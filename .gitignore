@@ -17,9 +17,12 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Local Claude Code session state — machine-specific, not shared config
+# Local Claude Code session state — machine-specific, not shared config.
+# Note: Claude Code's harness recreates a .claude/ directory by convention
+# regardless of the project-visible folder name below, so both are ignored.
 AEP-X 1/settings.local.json
 AEP-X 1/scheduled_tasks.lock
+.claude/
 
 # Local dev artifacts
 console/uploads_dev/
