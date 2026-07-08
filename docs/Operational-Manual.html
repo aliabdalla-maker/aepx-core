@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X — Operational Manual</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff; --code-bg:#0f1720; --code-ink:#d6e2f0;
+    --amber:#b8860b; --amber-light:#fdf6ec; --green:#2e8b57; --green-light:#eaf6ee;
+    --red:#b04a6f; --red-light:#fbeef2;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  .page { max-width:940px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+  header.doc-header { background:linear-gradient(135deg,#0f4c81 0%,#143d66 100%); color:#fff; border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.6rem; }
+  header.doc-header h1 { margin:0 0 .4rem; font-size:1.65rem; line-height:1.3; }
+  header.doc-header .subtitle { opacity:.85; font-size:1.02rem; }
+  .meta { display:flex; flex-wrap:wrap; gap:.5rem 1.6rem; margin-top:1.2rem; font-size:.85rem; opacity:.9; }
+  .meta span strong { opacity:.75; font-weight:600; margin-right:.35rem; }
+  nav.toc { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.4rem; margin-bottom:2rem; font-size:.88rem; }
+  nav.toc h2 { margin:0 0 .6rem; font-size:1rem; color:var(--accent); border:none; padding:0; }
+  nav.toc ol { margin:0; padding-left:1.3rem; columns:2; column-gap:2rem; }
+  nav.toc li { margin:.25rem 0; break-inside:avoid; }
+  nav.toc a { color:var(--ink); text-decoration:none; }
+  h2 { color:var(--accent); font-size:1.26rem; margin:2.3rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+  h3 { font-size:1.03rem; margin:1.5rem 0 .5rem; color:var(--ink); }
+  p { margin:.65rem 0; }
+  em { color:var(--muted); }
+  a { color:var(--accent); }
+  .table-wrap { overflow-x:auto; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; font-size:.84rem; background:var(--card); border-radius:8px; overflow:hidden; }
+  th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top; word-break:break-word; }
+  th { background:var(--accent-light); color:var(--accent); font-weight:600; }
+  tr:nth-child(even) td { background:#fbfcfe; }
+  code { font-family:"Cascadia Code",Consolas,monospace; }
+  p code, li code, td code { background:#e9edf3; padding:.1rem .35rem; border-radius:4px; font-size:.87em; color:#0f4c81; }
+  pre { background:var(--code-bg); color:var(--code-ink); border-radius:8px; padding:.85rem 1rem; font-size:.76rem; line-height:1.5; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin:.6rem 0 1rem; }
+  pre code { background:none; color:inherit; padding:0; font-size:1em; }
+  ul, ol { padding-left:1.4rem; } li { margin:.3rem 0; }
+  .callout { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin:1rem 0; font-size:.92rem; }
+  .callout.dod { border-left:5px solid var(--green); background:var(--green-light); }
+  .callout.note { border-left:5px solid var(--amber); background:var(--amber-light); }
+  .callout.warn { border-left:5px solid var(--red); background:var(--red-light); }
+  .part-divider { background:linear-gradient(135deg,#0f4c81,#143d66); color:#fff; border-radius:10px; padding:1.1rem 1.4rem; margin:2.6rem 0 1.2rem; page-break-before:always; }
+  .part-divider .k { font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .part-divider h2 { color:#fff; border:none; margin:.2rem 0 0; padding:0; font-size:1.35rem; }
+  .part-divider .when { font-size:.85rem; opacity:.85; margin-top:.3rem; }
+  .diagram-wrap { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1rem 0; }
+  .diagram-caption { font-size:.8rem; color:var(--muted); text-align:center; margin-top:.5rem; }
+  footer { margin-top:3rem; font-size:.82rem; color:var(--muted); text-align:center; }
+  @media print {
+    @page { size: A4 portrait; margin: 14mm 12mm; }
+    body { background:#fff; }
+    header.doc-header, .part-divider { background:var(--accent); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { max-width:none; padding:0; }
+    pre, table, .callout, .diagram-wrap { page-break-inside:avoid; }
+    h2, h3 { page-break-after:avoid; }
+    .part-divider { page-break-before:always; }
+    nav.toc { page-break-after:always; }
+    svg { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc-header">
+  <h1>AEP-X — Operational Manual</h1>
+  <div class="subtitle">Running, verifying, and troubleshooting the live reference implementation — with UML use case and sequence diagrams</div>
+  <div class="meta">
+    <span><strong>Companion to</strong> Handoff, ADLC-Plan, Instructional-Manual, Microservices Guide, SOA-Architecture</span>
+    <span><strong>Prepared</strong> 8 July 2026</span>
+    <span><strong>Covers</strong> 14 core services · Connector Bus · 10 connector categories · 100 connectors</span>
+  </div>
+</header>
+
+<nav class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#overview">1. System Overview</a></li>
+<li><a href="#usecase">2. UML Use Case Diagram</a></li>
+<li><a href="#seq">3. UML Sequence Diagrams</a></li>
+<li><a href="#ops">4. Operations Runbook</a></li>
+<li><a href="#smoke">5. Smoke Test Procedure</a></li>
+<li><a href="#trouble">6. Troubleshooting Guide</a></li>
+<li><a href="#backup">7. Backup &amp; Restore</a></li>
+<li><a href="#connectors">8. Connector Operations</a></li>
+<li><a href="#dod">9. Operational Definition of Done</a></li>
+</ol>
+</nav>
+
+<h2 id="overview">1. System Overview</h2>
+<p>The reference implementation runs as <strong>29 containers</strong> under one <code>docker-compose.yml</code>:</p>
+<ul>
+<li><strong>Tier 1 — Foundational (synchronous):</strong> Identity, Trust, Registry, Memory, Cache (L0–L5), Discovery — plus the API Gateway that fronts everything.</li>
+<li><strong>Tier 2 — Orchestration (event-driven):</strong> Workflow, Safety, Governance, Knowledge, Verification, Cost Optimiser, ML Integration.</li>
+<li><strong>SOA layer:</strong> the Connector Bus plus 10 category connector services carrying <strong>100 catalogued connectors</strong> (4 specialized, 96 governed stubs — see <a href="Connector-Catalogue.md">Connector-Catalogue.md</a>).</li>
+<li><strong>Infrastructure:</strong> PostgreSQL (pgvector), Redis, Neo4j, Kafka (KRaft).</li>
+</ul>
+<p>Two invariants govern every runtime path (governance/book-of-laws.md): <strong>Law 2</strong> — no external call executes before a trust evaluation, enforced structurally at the Connector Bus; <strong>Law 8</strong> — every event is audited by the Governance Engine, which consumes every Kafka topic unconditionally.</p>
+
+<h2 id="usecase">2. UML Use Case Diagram</h2>
+<div class="diagram-wrap">
+<svg viewBox="0 0 940 600" width="100%" role="img" aria-label="AEP-X use case diagram" style="font-family:'Segoe UI',system-ui,sans-serif">
+  <!-- system boundary -->
+  <rect x="200" y="40" width="540" height="530" rx="10" fill="#fbfcfe" stroke="#0f4c81" stroke-width="1.5"/>
+  <text x="470" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#0f4c81">AEP-X Platform</text>
+
+  <!-- actors -->
+  <g stroke="#1a2332" stroke-width="1.5" fill="none">
+    <!-- Developer -->
+    <circle cx="90" cy="120" r="12" fill="#e8f0f8"/>
+    <line x1="90" y1="132" x2="90" y2="165"/><line x1="70" y1="145" x2="110" y2="145"/>
+    <line x1="90" y1="165" x2="75" y2="190"/><line x1="90" y1="165" x2="105" y2="190"/>
+    <!-- AI Agent -->
+    <circle cx="90" cy="330" r="12" fill="#e8f0f8"/>
+    <line x1="90" y1="342" x2="90" y2="375"/><line x1="70" y1="355" x2="110" y2="355"/>
+    <line x1="90" y1="375" x2="75" y2="400"/><line x1="90" y1="375" x2="105" y2="400"/>
+    <!-- Platform Operator -->
+    <circle cx="855" cy="110" r="12" fill="#e8f0f8"/>
+    <line x1="855" y1="122" x2="855" y2="155"/><line x1="835" y1="135" x2="875" y2="135"/>
+    <line x1="855" y1="155" x2="840" y2="180"/><line x1="855" y1="155" x2="870" y2="180"/>
+    <!-- Compliance Auditor -->
+    <circle cx="855" cy="330" r="12" fill="#e8f0f8"/>
+    <line x1="855" y1="342" x2="855" y2="375"/><line x1="835" y1="355" x2="875" y2="355"/>
+    <line x1="855" y1="375" x2="840" y2="400"/><line x1="855" y1="375" x2="870" y2="400"/>
+    <!-- External System -->
+    <rect x="820" y="480" width="70" height="46" rx="6" fill="#f3eee7" stroke="#8a6d3b"/>
+  </g>
+  <text x="90" y="210" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">Developer</text>
+  <text x="90" y="420" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">AI Agent</text>
+  <text x="855" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">Platform Operator</text>
+  <text x="855" y="420" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">Compliance Auditor</text>
+  <text x="855" y="500" text-anchor="middle" font-size="10" font-weight="700" fill="#8a6d3b">External</text>
+  <text x="855" y="513" text-anchor="middle" font-size="10" font-weight="700" fill="#8a6d3b">System</text>
+
+  <!-- use cases: column 1 -->
+  <g font-size="11" text-anchor="middle">
+    <ellipse cx="330" cy="110" rx="95" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="330" y="114" fill="#1a2332">Register Agent</text>
+    <ellipse cx="330" cy="185" rx="95" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="330" y="189" fill="#1a2332">Discover Capability</text>
+    <ellipse cx="330" cy="260" rx="95" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="330" y="264" fill="#1a2332">Execute Workflow</text>
+    <ellipse cx="330" cy="345" rx="95" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="330" y="340" fill="#1a2332">Invoke External</text>
+    <text x="330" y="354" fill="#1a2332">Connector</text>
+    <ellipse cx="330" cy="430" rx="95" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="330" y="426" fill="#1a2332">Reuse Cached Result</text>
+    <text x="330" y="440" fill="#1a2332">(Law 5)</text>
+    <ellipse cx="330" cy="515" rx="95" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="330" y="519" fill="#1a2332">Monitor Health</text>
+
+    <!-- use cases: column 2 -->
+    <ellipse cx="590" cy="130" rx="90" ry="26" fill="#eaf6ee" stroke="#2e8b57"/>
+    <text x="590" y="126" fill="#1a2332">Trust Check</text>
+    <text x="590" y="140" fill="#1a2332">(Law 2)</text>
+    <ellipse cx="590" cy="205" rx="90" ry="26" fill="#eaf6ee" stroke="#2e8b57"/>
+    <text x="590" y="209" fill="#1a2332">Policy Evaluation</text>
+    <ellipse cx="590" cy="280" rx="90" ry="26" fill="#eaf6ee" stroke="#2e8b57"/>
+    <text x="590" y="276" fill="#1a2332">Evidence Validation</text>
+    <text x="590" y="290" fill="#1a2332">(Safety Engine)</text>
+    <ellipse cx="590" cy="355" rx="90" ry="26" fill="#eaf6ee" stroke="#2e8b57"/>
+    <text x="590" y="351" fill="#1a2332">Record Audit Trail</text>
+    <text x="590" y="365" fill="#1a2332">(Law 8)</text>
+    <ellipse cx="590" cy="430" rx="90" ry="26" fill="#eaf6ee" stroke="#2e8b57"/>
+    <text x="590" y="426" fill="#1a2332">Routing Decision</text>
+    <text x="590" y="440" fill="#1a2332">(Cost Optimiser)</text>
+    <ellipse cx="590" cy="515" rx="90" ry="26" fill="#e8f0f8" stroke="#0f4c81"/>
+    <text x="590" y="519" fill="#1a2332">Review Audit Log</text>
+  </g>
+
+  <!-- actor associations -->
+  <g stroke="#5a6b82" stroke-width="1.1" fill="none">
+    <line x1="112" y1="140" x2="236" y2="113"/>
+    <line x1="112" y1="150" x2="236" y2="255"/>
+    <line x1="112" y1="350" x2="236" y2="190"/>
+    <line x1="112" y1="360" x2="236" y2="345"/>
+    <line x1="112" y1="370" x2="236" y2="428"/>
+    <line x1="833" y1="135" x2="424" y2="513"/>
+    <line x1="833" y1="355" x2="679" y2="513"/>
+    <line x1="820" y1="500" x2="424" y2="350"/>
+  </g>
+
+  <!-- include relationships (dashed with open arrows + label) -->
+  <defs>
+    <marker id="incl" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L9,4 L0,8" fill="none" stroke="#5a6b82" stroke-width="1"/>
+    </marker>
+  </defs>
+  <g stroke="#5a6b82" stroke-width="1" stroke-dasharray="5,4" fill="none">
+    <line x1="418" y1="330" x2="502" y2="145" marker-end="url(#incl)"/>
+    <line x1="422" y1="340" x2="500" y2="212" marker-end="url(#incl)"/>
+    <line x1="424" y1="352" x2="500" y2="352" marker-end="url(#incl)"/>
+    <line x1="420" y1="270" x2="500" y2="278" marker-end="url(#incl)"/>
+    <line x1="418" y1="255" x2="502" y2="345" marker-end="url(#incl)"/>
+    <line x1="424" y1="437" x2="500" y2="432" marker-end="url(#incl)"/>
+  </g>
+  <g font-size="9" fill="#5a6b82" font-style="italic">
+    <text x="452" y="230">&#171;include&#187;</text>
+    <text x="452" y="284">&#171;include&#187;</text>
+    <text x="452" y="345">&#171;include&#187;</text>
+    <text x="452" y="440">&#171;include&#187;</text>
+  </g>
+</svg>
+<div class="diagram-caption">Fig. 1 — Use case diagram. Green use cases are governance-mandated inclusions: invoking any external connector <em>always</em> includes the trust check, policy evaluation, and audit recording — they are not optional paths.</div>
+</div>
+
+<div class="part-divider">
+  <div class="k">Behaviour</div>
+  <h2 id="seq" style="color:#fff">3. UML Sequence Diagrams</h2>
+  <div class="when">The three load-bearing runtime flows, as verified live on 8 July 2026</div>
+</div>
+
+<h3>3.1 Connector Bus mediation (SOA layer — Laws 2 &amp; 8 enforced structurally)</h3>
+<div class="diagram-wrap">
+<svg viewBox="0 0 940 560" width="100%" role="img" aria-label="Connector bus sequence diagram" style="font-family:'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="sarr" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="#1a2332"/></marker>
+    <marker id="rarr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8" fill="none" stroke="#5a6b82" stroke-width="1.2"/></marker>
+  </defs>
+  <!-- lifeline headers -->
+  <g font-size="10.5" font-weight="700" text-anchor="middle">
+    <rect x="30" y="10" width="100" height="34" rx="6" fill="#5a6b82"/><text x="80" y="31" fill="#fff">Agent / SDK</text>
+    <rect x="180" y="10" width="120" height="34" rx="6" fill="#b8860b"/><text x="240" y="31" fill="#fff">Connector Bus</text>
+    <rect x="345" y="10" width="110" height="34" rx="6" fill="#0f4c81"/><text x="400" y="31" fill="#fff">Trust Authority</text>
+    <rect x="490" y="10" width="120" height="34" rx="6" fill="#0f4c81"/><text x="550" y="31" fill="#fff">Governance Engine</text>
+    <rect x="645" y="10" width="120" height="34" rx="6" fill="#2e8b57"/><text x="705" y="26" fill="#fff">Category Service</text><text x="705" y="39" fill="#fff" font-size="8.5">(adapter dispatch)</text>
+    <rect x="805" y="10" width="105" height="34" rx="6" fill="#8a6d3b"/><text x="857" y="31" fill="#fff">External System</text>
+  </g>
+  <!-- lifelines -->
+  <g stroke="#c9d2de" stroke-width="1" stroke-dasharray="4,4">
+    <line x1="80" y1="44" x2="80" y2="540"/><line x1="240" y1="44" x2="240" y2="540"/>
+    <line x1="400" y1="44" x2="400" y2="540"/><line x1="550" y1="44" x2="550" y2="540"/>
+    <line x1="705" y1="44" x2="705" y2="540"/><line x1="857" y1="44" x2="857" y2="540"/>
+  </g>
+  <!-- activation bar on bus -->
+  <rect x="235" y="70" width="10" height="440" fill="#fdf6ec" stroke="#b8860b" stroke-width="1"/>
+  <!-- messages -->
+  <g font-size="10">
+    <line x1="80" y1="72" x2="233" y2="72" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="90" y="66">POST /bus/route  (RFC-0001 envelope: sender, receiver=aepx://connector/{name})</text>
+
+    <line x1="245" y1="104" x2="398" y2="104" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="255" y="98">GET /trust/{agent_id}</text>
+    <line x1="398" y1="126" x2="247" y2="126" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="262" y="140" fill="#5a6b82">trust_score</text>
+
+    <!-- alt trust denied -->
+    <rect x="55" y="152" width="380" height="52" fill="none" stroke="#b04a6f" stroke-width="1.1"/>
+    <rect x="55" y="152" width="180" height="16" fill="#fbeef2" stroke="#b04a6f" stroke-width="1.1"/>
+    <text x="60" y="164" font-size="9" font-weight="700" fill="#b04a6f">alt  [trust_score &lt; min_trust_score]</text>
+    <line x1="233" y1="188" x2="82" y2="188" stroke="#b04a6f" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="92" y="182" fill="#b04a6f">403 trust_below_threshold  → audit connector.denied</text>
+
+    <line x1="245" y1="228" x2="548" y2="228" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="255" y="222">POST /policy/evaluate?risk_level={AIA-R class}</text>
+    <line x1="548" y1="250" x2="247" y2="250" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="262" y="264" fill="#5a6b82">{allowed: bool, max_risk_level}</text>
+
+    <!-- alt policy denied -->
+    <rect x="55" y="276" width="530" height="52" fill="none" stroke="#b04a6f" stroke-width="1.1"/>
+    <rect x="55" y="276" width="215" height="16" fill="#fbeef2" stroke="#b04a6f" stroke-width="1.1"/>
+    <text x="60" y="288" font-size="9" font-weight="700" fill="#b04a6f">alt  [not allowed — e.g. AIA-R3 &gt; max S2]</text>
+    <line x1="233" y1="312" x2="82" y2="312" stroke="#b04a6f" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="92" y="306" fill="#b04a6f">403 policy_denied  → audit connector.denied</text>
+
+    <line x1="245" y1="352" x2="703" y2="352" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="300" y="346">POST /connector/execute  (canonical envelope)</text>
+    <!-- self message: adapter dispatch -->
+    <path d="M 710 372 h 55 v 22 h -55" fill="none" stroke="#1a2332" stroke-width="1.2" marker-end="url(#sarr)"/>
+    <text x="715" y="368" font-size="9.5">dispatch: SPECIALIZED[name] | StubAdapter(name)</text>
+
+    <line x1="710" y1="416" x2="855" y2="416" stroke="#8a6d3b" stroke-width="1.2" stroke-dasharray="2,3" marker-end="url(#sarr)"/>
+    <text x="718" y="410" fill="#8a6d3b" font-size="9.5">vendor protocol call (real adapters)</text>
+    <line x1="855" y1="436" x2="712" y2="436" stroke="#8a6d3b" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+
+    <line x1="703" y1="460" x2="247" y2="460" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="300" y="454" fill="#5a6b82">canonical response {source, confidence, maturity}</text>
+
+    <line x1="245" y1="486" x2="548" y2="486" stroke="#2e8b57" stroke-width="1.2" stroke-dasharray="2,3" marker-end="url(#sarr)"/>
+    <text x="255" y="480" fill="#2e8b57" font-size="9.5">async: connector.invoked → Kafka → audit log (Law 8)</text>
+
+    <line x1="233" y1="514" x2="82" y2="514" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="90" y="508" fill="#5a6b82">200 {connector, category, ai_risk_class, trust_score_at_call_time, response}</text>
+  </g>
+</svg>
+<div class="diagram-caption">Fig. 2 — Connector Bus mediation. Both denial paths were exercised live: <code>opcua</code>/<code>gov-pay</code> (AIA-R3) exit at the policy gate; <code>sap</code>/<code>moodle</code> (min trust 60 vs. stub score 50) exit at the trust gate.</div>
+</div>
+
+<h3>3.2 Workflow execution with event choreography (Tier 2 — async, Kafka)</h3>
+<div class="diagram-wrap">
+<svg viewBox="0 0 940 480" width="100%" role="img" aria-label="Workflow event choreography sequence diagram" style="font-family:'Segoe UI',system-ui,sans-serif">
+  <g font-size="10.5" font-weight="700" text-anchor="middle">
+    <rect x="20" y="10" width="95" height="34" rx="6" fill="#5a6b82"/><text x="67" y="31" fill="#fff">Client / SDK</text>
+    <rect x="160" y="10" width="115" height="34" rx="6" fill="#0f4c81"/><text x="217" y="31" fill="#fff">Workflow Engine</text>
+    <rect x="320" y="10" width="100" height="34" rx="6" fill="#0f4c81"/><text x="370" y="31" fill="#fff">Registry</text>
+    <rect x="465" y="10" width="90" height="34" rx="6" fill="#1a2332"/><text x="510" y="31" fill="#fff">Kafka</text>
+    <rect x="600" y="10" width="100" height="34" rx="6" fill="#0f4c81"/><text x="650" y="31" fill="#fff">Safety Engine</text>
+    <rect x="735" y="10" width="90" height="34" rx="6" fill="#0f4c81"/><text x="780" y="26" fill="#fff">Governance</text><text x="780" y="39" fill="#fff" font-size="8.5">(audit)</text>
+    <rect x="850" y="10" width="80" height="34" rx="6" fill="#2e8b57"/><text x="890" y="26" fill="#fff">ML Integr.</text><text x="890" y="39" fill="#fff" font-size="8.5">(Law 9)</text>
+  </g>
+  <g stroke="#c9d2de" stroke-width="1" stroke-dasharray="4,4">
+    <line x1="67" y1="44" x2="67" y2="460"/><line x1="217" y1="44" x2="217" y2="460"/>
+    <line x1="370" y1="44" x2="370" y2="460"/><line x1="510" y1="44" x2="510" y2="460"/>
+    <line x1="650" y1="44" x2="650" y2="460"/><line x1="780" y1="44" x2="780" y2="460"/>
+    <line x1="890" y1="44" x2="890" y2="460"/>
+  </g>
+  <g font-size="10">
+    <line x1="67" y1="70" x2="215" y2="70" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="77" y="64">POST /workflows {name, steps[]}</text>
+    <line x1="215" y1="92" x2="69" y2="92" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="82" y="106" fill="#5a6b82">201 CREATED {id}</text>
+    <line x1="67" y1="128" x2="215" y2="128" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="77" y="122">POST /workflows/{id}/execute</text>
+
+    <!-- loop fragment -->
+    <rect x="145" y="148" width="290" height="72" fill="none" stroke="#0f4c81" stroke-width="1.1"/>
+    <rect x="145" y="148" width="120" height="16" fill="#e8f0f8" stroke="#0f4c81" stroke-width="1.1"/>
+    <text x="150" y="160" font-size="9" font-weight="700" fill="#0f4c81">loop  [for each step]</text>
+    <line x1="222" y1="184" x2="368" y2="184" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="232" y="178">GET /agents/{step.agent_id}</text>
+    <line x1="368" y1="206" x2="224" y2="206" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="238" y="200" fill="#5a6b82">agent → thread output into step N+1</text>
+
+    <line x1="222" y1="244" x2="508" y2="244" stroke="#2e8b57" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="252" y="238" fill="#2e8b57">publish workflow.completed {workflow_id, step_count, ts}</text>
+    <line x1="215" y1="268" x2="69" y2="268" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="76" y="262" fill="#5a6b82">200 COMPLETED  (sync return — fan-out below is async)</text>
+
+    <line x1="515" y1="300" x2="648" y2="300" stroke="#2e8b57" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="522" y="294" fill="#2e8b57">consume</text>
+    <!-- alt flag -->
+    <rect x="580" y="316" width="330" height="52" fill="none" stroke="#b8860b" stroke-width="1.1"/>
+    <rect x="580" y="316" width="160" height="16" fill="#fdf6ec" stroke="#b8860b" stroke-width="1.1"/>
+    <text x="585" y="328" font-size="9" font-weight="700" fill="#b8860b">alt  [step_count == 0]</text>
+    <line x1="648" y1="352" x2="514" y2="352" stroke="#b8860b" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="522" y="346" fill="#b8860b">publish safety.flagged {reason: empty_workflow}</text>
+
+    <line x1="515" y1="394" x2="778" y2="394" stroke="#2e8b57" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="530" y="388" fill="#2e8b57">consume every topic → append audit log (Law 8)</text>
+    <line x1="515" y1="426" x2="888" y2="426" stroke="#2e8b57" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="530" y="420" fill="#2e8b57">consume workflow.completed + safety.flagged + verification.completed → retrain (Law 9)</text>
+  </g>
+</svg>
+<div class="diagram-caption">Fig. 3 — Event choreography. Governance is a passive listener — 100% audit coverage without any service having to call it. Consumers use reconnect loops (see §6, defect 3) so a broker restart never silently kills the chain again.</div>
+</div>
+
+<h3>3.3 Cache-first routing (Law 5 — the LLM is the last resort)</h3>
+<div class="diagram-wrap">
+<svg viewBox="0 0 940 430" width="100%" role="img" aria-label="Cache-first routing sequence diagram" style="font-family:'Segoe UI',system-ui,sans-serif">
+  <g font-size="10.5" font-weight="700" text-anchor="middle">
+    <rect x="25" y="10" width="95" height="34" rx="6" fill="#5a6b82"/><text x="72" y="31" fill="#fff">Agent / SDK</text>
+    <rect x="170" y="10" width="100" height="34" rx="6" fill="#0f4c81"/><text x="220" y="31" fill="#fff">Gateway</text>
+    <rect x="320" y="10" width="120" height="34" rx="6" fill="#0f4c81"/><text x="380" y="31" fill="#fff">Cost Optimiser</text>
+    <rect x="490" y="10" width="100" height="34" rx="6" fill="#0f4c81"/><text x="540" y="31" fill="#fff">Trust</text>
+    <rect x="635" y="10" width="110" height="34" rx="6" fill="#0f4c81"/><text x="690" y="26" fill="#fff">Cache Service</text><text x="690" y="39" fill="#fff" font-size="8.5">(L0–L5)</text>
+    <rect x="790" y="10" width="125" height="34" rx="6" fill="#b8860b"/><text x="852" y="26" fill="#fff">ML Connector</text><text x="852" y="39" fill="#fff" font-size="8.5">(via Connector Bus)</text>
+  </g>
+  <g stroke="#c9d2de" stroke-width="1" stroke-dasharray="4,4">
+    <line x1="72" y1="44" x2="72" y2="410"/><line x1="220" y1="44" x2="220" y2="410"/>
+    <line x1="380" y1="44" x2="380" y2="410"/><line x1="540" y1="44" x2="540" y2="410"/>
+    <line x1="690" y1="44" x2="690" y2="410"/><line x1="852" y1="44" x2="852" y2="410"/>
+  </g>
+  <g font-size="10">
+    <line x1="72" y1="70" x2="218" y2="70" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="82" y="64">POST /execute {agent_id, capability, payload}</text>
+    <line x1="225" y1="96" x2="378" y2="96" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="235" y="90">POST /route/decide</text>
+    <line x1="385" y1="120" x2="538" y2="120" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="395" y="114">GET /trust/{agent_id}</text>
+    <line x1="538" y1="142" x2="387" y2="142" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <line x1="378" y1="166" x2="227" y2="166" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="237" y="160" fill="#5a6b82">{utility_score, breakdown, explanation}  — Law 7: every decision explainable</text>
+
+    <line x1="225" y1="196" x2="688" y2="196" stroke="#1a2332" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="290" y="190">GET /cache/L0/{hash(request+context+policy)}</text>
+
+    <!-- alt hit -->
+    <rect x="50" y="212" width="700" height="50" fill="none" stroke="#2e8b57" stroke-width="1.1"/>
+    <rect x="50" y="212" width="90" height="16" fill="#eaf6ee" stroke="#2e8b57" stroke-width="1.1"/>
+    <text x="55" y="224" font-size="9" font-weight="700" fill="#2e8b57">alt  [hit]</text>
+    <line x1="688" y1="246" x2="227" y2="246" stroke="#2e8b57" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="240" y="240" fill="#2e8b57">value — return immediately, zero model cost</text>
+
+    <!-- alt miss -->
+    <rect x="50" y="272" width="860" height="100" fill="none" stroke="#b8860b" stroke-width="1.1"/>
+    <rect x="50" y="272" width="230" height="16" fill="#fdf6ec" stroke="#b8860b" stroke-width="1.1"/>
+    <text x="55" y="284" font-size="9" font-weight="700" fill="#b8860b">alt  [miss on L0…L4 → fall through hierarchy]</text>
+    <line x1="225" y1="308" x2="850" y2="308" stroke="#b8860b" stroke-width="1.3" marker-end="url(#sarr)"/>
+    <text x="300" y="302" fill="#b8860b">aepx://connector/ml — self-hosted model, near-zero marginal cost (only after Memory/Knowledge/Tool exhausted)</text>
+    <line x1="850" y1="330" x2="227" y2="330" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="300" y="344" fill="#5a6b82">completion {confidence, estimated_cost: 0.0}</text>
+    <line x1="225" y1="360" x2="688" y2="360" stroke="#1a2332" stroke-width="1.2" marker-end="url(#sarr)"/>
+    <text x="290" y="354">POST /cache/L2/{key}  — write back for reuse</text>
+
+    <line x1="218" y1="394" x2="74" y2="394" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#rarr)"/>
+    <text x="84" y="388" fill="#5a6b82">200 response + confidence + evidence contract</text>
+  </g>
+</svg>
+<div class="diagram-caption">Fig. 4 — Cache-first execution (RFC-0005/0008). The Cost Optimiser's <code>/route/decide</code> is the single synchronous Tier-2 exception (&lt;20&nbsp;ms budget); L5 federation-cache writes additionally require a Governance policy check.</div>
+</div>
+
+<div class="part-divider">
+  <div class="k">Operations</div>
+  <h2 id="ops" style="color:#fff">4. Operations Runbook</h2>
+  <div class="when">Start, stop, verify — the day-2 procedures for the running stack</div>
+</div>
+
+<h3>4.1 Start / stop</h3>
+<pre><code># start everything (from the repo root)
+docker compose up -d --build
+
+# SOA layer only, after trust + governance are healthy (SOA-Architecture.md §5 ordering)
+docker compose up -d trust governance
+docker compose up -d --build connector-bus connector-enterprise connector-productivity \
+  connector-devtools connector-aiplatform connector-data connector-messaging \
+  connector-industrial connector-cloud connector-government connector-education
+
+# stop (containers persist)          # stop and remove (data volumes preserved)
+docker compose stop                  docker compose down
+
+# full reset including data volumes — Postgres re-runs schemas/sql/*.sql on next start
+docker compose down -v</code></pre>
+
+<h3>4.2 Port map</h3>
+<div class="table-wrap"><table>
+<tr><th>Port</th><th>Service</th><th>Port</th><th>Service</th></tr>
+<tr><td>8000</td><td>Gateway (aggregate <code>/health</code>)</td><td>8020</td><td>Connector Bus</td></tr>
+<tr><td>8001</td><td>Identity</td><td>8021</td><td>connector-enterprise (14)</td></tr>
+<tr><td>8002</td><td>Trust</td><td>8022</td><td>connector-aiplatform (14)</td></tr>
+<tr><td>8003</td><td>Registry</td><td>8023</td><td>connector-devtools (11)</td></tr>
+<tr><td>8004</td><td>Memory</td><td>8024</td><td>connector-productivity (11)</td></tr>
+<tr><td>8005</td><td>Cache (L0–L5)</td><td>8025</td><td>connector-data (16)</td></tr>
+<tr><td>8006</td><td>Discovery</td><td>8026</td><td>connector-messaging (8)</td></tr>
+<tr><td>8007</td><td>Workflow Engine</td><td>8027</td><td>connector-industrial (8)</td></tr>
+<tr><td>8008</td><td>Safety Engine</td><td>8028</td><td>connector-cloud (10)</td></tr>
+<tr><td>8009</td><td>Governance (<code>/audit</code>, <code>/policy/evaluate</code>)</td><td>8029</td><td>connector-government (4)</td></tr>
+<tr><td>8010</td><td>Knowledge</td><td>8030</td><td>connector-education (4)</td></tr>
+<tr><td>8011</td><td>Verification</td><td>5432</td><td>PostgreSQL (pgvector/pgvector:pg16)</td></tr>
+<tr><td>8012</td><td>Cost Optimiser</td><td>6379</td><td>Redis</td></tr>
+<tr><td>8013</td><td>ML Integration</td><td>7474/7687</td><td>Neo4j (HTTP / Bolt)</td></tr>
+<tr><td><strong>8080</strong></td><td><strong>Console — the LLM/ML box web GUI</strong> (chat via Connector Bus; file/folder/image/video upload)</td><td>9092</td><td>Kafka (KRaft)</td></tr>
+</table></div>
+
+<h3>4.3 Health verification</h3>
+<pre><code>curl http://localhost:8000/health     # 14 core services, aggregated
+curl http://localhost:8020/health     # bus: expect "connector_count": 100, 10 categories
+curl http://localhost:8009/audit      # audit log — grows with every workflow/safety event
+docker compose ps                     # 29 containers; postgres/redis/neo4j report (healthy)</code></pre>
+
+<h2 id="smoke">5. Smoke Test Procedure</h2>
+<p>Run after any rebuild. Every step below was executed successfully against the live stack on 8 July 2026.</p>
+<pre><code># 1. Register an agent
+AGENT_ID=$(curl -s -X POST http://localhost:8003/agents \
+  -H "Content-Type: application/json" -d '{"name":"smoke-agent"}' | jq -r .id)
+
+# 2. Create + execute a workflow → expect status COMPLETED
+WF_ID=$(curl -s -X POST http://localhost:8007/workflows -H "Content-Type: application/json" \
+  -d "{\"name\":\"smoke\",\"steps\":[{\"capability\":\"lesson_generation\",\"agent_id\":\"$AGENT_ID\"}]}" | jq -r .id)
+curl -s -X POST http://localhost:8007/workflows/$WF_ID/execute | jq .status
+
+# 3. Within ~2s the event must appear in the audit log (Law 8)
+curl -s http://localhost:8009/audit | jq '.[-1].topic'    # → "workflow.completed"
+
+# 4. Connector Bus — specialized adapter (expect Jane Doe)
+curl -s -X POST http://localhost:8020/bus/route -H "Content-Type: application/json" \
+  -d '{"sender":"aepx://agent/'$AGENT_ID'","receiver":"aepx://connector/salesforce","payload":{"op":"lookup_contact"}}' | jq .response.result.name
+
+# 5. Connector Bus — governance gates (expect HTTP 403 on both)
+curl -s -o /dev/null -w "%{http_code}\n" -X POST http://localhost:8020/bus/route \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"aepx://agent/x","receiver":"aepx://connector/opcua","payload":{}}'   # policy gate
+curl -s -o /dev/null -w "%{http_code}\n" -X POST http://localhost:8020/bus/route \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"aepx://agent/x","receiver":"aepx://connector/sap","payload":{}}'     # trust gate
+
+# 6. Cost Optimiser — explainable routing decision (Law 7)
+curl -s -X POST http://localhost:8012/route/decide -H "Content-Type: application/json" \
+  -d '{"agent_id":"'$AGENT_ID'","capability":"x","candidate_route":"cache","estimated_latency_ms":5}' | jq .explanation</code></pre>
+<div class="callout dod"><strong>Pass criteria:</strong> step 2 returns <code>COMPLETED</code>; step 3 shows the event within 2 seconds; step 4 returns <code>Jane Doe</code>; step 5 returns <code>403</code> twice; step 6 returns an explanation string containing the utility score.</div>
+
+<h2 id="trouble">6. Troubleshooting Guide</h2>
+<p>The first three entries are real defects found and fixed during the 7–8 July deployment — kept here because their symptoms will recur in any fresh environment that repeats the original configuration.</p>
+<div class="table-wrap"><table class="narrow-col">
+<tr><th>Symptom</th><th>Root cause</th><th>Fix</th></tr>
+<tr><td><code>uvicorn: executable file not found in $PATH</code> at container start; image builds "succeed" but pip layers are ~4&nbsp;kB</td><td>Disk full during build — containerd writes truncated layers silently (<code>input/output error</code> in daemon logs)</td><td>Free disk space (Docker's VHDX lives under <code>AppData\Local\Docker</code>), then <code>docker compose build --no-cache</code></td></tr>
+<tr><td>Postgres exits (3): <code>extension "vector" is not available</code></td><td>Stock <code>postgres:16</code> doesn't ship pgvector, which <code>002_v2_additions.sql</code> requires</td><td>Use <code>pgvector/pgvector:pg16</code> (already in docker-compose.yml). If a stale anonymous volume shows <em>collation mismatch</em> warnings: <code>docker compose rm -sfv postgres &amp;&amp; docker compose up -d postgres</code></td></tr>
+<tr><td>Workflows complete but <code>GET /audit</code> stays empty; Kafka topic exists but has no consumers</td><td>Consumer/producer created once at import lost the startup race against the broker and died silently (no retry)</td><td>Fixed in source: reconnect loops (Governance, Safety) + lazy producers (Workflow, Safety). If it recurs: <code>docker compose restart workflow safety governance ml-integration</code> and check only <code>MainThread</code> isn't alone via <code>docker exec … python -c "import threading; print(threading.enumerate())"</code></td></tr>
+<tr><td>Kafka exits at preflight: <code>Cluster ID string … is not a valid UUID</code></td><td>KRaft requires a base64-encoded 16-byte UUID (22 chars), not an arbitrary string</td><td>Generate one: <code>python -c "import uuid,base64; print(base64.urlsafe_b64encode(uuid.uuid4().bytes).decode().rstrip('='))"</code> → set as <code>CLUSTER_ID</code></td></tr>
+<tr><td>Bus returns <code>403 trust_below_threshold</code></td><td>Agent trust (stub: 50) below the connector's <code>min_trust_score</code> (e.g. SAP/education: 60)</td><td>Working as designed (Law 2). Unlocks when Trust Authority implements the RFC-0002 5-component formula — or is a per-connector governance decision in the catalogue</td></tr>
+<tr><td>Bus returns <code>403 policy_denied</code> for industrial/government connectors</td><td>AIA-R3 exceeds Governance's seed <code>max_risk_level: S2</code></td><td>Working as designed. Raising the ceiling is an explicit governance decision (<code>_POLICIES</code> in governance service), never a code workaround</td></tr>
+<tr><td>Bus <code>/health</code> shows <code>connector_count: 0</code></td><td><code>catalogue.json</code> not mounted at <code>/app/catalogue.json</code></td><td>Check the <code>volumes:</code> entry for connector-bus and every connector-* service in docker-compose.yml</td></tr>
+<tr><td>Console shows <strong>"⚠️ Could not reach the platform"</strong>; <code>docker version</code>/<code>docker ps</code> hang or return a 500 from the Linux engine pipe</td><td>Docker Desktop's daemon has wedged — on memory-constrained hosts (&lt;8&nbsp;GB RAM) this recurs under load once ~30 containers plus a loaded model are running, especially if Docker Desktop's <strong>Kubernetes</strong> feature is also enabled (it adds ~18 unused system containers: etcd, kube-apiserver, coredns, etc.)</td><td>Restart the daemon: stop all <code>*docker*</code> processes, <code>wsl --shutdown</code>, relaunch Docker Desktop, wait ~40s, then <code>docker compose ps</code> — every service has <code>restart: unless-stopped</code> so the whole stack self-heals with no further commands. If this recurs, disable Kubernetes in Docker Desktop Settings → Kubernetes (or set <code>"KubernetesEnabled": false</code> in <code>%APPDATA%\Docker\settings-store.json</code> while Docker Desktop is stopped) — this alone cut a live chat response from ~20s to ~6s on a 7.7&nbsp;GB-RAM host by freeing an entire unused control-plane's worth of memory.</td></tr>
+<tr><td>First chat reply after any Ollama restart returns <code>maturity: specialized_degraded</code> with a "model unreachable" message</td><td>Cold start — Ollama must load the model into RAM before its first inference, which can exceed the adapter's timeout (25s) on a constrained host</td><td>Working as designed (graceful degradation, not a bug). Warm it manually: <code>curl -X POST http://localhost:11434/api/generate -d '{"model":"llama3.2:1b","prompt":"hi","stream":false}'</code>, then retry — subsequent calls return in 3–7s</td></tr>
+</table></div>
+
+<h2 id="backup">7. Backup &amp; Restore</h2>
+<ul>
+<li><strong>What to back up:</strong> the repo itself is the system of record — all images rebuild from Dockerfiles; base images re-pull from Docker Hub. Runtime state that matters lives in Postgres volumes only once real pilot data exists.</li>
+<li><strong>Current backups (8 July 2026):</strong> <code>OneDrive\Backups\AEP-X\aepx-core-full-2026-07-08.tar.gz</code> (complete repo) and <code>Docker-Backup-2026-07-08\</code> (build definitions + restore README). Cloud sync engages when the OneDrive client is signed in.</li>
+<li><strong>Restore:</strong> extract the tarball → <code>docker compose up --build</code>. Postgres re-initialises from <code>schemas/sql/</code> on first boot with an empty volume.</li>
+<li><strong>Do not back up Docker's binary image data</strong> (<code>docker_data.vhdx</code>) — it is ~20&nbsp;GB of rebuildable artifacts, and images built during a disk-full incident are corrupted anyway (see §6, defect 1).</li>
+</ul>
+
+<h2 id="connectors">8. Connector Operations</h2>
+<h3>8.1 Promoting a stub to a real integration</h3>
+<ol>
+<li>Write an adapter class in the category service's <code>app/adapters.py</code> implementing <code>execute(payload) → dict</code>, and register it: <code>SPECIALIZED["notion"] = NotionAdapter()</code>.</li>
+<li>Store credentials in Vault/env — never in the catalogue or code.</li>
+<li>Update the connector's <code>maturity</code> to <code>specialized</code> in <code>connectors/catalogue.json</code> (single source of truth) and regenerate the SQL/docs.</li>
+<li>For AIA-R2+: record the assurance-tier sign-off in <code>governance/decisions/</code> <em>before</em> first live traffic (SOA-Architecture.md §4).</li>
+<li><code>docker compose up -d --build connector-&lt;category&gt;</code> — nothing else redeploys.</li>
+</ol>
+<h3>8.2 Adding a brand-new connector</h3>
+<p>Add one entry to <code>connectors/catalogue.json</code> and restart the bus + owning category service. It is immediately routable as a governed stub — trust-checked, policy-gated, audited — with no code change. That is the point of the data-driven routing table.</p>
+<h3>8.3 The two governance gates (do not bypass)</h3>
+<div class="callout warn">A <code>403</code> from the bus is a <strong>feature</strong>. The trust gate (Law 2) and the policy ceiling protect exactly the connectors — industrial control systems, government services, HR/finance platforms — where an ungoverned agent call does real-world damage. Raise an agent's trust or the risk ceiling through governance records, never by editing the check out of the bus.</div>
+
+<h2 id="dod">9. Operational Definition of Done</h2>
+<ul>
+<li>All 29 containers up; <code>postgres</code>, <code>redis</code>, <code>neo4j</code> report <code>(healthy)</code>.</li>
+<li>Gateway <code>/health</code>: all 14 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 100</code>, 10 categories.</li>
+<li>Smoke test (§5) passes all six criteria, including both 403 governance gates.</li>
+<li>A workflow execution appears in <code>GET /audit</code> within 2 seconds (choreography chain alive).</li>
+<li>Backups current (§7) and the restore path tested at least once per release.</li>
+</ul>
+
+<footer>AEP-X — Operational Manual · Companion to Handoff, ADLC-Plan, Instructional-Manual, Microservices-Implementation-Guide, and SOA-Architecture · 8 July 2026</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,287 @@
+# AEP-X reference deployment — one file, everything a developer runs on day
+# one (Instructional Manual §3.1), extended with the Microservices-Guide's
+# Wave 2 additions (Neo4j, Kafka, discovery/workflow/safety/governance) and
+# this repo's own v2 additions (knowledge/verification/cost-optimiser/
+# ml-integration) plus the SOA Connector Bus layer.
+#
+#   docker compose up --build
+#
+services:
+  # ---- Infrastructure ----
+  # Self-hosted model server behind the aiplatform 'ml' connector
+  # (connectors/aiplatform/app/adapters.py). Uses a 1B-parameter model by
+  # default to keep disk/RAM modest on constrained dev machines — swap
+  # OLLAMA_MODEL for a larger one once headroom allows.
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports: ["11434:11434"]
+    volumes: ["ollama-models:/root/.ollama"]
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 20s
+
+  postgres:
+    # pgvector/pgvector:pg16 = postgres:16 + the vector extension, which
+    # schemas/sql/002_v2_additions.sql requires for knowledge.embeddings.
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aepx
+      POSTGRES_USER: aepx
+      POSTGRES_PASSWORD: aepx_dev_only
+    ports: ["5432:5432"]
+    volumes: ["./schemas/sql:/docker-entrypoint-initdb.d"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U aepx"], interval: 5s, retries: 5 }
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports: ["6379:6379"]
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 5s, retries: 5 }
+
+  neo4j:
+    image: neo4j:5-community
+    restart: unless-stopped
+    environment:
+      - NEO4J_AUTH=neo4j/aepx_dev_only
+    ports: ["7474:7474", "7687:7687"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474"]
+      interval: 10s
+      retries: 5
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    restart: unless-stopped
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      # KRaft requires a base64-encoded 16-byte UUID (22 chars), not an
+      # arbitrary string — the original guide's "aepx-dev-cluster" value
+      # crashes the broker at preflight.
+      - CLUSTER_ID=--uOo48KTJORT8HLBa3jFg
+    ports: ["9092:9092"]
+
+  # ---- Tier 1: Foundational (synchronous) ----
+  identity:
+    build: ./services/identity
+    restart: unless-stopped
+    ports: ["8001:8000"]
+    depends_on: [postgres]
+
+  trust:
+    build: ./services/trust
+    restart: unless-stopped
+    ports: ["8002:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres:5432/aepx
+    depends_on: [postgres]
+
+  registry:
+    build: ./services/registry
+    restart: unless-stopped
+    ports: ["8003:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres:5432/aepx
+    depends_on: [postgres]
+
+  memory:
+    build: ./services/memory
+    restart: unless-stopped
+    ports: ["8004:8000"]
+    depends_on: [postgres, redis]
+
+  cache:
+    build: ./services/cache
+    restart: unless-stopped
+    ports: ["8005:8000"]
+    depends_on: [redis]
+
+  discovery:
+    build: ./services/discovery
+    restart: unless-stopped
+    ports: ["8006:8000"]
+    depends_on: [registry, trust, redis]
+
+  # ---- Tier 2: Orchestration (event-driven) ----
+  workflow:
+    build: ./services/workflow
+    restart: unless-stopped
+    ports: ["8007:8000"]
+    depends_on: [registry, memory, neo4j, kafka]
+
+  safety:
+    build: ./services/safety
+    restart: unless-stopped
+    ports: ["8008:8000"]
+    depends_on: [trust, kafka]
+
+  governance:
+    build: ./services/governance
+    restart: unless-stopped
+    ports: ["8009:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres:5432/aepx
+    depends_on: [kafka, postgres]
+
+  knowledge:
+    build: ./services/knowledge
+    restart: unless-stopped
+    ports: ["8010:8000"]
+    depends_on: [postgres]
+
+  verification:
+    build: ./services/verification
+    restart: unless-stopped
+    ports: ["8011:8000"]
+    depends_on: [knowledge, kafka]
+
+  cost-optimiser:
+    build: ./services/cost-optimiser
+    restart: unless-stopped
+    ports: ["8012:8000"]
+    environment:
+      - TRUST_URL=http://trust:8000
+    depends_on: [trust, redis]
+
+  ml-integration:
+    build: ./services/ml-integration
+    restart: unless-stopped
+    ports: ["8013:8000"]
+    depends_on: [kafka]
+
+  # ---- Gateway ----
+  gateway:
+    build: ./services/gateway
+    restart: unless-stopped
+    ports: ["8000:8000"]
+    environment:
+      - IDENTITY_URL=http://identity:8000
+      - TRUST_URL=http://trust:8000
+      - REGISTRY_URL=http://registry:8000
+      - MEMORY_URL=http://memory:8000
+      - CACHE_URL=http://cache:8000
+      - DISCOVERY_URL=http://discovery:8000
+      - WORKFLOW_URL=http://workflow:8000
+      - SAFETY_URL=http://safety:8000
+      - GOVERNANCE_URL=http://governance:8000
+      - KNOWLEDGE_URL=http://knowledge:8000
+      - VERIFICATION_URL=http://verification:8000
+      - COST_OPTIMISER_URL=http://cost-optimiser:8000
+      - ML_INTEGRATION_URL=http://ml-integration:8000
+      - CONNECTOR_BUS_URL=http://connector-bus:8000
+    depends_on: [identity, trust, registry, memory, cache, discovery, workflow, safety, governance]
+
+  # ---- SOA layer: AEP-X Connector Bus (docs/SOA-Architecture.md) ----
+  # Gated on trust + governance being healthy first (see docs/SOA-Architecture.md §5) —
+  # bring these up with `docker compose up -d trust governance` before
+  # starting the bus in a fresh environment.
+  connector-bus:
+    build: ./connector-bus
+    restart: unless-stopped
+    ports: ["8020:8000"]
+    environment:
+      - TRUST_URL=http://trust:8000
+      - GOVERNANCE_URL=http://governance:8000
+    volumes:
+      - ./connectors/catalogue.json:/app/catalogue.json:ro
+    depends_on: [trust, governance]
+
+  # ---- 10 category connector services, 100 connectors total ----
+  # One coarse-grained service per category, one adapter per connector
+  # (SOA-Architecture.md §3.1). The catalogue (connectors/catalogue.json)
+  # is the single source of truth; docs/Connector-Catalogue.md lists all 100.
+  connector-enterprise:
+    build: ./connectors/enterprise
+    restart: unless-stopped
+    ports: ["8021:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-aiplatform:
+    build: ./connectors/aiplatform
+    restart: unless-stopped
+    ports: ["8022:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+    environment:
+      # The 'ml' connector's specialized adapter targets a self-hosted
+      # open-weights server (Ollama reference) — see its adapters.py.
+      # Falls back to a stub response automatically if Ollama or the model
+      # isn't ready (e.g. first-run pull still in progress).
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2:1b
+    depends_on: [ollama]
+
+  connector-devtools:
+    build: ./connectors/devtools
+    restart: unless-stopped
+    ports: ["8023:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-productivity:
+    build: ./connectors/productivity
+    restart: unless-stopped
+    ports: ["8024:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-data:
+    build: ./connectors/data
+    restart: unless-stopped
+    ports: ["8025:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-messaging:
+    build: ./connectors/messaging
+    restart: unless-stopped
+    ports: ["8026:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-industrial:
+    build: ./connectors/industrial
+    restart: unless-stopped
+    ports: ["8027:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-cloud:
+    build: ./connectors/cloud
+    restart: unless-stopped
+    ports: ["8028:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-government:
+    build: ./connectors/government
+    restart: unless-stopped
+    ports: ["8029:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  connector-education:
+    build: ./connectors/education
+    restart: unless-stopped
+    ports: ["8030:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+
+  # ---- Console: the LLM / machine-learning box (web GUI) ----
+  # Chat routes through the Connector Bus (trust + policy + audit);
+  # uploads (files/folders/images/videos) persist in the console-uploads volume.
+  console:
+    build: ./console
+    restart: unless-stopped
+    ports: ["8080:8000"]
+    environment:
+      - CONNECTOR_BUS_URL=http://connector-bus:8000
+      - REGISTRY_URL=http://registry:8000
+      - TRUST_URL=http://trust:8000
+      - GOVERNANCE_URL=http://governance:8000
+    volumes:
+      - console-uploads:/data/uploads
+    depends_on: [connector-bus, registry, trust, governance]
+
+volumes:
+  console-uploads:
+  ollama-models:

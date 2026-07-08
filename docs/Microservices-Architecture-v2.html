@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X — Microservices Architecture v2 Addendum</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff; --code-bg:#0f1720; --code-ink:#d6e2f0;
+    --amber:#b8860b; --amber-light:#fdf6ec; --green:#2e8b57; --green-light:#eaf6ee;
+    --red:#b04a6f; --red-light:#fbeef2;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  .page { max-width:940px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+  header.doc-header { background:linear-gradient(135deg,#0f4c81 0%,#143d66 100%); color:#fff; border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.6rem; }
+  header.doc-header h1 { margin:0 0 .4rem; font-size:1.65rem; line-height:1.3; }
+  header.doc-header .subtitle { opacity:.85; font-size:1.02rem; }
+  .meta { display:flex; flex-wrap:wrap; gap:.5rem 1.6rem; margin-top:1.2rem; font-size:.85rem; opacity:.9; }
+  .meta span strong { opacity:.75; font-weight:600; margin-right:.35rem; }
+  nav.toc { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.4rem; margin-bottom:2rem; font-size:.88rem; }
+  nav.toc h2 { margin:0 0 .6rem; font-size:1rem; color:var(--accent); border:none; padding:0; }
+  nav.toc ol { margin:0; padding-left:1.3rem; columns:2; column-gap:2rem; }
+  nav.toc li { margin:.25rem 0; break-inside:avoid; }
+  nav.toc a { color:var(--ink); text-decoration:none; }
+  h2 { color:var(--accent); font-size:1.26rem; margin:2.3rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+  h3 { font-size:1.03rem; margin:1.5rem 0 .5rem; color:var(--ink); }
+  p { margin:.65rem 0; }
+  em { color:var(--muted); }
+  a { color:var(--accent); }
+  .table-wrap { overflow-x:auto; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; font-size:.84rem; background:var(--card); border-radius:8px; overflow:hidden; }
+  th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top; word-break:break-word; }
+  th { background:var(--accent-light); color:var(--accent); font-weight:600; }
+  tr:nth-child(even) td { background:#fbfcfe; }
+  code { font-family:"Cascadia Code",Consolas,monospace; }
+  p code, li code, td code { background:#e9edf3; padding:.1rem .35rem; border-radius:4px; font-size:.87em; color:#0f4c81; }
+  pre { background:var(--code-bg); color:var(--code-ink); border-radius:8px; padding:.85rem 1rem; font-size:.76rem; line-height:1.5; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin:.6rem 0 1rem; }
+  pre code { background:none; color:inherit; padding:0; font-size:1em; }
+  ul, ol { padding-left:1.4rem; } li { margin:.3rem 0; }
+  .callout { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin:1rem 0; font-size:.92rem; }
+  .callout.warn { border-left:5px solid var(--red); background:var(--red-light); }
+  .callout.note { border-left:5px solid var(--amber); background:var(--amber-light); }
+  .part-divider { background:linear-gradient(135deg,#0f4c81,#143d66); color:#fff; border-radius:10px; padding:1.1rem 1.4rem; margin:2.6rem 0 1.2rem; }
+  .part-divider .k { font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .part-divider h2 { color:#fff; border:none; margin:.2rem 0 0; padding:0; font-size:1.35rem; }
+  .part-divider .when { font-size:.85rem; opacity:.85; margin-top:.3rem; }
+  footer { margin-top:3rem; font-size:.82rem; color:var(--muted); text-align:center; }
+  @media print {
+    @page { size: A4 portrait; margin: 14mm 12mm; }
+    body { background:#fff; }
+    header.doc-header, .part-divider { background:var(--accent); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { max-width:none; padding:0; }
+    pre, table, .callout { page-break-inside:avoid; }
+    h2, h3 { page-break-after:avoid; }
+    nav.toc { page-break-after:always; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc-header">
+  <h1>AEP-X — Microservices Architecture v2 Addendum</h1>
+  <div class="subtitle">Knowledge Service, Verification Engine, Cost Optimiser, ML Integration — plus the canonical L0–L5 cache</div>
+  <div class="meta">
+    <span><strong>Source</strong> AEP-X Ultra (1).docx</span>
+    <span><strong>Extends</strong> Microservices-Implementation-Guide.html</span>
+    <span><strong>Prepared</strong> 7 July 2026</span>
+  </div>
+</header>
+
+<nav class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#recon">1. Reconciliation</a></li>
+<li><a href="#overview">2. Updated architecture overview</a></li>
+<li><a href="#catalogue">3. Service catalogue additions</a></li>
+<li><a href="#patterns">4. Communication patterns — additions</a></li>
+<li><a href="#events">5. Event contracts — additions</a></li>
+<li><a href="#bands">6. Confidence bands — Verification Engine</a></li>
+<li><a href="#dod">7. Definition of Done</a></li>
+</ol>
+</nav>
+
+<h2 id="recon">1. Reconciliation — What This Addendum Adds and Why</h2>
+<p>The original Microservices-Implementation-Guide reconciled a short "Volume 9" outline into 7 services plus a backlogged Marketplace Engine. This new source, read in full, adds four engine families that outline never named at build-detail level:</p>
+<div class="table-wrap"><table>
+<tr><th>New engine family</th><th>Source</th><th>Already covered?</th></tr>
+<tr><td>Knowledge Service</td><td>Sprint 2.3 MVP; RFC-0005 "Knowledge"</td><td>No — Memory Service only covers session memory</td></tr>
+<tr><td>ML Integration Layer (Prediction/Learning/Optimisation)</td><td>Early-pass "ML Integration Layer": Classification/Prediction/Recommendation/Continuous Learning</td><td>No — ADLC Plan §12 mentions it only as an operations concept</td></tr>
+<tr><td>Anti-Hallucination Engine V2 / Verification Engine</td><td>Sprint 4.3: Claim Extraction → Evidence Correlation → Truth Scoring → Confidence → Citation</td><td>Partially — Instructional Manual §4.4 conflated it with Safety Engine's response contract</td></tr>
+<tr><td>Universal Cost Optimiser</td><td>Utility Score = Accuracy+Trust+Compliance+Performance − Cost−Latency−Energy−Risk</td><td>No — cache-first exists as a principle, no service computes it at request time</td></tr>
+</table></div>
+<div class="callout note"><strong>Scope discipline check:</strong> these are new Tier 2 surface, same tier as Workflow/Safety/Governance. Build order matters more than completeness — ordered below by dependency and by how directly they serve the platform's core economic claim (80% LLM-cost reduction, ADLC Plan §9), not by how the source happens to list them.</div>
+
+<div class="part-divider">
+  <div class="k">Architecture</div>
+  <h2 id="overview" style="color:#fff">2. Updated Architecture Overview</h2>
+  <div class="when">Tier 1 unchanged · Tier 2 extended with 4 services · Tier 3 gains pgvector</div>
+</div>
+<ul>
+<li><strong>Tier 1 (unchanged):</strong> Agent Registry, Trust Authority, Discovery Service, Memory Service.</li>
+<li><strong>Tier 2 (extended):</strong> Workflow Engine, Safety Engine, Governance Engine, Marketplace Engine (backlog) <strong>+ Knowledge Service, Cost Optimiser Service, ML Integration Service, Verification Engine</strong>.</li>
+<li><strong>Tier 3 (extended):</strong> PostgreSQL, Redis, Neo4j, Kafka <strong>+ pgvector</strong> on the existing PostgreSQL instance.</li>
+</ul>
+<p>The dependency rule holds: no Tier 2 service calls another Tier 2 service synchronously — the new services communicate via Kafka events, same as Workflow/Safety/Governance already do.</p>
+
+<h2 id="catalogue">3. Service Catalogue Additions</h2>
+<div class="table-wrap"><table>
+<tr><th>Service</th><th>Owns</th><th>Exposes</th><th>Depends on</th><th>Data store</th></tr>
+<tr><td>Knowledge Service</td><td>Validated facts, embeddings</td><td><code>POST/GET /knowledge</code>, <code>/knowledge/search</code></td><td>Memory Service (read); Neo4j</td><td>PostgreSQL + pgvector</td></tr>
+<tr><td>Verification Engine</td><td>Evidence correlation, truth/confidence scores</td><td><code>POST /verify</code></td><td>Knowledge Service; consumes <code>workflow.completed</code></td><td>PostgreSQL</td></tr>
+<tr><td>Cost Optimiser Service</td><td>Utility Score computations</td><td><code>POST /route/decide</code></td><td>Trust Authority, Safety Engine</td><td>Redis (decision cache only)</td></tr>
+<tr><td>ML Integration Service</td><td>Prediction/recommendation models</td><td><code>POST /predict</code>, <code>/recommend</code></td><td>Consumes <code>workflow.completed</code>, <code>safety.flagged</code>, <code>verification.completed</code></td><td>PostgreSQL + object storage</td></tr>
+</table></div>
+<p><strong>The one rule that still applies:</strong> every row owns its own schema. Cost Optimiser Service needs a trust score on every request — call the Trust Authority API and cache the response; never read <code>trust_scores</code> directly.</p>
+
+<h2 id="patterns">4. Communication Patterns — Additions</h2>
+<h3>4.1 Cost Optimiser — the one synchronous exception in Tier 2</h3>
+<p>Routing decisions must be available <em>before</em> an LLM call is made, so <code>POST /route/decide</code> is synchronous from the Gateway, budgeted at &lt;20 ms. This is the only synchronous Tier 2 call in the system — if a second one gets proposed later, treat that as a signal to re-examine the tier boundary, not a precedent.</p>
+
+<h3>4.2 The extended event flow</h3>
+<pre><code>Workflow Engine  ──publishes──▶ workflow.completed
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                 ▼
+             Safety Engine    Governance Engine   Verification Engine (NEW)
+             (existing)       (existing, audits    (extracts claims, correlates
+                               unconditionally)      evidence, truth score)
+                    │                                      │
+                    ▼                                      ▼
+            safety.flagged                      verification.completed (NEW)
+                    │                                      │
+                    └──────────────┬───────────────────────┘
+                                   ▼
+                    ML Integration Service (NEW) — updates
+                    prediction/recommendation models (Law 9)
+                                   │
+                                   ▼
+                    trust.updated (existing topic, now also
+                    fed by ML Integration Service outcomes)</code></pre>
+
+<h3>4.3 Cache/memory layer implementation, now canonical</h3>
+<p>Instructional Manual §3.5 built only <code>L1 Session Cache, TTL = 1 hour</code> as an explicit reduced-scope MVP. This addendum extends to the full model resolved in ADLC Plan §15.3, TTLs pinned by this source's Sprint 2.2 spec:</p>
+<div class="table-wrap"><table>
+<tr><th>Layer</th><th>Scope</th><th>TTL</th></tr>
+<tr><td>L0 Prompt Cache</td><td>Exact-match prompt+context hash</td><td>5 minutes</td></tr>
+<tr><td>L1 Session Cache</td><td>Per-session (already built)</td><td>1 hour</td></tr>
+<tr><td>L2 Agent Cache</td><td>Per-agent, cross-session</td><td>24 hours</td></tr>
+<tr><td>L3 Workflow Cache</td><td>Per-workflow-definition reuse</td><td>7 days</td></tr>
+<tr><td>L4 Organisation Cache</td><td>Cross-agent, per-organisation</td><td>30 days</td></tr>
+<tr><td>L5 Federation Cache</td><td>Cross-organisation</td><td>Policy-controlled (Governance Engine decides per call)</td></tr>
+</table></div>
+
+<h2 id="events">5. Event Contracts — Additions</h2>
+<div class="table-wrap"><table>
+<tr><th>Topic</th><th>Producer</th><th>Consumers</th><th>Payload</th></tr>
+<tr><td><code>verification.completed</code></td><td>Verification Engine</td><td>Governance Engine, ML Integration Service</td><td><code>{workflow_id, claim_count, truth_score, confidence_band, citations[]}</code></td></tr>
+<tr><td><code>ml.prediction.made</code></td><td>ML Integration Service</td><td>Cost Optimiser Service (optional)</td><td><code>{prediction_type, target_id, value, confidence, model_version}</code></td></tr>
+<tr><td><code>knowledge.updated</code></td><td>Knowledge Service</td><td>Verification Engine</td><td><code>{knowledge_id, source, updated_fields[], ts}</code></td></tr>
+</table></div>
+
+<h2 id="bands">6. Confidence Bands — Verification Engine</h2>
+<p>Reuses the exact band structure the source repeats consistently across every pass — one of the few things that didn't drift between drafts:</p>
+<pre><code>CONFIDENCE_BANDS = [(95, "GREEN"), (80, "AMBER"), (60, "RED"), (0, "GREY")]
+# GREEN=Verified, AMBER=Inference, RED=Challenge, GREY=Risk</code></pre>
+<p>This feeds the same <code>{answer, confidence, evidence[], verification_status}</code> contract Safety Engine already returns — a deeper pipeline with a real truth score, not a competing contract.</p>
+
+<h2 id="dod">7. Definition of Done — Microservices v2 Milestone</h2>
+<ul>
+<li>Knowledge Service, Verification Engine, Cost Optimiser Service, and ML Integration Service all report <code>"status": "ok"</code> on <code>/health</code>.</li>
+<li>Cache Service serves all six layers (L0–L5) with the TTLs above; an L5 policy-denied request returns a clear reason, not a silent fallback.</li>
+<li><code>POST /route/decide</code> responds in &lt;20 ms p95 with an explainable Utility Score breakdown.</li>
+<li>A workflow completion produces a real <code>verification.completed</code> event, consumed by ML Integration Service within 1 second.</li>
+<li>Recorded in <code>governance/decisions/</code>, noting Marketplace Engine and connector layers remain backlog.</li>
+</ul>
+
+<footer>AEP-X — Microservices Architecture v2 Addendum · Companion to ADLC-Plan, Handoff, Instructional-Manual, and Microservices-Implementation-Guide · 7 July 2026</footer>
+</div>
+</body>
+</html>

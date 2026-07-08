@@ -1,0 +1,58 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - registry
+          - identity
+          - trust
+          - memory
+          - cache
+          - gateway
+          - discovery
+          - workflow
+          - safety
+          - governance
+          - knowledge
+          - verification
+          - cost-optimiser
+          - ml-integration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r services/${{ matrix.service }}/requirements.txt pytest ruff
+      - run: pip install fakeredis==2.23.2
+        if: matrix.service == 'cache' || matrix.service == 'discovery'
+      - run: ruff check services/${{ matrix.service }}
+      # run from the service dir — tests import `app.main` relative to it
+      - run: cd services/${{ matrix.service }} && pytest tests -v
+
+  test-soa:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        connector:
+          - connector-bus
+          - connectors/enterprise
+          - connectors/productivity
+          - connectors/devtools
+          - connectors/aiplatform
+          - connectors/data
+          - connectors/messaging
+          - connectors/industrial
+          - connectors/cloud
+          - connectors/government
+          - connectors/education
+          - console
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r ${{ matrix.connector }}/requirements.txt pytest ruff
+      - run: ruff check ${{ matrix.connector }}
+      # run from the component dir — tests import `app.main` relative to it
+      - run: cd ${{ matrix.connector }} && pytest tests -v

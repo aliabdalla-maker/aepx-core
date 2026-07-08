@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X — Hybrid Architecture &amp; Comparison</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff; --code-bg:#0f1720; --code-ink:#d6e2f0;
+    --amber:#b8860b; --amber-light:#fdf6ec; --green:#2e8b57; --green-light:#eaf6ee;
+    --red:#b04a6f; --red-light:#fbeef2;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  .page { max-width:940px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+  header.doc-header { background:linear-gradient(135deg,#0f4c81 0%,#143d66 100%); color:#fff; border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.6rem; }
+  header.doc-header h1 { margin:0 0 .4rem; font-size:1.65rem; line-height:1.3; }
+  header.doc-header .subtitle { opacity:.85; font-size:1.02rem; }
+  .meta { display:flex; flex-wrap:wrap; gap:.5rem 1.6rem; margin-top:1.2rem; font-size:.85rem; opacity:.9; }
+  .meta span strong { opacity:.75; font-weight:600; margin-right:.35rem; }
+  h2 { color:var(--accent); font-size:1.26rem; margin:2.3rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+  p { margin:.65rem 0; }
+  a { color:var(--accent); }
+  .table-wrap { overflow-x:auto; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; font-size:.84rem; background:var(--card); border-radius:8px; overflow:hidden; }
+  th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top; word-break:break-word; }
+  th { background:var(--accent-light); color:var(--accent); font-weight:600; }
+  tr:nth-child(even) td { background:#fbfcfe; }
+  code { font-family:"Cascadia Code",Consolas,monospace; }
+  p code, li code, td code { background:#e9edf3; padding:.1rem .35rem; border-radius:4px; font-size:.87em; color:#0f4c81; }
+  pre { background:var(--code-bg); color:var(--code-ink); border-radius:8px; padding:.85rem 1rem; font-size:.74rem; line-height:1.5; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin:.6rem 0 1rem; }
+  ul, ol { padding-left:1.4rem; } li { margin:.3rem 0; }
+  .callout { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin:1rem 0; font-size:.92rem; }
+  .callout.warn { border-left:5px solid var(--red); background:var(--red-light); }
+  .callout.dod { border-left:5px solid var(--green); background:var(--green-light); }
+  footer { margin-top:3rem; font-size:.82rem; color:var(--muted); text-align:center; }
+  @media print {
+    @page { size: A4 portrait; margin: 14mm 12mm; }
+    body { background:#fff; }
+    header.doc-header { background:var(--accent); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { max-width:none; padding:0; }
+    pre, table, .callout { page-break-inside:avoid; }
+    h2 { page-break-after:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc-header">
+  <h1>AEP-X — Hybrid Architecture &amp; SOA-vs-Microservices Comparison</h1>
+  <div class="subtitle">One platform, two integration styles, sharing a trust &amp; governance spine</div>
+  <div class="meta">
+    <span><strong>Companion to</strong> SOA-Architecture.html, Microservices-Architecture-v2.html</span>
+    <span><strong>Prepared</strong> 7 July 2026</span>
+  </div>
+</header>
+
+<h2>1. The Hybrid, in One Diagram</h2>
+<pre><code>                         Client · SDK · CLI · MCP
+                                    │
+                                    ▼
+                              API Gateway
+                                    │
+                ┌───────────────────┴────────────────────┐
+                ▼                                         ▼
+    MICROSERVICES CORE (owned,                 SOA — AEP-X Connector Bus
+    independently deployable,                  (mediates systems AEP-X
+    choreographed via Kafka)                   does not own)
+                │                                         │
+    Tier 1: Registry, Trust,                  Coarse connector services:
+    Discovery, Memory                         Enterprise, Industrial,
+                │                              Productivity, Developer Tools,
+    Tier 2: Workflow, Safety,                  AI Platform
+    Governance, Knowledge,
+    Cost Optimiser, ML                                    │
+    Integration, Verification                             ▼
+    (event-driven, own schemas)                External systems: SAP,
+                │                              Salesforce, Workday, OPC-UA
+                ▼                              plants, OpenAI, GitHub, Slack…
+    Tier 3: PostgreSQL, Redis,
+    Neo4j, Kafka, pgvector
+
+    Both sides share: Trust Authority, Governance Engine, the RFC-0001
+    message envelope, and Kafka. Neither side re-implements these — that's
+    what makes it one system with two integration styles, not two systems
+    bolted together.</code></pre>
+
+<h2>2. Why the Boundary Sits Exactly at "Who Owns the System"</h2>
+<p>The deciding question: <strong>does AEP-X control the release cadence and protocol of the thing being integrated?</strong></p>
+<ul>
+<li>Registry, Trust, Memory, Workflow, Safety, Governance, Knowledge, Cost Optimiser, ML Integration, Verification — <strong>yes</strong>. Independent deployability and choreography pay off because each changes on its own schedule.</li>
+<li>SAP, Salesforce, Workday, an OPC-UA-speaking factory PLC — <strong>no</strong>. What's needed is one place enforcing trust/policy/audit consistently and translating heterogeneous protocols into one canonical shape.</li>
+</ul>
+
+<h2>3. Comparison Table</h2>
+<div class="table-wrap"><table>
+<tr><th>Dimension</th><th>Microservices (core)</th><th>SOA / ESB (connector layer)</th></tr>
+<tr><td>Coupling</td><td>Loose — own schema, know only APIs</td><td>Loose to externals (adapter hides protocol), tighter internally (bus mediates every call)</td></tr>
+<tr><td>Deployment cadence</td><td>Independent, as often as needed</td><td>Per category, usually far less often</td></tr>
+<tr><td>Scaling unit</td><td>Per-service</td><td>Per-category</td></tr>
+<tr><td>Protocol standardisation</td><td>One internal standard</td><td>Many external protocols in, one canonical envelope out</td></tr>
+<tr><td>Governance enforcement</td><td>Distributed by convention</td><td>Centralised, structurally enforced</td></tr>
+<tr><td>Failure blast radius</td><td>Contained to one service</td><td>Contained to one connector category</td></tr>
+<tr><td>Cost to build N integrations</td><td>High if used for externals — N near-identical services</td><td>Low — N adapters inside 5 coarse services</td></tr>
+<tr><td>Fit for AIA-R0–R4 compliance</td><td>Adequate for internal services</td><td>Better — AIA-R is naturally per-connector</td></tr>
+<tr><td>Anti-pattern risk if misapplied</td><td>"Distributed monolith" if DBs are shared</td><td>"God bus" if the bus grows business logic</td></tr>
+</table></div>
+
+<h2>4. What NOT to Build</h2>
+<div class="callout warn">
+<ul style="margin:0">
+<li><strong>No commercial ESB product</strong> (MuleSoft, BizTalk). The Connector Bus is a ~200-line FastAPI service plus the existing Kafka bus.</li>
+<li><strong>Don't build all 25+ external systems</strong> before validating one per category (Salesforce, GitHub, Slack, OpenAI first).</li>
+<li><strong>Don't let the SOA layer duplicate governance logic</strong> — it calls existing Trust Authority / Governance Engine APIs, never grows its own.</li>
+<li><strong>Don't re-open Marketplace Engine or connector deferrals</strong> to justify this work.</li>
+</ul>
+</div>
+
+<h2>5. Recommendation</h2>
+<div class="callout dod">Finish the Microservices v2 additions first (Knowledge, Verification, Cost Optimiser, ML Integration — these unlock the platform's core economic and anti-hallucination claims), then start the SOA Connector Bus (Weeks 13+, gated on Trust Authority + Governance Engine being healthy in production). The two are not in tension for engineering capacity — the SOA layer's first cut reuses the core's existing trust/policy/audit APIs rather than designing a second platform from scratch.</div>
+
+<footer>AEP-X — Hybrid Architecture &amp; Comparison · Companion to SOA-Architecture.html and Microservices-Architecture-v2.html · 7 July 2026</footer>
+</div>
+</body>
+</html>

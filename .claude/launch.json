@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "console",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8081", "-d", "console/static"],
+      "port": 8081
+    }
+  ]
+}
