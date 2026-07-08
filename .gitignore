@@ -18,8 +18,8 @@ node_modules/
 Thumbs.db
 
 # Local Claude Code session state — machine-specific, not shared config
-.claude/settings.local.json
-.claude/scheduled_tasks.lock
+AEP-X 1/settings.local.json
+AEP-X 1/scheduled_tasks.lock
 
 # Local dev artifacts
 console/uploads_dev/
