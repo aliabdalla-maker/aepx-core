@@ -92,14 +92,15 @@
 </nav>
 
 <h2 id="overview">1. System Overview</h2>
-<p>The reference implementation runs as <strong>29 containers</strong> under one <code>docker-compose.yml</code>:</p>
+<p>The reference implementation runs as <strong>32 containers</strong> under one <code>docker-compose.yml</code>:</p>
 <ul>
 <li><strong>Tier 1 — Foundational (synchronous):</strong> Identity, Trust, Registry, Memory, Cache (L0–L5), Discovery — plus the API Gateway that fronts everything.</li>
 <li><strong>Tier 2 — Orchestration (event-driven):</strong> Workflow, Safety, Governance, Knowledge, Verification, Cost Optimiser, ML Integration.</li>
 <li><strong>SOA layer:</strong> the Connector Bus plus 10 category connector services carrying <strong>100 catalogued connectors</strong> (4 specialized, 96 governed stubs — see <a href="Connector-Catalogue.md">Connector-Catalogue.md</a>).</li>
-<li><strong>Infrastructure:</strong> PostgreSQL (pgvector), Redis, Neo4j, Kafka (KRaft).</li>
+<li><strong>Infrastructure:</strong> PostgreSQL (pgvector), Redis, Neo4j, Kafka (KRaft), Ollama (self-hosted model server).</li>
+<li><strong>Brain:</strong> the self-healing/self-learning monitor — watches every core service's health, re-warms a cold Ollama, and runs a circuit breaker per connector learned from Governance's real audit history (§8.4).</li>
 </ul>
-<p>Two invariants govern every runtime path (governance/book-of-laws.md): <strong>Law 2</strong> — no external call executes before a trust evaluation, enforced structurally at the Connector Bus; <strong>Law 8</strong> — every event is audited by the Governance Engine, which consumes every Kafka topic unconditionally.</p>
+<p>Three invariants govern every runtime path (governance/book-of-laws.md): <strong>Law 2</strong> — no external call executes before a trust evaluation, enforced structurally at the Connector Bus; <strong>Law 8</strong> — every event is audited by the Governance Engine, which consumes every Kafka topic unconditionally; and the Brain's circuit breaker, which fails a repeatedly-unreliable connector fast rather than letting every caller rediscover the same timeout.</p>
 
 <h2 id="usecase">2. UML Use Case Diagram</h2>
 <div class="diagram-wrap">
@@ -442,6 +443,7 @@ docker compose down -v</code></pre>
 <tr><td>8011</td><td>Verification</td><td>5432</td><td>PostgreSQL (pgvector/pgvector:pg16)</td></tr>
 <tr><td>8012</td><td>Cost Optimiser</td><td>6379</td><td>Redis</td></tr>
 <tr><td>8013</td><td>ML Integration</td><td>7474/7687</td><td>Neo4j (HTTP / Bolt)</td></tr>
+<tr><td>8014</td><td>Brain (<code>/brain/status</code>, <code>/brain/circuit/&lt;name&gt;</code>)</td><td>11434</td><td>Ollama (self-hosted model server)</td></tr>
 <tr><td><strong>8080</strong></td><td><strong>Console — the LLM/ML box web GUI</strong> (chat via Connector Bus; file/folder/image/video upload)</td><td>9092</td><td>Kafka (KRaft)</td></tr>
 </table></div>
 
@@ -449,7 +451,8 @@ docker compose down -v</code></pre>
 <pre><code>curl http://localhost:8000/health     # 14 core services, aggregated
 curl http://localhost:8020/health     # bus: expect "connector_count": 100, 10 categories
 curl http://localhost:8009/audit      # audit log — grows with every workflow/safety event
-docker compose ps                     # 29 containers; postgres/redis/neo4j report (healthy)</code></pre>
+curl http://localhost:8014/brain/status   # every monitored service's up/down state
+docker compose ps                     # 32 containers; postgres/redis/neo4j/ollama report (healthy)</code></pre>
 
 <h2 id="smoke">5. Smoke Test Procedure</h2>
 <p>Run after any rebuild. Every step below was executed successfully against the live stack on 8 July 2026.</p>
@@ -517,15 +520,18 @@ curl -s -X POST http://localhost:8012/route/decide -H "Content-Type: application
 </ol>
 <h3>8.2 Adding a brand-new connector</h3>
 <p>Add one entry to <code>connectors/catalogue.json</code> and restart the bus + owning category service. It is immediately routable as a governed stub — trust-checked, policy-gated, audited — with no code change. That is the point of the data-driven routing table.</p>
-<h3>8.3 The two governance gates (do not bypass)</h3>
+<h3>8.3 The trust and policy gates (do not bypass)</h3>
 <div class="callout warn">A <code>403</code> from the bus is a <strong>feature</strong>. The trust gate (Law 2) and the policy ceiling protect exactly the connectors — industrial control systems, government services, HR/finance platforms — where an ungoverned agent call does real-world damage. Raise an agent's trust or the risk ceiling through governance records, never by editing the check out of the bus.</div>
+
+<h3>8.4 The third gate: the Brain's circuit breaker (also do not bypass)</h3>
+<div class="callout warn">A <code>503</code> from the bus is the same kind of feature, for a different reason. Unlike trust/policy (fixed rules, evaluated per call), the circuit breaker is <strong>learned</strong> — <code>services/brain</code> derives each connector's reliability from Governance's real audit history and opens the circuit after <code>CIRCUIT_FAILURE_THRESHOLD</code> (5) consecutive failures, closing it again only after a cooldown trial succeeds. It is deliberately HTTP-only (no <code>docker.sock</code>, which would be root-equivalent host control with no real justification for a health monitor) and fails <strong>open</strong> — if the Brain itself is unreachable, the bus proceeds as if the circuit were closed rather than blocking normal traffic. Check <code>GET /brain/circuit/&lt;name&gt;</code> before assuming a connector is broken; do not silence a <code>503</code> by removing the bus's call to the Brain.</div>
 
 <h2 id="dod">9. Operational Definition of Done</h2>
 <ul>
-<li>All 29 containers up; <code>postgres</code>, <code>redis</code>, <code>neo4j</code> report <code>(healthy)</code>.</li>
-<li>Gateway <code>/health</code>: all 14 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 100</code>, 10 categories.</li>
-<li>Smoke test (§5) passes all six criteria, including both 403 governance gates.</li>
-<li>A workflow execution appears in <code>GET /audit</code> within 2 seconds (choreography chain alive).</li>
+<li>All 32 containers up; <code>postgres</code>, <code>redis</code>, <code>neo4j</code>, <code>ollama</code> report <code>(healthy)</code>.</li>
+<li>Gateway <code>/health</code>: all 14 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 100</code>, 10 categories. Brain <code>/health</code>: <code>monitoring: 16</code>.</li>
+<li>Smoke test (§5) passes all six criteria, including both 403 governance gates. v1 test environment (<code>tests/v1/run_smoke_test.sh</code>) passes all 6 checks in isolation.</li>
+<li>A workflow execution appears in <code>GET /audit</code> within 2 seconds (choreography chain alive); a Brain circuit-breaker trip appears there too (Law 8 covers self-healing actions, not just application events).</li>
 <li>Backups current (§7) and the restore path tested at least once per release.</li>
 </ul>
 
