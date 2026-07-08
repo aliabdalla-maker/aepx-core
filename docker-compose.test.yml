@@ -1,0 +1,115 @@
+# v1 isolated test environment — a deliberately minimal slice of the full
+# platform, not a second copy of all 32 containers. Runs alongside the main
+# stack (different project name, ports, and volumes) so it never touches
+# production data, and is small enough to actually fit on this box's
+# measured ~600MB-1GB free RAM headroom.
+#
+# Scope: identity -> trust -> registry -> gateway -> governance ->
+# connector-bus -> the aiplatform connector -> the console ("machine
+# learning box"). That is the smallest slice that still proves the whole
+# protocol end-to-end (trust check, policy check, mediation, a real model
+# response). Kafka is intentionally omitted — Governance's consumer thread
+# already degrades gracefully without a broker (see services/governance),
+# so /policy/evaluate and /audit both still work, just without the
+# event-sourced audit trail. The other 9 connector categories and the
+# Brain aren't included in v1 for the same resource reason; add them here
+# once this slice is proven and headroom allows.
+#
+# Reuses the MAIN stack's already-warm Ollama instance via
+# host.docker.internal rather than loading a second 1.3GB model into RAM.
+#
+# Run:   docker compose -p aepx-test -f docker-compose.test.yml up -d --build
+# Stop:  docker compose -p aepx-test -f docker-compose.test.yml down -v
+name: aepx-test
+services:
+  postgres-test:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: aepx
+      POSTGRES_USER: aepx
+      POSTGRES_PASSWORD: aepx_dev_only
+    ports: ["5532:5432"]
+    volumes: ["./schemas/sql:/docker-entrypoint-initdb.d"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U aepx"], interval: 5s, retries: 10 }
+
+  identity-test:
+    build: ./services/identity
+    ports: ["8101:8000"]
+    depends_on: [postgres-test]
+
+  trust-test:
+    build: ./services/trust
+    ports: ["8102:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres-test:5432/aepx
+    depends_on: [postgres-test]
+
+  registry-test:
+    build: ./services/registry
+    ports: ["8103:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres-test:5432/aepx
+    depends_on: [postgres-test]
+
+  governance-test:
+    build: ./services/governance
+    ports: ["8109:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres-test:5432/aepx
+      - KAFKA_BOOTSTRAP=kafka-test-not-running:9092  # deliberately absent — see file header
+    depends_on: [postgres-test]
+
+  gateway-test:
+    build: ./services/gateway
+    ports: ["8100:8000"]
+    environment:
+      - IDENTITY_URL=http://identity-test:8000
+      - TRUST_URL=http://trust-test:8000
+      - REGISTRY_URL=http://registry-test:8000
+      - MEMORY_URL=http://identity-test:8000       # not in the v1 slice; gateway tolerates a stub target
+      - CACHE_URL=http://identity-test:8000
+      - DISCOVERY_URL=http://identity-test:8000
+      - WORKFLOW_URL=http://identity-test:8000
+      - SAFETY_URL=http://identity-test:8000
+      - GOVERNANCE_URL=http://governance-test:8000
+      - KNOWLEDGE_URL=http://identity-test:8000
+      - VERIFICATION_URL=http://identity-test:8000
+      - COST_OPTIMISER_URL=http://identity-test:8000
+      - ML_INTEGRATION_URL=http://identity-test:8000
+      - CONNECTOR_BUS_URL=http://connector-bus-test:8000
+    depends_on: [identity-test, trust-test, registry-test, governance-test]
+
+  connector-bus-test:
+    build: ./connector-bus
+    ports: ["8120:8000"]
+    environment:
+      - TRUST_URL=http://trust-test:8000
+      - GOVERNANCE_URL=http://governance-test:8000
+      - BRAIN_URL=http://brain-not-running-in-v1:8000  # absent by design — bus fails open
+      - CONNECTOR_URL_AIPLATFORM=http://connector-aiplatform-test:8000
+    volumes:
+      - ./connectors/catalogue.json:/app/catalogue.json:ro
+    depends_on: [trust-test, governance-test]
+
+  connector-aiplatform-test:
+    build: ./connectors/aiplatform
+    ports: ["8122:8000"]
+    volumes:
+      - ./connectors/catalogue.json:/app/catalogue.json:ro
+    environment:
+      # Reuses the MAIN stack's Ollama (already warm) instead of a second
+      # 1.3GB model in RAM — see file header.
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3.2:1b
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  console-test:
+    build: ./console
+    ports: ["8180:8000"]
+    environment:
+      - CONNECTOR_BUS_URL=http://connector-bus-test:8000
+      - REGISTRY_URL=http://registry-test:8000
+      - TRUST_URL=http://trust-test:8000
+      - GOVERNANCE_URL=http://governance-test:8000
+    depends_on: [connector-bus-test, registry-test, trust-test, governance-test]

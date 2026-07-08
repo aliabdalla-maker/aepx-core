@@ -10,6 +10,7 @@ app = FastAPI(title="AEP-X Connector Bus (ACB)", version="0.2.0")
 
 TRUST_URL = os.getenv("TRUST_URL", "http://trust:8000")
 GOVERNANCE_URL = os.getenv("GOVERNANCE_URL", "http://governance:8000")
+BRAIN_URL = os.getenv("BRAIN_URL", "http://brain:8000")
 CATALOGUE_PATH = os.getenv("CATALOGUE_PATH", "/app/catalogue.json")
 
 try:
@@ -123,7 +124,22 @@ async def route(envelope: Envelope):
             await _audit(agent_id, name, "denied", "policy_denied", trust_score, connector["ai_risk_class"])
             raise HTTPException(403, f"policy denies risk level {connector['ai_risk_class']} for connector '{name}'")
 
-        # 3. Mediate — forward the canonical envelope to the owning category
+        # 3. Circuit breaker — self-healing (services/brain): if this connector
+        # has been failing repeatedly, fail fast with a clear reason instead of
+        # every caller re-discovering the same timeout. Fail-open: the Brain
+        # being unreachable must never itself block a normal call.
+        try:
+            circuit_resp = await client.get(f"{BRAIN_URL}/brain/circuit/{name}")
+            circuit = circuit_resp.json()
+            if not circuit.get("allowed", True):
+                await _audit(agent_id, name, "denied", "circuit_open", trust_score, connector["ai_risk_class"])
+                raise HTTPException(503, f"connector '{name}' is circuit-broken (reliability {circuit.get('reliability_score')}) — try again later")
+        except HTTPException:
+            raise
+        except Exception:
+            pass  # Brain unreachable — fail open, proceed as normal
+
+        # 4. Mediate — forward the canonical envelope to the owning category
         #    service, which dispatches to the connector's adapter. Overrides
         #    the client's 3s default for this call only.
         forward_resp = await client.post(

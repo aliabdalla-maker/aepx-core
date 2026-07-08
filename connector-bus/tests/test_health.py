@@ -40,6 +40,8 @@ class _FakeAsyncClient:
     async def get(self, url, *args, **kwargs):
         if "/trust/" in url:
             return _FakeResponse({"trust_score": 90})
+        if "/brain/circuit/" in url:
+            return _FakeResponse({"state": "closed", "allowed": True, "reliability_score": 1.0})
         raise AssertionError(f"unexpected GET {url}")
 
     async def post(self, url, *args, **kwargs):
@@ -103,6 +105,41 @@ def test_route_denies_high_risk_connector_by_policy(monkeypatch):
     # which is the governance gate SOA-Architecture.md §4 requires for
     # industrial connectors.
     assert resp.status_code == 403
+
+
+def test_route_denies_when_circuit_open(monkeypatch):
+    class _CircuitOpenClient(_FakeAsyncClient):
+        async def get(self, url, *args, **kwargs):
+            if "/trust/" in url:
+                return _FakeResponse({"trust_score": 90})
+            if "/brain/circuit/" in url:
+                return _FakeResponse({"state": "open", "allowed": False, "reliability_score": 0.1})
+            raise AssertionError(f"unexpected GET {url}")
+
+    monkeypatch.setattr(main.httpx, "AsyncClient", _CircuitOpenClient)
+    resp = client.post(
+        "/bus/route",
+        json={"sender": "aepx://agent/tutor-1", "receiver": "aepx://connector/github", "payload": {"op": "ping"}},
+    )
+    assert resp.status_code == 503
+
+
+def test_route_fails_open_when_brain_unreachable(monkeypatch):
+    class _BrainDownClient(_FakeAsyncClient):
+        async def get(self, url, *args, **kwargs):
+            if "/trust/" in url:
+                return _FakeResponse({"trust_score": 90})
+            if "/brain/circuit/" in url:
+                raise ConnectionError("brain unreachable")
+            raise AssertionError(f"unexpected GET {url}")
+
+    monkeypatch.setattr(main.httpx, "AsyncClient", _BrainDownClient)
+    resp = client.post(
+        "/bus/route",
+        json={"sender": "aepx://agent/tutor-1", "receiver": "aepx://connector/github", "payload": {"op": "ping"}},
+    )
+    # the Brain being down must never block a normal, otherwise-valid call
+    assert resp.status_code == 200
 
 
 def test_get_producer_degrades_without_kafka():

@@ -10,6 +10,18 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://aepx:aepx_dev_only@postgr
 _RISK_ORDER = ["S0", "S1", "S2", "S3", "S4"]
 _POLICIES = {"max_risk_level": "S2"}  # seed policy — extend via RFC-0006 categories
 
+# Every topic this consumer subscribes to — KafkaConsumer matches exact
+# topic names, not patterns, so a producer adding a new brain.* kind (see
+# services/brain's _record_incident) must be mirrored here explicitly or
+# its events are silently dropped from the audit trail. Kept as a
+# module-level constant specifically so tests can catch that drift.
+_CONSUMED_TOPICS = [
+    "workflow.completed", "safety.flagged", "verification.completed",
+    "connector.invoked", "connector.failed", "trust.updated",
+    "brain.service_down", "brain.service_recovered", "brain.ollama_rewarmed",
+    "brain.circuit_opened", "brain.circuit_closed", "brain.circuit_half_open",
+]
+
 try:
     from kafka import KafkaConsumer
     _KAFKA_AVAILABLE = True
@@ -112,11 +124,9 @@ def consume_all_events():
     # that dies silently means 0% audit coverage while /health still says ok.
     if not _KAFKA_AVAILABLE:
         return
-    topics = ["workflow.completed", "safety.flagged", "verification.completed",
-              "connector.invoked", "connector.failed", "trust.updated"]
     while True:
         try:
-            consumer = KafkaConsumer(*topics, bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP", "kafka:9092"),
+            consumer = KafkaConsumer(*_CONSUMED_TOPICS, bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP", "kafka:9092"),
                                       auto_offset_reset="earliest",
                                       value_deserializer=lambda v: json.loads(v.decode()))
             for msg in consumer:

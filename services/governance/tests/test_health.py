@@ -37,3 +37,20 @@ def test_record_falls_back_to_memory_without_postgres():
     audit = client.get("/audit").json()
     assert audit[0]["topic"] == "workflow.completed"
     assert audit[0]["event"]["workflow_id"] == "abc"
+
+
+def test_consumes_every_brain_topic():
+    # Regression: this exact class of bug shipped once already — the Brain
+    # (services/brain) published brain.circuit_opened etc. to Kafka, but
+    # Governance's KafkaConsumer only matches exact topic names, so those
+    # events were silently dropped from the audit trail with no error
+    # anywhere. Every kind in brain's schema CHECK constraint
+    # (schemas/sql/006_brain.sql) must have a matching "brain.<kind>" here.
+    from app.main import _CONSUMED_TOPICS
+
+    brain_kinds = [
+        "service_down", "service_recovered", "ollama_rewarmed",
+        "circuit_opened", "circuit_closed", "circuit_half_open",
+    ]
+    for kind in brain_kinds:
+        assert f"brain.{kind}" in _CONSUMED_TOPICS, f"missing brain.{kind} in _CONSUMED_TOPICS"

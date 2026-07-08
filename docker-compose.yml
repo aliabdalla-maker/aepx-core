@@ -17,6 +17,14 @@ services:
     restart: unless-stopped
     ports: ["11434:11434"]
     volumes: ["ollama-models:/root/.ollama"]
+    environment:
+      # Ollama's default (5m idle) unloads the model between chats on a
+      # normal-use console, forcing a cold reload that's measured as slow
+      # as 88s on this box — well past the aiplatform connector's 25s
+      # timeout, which is what was intermittently surfacing as "could not
+      # reach the platform" even though every other part of the stack was
+      # healthy. Keep it loaded indefinitely instead.
+      - OLLAMA_KEEP_ALIVE=-1
     healthcheck:
       test: ["CMD-SHELL", "ollama list || exit 1"]
       interval: 10s
@@ -190,9 +198,29 @@ services:
     environment:
       - TRUST_URL=http://trust:8000
       - GOVERNANCE_URL=http://governance:8000
+      - BRAIN_URL=http://brain:8000
     volumes:
       - ./connectors/catalogue.json:/app/catalogue.json:ro
-    depends_on: [trust, governance]
+    depends_on: [trust, governance, brain]
+
+  # ---- Brain: self-healing + self-learning monitor ----
+  # Watches every core service's health, re-warms a cold Ollama, and runs a
+  # circuit breaker per connector learned from Governance's real audit
+  # history (docs/Operational-Manual.html §... Brain section). HTTP-only —
+  # deliberately does NOT get docker.sock access (that's root-equivalent
+  # host control); every action it takes is published to Kafka so
+  # Governance's audit log captures it (Law 8).
+  brain:
+    build: ./services/brain
+    restart: unless-stopped
+    ports: ["8014:8000"]
+    environment:
+      - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres:5432/aepx
+      - GOVERNANCE_URL=http://governance:8000
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2:1b
+      - BRAIN_POLL_INTERVAL=20
+    depends_on: [postgres, governance, ollama]
 
   # ---- 10 category connector services, 100 connectors total ----
   # One coarse-grained service per category, one adapter per connector
