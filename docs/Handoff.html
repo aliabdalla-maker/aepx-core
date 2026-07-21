@@ -105,7 +105,8 @@
   </div>
   <div class="badge-row">
     <span class="badge">✅ Delivered: 14 core services + Connector Bus, live in Docker</span>
-    <span class="badge">🔌 100 connectors · 10 category services</span>
+    <span class="badge">🔌 107 connectors · 11 category services</span>
+    <span class="badge">⛓️ RFC-0006: blockchain connectors · ledger anchoring · did:key</span>
     <span class="badge">📄 Runbooks: Instructional-Manual.pdf · Operational-Manual.pdf</span>
   </div>
 </header>
@@ -136,6 +137,18 @@
 <p><strong>Defects found and fixed during deployment</strong> (full detail in the Operational Manual §6 troubleshooting guide): stock <code>postgres:16</code> lacks pgvector → switched to <code>pgvector/pgvector:pg16</code>; the Microservices Guide's Kafka <code>CLUSTER_ID</code> value is not a valid KRaft UUID → regenerated; Kafka producers/consumers created once at import died silently on the broker startup race → reconnect loops and lazy producers added (Governance, Safety, Workflow).</p>
 <p><strong>Governance gates verified live:</strong> AIA-R3 connectors (industrial, government) are policy-denied under the seed <code>max_risk_level: S2</code>; AIA-R2 connectors (SAP, education) are trust-denied while the Trust stub returns 50. Raising either is a governance/data decision, not a code change.</p>
 <p><strong>Backups:</strong> full repo tarball + Docker build definitions staged in <code>OneDrive\Backups\AEP-X\</code> (sync pending OneDrive client sign-in); restore procedure in <code>Docker-Backup-2026-07-08\README.md</code>.</p>
+
+<h2 id="status-update-2">1b. Delivery Status Update — 21 July 2026 (RFC-0006)</h2>
+<div class="callout go">
+<strong>Blockchain ecosystem delivered</strong> per <code>rfcs/RFC-0006-blockchain-ledger.md</code> — every capability works with zero external infrastructure by default and upgrades to a real EVM chain only when explicitly configured.
+</div>
+<div class="table-wrap"><table>
+<tr><th>Capability</th><th>Delivered</th><th>Evidence</th></tr>
+<tr><td>Blockchain connector category</td><td><strong>7 connectors</strong> (ethereum specialized via a generic EVM JSON-RPC adapter; polygon, base, avalanche, bitcoin, solana, hyperledger-fabric as governed stubs) — total now <strong>107 connectors across 11 categories</strong>, 5 specialized</td><td><code>connectors/blockchain/</code>; bus <code>/health</code> reports <code>connector_count: 107</code></td></tr>
+<tr><td>Tamper-evident audit anchoring (Law 8)</td><td>Governance chains a SHA-256 Merkle root over every 20 audit rows; optional on-chain anchoring via <code>AEPXAnchor.sol</code></td><td><code>GET /ledger/anchors</code>, <code>GET /ledger/verify/{audit_id}</code>; <code>services/governance/tests/test_ledger.py</code> proves tamper detection</td></tr>
+<tr><td>Decentralized identity (Law 1)</td><td><code>did:key</code> (Ed25519, self-certifying — resolvable with no chain or registry); Registry mints one per agent, fail-open</td><td>Identity <code>POST /did</code> / <code>GET /did/{did}</code>; <code>agents.did</code> column</td></tr>
+<tr><td>Smart-contract policy enforcement</td><td>Opt-in: <code>AEPXPolicyRegistry.sol</code> can own <code>max_risk_level</code>; unconfigured behaviour unchanged</td><td><code>governance/contracts/</code>; existing policy tests pass unmodified</td></tr>
+</table></div>
 
 <h2 id="scope">2. Committed Scope (Execution-Lock Reading)</h2>
 <p>The ADLC Plan's Critical Evaluation (§15) found the full manual's Year-1 ask — 13 production services, a standards body, 10 frozen RFCs, a marketplace, a certification platform, and 3 verticals, built by 7 people on £250k — does not close. This handoff commits to the <strong>narrower scope the evaluation recommended</strong>, so what follows is buildable, not aspirational.</p>

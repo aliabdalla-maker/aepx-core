@@ -1015,6 +1015,76 @@
       "ai_risk_class": "AIA-R2",
       "min_trust_score": 60,
       "maturity": "stub"
+    },
+    {
+      "name": "ethereum",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "specialized"
+    },
+    {
+      "name": "polygon",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "base",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "avalanche",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "bitcoin",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "solana",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "hyperledger-fabric",
+      "category": "blockchain",
+      "protocols": [
+        "gRPC"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
     }
   ]
 }

@@ -98,7 +98,10 @@ services:
     ports: ["8003:8000"]
     environment:
       - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres:5432/aepx
-    depends_on: [postgres]
+      # Mints a did:key for every agent that doesn't supply one (RFC-0006) —
+      # best-effort: Identity being unreachable never blocks registration.
+      - IDENTITY_URL=http://identity:8000
+    depends_on: [postgres, identity]
 
   memory:
     build: ./services/memory
@@ -137,6 +140,17 @@ services:
     ports: ["8009:8000"]
     environment:
       - DATABASE_URL=postgresql://aepx:aepx_dev_only@postgres:5432/aepx
+      # RFC-0006, all optional — leave unset (the default) and Governance
+      # anchors the audit trail with its own local SHA-256 hash chain and
+      # enforces the in-process seed policy, no chain required. Set all
+      # three LEDGER_* vars to also anchor on an EVM chain
+      # (governance/contracts/AEPXAnchor.sol); set POLICY_CONTRACT_ADDRESS
+      # too to let an AEPXPolicyRegistry.sol deployment set the risk-level
+      # ceiling instead of the seed policy. See governance/contracts/README.md.
+      - LEDGER_RPC_URL=${LEDGER_RPC_URL:-}
+      - LEDGER_CONTRACT_ADDRESS=${LEDGER_CONTRACT_ADDRESS:-}
+      - LEDGER_PRIVATE_KEY=${LEDGER_PRIVATE_KEY:-}
+      - POLICY_CONTRACT_ADDRESS=${POLICY_CONTRACT_ADDRESS:-}
     depends_on: [kafka, postgres]
 
   knowledge:
@@ -222,10 +236,10 @@ services:
       - BRAIN_POLL_INTERVAL=20
     depends_on: [postgres, governance, ollama]
 
-  # ---- 10 category connector services, 100 connectors total ----
+  # ---- 11 category connector services, 107 connectors total ----
   # One coarse-grained service per category, one adapter per connector
   # (SOA-Architecture.md §3.1). The catalogue (connectors/catalogue.json)
-  # is the single source of truth; docs/Connector-Catalogue.md lists all 100.
+  # is the single source of truth; docs/Connector-Catalogue.md lists all 107.
   connector-enterprise:
     build: ./connectors/enterprise
     restart: unless-stopped
@@ -294,6 +308,18 @@ services:
     ports: ["8030:8000"]
     volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
 
+  connector-blockchain:
+    build: ./connectors/blockchain
+    restart: unless-stopped
+    ports: ["8031:8000"]
+    volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+    environment:
+      # 'ethereum's specialized adapter speaks generic EVM JSON-RPC — point
+      # it at any Ethereum-compatible chain, or a local Anvil/Hardhat devnet
+      # (see governance/contracts/README.md). Unset by default: the adapter
+      # degrades to a clean stub response, never a 5xx (see its adapters.py).
+      - EVM_RPC_URL=${EVM_RPC_URL:-http://localhost:8545}
+
   # ---- Console: the LLM / machine-learning box (web GUI) ----
   # Chat routes through the Connector Bus (trust + policy + audit);
   # uploads (files/folders/images/videos) persist in the console-uploads volume.
@@ -309,6 +335,36 @@ services:
     volumes:
       - console-uploads:/data/uploads
     depends_on: [connector-bus, registry, trust, governance]
+
+  # ---- RFC-0007: testing & utilisation platform ----
+  # Both build from the repo root so the SDK (sdk/python) — which carries
+  # the protocol client, plugins, and conformance engine — installs from
+  # source into their images.
+  workbench:
+    build: { context: ., dockerfile: platform/workbench/Dockerfile }
+    restart: unless-stopped
+    ports: ["8081:8000"]
+    environment:
+      - GATEWAY_URL=http://gateway:8000
+      - IDENTITY_URL=http://identity:8000
+      - TRUST_URL=http://trust:8000
+      - REGISTRY_URL=http://registry:8000
+      - GOVERNANCE_URL=http://governance:8000
+      - CONNECTOR_BUS_URL=http://connector-bus:8000
+    depends_on: [gateway, connector-bus]
+
+  conformance:
+    build: { context: ., dockerfile: platform/conformance/Dockerfile }
+    restart: unless-stopped
+    ports: ["8082:8000"]
+    environment:
+      - GATEWAY_URL=http://gateway:8000
+      - IDENTITY_URL=http://identity:8000
+      - TRUST_URL=http://trust:8000
+      - REGISTRY_URL=http://registry:8000
+      - GOVERNANCE_URL=http://governance:8000
+      - CONNECTOR_BUS_URL=http://connector-bus:8000
+    depends_on: [gateway, connector-bus]
 
 volumes:
   console-uploads:

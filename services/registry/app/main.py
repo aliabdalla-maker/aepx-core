@@ -1,11 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import httpx
 import os
 import uuid
 
 app = FastAPI(title="AEP-X Registry Service", version="0.1.0")
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://aepx:aepx_dev_only@postgres:5432/aepx")
+IDENTITY_URL = os.getenv("IDENTITY_URL", "http://identity:8000")
 
 try:
     import psycopg
@@ -31,12 +33,26 @@ def _get_conn():
 class AgentIn(BaseModel):
     name: str
     organisation_id: str | None = None
+    did: str | None = None
 
 
 class Agent(AgentIn):
     id: str
     version: str = "0.0.1"
     trust_score: int = 0
+
+
+def _mint_did() -> str | None:
+    # RFC-0006 — Law 1 (Identity Before Interaction): every agent gets a
+    # did:key if one isn't supplied. Best-effort and fail-open: Identity
+    # being unreachable must never block agent registration, same as the
+    # Connector Bus's circuit-breaker check (connector-bus/app/main.py).
+    try:
+        resp = httpx.post(f"{IDENTITY_URL}/did", timeout=3.0)
+        resp.raise_for_status()
+        return resp.json().get("did")
+    except Exception:
+        return None
 
 
 @app.get("/health")
@@ -50,25 +66,26 @@ def health():
 
 @app.post("/agents", response_model=Agent)
 def create_agent(payload: AgentIn):
+    did = payload.did or _mint_did()
     conn = _get_conn()
     if conn:
         try:
             with conn, conn.cursor() as cur:
                 cur.execute(
-                    "INSERT INTO agents (organisation_id, name) VALUES (%s, %s) "
-                    "RETURNING id, name, organisation_id, version, trust_score",
-                    (payload.organisation_id, payload.name),
+                    "INSERT INTO agents (organisation_id, name, did) VALUES (%s, %s, %s) "
+                    "RETURNING id, name, organisation_id, version, trust_score, did",
+                    (payload.organisation_id, payload.name, did),
                 )
                 row = cur.fetchone()
             return Agent(id=str(row[0]), name=row[1], organisation_id=str(row[2]) if row[2] else None,
-                         version=row[3], trust_score=row[4])
+                         version=row[3], trust_score=row[4], did=row[5])
         except Exception:
             pass
         finally:
             conn.close()
 
     agent_id = str(uuid.uuid4())
-    agent = Agent(id=agent_id, **payload.model_dump())
+    agent = Agent(id=agent_id, name=payload.name, organisation_id=payload.organisation_id, did=did)
     _AGENTS[agent_id] = agent.model_dump()
     return agent
 
@@ -80,14 +97,14 @@ def get_agent(agent_id: str):
         try:
             with conn, conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, name, organisation_id, version, trust_score FROM agents WHERE id = %s",
+                    "SELECT id, name, organisation_id, version, trust_score, did FROM agents WHERE id = %s",
                     (agent_id,),
                 )
                 row = cur.fetchone()
             if not row:
                 raise HTTPException(404, "agent not found")
             return Agent(id=str(row[0]), name=row[1], organisation_id=str(row[2]) if row[2] else None,
-                         version=row[3], trust_score=row[4])
+                         version=row[3], trust_score=row[4], did=row[5])
         except HTTPException:
             raise
         except Exception:
@@ -110,13 +127,13 @@ def list_agents():
         try:
             with conn, conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, name, organisation_id, version, trust_score FROM agents "
+                    "SELECT id, name, organisation_id, version, trust_score, did FROM agents "
                     "ORDER BY trust_score DESC, name ASC"
                 )
                 rows = cur.fetchall()
             return [
                 Agent(id=str(r[0]), name=r[1], organisation_id=str(r[2]) if r[2] else None,
-                      version=r[3], trust_score=r[4])
+                      version=r[3], trust_score=r[4], did=r[5])
                 for r in rows
             ]
         except Exception:

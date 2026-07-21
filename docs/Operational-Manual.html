@@ -72,7 +72,7 @@
   <div class="meta">
     <span><strong>Companion to</strong> Handoff, ADLC-Plan, Instructional-Manual, Microservices Guide, SOA-Architecture</span>
     <span><strong>Prepared</strong> 8 July 2026</span>
-    <span><strong>Covers</strong> 14 core services · Connector Bus · 10 connector categories · 100 connectors</span>
+    <span><strong>Covers</strong> 14 core services · Connector Bus · 11 connector categories · 107 connectors</span>
   </div>
 </header>
 
@@ -92,13 +92,14 @@
 </nav>
 
 <h2 id="overview">1. System Overview</h2>
-<p>The reference implementation runs as <strong>32 containers</strong> under one <code>docker-compose.yml</code>:</p>
+<p>The reference implementation runs as <strong>35 containers</strong> under one <code>docker-compose.yml</code>:</p>
 <ul>
 <li><strong>Tier 1 — Foundational (synchronous):</strong> Identity, Trust, Registry, Memory, Cache (L0–L5), Discovery — plus the API Gateway that fronts everything.</li>
 <li><strong>Tier 2 — Orchestration (event-driven):</strong> Workflow, Safety, Governance, Knowledge, Verification, Cost Optimiser, ML Integration.</li>
-<li><strong>SOA layer:</strong> the Connector Bus plus 10 category connector services carrying <strong>100 catalogued connectors</strong> (4 specialized, 96 governed stubs — see <a href="Connector-Catalogue.md">Connector-Catalogue.md</a>).</li>
+<li><strong>SOA layer:</strong> the Connector Bus plus 11 category connector services carrying <strong>107 catalogued connectors</strong> (5 specialized, 102 governed stubs — see <a href="Connector-Catalogue.md">Connector-Catalogue.md</a>).</li>
 <li><strong>Infrastructure:</strong> PostgreSQL (pgvector), Redis, Neo4j, Kafka (KRaft), Ollama (self-hosted model server).</li>
 <li><strong>Brain:</strong> the self-healing/self-learning monitor — watches every core service's health, re-warms a cold Ollama, and runs a circuit breaker per connector learned from Governance's real audit history (§8.4).</li>
+<li><strong>Developer platforms (RFC-0007):</strong> the <strong>Workbench</strong> utilisation platform (port 8081 — envelopes, DID minting, trust inspection, ledger verification, audit tail) and the <strong>Conformance</strong> testing platform (port 8082 — runs the SDK's RFC conformance suite against this or any other deployment).</li>
 </ul>
 <p>Three invariants govern every runtime path (governance/book-of-laws.md): <strong>Law 2</strong> — no external call executes before a trust evaluation, enforced structurally at the Connector Bus; <strong>Law 8</strong> — every event is audited by the Governance Engine, which consumes every Kafka topic unconditionally; and the Brain's circuit breaker, which fails a repeatedly-unreliable connector fast rather than letting every caller rediscover the same timeout.</p>
 
@@ -418,7 +419,8 @@ docker compose up -d --build
 docker compose up -d trust governance
 docker compose up -d --build connector-bus connector-enterprise connector-productivity \
   connector-devtools connector-aiplatform connector-data connector-messaging \
-  connector-industrial connector-cloud connector-government connector-education
+  connector-industrial connector-cloud connector-government connector-education \
+  connector-blockchain
 
 # stop (containers persist)          # stop and remove (data volumes preserved)
 docker compose stop                  docker compose down
@@ -440,19 +442,21 @@ docker compose down -v</code></pre>
 <tr><td>8008</td><td>Safety Engine</td><td>8028</td><td>connector-cloud (10)</td></tr>
 <tr><td>8009</td><td>Governance (<code>/audit</code>, <code>/policy/evaluate</code>)</td><td>8029</td><td>connector-government (4)</td></tr>
 <tr><td>8010</td><td>Knowledge</td><td>8030</td><td>connector-education (4)</td></tr>
-<tr><td>8011</td><td>Verification</td><td>5432</td><td>PostgreSQL (pgvector/pgvector:pg16)</td></tr>
-<tr><td>8012</td><td>Cost Optimiser</td><td>6379</td><td>Redis</td></tr>
-<tr><td>8013</td><td>ML Integration</td><td>7474/7687</td><td>Neo4j (HTTP / Bolt)</td></tr>
-<tr><td>8014</td><td>Brain (<code>/brain/status</code>, <code>/brain/circuit/&lt;name&gt;</code>)</td><td>11434</td><td>Ollama (self-hosted model server)</td></tr>
-<tr><td><strong>8080</strong></td><td><strong>Console — the LLM/ML box web GUI</strong> (chat via Connector Bus; file/folder/image/video upload)</td><td>9092</td><td>Kafka (KRaft)</td></tr>
+<tr><td>8011</td><td>Verification</td><td>8031</td><td>connector-blockchain (7)</td></tr>
+<tr><td>8012</td><td>Cost Optimiser</td><td>5432</td><td>PostgreSQL (pgvector/pgvector:pg16)</td></tr>
+<tr><td>8013</td><td>ML Integration</td><td>6379</td><td>Redis</td></tr>
+<tr><td>8014</td><td>Brain (<code>/brain/status</code>, <code>/brain/circuit/&lt;name&gt;</code>)</td><td>7474/7687</td><td>Neo4j (HTTP / Bolt)</td></tr>
+<tr><td><strong>8080</strong></td><td><strong>Console — the LLM/ML box web GUI</strong> (chat via Connector Bus; file/folder/image/video upload)</td><td>11434</td><td>Ollama (self-hosted model server)</td></tr>
+<tr><td><strong>8081</strong></td><td><strong>Workbench — utilisation platform</strong> (envelopes, DID, trust, ledger, audit — RFC-0007)</td><td>9092</td><td>Kafka (KRaft)</td></tr>
+<tr><td><strong>8082</strong></td><td><strong>Conformance — testing platform</strong> (RFC conformance runs against any deployment)</td><td></td><td></td></tr>
 </table></div>
 
 <h3>4.3 Health verification</h3>
 <pre><code>curl http://localhost:8000/health     # 14 core services, aggregated
-curl http://localhost:8020/health     # bus: expect "connector_count": 100, 10 categories
+curl http://localhost:8020/health     # bus: expect "connector_count": 107, 11 categories
 curl http://localhost:8009/audit      # audit log — grows with every workflow/safety event
 curl http://localhost:8014/brain/status   # every monitored service's up/down state
-docker compose ps                     # 32 containers; postgres/redis/neo4j/ollama report (healthy)</code></pre>
+docker compose ps                     # 35 containers; postgres/redis/neo4j/ollama report (healthy)</code></pre>
 
 <h2 id="smoke">5. Smoke Test Procedure</h2>
 <p>Run after any rebuild. Every step below was executed successfully against the live stack on 8 July 2026.</p>
@@ -528,8 +532,8 @@ curl -s -X POST http://localhost:8012/route/decide -H "Content-Type: application
 
 <h2 id="dod">9. Operational Definition of Done</h2>
 <ul>
-<li>All 32 containers up; <code>postgres</code>, <code>redis</code>, <code>neo4j</code>, <code>ollama</code> report <code>(healthy)</code>.</li>
-<li>Gateway <code>/health</code>: all 14 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 100</code>, 10 categories. Brain <code>/health</code>: <code>monitoring: 16</code>.</li>
+<li>All 35 containers up; <code>postgres</code>, <code>redis</code>, <code>neo4j</code>, <code>ollama</code> report <code>(healthy)</code>.</li>
+<li>Gateway <code>/health</code>: all 14 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 107</code>, 11 categories. Brain <code>/health</code>: <code>monitoring: 16</code>.</li>
 <li>Smoke test (§5) passes all six criteria, including both 403 governance gates. v1 test environment (<code>tests/v1/run_smoke_test.sh</code>) passes all 6 checks in isolation.</li>
 <li>A workflow execution appears in <code>GET /audit</code> within 2 seconds (choreography chain alive); a Brain circuit-breaker trip appears there too (Law 8 covers self-healing actions, not just application events).</li>
 <li>Backups current (§7) and the restore path tested at least once per release.</li>

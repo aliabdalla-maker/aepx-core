@@ -14,7 +14,9 @@ Planning and architecture documents live in [`docs/`](docs/), in read order:
 6. [Microservices-Architecture-v2](docs/Microservices-Architecture-v2.html) — adds `knowledge`, `verification`, `cost-optimiser`, `ml-integration`, and the L0–L5 cache upgrade.
 7. [Hybrid-Architecture-and-Comparison](docs/Hybrid-Architecture-and-Comparison.html) — why the platform uses both a microservices core and an SOA integration layer.
 8. [Operational-Manual](docs/Operational-Manual.html) ([PDF](docs/Operational-Manual.pdf)) — running, verifying, and troubleshooting the live stack, with UML use case and sequence diagrams of the three load-bearing flows.
-9. [Connector-Catalogue](docs/Connector-Catalogue.md) — all 100 connectors by category, with risk class and maturity.
+9. [Connector-Catalogue](docs/Connector-Catalogue.md) — all 107 connectors by category, with risk class and maturity.
+
+RFC-0006 ([rfcs/RFC-0006-blockchain-ledger.md](rfcs/RFC-0006-blockchain-ledger.md)) adds the `blockchain` connector category, Governance's tamper-evident audit anchoring, `did:key` decentralized identity, and optional smart-contract policy enforcement — see [`governance/contracts/`](governance/contracts/) for the reference Solidity sources.
 
 The original source attachment is kept at [`attachment/AEP-X Ultra v2 (source).docx`](attachment/AEP-X%20Ultra%20v2%20%28source%29.docx) for traceability.
 
@@ -22,8 +24,8 @@ The original source attachment is kept at [`attachment/AEP-X Ultra v2 (source).d
 
 ```
 aepx-core/
-├── governance/              constitution.md, book-of-laws.md, decisions/
-├── rfcs/                     RFC-0001 – RFC-0005 (Tier 1 Foundation Standards)
+├── governance/              constitution.md, book-of-laws.md, decisions/, contracts/ (RFC-0006 Solidity)
+├── rfcs/                     RFC-0001 – RFC-0007 (Foundation Standards, blockchain ecosystem, SDK/conformance)
 ├── schemas/
 │   ├── sql/                  001_init.sql, 002_v2_additions.sql, 003_connectors.sql
 │   └── openapi/              per-service OpenAPI contracts
@@ -33,11 +35,16 @@ aepx-core/
 │   └── knowledge/ verification/ cost-optimiser/ ml-integration/ (Microservices-Architecture-v2)
 ├── console/                   the LLM / machine-learning box — web GUI (chat + file/folder/image/video upload), http://localhost:8080
 ├── connector-bus/            AEP-X Connector Bus — SOA mediation layer (SOA-Architecture.md)
-├── connectors/                catalogue.json (100 connectors) + 10 category services:
+├── connectors/                catalogue.json (107 connectors) + 11 category services:
 │                              enterprise/ productivity/ devtools/ aiplatform/ data/
-│                              messaging/ industrial/ cloud/ government/ education/
-├── sdk/python/aepx/          `pip install aepx`; `from aepx import Agent`
-├── cli/aepx_cli/              `aepx init|create|run|deploy`
+│                              messaging/ industrial/ cloud/ government/ education/ blockchain/
+├── sdk/python/aepx/          `pip install aepx`; Agent + AepxClient, plugin architecture
+│                              (did/connectors/trust/ledger/audit + `aepx.plugins` entry points),
+│                              and the RFC-0007 conformance engine (aepx.conformance)
+├── cli/aepx_cli/              `aepx init|create|run|deploy|test|did|invoke|plugins`
+├── platform/
+│   ├── workbench/             utilisation platform — developer portal, http://localhost:8081
+│   └── conformance/           testing platform — RFC conformance runs, http://localhost:8082
 ├── docker-compose.yml         the whole stack, one command
 ├── .github/workflows/ci.yml   matrixed tests across every service
 └── docs/                      all planning & architecture documents
@@ -70,7 +77,11 @@ pytest tests/ -v
 
 ## What's built vs. what's deliberately not
 
-**Built:** all 14 core services, health-checked and tested; the Connector Bus plus **100 catalogued connectors across 10 category services** (see [docs/Connector-Catalogue.md](docs/Connector-Catalogue.md)). Four connectors have specialized adapters (Salesforce, self-hosted ML/Ollama, GitHub, Slack); the other 96 are routed, trust-checked, policy-gated stubs — swap a stub for a real adapter class in the category service's `adapters.py` when credentials exist; nothing else changes. High-risk categories (industrial AIA-R3, government AIA-R3) are policy-denied by default under Governance's `max_risk_level: S2` seed policy — raising that ceiling is an explicit governance decision, not a code change.
+**Built:** all 14 core services, health-checked and tested; the Connector Bus plus **107 catalogued connectors across 11 category services** (see [docs/Connector-Catalogue.md](docs/Connector-Catalogue.md)). Five connectors have specialized adapters (Salesforce, self-hosted ML/Ollama, GitHub, Slack, generic-EVM-RPC/ethereum); the other 102 are routed, trust-checked, policy-gated stubs — swap a stub for a real adapter class in the category service's `adapters.py` when credentials exist; nothing else changes. High-risk categories (industrial AIA-R3, government AIA-R3) are policy-denied by default under Governance's `max_risk_level: S2` seed policy — raising that ceiling is an explicit governance decision, not a code change (or, per RFC-0006, an on-chain `AEPXPolicyRegistry.sol` decision, if configured).
+
+Governance additionally anchors its audit trail (Law 8) with a local SHA-256 hash chain, and Identity issues `did:key` decentralized identities (Law 1) — both work with zero external infrastructure by default, with an optional upgrade path to a real EVM chain (see [`governance/contracts/README.md`](governance/contracts/README.md)).
+
+Per RFC-0007 ([rfcs/RFC-0007-sdk-conformance.md](rfcs/RFC-0007-sdk-conformance.md)), the SDK carries a plugin architecture (five built-ins plus third-party discovery via the `aepx.plugins` entry-point group) and a protocol conformance engine, surfaced three ways: `aepx test` in the CLI, the **Conformance testing platform** (http://localhost:8082), and the **Workbench utilisation platform** (http://localhost:8081) for exercising envelopes, DIDs, trust, the ledger, and the audit trail interactively.
 
 **Deliberately not built** (see docs for the reasoning, not an oversight):
 - Marketplace Engine — backlog per Handoff §2.

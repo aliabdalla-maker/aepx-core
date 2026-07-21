@@ -1,9 +1,9 @@
-# AEP-X Connector Catalogue — 100 Connectors
+# AEP-X Connector Catalogue — 107 Connectors
 
 **Generated from** `connectors/catalogue.json` (single source of truth — regenerate this file rather than editing it).
 **Architecture:** one coarse-grained service per category, one adapter per connector ([SOA-Architecture.md](SOA-Architecture.md) §3.1). `specialized` = working adapter with a concrete implementation path; `stub` = catalogued, routed, governed, returning canonical stub responses until a real integration lands.
 
-**Total: 100 connectors across 10 categories.**
+**Total: 107 connectors across 11 categories.**
 
 ## enterprise (14)
 
@@ -154,3 +154,15 @@
 | canvas | REST, GraphQL | AIA-R2 | 60 | stub |
 | blackboard | REST | AIA-R2 | 60 | stub |
 | google-classroom | REST | AIA-R2 | 60 | stub |
+
+## blockchain (7)
+
+| Connector | Protocols | AIA risk | Min trust | Maturity |
+|---|---|---|---|---|
+| ethereum | JSON-RPC | AIA-R2 | 60 | specialized |
+| polygon | JSON-RPC | AIA-R2 | 60 | stub |
+| base | JSON-RPC | AIA-R2 | 60 | stub |
+| avalanche | JSON-RPC | AIA-R2 | 60 | stub |
+| bitcoin | JSON-RPC | AIA-R2 | 60 | stub |
+| solana | JSON-RPC | AIA-R2 | 60 | stub |
+| hyperledger-fabric | gRPC | AIA-R1 | 50 | stub |

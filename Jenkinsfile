@@ -31,7 +31,8 @@ pipeline {
                         'services/cost-optimiser', 'services/ml-integration', 'services/brain',
                         'connector-bus', 'connectors/enterprise', 'connectors/productivity', 'connectors/devtools',
                         'connectors/aiplatform', 'connectors/data', 'connectors/messaging', 'connectors/industrial',
-                        'connectors/cloud', 'connectors/government', 'connectors/education', 'console',
+                        'connectors/cloud', 'connectors/government', 'connectors/education', 'connectors/blockchain', 'console',
+                        'sdk/python', 'platform/conformance', 'platform/workbench',
                     ]
                     def branches = [:]
                     for (c in components) {
@@ -49,6 +50,10 @@ pipeline {
                                 if [ "${dir}" = "services/cache" ] || [ "${dir}" = "services/discovery" ]; then
                                     "${venv}/bin/pip" install -q fakeredis==2.23.2
                                 fi
+                                # the SDK's own tests and both platform services import `aepx`
+                                case "${dir}" in sdk/python|platform/*)
+                                    "${venv}/bin/pip" install -q -e sdk/python ;;
+                                esac
                                 "${venv}/bin/ruff" check ${dir}
                                 (cd ${dir} && "${venv}/bin/pytest" tests -v)
                                 rm -rf "${venv}"

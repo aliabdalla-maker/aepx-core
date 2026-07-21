@@ -11,7 +11,7 @@
 # response). Kafka is intentionally omitted — Governance's consumer thread
 # already degrades gracefully without a broker (see services/governance),
 # so /policy/evaluate and /audit both still work, just without the
-# event-sourced audit trail. The other 9 connector categories and the
+# event-sourced audit trail. The other 10 connector categories and the
 # Brain aren't included in v1 for the same resource reason; add them here
 # once this slice is proven and headroom allows.
 #

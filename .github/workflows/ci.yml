@@ -48,12 +48,19 @@ jobs:
           - connectors/cloud
           - connectors/government
           - connectors/education
+          - connectors/blockchain
+          - sdk/python
+          - platform/conformance
+          - platform/workbench
           - console
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - run: pip install -r ${{ matrix.connector }}/requirements.txt pytest ruff
+      # the SDK's own tests and both platform services import `aepx`
+      - run: pip install -e sdk/python
+        if: matrix.connector == 'sdk/python' || startsWith(matrix.connector, 'platform/')
       - run: ruff check ${{ matrix.connector }}
       # run from the component dir — tests import `app.main` relative to it
       - run: cd ${{ matrix.connector }} && pytest tests -v

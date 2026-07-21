@@ -9,11 +9,11 @@ import app.main as main
 client = TestClient(main.app)
 
 
-def test_health_lists_100_connectors():
+def test_health_lists_107_connectors():
     body = client.get("/health").json()
     assert body["status"] == "ok"
-    assert body["connector_count"] == 100
-    assert len(body["categories"]) == 10
+    assert body["connector_count"] == 107
+    assert len(body["categories"]) == 11
 
 
 class _FakeResponse:

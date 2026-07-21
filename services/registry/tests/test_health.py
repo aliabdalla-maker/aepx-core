@@ -36,3 +36,18 @@ def test_get_malformed_agent_id_returns_404_not_500():
     # Regression: a non-UUID id must 404, not throw an unhandled DB error
     resp = client.get("/agents/not-a-real-uuid")
     assert resp.status_code == 404
+
+
+def test_agent_creation_fails_open_when_identity_unreachable():
+    # No Identity service in the unit-test environment (IDENTITY_URL
+    # defaults to http://identity:8000, unreachable here) — DID minting
+    # must degrade to None, never block or fail agent registration.
+    created = client.post("/agents", json={"name": "no-did-agent"}).json()
+    assert created["did"] is None
+
+
+def test_agent_creation_stores_a_supplied_did():
+    created = client.post("/agents", json={"name": "has-did-agent", "did": "did:key:zSuppliedByCaller"}).json()
+    assert created["did"] == "did:key:zSuppliedByCaller"
+    fetched = client.get(f"/agents/{created['id']}").json()
+    assert fetched["did"] == "did:key:zSuppliedByCaller"

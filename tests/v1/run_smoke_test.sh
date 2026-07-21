@@ -56,22 +56,41 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "=== waiting for services to become reachable (up to 90s) ==="
+# Probe every port the checks below actually hit — not just a sample.
+# This once probed only gateway/bus/console and relied, by accident, on the
+# Ollama warm-up below taking ~90s to give trust/registry/governance time
+# to finish booting; with the main stack (and its Ollama) down, that curl
+# fails in ~1s and the checks fired against still-starting services.
+echo "=== waiting for services to become reachable (up to 120s) ==="
+READY_PORTS="8100 8102 8103 8109 8120 8180"
 ready=0
-for i in $(seq 1 30); do
-  if curl -sf --max-time 3 http://localhost:8100/health >/dev/null 2>&1 \
-     && curl -sf --max-time 3 http://localhost:8120/health >/dev/null 2>&1 \
-     && curl -sf --max-time 3 http://localhost:8180/health >/dev/null 2>&1; then
+for i in $(seq 1 40); do
+  all_up=1
+  for port in $READY_PORTS; do
+    curl -sf --max-time 3 "http://localhost:$port/health" >/dev/null 2>&1 || { all_up=0; break; }
+  done
+  if [ "$all_up" -eq 1 ]; then
     ready=1
     break
   fi
   sleep 3
 done
 if [ "$ready" -ne 1 ]; then
-  echo "FATAL: services did not become reachable within 90s"
+  echo "FATAL: services did not become reachable within 120s"
   $COMPOSE ps
   exit 1
 fi
+
+# Ollama unloads the idle model on its own schedule (see docker-compose.yml
+# OLLAMA_KEEP_ALIVE note); if nothing has queried it recently, the load can
+# take up to ~88s — longer than the console/connector-bus 30s call budgets
+# in the real request path. Force the load here, against Ollama directly
+# with a timeout that can absorb a full cold start, so check 5 below always
+# lands on an already-warm model instead of racing those budgets.
+echo "=== warming the ML box (cold model load can take up to ~90s) ==="
+curl -s --max-time 120 -X POST http://localhost:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"model":"llama3.2:1b","prompt":"hi","stream":false}' >/dev/null 2>&1
 
 echo "=== running checks ==="
 
