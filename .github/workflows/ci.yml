@@ -30,8 +30,10 @@ jobs:
       - run: pip install fakeredis==2.23.2
         if: matrix.service == 'cache' || matrix.service == 'discovery'
       - run: ruff check services/${{ matrix.service }}
-      # run from the service dir — tests import `app.main` relative to it
-      - run: cd services/${{ matrix.service }} && pytest tests -v
+      # run from the service dir — tests import `app.main` relative to it.
+      # `python -m pytest` (not bare `pytest`) puts that dir on sys.path so
+      # the `app` package is importable.
+      - run: cd services/${{ matrix.service }} && python -m pytest tests -v
 
   test-soa:
     runs-on: ubuntu-latest
@@ -64,5 +66,8 @@ jobs:
       - run: pip install -e sdk/python
         if: matrix.connector == 'sdk/python' || startsWith(matrix.connector, 'platform/')
       - run: ruff check ${{ matrix.connector }}
-      # run from the component dir — tests import `app.main` relative to it
-      - run: cd ${{ matrix.connector }} && pytest tests -v
+      # run from the component dir — tests import `app.main` relative to it.
+      # `python -m pytest` (not bare `pytest`) puts that dir on sys.path so
+      # the `app` package is importable. sdk/python has no `app` package; its
+      # tests import the installed `aepx`, so it works either way.
+      - run: cd ${{ matrix.connector }} && python -m pytest tests -v
