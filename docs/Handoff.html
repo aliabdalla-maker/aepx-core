@@ -99,14 +99,16 @@
   <div class="subtitle">From strategy to build: the committed scope, owners, and Day 1–30 checklist</div>
   <div class="meta">
     <span><strong>Companion to</strong> ADLC-Plan, Instructional-Manual &amp; Microservices Implementation Guide</span>
-    <span><strong>Prepared</strong> 7 July 2026 · <strong>Updated</strong> 8 July 2026</span>
-    <span><strong>Status</strong> Reference implementation delivered &amp; running — see §1a</span>
+    <span><strong>Prepared</strong> 7 July 2026 · <strong>Updated</strong> 23 July 2026</span>
+    <span><strong>Status</strong> Reference implementation delivered &amp; running; RFC-0008 bridge + unified Console added — see §1a–1c</span>
     <span><strong>Owner</strong> Equality Software Ltd / AEP-X Programme</span>
   </div>
   <div class="badge-row">
     <span class="badge">✅ Delivered: 14 core services + Connector Bus, live in Docker</span>
     <span class="badge">🔌 107 connectors · 11 category services</span>
     <span class="badge">⛓️ RFC-0006: blockchain connectors · ledger anchoring · did:key</span>
+    <span class="badge">🌉 RFC-0008: AI↔blockchain bridge, both directions</span>
+    <span class="badge">🖥️ AEP-X Console: one live GUI for protocol + blockchain</span>
     <span class="badge">📄 Runbooks: Instructional-Manual.pdf · Operational-Manual.pdf</span>
   </div>
 </header>
@@ -149,6 +151,21 @@
 <tr><td>Decentralized identity (Law 1)</td><td><code>did:key</code> (Ed25519, self-certifying — resolvable with no chain or registry); Registry mints one per agent, fail-open</td><td>Identity <code>POST /did</code> / <code>GET /did/{did}</code>; <code>agents.did</code> column</td></tr>
 <tr><td>Smart-contract policy enforcement</td><td>Opt-in: <code>AEPXPolicyRegistry.sol</code> can own <code>max_risk_level</code>; unconfigured behaviour unchanged</td><td><code>governance/contracts/</code>; existing policy tests pass unmodified</td></tr>
 </table></div>
+
+<h2 id="status-update-3">1c. Delivery Status Update — 23 July 2026 (RFC-0008 + Console)</h2>
+<div class="callout go">
+<strong>The protocol is now bidirectional between AI and blockchains, and a single GUI drives the whole platform.</strong> Delivered per <code>rfcs/RFC-0008-ai-blockchain-bridge.md</code>. Every path degrades cleanly with zero chain configured and upgrades to a real EVM chain only when explicitly wired. CI is green across all 33 jobs on GitHub (<code>aliabdalla-maker/aepx-core</code>).
+</div>
+<div class="table-wrap"><table>
+<tr><th>Capability</th><th>Delivered</th><th>Evidence</th></tr>
+<tr><td>AI → chain (governed contract calls)</td><td>The <code>ethereum</code> EVM adapter gained <code>contract_read</code> / <code>contract_write</code> ops — an agent reads or signs a smart-contract transaction as an ordinary connector call, so trust + policy + audit apply to it. Degrades to <code>specialized_degraded</code> (never a 5xx) with no chain/key</td><td><code>connectors/blockchain/app/adapters.py</code>; <code>client.chain.read/write/rpc</code></td></tr>
+<tr><td>chain → AI (decision oracle)</td><td><code>AEPXOracle.sol</code> emits <code>DecisionRequested</code>; <code>services/oracle-bridge</code> watches for it, runs a <em>governed</em> AI call (bus → <code>ml</code>) plus a Verification scoring pass, and writes the evidence-scored answer back on-chain via the permissioned <code>fulfillDecision</code>. Works off-chain too via <code>POST /oracle/decide</code></td><td><code>governance/contracts/AEPXOracle.sol</code>; <code>services/oracle-bridge/</code>; <code>client.oracle.decide/poll</code></td></tr>
+<tr><td>Audit coverage of the bridge (Law 8)</td><td>Governance consumes the new <code>oracle.requested</code> / <code>oracle.fulfilled</code> topics, so every bridge action lands in the audit trail unprompted</td><td><code>services/governance</code> <code>_CONSUMED_TOPICS</code>; <code>GET /audit</code></td></tr>
+<tr><td>SDK</td><td>Two new built-in plugins — <code>chain</code> and <code>oracle</code> — reachable as <code>client.chain.*</code> / <code>client.oracle.*</code> alongside did/connectors/trust/ledger/audit</td><td><code>sdk/python/aepx/plugins/{chain,oracle}.py</code></td></tr>
+<tr><td>AEP-X Console — one GUI for protocol + blockchain</td><td><strong>New at <code>http://localhost:8083</code></strong> (<code>platform/aepx-console</code>): overview health of every service, connectors + governed invoke, trust &amp; did:key, memory / discovery / workflows, governance + audit + ledger, ML/Brain, an LLM box, and a first-class <strong>Blockchain</strong> workspace (live node status, contract read/write, decision oracle, raw JSON-RPC). Every action routes through the same governed path and lands in a live audit feed</td><td><code>platform/aepx-console/</code>; wired into <code>docker-compose.yml</code> + CI</td></tr>
+<tr><td>CI health</td><td>Fixed repo-wide: tests run via <code>python -m pytest</code> (the <code>app</code> package now imports); ruff E402/F401 debt cleared in three connectors; GitHub Actions bumped to Node-24 versions. <strong>33/33 jobs green, 0 annotations</strong></td><td>GitHub Actions run on <code>master</code></td></tr>
+</table></div>
+<p><strong>Still deferred, unchanged:</strong> the Marketplace Engine remains the one Volume-9-named service intentionally not built (§2). The one open item flagged in RFC-0006 §9 / RFC-0008 §9 — adding a local <code>anvil</code> EVM devnet to <code>docker-compose.yml</code> so the on-chain paths run live in CI rather than only degrade-tested — is a deliberate, deferred day-2 task, not an oversight.</p>
 
 <h2 id="scope">2. Committed Scope (Execution-Lock Reading)</h2>
 <p>The ADLC Plan's Critical Evaluation (§15) found the full manual's Year-1 ask — 13 production services, a standards body, 10 frozen RFCs, a marketplace, a certification platform, and 3 verticals, built by 7 people on £250k — does not close. This handoff commits to the <strong>narrower scope the evaluation recommended</strong>, so what follows is buildable, not aspirational.</p>
@@ -286,7 +303,7 @@
 </div>
 
 <footer>
-AEP-X Ultra — Execution Handoff · Companion to ADLC-Plan.html/.pdf, Instructional-Manual.pdf, and Microservices-Implementation-Guide.pdf · 7 July 2026
+AEP-X Ultra — Execution Handoff · Companion to ADLC-Plan.html/.pdf, Instructional-Manual.pdf, and Microservices-Implementation-Guide.pdf · Prepared 7 July 2026 · Updated 23 July 2026
 </footer>
 </div>
 
