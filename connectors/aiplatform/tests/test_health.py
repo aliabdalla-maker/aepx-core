@@ -50,8 +50,6 @@ def test_ml_adapter_falls_back_when_ollama_unreachable():
 
 
 def test_ml_adapter_uses_live_response_when_ollama_reachable(monkeypatch):
-    from app.adapters import SPECIALIZED
-
     class _FakeResp:
         def raise_for_status(self):
             pass

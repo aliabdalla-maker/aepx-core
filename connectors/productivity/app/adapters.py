@@ -6,6 +6,9 @@ connector that doesn't yet have a specialized implementation — swap a stub
 for a real adapter class here when credentials and a sandbox exist; nothing
 else (bus, catalogue, compose) needs to change.
 """
+import os
+
+import httpx
 
 
 class StubAdapter:
@@ -22,10 +25,6 @@ class StubAdapter:
             "confidence": 0.5,
             "maturity": "stub",
         }
-
-
-import os
-import httpx
 
 
 class SlackAdapter:
