@@ -13,6 +13,8 @@ connectors = "aepx.plugins.connectors:ConnectorsPlugin"
 trust = "aepx.plugins.trust:TrustPlugin"
 ledger = "aepx.plugins.ledger:LedgerPlugin"
 audit = "aepx.plugins.audit:AuditPlugin"
+chain = "aepx.plugins.chain:ChainPlugin"
+oracle = "aepx.plugins.oracle:OraclePlugin"
 
 [build-system]
 requires = ["setuptools>=68"]

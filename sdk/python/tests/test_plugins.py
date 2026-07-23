@@ -66,3 +66,60 @@ def test_audit_tail_and_policy(fake_api):
     client = AepxClient()
     assert client.audit.tail()[0]["topic"] == "connector.invoked"
     assert client.audit.policy("S1")["allowed"] is True
+
+
+# -- RFC-0008 AI->chain (ChainPlugin over the governed connector path) -----
+
+_ABI = [{"inputs": [], "name": "latestRoot", "outputs": [{"type": "bytes32"}],
+         "stateMutability": "view", "type": "function"}]
+
+
+def test_chain_read_goes_through_governed_bus(fake_api):
+    fake_api.on("POST", "/bus/route", body={
+        "connector": "ethereum", "maturity": "specialized",
+        "response": {"op": "contract_read", "result": "0xabc"}})
+    result = AepxClient().chain.read("0x0000000000000000000000000000000000000000", _ABI, "latestRoot")
+    assert result["status"] == 200
+    assert result["connector"] == "ethereum"
+    # The AI->chain call must ride the same /bus/route path as any connector
+    # (trust + policy + circuit), carrying the contract_read op.
+    method, path, kwargs = fake_api.calls[-1]
+    assert (method, path) == ("POST", "/bus/route")
+    assert kwargs["json"]["payload"]["op"] == "contract_read"
+
+
+def test_chain_write_carries_write_op(fake_api):
+    fake_api.on("POST", "/bus/route", body={"connector": "ethereum", "response": {"op": "contract_write"}})
+    AepxClient().chain.write("0x0000000000000000000000000000000000000000", _ABI, "anchor", ["0xdead"])
+    _, _, kwargs = fake_api.calls[-1]
+    assert kwargs["json"]["payload"]["op"] == "contract_write"
+    assert kwargs["json"]["payload"]["function"] == "anchor"
+
+
+def test_chain_write_denial_is_a_result_not_an_exception(fake_api):
+    # A policy/trust denial on a chain write is a governance outcome, surfaced
+    # like any other connector denial (RFC-0008 §4.1).
+    fake_api.on("POST", "/bus/route", status=403, body={"detail": "policy denies risk level AIA-R2"})
+    result = AepxClient().chain.write("0xabc", _ABI, "anchor")
+    assert result["status"] == 403
+    assert result["denied"] is True
+
+
+# -- RFC-0008 chain->AI (OraclePlugin over the oracle-bridge) --------------
+
+def test_oracle_decide(fake_api):
+    fake_api.on("POST", "/oracle/decide", body={
+        "answer": "4", "confidence": 90, "band": "GREEN", "request_id": 7})
+    result = AepxClient().oracle.decide("What is 2+2?", request_id=7)
+    assert result["answer"] == "4"
+    assert result["band"] == "GREEN"
+    _, _, kwargs = fake_api.calls[-1]
+    assert kwargs["json"]["prompt"] == "What is 2+2?"
+    assert kwargs["json"]["request_id"] == 7
+
+
+def test_oracle_poll_noop_without_chain(fake_api):
+    fake_api.on("POST", "/oracle/poll", body={"chain_configured": False, "processed": 0})
+    result = AepxClient().oracle.poll()
+    assert result["chain_configured"] is False
+    assert result["processed"] == 0

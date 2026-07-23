@@ -22,7 +22,7 @@ def test_envelope_message_ids_are_unique():
 
 def test_builtin_plugins_attached():
     client = AepxClient()
-    for name in ("did", "connectors", "trust", "ledger", "audit"):
+    for name in ("did", "connectors", "trust", "ledger", "audit", "chain", "oracle"):
         assert name in client.plugins
         assert getattr(client, name) is client.plugins[name]
         assert client.plugins[name].client is client

@@ -26,6 +26,10 @@ _CONSUMED_TOPICS = [
     "connector.invoked", "connector.failed", "trust.updated",
     "brain.service_down", "brain.service_recovered", "brain.ollama_rewarmed",
     "brain.circuit_opened", "brain.circuit_closed", "brain.circuit_half_open",
+    # RFC-0008 chain->AI oracle bridge (services/oracle-bridge): an on-chain
+    # request for an AI decision, and the scored answer written back. Audited
+    # here so every AI-for-a-contract call lands in the trail (Law 8).
+    "oracle.requested", "oracle.fulfilled",
 ]
 
 try:

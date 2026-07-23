@@ -54,3 +54,14 @@ def test_consumes_every_brain_topic():
     ]
     for kind in brain_kinds:
         assert f"brain.{kind}" in _CONSUMED_TOPICS, f"missing brain.{kind} in _CONSUMED_TOPICS"
+
+
+def test_consumes_oracle_bridge_topics():
+    # Same drift guard for the RFC-0008 oracle bridge (services/oracle-bridge):
+    # if it publishes oracle.requested / oracle.fulfilled but Governance
+    # doesn't subscribe, chain->AI decisions vanish from the audit trail
+    # silently — exactly the brain-topic bug class above.
+    from app.main import _CONSUMED_TOPICS
+
+    for topic in ("oracle.requested", "oracle.fulfilled"):
+        assert topic in _CONSUMED_TOPICS, f"missing {topic} in _CONSUMED_TOPICS"

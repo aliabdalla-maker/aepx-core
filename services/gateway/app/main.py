@@ -17,6 +17,7 @@ SERVICES = {
     "verification": os.getenv("VERIFICATION_URL", "http://verification:8000"),
     "cost-optimiser": os.getenv("COST_OPTIMISER_URL", "http://cost-optimiser:8000"),
     "ml-integration": os.getenv("ML_INTEGRATION_URL", "http://ml-integration:8000"),
+    "oracle-bridge": os.getenv("ORACLE_BRIDGE_URL", "http://oracle-bridge:8000"),
     "connector-bus": os.getenv("CONNECTOR_BUS_URL", "http://connector-bus:8000"),
 }
 

@@ -179,6 +179,25 @@ services:
     ports: ["8013:8000"]
     depends_on: [kafka]
 
+  # ---- RFC-0008: chain->AI oracle bridge ----
+  # Off-chain half of the AI<->blockchain bridge. Its /oracle/decide pipeline
+  # (governed AI call via the bus + Verification scoring) is always on;
+  # the on-chain listener that fulfils AEPXOracle.sol requests only runs when
+  # all three ORACLE_* vars are set (see governance/contracts/README.md).
+  # Unset by default => listener idle, never a 5xx (RFC-0008 §3).
+  oracle-bridge:
+    build: ./services/oracle-bridge
+    restart: unless-stopped
+    ports: ["8015:8000"]
+    environment:
+      - CONNECTOR_BUS_URL=http://connector-bus:8000
+      - VERIFICATION_URL=http://verification:8000
+      - ORACLE_AI_CONNECTOR=${ORACLE_AI_CONNECTOR:-ml}
+      - ORACLE_RPC_URL=${ORACLE_RPC_URL:-}
+      - ORACLE_CONTRACT_ADDRESS=${ORACLE_CONTRACT_ADDRESS:-}
+      - ORACLE_PRIVATE_KEY=${ORACLE_PRIVATE_KEY:-}
+    depends_on: [connector-bus, verification, kafka]
+
   # ---- Gateway ----
   gateway:
     build: ./services/gateway
@@ -198,6 +217,7 @@ services:
       - VERIFICATION_URL=http://verification:8000
       - COST_OPTIMISER_URL=http://cost-optimiser:8000
       - ML_INTEGRATION_URL=http://ml-integration:8000
+      - ORACLE_BRIDGE_URL=http://oracle-bridge:8000
       - CONNECTOR_BUS_URL=http://connector-bus:8000
     depends_on: [identity, trust, registry, memory, cache, discovery, workflow, safety, governance]
 
@@ -365,6 +385,35 @@ services:
       - GOVERNANCE_URL=http://governance:8000
       - CONNECTOR_BUS_URL=http://connector-bus:8000
     depends_on: [gateway, connector-bus]
+
+  # ---- AEP-X Console: one live GUI over the whole platform ----
+  # Overview/health, connectors, trust & DID, memory & workflows, governance
+  # + audit + ledger, the RFC-0008 AI<->chain bridge, ML/Brain, and an LLM
+  # box — all governed through the bus/SDK. http://localhost:8083
+  aepx-console:
+    build: { context: ., dockerfile: platform/aepx-console/Dockerfile }
+    restart: unless-stopped
+    ports: ["8083:8000"]
+    environment:
+      - GATEWAY_URL=http://gateway:8000
+      - IDENTITY_URL=http://identity:8000
+      - TRUST_URL=http://trust:8000
+      - REGISTRY_URL=http://registry:8000
+      - MEMORY_URL=http://memory:8000
+      - CACHE_URL=http://cache:8000
+      - DISCOVERY_URL=http://discovery:8000
+      - WORKFLOW_URL=http://workflow:8000
+      - SAFETY_URL=http://safety:8000
+      - GOVERNANCE_URL=http://governance:8000
+      - KNOWLEDGE_URL=http://knowledge:8000
+      - VERIFICATION_URL=http://verification:8000
+      - COST_OPTIMISER_URL=http://cost-optimiser:8000
+      - ML_INTEGRATION_URL=http://ml-integration:8000
+      - BRAIN_URL=http://brain:8000
+      - CONNECTOR_BUS_URL=http://connector-bus:8000
+      - ORACLE_BRIDGE_URL=http://oracle-bridge:8000
+      - CONNECTOR_URL_BLOCKCHAIN=http://connector-blockchain:8000
+    depends_on: [gateway, connector-bus, governance, verification, oracle-bridge]
 
 volumes:
   console-uploads:

@@ -21,6 +21,7 @@ jobs:
           - cost-optimiser
           - ml-integration
           - brain
+          - oracle-bridge
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -52,6 +53,7 @@ jobs:
           - sdk/python
           - platform/conformance
           - platform/workbench
+          - platform/aepx-console
           - console
     steps:
       - uses: actions/checkout@v4
