@@ -23,8 +23,8 @@ jobs:
           - brain
           - oracle-bridge
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with: { python-version: "3.11" }
       - run: pip install -r services/${{ matrix.service }}/requirements.txt pytest ruff
       - run: pip install fakeredis==2.23.2
@@ -58,8 +58,8 @@ jobs:
           - platform/aepx-console
           - console
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with: { python-version: "3.11" }
       - run: pip install -r ${{ matrix.connector }}/requirements.txt pytest ruff
       # the SDK's own tests and both platform services import `aepx`
