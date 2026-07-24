@@ -12,6 +12,8 @@ node_modules/
 # Env / secrets
 .env
 .env.*
+# ...except the committed template, which holds no real values.
+!.env.example
 
 # OS
 .DS_Store
