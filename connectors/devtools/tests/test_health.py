@@ -122,3 +122,47 @@ def test_dockerhub_bare_name_normalises_to_library():
     from app.adapters import DockerHubAdapter
     out = DockerHubAdapter().execute({"op": "bogus", "repo": "redis"})
     assert out["error"].startswith("unsupported")
+
+
+# ---- gitlab: a third real, no-auth adapter (promoted from stub) ------------
+
+def test_gitlab_adapter_falls_back_without_network(monkeypatch):
+    import httpx
+
+    monkeypatch.setattr(httpx, "get", lambda *a, **k: (_ for _ in ()).throw(httpx.ConnectError("offline")))
+    resp = client.post(
+        "/connector/execute",
+        json={"sender": "aepx://agent/x", "receiver": "aepx://connector/gitlab",
+              "payload": {"op": "project", "project": "gitlab-org/gitlab"}},
+    )
+    body = resp.json()
+    assert body["source"] == "connector:gitlab"
+    assert body["maturity"] == "specialized_degraded"
+
+
+def test_gitlab_adapter_uses_live_response(monkeypatch):
+    import httpx
+
+    class _FakeResp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"path_with_namespace": "gitlab-org/gitlab", "star_count": 100,
+                    "forks_count": 20, "description": "GitLab", "last_activity_at": "2026-01-01"}
+
+    monkeypatch.setattr(httpx, "get", lambda *a, **k: _FakeResp())
+    resp = client.post(
+        "/connector/execute",
+        json={"sender": "aepx://agent/x", "receiver": "aepx://connector/gitlab",
+              "payload": {"op": "project", "project": "gitlab-org/gitlab"}},
+    )
+    body = resp.json()
+    assert body["maturity"] == "specialized"
+    assert body["result"]["star_count"] == 100
+
+
+def test_gitlab_unsupported_op():
+    from app.adapters import GitLabAdapter
+    out = GitLabAdapter().execute({"op": "nope", "project": "a/b"})
+    assert out["error"].startswith("unsupported")
