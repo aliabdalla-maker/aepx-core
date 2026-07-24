@@ -2,7 +2,7 @@
 # Kept separate from the services — only this test compiles Solidity and runs
 # an in-memory EVM, so nothing else pays for these.
 pytest==8.2.0
-web3==7.6.1
+web3==7.15.0
 py-solc-x==2.0.5
 eth-tester==0.13.0b1
 py-evm==0.12.1b1
