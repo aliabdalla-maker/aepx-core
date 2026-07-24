@@ -55,4 +55,6 @@ Every addition is additive and opt-in. The `EVMRPCAdapter`'s raw JSON-RPC path (
 
 ## 9. Open Questions
 
-Whether the oracle listener should move from id-polling to log-based event subscription (`eth_getLogs`/filters) once an EVM devnet is added to `docker-compose.yml` for CI (RFC-0006 §9's deferred question) — id-polling is deterministic and web3-version-robust, which is why it ships first; a high-throughput deployment would prefer filters. Deferred until the on-chain path is exercised in CI rather than only unit-tested.
+**Resolved (24 July 2026):** the on-chain path is now exercised for real. The three contracts are compiled with solc 0.8.24 and deployed+exercised on an in-memory EVM in CI (`tests/test_contracts.py`, the `contracts` job), and a local `anvil` devnet overlay (`docker-compose.chain.yml` + `scripts/deploy_contracts.py`) wires the running stack to a persistent chain. The default no-chain path is unchanged and still degrades cleanly.
+
+Remaining: whether the oracle listener should move from id-polling to log-based event subscription (`eth_getLogs`/filters) for high-throughput deployments — id-polling is deterministic and web3-version-robust, which is why it ships first. Deferred until a throughput need is demonstrated.

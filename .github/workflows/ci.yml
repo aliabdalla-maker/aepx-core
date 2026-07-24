@@ -71,3 +71,15 @@ jobs:
       # the `app` package is importable. sdk/python has no `app` package; its
       # tests import the installed `aepx`, so it works either way.
       - run: cd ${{ matrix.connector }} && python -m pytest tests -v
+
+  # On-chain contract integration (RFC-0006 / RFC-0008): compiles the real
+  # Solidity with solc 0.8.24 and exercises AEPXAnchor / AEPXPolicyRegistry /
+  # AEPXOracle on an in-memory EVM — no Docker or anvil needed.
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with: { python-version: "3.11" }
+      - run: pip install -r tests/requirements.txt
+      - run: python -m pytest tests/test_contracts.py -v
