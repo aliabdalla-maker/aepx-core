@@ -77,4 +77,55 @@ class GitHubAdapter:
         return {"op": op, "error": "unsupported operation in this adapter"}
 
 
-SPECIALIZED = {"github": GitHubAdapter()}
+class DockerHubAdapter:
+    """Real hub.docker.com/v2 calls. The public registry API needs no
+    authentication for public repositories, so this connector genuinely
+    works out of the box — pull counts, star counts, and tag lists for any
+    public image. Falls back to a canonical stub if the API is unreachable,
+    same pattern as GitHubAdapter / the ML connector's Ollama fallback.
+
+    Ops:
+      * {"op": "repo",  "repo": "library/python"}  -> repo summary
+      * {"op": "tags",  "repo": "library/python"}  -> recent tag names
+    """
+
+    BASE = "https://hub.docker.com/v2"
+
+    def execute(self, payload: dict) -> dict:
+        op = payload.get("op")
+        repo = payload.get("repo", "library/python")
+        if "/" not in repo:  # bare name -> official "library" namespace
+            repo = f"library/{repo}"
+        try:
+            if op == "repo":
+                resp = httpx.get(f"{self.BASE}/repositories/{repo}", timeout=10.0)
+                resp.raise_for_status()
+                d = resp.json()
+                result = {
+                    "name": d.get("name"),
+                    "namespace": d.get("namespace"),
+                    "pull_count": d.get("pull_count"),
+                    "star_count": d.get("star_count"),
+                    "description": d.get("description"),
+                    "last_updated": d.get("last_updated"),
+                }
+            elif op == "tags":
+                resp = httpx.get(f"{self.BASE}/repositories/{repo}/tags",
+                                 params={"page_size": 10, "ordering": "last_updated"}, timeout=10.0)
+                resp.raise_for_status()
+                result = [t["name"] for t in resp.json().get("results", [])]
+            else:
+                return {"op": op, "error": "unsupported operation (use 'repo' or 'tags')"}
+            return {
+                "op": op, "repo": repo, "result": result,
+                "source": "connector:dockerhub", "confidence": 0.95, "maturity": "specialized",
+            }
+        except Exception as e:
+            return {
+                "op": op, "repo": repo,
+                "result": f"[fallback: Docker Hub API unreachable ({type(e).__name__}) for '{repo}']",
+                "source": "connector:dockerhub", "confidence": 0.3, "maturity": "specialized_degraded",
+            }
+
+
+SPECIALIZED = {"github": GitHubAdapter(), "dockerhub": DockerHubAdapter()}

@@ -357,7 +357,7 @@
       ],
       "ai_risk_class": "AIA-R0",
       "min_trust_score": 40,
-      "maturity": "stub"
+      "maturity": "specialized"
     },
     {
       "name": "terraform-cloud",

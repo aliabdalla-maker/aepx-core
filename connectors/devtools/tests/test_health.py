@@ -76,3 +76,49 @@ def test_github_adapter_uses_live_response(monkeypatch):
     body = resp.json()
     assert body["maturity"] == "specialized"
     assert body["result"] == [{"number": 1, "title": "Real bug", "state": "open"}]  # PR filtered out
+
+
+# ---- dockerhub: a second real, no-auth adapter (promoted from stub) --------
+
+def test_dockerhub_adapter_falls_back_without_network(monkeypatch):
+    import httpx
+
+    monkeypatch.setattr(httpx, "get", lambda *a, **k: (_ for _ in ()).throw(httpx.ConnectError("offline")))
+    resp = client.post(
+        "/connector/execute",
+        json={"sender": "aepx://agent/x", "receiver": "aepx://connector/dockerhub",
+              "payload": {"op": "repo", "repo": "library/python"}},
+    )
+    body = resp.json()
+    assert body["source"] == "connector:dockerhub"
+    assert body["maturity"] == "specialized_degraded"
+
+
+def test_dockerhub_adapter_uses_live_response(monkeypatch):
+    import httpx
+
+    class _FakeResp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"name": "python", "namespace": "library", "pull_count": 123,
+                    "star_count": 9, "description": "Python", "last_updated": "2026-01-01"}
+
+    monkeypatch.setattr(httpx, "get", lambda *a, **k: _FakeResp())
+    resp = client.post(
+        "/connector/execute",
+        json={"sender": "aepx://agent/x", "receiver": "aepx://connector/dockerhub",
+              "payload": {"op": "repo", "repo": "python"}},  # bare name -> library/python
+    )
+    body = resp.json()
+    assert body["maturity"] == "specialized"
+    assert body["repo"] == "library/python"
+    assert body["result"]["pull_count"] == 123
+
+
+def test_dockerhub_bare_name_normalises_to_library():
+    # A pure-logic check that doesn't touch the network.
+    from app.adapters import DockerHubAdapter
+    out = DockerHubAdapter().execute({"op": "bogus", "repo": "redis"})
+    assert out["error"].startswith("unsupported")
