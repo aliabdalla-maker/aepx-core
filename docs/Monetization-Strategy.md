@@ -84,6 +84,16 @@ Revenue targets align with the ADLC Plan (§13): £100k ARR (Yr 1) → £500k–
 
 ---
 
+## Payment processing
+
+Payments run through **`services/billing`** — Stripe-hosted Checkout Sessions
+created via the Stripe REST API. Two safety invariants: the secret key is read
+only from the `STRIPE_API_KEY` environment variable (never in the repo or git
+history — supply it via a secrets manager at deploy time), and card data never
+touches AEP-X (the customer pays on Stripe's hosted page, which also honours
+Law 6 — human approval for financial decisions). Unset key ⇒ the service
+degrades cleanly and never attempts a charge.
+
 ## The honest caveat
 
 The binding risk is **adoption, not architecture** (ADLC Plan Critical

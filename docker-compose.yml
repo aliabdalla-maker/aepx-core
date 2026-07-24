@@ -191,6 +191,18 @@ services:
       - GOVERNANCE_URL=http://governance:8000
     depends_on: [trust, governance]
 
+  # ---- Billing: Stripe payment processing ----
+  # Creates Stripe-hosted Checkout Sessions. The secret key is supplied ONLY
+  # via the STRIPE_API_KEY env/secret (never in the repo); unset by default,
+  # so the service degrades cleanly and never attempts a live charge.
+  billing:
+    build: ./services/billing
+    restart: unless-stopped
+    ports: ["8017:8000"]
+    environment:
+      - STRIPE_API_KEY=${STRIPE_API_KEY:-}
+    # depends on nothing internal — it talks to Stripe, gated on the secret.
+
   # ---- RFC-0008: chain->AI oracle bridge ----
   # Off-chain half of the AI<->blockchain bridge. Its /oracle/decide pipeline
   # (governed AI call via the bus + Verification scoring) is always on;
@@ -230,6 +242,7 @@ services:
       - COST_OPTIMISER_URL=http://cost-optimiser:8000
       - ML_INTEGRATION_URL=http://ml-integration:8000
       - MARKETPLACE_URL=http://marketplace:8000
+      - BILLING_URL=http://billing:8000
       - ORACLE_BRIDGE_URL=http://oracle-bridge:8000
       - CONNECTOR_BUS_URL=http://connector-bus:8000
     depends_on: [identity, trust, registry, memory, cache, discovery, workflow, safety, governance]
@@ -424,6 +437,7 @@ services:
       - ML_INTEGRATION_URL=http://ml-integration:8000
       - BRAIN_URL=http://brain:8000
       - MARKETPLACE_URL=http://marketplace:8000
+      - BILLING_URL=http://billing:8000
       - CONNECTOR_BUS_URL=http://connector-bus:8000
       - ORACLE_BRIDGE_URL=http://oracle-bridge:8000
       - CONNECTOR_URL_BLOCKCHAIN=http://connector-blockchain:8000

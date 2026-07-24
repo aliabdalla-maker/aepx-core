@@ -55,6 +55,7 @@ SVC = {
     "ml-integration": os.getenv("ML_INTEGRATION_URL", "http://ml-integration:8000"),
     "brain": os.getenv("BRAIN_URL", "http://brain:8000"),
     "marketplace": os.getenv("MARKETPLACE_URL", "http://marketplace:8000"),
+    "billing": os.getenv("BILLING_URL", "http://billing:8000"),
     "oracle-bridge": client.oracle.oracle_url,
     "connector-bus": client.bus_url,
     "blockchain-connector": os.getenv("CONNECTOR_URL_BLOCKCHAIN", "http://connector-blockchain:8000"),
