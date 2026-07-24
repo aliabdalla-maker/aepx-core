@@ -140,6 +140,15 @@ class PredictRequest(BaseModel):
     features: dict = {}
 
 
+class CheckoutRequest(BaseModel):
+    product: str = "AEP-X Professional"
+    amount_minor: int = 9900
+    currency: str = "gbp"
+    mode: str = "payment"
+    success_url: str = "https://example.com/success"
+    cancel_url: str = "https://example.com/cancel"
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "aepx-console"}
@@ -266,6 +275,18 @@ def predict(req: PredictRequest):
 @app.get("/api/brain/status")
 def brain_status():
     return _svc_get("brain", "/brain/status")
+
+
+@app.get("/api/billing/config")
+def billing_config():
+    # Never proxies the key itself — only whether one is configured, so the
+    # Console can show a real/degraded state without ever seeing the secret.
+    return _svc_get("billing", "/billing/config")
+
+
+@app.post("/api/billing/checkout")
+def billing_checkout(req: CheckoutRequest):
+    return _svc_post("billing", "/billing/checkout", req.model_dump())
 
 
 @app.get("/api/brain/reliability")

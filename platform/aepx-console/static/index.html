@@ -133,6 +133,7 @@
     <div class="nav" data-sec="flows"><span class="ic">❖</span><span class="t">Memory &amp; Flows</span></div>
     <div class="nav" data-sec="bridge"><span class="ic">⧉</span><span class="t">Blockchain</span></div>
     <div class="nav" data-sec="governance"><span class="ic">§</span><span class="t">Governance</span></div>
+    <div class="nav" data-sec="billing"><span class="ic">💳</span><span class="t">Billing</span></div>
     <div class="nav" data-sec="intelligence"><span class="ic">✦</span><span class="t">Intelligence</span></div>
     <div class="nav" data-sec="chat"><span class="ic">✉</span><span class="t">LLM Box</span></div>
     <div class="brandnote">AEP-X v1.0 · 15 services + SOA bus + 107 connectors · RFC-0001–0008</div>
@@ -279,6 +280,25 @@
         <div class="body"><div id="feed" class="feed"><div class="empty">Waiting for events…</div></div></div></div>
     </section>
 
+    <!-- BILLING -->
+    <section id="sec-billing" class="section">
+      <div class="sec-head"><h1>Billing</h1><p>Stripe-hosted Checkout — AEP-X never handles card data, and the secret key lives only in an environment variable, never in the codebase.</p></div>
+      <div class="cards">
+        <div class="card"><div class="cap"><div class="k">Status</div><h2>Configuration</h2><p>Whether a Stripe key is set — never shows the key itself.</p></div>
+          <div class="body"><button id="billCfgGo" class="btn ghost">Check status</button><div id="billCfgRes" class="res"></div></div></div>
+        <div class="card t"><div class="cap"><div class="k">Checkout</div><h2>Create a session</h2><p>Returns a Stripe-hosted URL; the customer pays there, not on AEP-X.</p></div>
+          <div class="body">
+            <div><label>Product</label><input id="billProduct" value="AEP-X Professional"></div>
+            <div class="row"><div><label>Amount (minor units, e.g. pence)</label><input id="billAmount" type="number" value="9900"></div>
+              <div><label>Currency</label><input id="billCurrency" value="gbp"></div></div>
+            <div><label>Mode</label>
+              <div class="seg" id="billModeSeg"><button data-mode="payment" class="on">One-off</button><button data-mode="subscription">Subscription</button></div></div>
+            <button id="billGo" class="btn teal"><span class="spin"></span><span class="t">Create Checkout Session</span></button>
+            <div id="billRes" class="res"></div>
+          </div></div>
+      </div>
+    </section>
+
     <!-- INTELLIGENCE -->
     <section id="sec-intelligence" class="section">
       <div class="sec-head"><h1>Intelligence &amp; self-healing</h1><p>The ML integration layer and the Brain — prediction, recommendation, and the circuit breaker learned from real audit history.</p></div>
@@ -418,6 +438,21 @@ $("#polGo").onclick=async()=>{const {ok,body}=await api(`/api/policy?risk_level=
 $("#anchGo").onclick=async()=>{const {ok,body}=await api("/api/ledger/anchors");const el=$("#ledRes");if(!ok){offline(el);}else{el.className="res show";el.innerHTML=`<span class="badge ok">${(body||[]).length} anchors</span><pre>${esc(JSON.stringify(body,null,2))}</pre>`;}};
 $("#verGo").onclick=async()=>{const id=$("#verId").value.trim();if(!id)return;const {ok,body}=await api(`/api/ledger/verify/${id}`);const el=$("#ledRes");el.className="res show";
   if(!ok){offline(el);}else{const v=body.chain_valid;el.innerHTML=`<span class="badge ${body.anchored?(v?'ok':'err'):'warn'}">${body.anchored?(v?'chain valid':'TAMPERED'):'not yet anchored'}</span><pre>${esc(JSON.stringify(body,null,2))}</pre>`;}};
+
+// billing
+let billMode="payment";
+document.querySelectorAll("#billModeSeg button").forEach(bt=>bt.onclick=()=>{billMode=bt.dataset.mode;document.querySelectorAll("#billModeSeg button").forEach(x=>x.classList.toggle("on",x===bt));});
+$("#billCfgGo").onclick=async()=>{const b=$("#billCfgGo");load(b,true);const {ok,body}=await api("/api/billing/config");const el=$("#billCfgRes");
+  if(!ok){offline(el);}else{el.className="res show";el.innerHTML=`<span class="badge ${body.stripe_configured?'ok':'warn'}">${body.stripe_configured?'Stripe configured':'no key set — degrade-clean'}</span><div class="hintline" style="margin-top:.4rem">${esc(body.note||"")}</div>`;} load(b,false);};
+$("#billGo").onclick=async()=>{const b=$("#billGo");load(b,true);
+  const req={product:$("#billProduct").value.trim(),amount_minor:Number($("#billAmount").value)||0,currency:$("#billCurrency").value.trim()||"gbp",mode:billMode};
+  const {ok,body}=await api("/api/billing/checkout",{method:"POST",body:JSON.stringify(req)});
+  const el=$("#billRes");el.className="res show";
+  if(!ok){offline(el);load(b,false);return;}
+  if(!body.configured){el.innerHTML=`<span class="badge warn">not configured</span><div class="hintline" style="margin-top:.4rem">${esc(body.reason||"STRIPE_API_KEY unset")}</div>`;load(b,false);return;}
+  if(!body.checkout_url){el.innerHTML=`<span class="badge err">stripe error</span><div class="hintline" style="margin-top:.4rem">${esc(body.reason||"unknown")}</div>`;load(b,false);return;}
+  el.innerHTML=`<span class="badge ok">session created</span><div class="kv" style="margin-top:.4rem"><span><b>amount</b> ${(req.amount_minor/100).toFixed(2)} ${req.currency.toUpperCase()}</span><span><b>session</b> ${esc(body.session_id||"")}</span></div><div style="margin-top:.5rem"><a href="${esc(body.checkout_url)}" target="_blank" rel="noopener" class="btn pri" style="text-decoration:none;display:inline-flex">Open Stripe Checkout ↗</a></div>`;
+  load(b,false); pokeFeed();};
 
 // intelligence
 $("#mdlGo").onclick=async()=>{const {ok,body}=await api("/api/models");showJSON($("#mlRes"),ok,body);};

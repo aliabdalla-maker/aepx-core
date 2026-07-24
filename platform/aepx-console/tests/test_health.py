@@ -55,6 +55,8 @@ def test_platform_wide_endpoints_degrade_to_502_without_stack():
     assert client.get("/api/models").status_code == 502
     assert client.get("/api/brain/status").status_code == 502
     assert client.post("/api/chat", json={"prompt": "hi"}).status_code == 502
+    assert client.get("/api/billing/config").status_code == 502
+    assert client.post("/api/billing/checkout", json={"product": "x", "amount_minor": 100}).status_code == 502
 
 
 def test_health_map_never_blanks_when_targets_down():
@@ -62,6 +64,6 @@ def test_health_map_never_blanks_when_targets_down():
     # every service marked down rather than failing as a whole — and it now
     # covers the whole platform, not just the bridge.
     body = client.get("/api/health-map").json()
-    for svc in ("oracle-bridge", "connector-bus", "governance", "memory", "workflow", "brain"):
+    for svc in ("oracle-bridge", "connector-bus", "governance", "memory", "workflow", "brain", "billing"):
         assert svc in body, f"{svc} missing from health map"
         assert body[svc]["up"] is False
