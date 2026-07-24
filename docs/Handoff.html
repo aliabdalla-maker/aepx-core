@@ -99,19 +99,33 @@
   <div class="subtitle">From strategy to build: the committed scope, owners, and Day 1–30 checklist</div>
   <div class="meta">
     <span><strong>Companion to</strong> ADLC-Plan, Instructional-Manual &amp; Microservices Implementation Guide</span>
-    <span><strong>Prepared</strong> 7 July 2026 · <strong>Updated</strong> 23 July 2026</span>
-    <span><strong>Status</strong> Reference implementation delivered &amp; running; RFC-0008 bridge + unified Console added — see §1a–1c</span>
+    <span><strong>Prepared</strong> 7 July 2026 · <strong>Updated</strong> 24 July 2026</span>
+    <span><strong>Status</strong> Reference implementation delivered &amp; running; RFC-0008 bridge, unified Console, Marketplace &amp; live-chain mode added; tagged v0.1.0 — see §0</span>
     <span><strong>Owner</strong> Equality Software Ltd / AEP-X Programme</span>
   </div>
   <div class="badge-row">
-    <span class="badge">✅ Delivered: 14 core services + Connector Bus, live in Docker</span>
-    <span class="badge">🔌 107 connectors · 11 category services</span>
+    <span class="badge">✅ Delivered: 16 services + Connector Bus, live in Docker</span>
+    <span class="badge">🔌 107 connectors · 11 category services · 7 real adapters</span>
     <span class="badge">⛓️ RFC-0006: blockchain connectors · ledger anchoring · did:key</span>
     <span class="badge">🌉 RFC-0008: AI↔blockchain bridge, both directions</span>
     <span class="badge">🖥️ AEP-X Console: one live GUI for protocol + blockchain</span>
     <span class="badge">📄 Runbooks: Instructional-Manual.pdf · Operational-Manual.pdf</span>
   </div>
 </header>
+
+<h2 id="latest-update">0. Latest Delivery Update — 24 July 2026</h2>
+<div class="callout go">
+<strong>Shipped since the 8 July build, now tagged <code>v0.1.0</code>:</strong>
+<ul>
+<li><strong>RFC-0008 AI↔blockchain bridge</strong>, both directions — governed contract read/write (AI→chain) and the <code>AEPXOracle</code> decision oracle (chain→AI: governed AI call + Verification scoring + on-chain writeback). SDK <code>chain</code>/<code>oracle</code> plugins.</li>
+<li><strong>Marketplace Engine</strong> — <em>no longer deferred</em>. Built with a governed publish gate (publisher trust ≥ 60 <em>and</em> policy allow, fail-closed) before a listing goes live. Now 16 services total.</li>
+<li><strong>Unified AEP-X Console</strong> (<code>:8083</code>) — one live GUI over the whole platform plus a first-class Blockchain workspace.</li>
+<li><strong>Live-chain mode</strong> — the RFC-0006/0008 open item is closed: opt-in <code>anvil</code> devnet overlay (<code>docker-compose.chain.yml</code> + <code>scripts/deploy_contracts.py</code>); the three contracts are compiled and exercised on an in-memory EVM in CI. The oracle listener now uses log-based event subscription with an id-scan fallback.</li>
+<li><strong>7 real connectors</strong> (was 5): added Docker Hub and GitLab (real no-auth public APIs), plus the ethereum adapter's governed <code>contract_read</code>/<code>contract_write</code>.</li>
+<li><strong>CI</strong>: green across 35 jobs; ruff ruleset + version pinned; <strong>Dependabot alerts + automated security fixes enabled</strong>.</li>
+</ul>
+Sections below are preserved as the original commitment baseline; this section records the current state on top of it.
+</div>
 
 <h2 id="purpose">1. What This Document Is</h2>
 <p>This is the <strong>handoff package</strong> — the document that turns the ADLC Plan from a strategy artifact into a piece of work someone can start on Monday morning. It answers four questions for whoever is picking this up (a founding engineer, a contracted team, or the founder themselves):</p>
@@ -134,7 +148,7 @@
 <tr><td>Python SDK + CLI</td><td>Delivered as scaffolds (<code>sdk/python/aepx</code>, <code>cli/aepx_cli</code>)</td><td><code>from aepx import Agent</code> round-trips via Gateway</td></tr>
 <tr><td>Cache: L1 session only (reduced-scope MVP)</td><td><strong>Full L0–L5 hierarchy</strong> with RFC-0005 TTLs; L5 federation writes policy-gated via Governance</td><td>Cache <code>/health</code> lists all six layers</td></tr>
 <tr><td>Event-driven Tier 2 (design only)</td><td><strong>Live choreography verified:</strong> <code>workflow.completed</code> → Kafka → Safety flags → <code>safety.flagged</code> → Governance audit log captures both, unprompted</td><td>Governance <code>GET /audit</code></td></tr>
-<tr><td>Marketplace Engine deferred</td><td><strong>Still deferred</strong> — deferral intact, unchanged</td><td>§2 table below</td></tr>
+<tr><td>Marketplace Engine deferred</td><td><strong>Now built</strong> (24 Jul 2026) with a governed publish gate — see §0</td><td>services/marketplace</td></tr>
 </table></div>
 <p><strong>Defects found and fixed during deployment</strong> (full detail in the Operational Manual §6 troubleshooting guide): stock <code>postgres:16</code> lacks pgvector → switched to <code>pgvector/pgvector:pg16</code>; the Microservices Guide's Kafka <code>CLUSTER_ID</code> value is not a valid KRaft UUID → regenerated; Kafka producers/consumers created once at import died silently on the broker startup race → reconnect loops and lazy producers added (Governance, Safety, Workflow).</p>
 <p><strong>Governance gates verified live:</strong> AIA-R3 connectors (industrial, government) are policy-denied under the seed <code>max_risk_level: S2</code>; AIA-R2 connectors (SAP, education) are trust-denied while the Trust stub returns 50. Raising either is a governance/data decision, not a code change.</p>
@@ -165,14 +179,14 @@
 <tr><td>AEP-X Console — one GUI for protocol + blockchain</td><td><strong>New at <code>http://localhost:8083</code></strong> (<code>platform/aepx-console</code>): overview health of every service, connectors + governed invoke, trust &amp; did:key, memory / discovery / workflows, governance + audit + ledger, ML/Brain, an LLM box, and a first-class <strong>Blockchain</strong> workspace (live node status, contract read/write, decision oracle, raw JSON-RPC). Every action routes through the same governed path and lands in a live audit feed</td><td><code>platform/aepx-console/</code>; wired into <code>docker-compose.yml</code> + CI</td></tr>
 <tr><td>CI health</td><td>Fixed repo-wide: tests run via <code>python -m pytest</code> (the <code>app</code> package now imports); ruff E402/F401 debt cleared in three connectors; GitHub Actions bumped to Node-24 versions. <strong>33/33 jobs green, 0 annotations</strong></td><td>GitHub Actions run on <code>master</code></td></tr>
 </table></div>
-<p><strong>Still deferred, unchanged:</strong> the Marketplace Engine remains the one Volume-9-named service intentionally not built (§2). The one open item flagged in RFC-0006 §9 / RFC-0008 §9 — adding a local <code>anvil</code> EVM devnet to <code>docker-compose.yml</code> so the on-chain paths run live in CI rather than only degrade-tested — is a deliberate, deferred day-2 task, not an oversight.</p>
+<p><strong>Update (24 Jul 2026):</strong> both items formerly deferred here are now delivered (§0). The Marketplace Engine is built with a governed publish gate; the local <code>anvil</code> EVM devnet exists as an opt-in overlay (<code>docker-compose.chain.yml</code>) and the contracts are compiled + exercised on an in-memory EVM in CI. What remains genuinely out of scope is the source manual's Stages 9–20 (see README).</p>
 
 <h2 id="scope">2. Committed Scope (Execution-Lock Reading)</h2>
 <p>The ADLC Plan's Critical Evaluation (§15) found the full manual's Year-1 ask — 13 production services, a standards body, 10 frozen RFCs, a marketplace, a certification platform, and 3 verticals, built by 7 people on £250k — does not close. This handoff commits to the <strong>narrower scope the evaluation recommended</strong>, so what follows is buildable, not aspirational.</p>
 <div class="table-wrap"><table>
 <tr><th>In scope for v0.0.1 → v0.1 Alpha (Months 1–3)</th><th>Explicitly deferred (backlog, gated on pilot evidence)</th></tr>
 <tr><td>6 services: Identity (minimal), Trust (minimal), Registry, Memory, Cache, Gateway</td><td>Verification Engine (full anti-hallucination pipeline — Alpha ships a response-contract stub only)</td></tr>
-<tr><td>Discovery Service, minimal sequential Workflow Engine <em>(Instructional Manual §4.1–4.2)</em></td><td><strong>Marketplace Engine</strong> — named in the Volume 9 catalogue, deliberately not built; see Microservices Guide §1.2, §5.5</td></tr>
+<tr><td>Discovery Service, minimal sequential Workflow Engine <em>(Instructional Manual §4.1–4.2)</em></td><td><strong>Marketplace Engine</strong> — was deferred here in the original baseline; <em>now built</em> (§0), governed publish gate. See Microservices Guide §1.2, §5.5</td></tr>
 <tr><td>Python SDK + CLI (<code>aepx init/create/run</code>)</td><td>TypeScript/Java/Go/Rust SDKs</td></tr>
 <tr><td>MCP protocol adapter <em>(pulled forward from Month 4 — see note below)</em></td><td>Certification Platform, Developer Portal (Wave 5)</td></tr>
 <tr><td>One vertical: Education pilot (Tutor Agent demo)</td><td>Hospitality, Enterprise pilots (Wave 6)</td></tr>

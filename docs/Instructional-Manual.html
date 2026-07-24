@@ -119,6 +119,9 @@ The repo tree, schemas, and all service scaffolds in Parts 1–4 exist and run �
 </nav>
 
 <h2 id="intro">Introduction &amp; Prerequisites</h2>
+<div class="callout note">
+<strong>Delivered since this manual was written (24 July 2026, <code>v0.1.0</code>):</strong> the platform now runs <strong>16 services</strong> (the 6 here + Discovery/Workflow/Safety/Governance + Knowledge/Verification/Cost-Optimiser/ML-Integration + the RFC-0008 <code>oracle-bridge</code> and the <code>marketplace</code> engine). The <strong>RFC-0008 AI↔blockchain bridge</strong> is live both directions (governed contract read/write; the decision oracle with log-based event subscription), driven from the SDK (<code>chain</code>/<code>oracle</code> plugins) or the <strong>AEP-X Console</strong> at <code>:8083</code>. An opt-in <strong>live-chain mode</strong> (<code>docker-compose.chain.yml</code> + <code>scripts/deploy_contracts.py</code>) runs the on-chain paths against a local anvil devnet; contracts are compiled and tested on an in-memory EVM in CI. <strong>7 connectors</strong> now have real adapters. See <code>docs/Console-and-Bridge.md</code>. The step-by-step build below remains the correct path from zero — the above is what "done" now looks like.
+</div>
 <p>This manual turns the ADLC Plan's phases into literal, ordered steps. It assumes you have accepted the <strong>Handoff</strong> document's committed scope (§2: 6 services, Python SDK, MCP adapter, one vertical, one pilot customer) and resolved its blockers (§5: team size, MCP positioning, pilot contact).</p>
 <p><strong>Read this manual sequentially the first time.</strong> Each Part corresponds to a block of the roadmap and ends with a Definition-of-Done checklist — don't start the next Part until the current one's DoD is met. After the first pass, use the table of contents to jump to whichever Part you're executing.</p>
 
