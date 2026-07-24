@@ -16,6 +16,7 @@ Planning and architecture documents live in [`docs/`](docs/), in read order:
 8. [Operational-Manual](docs/Operational-Manual.html) ([PDF](docs/Operational-Manual.pdf)) — running, verifying, and troubleshooting the live stack, with UML use case and sequence diagrams of the three load-bearing flows.
 9. [Connector-Catalogue](docs/Connector-Catalogue.md) — all 107 connectors by category, with risk class and maturity.
 10. [Console-and-Bridge](docs/Console-and-Bridge.md) — the AEP-X Console (`:8083`), the RFC-0008 AI↔blockchain bridge, and how to run the opt-in live-chain (anvil) mode.
+11. [Monetization-Strategy](docs/Monetization-Strategy.md) — open-core + governed-infrastructure model: the five revenue lines, indicative pricing, and sequencing tied to the funding stages.
 
 RFC-0006 ([rfcs/RFC-0006-blockchain-ledger.md](rfcs/RFC-0006-blockchain-ledger.md)) adds the `blockchain` connector category, Governance's tamper-evident audit anchoring, `did:key` decentralized identity, and optional smart-contract policy enforcement — see [`governance/contracts/`](governance/contracts/) for the reference Solidity sources.
 
