@@ -22,6 +22,7 @@ jobs:
           - ml-integration
           - brain
           - oracle-bridge
+          - marketplace
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6

@@ -179,6 +179,18 @@ services:
     ports: ["8013:8000"]
     depends_on: [kafka]
 
+  # ---- Marketplace Engine ----
+  # Publish/discover assets, with a governed publish gate (Trust >= 60 AND
+  # policy allow, fail-closed) before a listing goes live.
+  marketplace:
+    build: ./services/marketplace
+    restart: unless-stopped
+    ports: ["8016:8000"]
+    environment:
+      - TRUST_URL=http://trust:8000
+      - GOVERNANCE_URL=http://governance:8000
+    depends_on: [trust, governance]
+
   # ---- RFC-0008: chain->AI oracle bridge ----
   # Off-chain half of the AI<->blockchain bridge. Its /oracle/decide pipeline
   # (governed AI call via the bus + Verification scoring) is always on;
@@ -217,6 +229,7 @@ services:
       - VERIFICATION_URL=http://verification:8000
       - COST_OPTIMISER_URL=http://cost-optimiser:8000
       - ML_INTEGRATION_URL=http://ml-integration:8000
+      - MARKETPLACE_URL=http://marketplace:8000
       - ORACLE_BRIDGE_URL=http://oracle-bridge:8000
       - CONNECTOR_BUS_URL=http://connector-bus:8000
     depends_on: [identity, trust, registry, memory, cache, discovery, workflow, safety, governance]
@@ -410,6 +423,7 @@ services:
       - COST_OPTIMISER_URL=http://cost-optimiser:8000
       - ML_INTEGRATION_URL=http://ml-integration:8000
       - BRAIN_URL=http://brain:8000
+      - MARKETPLACE_URL=http://marketplace:8000
       - CONNECTOR_BUS_URL=http://connector-bus:8000
       - ORACLE_BRIDGE_URL=http://oracle-bridge:8000
       - CONNECTOR_URL_BLOCKCHAIN=http://connector-blockchain:8000
