@@ -108,3 +108,21 @@ def test_policy_registry_ceiling(chain):
     policy = _contract(w3, art, addrs, "AEPXPolicyRegistry")
     # default seed is S2 (index 2) per the contract constructor
     assert policy.functions.maxRiskLevel().call() == 2
+
+
+def test_oracle_decision_requested_logs_are_queryable(chain):
+    # Validates the oracle-bridge's log-subscription path (RFC-0008 §9): the
+    # bridge finds pending work by querying DecisionRequested events via
+    # get_logs rather than scanning every id. Emit two requests and confirm
+    # both are recoverable from the event logs with their prompts intact.
+    w3, art, addrs, deployer = chain
+    oracle = _contract(w3, art, addrs, "AEPXOracle")
+    oracle.functions.requestDecision("first prompt").transact({"from": deployer})
+    oracle.functions.requestDecision("second prompt").transact({"from": deployer})
+
+    logs = oracle.events.DecisionRequested().get_logs(from_block=0)
+    prompts = {ev["args"]["prompt"] for ev in logs}
+    assert {"first prompt", "second prompt"} <= prompts
+    # request ids are contiguous and start at 0
+    ids = sorted(ev["args"]["requestId"] for ev in logs)
+    assert ids == list(range(len(ids)))

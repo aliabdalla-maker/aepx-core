@@ -57,4 +57,6 @@ Every addition is additive and opt-in. The `EVMRPCAdapter`'s raw JSON-RPC path (
 
 **Resolved (24 July 2026):** the on-chain path is now exercised for real. The three contracts are compiled with solc 0.8.24 and deployed+exercised on an in-memory EVM in CI (`tests/test_contracts.py`, the `contracts` job), and a local `anvil` devnet overlay (`docker-compose.chain.yml` + `scripts/deploy_contracts.py`) wires the running stack to a persistent chain. The default no-chain path is unchanged and still degrades cleanly.
 
-Remaining: whether the oracle listener should move from id-polling to log-based event subscription (`eth_getLogs`/filters) for high-throughput deployments — id-polling is deterministic and web3-version-robust, which is why it ships first. Deferred until a throughput need is demonstrated.
+**Also resolved (24 July 2026):** the oracle listener now defaults to log-based event subscription — it reacts to `DecisionRequested` events via `get_logs` from the last-scanned block (`ORACLE_USE_LOGS=true`, the default), and falls back to the deterministic id-scan if a node's filter API misbehaves, so it never misses a request. `tests/test_contracts.py` verifies the events are queryable on a real EVM.
+
+No open questions remain.

@@ -78,7 +78,19 @@ _ORACLE_ABI = [
         {"name": "confidence", "type": "uint8"},
         {"name": "band", "type": "string"}],
      "name": "fulfillDecision", "outputs": [], "stateMutability": "nonpayable", "type": "function"},
+    {"anonymous": False, "inputs": [
+        {"indexed": True, "name": "requestId", "type": "uint256"},
+        {"indexed": True, "name": "requester", "type": "address"},
+        {"indexed": False, "name": "prompt", "type": "string"}],
+     "name": "DecisionRequested", "type": "event"},
 ]
+
+# Log-based scanning is the default (RFC-0008 §9): react to DecisionRequested
+# events instead of rescanning every request id each cycle. Falls back to an
+# id-scan if the node/filter API misbehaves. _LAST_BLOCK tracks how far the
+# log scan has advanced so each cycle only reads new blocks.
+USE_LOGS = os.getenv("ORACLE_USE_LOGS", "true").lower() in ("1", "true", "yes")
+_LAST_BLOCK = 0
 
 
 def _get_web3():
@@ -235,40 +247,76 @@ def oracle_poll():
     return _poll_once()
 
 
+def _connect():
+    Web3 = _get_web3()
+    if Web3 is None:
+        raise RuntimeError("web3 not importable")
+    w3 = Web3(Web3.HTTPProvider(ORACLE_RPC_URL, request_kwargs={"timeout": 5}))
+    account = w3.eth.account.from_key(ORACLE_PRIVATE_KEY)
+    contract = w3.eth.contract(address=Web3.to_checksum_address(ORACLE_CONTRACT_ADDRESS), abi=_ORACLE_ABI)
+    return w3, contract, account
+
+
+def _fulfill(w3, contract, account, request_id: int, prompt: str) -> bool:
+    """Decide + write back on-chain for one request. Returns True if it wrote
+    a fulfilment, False if the request was already fulfilled."""
+    d = contract.functions.getDecision(request_id).call()
+    if d[5]:  # already fulfilled
+        return False
+    decision = decide(prompt or d[1], request_id)
+    tx = contract.functions.fulfillDecision(
+        request_id, decision["answer"], decision["confidence"], decision["band"]
+    ).build_transaction({
+        "from": account.address,
+        "nonce": w3.eth.get_transaction_count(account.address),
+    })
+    signed = account.sign_transaction(tx)
+    tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
+    _publish("oracle.fulfilled", {
+        "request_id": request_id, "band": decision["band"],
+        "confidence": decision["confidence"], "tx_hash": tx_hash.hex(), "ts": time.time(),
+    })
+    return True
+
+
+def _poll_via_logs(w3, contract, account) -> dict:
+    """React to DecisionRequested events since the last scanned block."""
+    global _LAST_BLOCK
+    latest = w3.eth.block_number
+    from_block = _LAST_BLOCK
+    events = contract.events.DecisionRequested().get_logs(from_block=from_block, to_block=latest)
+    processed = 0
+    for ev in events:
+        if _fulfill(w3, contract, account, ev["args"]["requestId"], ev["args"]["prompt"]):
+            processed += 1
+    _LAST_BLOCK = latest + 1
+    return {"chain_configured": True, "mode": "logs", "processed": processed,
+            "scanned_to_block": latest}
+
+
+def _poll_by_ids(w3, contract, account) -> dict:
+    """Fallback: scan every request id (deterministic, filter-API-independent)."""
+    total = contract.functions.nextRequestId().call()
+    processed = sum(1 for rid in range(total) if _fulfill(w3, contract, account, rid, ""))
+    return {"chain_configured": True, "mode": "ids", "processed": processed, "total_requests": total}
+
+
 def _poll_once() -> dict:
     if not _chain_configured():
         return {"chain_configured": False, "processed": 0, "reason": "oracle chain not configured"}
-    Web3 = _get_web3()
-    if Web3 is None:
-        return {"chain_configured": True, "processed": 0, "reason": "web3 not importable"}
     try:
-        w3 = Web3(Web3.HTTPProvider(ORACLE_RPC_URL, request_kwargs={"timeout": 5}))
-        account = w3.eth.account.from_key(ORACLE_PRIVATE_KEY)
-        contract = w3.eth.contract(
-            address=Web3.to_checksum_address(ORACLE_CONTRACT_ADDRESS), abi=_ORACLE_ABI)
-        total = contract.functions.nextRequestId().call()
-        processed = 0
-        for request_id in range(total):
-            d = contract.functions.getDecision(request_id).call()
-            fulfilled = d[5]
-            prompt = d[1]
-            if fulfilled:
-                continue
-            decision = decide(prompt, request_id)
-            tx = contract.functions.fulfillDecision(
-                request_id, decision["answer"], decision["confidence"], decision["band"]
-            ).build_transaction({
-                "from": account.address,
-                "nonce": w3.eth.get_transaction_count(account.address),
-            })
-            signed = account.sign_transaction(tx)
-            tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
-            _publish("oracle.fulfilled", {
-                "request_id": request_id, "band": decision["band"],
-                "confidence": decision["confidence"], "tx_hash": tx_hash.hex(), "ts": time.time(),
-            })
-            processed += 1
-        return {"chain_configured": True, "processed": processed, "total_requests": total}
+        w3, contract, account = _connect()
+    except Exception as e:
+        return {"chain_configured": True, "processed": 0, "reason": f"connect_failed ({type(e).__name__})"}
+    if USE_LOGS:
+        try:
+            return _poll_via_logs(w3, contract, account)
+        except Exception:
+            # Some nodes / filter APIs differ; fall back to the id-scan rather
+            # than miss requests (RFC-0008 §9).
+            pass
+    try:
+        return _poll_by_ids(w3, contract, account)
     except Exception as e:
         return {"chain_configured": True, "processed": 0, "reason": f"poll_failed ({type(e).__name__})"}
 
