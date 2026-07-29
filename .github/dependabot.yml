@@ -1,0 +1,49 @@
+# Dependabot — weekly dependency + action updates.
+# Enabling this addresses the "Dependabot alerts are disabled" gap. Updates
+# are grouped so we get one PR per ecosystem per week, not dozens.
+version: 2
+updates:
+  # GitHub Actions used by the CI workflow (keeps checkout/setup-python current,
+  # which is what the Node-20 deprecation was about).
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Python — one entry per directory that has its own requirements.txt.
+  # Grouped into a single PR each so review stays manageable.
+  - package-ecosystem: pip
+    directories:
+      - "/services/registry"
+      - "/services/identity"
+      - "/services/trust"
+      - "/services/memory"
+      - "/services/cache"
+      - "/services/gateway"
+      - "/services/discovery"
+      - "/services/workflow"
+      - "/services/safety"
+      - "/services/governance"
+      - "/services/knowledge"
+      - "/services/verification"
+      - "/services/cost-optimiser"
+      - "/services/ml-integration"
+      - "/services/brain"
+      - "/services/oracle-bridge"
+      - "/connector-bus"
+      - "/connectors/*"
+      - "/sdk/python"
+      - "/platform/conformance"
+      - "/platform/workbench"
+      - "/platform/aepx-console"
+      - "/console"
+      - "/tests"
+    schedule:
+      interval: weekly
+    groups:
+      python:
+        patterns: ["*"]
+    open-pull-requests-limit: 5

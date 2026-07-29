@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Node (docs portal, if added later)
+node_modules/
+
+# Env / secrets
+.env
+.env.*
+# ...except the committed template, which holds no real values.
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local AEP-X 1 session state — machine-specific, not shared config.
+# Note: AEP-X 1's harness recreates a .claude/ directory by convention
+# regardless of the project-visible folder name below, so both are ignored.
+AEP-X 1/settings.local.json
+AEP-X 1/scheduled_tasks.lock
+.claude/
+
+# Local dev artifacts
+console/uploads_dev/

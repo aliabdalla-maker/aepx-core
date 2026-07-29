@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X Conformance — Testing Platform</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff;
+    --green:#2e8b57; --green-light:#eaf6ee; --red:#b04a6f; --red-light:#fbeef2;
+    --amber:#b8860b; --amber-light:#fdf6ec;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.55; }
+  .page { max-width:900px; margin:0 auto; padding:1.6rem 1.2rem 3rem; }
+  header { background:linear-gradient(135deg,#0f4c81,#143d66); color:#fff; border-radius:12px; padding:1.4rem 1.6rem; margin-bottom:1.2rem; }
+  header h1 { margin:0 0 .2rem; font-size:1.3rem; }
+  header .sub { opacity:.85; font-size:.9rem; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin-bottom:1rem; }
+  label { font-size:.78rem; color:var(--muted); display:block; margin-bottom:.15rem; }
+  input { width:100%; padding:.4rem .55rem; border:1.5px solid var(--border); border-radius:8px; font:inherit; font-size:.85rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:.7rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:.55rem 1.4rem; font:inherit; font-weight:600; cursor:pointer; margin-top:.9rem; }
+  button:disabled { opacity:.55; cursor:wait; }
+  table { border-collapse:collapse; width:100%; font-size:.83rem; }
+  th, td { border:1px solid var(--border); padding:.4rem .6rem; text-align:left; vertical-align:top; }
+  th { background:var(--accent-light); color:var(--accent); }
+  .pass { color:var(--green); font-weight:700; }
+  .fail { color:var(--red); font-weight:700; }
+  .skip { color:var(--amber); font-weight:700; }
+  .badges { display:flex; gap:.5rem; margin:.6rem 0; flex-wrap:wrap; }
+  .badge { border-radius:999px; padding:.2rem .8rem; font-size:.8rem; font-weight:600; }
+  .badge.ok { background:var(--green-light); color:var(--green); }
+  .badge.bad { background:var(--red-light); color:var(--red); }
+  .badge.warn { background:var(--amber-light); color:var(--amber); }
+  .verdict { font-size:1.02rem; font-weight:700; margin:.4rem 0; }
+  #history li { font-size:.82rem; margin:.2rem 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>🧪 AEP-X Conformance — Testing Platform</h1>
+    <div class="sub">Runs the RFC-0007 conformance suite against any live AEP-X deployment (RFC-0001 envelopes · RFC-0002 trust · governance · RFC-0006 DID &amp; ledger)</div>
+  </header>
+
+  <div class="card">
+    <div class="grid">
+      <div><label>Gateway URL</label><input id="gateway_url" placeholder="(in-cluster default)"></div>
+      <div><label>Connector Bus URL</label><input id="bus_url" placeholder="(in-cluster default)"></div>
+      <div><label>Identity URL</label><input id="identity_url" placeholder="(in-cluster default)"></div>
+      <div><label>Trust URL</label><input id="trust_url" placeholder="(in-cluster default)"></div>
+      <div><label>Governance URL</label><input id="governance_url" placeholder="(in-cluster default)"></div>
+      <div><label>Registry URL</label><input id="registry_url" placeholder="(in-cluster default)"></div>
+    </div>
+    <button id="runBtn" onclick="runSuite()">Run conformance</button>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <div class="verdict" id="verdict"></div>
+    <div class="badges" id="badges"></div>
+    <table>
+      <thead><tr><th>Check</th><th>RFC</th><th>Status</th><th>Detail</th></tr></thead>
+      <tbody id="results"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <strong style="font-size:.9rem">Previous runs</strong>
+    <ul id="history"><li>None yet.</li></ul>
+  </div>
+</div>
+
+<script>
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function runSuite() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true; btn.textContent = 'Running…';
+  const target = {};
+  for (const k of ['gateway_url','bus_url','identity_url','trust_url','governance_url','registry_url']) {
+    const v = document.getElementById(k).value.trim();
+    if (v) target[k] = v;
+  }
+  try {
+    const resp = await fetch('/runs', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(Object.keys(target).length ? {target} : {}) });
+    render(await resp.json());
+    loadHistory();
+  } catch (e) {
+    alert('run failed: ' + e);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Run conformance';
+  }
+}
+
+function render(run) {
+  document.getElementById('resultCard').style.display = '';
+  document.getElementById('verdict').innerHTML = run.conformant
+    ? '<span class="pass">✅ CONFORMANT</span>' : '<span class="fail">❌ NOT CONFORMANT</span>';
+  document.getElementById('badges').innerHTML =
+    `<span class="badge ok">${run.passed} passed</span>` +
+    `<span class="badge bad">${run.failed} failed</span>` +
+    `<span class="badge warn">${run.skipped} skipped</span>` +
+    `<span class="badge" style="background:var(--accent-light);color:var(--accent)">${run.duration_seconds}s</span>`;
+  document.getElementById('results').innerHTML = run.results.map(r =>
+    `<tr><td><code>${esc(r.id)}</code><br><span style="color:var(--muted);font-size:.76rem">${esc(r.title)}</span></td>` +
+    `<td>${esc(r.rfc)}</td><td class="${r.status}">${r.status.toUpperCase()}</td><td>${esc(r.detail)}</td></tr>`).join('');
+}
+
+async function loadHistory() {
+  const runs = await (await fetch('/runs')).json();
+  document.getElementById('history').innerHTML = runs.length
+    ? runs.map(r => `<li><a href="#" onclick="showRun(${r.run_id});return false">run #${r.run_id}</a> — ` +
+        `${r.conformant ? '✅' : '❌'} ${r.passed}P/${r.failed}F/${r.skipped}S in ${r.duration_seconds}s</li>`).join('')
+    : '<li>None yet.</li>';
+}
+
+async function showRun(id) { render(await (await fetch('/runs/' + id)).json()); }
+loadHistory();
+</script>
+</body>
+</html>

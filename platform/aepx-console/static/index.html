@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X Console</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-dark:#143d66;
+    --accent-light:#e8f0f8; --border:#d7dee8; --bg:#f7f9fc; --card:#fff;
+    --green:#2e8b57; --green-light:#eaf6ee; --amber:#b8860b; --amber-light:#fdf6ec;
+    --red:#b04a6f; --red-light:#fbeef2; --teal:#16867d; --teal-light:#e5f3f1;
+    --purple:#6b5b95; --grey:#8a97a8; --radius:14px; --code-bg:#0f1720; --code-ink:#d6e2f0;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; max-width:100%; overflow-x:hidden; }
+  body { font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink);
+    background:var(--bg); display:flex; flex-direction:column; }
+
+  header { background:linear-gradient(135deg,var(--accent) 0%,var(--accent-dark) 100%);
+    color:#fff; padding:.85rem 1.4rem; display:flex; align-items:center; gap:1rem;
+    box-shadow:0 2px 12px rgba(15,76,129,.28); z-index:20; }
+  header .logo { font-weight:700; font-size:1.15rem; } header .logo span { opacity:.65; font-weight:400; }
+  header .tagline { font-size:.78rem; opacity:.8; flex:1; }
+  .pill { display:flex; align-items:center; gap:.45rem; font-size:.78rem;
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:20px; padding:.3rem .85rem; }
+  .pill .dot { width:9px; height:9px; border-radius:50%; background:#9aa7b8; transition:.3s; }
+  .pill .dot.ok { background:#5fd38d; box-shadow:0 0 7px #5fd38d; } .pill .dot.err { background:#ff8fb0; box-shadow:0 0 7px #ff8fb0; }
+
+  .layout { flex:1; display:flex; min-height:0; }
+  aside { width:220px; background:var(--card); border-right:1px solid var(--border); flex:none;
+    display:flex; flex-direction:column; padding:.7rem; gap:.15rem; overflow-y:auto; }
+  .nav { display:flex; align-items:center; gap:.65rem; padding:.6rem .75rem; border-radius:10px;
+    font-size:.87rem; font-weight:600; color:var(--muted); cursor:pointer; transition:.12s; }
+  .nav:hover { background:var(--accent-light); color:var(--accent); }
+  .nav.on { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff; box-shadow:0 2px 8px rgba(15,76,129,.25); }
+  .nav .ic { width:20px; text-align:center; font-size:1rem; flex:none; }
+  aside .brandnote { margin-top:auto; font-size:.68rem; color:var(--muted); padding:.7rem .75rem; line-height:1.5; }
+
+  main { flex:1; overflow-y:auto; padding:1.4rem 1.6rem 3rem; min-width:0; }
+  .section { display:none; animation:fade .2s ease-out; } .section.on { display:block; }
+  @keyframes fade { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+  .sec-head { margin-bottom:1rem; } .sec-head h1 { font-size:1.4rem; } .sec-head p { color:var(--muted); font-size:.86rem; margin-top:.1rem; }
+
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(310px,1fr)); gap:1.1rem; align-items:start; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+  .card .cap { padding:.9rem 1.1rem .65rem; border-bottom:1px solid var(--border); }
+  .card .cap .k { font-size:.66rem; text-transform:uppercase; letter-spacing:.07em; font-weight:700; color:var(--accent); }
+  .card.t .cap .k { color:var(--teal); } .card.p .cap .k { color:var(--purple); } .card.a .cap .k { color:var(--amber); }
+  .card .cap h2 { font-size:1.05rem; margin:.12rem 0 .15rem; } .card .cap p { font-size:.8rem; color:var(--muted); }
+  .card .body { padding:.9rem 1.1rem 1.1rem; display:flex; flex-direction:column; gap:.65rem; }
+
+  label { font-size:.72rem; font-weight:600; color:var(--muted); display:block; margin-bottom:.22rem; }
+  input, textarea, select { width:100%; font-family:inherit; font-size:.85rem; color:var(--ink);
+    background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.5rem .65rem; }
+  input:focus, textarea:focus, select:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-light); }
+  textarea { resize:vertical; } textarea.code { font-family:"Cascadia Code",Consolas,monospace; font-size:.76rem; }
+  .row { display:flex; gap:.6rem; } .row > * { flex:1; } .row.tight { gap:.4rem; }
+  .seg { display:inline-flex; background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:2px; }
+  .seg button { border:none; background:none; padding:.35rem .85rem; font-size:.8rem; font-weight:600; color:var(--muted); border-radius:7px; cursor:pointer; }
+  .seg button.on { background:var(--accent); color:#fff; }
+
+  .btn { border:none; border-radius:10px; padding:.55rem .95rem; font-size:.85rem; font-weight:600; color:#fff;
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:.5rem; transition:transform .12s, filter .12s; }
+  .btn:active { transform:translateY(1px); } .btn:disabled { filter:grayscale(.4) opacity(.7); cursor:default; }
+  .btn.pri { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); }
+  .btn.teal { background:linear-gradient(135deg,var(--teal),#0f6158); }
+  .btn.ghost { background:var(--card); color:var(--muted); border:1px solid var(--border); }
+  .btn .spin { width:14px; height:14px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none; }
+  .btn.loading .spin { display:inline-block; } @keyframes spin { to{transform:rotate(360deg);} }
+
+  .res { border-radius:11px; border:1px solid var(--border); padding:.75rem .85rem; font-size:.82rem; display:none; animation:fade .2s ease-out; }
+  .res.show { display:block; }
+  .badge { display:inline-flex; align-items:center; gap:.35rem; font-size:.68rem; font-weight:700; padding:.16rem .55rem; border-radius:20px; text-transform:uppercase; letter-spacing:.03em; }
+  .badge.ok{background:var(--green-light);color:var(--green);} .badge.warn{background:var(--amber-light);color:var(--amber);} .badge.err{background:var(--red-light);color:var(--red);}
+  .kv { display:flex; flex-wrap:wrap; gap:.35rem 1rem; margin:.5rem 0; font-size:.77rem; } .kv b { color:var(--muted); font-weight:600; }
+  pre { background:var(--code-bg); color:var(--code-ink); border-radius:9px; padding:.65rem .75rem; font-family:"Cascadia Code",Consolas,monospace;
+    font-size:.73rem; line-height:1.5; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin-top:.45rem; max-height:240px; overflow:auto; }
+  .hintline { font-size:.74rem; color:var(--muted); }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.9rem; margin-bottom:1.2rem; }
+  .stat { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:.9rem 1rem; }
+  .stat .n { font-size:1.7rem; font-weight:700; color:var(--accent); line-height:1.1; }
+  .stat .l { font-size:.74rem; color:var(--muted); margin-top:.15rem; }
+  .hgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.55rem; }
+  .htile { display:flex; align-items:center; gap:.5rem; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.5rem .7rem; font-size:.78rem; }
+  .htile .d { width:8px; height:8px; border-radius:50%; background:var(--grey); flex:none; }
+  .htile .d.up { background:var(--green); box-shadow:0 0 6px rgba(46,139,87,.55); } .htile .d.down { background:var(--red); }
+  .htile .lbl { font-weight:600; flex:1; } .htile .st { color:var(--muted); font-size:.7rem; }
+  .banner { background:var(--amber-light); border:1px solid #ecd9b8; border-left:4px solid var(--amber); border-radius:10px; padding:.7rem 1rem; margin-bottom:1.1rem; font-size:.85rem; display:none; }
+  .banner code { background:#f1e6cf; padding:.05rem .35rem; border-radius:4px; }
+
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; } .catchip { font-size:.72rem; background:var(--accent-light); color:var(--accent); border-radius:20px; padding:.2rem .6rem; font-weight:600; }
+  .connlist { display:flex; flex-wrap:wrap; gap:.35rem; max-height:150px; overflow-y:auto; }
+  .connlist .c { font-size:.74rem; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:.25rem .55rem; cursor:pointer; }
+  .connlist .c:hover { border-color:var(--accent); color:var(--accent); }
+
+  .decision { display:flex; gap:1rem; align-items:center; margin:.3rem 0; } .answer { flex:1; min-width:0; } .answer .txt { font-size:.92rem; }
+  .gauge text.val { font-size:15px; font-weight:700; fill:var(--ink); } .gauge text.lbl { font-size:6px; fill:var(--muted); letter-spacing:.5px; }
+  .bandchip { display:inline-flex; gap:.4rem; font-size:.7rem; font-weight:700; padding:.18rem .6rem; border-radius:20px; margin-top:.35rem; }
+  .band-GREEN{background:var(--green-light);color:var(--green);} .band-AMBER{background:var(--amber-light);color:var(--amber);} .band-RED{background:var(--red-light);color:var(--red);} .band-GREY{background:#eef1f4;color:var(--grey);}
+
+  .feed { max-height:340px; overflow-y:auto; } .ev { display:flex; align-items:center; gap:.65rem; padding:.45rem 0; border-bottom:1px solid var(--border); font-size:.79rem; }
+  .ev:last-child { border-bottom:none; } .ev .tp { font-family:"Cascadia Code",Consolas,monospace; font-size:.7rem; font-weight:700; padding:.1rem .45rem; border-radius:6px; flex:none; }
+  .tp.blue{background:var(--accent-light);color:var(--accent);} .tp.teal{background:var(--teal-light);color:var(--teal);} .tp.red{background:var(--red-light);color:var(--red);} .tp.grey{background:#eef1f4;color:var(--muted);}
+  .ev .dsc { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ev .tm { color:var(--muted); font-size:.69rem; flex:none; }
+  .empty { color:var(--muted); font-size:.82rem; padding:1rem 0; text-align:center; }
+
+  .chatwin { display:flex; flex-direction:column; height:calc(100vh - 250px); min-height:340px; }
+  .msgs { flex:1; overflow-y:auto; padding:.4rem 0; display:flex; flex-direction:column; gap:.7rem; }
+  .msg { max-width:78%; border-radius:14px; padding:.6rem .9rem; font-size:.88rem; line-height:1.5; animation:fade .18s ease-out; }
+  .msg.u { align-self:flex-end; background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff; border-bottom-right-radius:4px; }
+  .msg.b { align-self:flex-start; background:var(--card); border:1px solid var(--border); border-bottom-left-radius:4px; }
+  .msg.e { align-self:flex-start; background:var(--red-light); border:1px solid var(--red); }
+  .msg .meta { font-size:.66rem; opacity:.7; margin-top:.3rem; }
+  .chatbar { display:flex; gap:.5rem; margin-top:.6rem; } .chatbar textarea { flex:1; }
+  .ten { columns:2; column-gap:1.4rem; font-size:.82rem; padding-left:1.1rem; } .ten li { margin:.2rem 0; break-inside:avoid; }
+  @media (max-width:720px){ aside { width:60px; } .nav .t { display:none; } .ten { columns:1; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">AEP-X <span>Console</span></div>
+  <div class="tagline">One control surface for the whole platform · governed, evidence-first, cache-first</div>
+  <div class="pill"><span id="statusDot" class="dot"></span><span id="statusText">connecting…</span></div>
+</header>
+
+<div class="layout">
+  <aside id="nav">
+    <div class="nav on" data-sec="overview"><span class="ic">◧</span><span class="t">Overview</span></div>
+    <div class="nav" data-sec="connectors"><span class="ic">⇄</span><span class="t">Connectors</span></div>
+    <div class="nav" data-sec="trust"><span class="ic">⛨</span><span class="t">Trust &amp; ID</span></div>
+    <div class="nav" data-sec="flows"><span class="ic">❖</span><span class="t">Memory &amp; Flows</span></div>
+    <div class="nav" data-sec="bridge"><span class="ic">⧉</span><span class="t">Blockchain</span></div>
+    <div class="nav" data-sec="governance"><span class="ic">§</span><span class="t">Governance</span></div>
+    <div class="nav" data-sec="billing"><span class="ic">💳</span><span class="t">Billing</span></div>
+    <div class="nav" data-sec="intelligence"><span class="ic">✦</span><span class="t">Intelligence</span></div>
+    <div class="nav" data-sec="chat"><span class="ic">✉</span><span class="t">LLM Box</span></div>
+    <div class="brandnote">AEP-X v1.0 · 15 services + SOA bus + 107 connectors · RFC-0001–0008</div>
+  </aside>
+
+  <main>
+    <!-- OVERVIEW -->
+    <section id="sec-overview" class="section on">
+      <div class="sec-head"><h1>Platform overview</h1><p>Live health of every service, with the platform's load-bearing numbers.</p></div>
+      <div id="banner" class="banner">Some services are down. Bring the stack up with <code>docker compose up</code> — this console goes live as they report healthy; every panel still responds (governed-degraded) meanwhile.</div>
+      <div class="stats" id="stats"></div>
+      <div class="card"><div class="cap"><div class="k">Services</div><h2>Health grid</h2><p>Independently probed — one down service never blanks the board.</p></div>
+        <div class="body"><div id="hgrid" class="hgrid"></div></div></div>
+      <div class="card" style="margin-top:1.1rem"><div class="cap"><div class="k">Constitution</div><h2>The Ten Laws</h2><p>Every action in the platform is bound by these (governance/book-of-laws.md).</p></div>
+        <div class="body"><ol class="ten">
+          <li>Identity Before Interaction</li><li>Trust Before Execution</li><li>Evidence Before Assertion</li><li>Knowledge Before Generation</li><li>Reuse Before Computation</li>
+          <li>Human Authority (critical domains)</li><li>Explainability</li><li>Auditability</li><li>Learning</li><li>Evolution</li>
+        </ol></div></div>
+    </section>
+
+    <!-- CONNECTORS -->
+    <section id="sec-connectors" class="section">
+      <div class="sec-head"><h1>Connectors</h1><p>The Universal Connector Layer — invoke any of 107 connectors through the governed bus (trust → policy → circuit → audit).</p></div>
+      <div class="cards">
+        <div class="card"><div class="cap"><div class="k">Catalogue</div><h2>What's connected</h2><p>Live, as the bus sees it.</p></div>
+          <div class="body">
+            <div id="catStats" class="kv"></div>
+            <label>Categories</label><div id="catChips" class="chips"></div>
+            <label style="margin-top:.4rem">Connectors <span class="hintline">(click to load into the invoker)</span></label>
+            <div id="connList" class="connlist"></div>
+          </div></div>
+        <div class="card"><div class="cap"><div class="k">Governed invoke</div><h2>Send an envelope</h2><p>An RFC-0001 request through the full governance chain.</p></div>
+          <div class="body">
+            <div><label>Connector</label><input id="invConn" value="ml"></div>
+            <div><label>Payload (JSON)</label><textarea id="invPayload" class="code" rows="3">{"prompt": "Summarise AEP-X in one line."}</textarea></div>
+            <button id="invGo" class="btn pri"><span class="spin"></span><span class="t">Invoke via bus</span></button>
+            <div id="invRes" class="res"></div>
+          </div></div>
+      </div>
+    </section>
+
+    <!-- TRUST & ID -->
+    <section id="sec-trust" class="section">
+      <div class="sec-head"><h1>Trust &amp; identity</h1><p>Law 1 &amp; Law 2 — self-certifying did:key identities, trust scores, and the agent registry.</p></div>
+      <div class="cards">
+        <div class="card t"><div class="cap"><div class="k">Trust</div><h2>Score lookup</h2><p>The 5-component trust score behind every gated call.</p></div>
+          <div class="body"><div class="row"><input id="trustId" placeholder="entity id / agent id" value="aepx://agent/console">
+            <button id="trustGo" class="btn teal" style="flex:0 0 auto"><span class="spin"></span><span class="t">Look up</span></button></div>
+            <div id="trustRes" class="res"></div></div></div>
+        <div class="card p"><div class="cap"><div class="k">Identity</div><h2>did:key</h2><p>Mint a self-certifying identifier, or resolve one to its DID document.</p></div>
+          <div class="body"><button id="didGo" class="btn pri" style="background:linear-gradient(135deg,var(--purple),#4f4370)"><span class="spin"></span><span class="t">Mint new did:key</span></button>
+            <div class="row"><input id="didResolve" placeholder="did:key:z6Mk…"><button id="didResolveGo" class="btn ghost" style="flex:0 0 auto">Resolve</button></div>
+            <div id="didRes" class="res"></div></div></div>
+        <div class="card"><div class="cap"><div class="k">Registry</div><h2>Agents</h2><p>Register an agent (a did:key is minted if you don't supply one).</p></div>
+          <div class="body"><div class="row"><input id="agentName" placeholder="agent name"><button id="agentGo" class="btn pri" style="flex:0 0 auto">Register</button></div>
+            <button id="agentList" class="btn ghost">Refresh list</button><div id="agentRes" class="res"></div></div></div>
+      </div>
+    </section>
+
+    <!-- MEMORY & FLOWS -->
+    <section id="sec-flows" class="section">
+      <div class="sec-head"><h1>Memory &amp; workflows</h1><p>The intelligence layer — session memory, capability discovery, and multi-step agent orchestration.</p></div>
+      <div class="cards">
+        <div class="card t"><div class="cap"><div class="k">Memory</div><h2>Session memory</h2><p>Write then read back — the M1 layer of the memory hierarchy.</p></div>
+          <div class="body"><div class="row"><input id="memAgent" placeholder="agent id" value="tutor-agent"></div>
+            <div><label>Content (JSON)</label><textarea id="memContent" class="code" rows="2">{"note": "student prefers worked examples"}</textarea></div>
+            <div class="row"><button id="memWrite" class="btn teal" style="flex:1"><span class="spin"></span><span class="t">Write</span></button>
+              <button id="memRead" class="btn ghost" style="flex:1">Read back</button></div>
+            <div id="memRes" class="res"></div></div></div>
+        <div class="card"><div class="cap"><div class="k">Discovery</div><h2>Find an agent</h2><p>Trust-and-cost-ranked, per RFC-0004.</p></div>
+          <div class="body"><div class="row"><input id="discCap" placeholder="capability" value="generate_lesson">
+            <button id="discGo" class="btn pri" style="flex:0 0 auto"><span class="spin"></span><span class="t">Discover</span></button></div>
+            <div id="discRes" class="res"></div></div></div>
+        <div class="card a"><div class="cap"><div class="k">Workflow</div><h2>Orchestrate</h2><p>Create a sequential workflow and run it — publishes to the audit trail.</p></div>
+          <div class="body"><div><label>Name</label><input id="wfName" value="lesson-flow"></div>
+            <div><label>Steps (JSON)</label><textarea id="wfSteps" class="code" rows="3">[{"capability":"generate_lesson","agent_id":"tutor-agent"}]</textarea></div>
+            <button id="wfGo" class="btn pri" style="background:linear-gradient(135deg,var(--amber),#8f6a09)"><span class="spin"></span><span class="t">Create &amp; execute</span></button>
+            <div id="wfRes" class="res"></div></div></div>
+      </div>
+    </section>
+
+    <!-- BLOCKCHAIN -->
+    <section id="sec-bridge" class="section">
+      <div class="sec-head"><h1>Blockchain</h1><p>One live surface for the chain: node status, governed smart-contract calls, the RFC-0008 AI↔chain bridge, and a raw JSON-RPC console.</p></div>
+      <div class="card" style="margin-bottom:1.1rem"><div class="cap" style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem">
+        <div><div class="k">Live chain</div><h2>Node status</h2><p>Block height, chain ID and gas — read through the governed bus.</p></div>
+        <div class="row" style="flex:0 0 auto;align-items:center;gap:.5rem">
+          <select id="stConnector" style="width:auto"><option>ethereum</option><option>polygon</option><option>base</option><option>avalanche</option></select>
+          <button id="stGo" class="btn pri" style="flex:0 0 auto"><span class="spin"></span><span class="t">Refresh</span></button></div></div>
+        <div class="body"><div id="stStats" class="stats" style="margin:0"><div class="stat"><div class="n">—</div><div class="l">latest block</div></div>
+          <div class="stat"><div class="n">—</div><div class="l">chain ID</div></div><div class="stat"><div class="n">—</div><div class="l">gas price (wei)</div></div>
+          <div class="stat"><div class="n">—</div><div class="l">node</div></div></div>
+          <div class="hintline" style="margin-top:.5rem">No <code>EVM_RPC_URL</code> configured → the connector returns a clean <b>specialized_degraded</b> snapshot; point it at any EVM node (or a local Anvil devnet) to go live.</div></div></div>
+      <div class="cards">
+        <div class="card"><div class="cap"><div class="k">Direction 1 · AI → Chain</div><h2>Act on a contract</h2><p>Every write passes trust + policy + audit before a signature.</p></div>
+          <div class="body">
+            <div class="row" style="align-items:flex-end"><div style="flex:0 0 auto"><label>Mode</label>
+              <div class="seg" id="modeSeg"><button data-mode="read" class="on">Read</button><button data-mode="write">Write</button></div></div>
+              <div><label>Connector</label><select id="chConnector"><option>ethereum</option><option>polygon</option><option>base</option><option>avalanche</option></select></div></div>
+            <div><label>Contract address</label><input id="chAddress" value="0x0000000000000000000000000000000000000000"></div>
+            <div class="row"><div><label>Function</label><input id="chFunction" value="anchorCount"></div>
+              <div><label>Args (JSON / comma)</label><input id="chArgs" placeholder="[] or 0xdead, 42"></div></div>
+            <div><label>ABI</label><textarea id="chAbi" class="code" rows="3"></textarea></div>
+            <div class="row"><button id="chGo" class="btn pri"><span class="spin"></span><span class="t">Invoke via governed bus</span></button>
+              <button id="chRpc" class="btn ghost" style="flex:0 0 auto">block #</button></div>
+            <div class="hintline">Prefilled with AEP-X's own <b>AEPXAnchor</b> ABI. No chain configured → clean <b>specialized_degraded</b>; the governance still runs.</div>
+            <div id="chRes" class="res"></div>
+          </div></div>
+        <div class="card t"><div class="cap"><div class="k">Direction 2 · Chain → AI</div><h2>Ask an AI, scored</h2><p>Governed AI call, then Verification scores it into a confidence + band.</p></div>
+          <div class="body"><div><label>Prompt (what the contract asks)</label>
+            <textarea id="orPrompt" rows="3">Given a valid audit hash-chain, should settlement proceed? Answer yes/no with one sentence.</textarea></div>
+            <div class="row" style="align-items:flex-end"><div style="flex:0 0 110px"><label>Request ID</label><input id="orReqId" placeholder="opt."></div>
+              <button id="orGo" class="btn teal" style="flex:1"><span class="spin"></span><span class="t">Run oracle decision</span></button></div>
+            <div id="orRes" class="res"></div>
+            <div class="row" style="align-items:center"><button id="orPoll" class="btn ghost">Poll chain</button><span id="orPollOut" class="hintline" style="flex:1"></span></div>
+          </div></div>
+        <div class="card p"><div class="cap"><div class="k">Direct</div><h2>Raw JSON-RPC console</h2><p>Any <code>eth_</code> method, straight through the governed bus.</p></div>
+          <div class="body">
+            <div class="row"><div style="flex:2"><label>Method</label><input id="rpcMethod" value="eth_blockNumber"></div>
+              <div style="flex:3"><label>Params (JSON array)</label><input id="rpcParams" value="[]"></div></div>
+            <button id="rpcGo" class="btn pri" style="background:linear-gradient(135deg,var(--purple),#4f4370)"><span class="spin"></span><span class="t">Send RPC</span></button>
+            <div class="hintline">Try <code>eth_gasPrice</code>, <code>eth_chainId</code>, or <code>eth_getBalance</code> with <code>["0x…","latest"]</code>.</div>
+            <div id="rpcRes" class="res"></div>
+          </div></div>
+      </div>
+    </section>
+
+    <!-- GOVERNANCE -->
+    <section id="sec-governance" class="section">
+      <div class="sec-head"><h1>Governance</h1><p>Law 8 — policy enforcement, the immutable audit trail, and its tamper-evident ledger anchoring.</p></div>
+      <div class="cards">
+        <div class="card a"><div class="cap"><div class="k">Policy</div><h2>Evaluate risk</h2><p>Against the seed ceiling (or an on-chain AEPXPolicyRegistry).</p></div>
+          <div class="body"><div class="row"><select id="polLevel"><option>S0</option><option>S1</option><option selected>S2</option><option>S3</option><option>S4</option></select>
+            <button id="polGo" class="btn pri" style="flex:0 0 auto;background:linear-gradient(135deg,var(--amber),#8f6a09)">Evaluate</button></div>
+            <div id="polRes" class="res"></div></div></div>
+        <div class="card"><div class="cap"><div class="k">Ledger</div><h2>Anchors &amp; verify</h2><p>Replay the hash chain to prove history is unaltered.</p></div>
+          <div class="body"><button id="anchGo" class="btn ghost">List anchors</button>
+            <div class="row"><input id="verId" placeholder="audit id" type="number"><button id="verGo" class="btn pri" style="flex:0 0 auto">Verify</button></div>
+            <div id="ledRes" class="res"></div></div></div>
+      </div>
+      <div class="card" style="margin-top:1.1rem"><div class="cap" style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="k">Law 8</div><h2>Live audit trail</h2><p>Every governed action lands here — act anywhere and watch it appear.</p></div>
+        <div class="pill" style="background:var(--accent-light);color:var(--accent);border-color:var(--border)"><span class="dot ok"></span><span id="feedCount">0</span></div></div>
+        <div class="body"><div id="feed" class="feed"><div class="empty">Waiting for events…</div></div></div></div>
+    </section>
+
+    <!-- BILLING -->
+    <section id="sec-billing" class="section">
+      <div class="sec-head"><h1>Billing</h1><p>Stripe-hosted Checkout — AEP-X never handles card data, and the secret key lives only in an environment variable, never in the codebase.</p></div>
+      <div class="cards">
+        <div class="card"><div class="cap"><div class="k">Status</div><h2>Configuration</h2><p>Whether a Stripe key is set — never shows the key itself.</p></div>
+          <div class="body"><button id="billCfgGo" class="btn ghost">Check status</button><div id="billCfgRes" class="res"></div></div></div>
+        <div class="card t"><div class="cap"><div class="k">Checkout</div><h2>Create a session</h2><p>Returns a Stripe-hosted URL; the customer pays there, not on AEP-X.</p></div>
+          <div class="body">
+            <div><label>Product</label><input id="billProduct" value="AEP-X Professional"></div>
+            <div class="row"><div><label>Amount (minor units, e.g. pence)</label><input id="billAmount" type="number" value="9900"></div>
+              <div><label>Currency</label><input id="billCurrency" value="gbp"></div></div>
+            <div><label>Mode</label>
+              <div class="seg" id="billModeSeg"><button data-mode="payment" class="on">One-off</button><button data-mode="subscription">Subscription</button></div></div>
+            <button id="billGo" class="btn teal"><span class="spin"></span><span class="t">Create Checkout Session</span></button>
+            <div id="billRes" class="res"></div>
+          </div></div>
+      </div>
+    </section>
+
+    <!-- INTELLIGENCE -->
+    <section id="sec-intelligence" class="section">
+      <div class="sec-head"><h1>Intelligence &amp; self-healing</h1><p>The ML integration layer and the Brain — prediction, recommendation, and the circuit breaker learned from real audit history.</p></div>
+      <div class="cards">
+        <div class="card p"><div class="cap"><div class="k">ML fabric</div><h2>Models &amp; prediction</h2><p>Native ML, per the Machine Learning Native RFC.</p></div>
+          <div class="body"><button id="mdlGo" class="btn ghost">List models</button>
+            <div class="row"><select id="predKind"><option>cost</option><option>demand</option><option>failure</option></select>
+              <button id="predGo" class="btn pri" style="flex:0 0 auto;background:linear-gradient(135deg,var(--purple),#4f4370)">Predict</button></div>
+            <div id="mlRes" class="res"></div></div></div>
+        <div class="card"><div class="cap"><div class="k">Brain</div><h2>Self-healing status</h2><p>Circuit-breaker reliability per connector, learned from Governance.</p></div>
+          <div class="body"><div class="row"><button id="brainGo" class="btn ghost" style="flex:1">Status</button><button id="relGo" class="btn ghost" style="flex:1">Reliability</button></div>
+            <div id="brainRes" class="res"></div></div></div>
+      </div>
+    </section>
+
+    <!-- CHAT -->
+    <section id="sec-chat" class="section">
+      <div class="sec-head"><h1>LLM box</h1><p>Chat routed through the bus to the self-hosted <b>ml</b> connector — even a message is trust/policy/audit-governed.</p></div>
+      <div class="card"><div class="body"><div class="chatwin">
+        <div id="msgs" class="msgs"><div class="msg b">Ask me anything. I run on the self-hosted model tier (Law 5: cheapest sufficient model), and this exchange is governed and audited like any other connector call.</div></div>
+        <div class="chatbar"><textarea id="chatIn" rows="2" placeholder="Type a message… (Ctrl/Cmd+Enter to send)"></textarea>
+          <button id="chatGo" class="btn teal" style="flex:0 0 auto"><span class="spin"></span><span class="t">Send</span></button></div>
+      </div></div></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+async function api(path, opts){ const r = await fetch(path, Object.assign({headers:{"Content-Type":"application/json"}}, opts||{}));
+  const body = await r.json().catch(()=>({})); return {ok:r.ok, status:r.status, body}; }
+function load(btn,on){ if(!btn)return; btn.classList.toggle("loading",on); btn.disabled=on; }
+function offline(el){ el.className="res show"; el.innerHTML=`<span class="badge err">console offline</span><div class="hintline" style="margin-top:.4rem">Start the stack: <b>docker compose up</b>, then retry.</div>`; }
+function showJSON(el, ok, body, extra){ el.className="res show"; if(!ok){offline(el);return;} el.innerHTML=(extra||"")+`<pre>${esc(JSON.stringify(body,null,2))}</pre>`; }
+
+document.querySelectorAll(".nav").forEach(n => n.onclick = () => {
+  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("on",x===n));
+  const sec=n.dataset.sec; document.querySelectorAll(".section").forEach(s=>s.classList.toggle("on",s.id==="sec-"+sec));
+  if(sec==="connectors") loadCatalogue(); if(sec==="governance") refreshFeed();
+});
+
+// overview / health
+async function refreshHealth(){
+  const {ok, body} = await api("/api/health-map");
+  if(!ok){ $("#statusDot").className="dot err"; $("#statusText").textContent="console offline"; return; }
+  const ent = Object.entries(body), up = ent.filter(([,v])=>v.up).length;
+  $("#statusDot").className="dot "+(up===ent.length?"ok":up===0?"err":"ok"); $("#statusText").textContent=`${up}/${ent.length} services live`;
+  $("#banner").style.display = up===ent.length?"none":"block";
+  $("#hgrid").innerHTML = ent.map(([l,v])=>`<div class="htile"><span class="d ${v.up?'up':'down'}"></span><span class="lbl">${l}</span><span class="st">${v.up?'ok':'down'}</span></div>`).join("");
+  const bus = body["connector-bus"]?.detail||{};
+  $("#stats").innerHTML = `
+    <div class="stat"><div class="n">${up}/${ent.length}</div><div class="l">services healthy</div></div>
+    <div class="stat"><div class="n">${bus.connector_count ?? "—"}</div><div class="l">connectors on the bus</div></div>
+    <div class="stat"><div class="n">${(bus.categories||[]).length||"—"}</div><div class="l">connector categories</div></div>
+    <div class="stat"><div class="n">8</div><div class="l">RFCs · 0001–0008</div></div>`;
+}
+
+// connectors
+let catLoaded=false;
+async function loadCatalogue(){ if(catLoaded) return;
+  const {ok, body} = await api("/api/connectors"); if(!ok) return;
+  catLoaded=true; $("#catStats").innerHTML=`<span><b>connectors</b> ${body.connector_count||0}</span><span><b>categories</b> ${(body.categories||[]).length}</span>`;
+  $("#catChips").innerHTML=(body.categories||[]).map(c=>`<span class="catchip">${esc(c)}</span>`).join("");
+  $("#connList").innerHTML=(body.connectors||[]).map(c=>`<span class="c" data-c="${esc(c)}">${esc(c)}</span>`).join("");
+  document.querySelectorAll("#connList .c").forEach(el=>el.onclick=()=>{ $("#invConn").value=el.dataset.c; });
+}
+$("#invGo").onclick = async () => { const b=$("#invGo"); load(b,true);
+  let payload={}; try{payload=JSON.parse($("#invPayload").value);}catch(e){}
+  const {ok, body} = await api("/api/invoke",{method:"POST",body:JSON.stringify({connector:$("#invConn").value.trim(),payload})});
+  const el=$("#invRes"); if(!ok){offline(el);} else if(body.denied){el.className="res show";el.innerHTML=`<span class="badge err">governed denial · ${body.status}</span><div class="kv" style="margin-top:.4rem">${esc(body.reason||"")}</div>`;}
+  else{el.className="res show";el.innerHTML=`<span class="badge ok">${esc(body.connector||"ok")} · ${esc(body.maturity||"")}</span><pre>${esc(JSON.stringify(body.response??body,null,2))}</pre>`;}
+  load(b,false); pokeFeed(); };
+
+// trust & id
+$("#trustGo").onclick = async()=>{ const b=$("#trustGo");load(b,true);
+  const {ok,body}=await api(`/api/trust/${encodeURIComponent($("#trustId").value.trim())}`);
+  const el=$("#trustRes"); if(!ok){offline(el);}else{el.className="res show";el.innerHTML=`<div class="kv"><span><b>score</b> ${body.trust_score??"—"}</span><span><b>level</b> ${esc(body.level||"—")}</span></div><pre>${esc(JSON.stringify(body,null,2))}</pre>`;} load(b,false); };
+$("#didGo").onclick = async()=>{ const b=$("#didGo");load(b,true); const {ok,body}=await api("/api/did",{method:"POST"}); const el=$("#didRes");
+  if(!ok){offline(el);}else{el.className="res show";el.innerHTML=`<span class="badge ok">minted</span><div class="kv" style="margin-top:.4rem"><span style="word-break:break-all"><b>did</b> ${esc(body.did||"")}</span></div><div class="hintline">Private key returned once — never stored server-side.</div><pre>${esc(JSON.stringify(body.did_document||body,null,2))}</pre>`;} load(b,false); };
+$("#didResolveGo").onclick = async()=>{ const d=$("#didResolve").value.trim(); if(!d)return; const {ok,body}=await api(`/api/did/${encodeURIComponent(d)}`); showJSON($("#didRes"),ok,body,ok?'<span class="badge ok">resolved</span>':""); };
+$("#agentGo").onclick = async()=>{ const n=$("#agentName").value.trim(); if(!n)return; const {ok,body}=await api("/api/agents",{method:"POST",body:JSON.stringify({name:n})}); showJSON($("#agentRes"),ok,body,ok?'<span class="badge ok">registered</span>':""); pokeFeed(); };
+$("#agentList").onclick = async()=>{ const {ok,body}=await api("/api/agents"); showJSON($("#agentRes"),ok,body); };
+
+// memory & flows
+$("#memWrite").onclick = async()=>{ const b=$("#memWrite");load(b,true); let content={};try{content=JSON.parse($("#memContent").value);}catch(e){}
+  const {ok,body}=await api("/api/memory",{method:"POST",body:JSON.stringify({agent_id:$("#memAgent").value.trim(),content})}); showJSON($("#memRes"),ok,body,ok?'<span class="badge ok">stored</span>':""); load(b,false); };
+$("#memRead").onclick = async()=>{ const {ok,body}=await api(`/api/memory/${encodeURIComponent($("#memAgent").value.trim())}`); showJSON($("#memRes"),ok,body); };
+$("#discGo").onclick = async()=>{ const b=$("#discGo");load(b,true); const {ok,body}=await api(`/api/discover?capability=${encodeURIComponent($("#discCap").value.trim())}`); showJSON($("#discRes"),ok,body); load(b,false); };
+$("#wfGo").onclick = async()=>{ const b=$("#wfGo");load(b,true); let steps=[];try{steps=JSON.parse($("#wfSteps").value);}catch(e){}
+  const c=await api("/api/workflow",{method:"POST",body:JSON.stringify({name:$("#wfName").value.trim(),steps})});
+  const el=$("#wfRes"); if(!c.ok){offline(el);load(b,false);return;}
+  const wid=c.body.id; const x=await api(`/api/workflow/${wid}/execute`,{method:"POST"});
+  if(!x.ok){offline(el);}else{el.className="res show";el.innerHTML=`<span class="badge ok">${esc(x.body.status||"done")}</span><div class="kv" style="margin-top:.4rem"><span><b>id</b> ${esc(wid)}</span><span><b>steps</b> ${(x.body.results||[]).length}</span></div><pre>${esc(JSON.stringify(x.body.results||x.body,null,2))}</pre>`;} load(b,false); pokeFeed(); };
+
+// bridge
+const ANCHOR_ABI=[{"inputs":[],"name":"anchorCount","outputs":[{"type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"latestRoot","outputs":[{"type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"name":"root","type":"bytes32"}],"name":"anchor","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+$("#chAbi").value=JSON.stringify(ANCHOR_ABI,null,2);
+let mode="read";
+document.querySelectorAll("#modeSeg button").forEach(bt=>bt.onclick=()=>{mode=bt.dataset.mode;document.querySelectorAll("#modeSeg button").forEach(x=>x.classList.toggle("on",x===bt));$("#chGo .t").textContent=mode==="write"?"Sign & write via bus":"Invoke via governed bus";if(mode==="write"&&$("#chFunction").value==="anchorCount"){$("#chFunction").value="anchor";$("#chArgs").value='["0x0000000000000000000000000000000000000000000000000000000000000001"]';}});
+function parseArgs(raw){raw=(raw||"").trim();if(!raw)return[];if(raw.startsWith("["))try{return JSON.parse(raw);}catch(e){return raw;}return raw.split(",").map(s=>{s=s.trim();return /^-?\d+$/.test(s)?Number(s):s;});}
+async function runChain(){const b=$("#chGo");load(b,true);const req={connector:$("#chConnector").value,address:$("#chAddress").value.trim(),function:$("#chFunction").value.trim(),args:parseArgs($("#chArgs").value)};try{req.abi=JSON.parse($("#chAbi").value);}catch(e){req.abi=[];}
+  const {ok,body}=await api(`/api/chain/${mode}`,{method:"POST",body:JSON.stringify(req)});renderChain(ok,body);load(b,false);pokeFeed();}
+function renderChain(ok,body){const el=$("#chRes");el.className="res show";if(!ok){offline(el);return;}if(body.denied){el.innerHTML=`<span class="badge err">governed denial · ${body.status}</span><div class="kv" style="margin-top:.4rem">${esc(body.reason||"")}</div>`;return;}
+  const r=body.response||{},m=r.maturity||"—";const badge=m==="specialized"?'<span class="badge ok">on-chain · specialized</span>':m.includes("degraded")?'<span class="badge warn">specialized · degraded (no chain)</span>':`<span class="badge">${esc(m)}</span>`;
+  el.innerHTML=badge+`<div class="kv" style="margin-top:.4rem"><span><b>connector</b> ${esc(body.connector||"—")}</span><span><b>risk</b> ${esc(body.ai_risk_class||"—")}</span><span><b>trust@call</b> ${body.trust_score_at_call_time??"—"}</span></div><pre>${esc(JSON.stringify(r.result??r,null,2))}</pre>`;}
+$("#chGo").onclick=runChain;
+$("#chRpc").onclick=async()=>{const b=$("#chRpc");b.disabled=true;const {ok,body}=await api("/api/chain/rpc",{method:"POST",body:JSON.stringify({connector:$("#chConnector").value,method:"eth_blockNumber",params:[]})});renderChain(ok,body);b.disabled=false;pokeFeed();};
+// live chain status
+function hexToInt(h){ if(typeof h!=="string"||!h.startsWith("0x"))return h??"—"; try{return BigInt(h).toString();}catch(e){return h;} }
+async function chainStatus(){const b=$("#stGo");load(b,true);const {ok,body}=await api("/api/chain/status",{method:"POST",body:JSON.stringify({connector:$("#stConnector").value})});
+  const s=$("#stStats");if(!ok){s.innerHTML=`<div class="stat"><div class="n">—</div><div class="l">node unreachable — start the stack</div></div>`;load(b,false);return;}
+  const nodeUp=body.node_up;const nodeLbl=nodeUp?'<span style="color:var(--green)">live</span>':'<span style="color:var(--amber)">degraded</span>';
+  s.innerHTML=`<div class="stat"><div class="n">${esc(hexToInt(body.block))}</div><div class="l">latest block</div></div>
+    <div class="stat"><div class="n">${esc(hexToInt(body.chain_id))}</div><div class="l">chain ID</div></div>
+    <div class="stat"><div class="n" style="font-size:1.15rem">${esc(hexToInt(body.gas_price))}</div><div class="l">gas price (wei)</div></div>
+    <div class="stat"><div class="n" style="font-size:1.15rem">${nodeLbl}</div><div class="l">node · ${esc(body.maturity||"—")}</div></div>`;load(b,false);pokeFeed();}
+$("#stGo").onclick=chainStatus;
+// raw RPC console
+$("#rpcGo").onclick=async()=>{const b=$("#rpcGo");load(b,true);let params=[];try{params=JSON.parse($("#rpcParams").value||"[]");}catch(e){}
+  const {ok,body}=await api("/api/chain/rpc",{method:"POST",body:JSON.stringify({connector:$("#stConnector").value,method:$("#rpcMethod").value.trim(),params})});
+  const el=$("#rpcRes");if(!ok){offline(el);}else{const r=body.response||{};const m=r.maturity||"—";const badge=m==="specialized"?'<span class="badge ok">live</span>':'<span class="badge warn">degraded (no node)</span>';
+    el.className="res show";el.innerHTML=badge+`<pre>${esc(JSON.stringify(r.result??r,null,2))}</pre>`;}load(b,false);pokeFeed();};
+function gauge(v,band){const pct=Math.max(0,Math.min(100,v))/100,R=34,C=Math.PI*R,off=C*(1-pct);const col={GREEN:"var(--green)",AMBER:"var(--amber)",RED:"var(--red)",GREY:"var(--grey)"}[band]||"var(--grey)";
+  return `<svg class="gauge" width="86" height="66" viewBox="0 0 86 66"><path d="M9 58 A34 34 0 0 1 77 58" fill="none" stroke="var(--border)" stroke-width="9" stroke-linecap="round"/><path d="M9 58 A34 34 0 0 1 77 58" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}" style="transition:stroke-dashoffset .6s"/><text class="val" x="43" y="50" text-anchor="middle">${Math.round(v)}</text><text class="lbl" x="43" y="60" text-anchor="middle">CONFIDENCE</text></svg>`;}
+async function runOracle(){const b=$("#orGo");load(b,true);const req={prompt:$("#orPrompt").value.trim()};const rid=$("#orReqId").value.trim();if(rid)req.request_id=Number(rid);
+  const {ok,body}=await api("/api/oracle/decide",{method:"POST",body:JSON.stringify(req)});const el=$("#orRes");el.className="res show";
+  if(!ok){offline(el);load(b,false);return;}const band=body.band||"GREY";const ans=body.answer&&body.answer.trim()?body.answer:"(no answer — see note)";
+  el.innerHTML=`<div class="decision">${gauge(body.confidence||0,band)}<div class="answer"><div class="txt">${esc(ans)}</div><span class="bandchip band-${band}">● ${band} · evidence band</span></div></div><div class="kv"><span><b>source</b> ${esc(body.ai_source||"—")}</span>${body.reason?`<span><b>note</b> ${esc(body.reason)}</span>`:""}</div>`;load(b,false);pokeFeed();}
+$("#orGo").onclick=runOracle;
+$("#orPoll").onclick=async()=>{const b=$("#orPoll");b.disabled=true;$("#orPollOut").textContent="polling…";const {ok,body}=await api("/api/oracle/poll",{method:"POST"});
+  $("#orPollOut").textContent=!ok?"console offline":body.chain_configured?`chain live · processed ${body.processed}`:"no chain configured — off-chain pipeline still runs";b.disabled=false;pokeFeed();};
+
+// governance
+$("#polGo").onclick=async()=>{const {ok,body}=await api(`/api/policy?risk_level=${$("#polLevel").value}`);const el=$("#polRes");el.className="res show";
+  if(!ok){offline(el);}else{const a=body.allowed;el.innerHTML=`<span class="badge ${a?'ok':'err'}">${a?'allowed':'denied'}</span><div class="kv" style="margin-top:.4rem"><span><b>requested</b> ${esc(body.risk_level||"")}</span><span><b>ceiling</b> ${esc(body.max_risk_level||"")}</span></div>`;}};
+$("#anchGo").onclick=async()=>{const {ok,body}=await api("/api/ledger/anchors");const el=$("#ledRes");if(!ok){offline(el);}else{el.className="res show";el.innerHTML=`<span class="badge ok">${(body||[]).length} anchors</span><pre>${esc(JSON.stringify(body,null,2))}</pre>`;}};
+$("#verGo").onclick=async()=>{const id=$("#verId").value.trim();if(!id)return;const {ok,body}=await api(`/api/ledger/verify/${id}`);const el=$("#ledRes");el.className="res show";
+  if(!ok){offline(el);}else{const v=body.chain_valid;el.innerHTML=`<span class="badge ${body.anchored?(v?'ok':'err'):'warn'}">${body.anchored?(v?'chain valid':'TAMPERED'):'not yet anchored'}</span><pre>${esc(JSON.stringify(body,null,2))}</pre>`;}};
+
+// billing
+let billMode="payment";
+document.querySelectorAll("#billModeSeg button").forEach(bt=>bt.onclick=()=>{billMode=bt.dataset.mode;document.querySelectorAll("#billModeSeg button").forEach(x=>x.classList.toggle("on",x===bt));});
+$("#billCfgGo").onclick=async()=>{const b=$("#billCfgGo");load(b,true);const {ok,body}=await api("/api/billing/config");const el=$("#billCfgRes");
+  if(!ok){offline(el);}else{el.className="res show";el.innerHTML=`<span class="badge ${body.stripe_configured?'ok':'warn'}">${body.stripe_configured?'Stripe configured':'no key set — degrade-clean'}</span><div class="hintline" style="margin-top:.4rem">${esc(body.note||"")}</div>`;} load(b,false);};
+$("#billGo").onclick=async()=>{const b=$("#billGo");load(b,true);
+  const req={product:$("#billProduct").value.trim(),amount_minor:Number($("#billAmount").value)||0,currency:$("#billCurrency").value.trim()||"gbp",mode:billMode};
+  const {ok,body}=await api("/api/billing/checkout",{method:"POST",body:JSON.stringify(req)});
+  const el=$("#billRes");el.className="res show";
+  if(!ok){offline(el);load(b,false);return;}
+  if(!body.configured){el.innerHTML=`<span class="badge warn">not configured</span><div class="hintline" style="margin-top:.4rem">${esc(body.reason||"STRIPE_API_KEY unset")}</div>`;load(b,false);return;}
+  if(!body.checkout_url){el.innerHTML=`<span class="badge err">stripe error</span><div class="hintline" style="margin-top:.4rem">${esc(body.reason||"unknown")}</div>`;load(b,false);return;}
+  el.innerHTML=`<span class="badge ok">session created</span><div class="kv" style="margin-top:.4rem"><span><b>amount</b> ${(req.amount_minor/100).toFixed(2)} ${req.currency.toUpperCase()}</span><span><b>session</b> ${esc(body.session_id||"")}</span></div><div style="margin-top:.5rem"><a href="${esc(body.checkout_url)}" target="_blank" rel="noopener" class="btn pri" style="text-decoration:none;display:inline-flex">Open Stripe Checkout ↗</a></div>`;
+  load(b,false); pokeFeed();};
+
+// intelligence
+$("#mdlGo").onclick=async()=>{const {ok,body}=await api("/api/models");showJSON($("#mlRes"),ok,body);};
+$("#predGo").onclick=async()=>{const b=$("#predGo");load(b,true);const {ok,body}=await api("/api/predict",{method:"POST",body:JSON.stringify({kind:$("#predKind").value,features:{}})});showJSON($("#mlRes"),ok,body);load(b,false);};
+$("#brainGo").onclick=async()=>{const {ok,body}=await api("/api/brain/status");showJSON($("#brainRes"),ok,body);};
+$("#relGo").onclick=async()=>{const {ok,body}=await api("/api/brain/reliability");showJSON($("#brainRes"),ok,body);};
+
+// chat
+async function sendChat(){const inp=$("#chatIn");const text=inp.value.trim();if(!text)return;const b=$("#chatGo");load(b,true);
+  const msgs=$("#msgs");msgs.insertAdjacentHTML("beforeend",`<div class="msg u">${esc(text)}</div>`);inp.value="";msgs.scrollTop=msgs.scrollHeight;
+  const {ok,body}=await api("/api/chat",{method:"POST",body:JSON.stringify({prompt:text})});
+  if(!ok){msgs.insertAdjacentHTML("beforeend",`<div class="msg e">Console offline — start the stack with <b>docker compose up</b>.</div>`);}
+  else{const r=body.response||{};const ans=r.result||"(no response)";msgs.insertAdjacentHTML("beforeend",`<div class="msg b">${esc(ans)}<div class="meta">${esc(r.source||"ml")} · ${esc(r.maturity||"")} · governed</div></div>`);}
+  msgs.scrollTop=msgs.scrollHeight;load(b,false);pokeFeed();}
+$("#chatGo").onclick=sendChat;
+
+// live audit feed
+function topicClass(t){if(t.startsWith("oracle."))return"teal";if(t.endsWith(".failed")||t.includes("denied")||t.endsWith(".flagged"))return"red";if(t.startsWith("connector.")||t.startsWith("workflow."))return"blue";return"grey";}
+function evDesc(e){const v=e.event||{};return v.connector?`${v.outcome||"call"} · ${v.connector}${v.reason?` (${v.reason})`:""}`:v.request_id!=null?`request ${v.request_id}${v.band?` · ${v.band}`:""}`:v.workflow_id?`workflow ${v.workflow_id}`:JSON.stringify(v).slice(0,70);}
+async function refreshFeed(){const {ok,body}=await api("/api/audit?limit=30");if(!ok||!Array.isArray(body))return;$("#feedCount").textContent=body.length;const f=$("#feed");
+  if(!body.length){f.innerHTML='<div class="empty">Waiting for events… act anywhere and watch them land.</div>';return;}
+  f.innerHTML=body.map(e=>{const t=e.topic||"event",w=e.recorded_at?new Date(e.recorded_at*1000).toLocaleTimeString():"";return `<div class="ev"><span class="tp ${topicClass(t)}">${esc(t)}</span><span class="dsc">${esc(evDesc(e))}</span><span class="tm">${w}</span></div>`;}).join("");}
+function pokeFeed(){setTimeout(refreshFeed,700);setTimeout(refreshFeed,2200);}
+
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="Enter"&&$("#sec-chat").classList.contains("on"))sendChat();});
+refreshHealth(); refreshFeed(); setInterval(refreshHealth,5000); setInterval(refreshFeed,4500);
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X Workbench — Utilisation Platform</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff;
+    --green:#2e8b57; --green-light:#eaf6ee; --red:#b04a6f; --red-light:#fbeef2;
+    --amber:#b8860b; --amber-light:#fdf6ec;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.55; }
+  .page { max-width:960px; margin:0 auto; padding:1.6rem 1.2rem 3rem; }
+  header { background:linear-gradient(135deg,#0f4c81,#143d66); color:#fff; border-radius:12px; padding:1.4rem 1.6rem; margin-bottom:1rem; }
+  header h1 { margin:0 0 .2rem; font-size:1.3rem; }
+  header .sub { opacity:.85; font-size:.9rem; }
+  nav { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1rem; }
+  nav button { background:var(--card); border:1.5px solid var(--border); color:var(--ink); border-radius:999px; padding:.4rem 1.1rem; font:inherit; font-size:.87rem; cursor:pointer; }
+  nav button.active { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  .tab { display:none; }
+  .tab.active { display:block; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin-bottom:1rem; }
+  label { font-size:.78rem; color:var(--muted); display:block; margin:.5rem 0 .15rem; }
+  input, select, textarea { width:100%; padding:.45rem .6rem; border:1.5px solid var(--border); border-radius:8px; font:inherit; font-size:.86rem; }
+  textarea { font-family:Consolas,monospace; min-height:90px; }
+  button.act { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:.5rem 1.3rem; font:inherit; font-weight:600; cursor:pointer; margin-top:.7rem; }
+  button.act:disabled { opacity:.55; cursor:wait; }
+  pre.out { background:#0f1720; color:#d6e2f0; border-radius:8px; padding:.8rem 1rem; font-size:.78rem; white-space:pre-wrap; word-break:break-word; max-height:340px; overflow:auto; }
+  table { border-collapse:collapse; width:100%; font-size:.82rem; }
+  th, td { border:1px solid var(--border); padding:.35rem .55rem; text-align:left; word-break:break-all; }
+  th { background:var(--accent-light); color:var(--accent); }
+  .ok { color:var(--green); font-weight:700; } .bad { color:var(--red); font-weight:700; }
+  .bar-wrap { background:var(--accent-light); border-radius:4px; height:10px; overflow:hidden; }
+  .bar { height:100%; background:var(--accent); }
+  .trust-row { display:grid; grid-template-columns:150px 1fr 40px; gap:.6rem; align-items:center; font-size:.84rem; margin:.3rem 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>🛠 AEP-X Workbench — Utilisation Platform</h1>
+    <div class="sub">Exercise the live protocol: envelopes · connectors · did:key identity · trust · ledger · audit</div>
+  </header>
+
+  <nav>
+    <button class="active" onclick="tab(this,'send')">📨 Envelope sender</button>
+    <button onclick="tab(this,'identity')">🪪 Identity / DID</button>
+    <button onclick="tab(this,'trust')">🤝 Trust</button>
+    <button onclick="tab(this,'ledger')">⛓️ Ledger</button>
+    <button onclick="tab(this,'audit')">📜 Audit</button>
+  </nav>
+
+  <section id="send" class="tab active"><div class="card">
+    <label>Connector (live catalogue)</label>
+    <select id="connectorSel"><option>loading…</option></select>
+    <label>Payload (JSON)</label>
+    <textarea id="payload">{"op": "ping"}</textarea>
+    <label>Sender</label>
+    <input id="sender" value="aepx://agent/workbench">
+    <button class="act" onclick="invoke()">Send through the bus</button>
+    <pre class="out" id="sendOut">The response shows the full governed outcome — trust score at call time, risk class, maturity, or the denial reason.</pre>
+  </div></section>
+
+  <section id="identity" class="tab"><div class="card">
+    <button class="act" onclick="mintDid()">Mint a did:key</button>
+    <pre class="out" id="didOut">The private key is shown once and never stored server-side.</pre>
+    <label>Resolve a DID</label>
+    <input id="didIn" placeholder="did:key:z6Mk…">
+    <button class="act" onclick="resolveDid()">Resolve</button>
+    <label style="margin-top:1rem">Register an agent (optionally under a DID)</label>
+    <input id="agentName" placeholder="agent name">
+    <input id="agentDid" placeholder="did (blank = Registry mints one)" style="margin-top:.4rem">
+    <button class="act" onclick="registerAgent()">Register</button>
+  </div></section>
+
+  <section id="trust" class="tab"><div class="card">
+    <label>Entity id (agent id or aepx name)</label>
+    <input id="trustIn" placeholder="e.g. console, or a registry UUID">
+    <button class="act" onclick="lookupTrust()">Look up</button>
+    <div id="trustOut" style="margin-top:.8rem"></div>
+  </div></section>
+
+  <section id="ledger" class="tab"><div class="card">
+    <button class="act" onclick="loadAnchors()">Load anchors</button>
+    <div style="overflow-x:auto"><table style="margin-top:.7rem"><thead>
+      <tr><th>seq</th><th>entries</th><th>audit ids</th><th>anchor hash</th><th>backend</th><th>tx</th></tr>
+    </thead><tbody id="anchorRows"></tbody></table></div>
+    <label>Verify an audit id against the hash chain</label>
+    <input id="verifyIn" type="number" placeholder="audit id">
+    <button class="act" onclick="verifyAnchor()">Verify</button>
+    <pre class="out" id="verifyOut">chain_valid=false means the audit history was altered after anchoring.</pre>
+  </div></section>
+
+  <section id="audit" class="tab"><div class="card">
+    <div style="font-size:.82rem;color:var(--muted)">Law 8 — every event, consumed unconditionally. Auto-refreshes every 10s.</div>
+    <div style="overflow-x:auto"><table style="margin-top:.7rem"><thead>
+      <tr><th>topic</th><th>event</th></tr>
+    </thead><tbody id="auditRows"><tr><td colspan="2">loading…</td></tr></tbody></table></div>
+  </div></section>
+</div>
+
+<script>
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const j = async (url, opts) => { const r = await fetch(url, opts); return r.json(); };
+const show = (id, data) => document.getElementById(id).textContent = JSON.stringify(data, null, 2);
+
+function tab(btn, id) {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === id));
+}
+
+async function loadConnectors() {
+  try {
+    const c = await j('/api/connectors');
+    document.getElementById('connectorSel').innerHTML =
+      c.connectors.map(n => `<option ${n === 'ml' ? 'selected' : ''}>${esc(n)}</option>`).join('');
+  } catch { document.getElementById('connectorSel').innerHTML = '<option>bus unreachable</option>'; }
+}
+
+async function invoke() {
+  let payload;
+  try { payload = JSON.parse(document.getElementById('payload').value); }
+  catch (e) { return show('sendOut', {error: 'payload is not valid JSON: ' + e.message}); }
+  show('sendOut', {status: 'sending…'});
+  show('sendOut', await j('/api/invoke', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({connector: document.getElementById('connectorSel').value,
+                          payload, sender: document.getElementById('sender').value})}));
+}
+
+async function mintDid() { show('didOut', await j('/api/did', {method:'POST'})); }
+async function resolveDid() { show('didOut', await j('/api/did/' + encodeURIComponent(document.getElementById('didIn').value.trim()))); }
+async function registerAgent() {
+  show('didOut', await j('/api/agents', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name: document.getElementById('agentName').value,
+                          did: document.getElementById('agentDid').value.trim() || null})}));
+}
+
+async function lookupTrust() {
+  const data = await j('/api/trust/' + encodeURIComponent(document.getElementById('trustIn').value.trim()));
+  const comps = ['identity_score','behaviour_score','security_score','evidence_score','reputation_score'];
+  document.getElementById('trustOut').innerHTML =
+    `<div style="font-size:1.05rem;margin-bottom:.5rem"><b>${data.trust_score}</b>/100 — ${esc(data.level || '')}</div>` +
+    comps.map(c => `<div class="trust-row"><span>${c.replace('_score','')}</span>` +
+      `<div class="bar-wrap"><div class="bar" style="width:${data[c] || 0}%"></div></div><span>${data[c] ?? '—'}</span></div>`).join('');
+}
+
+async function loadAnchors() {
+  const anchors = await j('/api/ledger/anchors');
+  document.getElementById('anchorRows').innerHTML = anchors.length ? anchors.map(a =>
+    `<tr><td>${a.seq_no}</td><td>${a.entry_count}</td><td>${a.first_audit_id}–${a.last_audit_id}</td>` +
+    `<td><code>${esc(String(a.anchor_hash).slice(0,16))}…</code></td><td>${esc(a.backend)}</td>` +
+    `<td>${a.tx_ref ? esc(String(a.tx_ref).slice(0,14)) + '…' : '—'}</td></tr>`).join('')
+    : '<tr><td colspan="6">No anchors yet — anchors form every 20 audit events.</td></tr>';
+}
+
+async function verifyAnchor() {
+  const v = await j('/api/ledger/verify/' + document.getElementById('verifyIn').value);
+  document.getElementById('verifyOut').innerHTML =
+    (v.anchored ? (v.chain_valid ? '<span class="ok">✅ anchored, chain valid</span>' : '<span class="bad">❌ anchored but CHAIN BROKEN</span>')
+                : '⚠️ not covered by any anchor yet') + '\n\n' + esc(JSON.stringify(v, null, 2));
+}
+
+async function loadAudit() {
+  try {
+    const events = await j('/api/audit');
+    document.getElementById('auditRows').innerHTML = events.length ? events.slice(0, 30).map(e =>
+      `<tr><td>${esc(e.topic)}</td><td><code style="font-size:.74rem">${esc(JSON.stringify(e.event)).slice(0, 160)}</code></td></tr>`).join('')
+      : '<tr><td colspan="2">No audit events yet.</td></tr>';
+  } catch {}
+}
+
+loadConnectors(); loadAudit(); setInterval(loadAudit, 10000);
+</script>
+</body>
+</html>

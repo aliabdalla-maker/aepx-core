@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X Ultra — ADLC Plan</title>
+<style>
+  :root {
+    --ink: #1a2332;
+    --muted: #5a6b82;
+    --accent: #0f4c81;
+    --accent-light: #e8f0f8;
+    --border: #d7dee8;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --code-bg: #f1f4f9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  header.doc-header {
+    background: linear-gradient(135deg, #0f4c81 0%, #143d66 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 2.2rem 2rem;
+    margin-bottom: 2rem;
+  }
+  header.doc-header h1 { margin: 0 0 .4rem; font-size: 1.7rem; line-height: 1.3; }
+  header.doc-header .subtitle { opacity: .85; font-size: 1.02rem; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: .5rem 1.6rem;
+    margin-top: 1.2rem; font-size: .85rem; opacity: .9;
+  }
+  .meta span strong { opacity: .75; font-weight: 600; margin-right: .35rem; }
+  h2 {
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin: 2.4rem 0 .8rem;
+    padding-bottom: .35rem;
+    border-bottom: 2px solid var(--border);
+  }
+  h3 { font-size: 1.05rem; margin: 1.6rem 0 .6rem; color: var(--ink); }
+  p { margin: .7rem 0; }
+  em { color: var(--muted); }
+  blockquote {
+    margin: 1rem 0;
+    padding: .7rem 1rem;
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: .95rem;
+  }
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: .9rem;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: .5rem .75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+  tr:nth-child(even) td { background: #fbfcfe; }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: .85rem;
+    line-height: 1.5;
+  }
+  code { font-family: "Cascadia Code", Consolas, monospace; }
+  p code, li code, td code {
+    background: var(--code-bg);
+    padding: .1rem .35rem;
+    border-radius: 4px;
+    font-size: .88em;
+  }
+  ul, ol { padding-left: 1.5rem; }
+  li { margin: .3rem 0; }
+  .callout {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin: 1.2rem 0;
+  }
+  .callout.success { border-left: 5px solid #2e8b57; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  footer {
+    margin-top: 3rem;
+    font-size: .82rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  /* ---- Gantt roadmap ---- */
+  .gantt {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1.2rem 0;
+    overflow-x: auto;
+  }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: .4rem 1rem;
+    font-size: .72rem; color: var(--muted); margin-top: .8rem;
+  }
+  .legend i {
+    display: inline-block; width: 11px; height: 11px; border-radius: 3px;
+    margin-right: .3rem; vertical-align: -1px;
+  }
+  /* ---- Critical evaluation ---- */
+  .verdict {
+    background: #fdf6ec;
+    border: 1px solid #ecd9b8;
+    border-left: 5px solid #b8860b;
+    border-radius: 0 8px 8px 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+  }
+  .eval-strength { border-left: 5px solid #2e8b57; }
+  .eval-risk { border-left: 5px solid #b04a6f; }
+  @media print {
+    @page { size: A4 landscape; margin: 14mm 12mm; }
+    body { background: #fff; }
+    header.doc-header { background: var(--accent); -webkit-print-color-adjust: exact; }
+    .page { max-width: none; padding: 0; }
+    .gantt { overflow-x: visible; }
+    .gantt svg {
+      min-width: 0 !important;
+      width: 100% !important;
+      height: auto !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    table, .table-wrap { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc-header">
+  <h1>AEP-X Ultra — Agentic Development Life Cycle (ADLC) Plan</h1>
+  <div class="subtitle">Autonomous Enterprise Protocol eXtended — Universal Operating System for Agentic AI</div>
+  <div class="meta">
+    <span><strong>Source</strong> AEP-X Ultra Project Manual — Consolidated Edition (3,188 pages)</span>
+    <span><strong>Prepared</strong> 7 July 2026</span>
+    <span><strong>Status</strong> Draft v1.0 for review</span>
+    <span><strong>Owner</strong> Equality Software Ltd / AEP-X Programme</span>
+  </div>
+</header>
+
+<h2 id="purpose">1. Purpose &amp; Scope</h2>
+<p>This ADLC Plan translates the AEP-X Ultra Project Manual into a single, executable development life cycle. The manual contains many overlapping roadmaps (Stages 1–20, Phases 1–20, G1–G10, 12 workstreams, 100-day plans, 24-month plans, 5-year and 10-year programmes). This plan <strong>reconciles them into one lifecycle</strong> with clear phases, gates, deliverables, and metrics, following the manual's own directive: <em>"stop creating stages, start shipping"</em> and the 180-day Execution Lock (no new architecture, no new framework layers, no new conceptual stages).</p>
+<p><strong>What is being built:</strong> AEP-X Ultra — the Autonomous Enterprise Protocol eXtended, a universal interoperability layer and runtime for agentic AI: cache-first cost optimisation, multi-layer memory, anti-hallucination/evidence engine, trust &amp; governance, universal connectivity (MCP, REST, gRPC, Kafka, etc.), marketplace, and certification ecosystem.</p>
+
+<h2 id="roadmap">Roadmap at a Glance (24 Months)</h2>
+<div class="gantt">
+<svg viewBox="0 0 980 512" width="100%" style="min-width:860px; font-family:'Segoe UI',system-ui,sans-serif" role="img" aria-label="AEP-X 24-month roadmap Gantt chart">
+  <!-- quarter shading (alternate quarters) -->
+  <rect x="277" y="46" width="99" height="440" fill="#f2f6fb"/>
+  <rect x="475" y="46" width="99" height="440" fill="#f2f6fb"/>
+  <rect x="673" y="46" width="99" height="440" fill="#f2f6fb"/>
+  <rect x="871" y="46" width="99" height="440" fill="#f2f6fb"/>
+
+  <!-- quarter labels -->
+  <text x="227" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q1</text>
+  <text x="326" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q2</text>
+  <text x="425" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q3</text>
+  <text x="524" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q4</text>
+  <text x="623" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q5</text>
+  <text x="722" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q6</text>
+  <text x="821" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q7</text>
+  <text x="920" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#0f4c81">Q8</text>
+  <text x="227" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Year 1 — Jul–Sep 26</text>
+  <text x="326" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Oct–Dec 26</text>
+  <text x="425" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Jan–Mar 27</text>
+  <text x="524" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Apr–Jun 27</text>
+  <text x="623" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Year 2 — Jul–Sep 27</text>
+  <text x="722" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Oct–Dec 27</text>
+  <text x="821" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Jan–Mar 28</text>
+  <text x="920" y="32" text-anchor="middle" font-size="8.5" fill="#5a6b82">Apr–Jun 28</text>
+
+  <!-- month tick numbers -->
+  <text x="194" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">1</text>
+  <text x="227" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">2</text>
+  <text x="260" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">3</text>
+  <text x="293" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">4</text>
+  <text x="326" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">5</text>
+  <text x="359" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">6</text>
+  <text x="392" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">7</text>
+  <text x="425" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">8</text>
+  <text x="458" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">9</text>
+  <text x="491" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">10</text>
+  <text x="524" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">11</text>
+  <text x="557" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">12</text>
+  <text x="590" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">13</text>
+  <text x="623" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">14</text>
+  <text x="656" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">15</text>
+  <text x="689" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">16</text>
+  <text x="722" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">17</text>
+  <text x="755" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">18</text>
+  <text x="788" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">19</text>
+  <text x="821" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">20</text>
+  <text x="854" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">21</text>
+  <text x="887" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">22</text>
+  <text x="920" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">23</text>
+  <text x="953" y="43" text-anchor="middle" font-size="7.5" fill="#8a97a8">24</text>
+
+  <!-- month gridlines (quarter boundaries heavier) -->
+  <g stroke="#e3e9f1" stroke-width="1">
+    <line x1="211" y1="46" x2="211" y2="486"/><line x1="244" y1="46" x2="244" y2="486"/>
+    <line x1="310" y1="46" x2="310" y2="486"/><line x1="343" y1="46" x2="343" y2="486"/>
+    <line x1="409" y1="46" x2="409" y2="486"/><line x1="442" y1="46" x2="442" y2="486"/>
+    <line x1="508" y1="46" x2="508" y2="486"/><line x1="541" y1="46" x2="541" y2="486"/>
+    <line x1="607" y1="46" x2="607" y2="486"/><line x1="640" y1="46" x2="640" y2="486"/>
+    <line x1="706" y1="46" x2="706" y2="486"/><line x1="739" y1="46" x2="739" y2="486"/>
+    <line x1="805" y1="46" x2="805" y2="486"/><line x1="838" y1="46" x2="838" y2="486"/>
+    <line x1="904" y1="46" x2="904" y2="486"/><line x1="937" y1="46" x2="937" y2="486"/>
+  </g>
+  <g stroke="#c6d2e0" stroke-width="1.2">
+    <line x1="178" y1="46" x2="178" y2="486"/><line x1="277" y1="46" x2="277" y2="486"/>
+    <line x1="376" y1="46" x2="376" y2="486"/><line x1="475" y1="46" x2="475" y2="486"/>
+    <line x1="574" y1="46" x2="574" y2="486"/><line x1="673" y1="46" x2="673" y2="486"/>
+    <line x1="772" y1="46" x2="772" y2="486"/><line x1="871" y1="46" x2="871" y2="486"/>
+    <line x1="970" y1="46" x2="970" y2="486"/>
+  </g>
+  <!-- GA marker line at end of month 12 -->
+  <line x1="574" y1="46" x2="574" y2="486" stroke="#b8860b" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="578" y="58" font-size="9" font-weight="700" fill="#b8860b">v1.0 GA</text>
+
+  <!-- ============ ROWS (rowH 34, bars h 21) ============ -->
+  <!-- r1 Spec & Design: M1-2 -->
+  <text x="170" y="69" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">A+B — Spec &amp; Design</text>
+  <rect x="180" y="54" width="62" height="21" rx="4" fill="#6b5b95"/>
+  <text x="248" y="69" font-size="9.5" fill="#3c4657">Requirements · Architecture baseline</text>
+
+  <!-- r2 Standards: M1-3 -->
+  <text x="170" y="103" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">C — Standards</text>
+  <rect x="180" y="88" width="95" height="21" rx="4" fill="#8e44ad"/>
+  <text x="186" y="103" font-size="9.5" fill="#fff" font-weight="600">RFC-0001–0010</text>
+  <text x="281" y="103" font-size="9.5" fill="#3c4657">Constitution · RFC freeze</text>
+
+  <!-- r3 Core Runtime: M1-5 -->
+  <text x="170" y="137" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">D — Core Runtime</text>
+  <rect x="180" y="122" width="161" height="21" rx="4" fill="#0f4c81"/>
+  <text x="186" y="137" font-size="9.5" fill="#fff" font-weight="600">Waves 1–4: Access → Intelligence → Trust → Safety</text>
+
+  <!-- r4 Connectivity: M4-5 -->
+  <text x="170" y="171" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Connectivity &amp; o11y</text>
+  <rect x="279" y="156" width="62" height="21" rx="4" fill="#2980b9"/>
+  <text x="347" y="171" font-size="9.5" fill="#3c4657">UCL adapters · observability stack</text>
+
+  <!-- r5 Ecosystem: M6 -->
+  <text x="170" y="205" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Ecosystem (Wave 5)</text>
+  <rect x="345" y="190" width="29" height="21" rx="4" fill="#16867d"/>
+  <text x="380" y="205" font-size="9.5" fill="#3c4657">Marketplace MVP · Cloud MVP</text>
+
+  <!-- r6 Pilots: M7-9 -->
+  <text x="170" y="239" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Vertical Pilots (Wave 6)</text>
+  <rect x="378" y="224" width="95" height="21" rx="4" fill="#2e8b57"/>
+  <text x="384" y="239" font-size="9.5" fill="#fff" font-weight="600">Education · Hospitality</text>
+  <text x="479" y="239" font-size="9.5" fill="#3c4657">+ Enterprise pilot · case studies</text>
+
+  <!-- r7 GA track: M10-12 -->
+  <text x="170" y="273" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Certification &amp; GA</text>
+  <rect x="477" y="258" width="95" height="21" rx="4" fill="#b8860b"/>
+  <text x="483" y="273" font-size="9.5" fill="#fff" font-weight="600">Cert · Portal · GA hardening</text>
+
+  <!-- r8 Post-GA: M13-24 -->
+  <text x="170" y="307" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Post-GA Scale</text>
+  <rect x="576" y="292" width="392" height="21" rx="4" fill="#5a6b82"/>
+  <text x="582" y="307" font-size="9.5" fill="#fff" font-weight="600">Enterprise/Gov editions · LTS · universities · connectors · marketplace growth</text>
+
+  <!-- r9 Compliance: M1-6 / M7-12 / M13-24 -->
+  <text x="170" y="341" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Compliance &amp; ISO</text>
+  <rect x="180" y="326" width="192" height="21" rx="4" fill="#c0700e"/>
+  <text x="186" y="341" font-size="9.5" fill="#fff" font-weight="600">Governance foundation (POLICY·RISK·DATA·AUDIT)</text>
+  <rect x="378" y="326" width="192" height="21" rx="4" fill="#c0700e" opacity="0.8"/>
+  <text x="384" y="341" font-size="9.5" fill="#fff" font-weight="600">ISO 9001 · Cyber Essentials+</text>
+  <rect x="576" y="326" width="392" height="21" rx="4" fill="#c0700e" opacity="0.6"/>
+  <text x="582" y="341" font-size="9.5" fill="#fff" font-weight="600">ISO 27001 · ISO 22301 · ISO 42001 (SOC 2 → M30)</text>
+
+  <!-- r10 Funding: M1-6 / M19-24 -->
+  <text x="170" y="375" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Funding</text>
+  <rect x="180" y="360" width="192" height="21" rx="4" fill="#b04a6f"/>
+  <text x="186" y="375" font-size="9.5" fill="#fff" font-weight="600">Grants (Innovate UK) + Angel — £250k</text>
+  <rect x="774" y="360" width="194" height="21" rx="4" fill="#b04a6f" opacity="0.85"/>
+  <text x="780" y="375" font-size="9.5" fill="#fff" font-weight="600">Seed round — £1M+</text>
+
+  <!-- r11 Releases (diamonds) -->
+  <text x="170" y="412" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Releases</text>
+  <g fill="#b8860b">
+    <path d="M194.5 400 l7 7 l-7 7 l-7 -7 Z"/>
+    <path d="M260.5 400 l7 7 l-7 7 l-7 -7 Z"/>
+    <path d="M359.5 400 l7 7 l-7 7 l-7 -7 Z"/>
+    <path d="M557.5 400 l7 7 l-7 7 l-7 -7 Z"/>
+    <path d="M953.5 400 l7 7 l-7 7 l-7 -7 Z"/>
+  </g>
+  <g font-size="8.5" font-weight="700" fill="#0f4c81" text-anchor="middle">
+    <text x="194.5" y="428">v0.0.1</text>
+    <text x="260.5" y="428">v0.1 Alpha</text>
+    <text x="359.5" y="428">v0.5 Beta/RC</text>
+    <text x="557.5" y="428">v1.0 GA</text>
+    <text x="953.5" y="428">Ecosystem</text>
+  </g>
+
+  <!-- r12 Gates (diamonds) -->
+  <text x="170" y="458" text-anchor="end" font-size="11" font-weight="600" fill="#5a6b82">Decision Gates</text>
+  <g fill="#0f4c81">
+    <path d="M194.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+    <path d="M227.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+    <path d="M260.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+    <path d="M359.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+    <path d="M458.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+    <path d="M557.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+    <path d="M854.5 446 l6 6 l-6 6 l-6 -6 Z"/>
+  </g>
+  <g font-size="8.5" font-weight="600" fill="#3c4657" text-anchor="middle">
+    <text x="194.5" y="472">G1 Concept</text>
+    <text x="227.5" y="484">G2 Biz Case</text>
+    <text x="260.5" y="472">Alpha Gate</text>
+    <text x="359.5" y="472">G3 MVP</text>
+    <text x="458.5" y="472">G4 Pilot</text>
+    <text x="557.5" y="472">G5 Launch</text>
+    <text x="854.5" y="472">G6 Expand</text>
+  </g>
+</svg>
+<div class="legend">
+  <span><i style="background:#6b5b95"></i>Spec &amp; Design</span>
+  <span><i style="background:#8e44ad"></i>Standards</span>
+  <span><i style="background:#0f4c81"></i>Core Runtime</span>
+  <span><i style="background:#2980b9"></i>Connectivity</span>
+  <span><i style="background:#16867d"></i>Ecosystem</span>
+  <span><i style="background:#2e8b57"></i>Pilots</span>
+  <span><i style="background:#b8860b"></i>GA Track</span>
+  <span><i style="background:#5a6b82"></i>Scale</span>
+  <span><i style="background:#c0700e"></i>Compliance</span>
+  <span><i style="background:#b04a6f"></i>Funding</span>
+  <span>◆ Milestone / Gate</span>
+</div>
+</div>
+<p style="font-size:.85rem; color:var(--muted)">Waves 1–4 overlap by design: identity/trust are stubbed in Month 1 and hardened in Month 5 (§6.1). The compliance track continues to Month 30 (SOC 2) beyond this chart. Detailed schedule in §6.2; gate definitions in §7 and §11.</p>
+
+<h2 id="methodology">2. ADLC Methodology</h2>
+<p>The lifecycle is <strong>SPARC-X native</strong> (the manual's own methodology), wrapped around continuous agentic loops:</p>
+<div class="table-wrap"><table>
+<tr><th>ADLC Phase</th><th>SPARC-X</th><th>Core Question</th></tr>
+<tr><td>A. Specification</td><td>S — Specification</td><td>What must the system do, for whom, under which constraints?</td></tr>
+<tr><td>B. Design</td><td>P + A — Pseudocode, Architecture</td><td>How do agents reason, remember, decide, recover?</td></tr>
+<tr><td>C. Standards &amp; Governance</td><td>(Constitution/RFC track)</td><td>What rules bind every component before code exists?</td></tr>
+<tr><td>D. Implementation</td><td>(Build waves)</td><td>Build the 13 core services + SDKs, spec-driven</td></tr>
+<tr><td>E. Validation</td><td>R — Refinement</td><td>Does it meet the gates: performance, safety, cost, compliance?</td></tr>
+<tr><td>F. Release</td><td>C — Completion</td><td>Alpha → Beta → RC → GA with exit criteria</td></tr>
+<tr><td>G. Operations</td><td>X — Continuous Optimisation</td><td>Run, observe, respond, comply</td></tr>
+<tr><td>H. Learning &amp; Evolution</td><td>X — Continuous Optimisation</td><td>Feedback → Learning → Model/RFC updates (the agentic loop)</td></tr>
+</table></div>
+<p>Two invariant loops run through every phase:</p>
+<ul>
+<li><strong>Anti-hallucination loop</strong> (RFC-0007): Question → Memory → Knowledge → Evidence → Validation → Response, with confidence bands (Verified 95–100 / High 80–94 / Medium 60–79 / Unverified 0–59) and mandatory human oversight for S3/S4 risk classes.</li>
+<li><strong>Cost-elimination loop</strong> (RFC-0008): Cache → Memory → Knowledge → Workflow → Tool → Prediction → Small → Medium → Large Model → Human. The LLM is the last resort. (Invariants C1–C4: never invoke an LLM if cache/memory/knowledge has the answer; never use a premium model when a cheaper one meets confidence thresholds.)</li>
+</ul>
+<p>And ten constitutional laws govern all development (AEP-X Zero), most notably: <em>Identity Before Interaction, Trust Before Execution, Evidence Before Assertion, Knowledge Before Generation, Reuse Before Computation, Human Authority in critical domains</em> (finance, legal, healthcare, child-related decisions).</p>
+
+<h2 id="phase-a">3. Phase A — Specification (Weeks 1–4)</h2>
+<p><strong>Objective:</strong> Freeze what is being built and why, before any architecture work.</p>
+<div class="table-wrap"><table>
+<tr><th>Deliverable</th><th>Content</th><th>Source</th></tr>
+<tr><td>Vision &amp; Strategy Pack</td><td>Executive vision, PESTEL analysis, SWOT, mission KPIs</td><td>Manual pp. 4–6</td></tr>
+<tr><td>Business Requirements (BRD)</td><td>Stakeholder analysis, market gap, competitive positioning (vs MCP, LangGraph, CrewAI, AutoGen)</td><td>PRD-001</td></tr>
+<tr><td>Functional Requirements</td><td>FR-001…FR-013 — one per core service (Registry, Discovery, Gateway, Memory, Cache, Knowledge, Identity, Trust, Policy, Audit, Workflow, Safety, Verification)</td><td>PRD-001</td></tr>
+<tr><td>Non-Functional Requirements</td><td>Performance, availability, scalability (10M agents design ceiling), security, cost targets (§9)</td><td>Phase 3 spec</td></tr>
+<tr><td>Compliance Requirements</td><td>UK GDPR, GDPR, EU AI Act, ISO 27001, ISO 42001, SOC 2, NIST AI RMF, DPA 2018</td><td>SEC-001, AIA-001</td></tr>
+<tr><td>User Stories &amp; Acceptance Criteria</td><td>100–500 stories, product backlog</td><td>Phase 2 spec</td></tr>
+</table></div>
+<blockquote><strong>Gate A (Concept Approval):</strong> Strategic alignment confirmed; requirements baselined; risk register opened.</blockquote>
+
+<h2 id="phase-b">4. Phase B — Design (Weeks 3–8, overlaps A)</h2>
+<p><strong>Objective:</strong> Produce the architecture baseline that all code is generated from.</p>
+<p><strong>Deliverables:</strong></p>
+<ol>
+<li><strong>Domain-Driven Design</strong> — 8 core domains, bounded contexts.</li>
+<li><strong>Protocol Design</strong> — message envelope, 8 message types, capability/agent/cost/safety contracts.</li>
+<li><strong>Layered Reference Architecture</strong> — the 20-layer model (Infrastructure → Connectivity → … → Constitution) mapped to microservices.</li>
+<li><strong>Data Architecture</strong> — canonical data model; PostgreSQL (system of record), pgvector (embeddings), Neo4j (knowledge graph), Redis (cache), Kafka (events), MinIO (objects).</li>
+<li><strong>Memory Design</strong> — M0 Prompt → M1 Session → M2 Episodic → M3 Semantic → M4 Procedural → M5 Organisational → M6 Federated, each with TTL and governance metadata.</li>
+<li><strong>Cache Design</strong> — L0 Prompt (5 min) → L1 Session (1 h) → L2 Agent (24 h) → L3 Workflow (7 d) → L4 Organisation (30 d) → L5 Federation (policy), target &gt;90% hit rate.</li>
+<li><strong>Reasoning/Decision/Risk/Recovery flows</strong> (SPARC-P pseudocode) for every agent and the workflow engine.</li>
+<li><strong>Security Architecture</strong> — Zero Trust; OIDC/OAuth2/JWT/mTLS; RBAC + ABAC + PBAC; TLS 1.3 in transit, AES-256 at rest; Vault for secrets; threat model covering prompt injection, data poisoning, model manipulation, credential theft, supply chain.</li>
+<li><strong>API Standards</strong> — OpenAPI-first REST (<code>/api/v1/</code>), response envelopes, health endpoints, X-Request/Correlation/Trace-ID propagation.</li>
+<li><strong>Code Generation Framework (CGF-0001)</strong> — spec compiler that generates OpenAPI, schemas, service scaffolds, SDK stubs, Helm/Terraform, and conformance tests (target: 80% auto-generation, 70% dev-time reduction).</li>
+</ol>
+<blockquote><strong>Gate B (Business Case + Architecture Approval):</strong> RA-0001…RA-0008 equivalents baselined; canonical data model frozen; ADR repository live.</blockquote>
+
+<h2 id="phase-c">5. Phase C — Standards &amp; Governance Foundation (Weeks 1–12, parallel track)</h2>
+<p><strong>Objective:</strong> Establish the authority everything else depends on. Without RFC-0001, developers cannot build.</p>
+<div class="table-wrap"><table>
+<tr><th>Week</th><th>Deliverable</th></tr>
+<tr><td>1–2</td><td>AEP-X Constitution v1.0 + Book of Laws (10 laws); Foundation Charter; governance bodies defined</td></tr>
+<tr><td>3–7</td><td><strong>RFC-0001</strong> Core Protocol, <strong>RFC-0002</strong> Identity &amp; Trust, <strong>RFC-0003</strong> Messaging/Events/Workflow, <strong>RFC-0004</strong> Discovery &amp; Federation, <strong>RFC-0005</strong> Memory/Knowledge/Cache — frozen as v1.0 Draft</td></tr>
+<tr><td>6</td><td>GitHub organisation + monorepo (<code>aepx-core</code>: RFCs, schemas, SDKs, services, tests, docs); CI/CD; contribution guidelines</td></tr>
+<tr><td>8–12</td><td><strong>RFC-0006</strong> Governance/Compliance/Audit, <strong>RFC-0007</strong> Safety/Anti-Hallucination, <strong>RFC-0008</strong> Economic Optimisation, <strong>RFC-0009</strong> Marketplace, <strong>RFC-0010</strong> Certification</td></tr>
+</table></div>
+<p><strong>Standards lifecycle:</strong> Draft → Review → Public Consultation → TSC Approval → Publication → Deprecation. No breaking changes within v1.x (SEMVER discipline).</p>
+<p><strong>Governance bodies (minimum viable):</strong> Technical Steering Committee, Security Council, Certification Council, Community Council; Board-level Audit &amp; Risk Committee. Full Foundation registration targeted Month 18.</p>
+<blockquote><strong>Gate C (Standards Freeze):</strong> RFC-0001–0005 published and frozen; monorepo and CI/CD operational.</blockquote>
+
+<h2 id="phase-d">6. Phase D — Implementation (Months 1–12)</h2>
+<p><strong>Objective:</strong> Build the 13-service core runtime plus SDKs, cache-first, spec-driven. This is the manual's 180-day Execution Lock scope followed by ecosystem waves.</p>
+
+<h3>6.1 Build order (critical path)</h3>
+<p>The manual's critical path is strictly sequential because of the constitutional laws (identity before trust, trust before execution):</p>
+<pre>Wave 1 — Access Layer:        Registry → Discovery → Gateway
+Wave 2 — Intelligence Layer:  Memory → Cache → Knowledge
+Wave 3 — Trust Layer:         Identity → Trust → Policy → Audit
+Wave 4 — Execution &amp; Safety:  Workflow → Safety → Verification
+Wave 5 — Ecosystem:           Marketplace → Certification → Developer Portal → Billing → Licensing
+Wave 6 — Platforms &amp; Pilots:  Cloud MVP → Education → Hospitality → Enterprise</pre>
+<blockquote>Note: identity/trust plumbing (JWT, OIDC) is stubbed in Wave 1 and hardened in Wave 3 — the manual's week-by-week plan builds Identity and Trust first in minimal form (Week 1) and productionises them in Wave 3.</blockquote>
+<div class="callout" style="border-left:5px solid var(--accent); background:var(--accent-light); padding:.9rem 1.1rem; border-radius:0 8px 8px 0; margin:1rem 0;">
+<strong>Detailed build reference:</strong> the bounded-context service boundaries, communication patterns (sync Tier 1 vs. event-driven Tier 2), database-per-service enforcement, and step-by-step code for Wave 1–4 are specified in the companion <strong>Microservices Implementation Guide</strong>, which also reconciles this Wave numbering against the AEP-X Ultra book outline's Volume 9 service catalogue (Agent Registry, Trust Authority, Discovery, Memory, Workflow Engine, Safety Engine, Governance Engine, Marketplace Engine).
+</div>
+
+<h3>6.2 Month-by-month schedule (Year 1 Operating Plan)</h3>
+<div class="table-wrap"><table>
+<tr><th>Month</th><th>Deliverables</th><th>Milestone</th></tr>
+<tr><td>1</td><td>Identity + Trust (minimal), Registry, Memory, Cache, Gateway MVPs; Python SDK; Tutor Agent demo</td><td><strong>v0.0.1</strong> — first installable version (docker compose up)</td></tr>
+<tr><td>2</td><td>Discovery Service, Workflow Engine, Vector Memory (pgvector), MCP compatibility adapter</td><td>Runtime Kernel (execution, scheduling, routing)</td></tr>
+<tr><td>3</td><td>Knowledge, Evidence, Anti-Hallucination, Policy services; TypeScript SDK; CLI (<code>aepx init/create/run/deploy</code>)</td><td><strong>v0.1 Alpha</strong></td></tr>
+<tr><td>4</td><td>Universal Connectivity Layer: protocol adapters (MCP/REST/GraphQL/gRPC/Kafka/MQTT), AI connectors (OpenAI, Anthropic, Gemini, Ollama, vLLM…), first tool/data connectors</td><td>Connect-once-use-everywhere proven</td></tr>
+<tr><td>5</td><td>Hardened Identity/Trust/Policy/Audit (Wave 3 complete); observability stack (Prometheus, Grafana, OpenTelemetry, Jaeger, OpenSearch)</td><td>Trusted execution, 100% audit coverage</td></tr>
+<tr><td>6</td><td>Marketplace MVP, Trust Authority, Cloud MVP; load/security/compliance testing</td><td><strong>v0.5 Beta → v1.0 RC</strong></td></tr>
+<tr><td>7–9</td><td>Education pilot (Tutor/Curriculum/Assessment agents), Hospitality pilot (Search/Booking/Pricing), first enterprise pilot; case studies; beta programme</td><td>3 pilots running</td></tr>
+<tr><td>10–12</td><td>Certification platform, Developer Portal, Enterprise Edition packaging; GA hardening; documentation portal</td><td><strong>v1.0 GA</strong> (Month 12)</td></tr>
+</table></div>
+
+<h3>6.3 Engineering practices</h3>
+<ul>
+<li><strong>Spec-driven development:</strong> services generated/validated against RFC schemas via CGF-0001; 100% standards compliance and API consistency are hard requirements.</li>
+<li><strong>Sprint cadence:</strong> 2-week releases (Engineering Board KPI); every sprint follows the manual's 20-step structure ending in explicit success criteria.</li>
+<li><strong>Team structure (Year 1, ~7 people):</strong> Founder/Chief Architect; 2× Backend Engineers; AI Engineer; DevOps Engineer; QA Engineer; Product Owner — organised as Team A (Core Platform), Team B (Developer Experience), Team C (Trust &amp; Security), Team D (Pilots). Growth: 12–15 (Year 2), 20–25 (Year 3).</li>
+<li><strong>Definition of Done (every service):</strong> OpenAPI contract + schema published; unit tests &gt;85–90% coverage; integration tests for critical flows; Dockerfile + Helm chart; observability instrumented; audit events emitted; conformance tests passing; docs published.</li>
+</ul>
+<blockquote><strong>Gate D (MVP Approval):</strong> All 13 core services operational; the full chain Gateway → Registry → Discovery → Workflow → Safety → Verification executes end-to-end.</blockquote>
+
+<h2 id="phase-e">7. Phase E — Validation (continuous; formal gates at Months 3, 6, 12)</h2>
+
+<h3>7.1 Test categories (RFC-0010 conformance suite)</h3>
+<div class="table-wrap"><table>
+<tr><th>Category</th><th>Scope</th><th>Key thresholds</th></tr>
+<tr><td>Functional</td><td>Protocol, APIs, workflows, memory, trust, safety</td><td>100% critical flows</td></tr>
+<tr><td>Performance</td><td>Latency, throughput, scaling</td><td>See §9 targets</td></tr>
+<tr><td>Security</td><td>AuthN/AuthZ, encryption, audit, dependencies, secrets</td><td>0 critical vulnerabilities</td></tr>
+<tr><td>Safety</td><td>Evidence coverage, verification, risk classification, hallucination testing</td><td>≥95% evidence coverage, &lt;1% critical hallucination on 1,000-question benchmark</td></tr>
+<tr><td>Compliance</td><td>GDPR, UK GDPR, EU AI Act, ISO 27001/42001, SOC 2</td><td>100% of controls evidenced</td></tr>
+<tr><td>Interoperability</td><td>MCP compat, federation, cross-org workflows, multi-region</td><td>3 independent implementations (GA+)</td></tr>
+</table></div>
+
+<h3>7.2 Alpha Gate Review (Month 3) — five gates</h3>
+<ol>
+<li><strong>Technical:</strong> Discovery &lt;50 ms, Memory &lt;20 ms, Cache &gt;90% hit, Gateway &lt;100 ms.</li>
+<li><strong>Developer Experience:</strong> install &lt;5 min, first agent &lt;10 min, first workflow &lt;15 min, deployment &lt;30 min.</li>
+<li><strong>Cost:</strong> measured cost per execution vs plain-LLM baseline (target trajectory to 80% LLM-call reduction).</li>
+<li><strong>Anti-Hallucination:</strong> 100-question known-answer benchmark; evidence and confidence scoring validated.</li>
+<li><strong>Competitive Benchmark:</strong> vs MCP, LangGraph, CrewAI, AutoGen, OpenAI Agents SDK on latency, cost, complexity, extensibility, DX.</li>
+</ol>
+<p><strong>Decision:</strong> refactor or proceed to Beta. The parallel <strong>Reality Validation Programme</strong> publishes the benchmark report (pass/fail per area) — this is the honesty mechanism against over-engineering.</p>
+
+<h3>7.3 Beta exit (→ RC) and RC exit (→ GA)</h3>
+<ul>
+<li><strong>Beta exit:</strong> 99% reliability; &lt;100 ms gateway; &lt;20 ms memory; 3 pilots; 100 developers; 10 organisations; measured 50% cost reduction.</li>
+<li><strong>RC exit:</strong> 99.9% reliability; 90% cache hit; 80% LLM reduction; conformance suite published; independent security audit passed; 3 production pilots; 1,000 developers; positive unit economics; funding secured.</li>
+</ul>
+
+<h2 id="phase-f">8. Phase F — Release Management</h2>
+<p><strong>Versioning:</strong> SEMVER (PATCH = fix, MINOR = feature, MAJOR = breaking). v1.x backward compatible. Python &amp; TypeScript SDKs supported ≥3 years.</p>
+<div class="table-wrap"><table>
+<tr><th>Release</th><th>Target</th><th>Content</th><th>Exit criteria owner</th></tr>
+<tr><td>v0.0.1</td><td>Month 1</td><td>6 minimal services + Python SDK + demo agent</td><td>Engineering Board</td></tr>
+<tr><td>v0.1 Alpha</td><td>Month 3</td><td>+ Discovery, Workflow, Vector Memory, MCP compat, Anti-Hallucination</td><td>Alpha Gate Review</td></tr>
+<tr><td>v0.5 Beta</td><td>Month 6</td><td>+ Security hardening, UCL connectors, Marketplace MVP, cost optimiser, pilots</td><td>Beta exit gates</td></tr>
+<tr><td>v1.0 RC</td><td>Months 6–9</td><td>Core frozen; specs published; conformance suite; security audit</td><td>RC exit gates</td></tr>
+<tr><td>v1.0 GA</td><td>Month 12</td><td>Full platform + 3 verticals + Certification + Foundation launch</td><td>GA launch programme (10 deliverables)</td></tr>
+<tr><td>Post-GA</td><td>Months 13–24</td><td>Enterprise/Government editions; LTS programme; ecosystem scale</td><td>PEB</td></tr>
+</table></div>
+<p><strong>GA Launch Programme (10 deliverables):</strong> public launch (site/portal/forum), Foundation formalised, certification programme live, marketplace launch (targets: 100 agents, 50 workflows, 20 plugins at launch; 1,000/500/100 within first release cycle), 10 university partnerships, industry accelerators, published benchmarks, commercial model (Open Source / Professional £99–499/mo / Enterprise £25k–250k/yr), standards expansion working groups, AEP-X 2.0 research kickoff.</p>
+
+<h2 id="nfr">9. Non-Functional Targets (binding through all phases)</h2>
+
+<h3>Performance &amp; reliability</h3>
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>MVP (Mo. 6)</th><th>GA (Mo. 12)</th><th>Year 3</th></tr>
+<tr><td>Availability</td><td>99.9%</td><td>99.99%</td><td>99.999%</td></tr>
+<tr><td>Gateway latency</td><td>&lt;100 ms</td><td>&lt;100 ms</td><td>&lt;100 ms</td></tr>
+<tr><td>Discovery</td><td>&lt;50 ms (&lt;10 ms cached)</td><td>&lt;50 ms</td><td>&lt;50 ms</td></tr>
+<tr><td>Memory retrieval</td><td>&lt;20 ms (&lt;5 ms cached)</td><td>&lt;20 ms</td><td>&lt;20 ms</td></tr>
+<tr><td>Cache hit lookup</td><td>&lt;5 ms</td><td>&lt;5 ms</td><td>&lt;5 ms</td></tr>
+<tr><td>Policy / trust evaluation</td><td>&lt;50 ms</td><td>&lt;50 ms</td><td>&lt;50 ms</td></tr>
+<tr><td>Audit write / search</td><td>&lt;10 ms / &lt;100 ms</td><td>same</td><td>same</td></tr>
+<tr><td>Workflow start / planning / recovery</td><td>&lt;100 / &lt;200 / &lt;500 ms</td><td>same</td><td>same</td></tr>
+<tr><td>Verification per claim</td><td>&lt;200 ms</td><td>&lt;200 ms</td><td>&lt;200 ms</td></tr>
+</table></div>
+
+<h3>Economics (the platform's core differentiator)</h3>
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>Target</th></tr>
+<tr><td>Cache hit rate</td><td>&gt;90% (→95%)</td></tr>
+<tr><td>LLM call reduction</td><td>80% (→90%)</td></tr>
+<tr><td>Memory reuse</td><td>90%</td></tr>
+<tr><td>Workflow reuse</td><td>70–80%</td></tr>
+<tr><td>Infrastructure cost reduction</td><td>50%</td></tr>
+<tr><td>Energy reduction</td><td>30% (→50% long-term)</td></tr>
+</table></div>
+
+<h3>Safety &amp; quality</h3>
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>Target</th></tr>
+<tr><td>Evidence coverage</td><td>≥95%</td></tr>
+<tr><td>Verified responses</td><td>≥90%</td></tr>
+<tr><td>Critical hallucination rate</td><td>&lt;1%</td></tr>
+<tr><td>Human oversight, S3/S4 &amp; regulated domains</td><td>100%</td></tr>
+<tr><td>Auditability / traceability / explainability</td><td>100%</td></tr>
+<tr><td>Unit test coverage</td><td>&gt;85–90%</td></tr>
+<tr><td>Defect escape rate</td><td>&lt;2%</td></tr>
+<tr><td>Release success rate</td><td>&gt;95%</td></tr>
+</table></div>
+
+<h2 id="compliance">10. Compliance &amp; Certification Roadmap (parallel track, Months 1–30)</h2>
+<div class="table-wrap"><table>
+<tr><th>Phase</th><th>Months</th><th>Outcome</th></tr>
+<tr><td>1</td><td>1–6</td><td>Governance foundation: POLICY-001, RISK-001, QUALITY-001, DATA-001, AUDIT-001 live</td></tr>
+<tr><td>2</td><td>6–12</td><td><strong>ISO 9001</strong> (QMS)</td></tr>
+<tr><td>3</td><td>9–15</td><td><strong>Cyber Essentials Plus</strong></td></tr>
+<tr><td>4</td><td>12–18</td><td><strong>ISO 27001</strong> (ISMS)</td></tr>
+<tr><td>5</td><td>15–21</td><td><strong>ISO 22301</strong> (BC/DR: RTO &lt;4 h, RPO &lt;1 h for Tier-1 services)</td></tr>
+<tr><td>6</td><td>18–24</td><td><strong>ISO 42001</strong> (AI management) — supported by AIA-001 AI Assurance Framework</td></tr>
+<tr><td>7</td><td>24–30</td><td><strong>SOC 2</strong> readiness</td></tr>
+</table></div>
+<p><strong>AI-specific controls (AIA-001, EU AI Act):</strong> risk classification R0–R4 for every AI system; DPIAs for all high-risk features; AI system inventory; transparency metadata (purpose, owner, version, risk level, limitations); explainability contract on every response (<code>{answer, confidence, evidence[], verification_status}</code>); bias &amp; fairness monitoring; mandatory human oversight for high/critical risk. Data retention: audit logs 7 years, security logs 2 years, application logs 90 days.</p>
+<p><strong>Incident response:</strong> P1 15-min / P2 1-h / P3 4-h / P4 next release. Vulnerability SLAs: critical 24 h, high 7 d, medium 30 d.</p>
+
+<h2 id="governance">11. Governance, Risk &amp; Decision Gates</h2>
+
+<h3>Stage-gate framework (PMO-001)</h3>
+<div class="table-wrap"><table>
+<tr><th>Gate</th><th>Name</th><th>When</th></tr>
+<tr><td>1</td><td>Concept Approval</td><td>End of Phase A</td></tr>
+<tr><td>2</td><td>Business Case Approval</td><td>End of Phase B</td></tr>
+<tr><td>3</td><td>MVP Approval</td><td>Month 6</td></tr>
+<tr><td>4</td><td>Pilot Approval</td><td>Months 7–9</td></tr>
+<tr><td>5</td><td>Commercial Launch Approval</td><td>Month 12 (GA)</td></tr>
+<tr><td>6</td><td>Expansion Approval</td><td>Month 18–24</td></tr>
+</table></div>
+
+<h3>Programme Execution Board (weekly command centre)</h3>
+<p>Six boards with single KPIs: Standards (RFCs frozen/traceable), Engineering (release every 2 weeks), Security (zero critical vulnerabilities), Product (one new pilot per quarter), Commercial (first paying customer, then ARR), Foundation (100 active contributors). Five dashboards: Product (WAU — <em>the single most important KPI</em>), Technology, Economics, Trust &amp; Safety, Growth.</p>
+
+<h3>Top risks &amp; mitigations</h3>
+<div class="table-wrap"><table>
+<tr><th>Risk</th><th>Score</th><th>Mitigation</th></tr>
+<tr><td>Data breach</td><td>Critical (20)</td><td>Encryption everywhere, MFA 100%, monitoring, security reviews</td></tr>
+<tr><td>GDPR non-compliance</td><td>Critical (16)</td><td>Privacy by design, DPIAs, training, DATA-001</td></tr>
+<tr><td>Funding delays</td><td>High (15)</td><td>Staged plan: bootstrap/grants (£250k, Mo. 6) → seed £1M+ (Mo. 24) → Series A (Yr 3–4); Innovate UK/UKRI applications in parallel from Month 1</td></tr>
+<tr><td>Supply chain attack</td><td>High (15)</td><td>SBOM, dependency scanning, code signing (Trivy/Syft/Cosign)</td></tr>
+<tr><td>Slow adoption</td><td>High (12)</td><td>Pilot early, university partnerships, free open-source core, &lt;10-min first agent</td></tr>
+<tr><td>EU AI Act non-conformity</td><td>High (12)</td><td>AIA-001 framework, independent reviews</td></tr>
+<tr><td>Over-engineering</td><td>High</td><td><strong>180-day Execution Lock</strong>; Reality Validation Programme; WAU as north-star metric</td></tr>
+<tr><td>Vendor capture / fragmentation</td><td>Medium</td><td>Non-profit foundation, open RFCs, conformance testing, 3 independent implementations</td></tr>
+</table></div>
+
+<h2 id="operations">12. Phase G/H — Operations, Learning &amp; Evolution (Month 6 onward, permanent)</h2>
+<ul>
+<li><strong>Operations (OPS-001):</strong> GitOps deployment (ArgoCD, Helm, Terraform); multi-AZ; automated backups (hourly incremental, daily full, 35-day retention); quarterly tabletop exercises, twice-yearly recovery tests, annual full DR exercise; SLO-based alerting.</li>
+<li><strong>Learning loop (Law 9):</strong> every interaction feeds Experience → Knowledge → Learning → Improvement; the ML fabric (classification, prediction, recommendation) retrains from outcomes; cost optimiser continuously re-tunes model routing.</li>
+<li><strong>Evolution loop (Law 10):</strong> telemetry and pilot feedback drive RFC updates through the standards lifecycle; AEP-X 2.0 research stream starts at GA; deprecation policy protects backward compatibility.</li>
+<li><strong>Post-GA programme:</strong> independent implementations, interop lab, conformance certification, connector expansion, global education programme, industry accelerators (Education, Hospitality, Government, Healthcare, Finance), AEP-X Cloud.</li>
+</ul>
+
+<h2 id="milestones">13. Adoption &amp; Commercial Milestones (success criteria per period)</h2>
+<div class="table-wrap"><table>
+<tr><th>Milestone</th><th>Developers</th><th>Organisations</th><th>Universities</th><th>Revenue</th><th>Release</th></tr>
+<tr><td>Month 3</td><td>100</td><td>1–3 pilots</td><td>1 contact</td><td>—</td><td>v0.1 Alpha</td></tr>
+<tr><td>Month 6</td><td>500</td><td>10</td><td>1–2</td><td>first paying customer</td><td>v0.5 Beta / RC</td></tr>
+<tr><td>Month 12</td><td>1,000</td><td>100</td><td>10</td><td>£100k ARR</td><td><strong>v1.0 GA</strong></td></tr>
+<tr><td>Month 24</td><td>5–10k</td><td>500–1,000</td><td>25–30</td><td>£500k–£1M ARR</td><td>Ecosystem</td></tr>
+<tr><td>Year 3</td><td>5,000–10,000</td><td>200–1,000</td><td>25–100</td><td>£2M ARR</td><td>Enterprise scale</td></tr>
+<tr><td>Year 5</td><td>100,000</td><td>1,000</td><td>100</td><td>£10M+ ARR</td><td>Industry leadership</td></tr>
+</table></div>
+<p>Marketplace at first release cycle: 1,000 agents, 500 workflows, 100 plugins, 100 knowledge packs. Certification Year 1: 100 certified developers (5-level track: Developer → Engineer → Architect → Enterprise Architect → Fellow; exams £150–£1,500).</p>
+
+<h2 id="next-actions">14. Immediate Next Actions (Days 1–30)</h2>
+<ol>
+<li><strong>Week 1:</strong> Register GitHub org + domains; publish Constitution v1.0 draft and Book of Laws; stand up docs portal skeleton.</li>
+<li><strong>Week 2:</strong> Freeze RFC-0001–0005 as v1.0 Draft; publish OpenAPI schemas and canonical data model; monorepo + CI/CD live.</li>
+<li><strong>Week 3:</strong> First running services — Identity (minimal), Trust (minimal), Registry, Memory, Cache, Gateway via docker compose.</li>
+<li><strong>Week 4:</strong> Python SDK v0.0.1 (<code>pip install aepx</code>); Tutor Agent demo end-to-end; measure: time-to-first-agent &lt;10 min.</li>
+<li><strong>In parallel:</strong> Innovate UK application drafted; 2 university conversations opened; risk register and policy library (POLICY-001) initialised.</li>
+</ol>
+<div class="callout success">
+<strong>Definition of success for Month 1:</strong> a new developer can go from <code>git clone</code> to a working evidence-validated agent in under 10 minutes — everything else in this plan exists to keep that loop true at scale.
+</div>
+
+<h2 id="evaluation">15. Critical Evaluation</h2>
+<p>This section assesses the manual — and therefore this plan — honestly. It exists because the manual itself demands it: the Reality Validation Programme, the 180-day Execution Lock, and the warning that <em>"if nobody uses AEP-X, architecture = 0 value"</em> are all the manual auditing its own ambition. The evaluation below extends that audit.</p>
+
+<div class="verdict">
+<strong>Overall verdict:</strong> The manual is a visionary and unusually complete <em>portfolio of ambitions</em>, but it is not yet an executable plan. Its genuine differentiators (cache-first economics, evidence-first anti-hallucination, compliance-by-design) are buried under a scope that no Year-1 team of 7 can deliver, and the document carries material internal contradictions from iterative drafting that must be reconciled before build. This ADLC plan is executable <strong>only under the manual's own Execution-Lock reading</strong>: 6 services, one SDK, one vertical, one paying customer — with everything else held as conditional backlog.
+</div>
+
+<h3>15.1 What is genuinely strong</h3>
+<div class="callout eval-strength">
+<ol>
+<li><strong>Cache-first economics is a real, measurable differentiator.</strong> The execution hierarchy (cache → memory → knowledge → … → LLM last) attacks the dominant cost line of agentic systems, and no mainstream framework (MCP, LangGraph, CrewAI, AutoGen) makes it a protocol invariant. It is also falsifiable — the cost dashboard either shows the savings or it doesn't.</li>
+<li><strong>Evidence-first anti-hallucination fills a genuine gap.</strong> A response contract of <code>{answer, confidence, evidence[], verification_status}</code> with risk-tiered human oversight is exactly what regulated buyers (education, healthcare, government) ask for and don't get from current stacks.</li>
+<li><strong>Compliance-by-design is well timed.</strong> Building EU AI Act / ISO 42001 conformity into the runtime, rather than bolting it on, matches where enterprise and public-sector procurement is heading in 2026–2028.</li>
+<li><strong>The manual is self-aware.</strong> The Execution Lock, the Reality Validation Programme, the "WAU is the only KPI that matters" directive, and the benchmark-vs-competitors gates are the document correcting its own tendency to sprawl. The best strategic thinking in the manual is its scepticism about itself.</li>
+<li><strong>The critical path is architecturally sound.</strong> Identity → trust → registry → memory → execution is the right dependency order, and the 20-step sprint template with explicit success criteria is a solid delivery discipline.</li>
+</ol>
+</div>
+
+<h3>15.2 Critical weaknesses</h3>
+<div class="callout eval-risk">
+<ol>
+<li><strong>Scope–capacity mismatch is the central defect.</strong> Year 1 asks a team of 7 to deliver 13 production services (&gt;85% test coverage, Helm, observability, audit), 2 SDKs, a CLI, a marketplace, a certification platform, 3 vertical pilots, a standards body, 10 RFCs, and 2 ISO certifications. That is roughly 2 production services per engineer <em>plus</em> everything else. Kubernetes had Google behind it; MCP has Anthropic. At production quality this is a 25–40 person scope. The month-by-month schedule in §6.2 is achievable only at MVP/scaffold quality.</li>
+<li><strong>Head-on competition with MCP is the largest market risk.</strong> The manual positions AEP-X as an MCP superset while MCP has first-mover network effects and a major backer. A protocol war fought by a bootstrapped startup is unwinnable on those terms; an MCP-<em>complementary</em> position (the memory/cache/trust/evidence layer that makes MCP deployments cheaper and safer) is winnable.</li>
+<li><strong>The standards-body strategy is inverted.</strong> Constitution, Book of Laws, Foundation, and 10 frozen RFCs are scheduled <em>before</em> a single external user exists. Every successful precedent (TCP/IP, OAuth, Kubernetes/CNCF) ran the other way: working implementation → adoption → formal standardisation. Freezing standards with zero implementers creates prestige overhead, not authority.</li>
+<li><strong>Key performance targets are asserted, not evidenced.</strong> See the reality-check table (§15.4). The 90–95% cache-hit target — from which the 80% LLM-cost-reduction claim mechanically follows — assumes highly repetitive workloads; real agentic traffic is long-tailed. Publishing these as universal platform guarantees before pilot data exists risks a credibility failure at exactly the moment the benchmark reports (Alpha Gate 5) go public.</li>
+<li><strong>Financial and adoption figures contradict each other</strong> (§15.3) and the funding maths does not close: £250k of grant/angel funding cannot carry 7 UK FTEs for 12 months (~£600–700k loaded cost). Either the team is 3–4 people, or more capital is needed earlier — the plan currently pretends neither.</li>
+<li><strong>No adoption mechanism behind the adoption targets.</strong> 1,000 developers by Month 12 is asserted with no DevRel headcount, no marketing budget line beyond "community", and no distribution wedge other than open-source virality — against an incumbent with default distribution.</li>
+<li><strong>Compliance overhead front-loaded onto scarce capacity.</strong> Six ISO certifications in 30 months while building the platform diverts the same 7 people. Only GDPR fundamentals and Cyber Essentials are needed before the first enterprise deal; ISO 42001 and SOC 2 matter post-revenue.</li>
+<li><strong>The manual's provenance shows.</strong> The 3,188-page consolidated edition stacks ~20 successive re-plannings of the same programme (Stages, Phases, G-phases, waves, sprints, 100-day/90-day/30-day plans) without reconciliation. Terminology drifts between passes (§15.3). Anyone implementing directly from the manual, rather than from a reconciled plan like this one, will build inconsistent systems.</li>
+</ol>
+</div>
+
+<h3>15.3 Contradiction register (must be resolved before build)</h3>
+<div class="table-wrap"><table>
+<tr><th>Topic</th><th>Conflicting statements in the manual</th><th>Resolution adopted in this plan</th></tr>
+<tr><td>Memory layers</td><td>M0–M5 (6 layers, p.11) vs M0–M6 (7 layers, RFC-0005)</td><td>M0–M6 (RFC-0005 is the normative source)</td></tr>
+<tr><td>Cache layers</td><td>L1–L4 vs L0–L5 vs L0–L6 in different chapters</td><td>L0–L5 (RFC-0005)</td></tr>
+<tr><td>Availability target</td><td>99.9% vs 99.99% vs 99.999% quoted for overlapping periods</td><td>Staged: 99.9% MVP → 99.99% GA → 99.999% aspirational Year 3</td></tr>
+<tr><td>Trust score formula</td><td>5 equal components × 20% (RFC-0002) vs 40% reputation / 30% compliance / 20% reliability / 10% security (build chapters)</td><td>RFC-0002 formula; revisit with pilot data</td></tr>
+<tr><td>Safety classes</td><td>S0–S3 (RFC-0007) vs S0–S4 (multiple chapters)</td><td>S0–S4, human oversight mandatory at S3+</td></tr>
+<tr><td>RFC numbering</td><td>RFC-0008 = "Safety Framework" (Stage 2) vs RFC-0008 = "Economic Optimisation" (RFC suite); "8 core standards" vs "10 RFCs"</td><td>10-RFC suite as listed in §5</td></tr>
+<tr><td>Year-1 adoption</td><td>100 devs / 10 orgs (EXEC-001) vs 1,000 devs / 100 orgs (Y1OP GA criteria) vs 10,000+ devs / 1,000+ orgs (ROADMAP-001 "Year 1")</td><td>Plan uses the Y1OP ladder (§13); treat EXEC-001 numbers as the commit case, Y1OP as stretch</td></tr>
+<tr><td>Year-1 revenue</td><td>£50k–£100k (FIN-001) vs £100k ARR (Y1OP) vs "&gt;£400k" (investor KPIs)</td><td>£100k ARR stretch, £50k commit</td></tr>
+<tr><td>MVP duration</td><td>90 days vs 6 months vs 9 months vs 12 months across programmes</td><td>v0.0.1 at 30 days, Alpha at 90 days, GA at 12 months</td></tr>
+</table></div>
+
+<h3>15.4 Reality check on headline targets</h3>
+<div class="table-wrap"><table>
+<tr><th>Claim</th><th>Assessment</th></tr>
+<tr><td>&gt;90–95% cache hit rate</td><td><strong>Conditional.</strong> Plausible for narrow, repetitive domains (FAQ-style education pilots); typical agentic long-tail workloads land far lower. Should be an SLO per workload class, never a platform-wide guarantee.</td></tr>
+<tr><td>80% LLM call/cost reduction</td><td><strong>Derivative of the above.</strong> Credible in the education pilot; unproven generally. Publish measured pilot numbers, not the target.</td></tr>
+<tr><td>&lt;20 ms memory retrieval</td><td><strong>Optimistic for semantic search.</strong> pgvector ANN at scale typically runs 20–100 ms+; achievable only for cache-fronted reads. Keep &lt;5 ms cached / restate uncached honestly.</td></tr>
+<tr><td>99.999% availability (Year 3)</td><td><strong>Conflicts with the low-cost positioning.</strong> Five nines means multi-region active-active and a serious SRE bench — a &gt;£1M/yr operations posture. 99.9→99.95% is the honest Year 1–3 band.</td></tr>
+<tr><td>13 services in 6 months, team of 7</td><td><strong>Not credible at production grade.</strong> Feasible only as code-generated MVP scaffolds — and the code generator (CGF-0001) is itself an unbuilt dependency on the critical path.</td></tr>
+<tr><td>&lt;1% critical hallucination, ≥95% evidence coverage</td><td><strong>Unmeasurable as stated.</strong> Needs a defined benchmark methodology (dataset, judge protocol, domain spread) before the number means anything. The 1,000-question benchmark is a start; pre-register it.</td></tr>
+<tr><td>1,000 developers by Month 12</td><td><strong>No mechanism.</strong> Requires funded DevRel and an MCP-compatible on-ramp; treat 100–300 as the commit case.</td></tr>
+<tr><td>Standards-body recognition (IETF/W3C/CNCF peer)</td><td><strong>Years premature.</strong> Recognition follows adoption; schedule after 3 independent implementations exist, not before.</td></tr>
+</table></div>
+
+<h3>15.5 Recommendations</h3>
+<ol>
+<li><strong>Make the Execution Lock the actual plan.</strong> Year-1 committed scope: 6 services (Identity, Trust, Registry, Memory, Cache, Gateway), Python SDK, education vertical, 1 paying customer. Waves 5–6, the Foundation, and 5 of the 10 RFCs move to a conditional backlog gated on pilot evidence.</li>
+<li><strong>Reposition relative to MCP: complement, not competitor.</strong> Ship the MCP adapter in Month 1, not Month 4, and market AEP-X as "the memory, cost and evidence layer for MCP agents". Inherit the ecosystem instead of fighting it.</li>
+<li><strong>Demote RFCs to living design docs</strong> until there are third-party implementers; freeze only the wire format and response contract. Register the Foundation at Month 18 as planned, not earlier.</li>
+<li><strong>Fix the funding maths before hiring.</strong> Either raise ~£600–750k pre-seed for the 7-FTE plan, or run Months 1–6 with 3–4 people and cut the Month-6 milestone list accordingly. The current £250k/7-FTE combination fails in Month 5.</li>
+<li><strong>Re-baseline public targets to defensible numbers</strong> (99.9% availability; cache-hit by workload class; hallucination metrics only after the benchmark methodology is pre-registered). Keep aspirational numbers internal until pilots evidence them.</li>
+<li><strong>Build the public benchmark suite (RVP) in Month 2, not after Alpha.</strong> It is the credibility engine for every economic claim the project makes — and the cheapest marketing available.</li>
+<li><strong>Adopt the contradiction register (§15.3) as a living document</strong> with a single normative source per topic; every spec/service PR links to it.</li>
+<li><strong>Defer ISO 42001 and SOC 2 to post-revenue;</strong> keep GDPR fundamentals, Cyber Essentials, and the AI risk-classification practice from day one because the anti-hallucination product story depends on them.</li>
+</ol>
+
+<hr>
+
+<h2 id="appendix-a">Appendix A — Reconciliation Map (manual roadmaps → this plan)</h2>
+<div class="table-wrap"><table>
+<tr><th>Manual construct</th><th>Where it lands in this ADLC</th></tr>
+<tr><td>SPARC / SPARC-X lifecycle</td><td>§2 methodology; phases A–H</td></tr>
+<tr><td>Development Guide Phases 1–20</td><td>Phases A–E deliverables</td></tr>
+<tr><td>Genesis Implementation Programme G1–G10</td><td>G1–G2 → Phase C; G3–G4 → Phase D; G5–G7 → Waves 5–6 + §13; G8 → §11 funding; G9–G10 → §12 post-GA</td></tr>
+<tr><td>Stage 5 (12 workstreams, 9 months) &amp; Stage 14-bis (12-month build)</td><td>§6.2 month-by-month schedule</td></tr>
+<tr><td>100-Day Plan / 90-Day FES / Day 1–30 checklist</td><td>§14 immediate actions + §6.2 Months 1–3</td></tr>
+<tr><td>24-Month Execution Plan (EXEC-001)</td><td>§6.2 + §13 milestones</td></tr>
+<tr><td>MVP v1.0 6-phase / 6-sprint plans</td><td>§6.1 build waves</td></tr>
+<tr><td>Alpha/Beta/RC/GA programmes</td><td>§7 gates + §8 releases</td></tr>
+<tr><td>ISO-001 certification roadmap</td><td>§10</td></tr>
+<tr><td>TRANSFORM-001 5-year / SEP 10-year</td><td>§13 (Years 3–5 summarised; out of ADLC execution scope)</td></tr>
+<tr><td>RVP / PoV / FCP / SRP / SGSG</td><td>§7.2 validation, §12 evolution, §13 adoption</td></tr>
+</table></div>
+
+<h2 id="appendix-b">Appendix B — Technology Stack (reference implementation)</h2>
+<p>FastAPI (services) · PostgreSQL + pgvector · Neo4j · Redis/Redis Cluster · Kafka · Temporal (workflow) · Keycloak (identity) · Open Policy Agent · HashiCorp Vault · Docker/Kubernetes/Helm/Terraform/ArgoCD · Prometheus/Grafana/OpenTelemetry/Jaeger/OpenSearch/AlertManager · MinIO · Next.js (portals) · Python &amp; TypeScript SDKs (then Java, Go, Rust).</p>
+
+<footer>
+AEP-X Ultra — ADLC Plan · Draft v1.0 · Generated from the AEP-X Ultra Project Manual (Consolidated Edition) · 7 July 2026
+</footer>
+
+</div>
+</body>
+</html>

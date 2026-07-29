@@ -1,0 +1,1090 @@
+{
+  "version": "1.0",
+  "connectors": [
+    {
+      "name": "sap",
+      "category": "enterprise",
+      "protocols": [
+        "SOAP",
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "salesforce",
+      "category": "enterprise",
+      "protocols": [
+        "SOAP",
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "specialized"
+    },
+    {
+      "name": "dynamics365",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "oracle-erp",
+      "category": "enterprise",
+      "protocols": [
+        "SOAP",
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "workday",
+      "category": "enterprise",
+      "protocols": [
+        "SOAP",
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "servicenow",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "bamboohr",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "successfactors",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "xero",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "quickbooks",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "netsuite",
+      "category": "enterprise",
+      "protocols": [
+        "SOAP",
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "hubspot",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "sage",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "zoho-crm",
+      "category": "enterprise",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "google-workspace",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "microsoft365",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "slack",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "specialized"
+    },
+    {
+      "name": "teams",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "zoom",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "notion",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "confluence",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "trello",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "asana",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "monday",
+      "category": "productivity",
+      "protocols": [
+        "REST",
+        "GraphQL"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "dropbox",
+      "category": "productivity",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "github",
+      "category": "devtools",
+      "protocols": [
+        "REST",
+        "GraphQL"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "specialized"
+    },
+    {
+      "name": "gitlab",
+      "category": "devtools",
+      "protocols": [
+        "REST",
+        "GraphQL"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "specialized"
+    },
+    {
+      "name": "jira",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "azure-devops",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "bitbucket",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "jenkins",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "circleci",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "sonarqube",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "artifactory",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "dockerhub",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "specialized"
+    },
+    {
+      "name": "terraform-cloud",
+      "category": "devtools",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "ml",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "specialized"
+    },
+    {
+      "name": "vllm",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "llamacpp",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "lmstudio",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "openai",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "anthropic",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "gemini",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "mistral",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "cohere",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "huggingface",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "bedrock",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "azure-openai",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "vertex-ai",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "deepseek",
+      "category": "aiplatform",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "postgresql",
+      "category": "data",
+      "protocols": [
+        "SQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "mysql",
+      "category": "data",
+      "protocols": [
+        "SQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "sqlserver",
+      "category": "data",
+      "protocols": [
+        "SQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "oracle-db",
+      "category": "data",
+      "protocols": [
+        "SQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "mongodb",
+      "category": "data",
+      "protocols": [
+        "Wire"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "cassandra",
+      "category": "data",
+      "protocols": [
+        "CQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "dynamodb",
+      "category": "data",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "redis",
+      "category": "data",
+      "protocols": [
+        "RESP"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "memcached",
+      "category": "data",
+      "protocols": [
+        "Memcache"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "pgvector",
+      "category": "data",
+      "protocols": [
+        "SQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "pinecone",
+      "category": "data",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "weaviate",
+      "category": "data",
+      "protocols": [
+        "REST",
+        "GraphQL"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "milvus",
+      "category": "data",
+      "protocols": [
+        "gRPC"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "qdrant",
+      "category": "data",
+      "protocols": [
+        "REST",
+        "gRPC"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "neo4j",
+      "category": "data",
+      "protocols": [
+        "Bolt"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "elasticsearch",
+      "category": "data",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "kafka",
+      "category": "messaging",
+      "protocols": [
+        "Kafka"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "nats",
+      "category": "messaging",
+      "protocols": [
+        "NATS"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "rabbitmq",
+      "category": "messaging",
+      "protocols": [
+        "AMQP"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "mqtt",
+      "category": "messaging",
+      "protocols": [
+        "MQTT"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "amqp",
+      "category": "messaging",
+      "protocols": [
+        "AMQP"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "pulsar",
+      "category": "messaging",
+      "protocols": [
+        "Pulsar"
+      ],
+      "ai_risk_class": "AIA-R0",
+      "min_trust_score": 40,
+      "maturity": "stub"
+    },
+    {
+      "name": "aws-sqs",
+      "category": "messaging",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "azure-servicebus",
+      "category": "messaging",
+      "protocols": [
+        "AMQP",
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "opcua",
+      "category": "industrial",
+      "protocols": [
+        "OPC-UA"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "modbus",
+      "category": "industrial",
+      "protocols": [
+        "Modbus"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "bacnet",
+      "category": "industrial",
+      "protocols": [
+        "BACnet"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "scada",
+      "category": "industrial",
+      "protocols": [
+        "OPC-UA",
+        "Custom"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "plc",
+      "category": "industrial",
+      "protocols": [
+        "Modbus",
+        "Custom"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "sparkplug",
+      "category": "industrial",
+      "protocols": [
+        "MQTT-Sparkplug"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "profinet",
+      "category": "industrial",
+      "protocols": [
+        "PROFINET"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "ethernet-ip",
+      "category": "industrial",
+      "protocols": [
+        "EtherNet/IP"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "aws-s3",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "aws-lambda",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "aws-eks",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "azure-blob",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "azure-aks",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "azure-functions",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "gcp-storage",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "gcp-gke",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "gcp-cloudrun",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "cloudflare",
+      "category": "cloud",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    },
+    {
+      "name": "gov-digital-identity",
+      "category": "government",
+      "protocols": [
+        "REST",
+        "OIDC"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "gov-citizen-services",
+      "category": "government",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "gov-notify",
+      "category": "government",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "gov-pay",
+      "category": "government",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R3",
+      "min_trust_score": 70,
+      "maturity": "stub"
+    },
+    {
+      "name": "moodle",
+      "category": "education",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "canvas",
+      "category": "education",
+      "protocols": [
+        "REST",
+        "GraphQL"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "blackboard",
+      "category": "education",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "google-classroom",
+      "category": "education",
+      "protocols": [
+        "REST"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "ethereum",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "specialized"
+    },
+    {
+      "name": "polygon",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "base",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "avalanche",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "bitcoin",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "solana",
+      "category": "blockchain",
+      "protocols": [
+        "JSON-RPC"
+      ],
+      "ai_risk_class": "AIA-R2",
+      "min_trust_score": 60,
+      "maturity": "stub"
+    },
+    {
+      "name": "hyperledger-fabric",
+      "category": "blockchain",
+      "protocols": [
+        "gRPC"
+      ],
+      "ai_risk_class": "AIA-R1",
+      "min_trust_score": 50,
+      "maturity": "stub"
+    }
+  ]
+}

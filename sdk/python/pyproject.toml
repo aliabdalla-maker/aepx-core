@@ -1,0 +1,24 @@
+[project]
+name = "aepx"
+version = "0.1.0"
+description = "AEP-X Python SDK — protocol client, plugin architecture, and conformance suite (RFC-0007)"
+requires-python = ">=3.11"
+dependencies = ["httpx==0.27.0"]
+
+# The built-in plugins are published through the same entry point group
+# third parties use — the discovery mechanism is dogfooded, not special-cased.
+[project.entry-points."aepx.plugins"]
+did = "aepx.plugins.did:DIDPlugin"
+connectors = "aepx.plugins.connectors:ConnectorsPlugin"
+trust = "aepx.plugins.trust:TrustPlugin"
+ledger = "aepx.plugins.ledger:LedgerPlugin"
+audit = "aepx.plugins.audit:AuditPlugin"
+chain = "aepx.plugins.chain:ChainPlugin"
+oracle = "aepx.plugins.oracle:OraclePlugin"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["aepx*"]

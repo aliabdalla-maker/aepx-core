@@ -1,0 +1,31 @@
+# Jenkins CI, deliberately kept OUT of the main docker-compose.yml and
+# NOT started by default.
+#
+# Why separate: this host has measured as low as ~600MB free RAM with the
+# 32-container core stack running (see docs/Operational-Manual.html §6) —
+# Jenkins alone typically wants 512MB-1GB+ heap, and starting it
+# unconditionally alongside everything else previously caused real daemon
+# instability on this box. Bring it up deliberately, when you have headroom
+# (e.g. `docker compose stop <some connector categories>` first), with:
+#
+#   docker compose -f docker-compose.jenkins.yml up -d --build
+#
+# Security note: Jenkins gets the host's Docker socket so its pipeline can
+# build/test images (docker-workflow plugin). That is root-equivalent host
+# access — set a real admin password on first login (the setup wizard
+# forces this) and do not expose port 8090 outside a trusted network.
+services:
+  jenkins:
+    build: ./jenkins
+    restart: unless-stopped
+    ports:
+      - "8090:8080"   # web UI
+      - "50000:50000" # inbound agent connections
+    environment:
+      - JAVA_OPTS=-Xmx768m -Xms256m
+    volumes:
+      - jenkins-home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  jenkins-home:

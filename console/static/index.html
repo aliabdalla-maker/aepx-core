@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X Console</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-dark:#143d66;
+    --accent-light:#e8f0f8; --border:#d7dee8; --bg:#f7f9fc; --card:#fff;
+    --green:#2e8b57; --green-light:#eaf6ee; --amber:#b8860b; --amber-light:#fdf6ec;
+    --red:#b04a6f; --red-light:#fbeef2; --radius:12px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; max-width:100%; overflow-x:hidden; }
+  body {
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    color:var(--ink); background:var(--bg); display:flex; flex-direction:column;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-dark) 100%);
+    color:#fff; padding:.85rem 1.4rem; display:flex; align-items:center; gap:1rem;
+    box-shadow:0 2px 10px rgba(15,76,129,.25); z-index:10;
+  }
+  header .logo { font-weight:700; font-size:1.12rem; letter-spacing:.01em; }
+  header .logo span { opacity:.7; font-weight:400; }
+  header .tagline { font-size:.78rem; opacity:.75; flex:1; }
+  .status { display:flex; align-items:center; gap:.45rem; font-size:.78rem; opacity:.95;
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+    border-radius:20px; padding:.28rem .8rem; }
+  .status .dot { width:9px; height:9px; border-radius:50%; background:#9aa7b8; transition:background .3s; }
+  .status .dot.ok { background:#5fd38d; box-shadow:0 0 6px #5fd38d; }
+  .status .dot.err { background:#ff8fb0; box-shadow:0 0 6px #ff8fb0; }
+
+  /* ---------- layout ---------- */
+  .layout { flex:1; display:flex; min-height:0; }
+  aside {
+    width:265px; background:var(--card); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; min-height:0;
+  }
+  aside h2 { font-size:.78rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--muted); padding:1rem 1.1rem .5rem; }
+  .lib { flex:1; overflow-y:auto; padding:0 .7rem .8rem; }
+  .lib-empty { color:var(--muted); font-size:.8rem; padding:.6rem .5rem; line-height:1.5; }
+  .lib-item { display:flex; align-items:center; gap:.6rem; padding:.45rem .5rem;
+    border-radius:8px; cursor:default; font-size:.8rem; }
+  .lib-item:hover { background:var(--accent-light); }
+  .lib-item img, .lib-item video { width:34px; height:34px; object-fit:cover; border-radius:6px; background:#e9edf3; }
+  .lib-item .ficon { width:34px; height:34px; border-radius:6px; background:var(--accent-light);
+    display:flex; align-items:center; justify-content:center; font-size:1rem; flex:none; }
+  .lib-item .nm { flex:1; min-width:0; }
+  .lib-item .nm .n { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:600; }
+  .lib-item .nm .s { color:var(--muted); font-size:.7rem; }
+
+  /* ---------- chat ---------- */
+  main { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .chat { flex:1; overflow-y:auto; padding:1.4rem 1.6rem; scroll-behavior:smooth; }
+  .hero { max-width:560px; margin:8vh auto 0; text-align:center; color:var(--muted); }
+  .hero .big { font-size:2.4rem; }
+  .hero h1 { color:var(--ink); font-size:1.35rem; margin:.6rem 0 .4rem; }
+  .hero p { font-size:.9rem; line-height:1.6; }
+  .hero .hints { display:flex; gap:.7rem; justify-content:center; margin-top:1.2rem; flex-wrap:wrap; }
+  .hero .hint { background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:.55rem .9rem; font-size:.78rem; cursor:pointer; transition:all .15s; }
+  .hero .hint:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
+
+  .msg { display:flex; margin-bottom:1.1rem; animation:pop .18s ease-out; }
+  @keyframes pop { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none;} }
+  .msg.user { justify-content:flex-end; }
+  .bubble { max-width:70%; border-radius:14px; padding:.7rem 1rem; font-size:.9rem; line-height:1.55; }
+  .msg.user .bubble { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
+    border-bottom-right-radius:4px; box-shadow:0 2px 8px rgba(15,76,129,.28); }
+  .msg.bot .bubble { background:var(--card); border:1px solid var(--border); border-bottom-left-radius:4px; }
+  .msg.err .bubble { background:var(--red-light); border:1px solid var(--red); color:var(--ink); }
+  .bubble .attgrid { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.55rem; }
+  .bubble .attgrid img { max-width:170px; max-height:130px; border-radius:8px; display:block; }
+  .bubble .attgrid video { max-width:240px; border-radius:8px; display:block; }
+  .bubble .fchip { display:inline-flex; align-items:center; gap:.4rem; background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.35); border-radius:8px; padding:.3rem .6rem; font-size:.76rem; }
+  .msg.bot .fchip { background:var(--accent-light); border-color:var(--border); color:var(--ink); }
+  .meta-badges { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem; }
+  .badge { font-size:.67rem; font-weight:700; border-radius:10px; padding:.12rem .55rem; letter-spacing:.02em; }
+  .badge.model { background:var(--accent-light); color:var(--accent); }
+  .badge.conf  { background:var(--green-light); color:var(--green); }
+  .badge.cost  { background:var(--amber-light); color:var(--amber); }
+  .badge.trust { background:#eef1f6; color:var(--muted); }
+  .badge.stub  { background:var(--amber-light); color:var(--amber); }
+
+  .typing { display:inline-flex; gap:5px; padding:.4rem .2rem; }
+  .typing i { width:7px; height:7px; border-radius:50%; background:var(--muted); animation:blink 1.2s infinite; }
+  .typing i:nth-child(2){ animation-delay:.2s; } .typing i:nth-child(3){ animation-delay:.4s; }
+  @keyframes blink { 0%,60%,100%{opacity:.25;} 30%{opacity:1;} }
+
+  /* ---------- composer ---------- */
+  .composer-wrap { border-top:1px solid var(--border); background:var(--card); padding:.8rem 1.2rem 1rem; }
+  .pending { display:flex; flex-wrap:wrap; gap:.55rem; margin-bottom:.6rem; }
+  .pchip { position:relative; display:flex; align-items:center; gap:.5rem; background:var(--accent-light);
+    border:1px solid var(--border); border-radius:10px; padding:.35rem .6rem; font-size:.76rem; max-width:230px; }
+  .pchip img, .pchip video { width:30px; height:30px; object-fit:cover; border-radius:6px; }
+  .pchip .n { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pchip .x { position:absolute; top:-7px; right:-7px; width:18px; height:18px; border-radius:50%;
+    background:var(--red); color:#fff; border:none; font-size:.65rem; line-height:1;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .composer { display:flex; align-items:flex-end; gap:.6rem; }
+  .tools { display:flex; gap:.35rem; }
+  .tool { width:40px; height:40px; border-radius:10px; border:1px solid var(--border); background:var(--card);
+    cursor:pointer; font-size:1.05rem; display:flex; align-items:center; justify-content:center;
+    transition:all .15s; color:var(--muted); }
+  .tool:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-light); }
+  textarea { flex:1; min-width:0; width:100%; resize:none; border:1.5px solid var(--border); border-radius:12px;
+    font:inherit; font-size:.92rem; padding:.6rem .85rem; max-height:150px; min-height:42px;
+    outline:none; transition:border-color .15s; background:var(--bg); }
+  textarea:focus { border-color:var(--accent); background:#fff; }
+  .send { height:42px; padding:0 1.25rem; border:none; border-radius:12px; font:inherit; font-size:.9rem;
+    font-weight:700; color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+    cursor:pointer; transition:all .15s; box-shadow:0 2px 8px rgba(15,76,129,.3); }
+  .send:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 4px 12px rgba(15,76,129,.4); }
+  .send:disabled { opacity:.5; cursor:not-allowed; }
+  .foot { font-size:.68rem; color:var(--muted); margin-top:.45rem; display:flex; gap:1rem; align-items:center; }
+  .foot select { font:inherit; font-size:.72rem; border:1px solid var(--border); border-radius:6px;
+    padding:.1rem .3rem; color:var(--ink); background:var(--card); }
+  .progress { height:4px; border-radius:2px; background:var(--border); overflow:hidden; margin-bottom:.5rem; display:none; }
+  .progress .bar { height:100%; width:0%; background:linear-gradient(90deg,var(--accent),#2e8b57); transition:width .2s; }
+
+  /* ---------- drag overlay & toast ---------- */
+  .dropzone { position:fixed; inset:0; background:rgba(15,76,129,.92); z-index:100; display:none;
+    align-items:center; justify-content:center; color:#fff; flex-direction:column; gap:.8rem; }
+  .dropzone.on { display:flex; }
+  .dropzone .big { font-size:3rem; }
+  .dropzone p { font-size:1.05rem; font-weight:600; }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+    background:var(--ink); color:#fff; border-radius:10px; padding:.7rem 1.2rem; font-size:.85rem;
+    box-shadow:0 6px 20px rgba(0,0,0,.25); transition:transform .25s; z-index:200; max-width:90vw; }
+  .toast.on { transform:translateX(-50%) translateY(0); }
+  .toast.warn { background:var(--red); }
+
+  /* ---------- right panel: agents + live protocol ---------- */
+  .aside-right {
+    width:300px; background:var(--card); border-left:1px solid var(--border);
+    display:flex; flex-direction:column; min-height:0; overflow-y:auto;
+  }
+  .panel { border-bottom:1px solid var(--border); }
+  .panel-head { display:flex; align-items:center; justify-content:space-between;
+    padding:.9rem 1.1rem .4rem; }
+  .panel-head h2 { font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .panel-head .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green);
+    box-shadow:0 0 5px var(--green); animation:pulse-dot 2s infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+  .agent-list { padding:.3rem .7rem .9rem; }
+  .agent-empty { color:var(--muted); font-size:.78rem; padding:.5rem; line-height:1.5; }
+  .agent-row { display:flex; align-items:center; gap:.6rem; padding:.5rem; border-radius:8px; }
+  .agent-row:hover { background:var(--bg); }
+  .agent-rank { width:20px; text-align:center; font-size:.72rem; font-weight:800; color:var(--muted); flex:none; }
+  .agent-rank.top1 { color:#c9942f; } .agent-rank.top2 { color:#8a95a5; } .agent-rank.top3 { color:#b0743f; }
+  .agent-info { flex:1; min-width:0; }
+  .agent-name { font-size:.82rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .agent-meta { display:flex; align-items:center; gap:.4rem; margin-top:.25rem; }
+  .trust-bar-track { flex:1; height:5px; border-radius:3px; background:#e9edf3; overflow:hidden; }
+  .trust-bar-fill { height:100%; border-radius:3px; transition:width .5s ease; }
+  .trust-num { font-size:.68rem; font-weight:700; color:var(--muted); flex:none; width:26px; text-align:right; }
+  .level-chip { font-size:.62rem; font-weight:700; padding:.08rem .4rem; border-radius:8px; flex:none; }
+  .level-chip.Trusted { background:var(--green-light); color:var(--green); }
+  .level-chip.Verified { background:var(--accent-light); color:var(--accent); }
+  .level-chip.Provisional { background:var(--amber-light); color:var(--amber); }
+  .level-chip.Untrusted, .level-chip.Unknown { background:var(--red-light); color:var(--red); }
+
+  .protocol-svg { width:100%; height:auto; display:block; padding:.2rem .9rem; }
+  .protocol-svg .node-box { fill:var(--card); stroke:var(--border); stroke-width:1.5; transition:all .35s ease; }
+  .protocol-svg .node-box.pass { fill:var(--green-light); stroke:var(--green); }
+  .protocol-svg .node-box.fail { fill:var(--red-light); stroke:var(--red); }
+  .protocol-svg .node-box.idle-pulse { animation:node-idle 1.6s ease-in-out; }
+  @keyframes node-idle { 0%{ filter:brightness(1);} 30%{ filter:brightness(1.15);} 100%{ filter:brightness(1);} }
+  .protocol-svg .node-label { font-size:8.5px; font-weight:700; fill:var(--ink); }
+  .protocol-svg .edge { stroke:var(--border); stroke-width:2; transition:stroke .35s ease; }
+  .protocol-svg .edge.pass { stroke:var(--green); }
+  .protocol-svg .edge.fail { stroke:var(--red); stroke-dasharray:4,3; }
+  .protocol-caption { font-size:.72rem; color:var(--muted); text-align:center; padding:.2rem .9rem .7rem; min-height:2.4em; line-height:1.4; }
+  .protocol-caption b { color:var(--ink); }
+
+  .activity-feed { padding:0 .9rem .9rem; display:flex; flex-direction:column; gap:.4rem; max-height:220px; overflow-y:auto; }
+  .activity-empty { color:var(--muted); font-size:.78rem; padding:.3rem .1rem; }
+  .activity-item { display:flex; gap:.5rem; font-size:.74rem; padding:.4rem .5rem; border-radius:7px; background:var(--bg); animation:pop .18s ease-out; }
+  .activity-item .aicon { flex:none; }
+  .activity-item .abody { flex:1; min-width:0; }
+  .activity-item .atopic { font-weight:700; color:var(--ink); }
+  .activity-item .adetail { color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .activity-item .atime { flex:none; color:var(--muted); font-size:.68rem; }
+  .activity-item.outcome-denied { border-left:3px solid var(--red); }
+  .activity-item.outcome-invoked { border-left:3px solid var(--green); }
+
+  @media (max-width: 1180px) {
+    .aside-right { width:260px; }
+  }
+
+  @media (max-width: 860px) {
+    aside, .aside-right { display:none; }
+    .bubble { max-width:86%; }
+    header { padding:.7rem 1rem; gap:.6rem; }
+    header .tagline { display:none; }
+    .status { margin-left:auto; flex:none; max-width:48vw; }
+    .status #statusText { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .chat { padding:1rem .9rem; }
+    .hero { margin-top:4vh; padding:0 .4rem; }
+    .composer-wrap { padding:.7rem .8rem .85rem; }
+    .send { padding:0 .9rem; }
+    .foot { flex-wrap:wrap; gap:.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AEP-X <span>Console</span></div>
+  <div class="tagline">Trust-checked · policy-gated · audited — every request routes through the Connector Bus</div>
+  <div class="status" id="status"><span class="dot" id="statusDot"></span><span id="statusText">connecting…</span></div>
+</header>
+
+<div class="layout">
+  <aside>
+    <h2>Library</h2>
+    <div class="lib" id="lib">
+      <div class="lib-empty" id="libEmpty">Nothing uploaded yet.<br>Drag &amp; drop files, images, or videos anywhere — or use the 📎 / 🗂 buttons below.</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="chat" id="chat">
+      <div class="hero" id="hero">
+        <div class="big">🧠</div>
+        <h1>The machine-learning box</h1>
+        <p>Ask the self-hosted model anything, or attach files, folders, images and videos as context.
+           Every call is trust-checked (Law&nbsp;2), policy-gated, and lands in the Governance audit log (Law&nbsp;8).</p>
+        <div class="hints">
+          <div class="hint" onclick="useHint(this)">Explain Newton's laws</div>
+          <div class="hint" onclick="useHint(this)">Summarise the attached files</div>
+          <div class="hint" onclick="useHint(this)">Draft a lesson plan on photosynthesis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer-wrap">
+      <div class="progress" id="progress"><div class="bar" id="progressBar"></div></div>
+      <div class="pending" id="pending"></div>
+      <div class="composer">
+        <div class="tools">
+          <button class="tool" title="Attach files (images, videos, documents)" onclick="document.getElementById('fileInput').click()">📎</button>
+          <button class="tool" title="Attach a whole folder" onclick="document.getElementById('folderInput').click()">🗂</button>
+        </div>
+        <textarea id="prompt" rows="1" placeholder="Message the model…  (Enter to send, Shift+Enter for a new line)"></textarea>
+        <button class="send" id="sendBtn" onclick="send()">Send</button>
+      </div>
+      <div class="foot">
+        <span>Connector:
+          <select id="connectorSel">
+            <option value="ml" selected>ml — self-hosted (Ollama)</option>
+            <option value="vllm">vllm — stub</option>
+            <option value="openai">openai — stub</option>
+            <option value="anthropic">anthropic — stub</option>
+            <option value="gemini">gemini — stub</option>
+            <option value="mistral">mistral — stub</option>
+          </select>
+        </span>
+        <span id="footNote">Routing: cache → memory → knowledge → model (Law 5 — the LLM is the last resort)</span>
+      </div>
+    </div>
+  </main>
+
+  <aside class="aside-right">
+    <div class="panel">
+      <div class="panel-head"><h2>Active Agents</h2><span class="live-dot" title="live-refreshing"></span></div>
+      <div class="agent-list" id="agentList">
+        <div class="agent-empty">No registered agents yet — create one via the Registry API to see it ranked here.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>Protocol In Action</h2><span class="live-dot" title="live-refreshing"></span></div>
+      <svg class="protocol-svg" viewBox="0 0 300 100" id="protocolSvg">
+        <defs>
+          <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 Z" fill="#5a6b82"/>
+          </marker>
+        </defs>
+        <line class="edge" id="edge-1" x1="40" y1="35" x2="63" y2="35" marker-end="url(#arrow)"/>
+        <line class="edge" id="edge-2" x1="102" y1="35" x2="123" y2="35" marker-end="url(#arrow)"/>
+        <line class="edge" id="edge-3" x1="160" y1="35" x2="181" y2="35" marker-end="url(#arrow)"/>
+        <line class="edge" id="edge-4" x1="220" y1="35" x2="241" y2="35" marker-end="url(#arrow)"/>
+
+        <rect class="node-box" id="node-agent" x="4" y="16" width="36" height="38" rx="8"/>
+        <text class="node-label" x="22" y="39" text-anchor="middle">Agent</text>
+
+        <rect class="node-box" id="node-bus" x="64" y="16" width="38" height="38" rx="8"/>
+        <text class="node-label" x="83" y="33" text-anchor="middle">Conn.</text>
+        <text class="node-label" x="83" y="43" text-anchor="middle">Bus</text>
+
+        <rect class="node-box" id="node-trust" x="124" y="16" width="36" height="38" rx="8"/>
+        <text class="node-label" x="142" y="39" text-anchor="middle">Trust</text>
+
+        <rect class="node-box" id="node-policy" x="182" y="16" width="38" height="38" rx="8"/>
+        <text class="node-label" x="201" y="39" text-anchor="middle">Policy</text>
+
+        <rect class="node-box" id="node-connector" x="242" y="16" width="40" height="38" rx="8"/>
+        <text class="node-label" x="262" y="33" text-anchor="middle">Conn-</text>
+        <text class="node-label" x="262" y="43" text-anchor="middle">ector</text>
+
+        <circle id="pulse-dot" cx="22" cy="35" r="3" fill="var(--accent)" opacity="0" />
+      </svg>
+      <div class="protocol-caption" id="protocolCaption">Waiting for the first protocol event…</div>
+      <div class="activity-feed" id="activityFeed">
+        <div class="activity-empty">No activity yet — send a chat message or invoke a connector.</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<input type="file" id="fileInput" multiple hidden>
+<input type="file" id="folderInput" webkitdirectory multiple hidden>
+<div class="dropzone" id="dropzone"><div class="big">📥</div><p>Drop files, images or videos to attach</p></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let pendingFiles = [];          // File objects staged before upload
+let uploadedIds = [];           // ids attached to the NEXT message
+
+/* ---------- status ---------- */
+async function poll() {
+  try {
+    const r = await fetch('/health'); const d = await r.json();
+    $('statusDot').className = 'dot ok';
+    $('statusText').textContent = 'platform online · ' + d.uploads + ' upload' + (d.uploads === 1 ? '' : 's');
+  } catch { $('statusDot').className = 'dot err'; $('statusText').textContent = 'backend unreachable'; }
+}
+poll(); setInterval(poll, 10000);
+
+/* ---------- toasts ---------- */
+let toastTimer;
+function toast(msg, warn = false) {
+  const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (warn ? ' warn' : '');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.className = 'toast', 4200);
+}
+
+/* ---------- attachments ---------- */
+function stage(files) {
+  for (const f of files) pendingFiles.push(f);
+  renderPending();
+}
+$('fileInput').addEventListener('change', e => { stage(e.target.files); e.target.value = ''; });
+$('folderInput').addEventListener('change', e => {
+  const n = e.target.files.length;
+  stage(e.target.files); e.target.value = '';
+  if (n) toast(`Folder staged — ${n} file${n === 1 ? '' : 's'}`);
+});
+
+function renderPending() {
+  const box = $('pending'); box.innerHTML = '';
+  pendingFiles.forEach((f, i) => {
+    const chip = document.createElement('div'); chip.className = 'pchip';
+    if (f.type.startsWith('image/')) {
+      const img = document.createElement('img'); img.src = URL.createObjectURL(f); chip.appendChild(img);
+    } else if (f.type.startsWith('video/')) {
+      const v = document.createElement('video'); v.src = URL.createObjectURL(f); v.muted = true; chip.appendChild(v);
+    } else {
+      const ic = document.createElement('span'); ic.textContent = '📄'; chip.appendChild(ic);
+    }
+    const n = document.createElement('span'); n.className = 'n';
+    n.textContent = (f.webkitRelativePath || f.name) + ' · ' + fmtSize(f.size); chip.appendChild(n);
+    const x = document.createElement('button'); x.className = 'x'; x.textContent = '✕';
+    x.onclick = () => { pendingFiles.splice(i, 1); renderPending(); }; chip.appendChild(x);
+    box.appendChild(chip);
+  });
+}
+function fmtSize(b) {
+  if (b > 1048576) return (b / 1048576).toFixed(1) + ' MB';
+  if (b > 1024) return (b / 1024).toFixed(0) + ' KB';
+  return b + ' B';
+}
+
+/* ---------- drag & drop ---------- */
+let dragDepth = 0;
+window.addEventListener('dragenter', e => { e.preventDefault(); if (++dragDepth === 1) $('dropzone').classList.add('on'); });
+window.addEventListener('dragleave', e => { e.preventDefault(); if (--dragDepth === 0) $('dropzone').classList.remove('on'); });
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => {
+  e.preventDefault(); dragDepth = 0; $('dropzone').classList.remove('on');
+  if (e.dataTransfer.files.length) { stage(e.dataTransfer.files); toast(`${e.dataTransfer.files.length} item(s) staged`); }
+});
+
+/* ---------- upload ---------- */
+function uploadStaged() {
+  return new Promise((resolve, reject) => {
+    if (!pendingFiles.length) return resolve([]);
+    const form = new FormData();
+    pendingFiles.forEach(f => form.append('files', f, f.webkitRelativePath || f.name));
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/upload');
+    $('progress').style.display = 'block';
+    xhr.upload.onprogress = e => { if (e.lengthComputable) $('progressBar').style.width = (e.loaded / e.total * 100) + '%'; };
+    xhr.onload = () => {
+      $('progress').style.display = 'none'; $('progressBar').style.width = '0%';
+      if (xhr.status === 200) { const d = JSON.parse(xhr.responseText); refreshLibrary(); resolve(d.uploaded); }
+      else reject(new Error('upload failed: HTTP ' + xhr.status));
+    };
+    xhr.onerror = () => { $('progress').style.display = 'none'; reject(new Error('upload failed')); };
+    xhr.send(form);
+  });
+}
+
+/* ---------- library ---------- */
+async function refreshLibrary() {
+  const items = await (await fetch('/api/uploads')).json();
+  const lib = $('lib'); lib.innerHTML = '';
+  if (!items.length) { lib.innerHTML = '<div class="lib-empty">Nothing uploaded yet.<br>Drag &amp; drop files, images, or videos anywhere — or use the 📎 / 🗂 buttons below.</div>'; return; }
+  for (const u of items) {
+    const row = document.createElement('div'); row.className = 'lib-item'; row.title = u.name;
+    if (u.kind === 'image') { const i = document.createElement('img'); i.loading = 'lazy'; i.src = `/api/uploads/${u.id}/content`; row.appendChild(i); }
+    else if (u.kind === 'video') { const v = document.createElement('video'); v.src = `/api/uploads/${u.id}/content`; v.muted = true; row.appendChild(v); }
+    else { const ic = document.createElement('div'); ic.className = 'ficon'; ic.textContent = '📄'; row.appendChild(ic); }
+    const nm = document.createElement('div'); nm.className = 'nm';
+    nm.innerHTML = `<div class="n"></div><div class="s">${u.kind} · ${fmtSize(u.size)}</div>`;
+    nm.querySelector('.n').textContent = u.name;
+    row.appendChild(nm); lib.appendChild(row);
+  }
+}
+refreshLibrary();
+
+/* ---------- chat ---------- */
+function addMsg(kind, html) {
+  $('hero') && $('hero').remove();
+  const m = document.createElement('div'); m.className = 'msg ' + kind;
+  const b = document.createElement('div'); b.className = 'bubble'; b.innerHTML = html;
+  m.appendChild(b); $('chat').appendChild(m);
+  $('chat').scrollTop = $('chat').scrollHeight;
+  return b;
+}
+const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function useHint(el) { $('prompt').value = el.textContent; $('prompt').focus(); }
+
+async function send() {
+  const prompt = $('prompt').value.trim();
+  if (!prompt && !pendingFiles.length) return;
+  $('sendBtn').disabled = true;
+  try {
+    const uploaded = await uploadStaged();
+    const stagedMeta = uploaded.map(u => u);
+    pendingFiles = []; renderPending();
+
+    let attHtml = '';
+    if (stagedMeta.length) {
+      attHtml = '<div class="attgrid">' + stagedMeta.map(u => {
+        if (u.kind === 'image') return `<img src="/api/uploads/${u.id}/content" alt="">`;
+        if (u.kind === 'video') return `<video src="/api/uploads/${u.id}/content" controls muted></video>`;
+        return `<span class="fchip">📄 ${esc(u.name)}</span>`;
+      }).join('') + '</div>';
+    }
+    addMsg('user', esc(prompt || '(attachments only)') + attHtml);
+    $('prompt').value = ''; autosize();
+
+    const typing = addMsg('bot', '<span class="typing"><i></i><i></i><i></i></span>');
+    let resp, d;
+    try {
+      resp = await fetch('/api/chat', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ prompt, attachment_ids: stagedMeta.map(u => u.id), connector: $('connectorSel').value })
+      });
+      d = await resp.json();
+    } catch (netErr) {
+      typing.parentElement.className = 'msg err';
+      typing.innerHTML = '⚠️ <strong>Could not reach the platform</strong><br>' +
+        'The Connector Bus or console backend is unreachable — check <code>docker compose ps</code> and try again.';
+      return;
+    }
+    if (!resp.ok) {
+      typing.parentElement.className = 'msg err';
+      typing.innerHTML = '🛡 <strong>Request blocked by platform governance</strong><br>' + esc(d.detail || 'denied') +
+        '<div class="meta-badges"><span class="badge trust">this denial is audited (Law 8)</span></div>';
+      return;
+    }
+    typing.innerHTML = esc(d.reply) +
+      `<div class="meta-badges">
+         ${d.model ? `<span class="badge model">${esc(String(d.model))}</span>` : ''}
+         ${d.connector ? `<span class="badge model">via ${esc(d.connector)}</span>` : ''}
+         ${d.confidence != null ? `<span class="badge conf">confidence ${(d.confidence * 100).toFixed(0)}%</span>` : ''}
+         ${d.estimated_cost != null ? `<span class="badge cost">cost £${Number(d.estimated_cost).toFixed(4)}</span>` : ''}
+         ${d.trust_score_at_call_time != null ? `<span class="badge trust">trust ${d.trust_score_at_call_time} at call</span>` : ''}
+         ${d.maturity === 'stub' ? `<span class="badge stub">stub adapter</span>` : ''}
+         ${d.maturity === 'specialized_degraded' ? `<span class="badge stub">⚠ model unreachable — fallback reply</span>` : ''}
+         ${d.attachment_count ? `<span class="badge trust">${d.attachment_count} attachment(s) in context</span>` : ''}
+       </div>`;
+  } catch (e) {
+    toast(e.message || 'request failed', true);
+  } finally {
+    $('sendBtn').disabled = false; $('prompt').focus();
+  }
+}
+
+/* ---------- textarea ergonomics ---------- */
+const ta = $('prompt');
+function autosize() { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 150) + 'px'; }
+ta.addEventListener('input', autosize);
+ta.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+});
+
+/* ---------- active agents (ranked by live Trust score) ---------- */
+function trustColor(score) {
+  if (score >= 90) return '#2e8b57';
+  if (score >= 60) return '#0f4c81';
+  if (score >= 30) return '#b8860b';
+  return '#b04a6f';
+}
+
+async function refreshAgents() {
+  let agents;
+  try { agents = await (await fetch('/api/agents')).json(); }
+  catch { return; }
+  const box = $('agentList');
+  if (!Array.isArray(agents) || !agents.length) {
+    box.innerHTML = '<div class="agent-empty">No registered agents yet — create one via the Registry API to see it ranked here.</div>';
+    return;
+  }
+  box.innerHTML = '';
+  agents.forEach((a, i) => {
+    const row = document.createElement('div'); row.className = 'agent-row';
+    const rankCls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+    const color = trustColor(a.trust_score);
+    row.innerHTML = `
+      <div class="agent-rank ${rankCls}">${medal}</div>
+      <div class="agent-info">
+        <div class="agent-name" title="${esc(a.name)}">${esc(a.name)}</div>
+        <div class="agent-meta">
+          <div class="trust-bar-track"><div class="trust-bar-fill" style="width:${a.trust_score}%;background:${color}"></div></div>
+          <div class="trust-num">${a.trust_score}</div>
+        </div>
+      </div>
+      <span class="level-chip ${a.level}">${esc(a.level)}</span>`;
+    box.appendChild(row);
+  });
+}
+refreshAgents();
+setInterval(refreshAgents, 6000);
+
+/* ---------- live protocol diagram + activity feed ---------- */
+const PROTOCOL_NODES = ['node-agent', 'node-bus', 'node-trust', 'node-policy', 'node-connector'];
+const PROTOCOL_EDGES = ['edge-1', 'edge-2', 'edge-3', 'edge-4'];
+let seenActivityKeys = new Set();
+let firstActivityLoad = true;
+
+function relTime(ts) {
+  const s = Math.max(0, Math.floor(Date.now() / 1000 - ts));
+  if (s < 5) return 'just now';
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+  return `${Math.floor(s / 3600)}h ago`;
+}
+
+const TOPIC_ICON = {
+  'connector.invoked': '🔌', 'connector.failed': '🚫', 'workflow.completed': '🔁',
+  'safety.flagged': '⚠️', 'verification.completed': '✔️', 'trust.updated': '📈',
+};
+
+function resetProtocol() {
+  PROTOCOL_NODES.forEach(id => { const el = document.getElementById(id); el.classList.remove('pass', 'fail', 'idle-pulse'); });
+  PROTOCOL_EDGES.forEach(id => { const el = document.getElementById(id); el.classList.remove('pass', 'fail'); });
+}
+
+function markPass(nodeIds, edgeIds) {
+  nodeIds.forEach(id => { const el = document.getElementById(id); el.classList.add('pass'); void el.offsetWidth; el.classList.add('idle-pulse'); });
+  edgeIds.forEach(id => document.getElementById(id).classList.add('pass'));
+}
+function markFail(nodeId) {
+  const el = document.getElementById(nodeId); el.classList.add('fail'); void el.offsetWidth; el.classList.add('idle-pulse');
+}
+
+function animateProtocol(ev) {
+  resetProtocol();
+  const agentShort = (ev.agent_id || '').split('/').pop().slice(0, 18);
+  if (ev.outcome === 'invoked') {
+    markPass(['node-agent', 'node-bus', 'node-trust', 'node-policy', 'node-connector'],
+             ['edge-1', 'edge-2', 'edge-3', 'edge-4']);
+    $('protocolCaption').innerHTML =
+      `✅ <b>${esc(agentShort)}</b> → <b>${esc(ev.connector)}</b> invoked (trust ${ev.trust_score})`;
+  } else if (ev.reason === 'trust_below_threshold') {
+    markPass(['node-agent', 'node-bus'], ['edge-1']);
+    markFail('node-trust');
+    $('protocolCaption').innerHTML =
+      `🛑 <b>${esc(agentShort)}</b> denied at <b>Trust</b> (score ${ev.trust_score}) → <b>${esc(ev.connector)}</b>`;
+  } else if (ev.reason === 'policy_denied') {
+    markPass(['node-agent', 'node-bus', 'node-trust'], ['edge-1', 'edge-2']);
+    markFail('node-policy');
+    $('protocolCaption').innerHTML =
+      `🛑 <b>${esc(agentShort)}</b> denied at <b>Policy</b> (${esc(ev.ai_risk_class || '')}) → <b>${esc(ev.connector)}</b>`;
+  } else {
+    markPass(['node-agent', 'node-bus'], ['edge-1']);
+    $('protocolCaption').innerHTML = `<b>${esc(agentShort)}</b> → <b>${esc(ev.connector || '?')}</b>: ${esc(ev.outcome || 'event')}`;
+  }
+}
+
+function renderActivityItem(item) {
+  const icon = TOPIC_ICON[item.topic] || '•';
+  const outcomeCls = item.event && item.event.outcome ? `outcome-${item.event.outcome}` : '';
+  const detail = summariseEvent(item.topic, item.event);
+  const div = document.createElement('div');
+  div.className = `activity-item ${outcomeCls}`;
+  div.innerHTML = `<span class="aicon">${icon}</span>
+    <div class="abody"><div class="atopic">${esc(item.topic)}</div><div class="adetail">${esc(detail)}</div></div>
+    <span class="atime">${relTime(item.recorded_at)}</span>`;
+  return div;
+}
+
+function summariseEvent(topic, ev) {
+  if (!ev) return '';
+  if (topic.startsWith('connector.')) return `${ev.connector || '?'} · ${ev.outcome || ''}${ev.reason ? ' (' + ev.reason + ')' : ''}`;
+  if (topic === 'workflow.completed') return `workflow ${ev.workflow_id ? ev.workflow_id.slice(0, 8) : ''} · ${ev.status || ''}`;
+  if (topic === 'safety.flagged') return ev.reason || 'flagged';
+  if (topic === 'verification.completed') return ev.verification_status || '';
+  return JSON.stringify(ev).slice(0, 60);
+}
+
+async function refreshActivity() {
+  let items;
+  try { items = await (await fetch('/api/activity?limit=30')).json(); }
+  catch { return; }
+  if (!Array.isArray(items)) return;
+
+  const feed = $('activityFeed');
+  if (!items.length) {
+    if (firstActivityLoad) feed.innerHTML = '<div class="activity-empty">No activity yet — send a chat message or invoke a connector.</div>';
+    firstActivityLoad = false;
+    return;
+  }
+
+  // items arrive newest-first; find any not seen before (by topic+recorded_at)
+  const fresh = items.filter(it => !seenActivityKeys.has(`${it.topic}:${it.recorded_at}`));
+  items.forEach(it => seenActivityKeys.add(`${it.topic}:${it.recorded_at}`));
+
+  if (firstActivityLoad) {
+    // first paint: just render history, don't animate the diagram for all of it
+    feed.innerHTML = '';
+    items.forEach(it => feed.appendChild(renderActivityItem(it)));
+    const latestConnectorEvent = items.find(it => it.topic.startsWith('connector.'));
+    if (latestConnectorEvent) animateProtocol(latestConnectorEvent.event);
+    firstActivityLoad = false;
+    return;
+  }
+
+  if (!fresh.length) return;
+  // fresh arrives newest-first; replay oldest-to-newest so the diagram ends on the latest
+  fresh.slice().reverse().forEach(it => {
+    feed.insertBefore(renderActivityItem(it), feed.firstChild);
+    if (it.topic.startsWith('connector.')) animateProtocol(it.event);
+  });
+  while (feed.children.length > 40) feed.removeChild(feed.lastChild);
+}
+refreshActivity();
+setInterval(refreshActivity, 4000);
+</script>
+</body>
+</html>

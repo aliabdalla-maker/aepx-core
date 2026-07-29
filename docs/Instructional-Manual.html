@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X Ultra — Instructional Manual</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff; --code-bg:#0f1720; --code-ink:#d6e2f0;
+    --amber:#b8860b; --amber-light:#fdf6ec; --green:#2e8b57; --green-light:#eaf6ee;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  .page { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+  header.doc-header { background:linear-gradient(135deg,#0f4c81 0%,#143d66 100%); color:#fff; border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.6rem; }
+  header.doc-header h1 { margin:0 0 .4rem; font-size:1.7rem; line-height:1.3; }
+  header.doc-header .subtitle { opacity:.85; font-size:1.02rem; }
+  .meta { display:flex; flex-wrap:wrap; gap:.5rem 1.6rem; margin-top:1.2rem; font-size:.85rem; opacity:.9; }
+  .meta span strong { opacity:.75; font-weight:600; margin-right:.35rem; }
+  nav.toc { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.4rem; margin-bottom:2rem; font-size:.88rem; }
+  nav.toc h2 { margin:0 0 .6rem; font-size:1rem; color:var(--accent); border:none; padding:0; }
+  nav.toc ol { margin:0; padding-left:1.3rem; columns:2; column-gap:2rem; }
+  nav.toc li { margin:.25rem 0; break-inside:avoid; }
+  nav.toc a { color:var(--ink); text-decoration:none; }
+  nav.toc a:hover { color:var(--accent); }
+
+  h2 { color:var(--accent); font-size:1.28rem; margin:2.3rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+  h3 { font-size:1.04rem; margin:1.5rem 0 .5rem; color:var(--ink); }
+  h4 { font-size:.92rem; margin:1.1rem 0 .4rem; color:var(--accent); }
+  p { margin:.65rem 0; }
+  em { color:var(--muted); }
+  a { color: var(--accent); }
+
+  .step { display:flex; gap:.7rem; margin:.9rem 0; align-items:flex-start; }
+  .step-num { flex:0 0 auto; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-size:.8rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:.1rem; }
+  .step-body { flex:1; min-width:0; }
+  .step-body p { margin:.25rem 0; }
+
+  .table-wrap { overflow-x:auto; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; font-size:.85rem; background:var(--card); border-radius:8px; overflow:hidden; }
+  th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top; word-break:break-word; }
+  th { background:var(--accent-light); color:var(--accent); font-weight:600; }
+  tr:nth-child(even) td { background:#fbfcfe; }
+  .gate-table td:first-child, .gate-table th:first-child { word-break:normal; white-space:normal; }
+
+  code { font-family:"Cascadia Code",Consolas,monospace; }
+  p code, li code, td code, h4 code { background:#e9edf3; padding:.1rem .35rem; border-radius:4px; font-size:.87em; color:#0f4c81; }
+
+  pre {
+    background:var(--code-bg); color:var(--code-ink); border-radius:8px;
+    padding:.85rem 1rem; font-size:.78rem; line-height:1.5;
+    white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
+    margin:.6rem 0 1rem;
+  }
+  pre code { background:none; color:inherit; padding:0; font-size:1em; }
+  .filename { font-size:.72rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.03em; margin:.9rem 0 -.3rem; }
+
+  ul, ol { padding-left:1.4rem; } li { margin:.3rem 0; }
+  .callout { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin:1rem 0; font-size:.92rem; }
+  .callout.dod { border-left:5px solid var(--green); background:var(--green-light); }
+  .callout.note { border-left:5px solid var(--amber); background:var(--amber-light); }
+  hr { border:none; border-top:1px solid var(--border); margin:2rem 0; }
+
+  .part-divider {
+    background:linear-gradient(135deg,#0f4c81,#143d66); color:#fff; border-radius:10px;
+    padding:1.1rem 1.4rem; margin:2.6rem 0 1.2rem; page-break-before: always;
+  }
+  .part-divider .k { font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .part-divider h2 { color:#fff; border:none; margin:.2rem 0 0; padding:0; font-size:1.4rem; }
+  .part-divider .when { font-size:.85rem; opacity:.85; margin-top:.3rem; }
+
+  footer { margin-top:3rem; font-size:.82rem; color:var(--muted); text-align:center; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 14mm 12mm; }
+    body { background:#fff; }
+    header.doc-header, .part-divider { background:var(--accent); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { max-width:none; padding:0; }
+    pre, table, .callout, .step { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    .part-divider { page-break-before: always; }
+    nav.toc { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc-header">
+  <h1>AEP-X Ultra — Instructional Manual</h1>
+  <div class="subtitle">The step-by-step build runbook: exact commands, code, and checks for executing the ADLC Plan</div>
+  <div class="meta">
+    <span><strong>Companion to</strong> ADLC-Plan, Handoff, Microservices Implementation Guide, Operational Manual &amp; Monetization Strategy</span>
+    <span><strong>Prepared</strong> 7 July 2026 · <strong>Updated</strong> 8 July 2026</span>
+    <span><strong>Audience</strong> Engineers executing the build</span>
+    <span><strong>Scope</strong> Execution-Lock reading (6 services) — since delivered and exceeded, see the addendum below</span>
+  </div>
+</header>
+
+<div class="callout go" style="border-left:5px solid #2e8b57; background:#eaf6ee;">
+<strong>Addendum — 8 July 2026: this manual has been executed, and the delivered system goes beyond it.</strong>
+The repo tree, schemas, and all service scaffolds in Parts 1–4 exist and run — plus the Microservices-Architecture-v2 services (Knowledge, Verification, Cost&nbsp;Optimiser, ML&nbsp;Integration), the full L0–L5 cache, and the SOA Connector Bus with <strong>107 catalogued connectors across 11 category services</strong>. Three defects in this manual's own listings were found and fixed during deployment: the Postgres image must be <code>pgvector/pgvector:pg16</code> (not <code>postgres:16</code>); Kafka's <code>CLUSTER_ID</code> must be a base64 16-byte UUID (the Microservices Guide's example value crashes the broker); and Kafka producers/consumers need reconnect loops — created-once-at-import clients die silently on the compose startup race. For running, verifying, and troubleshooting the <em>live</em> system — including UML use case and sequence diagrams of the three load-bearing flows — use the companion <strong>Operational-Manual.pdf</strong>; this document remains the from-scratch build runbook. Delivery status vs. the original commitment is recorded in <strong>Handoff §1a</strong>.
+</div>
+
+<nav class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#intro">Introduction &amp; Prerequisites</a></li>
+<li><a href="#part1">Part 1 — Governance &amp; Repo Setup</a></li>
+<li><a href="#part2">Part 2 — Data Model &amp; Schemas</a></li>
+<li><a href="#part3">Part 3 — Core Runtime Scaffold (v0.0.1)</a></li>
+<li><a href="#part4">Part 4 — Alpha Build &amp; Gate Review (v0.1)</a></li>
+<li><a href="#part5">Part 5 — Beta → RC → GA Playbook</a></li>
+<li><a href="#part6">Part 6 — Operations Runbook</a></li>
+<li><a href="#part7">Part 7 — Templates &amp; Appendices</a></li>
+<li><a href="#faq">Troubleshooting &amp; FAQ</a></li>
+</ol>
+</nav>
+
+<h2 id="intro">Introduction &amp; Prerequisites</h2>
+<div class="callout note">
+<strong>Delivered since this manual was written (24 July 2026, <code>v0.1.0</code>):</strong> the platform now runs <strong>16 services</strong> (the 6 here + Discovery/Workflow/Safety/Governance + Knowledge/Verification/Cost-Optimiser/ML-Integration + the RFC-0008 <code>oracle-bridge</code> and the <code>marketplace</code> engine). The <strong>RFC-0008 AI↔blockchain bridge</strong> is live both directions (governed contract read/write; the decision oracle with log-based event subscription), driven from the SDK (<code>chain</code>/<code>oracle</code> plugins) or the <strong>AEP-X Console</strong> at <code>:8083</code>. An opt-in <strong>live-chain mode</strong> (<code>docker-compose.chain.yml</code> + <code>scripts/deploy_contracts.py</code>) runs the on-chain paths against a local anvil devnet; contracts are compiled and tested on an in-memory EVM in CI. <strong>7 connectors</strong> now have real adapters. See <code>docs/Console-and-Bridge.md</code>. The step-by-step build below remains the correct path from zero — the above is what "done" now looks like.
+</div>
+<p>This manual turns the ADLC Plan's phases into literal, ordered steps. It assumes you have accepted the <strong>Handoff</strong> document's committed scope (§2: 6 services, Python SDK, MCP adapter, one vertical, one pilot customer) and resolved its blockers (§5: team size, MCP positioning, pilot contact).</p>
+<p><strong>Read this manual sequentially the first time.</strong> Each Part corresponds to a block of the roadmap and ends with a Definition-of-Done checklist — don't start the next Part until the current one's DoD is met. After the first pass, use the table of contents to jump to whichever Part you're executing.</p>
+
+<h3>Tooling you need before Part 1</h3>
+<div class="table-wrap"><table>
+<tr><th>Tool</th><th>Version</th><th>Check</th></tr>
+<tr><td>Git</td><td>2.40+</td><td><code>git --version</code></td></tr>
+<tr><td>Docker Desktop (with Compose v2)</td><td>latest</td><td><code>docker compose version</code></td></tr>
+<tr><td>Python</td><td>3.11+</td><td><code>python --version</code></td></tr>
+<tr><td>GitHub CLI (optional but recommended)</td><td>latest</td><td><code>gh --version</code></td></tr>
+<tr><td>jq (for smoke-test scripts)</td><td>any</td><td><code>jq --version</code></td></tr>
+</table></div>
+
+<div class="part-divider">
+  <div class="k">Weeks 1–2</div>
+  <h2 id="part1" style="color:#fff">Part 1 — Governance &amp; Repo Setup</h2>
+  <div class="when">Maps to Handoff Week 1–2 checklist · ADLC Plan §5, §14</div>
+</div>
+
+<h3>1.1 Create the GitHub organisation and repository</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">
+<p>Create the GitHub organisation (e.g. <code>aepx-core</code>) and a single monorepo inside it — one repo, not one-per-service, so RFCs/schemas/services/SDK stay in lockstep in Year 1.</p>
+<pre>gh auth login
+gh org create aepx-core   # or create via github.com/organizations/new
+gh repo create aepx-core/aepx-core --public --description "AEP-X Ultra reference implementation"
+git clone https://github.com/aepx-core/aepx-core.git
+cd aepx-core</pre>
+</div></div>
+
+<h3>1.2 Repository folder structure</h3>
+<div class="step"><div class="step-num">2</div><div class="step-body">
+<p>Create this exact tree. Everything in this manual assumes these paths.</p>
+<pre>aepx-core/
+├── governance/
+│   ├── constitution.md
+│   ├── book-of-laws.md
+│   └── decisions/
+├── rfcs/
+│   ├── RFC-0001-core-protocol.md
+│   ├── RFC-0002-identity-trust.md
+│   ├── RFC-0003-messaging-workflow.md
+│   ├── RFC-0004-discovery-federation.md
+│   └── RFC-0005-memory-cache.md
+├── schemas/
+│   ├── sql/001_init.sql
+│   └── openapi/
+│       ├── registry.yaml   ├── identity.yaml   ├── trust.yaml
+│       ├── memory.yaml     ├── cache.yaml       └── gateway.yaml
+├── services/
+│   ├── registry/  ├── identity/  ├── trust/
+│   ├── memory/    ├── cache/     └── gateway/
+├── sdk/python/aepx/
+├── cli/aepx_cli/
+├── docs/                      (mkdocs site)
+├── docker-compose.yml
+├── .github/workflows/ci.yml
+└── README.md</pre>
+</div></div>
+
+<h3>1.3 CI skeleton</h3>
+<div class="step"><div class="step-num">3</div><div class="step-body">
+<p>One workflow, matrixed across the 6 services, so every push lints and tests all of them.</p>
+<div class="filename">.github/workflows/ci.yml</div>
+<pre>name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [registry, identity, trust, memory, cache, gateway]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r services/${{ matrix.service }}/requirements.txt pytest ruff
+      - run: ruff check services/${{ matrix.service }}
+      - run: pytest services/${{ matrix.service }}/tests -v</pre>
+<p>Verify: push a trivial commit and confirm the Actions tab shows 6 green matrix jobs.</p>
+</div></div>
+
+<h3>1.4 Draft the Constitution and Book of Laws</h3>
+<div class="step"><div class="step-num">4</div><div class="step-body">
+<p>Seed <code>governance/book-of-laws.md</code> with the ten constitutional laws already defined in ADLC Plan §2 (Identity Before Interaction … Evolution). Don't re-derive them — copy them in verbatim as the seed, then add one paragraph of rationale per law.</p>
+<div class="filename">governance/constitution.md — outline</div>
+<pre># AEP-X Constitution v1.0 (Draft)
+
+## Preamble
+Why AEP-X exists, who it serves, what it will never do.
+
+## Article I — Purpose
+## Article II — The Ten Laws            (→ book-of-laws.md)
+## Article III — Governance Structure   (interim: Founder + advisor; full TSC at Month 18)
+## Article IV — Standards Lifecycle     (Draft → Review → Frozen → Deprecated)
+## Article V — Human Authority          (finance, legal, healthcare, child-related: human final)
+## Article VI — Amendment Procedure</pre>
+<p>Target length: 15–30 pages for a Month-1 draft, not the manual's 150–300 page aspiration — this is a working document, not a founding charter yet.</p>
+</div></div>
+
+<h3>1.5 Draft RFC-0001 through RFC-0005</h3>
+<div class="step"><div class="step-num">5</div><div class="step-body">
+<p>Use one template for every RFC. Only these five are in scope for Weeks 1–2 — do <strong>not</strong> start RFC-0006–0010 yet (Handoff §5, blocker 4).</p>
+<div class="filename">rfcs/_template.md</div>
+<pre># RFC-XXXX: &lt;Title&gt;
+Status: Draft | Review | Frozen | Deprecated
+Author(s):
+Created:
+
+## 1. Abstract
+## 2. Motivation
+## 3. Design Goals
+## 4. Specification
+## 5. Data Model / Schema           (link to schemas/openapi/*.yaml, schemas/sql/*.sql)
+## 6. Security &amp; Compliance Considerations
+## 7. Backward Compatibility
+## 8. Reference Implementation      (link to services/*)
+## 9. Open Questions</pre>
+<div class="table-wrap"><table>
+<tr><th>RFC</th><th>Scope (one line)</th></tr>
+<tr><td>RFC-0001 Core Protocol</td><td>Message envelope, message types, capability contract</td></tr>
+<tr><td>RFC-0002 Identity &amp; Trust</td><td>Identity model, 5-component trust formula, 6 trust levels</td></tr>
+<tr><td>RFC-0003 Messaging &amp; Workflow</td><td>Event bus, orchestration modes (defer full Workflow Engine to Part 5)</td></tr>
+<tr><td>RFC-0004 Discovery &amp; Federation</td><td>Capability discovery &amp; ranking (defer federation levels F1+ to post-GA)</td></tr>
+<tr><td>RFC-0005 Memory &amp; Cache</td><td>M0–M6 memory layers, L0–L5 cache layers, TTL policy</td></tr>
+</table></div>
+</div></div>
+
+<h3>1.6 Docs portal skeleton</h3>
+<div class="step"><div class="step-num">6</div><div class="step-body">
+<pre>pip install mkdocs mkdocs-material
+mkdocs new docs
+# edit docs/mkdocs.yml: nav: [Home, Governance, RFCs, Services, SDK]
+mkdocs build
+mkdocs gh-deploy   # publishes to https://aepx-core.github.io/aepx-core/</pre>
+</div></div>
+
+<div class="callout dod">
+<strong>Part 1 Definition of Done</strong>
+<ul>
+<li>Repo tree matches §1.2 exactly; CI shows 6 green jobs on a dummy PR.</li>
+<li>Constitution + Book of Laws merged to <code>governance/</code>, reviewed by at least one person outside the founding team.</li>
+<li>RFC-0001–0005 merged as <code>Status: Draft</code> — not more, not fewer.</li>
+<li>Docs site live at a public URL, even if mostly stubs.</li>
+</ul>
+</div>
+
+<div class="part-divider">
+  <div class="k">Week 2</div>
+  <h2 id="part2" style="color:#fff">Part 2 — Data Model &amp; Schemas</h2>
+  <div class="when">Maps to Handoff Week 2 checklist · ADLC Plan §4, §6.1</div>
+</div>
+
+<h3>2.1 Canonical data model</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">
+<p>This is the minimum schema for the 6 in-scope services — not the full canonical model in the manual. Extend it later; don't front-load fields you don't need yet.</p>
+<div class="filename">schemas/sql/001_init.sql</div>
+<pre>CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE agents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organisation_id UUID,
+    name TEXT NOT NULL,
+    version TEXT NOT NULL DEFAULT '0.0.1',
+    trust_score INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE capabilities (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    version TEXT NOT NULL
+);
+
+CREATE TABLE agent_capabilities (
+    agent_id UUID REFERENCES agents(id),
+    capability_id UUID REFERENCES capabilities(id),
+    confidence NUMERIC DEFAULT 0.8,
+    cost NUMERIC DEFAULT 0,
+    latency_ms INT DEFAULT 0,
+    PRIMARY KEY (agent_id, capability_id)
+);
+
+CREATE TABLE trust_scores (
+    entity_id UUID PRIMARY KEY,
+    entity_type TEXT NOT NULL,
+    identity_score INT DEFAULT 0,
+    behaviour_score INT DEFAULT 0,
+    security_score INT DEFAULT 0,
+    evidence_score INT DEFAULT 0,
+    reputation_score INT DEFAULT 0,
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE memory_entries (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    agent_id UUID REFERENCES agents(id),
+    layer TEXT NOT NULL CHECK (layer IN ('M1_SESSION','M2_EPISODIC','M3_SEMANTIC')),
+    content JSONB NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    expires_at TIMESTAMPTZ
+);</pre>
+<p>This file is mounted into the Postgres container in Part 3 and runs automatically on first boot.</p>
+</div></div>
+
+<h3>2.2 OpenAPI stubs</h3>
+<div class="step"><div class="step-num">2</div><div class="step-body">
+<p>One <code>openapi.yaml</code> per service, generated from the FastAPI app once it exists (Part 3) — for now, hand-write the shape so the SDK/CLI can be built against a contract before the service is done.</p>
+<pre>openapi: 3.0.3
+info:
+  title: AEP-X Registry
+  version: 0.0.1
+paths:
+  /health:
+    get:
+      responses: { "200": { description: OK } }
+  /agents:
+    post:
+      requestBody: { required: true }
+      responses: { "200": { description: Created } }
+    get:
+      responses: { "200": { description: List } }
+  /agents/{agent_id}:
+    get:
+      parameters:
+        - { name: agent_id, in: path, required: true }
+      responses: { "200": { description: OK } }</pre>
+<p>Validate every file: <code>npx @redocly/cli lint schemas/openapi/*.yaml</code></p>
+</div></div>
+
+<div class="callout dod">
+<strong>Part 2 Definition of Done</strong>
+<ul>
+<li><code>schemas/sql/001_init.sql</code> committed and applies cleanly to a fresh Postgres 16 instance.</li>
+<li>6 OpenAPI files present, all pass <code>redocly lint</code>.</li>
+</ul>
+</div>
+
+<div class="part-divider">
+  <div class="k">Weeks 3–4</div>
+  <h2 id="part3" style="color:#fff">Part 3 — Core Runtime Scaffold (v0.0.1)</h2>
+  <div class="when">Maps to Handoff Week 3–4 checklist · ADLC Plan §6.1 Wave 1, §6.2 Month 1</div>
+</div>
+
+<h3>3.1 docker-compose.yml</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">
+<p>Postgres + Redis + all 6 services in one file. This is what every developer runs on day one.</p>
+<div class="filename">docker-compose.yml</div>
+<pre>version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: aepx
+      POSTGRES_USER: aepx
+      POSTGRES_PASSWORD: aepx_dev_only
+    ports: ["5432:5432"]
+    volumes: ["./schemas/sql:/docker-entrypoint-initdb.d"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U aepx"], interval: 5s, retries: 5 }
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 5s, retries: 5 }
+
+  identity:
+    build: ./services/identity
+    ports: ["8001:8000"]
+    depends_on: [postgres]
+
+  trust:
+    build: ./services/trust
+    ports: ["8002:8000"]
+    depends_on: [postgres]
+
+  registry:
+    build: ./services/registry
+    ports: ["8003:8000"]
+    depends_on: [postgres]
+
+  memory:
+    build: ./services/memory
+    ports: ["8004:8000"]
+    depends_on: [postgres, redis]
+
+  cache:
+    build: ./services/cache
+    ports: ["8005:8000"]
+    depends_on: [redis]
+
+  gateway:
+    build: ./services/gateway
+    ports: ["8000:8000"]
+    environment:
+      - IDENTITY_URL=http://identity:8000
+      - TRUST_URL=http://trust:8000
+      - REGISTRY_URL=http://registry:8000
+      - MEMORY_URL=http://memory:8000
+      - CACHE_URL=http://cache:8000
+    depends_on: [identity, trust, registry, memory, cache]</pre>
+</div></div>
+
+<h3>3.2 Service template (used for all 6 services)</h3>
+<div class="step"><div class="step-num">2</div><div class="step-body">
+<p>Every service under <code>services/*</code> has the same shape — copy this template and edit <code>app/main.py</code> per service.</p>
+<pre>services/&lt;name&gt;/
+├── Dockerfile
+├── requirements.txt
+├── app/
+│   ├── main.py
+│   └── models.py
+└── tests/
+    └── test_health.py</pre>
+<div class="filename">services/&lt;name&gt;/Dockerfile</div>
+<pre>FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]</pre>
+<div class="filename">services/&lt;name&gt;/requirements.txt</div>
+<pre>fastapi==0.111.0
+uvicorn[standard]==0.30.0
+pydantic==2.7.1
+httpx==0.27.0</pre>
+</div></div>
+
+<h3>3.3 Registry service</h3>
+<div class="step"><div class="step-num">3</div><div class="step-body">
+<div class="filename">services/registry/app/main.py</div>
+<pre>from fastapi import FastAPI
+from pydantic import BaseModel
+import uuid
+
+app = FastAPI(title="AEP-X Registry Service", version="0.0.1")
+
+class AgentIn(BaseModel):
+    name: str
+    organisation_id: str | None = None
+
+class Agent(AgentIn):
+    id: str
+    version: str = "0.0.1"
+    trust_score: int = 0
+
+_AGENTS: dict[str, Agent] = {}
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "registry"}
+
+@app.post("/agents", response_model=Agent)
+def create_agent(payload: AgentIn):
+    agent_id = str(uuid.uuid4())
+    agent = Agent(id=agent_id, **payload.model_dump())
+    _AGENTS[agent_id] = agent
+    return agent
+
+@app.get("/agents/{agent_id}", response_model=Agent)
+def get_agent(agent_id: str):
+    return _AGENTS[agent_id]
+
+@app.get("/agents")
+def list_agents():
+    return list(_AGENTS.values())</pre>
+<div class="callout note"><strong>Scaffold, not final:</strong> the in-memory dict is a Week 3 placeholder. Swap it for the <code>agents</code> table from Part 2 via SQLAlchemy before the Alpha Gate (Part 4) — flag this explicitly in the PR so it isn't forgotten.</div>
+</div></div>
+
+<h3>3.4 Identity &amp; Trust (minimal stubs)</h3>
+<div class="step"><div class="step-num">4</div><div class="step-body">
+<div class="filename">services/identity/app/main.py</div>
+<pre>from fastapi import FastAPI
+import jwt, time, uuid
+
+SECRET = "dev-only-change-me"  # replace with env var + Vault before any pilot
+app = FastAPI(title="AEP-X Identity Service", version="0.0.1")
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "identity"}
+
+@app.post("/token")
+def issue_token(subject: str):
+    payload = {"sub": subject, "iat": int(time.time()), "jti": str(uuid.uuid4())}
+    return {"access_token": jwt.encode(payload, SECRET, algorithm="HS256"), "token_type": "bearer"}</pre>
+<div class="filename">services/trust/app/main.py</div>
+<pre>from fastapi import FastAPI
+app = FastAPI(title="AEP-X Trust Service", version="0.0.1")
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "trust"}
+
+@app.get("/trust/{entity_id}")
+def get_trust(entity_id: str):
+    # Placeholder value — RFC-0002 5-component formula wired in Wave 3 (Month 5)
+    return {"entity_id": entity_id, "trust_score": 50, "level": "Verified"}</pre>
+</div></div>
+
+<h3>3.5 Memory &amp; Cache</h3>
+<div class="step"><div class="step-num">5</div><div class="step-body">
+<div class="filename">services/memory/app/main.py</div>
+<pre>from fastapi import FastAPI
+from pydantic import BaseModel
+import time
+
+app = FastAPI(title="AEP-X Memory Service", version="0.0.1")
+_SESSION_MEMORY: dict[str, list[dict]] = {}
+
+class MemoryWrite(BaseModel):
+    agent_id: str
+    content: dict
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "memory"}
+
+@app.post("/memory/session")
+def write_session(m: MemoryWrite):
+    _SESSION_MEMORY.setdefault(m.agent_id, []).append({**m.content, "ts": time.time()})
+    return {"stored": True}
+
+@app.get("/memory/session/{agent_id}")
+def read_session(agent_id: str):
+    return _SESSION_MEMORY.get(agent_id, [])</pre>
+<div class="filename">services/cache/app/main.py</div>
+<pre>from fastapi import FastAPI
+import redis, os, json
+
+app = FastAPI(title="AEP-X Cache Service", version="0.0.1")
+r = redis.Redis(host=os.getenv("REDIS_HOST", "redis"), port=6379, decode_responses=True)
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "cache", "redis": r.ping()}
+
+@app.get("/cache/{key}")
+def get_cache(key: str):
+    val = r.get(key)
+    return {"key": key, "value": json.loads(val) if val else None, "hit": val is not None}
+
+@app.post("/cache/{key}")
+def set_cache(key: str, value: dict, ttl: int = 300):
+    r.set(key, json.dumps(value), ex=ttl)
+    return {"stored": True, "ttl": ttl}</pre>
+<p>Add <code>redis==5.0.4</code> to the cache service's <code>requirements.txt</code>.</p>
+</div></div>
+
+<h3>3.6 Gateway</h3>
+<div class="step"><div class="step-num">6</div><div class="step-body">
+<div class="filename">services/gateway/app/main.py</div>
+<pre>from fastapi import FastAPI
+import httpx, os
+
+app = FastAPI(title="AEP-X Gateway", version="0.0.1")
+SERVICES = {
+    "identity": os.getenv("IDENTITY_URL", "http://identity:8000"),
+    "trust":    os.getenv("TRUST_URL", "http://trust:8000"),
+    "registry": os.getenv("REGISTRY_URL", "http://registry:8000"),
+    "memory":   os.getenv("MEMORY_URL", "http://memory:8000"),
+    "cache":    os.getenv("CACHE_URL", "http://cache:8000"),
+}
+
+@app.get("/health")
+async def health():
+    results = {}
+    async with httpx.AsyncClient(timeout=2.0) as client:
+        for name, base in SERVICES.items():
+            try:
+                results[name] = (await client.get(f"{base}/health")).json()
+            except Exception as e:
+                results[name] = {"status": "down", "error": str(e)}
+    return results
+
+@app.post("/execute")
+async def execute(agent_id: str, capability: str, payload: dict):
+    # v0.0.1: passthrough only. Cache-first routing (RFC-0008 hierarchy) lands in Part 4.
+    async with httpx.AsyncClient(timeout=5.0) as client:
+        agent = await client.get(f"{SERVICES['registry']}/agents/{agent_id}")
+        return {"agent": agent.json(), "capability": capability, "payload": payload}</pre>
+</div></div>
+
+<h3>3.7 Python SDK v0.0.1</h3>
+<div class="step"><div class="step-num">7</div><div class="step-body">
+<pre>sdk/python/
+├── pyproject.toml
+└── aepx/
+    ├── __init__.py
+    └── agent.py</pre>
+<div class="filename">sdk/python/aepx/agent.py</div>
+<pre>import httpx
+
+class Agent:
+    def __init__(self, name: str, gateway_url="http://localhost:8000", registry_url="http://localhost:8003"):
+        self.name, self.gateway_url, self.registry_url, self.id = name, gateway_url, registry_url, None
+
+    def register(self):
+        r = httpx.post(f"{self.registry_url}/agents", json={"name": self.name})
+        r.raise_for_status()
+        self.id = r.json()["id"]
+        return self.id
+
+    def execute(self, capability: str, **payload):
+        r = httpx.post(f"{self.gateway_url}/execute",
+                        params={"agent_id": self.id, "capability": capability}, json=payload)
+        r.raise_for_status()
+        return r.json()</pre>
+<pre>cd sdk/python
+pip install -e .
+python -c "from aepx import Agent; a=Agent('tutor'); print(a.register())"</pre>
+</div></div>
+
+<h3>3.8 CLI</h3>
+<div class="step"><div class="step-num">8</div><div class="step-body">
+<div class="filename">cli/aepx_cli/main.py</div>
+<pre>import typer
+app = typer.Typer()
+
+@app.command()
+def init():
+    """Scaffold a new AEP-X agent project."""
+    typer.echo("Created ./aepx.yaml — edit it, then run `aepx create agent`.")
+
+@app.command()
+def create(kind: str):
+    """Create a new agent or workflow stub."""
+    typer.echo(f"Created {kind} stub in ./agents/{kind}.py")
+
+@app.command()
+def run(agent_file: str):
+    """Run an agent locally against the Gateway."""
+    typer.echo(f"Running {agent_file} against http://localhost:8000 ...")
+
+if __name__ == "__main__":
+    app()</pre>
+<pre>pip install typer
+python cli/aepx_cli/main.py init
+# time this end to end — target is under 10 minutes, clone to running agent</pre>
+</div></div>
+
+<h3>3.9 MCP adapter (pulled forward — see Handoff §2)</h3>
+<div class="step"><div class="step-num">9</div><div class="step-body">
+<p>Wrap the Gateway's <code>/execute</code> behind an MCP server, exposing each registered capability as an MCP tool. Use the official <code>mcp</code> Python SDK's <code>Server</code> class:</p>
+<pre>from mcp.server import Server
+from mcp.types import Tool
+import httpx
+
+server = Server("aepx-gateway")
+
+@server.list_tools()
+async def list_tools():
+    return [Tool(name="aepx_execute", description="Run an AEP-X agent capability",
+                 inputSchema={"type": "object", "properties": {
+                     "agent_id": {"type": "string"}, "capability": {"type": "string"}}})]
+
+@server.call_tool()
+async def call_tool(name: str, arguments: dict):
+    async with httpx.AsyncClient() as client:
+        r = await client.post("http://localhost:8000/execute", params=arguments, json={})
+        return [{"type": "text", "text": r.text}]</pre>
+<p>This is enough for an MCP client (e.g. Claude Desktop, Claude Code) to call an AEP-X agent as a tool — the concrete proof point for the "memory/cost/evidence layer for MCP agents" positioning.</p>
+</div></div>
+
+<h3>3.10 Tutor Agent demo</h3>
+<div class="step"><div class="step-num">10</div><div class="step-body">
+<pre>from aepx import Agent
+tutor = Agent("tutor-agent")
+tutor.register()
+result = tutor.execute("generate_lesson", topic="fractions", grade=5)
+print(result)</pre>
+<p>Record a short screen capture of this running end-to-end — it's the artifact you share with the Week 4 pilot contact (Handoff §5, blocker 3).</p>
+</div></div>
+
+<h3>3.11 Smoke test script</h3>
+<div class="step"><div class="step-num">11</div><div class="step-body">
+<div class="filename">scripts/smoke-test.sh</div>
+<pre>#!/usr/bin/env bash
+set -e
+echo "Waiting for services..."; sleep 5
+curl -sf http://localhost:8000/health | jq .
+
+AGENT_ID=$(curl -sf -X POST http://localhost:8003/agents \
+  -H "Content-Type: application/json" -d '{"name":"tutor-agent"}' | jq -r .id)
+echo "Created agent $AGENT_ID"
+
+curl -sf -X POST "http://localhost:8000/execute?agent_id=$AGENT_ID&capability=greet" \
+  -H "Content-Type: application/json" -d '{}' | jq .
+
+echo "Smoke test passed."</pre>
+<pre>docker compose up -d --build
+chmod +x scripts/smoke-test.sh
+./scripts/smoke-test.sh</pre>
+</div></div>
+
+<div class="callout dod">
+<strong>Part 3 / v0.0.1 Definition of Done</strong>
+<ul>
+<li><code>docker compose up</code> exits clean; <code>GET /health</code> on the Gateway reports all 5 backend services <code>"status": "ok"</code>.</li>
+<li>Smoke test script passes with no manual intervention.</li>
+<li>Fresh clone → running Tutor Agent demo in <strong>under 10 minutes</strong>, timed and recorded.</li>
+<li>One MCP tool call proxied through the Gateway successfully.</li>
+<li>Git tag <code>v0.0.1</code> pushed; CI green on the tagged commit.</li>
+</ul>
+</div>
+
+<div class="part-divider">
+  <div class="k">Months 2–3</div>
+  <h2 id="part4" style="color:#fff">Part 4 — Alpha Build &amp; Gate Review (v0.1)</h2>
+  <div class="when">Maps to ADLC Plan §6.2 Months 2–3, §7.2 Alpha Gate Review</div>
+</div>
+
+<p>This Part was originally sketch-level only — Discovery and the Workflow Engine were named at the requirement level (RFC-0003/0004/0005) without runnable code. That gap is now closed: the companion <strong>Microservices Implementation Guide</strong> gives full FastAPI implementations for Discovery, Workflow Engine, and two services this Part doesn't cover at all — Safety Engine and Governance Engine — plus the Kafka/Neo4j infrastructure additions they need. Use §4.1–4.2 below for the build sequence and design rationale; follow the Guide for the actual code.</p>
+
+<h3>4.1 Discovery Service</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">
+<p>Add a <code>/discover</code> endpoint to a new <code>services/discovery</code> service (same template as §3.2). Rank candidates by the formula in ADLC Plan §6.1/RFC-0004: <code>40% capability match + 25% trust + 15% availability − 10% latency − 10% cost</code>. Cache ranked results in Redis with a short TTL before falling back to a full registry scan.</p>
+<div class="callout note">Full implementation: Microservices Implementation Guide §5.1.</div>
+</div></div>
+
+<h3>4.2 Workflow Engine (minimal)</h3>
+<div class="step"><div class="step-num">2</div><div class="step-body">
+<p>Start with <strong>sequential</strong> orchestration only (defer Parallel/Conditional/Dynamic modes to Beta). A workflow is a JSON list of <code>{capability, agent_id}</code> steps; the engine calls the Gateway once per step and threads the output of step N into step N+1's payload.</p>
+<div class="callout note">Full implementation (including the <code>workflow.completed</code> Kafka event): Microservices Implementation Guide §5.2. That Guide also covers Safety Engine (§5.3) and Governance Engine (§5.4), which sit downstream of the Workflow Engine's events and aren't in this Part at all.</div>
+</div></div>
+
+<h3>4.3 Vector memory (pgvector)</h3>
+<div class="step"><div class="step-num">3</div><div class="step-body">
+<pre>-- add to schemas/sql/002_vector.sql
+CREATE EXTENSION IF NOT EXISTS vector;
+ALTER TABLE memory_entries ADD COLUMN embedding vector(1536);
+CREATE INDEX ON memory_entries USING hnsw (embedding vector_cosine_ops);</pre>
+<p>Add an embedding call (any provider) in the Memory service before insert; add a <code>/memory/search</code> endpoint doing cosine similarity search.</p>
+</div></div>
+
+<h3>4.4 Anti-hallucination validation stub</h3>
+<div class="step"><div class="step-num">4</div><div class="step-body">
+<p>Implement the response contract from ADLC Plan §2 on every agent output: <code>{answer, confidence, evidence[], verification_status}</code>. At Alpha, "evidence" can be as simple as "which memory/knowledge record this answer came from" — the full verification pipeline (RFC-0007) is a Beta-phase build, not Alpha.</p>
+</div></div>
+
+<h3>4.5 Running the Alpha Gate Review</h3>
+<div class="step"><div class="step-num">5</div><div class="step-body">
+<p>Five gates, ADLC Plan §7.2. Concrete measurement method for each:</p>
+<div class="table-wrap"><table class="gate-table" style="table-layout:fixed">
+<colgroup><col style="width:18%"><col style="width:45%"><col style="width:37%"></colgroup>
+<tr><th>Gate</th><th>How to measure it</th><th>Threshold</th></tr>
+<tr><td>1.&nbsp;Technical</td><td><code>hey -n 200 -c 10 http://localhost:8000/health</code> (or <code>ab</code>) against Discovery/Memory/Gateway</td><td>Discovery &lt;50ms, Memory &lt;20ms, Gateway &lt;100ms, Cache &gt;90% hit on repeat calls</td></tr>
+<tr><td>2. Dev&nbsp;Experience</td><td>Stopwatch: fresh clone → <code>docker compose up</code> → first agent response</td><td>Install &lt;5 min, first agent &lt;10 min</td></tr>
+<tr><td>3. Cost</td><td>Log token counts + cache hit/miss per execution; <code>cost = tokens_used × model_price</code>, compare cached vs uncached path</td><td>Directional evidence of LLM-call reduction on repeat queries</td></tr>
+<tr><td>4.&nbsp;Hallucination</td><td>Build a 100-question CSV (<code>question,expected_answer,source</code>); run each through the agent; score each response Verified/High/Medium/Unverified per the confidence bands in ADLC Plan §2</td><td>Record actual %, do not assert &lt;1% before this data exists (Critical Evaluation §15.4)</td></tr>
+<tr><td>5.&nbsp;Benchmark</td><td>Run the same Tutor Agent task through MCP+a bare LLM, LangGraph, and CrewAI; compare latency, cost, lines-of-code, setup time</td><td>Publish the comparison table regardless of outcome — this is the credibility engine (Critical Evaluation §15.5 Rec #6)</td></tr>
+</table></div>
+<p><strong>Decision:</strong> proceed to Beta only if Gates 1–2 pass outright and Gates 3–5 have honestly recorded numbers (they do not need to "win" — they need to be true).</p>
+</div></div>
+
+<div class="callout dod">
+<strong>Part 4 / v0.1 Alpha Definition of Done</strong>
+<ul>
+<li>Discovery, Workflow (sequential), vector memory, and the evidence-contract stub are live behind the Gateway.</li>
+<li>All 5 Alpha Gate measurements have been run and recorded (not estimated) in <code>governance/decisions/alpha-gate-review.md</code>.</li>
+<li>Go/no-go decision documented and dated.</li>
+</ul>
+</div>
+
+<div class="part-divider">
+  <div class="k">Months 4–12</div>
+  <h2 id="part5" style="color:#fff">Part 5 — Beta → RC → GA Playbook</h2>
+  <div class="when">Maps to ADLC Plan §6.2, §7.3, §8</div>
+</div>
+
+<p>From here, the ADLC Plan (§6.2, §7.3) already specifies exit criteria per stage — this Part is the operating cadence for running against them, not new architecture.</p>
+
+<h3>5.1 Phase kickoff (run at the start of Beta, RC, and GA hardening)</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">
+<p><strong>Kickoff agenda template</strong> (30 minutes):</p>
+<ol>
+<li>Re-state this phase's exit criteria verbatim from ADLC Plan §7.3/§8.</li>
+<li>Confirm owner per workstream (extend the RACI in Handoff §3).</li>
+<li>Set the weekly review slot (§5.2) for the duration of the phase.</li>
+<li>Identify the single biggest risk to hitting the exit criteria — write it down.</li>
+</ol>
+</div></div>
+
+<h3>5.2 Weekly cadence</h3>
+<div class="step"><div class="step-num">2</div><div class="step-body">
+<p>Every week: a 15-minute stand-up against the Command Centre's 5 dashboards (Product/WAU, Technology, Economics, Trust &amp; Safety, Growth — ADLC Plan §11). Record the numbers, don't just discuss them — the point is a time series, not a meeting.</p>
+</div></div>
+
+<h3>5.3 Exit review</h3>
+<div class="step"><div class="step-num">3</div><div class="step-body">
+<p>At the end of each phase, re-run the relevant gate from ADLC Plan §7.3/§8 (Beta exit: 99% reliability, 3 pilots, 100 developers, 10 orgs, 50% cost reduction; RC exit: 99.9% reliability, 90% cache hit, 80% LLM reduction, conformance suite, security audit, 3 production pilots, 1,000 developers). Document actual-vs-target for every line — partial misses are fine, undocumented misses are not.</p>
+</div></div>
+
+<div class="callout dod">
+<strong>Part 5 Definition of Done (per phase)</strong>
+<ul>
+<li>Kickoff agenda run and documented at phase start.</li>
+<li>Weekly dashboard numbers recorded for every week of the phase — no gaps.</li>
+<li>Exit review completed against the ADLC Plan's published criteria before advancing to the next release stage.</li>
+</ul>
+</div>
+
+<div class="part-divider">
+  <div class="k">Month 6 onward</div>
+  <h2 id="part6" style="color:#fff">Part 6 — Operations Runbook</h2>
+  <div class="when">Maps to ADLC Plan §12, OPS-001</div>
+</div>
+
+<h3>6.1 Backup &amp; restore</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">
+<pre># Daily full backup
+docker exec -t $(docker compose ps -q postgres) pg_dump -U aepx aepx > backup_$(date +%F).sql
+
+# Restore
+cat backup_2026-07-14.sql | docker exec -i $(docker compose ps -q postgres) psql -U aepx aepx</pre>
+<p>Automate the backup command via a scheduled GitHub Action or cron once off a laptop and onto real infrastructure; retain 35 days per ADLC Plan §12.</p>
+</div></div>
+
+<h3>6.2 Incident response (P1–P4)</h3>
+<div class="step"><div class="step-num">2</div><div class="step-body">
+<div class="table-wrap"><table>
+<tr><th>Severity</th><th>Example</th><th>Response time</th><th>First action</th></tr>
+<tr><td>P1 Critical</td><td>Gateway down, data loss</td><td>15 minutes</td><td>Page the on-call owner; open an incident doc from the template (Part 7)</td></tr>
+<tr><td>P2 High</td><td>One core service down, others up</td><td>1 hour</td><td>Restart via <code>docker compose restart &lt;service&gt;</code>, check logs</td></tr>
+<tr><td>P3 Medium</td><td>Degraded latency, no outage</td><td>4 hours</td><td>Log to backlog, monitor</td></tr>
+<tr><td>P4 Low</td><td>Minor defect</td><td>Next release</td><td>File as a normal issue</td></tr>
+</table></div>
+</div></div>
+
+<h3>6.3 Disaster recovery test</h3>
+<div class="step"><div class="step-num">3</div><div class="step-body">
+<p>Quarterly: restore the latest backup into a throwaway environment and run the Part 3 smoke test against it. If the smoke test doesn't pass on the restored copy, the backup strategy is broken — fix it before the next quarter, not after an actual incident.</p>
+</div></div>
+
+<div class="part-divider">
+  <div class="k">Reference</div>
+  <h2 id="part7" style="color:#fff">Part 7 — Templates &amp; Appendices</h2>
+</div>
+
+<h3>7.1 ADR (Architecture Decision Record) template</h3>
+<pre># ADR-XXXX: &lt;Decision title&gt;
+Status: Proposed | Accepted | Superseded
+Date:
+
+## Context
+## Decision
+## Consequences (what gets easier, what gets harder)
+## Alternatives considered</pre>
+
+<h3>7.2 Service README template</h3>
+<pre># &lt;Service Name&gt;
+One-line purpose.
+
+## Run locally
+docker compose up &lt;service&gt;
+
+## Endpoints
+- GET /health
+- ...
+
+## Definition of Done for this service
+- [ ] OpenAPI contract published
+- [ ] Unit tests &gt;85% coverage
+- [ ] Audit events emitted
+- [ ] Docs page published</pre>
+
+<h3>7.3 Incident report template</h3>
+<pre># Incident: &lt;short title&gt;
+Severity: P1-P4      Detected:      Resolved:
+
+## Summary
+## Timeline
+## Root cause
+## Impact
+## Remediation
+## Follow-up actions (owner + due date)</pre>
+
+<h3>7.4 Weekly Command Centre report template</h3>
+<pre># Week of &lt;date&gt;
+Product:    WAU ___  MAU ___  New agents created ___
+Technology: Availability ___%  Gateway p95 ___ms  Cache hit ___%
+Economics:  Cost/execution ___  LLM calls avoided ___%
+Trust&amp;Safety: Evidence coverage ___%  Incidents ___
+Growth:     Developers ___  Orgs ___  Pilot conversations ___
+Biggest risk this week:
+Decision needed from leadership:</pre>
+
+<h2 id="faq">Troubleshooting &amp; FAQ</h2>
+<div class="table-wrap"><table>
+<tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+<tr><td><code>docker compose up</code> hangs on Postgres</td><td>Init SQL script has an error</td><td>Check <code>docker compose logs postgres</code>; fix <code>001_init.sql</code>, then <code>docker compose down -v</code> to wipe the volume and retry</td></tr>
+<tr><td>Gateway <code>/health</code> shows a service as <code>"down"</code></td><td>Service container crashed on boot, or wrong URL env var</td><td><code>docker compose logs &lt;service&gt;</code>; confirm the env var in <code>docker-compose.yml</code> matches the service name</td></tr>
+<tr><td>Cache service can't reach Redis</td><td>Missing <code>redis</code> package, or wrong host</td><td>Confirm <code>redis==5.0.4</code> in requirements.txt and <code>REDIS_HOST=redis</code> (the Compose service name, not <code>localhost</code>)</td></tr>
+<tr><td>SDK <code>Agent.register()</code> raises a connection error</td><td>Registry not up yet, or wrong port</td><td>Confirm <code>docker compose ps</code> shows Registry healthy on 8003 before running the SDK</td></tr>
+<tr><td>CI fails only in the matrix, not locally</td><td>Missing dependency pin, or a service-specific env var not set in CI</td><td>Pin exact versions in <code>requirements.txt</code>; add any needed env vars to the workflow step</td></tr>
+</table></div>
+
+<footer>
+AEP-X Ultra — Instructional Manual · Companion to ADLC-Plan.html/.pdf, Handoff.html, and Microservices-Implementation-Guide.pdf · 7 July 2026
+</footer>
+</div>
+</body>
+</html>

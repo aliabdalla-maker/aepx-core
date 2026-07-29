@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEP-X — SOA Architecture Implementation Guide</title>
+<style>
+  :root {
+    --ink:#1a2332; --muted:#5a6b82; --accent:#0f4c81; --accent-light:#e8f0f8;
+    --border:#d7dee8; --bg:#f7f9fc; --card:#fff; --code-bg:#0f1720; --code-ink:#d6e2f0;
+    --amber:#b8860b; --amber-light:#fdf6ec; --green:#2e8b57; --green-light:#eaf6ee;
+    --red:#b04a6f; --red-light:#fbeef2;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  .page { max-width:940px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+  header.doc-header { background:linear-gradient(135deg,#0f4c81 0%,#143d66 100%); color:#fff; border-radius:12px; padding:2.2rem 2rem; margin-bottom:1.6rem; }
+  header.doc-header h1 { margin:0 0 .4rem; font-size:1.65rem; line-height:1.3; }
+  header.doc-header .subtitle { opacity:.85; font-size:1.02rem; }
+  .meta { display:flex; flex-wrap:wrap; gap:.5rem 1.6rem; margin-top:1.2rem; font-size:.85rem; opacity:.9; }
+  .meta span strong { opacity:.75; font-weight:600; margin-right:.35rem; }
+  nav.toc { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.4rem; margin-bottom:2rem; font-size:.88rem; }
+  nav.toc h2 { margin:0 0 .6rem; font-size:1rem; color:var(--accent); border:none; padding:0; }
+  nav.toc ol { margin:0; padding-left:1.3rem; columns:2; column-gap:2rem; }
+  nav.toc li { margin:.25rem 0; break-inside:avoid; }
+  nav.toc a { color:var(--ink); text-decoration:none; }
+
+  h2 { color:var(--accent); font-size:1.26rem; margin:2.3rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+  h3 { font-size:1.03rem; margin:1.5rem 0 .5rem; color:var(--ink); }
+  h4 { font-size:.92rem; margin:1.1rem 0 .4rem; color:var(--accent); }
+  p { margin:.65rem 0; }
+  em { color:var(--muted); }
+  a { color:var(--accent); }
+
+  .table-wrap { overflow-x:auto; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; font-size:.84rem; background:var(--card); border-radius:8px; overflow:hidden; }
+  th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top; word-break:break-word; }
+  th { background:var(--accent-light); color:var(--accent); font-weight:600; }
+  tr:nth-child(even) td { background:#fbfcfe; }
+
+  code { font-family:"Cascadia Code",Consolas,monospace; }
+  p code, li code, td code, h4 code { background:#e9edf3; padding:.1rem .35rem; border-radius:4px; font-size:.87em; color:#0f4c81; }
+
+  pre {
+    background:var(--code-bg); color:var(--code-ink); border-radius:8px;
+    padding:.85rem 1rem; font-size:.76rem; line-height:1.5;
+    white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
+    margin:.6rem 0 1rem;
+  }
+  pre code { background:none; color:inherit; padding:0; font-size:1em; }
+
+  ul, ol { padding-left:1.4rem; } li { margin:.3rem 0; }
+  .callout { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin:1rem 0; font-size:.92rem; }
+  .callout.warn { border-left:5px solid var(--red); background:var(--red-light); }
+  .callout.note { border-left:5px solid var(--amber); background:var(--amber-light); }
+  .callout.dod { border-left:5px solid var(--green); background:var(--green-light); }
+  hr { border:none; border-top:1px solid var(--border); margin:2rem 0; }
+
+  .part-divider { background:linear-gradient(135deg,#0f4c81,#143d66); color:#fff; border-radius:10px; padding:1.1rem 1.4rem; margin:2.6rem 0 1.2rem; page-break-before:always; }
+  .part-divider .k { font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .part-divider h2 { color:#fff; border:none; margin:.2rem 0 0; padding:0; font-size:1.35rem; }
+  .part-divider .when { font-size:.85rem; opacity:.85; margin-top:.3rem; }
+
+  .diagram-wrap { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1rem 0; }
+  .status-pill { display:inline-block; font-size:.68rem; font-weight:700; padding:.1rem .55rem; border-radius:10px; text-transform:uppercase; letter-spacing:.02em; }
+  .status-built { background:var(--green-light); color:var(--green); }
+  .status-new { background:var(--accent-light); color:var(--accent); }
+  .status-backlog { background:#f3eee7; color:#8a6d3b; }
+
+  footer { margin-top:3rem; font-size:.82rem; color:var(--muted); text-align:center; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 14mm 12mm; }
+    body { background:#fff; }
+    header.doc-header, .part-divider { background:var(--accent); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { max-width:none; padding:0; }
+    pre, table, .callout, .diagram-wrap { page-break-inside:avoid; }
+    h2, h3 { page-break-after:avoid; }
+    .part-divider { page-break-before:always; }
+    nav.toc { page-break-after:always; }
+    svg { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc-header">
+  <h1>AEP-X — SOA Architecture Implementation Guide</h1>
+  <div class="subtitle">The Universal Connector Layer, designed as SOA/ESB mediation — the one part of AEP-X Ultra the microservices core doesn't fit</div>
+  <div class="meta">
+    <span><strong>Source</strong> AEP-X Ultra (1).docx — 36,937-paragraph consolidated draft</span>
+    <span><strong>Companion to</strong> ADLC-Plan, Handoff, Instructional-Manual, Microservices-Implementation-Guide</span>
+    <span><strong>Prepared</strong> 7 July 2026</span>
+  </div>
+</header>
+
+<nav class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#recon">1. Reconciliation — how this source relates to the existing plan</a></li>
+<li><a href="#why">2. Why SOA fits the Connector Layer, not the core</a></li>
+<li><a href="#arch">3. SOA Architecture — the AEP-X Connector Bus</a></li>
+<li><a href="#sec">4. Security &amp; compliance in the SOA layer</a></li>
+<li><a href="#build">5. Build sequence addendum</a></li>
+<li><a href="#dod">6. Definition of Done</a></li>
+</ol>
+</nav>
+
+<h2 id="recon">1. Reconciliation — How This Source Relates to the Existing Plan</h2>
+<p><strong>What this document is.</strong> Unlike the prior "Volume 9" outline source, this attachment is the full escalating draft chain itself — Executive Vision → PESTEL → SPARC-Native Lifecycle → Universal Plug and Connect Framework → "V3 Standards Programme" → nine further "Stage"/"Programme" re-plannings climbing to increasingly aspirational scope (Autonomous Intelligence Internet, Agent Operating System, Planetary Intelligence Grid, "AEP-X Zero — Version ∞") → a ~10,000-line business/governance chain (PMO, HR, BCP, ESG, ISO roadmap, M&amp;A, IPO/Exit, 20-year Legacy Framework) → a return to concrete Sprint 0–4 build specs and the full text of RFC-0001–0010 / RA-0001–0008. It is the "3,188-page consolidated edition" the ADLC Plan's Critical Evaluation (§15.2.8) already warned about — roughly 30 restart points, each ending "the next step is…", terminology drifting between passes.</p>
+<p><strong>Why an SOA document at all.</strong> The source never once uses the words "SOA," "service-oriented," or "ESB" — that framing is this engagement's, not the manual's. But the source <em>does</em> independently converge, repeatedly, on a <code>Connector Contract</code> naming exactly the protocol mix classic SOA/ESB architectures exist to mediate: <code>Supports: MCP, REST, GraphQL, gRPC, MQTT, Kafka, NATS, SOAP, OPC-UA, Custom</code>, plus a generic <code>Connector</code> interface (<code>authenticate / discover / execute / monitor</code>). The <strong>Universal Connector Layer</strong> — Enterprise (SAP, Salesforce, MS Dynamics, Oracle, Workday, ServiceNow), Industrial (SCADA, PLC, OPC-UA, Modbus, BACnet), Productivity (Google Workspace, M365, Slack, Teams, Zoom), Developer (GitHub, GitLab, Jira, Confluence, Azure DevOps), AI Platforms (OpenAI, Anthropic, Gemini, Mistral, Ollama, vLLM, HuggingFace) — is the one part of this source not well served by the microservices style already committed. This document designs that layer as SOA and leaves the AI-native core as microservices. See <a href="Hybrid-Architecture-and-Comparison.html">Hybrid-Architecture-and-Comparison.html</a> for why the boundary sits there.</p>
+
+<h3>1.1 Contradictions in this source — inherited, not re-litigated</h3>
+<p>The ADLC Plan (§15.3) already resolved the memory/cache layer and RFC-numbering contradictions in the original manual. Reading this much larger attachment end-to-end restates the same contradictions with more variants, plus two the ADLC Plan didn't have material to catch:</p>
+<div class="table-wrap"><table>
+<tr><th>Topic</th><th>Conflicting statements found</th><th>Resolution adopted here</th></tr>
+<tr><td>Memory layers</td><td>M0–M5 (early pass) vs M0–M6 (RFC-0005, restated ~6×)</td><td><strong>M0–M6, RFC-0005 normative</strong> (unchanged from ADLC Plan §15.3)</td></tr>
+<tr><td>Cache layers</td><td>L1–L4 (no L0) vs L0–L6 ("Seven-Level" pass) vs L0–L5 (RFC-0005, ~8×) vs concrete-TTL L0–L5 (Sprint 2.2)</td><td><strong>L0–L5, RFC-0005 normative</strong>, TTLs from Sprint 2.2 (5 min / 1 h / 24 h / 7 d / 30 d / policy-controlled)</td></tr>
+<tr><td>Identity/Trust boundary</td><td>Every Sprint 3.1–3.2 pass treats Identity and Trust as two services; the existing Microservices Guide merged them into one Trust Authority</td><td><strong>Keep the existing merge</strong> — re-splitting now breaks already-built code for a distinction the source doesn't defend</td></tr>
+<tr><td>Risk classification</td><td>Two independent 5-level taxonomies never reconciled: Safety S0–S4 (RFC-0007) vs AI Assurance AIA-R0–R4 (EU AI Act framing)</td><td><strong>Both stay, mapped 1:1</strong> (S0≈R0…S4≈R4) — they answer different questions (per-call vs per-system)</td></tr>
+<tr><td>Platform name</td><td>"Autonomous Enterprise Protocol eXtended" (title page) vs "Agent Ecosystem Protocol Exchange" (from the investor-deck pass onward)</td><td>Cosmetic — use whichever current commercial materials use; not an architecture decision</td></tr>
+</table></div>
+
+<div class="callout warn">
+<strong>Scope discipline check:</strong> nine of this source's ~30 passes (Stages 9–20 — Autonomous Intelligence Internet, Agent Operating System, Planetary Intelligence Grid, Singularity Framework, AEP-X Zero) describe a self-evolving, planet-scale successor to the platform being scoped in Weeks 1–12. None of that is designed here — it is exactly the "everything looks equally urgent" failure the ADLC Plan's Critical Evaluation (§15.2.1) already flagged, one order of magnitude larger. This document is scoped to the Universal Connector Layer only, buildable in the Weeks 13+ window the Microservices-Implementation-Guide left open.
+</div>
+
+<h3>1.2 Cross-walk — what's genuinely new for architecture purposes</h3>
+<div class="table-wrap"><table>
+<tr><th>Source concept</th><th>Status</th></tr>
+<tr><td>Agent Registry, Trust Authority, Discovery, Memory, Workflow Engine, Safety Engine, Governance Engine</td><td><span class="status-pill status-built">Built</span> — unchanged</td></tr>
+<tr><td>Universal Connector Layer (Enterprise/Industrial/Productivity/Developer/AI Platform/Gov-Edu)</td><td><span class="status-pill status-new">New</span> — designed in this document as SOA</td></tr>
+<tr><td>Knowledge Service, ML Integration Layer, Anti-Hallucination Engine V2, Universal Cost Optimiser</td><td><span class="status-pill status-new">New</span> — designed in Microservices-Architecture-v2.html</td></tr>
+<tr><td>Marketplace Engine, Certification Platform, Developer Portal</td><td><span class="status-pill status-backlog">Backlog</span> — Handoff §2 deferral stands</td></tr>
+<tr><td>Stages 9–20 (AOS, AII, Planetary Intelligence Grid, Singularity Framework, etc.)</td><td><span class="status-pill status-backlog">Out of scope</span></td></tr>
+</table></div>
+
+<h2 id="why">2. Why SOA Fits the Universal Connector Layer and Not the Core</h2>
+<p>Classic SOA/ESB architecture earns its coupling and mediation overhead when a system integrates with <strong>external systems it does not own</strong>, speaking <strong>heterogeneous, often legacy protocols</strong>, changing on <strong>vendor release cycles</strong>, requiring <strong>centralised governance</strong> before any AEP-X agent touches them. That is the Connector Layer's problem, not the AI-native core's:</p>
+<div class="table-wrap"><table>
+<tr><th>Property</th><th>AI-native core</th><th>Universal Connector Layer</th></tr>
+<tr><td>Who owns the target system</td><td>AEP-X</td><td>External vendor / customer's estate</td></tr>
+<tr><td>Protocol diversity</td><td>One (internal REST + Kafka)</td><td>Many at once: SOAP, OPC-UA, proprietary RPC, REST, GraphQL, Modbus</td></tr>
+<tr><td>Release cadence</td><td>Continuous</td><td>Vendor-controlled, 6–18 months</td></tr>
+<tr><td>Independent-deploy unit</td><td>One microservice</td><td>Usually a whole protocol family at once</td></tr>
+<tr><td>Governance requirement</td><td>Enforced once, in Governance Engine</td><td>Enforced per external system, often per regulator (AIA-R is per-connector)</td></tr>
+<tr><td>Risk if built as N microservices</td><td>N/A</td><td>N near-identical services each re-implementing auth/retry/audit — "distributed monolith of adapters"</td></tr>
+</table></div>
+<p>Microservices optimise for independent deployability of cohesive capabilities you own. The Connector Layer is the opposite shape — many external protocols funnelling into one set of AEP-X-side concerns (trust check, policy check, canonical translation, audit). That's an Enterprise Service Bus's job description.</p>
+
+<div class="part-divider">
+  <div class="k">Architecture</div>
+  <h2 id="arch" style="color:#fff">3. SOA Architecture — the AEP-X Connector Bus (ACB)</h2>
+  <div class="when">5 coarse-grained connector services · 1 bus · shared trust &amp; governance spine</div>
+</div>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 940 560" width="100%" role="img" aria-label="AEP-X SOA connector bus architecture diagram" style="font-family:'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#5a6b82"/>
+    </marker>
+  </defs>
+
+  <rect x="370" y="8" width="200" height="32" rx="7" fill="#5a6b82"/>
+  <text x="470" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Client · SDK · CLI · MCP</text>
+  <line x1="470" y1="40" x2="470" y2="58" stroke="#5a6b82" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="320" y="60" width="300" height="36" rx="7" fill="#0f4c81"/>
+  <text x="470" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">API Gateway</text>
+
+  <line x1="390" y1="96" x2="250" y2="130" stroke="#5a6b82" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <line x1="550" y1="96" x2="690" y2="130" stroke="#5a6b82" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+  <rect x="90" y="132" width="320" height="52" rx="7" fill="#2e8b57"/>
+  <text x="250" y="152" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Microservices Core</text>
+  <text x="250" y="170" text-anchor="middle" font-size="10" fill="#eaf6ee">Registry · Trust · Discovery · Memory ·</text>
+  <text x="250" y="182" text-anchor="middle" font-size="10" fill="#eaf6ee">Workflow · Safety · Governance</text>
+
+  <rect x="530" y="132" width="320" height="52" rx="7" fill="#b8860b"/>
+  <text x="690" y="152" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">AEP-X Connector Bus (ACB)</text>
+  <text x="690" y="170" text-anchor="middle" font-size="10" fill="#fdf6ec">trust check → policy check →</text>
+  <text x="690" y="182" text-anchor="middle" font-size="10" fill="#fdf6ec">canonical translation → route</text>
+
+  <line x1="410" y1="158" x2="530" y2="158" stroke="#5a6b82" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="470" y="150" text-anchor="middle" font-size="8.5" fill="#5a6b82">shared trust/</text>
+  <text x="470" y="200" text-anchor="middle" font-size="8.5" fill="#5a6b82">governance spine</text>
+
+  <line x1="690" y1="184" x2="690" y2="205" stroke="#5a6b82" stroke-width="1.4"/>
+  <line x1="150" y1="205" x2="850" y2="205" stroke="#5a6b82" stroke-width="1.4"/>
+
+  <!-- 5 connector services -->
+  <g font-size="10">
+    <rect x="120" y="207" width="140" height="70" rx="6" fill="#fff" stroke="#d7dee8"/>
+    <text x="190" y="224" text-anchor="middle" font-weight="700" fill="#1a2332">Enterprise</text>
+    <text x="190" y="238" text-anchor="middle" fill="#5a6b82">Connector Service</text>
+    <text x="190" y="254" text-anchor="middle" fill="#5a6b82">SAP · SFDC · Dynamics</text>
+    <text x="190" y="266" text-anchor="middle" fill="#5a6b82">Oracle · Workday · SNow</text>
+
+    <rect x="280" y="207" width="140" height="70" rx="6" fill="#fff" stroke="#d7dee8"/>
+    <text x="350" y="224" text-anchor="middle" font-weight="700" fill="#1a2332">Industrial</text>
+    <text x="350" y="238" text-anchor="middle" fill="#5a6b82">Connector Service</text>
+    <text x="350" y="254" text-anchor="middle" fill="#5a6b82">OPC-UA · Modbus</text>
+    <text x="350" y="266" text-anchor="middle" fill="#5a6b82">BACnet · SCADA · PLC</text>
+
+    <rect x="440" y="207" width="140" height="70" rx="6" fill="#fff" stroke="#d7dee8"/>
+    <text x="510" y="224" text-anchor="middle" font-weight="700" fill="#1a2332">Productivity</text>
+    <text x="510" y="238" text-anchor="middle" fill="#5a6b82">Connector Service</text>
+    <text x="510" y="254" text-anchor="middle" fill="#5a6b82">Workspace · M365</text>
+    <text x="510" y="266" text-anchor="middle" fill="#5a6b82">Slack · Teams · Zoom</text>
+
+    <rect x="600" y="207" width="140" height="70" rx="6" fill="#fff" stroke="#d7dee8"/>
+    <text x="670" y="224" text-anchor="middle" font-weight="700" fill="#1a2332">Developer Tools</text>
+    <text x="670" y="238" text-anchor="middle" fill="#5a6b82">Connector Service</text>
+    <text x="670" y="254" text-anchor="middle" fill="#5a6b82">GitHub · GitLab · Jira</text>
+    <text x="670" y="266" text-anchor="middle" fill="#5a6b82">Confluence · Azure DevOps</text>
+
+    <rect x="760" y="207" width="140" height="70" rx="6" fill="#fff" stroke="#d7dee8"/>
+    <text x="830" y="224" text-anchor="middle" font-weight="700" fill="#1a2332">AI Platform</text>
+    <text x="830" y="238" text-anchor="middle" fill="#5a6b82">Connector Service</text>
+    <text x="830" y="254" text-anchor="middle" fill="#5a6b82">OpenAI · Anthropic</text>
+    <text x="830" y="266" text-anchor="middle" fill="#5a6b82">Gemini · Ollama · vLLM</text>
+  </g>
+
+  <g stroke="#5a6b82" stroke-width="1.2" marker-end="url(#arrow)">
+    <line x1="190" y1="277" x2="190" y2="300"/>
+    <line x1="350" y1="277" x2="350" y2="300"/>
+    <line x1="510" y1="277" x2="510" y2="300"/>
+    <line x1="670" y1="277" x2="670" y2="300"/>
+    <line x1="830" y1="277" x2="830" y2="300"/>
+  </g>
+
+  <rect x="90" y="302" width="820" height="40" rx="6" fill="#e8f0f8"/>
+  <text x="500" y="326" text-anchor="middle" font-size="10.5" fill="#0f4c81">External systems (one adapter per system, inside each coarse-grained service — see §3.2 catalogue)</text>
+
+  <rect x="90" y="360" width="820" height="34" rx="6" fill="#f3eee7"/>
+  <text x="500" y="381" text-anchor="middle" font-size="10" fill="#8a6d3b">Solid = synchronous mediation call · Dashed = shared spine (Trust Authority / Governance Engine APIs) · Grey box = infrastructure, not a service</text>
+</svg>
+</div>
+
+<h3>3.1 Design principles</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body"><p><strong>Coarse-grained services, fine-grained adapters.</strong> One connector service per category (5 services), not one per external system (25+). Inside each, one <code>Connector</code> implementation per system, reusing the source's own interface verbatim:</p>
+<pre><code>class Connector:
+    async def authenticate(self): pass
+    async def discover(self): pass
+    async def execute(self, request): pass
+    async def monitor(self): pass</code></pre></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body"><p><strong>Canonical message model, no exceptions.</strong> Every connector translates its external protocol into and out of the RFC-0001 envelope before touching the bus — the same envelope already used inside the microservices core.</p></div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body"><p><strong>Mediation, not choreography.</strong> The core's Tier 2 talks by publishing facts to Kafka (Microservices Guide §4.2). The bus does the opposite on purpose: it centrally orchestrates trust check → policy check → translation → route → external call → response translation, because that sequencing must be enforced <em>before</em> every call to an ungoverned external system, not eventually-consistent after it.</p></div></div>
+<div class="step"><div class="step-num">4</div><div class="step-body"><p><strong>Contract-first per connector.</strong> Each publishes a <code>Connector Contract</code> naming its protocols, canonical message version, required governance checks, and assigned AI risk class.</p></div></div>
+<div class="step"><div class="step-num">5</div><div class="step-body"><p><strong>No connector calls another connector.</strong> Cross-connector workflows go through Workflow Engine via the Gateway — the bus stays a mediation layer, not a second orchestrator (the "smart pipes, dumb endpoints" SOA anti-pattern).</p></div></div>
+
+<h3>3.2 Service catalogue (SOA layer)</h3>
+<div class="table-wrap"><table>
+<tr><th>Connector service</th><th>External systems owned</th><th>Protocols</th><th>Governance checks</th></tr>
+<tr><td>Enterprise Connector Service</td><td>SAP, Salesforce, MS Dynamics, Oracle, Workday, ServiceNow</td><td>SOAP, REST, proprietary RPC</td><td>Trust + Policy; AIA-R classified at onboarding</td></tr>
+<tr><td>Industrial Connector Service</td><td>SCADA, PLC, OPC-UA, BACnet, Modbus</td><td>OPC-UA, Modbus, BACnet</td><td>Trust + Policy + mandatory Safety Engine pre-check</td></tr>
+<tr><td>Productivity Connector Service</td><td>Google Workspace, M365, Slack, Teams, Zoom</td><td>REST, OAuth2-fronted APIs</td><td>Trust + Policy</td></tr>
+<tr><td>Developer Tools Connector Service</td><td>GitHub, GitLab, Jira, Confluence, Azure DevOps</td><td>REST, GraphQL</td><td>Trust + Policy</td></tr>
+<tr><td>AI Platform Connector Service</td><td>OpenAI, Anthropic, Gemini, Mistral, Ollama, vLLM, HuggingFace</td><td>REST (vendor-specific)</td><td>Trust + Policy + <strong>Cost Optimiser consulted before every call</strong></td></tr>
+</table></div>
+<p><em>Government/Education connectors are reference design only — same status as Marketplace Engine — until a pilot names a concrete system.</em></p>
+
+<h3>3.3 The bus itself</h3>
+<p><code>connector-bus/</code> (repo root, a sibling of <code>services/</code>) — a single lightweight FastAPI mediation service plus the existing Kafka bus, <strong>not</strong> a commercial ESB product. <code>POST /bus/route</code> accepts an RFC-0001 envelope, checks trust and policy via the existing Trust Authority and Governance Engine APIs, forwards to the resolved connector, and publishes <code>connector.invoked</code>/<code>connector.failed</code> to the same Kafka bus Governance Engine already audits unconditionally.</p>
+
+<h2 id="sec">4. Security &amp; Compliance in the SOA Layer</h2>
+<p>Reuses everything already specified for the core — no new security model. OAuth2/OIDC + JWT for the calling agent; mTLS Gateway→Bus→connectors; <strong>Trust Before Execution (Law 2)</strong> enforced structurally at the bus, before any external system is touched; every call wrapped in the <code>{answer, confidence, evidence[], verification_status}</code> contract. AIA risk classification is assigned <strong>once per connector at onboarding</strong> — deliberately different from the S0–S4 safety classification, which is per call. Connectors touching Workday or any Industrial system default to AIA-R2+, requiring at minimum <strong>Silver</strong> assurance before going live.</p>
+
+<h2 id="build">5. Build Sequence Addendum (Weeks 13+)</h2>
+<div class="callout note">The Connector Bus depends on Trust Authority and Governance Engine already being healthy in production — building it earlier lets ungoverned external calls through with no trust or policy check, the same failure mode the Microservices Guide flagged for early Marketplace Engine builds.</div>
+<div class="table-wrap"><table>
+<tr><th>Week</th><th>Deliverable</th></tr>
+<tr><td>13</td><td>Connector Bus skeleton — routing table, Kafka publish; mock connector only</td></tr>
+<tr><td>14</td><td>AI Platform Connector — self-hosted/open-weights model server (Ollama or vLLM), not a commercial API — critical path for the Cost Optimiser; a metered commercial connector is added later only if needed</td></tr>
+<tr><td>15</td><td>Developer Tools Connector (GitHub only)</td></tr>
+<tr><td>16</td><td>Productivity Connector (Slack only)</td></tr>
+<tr><td>17–18</td><td>Enterprise Connector (Salesforce only — the other five wait until this one is proven)</td></tr>
+<tr><td>Backlog</td><td>Industrial Connector — needs a real OPC-UA target to build against</td></tr>
+</table></div>
+
+<h2 id="dod">6. Definition of Done — SOA Milestone</h2>
+<ul>
+<li><code>POST /bus/route</code> rejects a call when trust is below the connector's threshold, visible in Governance Engine's audit log within 1 second.</li>
+<li>At least one live connector per category except Industrial responds end-to-end through the full mediation chain.</li>
+<li>Every connector call is audited with <code>ai_risk_class</code> and <code>trust_score_at_call_time</code>.</li>
+<li>No connector service calls another connector service directly.</li>
+<li>Recorded in <code>governance/decisions/</code>, noting Government/Education and Industrial connectors remain reference-design-only.</li>
+</ul>
+
+<footer>AEP-X — SOA Architecture Implementation Guide · Companion to ADLC-Plan, Handoff, Instructional-Manual, and Microservices-Implementation-Guide · 7 July 2026</footer>
+</div>
+</body>
+</html>

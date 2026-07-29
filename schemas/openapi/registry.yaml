@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: AEP-X Registry
+  version: 0.0.1
+paths:
+  /health:
+    get:
+      responses: { "200": { description: OK } }
+  /agents:
+    post:
+      requestBody: { required: true }
+      responses: { "200": { description: Created } }
+    get:
+      responses: { "200": { description: List } }
+  /agents/{agent_id}:
+    get:
+      parameters:
+        - { name: agent_id, in: path, required: true }
+      responses: { "200": { description: OK } }
