@@ -11,12 +11,22 @@
     {
       "name": "aepx-core",
       "source": "./",
-      "description": "Skills for running, testing, extending and debugging CI on the AEP-X platform (aepx-core): local stack, per-service tests, connector adapters, and GitHub Actions CI.",
-      "version": "0.1.0",
-      "author": { "name": "Equality Software Ltd", "email": "ali.abdalla@softwareequality.com" },
+      "description": "Complete AEP-X skill set for aepx-core: one skill per service, the connector bus and each connector category, plus SDK, CLI, consoles, blockchain, governance, RFCs/conformance, database, CI/Jenkins, docs and architecture.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Equality Software Ltd",
+        "email": "ali.abdalla@softwareequality.com"
+      },
       "repository": "https://github.com/aliabdalla-maker/aepx-core",
       "category": "development",
-      "keywords": ["aepx", "microservices", "soa", "connectors", "fastapi", "ci"]
+      "keywords": [
+        "aepx",
+        "microservices",
+        "soa",
+        "connectors",
+        "fastapi",
+        "ci"
+      ]
     }
   ]
 }
