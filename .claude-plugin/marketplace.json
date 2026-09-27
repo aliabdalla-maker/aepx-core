@@ -1,0 +1,22 @@
+{
+  "name": "aepx",
+  "owner": {
+    "name": "Equality Software Ltd",
+    "email": "ali.abdalla@softwareequality.com"
+  },
+  "metadata": {
+    "description": "AEP-X platform skills for working on the aepx-core monorepo"
+  },
+  "plugins": [
+    {
+      "name": "aepx-core",
+      "source": "./",
+      "description": "Skills for running, testing, extending and debugging CI on the AEP-X platform (aepx-core): local stack, per-service tests, connector adapters, and GitHub Actions CI.",
+      "version": "0.1.0",
+      "author": { "name": "Equality Software Ltd", "email": "ali.abdalla@softwareequality.com" },
+      "repository": "https://github.com/aliabdalla-maker/aepx-core",
+      "category": "development",
+      "keywords": ["aepx", "microservices", "soa", "connectors", "fastapi", "ci"]
+    }
+  ]
+}
