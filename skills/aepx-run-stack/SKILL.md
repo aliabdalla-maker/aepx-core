@@ -17,7 +17,7 @@ curl -s http://localhost:8000/health   # Gateway aggregates the core services' h
 
 Then open the AEP-X Console at http://localhost:8083.
 
-The Gateway's aggregated `/health` does **not** include brain, marketplace or billing (compose passes `MARKETPLACE_URL`/`BILLING_URL` but the gateway ignores them). Check those three directly — see the sweep below.
+The Gateway's aggregated `/health` covers every core service, marketplace, billing and the bus, but **not** brain. Check brain (:8014) directly — see the sweep below.
 
 ## Subset (SOA layer on a healthy core)
 

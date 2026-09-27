@@ -45,7 +45,7 @@
 | Connector | Protocols | AIA risk | Min trust | Maturity |
 |---|---|---|---|---|
 | github | REST, GraphQL | AIA-R0 | 40 | specialized |
-| gitlab | REST, GraphQL | AIA-R0 | 40 | stub |
+| gitlab | REST, GraphQL | AIA-R0 | 40 | specialized |
 | jira | REST | AIA-R0 | 40 | stub |
 | azure-devops | REST | AIA-R0 | 40 | stub |
 | bitbucket | REST | AIA-R0 | 40 | stub |
@@ -53,7 +53,7 @@
 | circleci | REST | AIA-R1 | 50 | stub |
 | sonarqube | REST | AIA-R0 | 40 | stub |
 | artifactory | REST | AIA-R1 | 50 | stub |
-| dockerhub | REST | AIA-R0 | 40 | stub |
+| dockerhub | REST | AIA-R0 | 40 | specialized |
 | terraform-cloud | REST | AIA-R1 | 50 | stub |
 
 ## aiplatform (14)

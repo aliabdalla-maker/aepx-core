@@ -21,13 +21,14 @@ GitHub Actions (`.github/workflows/ci.yml`) is the main CI. Jenkins is a second,
 
 1. **Lint + Unit Tests**: a `parallel` branch per component. Each branch:
    - creates its own venv at `$WORKSPACE/.venv-<dir>`;
-   - runs `pip install -r <dir>/requirements.txt pytest==8.2.0 ruff`;
-   - installs `fakeredis==2.23.2` for cache and discovery, and `pip install -e sdk/python` for `sdk/python` and `platform/*`;
-   - runs `ruff check <dir>`, then `(cd <dir> && pytest tests -v)`, then deletes the venv.
-2. **Build Images**: `docker compose build`. This is build-only: the build context is streamed to the host daemon, so it is safe over the mounted socket.
-3. **v1 Integration Smoke Test**: `bash tests/v1/run_smoke_test.sh`. The script brings up `docker-compose.test.yml` as project `aepx-test` on ports 8100–8180, exercises identity → trust → registry → gateway → governance → bus → aiplatform → console against the **main stack's Ollama** via `host.docker.internal:11434`, and tears itself down unless you pass `--keep`.
+   - runs `pip install -r <dir>/requirements.txt pytest httpx2 ruff==0.16.0`;
+   - installs `fakeredis==2.37.0` for cache and discovery, and `pip install -e sdk/python` for `sdk/python` and `platform/*`;
+   - runs `ruff check <dir>`, then `(cd <dir> && python -m pytest tests -v)`, then deletes the venv.
+2. **Contracts**: `pip install -r tests/requirements.txt` in its own venv, then `python -m pytest tests/test_contracts.py -v` (same as the Actions `contracts` job).
+3. **Build Images**: `docker compose build`. This is build-only: the build context is streamed to the host daemon, so it is safe over the mounted socket.
+4. **v1 Integration Smoke Test**: `bash tests/v1/run_smoke_test.sh`. The script brings up `docker-compose.test.yml` as project `aepx-test` on ports 8100–8180, exercises identity → trust → registry → gateway → governance → bus → aiplatform → console against the **main stack's Ollama** via `host.docker.internal:11434`, and tears itself down unless you pass `--keep`.
 
-`post.always` runs `docker compose -p ${COMPOSE_PROJECT_NAME} -f docker-compose.test.yml down -v --remove-orphans || true`. That uses project `aepx-ci`, while the smoke script uses `aepx-test`. The script's own EXIT trap does the real teardown.
+`post.always` runs `docker compose -p aepx-test -f docker-compose.test.yml down -v --remove-orphans || true` as a backstop; the smoke script's own EXIT trap normally tears down first.
 
 **Docker-outside-of-Docker constraint** (Jenkinsfile header): lint and tests run natively in the Jenkins image, because a nested `docker run -v` or `compose up` with relative bind mounts would resolve against the host filesystem, not the workspace. Keep new stages build-only, or drive containers over HTTP.
 
@@ -48,13 +49,14 @@ Then create a **Pipeline script from SCM** (or Multibranch Pipeline) job pointin
 | | GitHub Actions `ci.yml` | Jenkinsfile |
 |---|---|---|
 | Trigger | every push and pull_request | whatever the Jenkins job is configured with |
-| Components | `test`: 18 services; `test-soa`: bus, 11 connector categories, `sdk/python`, 3 platform apps, `console` | 15 services, bus, 11 categories, console, `sdk/python`, `platform/conformance`, `platform/workbench` |
-| Missing from Jenkins | — | `oracle-bridge`, `marketplace`, `billing`, `platform/aepx-console`, and the `contracts` job (`tests/test_contracts.py`) |
-| Tool pins | `ruff==0.16.0`, `pytest` unpinned, `httpx2`, `fakeredis==2.37.0` | `ruff` unpinned, `pytest==8.2.0`, no `httpx2`, `fakeredis==2.23.2` |
-| Test command | `python -m pytest tests -v` (puts the component dir on sys.path) | venv `pytest tests -v` |
+| Components | `test`: 18 services; `test-soa`: bus, 11 connector categories, `sdk/python`, 3 platform apps, `console` | the same 18 services, bus, 11 categories, `console`, `sdk/python` and all 3 platform apps |
+| Contracts | `contracts` job | `Contracts` stage |
+| Catalogue check | `catalogue` job | — (run `python scripts/gen_connector_catalogue.py --check` locally) |
+| Tool pins | `ruff==0.16.0`, `pytest`, `httpx2`, `fakeredis==2.37.0` | the same |
+| Test command | `python -m pytest tests -v` | the same (venv `python -m pytest`) |
 | Extra stages | — | image build and the v1 integration smoke test |
 
-When you add a component to `ci.yml`, also add it to the Jenkinsfile's `components` list. The existing gaps above are drift, not intentional exclusions. No reason for them is documented, so ask the user before closing them. Because `ruff` is unpinned here, Jenkins may run a different ruff version than CI. `ruff.toml` pins the rule selection (E4, E7, E9, F), which limits but does not remove that drift.
+GitHub Actions is the source of truth. When you add a component or change a pin in `ci.yml`, make the same change in the Jenkinsfile's `components` list and install line in the same PR — a comment above the list says so.
 
 ## Related skills
 

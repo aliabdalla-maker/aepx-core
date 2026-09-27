@@ -5,13 +5,14 @@ description: Run lint and tests for one or more AEP-X components (services, conn
 
 # Test an AEP-X component the way CI does
 
-CI (`.github/workflows/ci.yml`) has three jobs, all on Python 3.11, each component in isolation:
+CI (`.github/workflows/ci.yml`) has four jobs, all on Python 3.11, each component in isolation:
 
 | Job | Matrix |
 |---|---|
 | `test` | services: registry, identity, trust, memory, cache, gateway, discovery, workflow, safety, governance, knowledge, verification, cost-optimiser, ml-integration, brain, oracle-bridge, marketplace, billing |
 | `test-soa` | connector-bus, connectors/{enterprise, productivity, devtools, aiplatform, data, messaging, industrial, cloud, government, education, blockchain}, sdk/python, platform/{conformance, workbench, aepx-console}, console |
 | `contracts` | tests/test_contracts.py (compiles the real Solidity with solc 0.8.24, runs on an in-memory EVM) |
+| `catalogue` | `python scripts/gen_connector_catalogue.py --check` (docs/Connector-Catalogue.md matches catalogue.json) |
 
 ## Core service (`services/<name>`)
 
@@ -68,7 +69,7 @@ done
 - The pinned ruff version is 0.16.0, and the config is `ruff.toml` at the repo root. A different version can produce different findings than CI.
 - Test what the change touched, plus anything importing it. For example, an SDK change means testing sdk/python and platform/*. A service response-shape change means its callers too; each `aepx-svc-<name>` skill lists them.
 - Most service tests run without Postgres, Redis or Kafka and exercise the in-memory fallback. Don't add tests that need live infra to the CI suites.
-- Jenkins runs a different, older matrix with different pins (see `aepx-jenkins`). Treat GitHub Actions as the source of truth.
+- Jenkins mirrors this matrix and these pins (see `aepx-jenkins`). GitHub Actions is the source of truth; keep the two in step.
 
 ## Related skills
 

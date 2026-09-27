@@ -50,9 +50,8 @@ Cover each op, the unsupported-op path and the missing-credentials path. Mock ne
 
 ## 4. Docs and generated artefacts
 
-- Update `docs/Connector-Catalogue.md` (counts, the connector's row and its maturity).
-- Update `schemas/sql/003_connectors.sql` if the connector should be seeded.
-- Both files say they're generated from `catalogue.json`, but there's no generator in the repo. Edit them by hand to match, and tell the user.
+- Regenerate `docs/Connector-Catalogue.md` with `python scripts/gen_connector_catalogue.py`. Never hand-edit it; CI's `catalogue` job fails if it's stale.
+- Update `schemas/sql/003_connectors.sql` if the connector should be seeded. It says it's generated from `catalogue.json`, but no generator exists for it, so edit it by hand to match and tell the user.
 - If the number of real adapters changed, update the "Built" section of `README.md`.
 
 ## 5. Try it end to end

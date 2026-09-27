@@ -89,3 +89,13 @@ jobs:
         with: { python-version: "3.11" }
       - run: pip install -r tests/requirements.txt
       - run: python -m pytest tests/test_contracts.py -v
+
+  # docs/Connector-Catalogue.md is generated from connectors/catalogue.json;
+  # fail if someone changes one without regenerating the other.
+  catalogue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with: { python-version: "3.11" }
+      - run: python scripts/gen_connector_catalogue.py --check

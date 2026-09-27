@@ -54,7 +54,7 @@ It exists only as HTML and PDF. Its port map lists neither oracle-bridge, market
 | Change | Update |
 |---|---|
 | New or renamed service, or a port change | `README.md` layout, Operational-Manual §4.2 port map, the `aepx-run-stack` skill's port table (then cut a plugin release), and the relevant architecture doc |
-| New connector, or a stub promoted | `connectors/catalogue.json`, then regenerate `Connector-Catalogue.md` and `schemas/sql/003_connectors.sql`. Operational Manual §8.1 says to regenerate, but no generator script exists in the repo, so ask the user how it was produced |
+| New connector, or a stub promoted | `connectors/catalogue.json`, then `python scripts/gen_connector_catalogue.py` to regenerate `Connector-Catalogue.md` (CI's `catalogue` job fails if you forget). `schemas/sql/003_connectors.sql` has no generator; ask the user before hand-editing it |
 | Protocol behaviour (envelope, trust, policy, checks) | a new or updated RFC in `rfcs/`, and RFC-0007 §4.2 for a new conformance check |
 | Console, bridge, billing or live-chain operation | `Console-and-Bridge.md` |
 | Contract or chain env vars | `governance/contracts/README.md`, RFC-0006 and RFC-0008 |

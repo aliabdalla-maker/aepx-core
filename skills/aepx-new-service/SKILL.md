@@ -94,11 +94,11 @@ The first unused slot in the core range is **8018** (8019 is also free). Confirm
 ## 5. CI
 
 - `.github/workflows/ci.yml`: add `- <name>` to `jobs.test.strategy.matrix.service`. That job installs requirements, runs `ruff check services/<name>`, then `cd services/<name> && python -m pytest tests -v`.
-- `Jenkinsfile`: add `'services/<name>'` to the `components` list. It already lags CI: oracle-bridge, marketplace, billing and platform/aepx-console are missing from it.
+- `Jenkinsfile`: add `'services/<name>'` to the `components` list, which mirrors the CI matrix.
 
 ## 6. Wiring into the platform
 
-- **Gateway:** add `"<name>": os.getenv("<NAME>_URL", "http://<name>:8000")` to `SERVICES` in `services/gateway/app/main.py`, and `- <NAME>_URL=http://<name>:8000` to the gateway's compose `environment`. The env var name is the service name upper-cased with `-` → `_`, as with `COST_OPTIMISER_URL`. Once it is in `SERVICES`, a non-`ok` health **fails** the `gateway.health` conformance check. Note that compose already passes `MARKETPLACE_URL` and `BILLING_URL` to the gateway, but `SERVICES` does not read them.
+- **Gateway:** add `"<name>": os.getenv("<NAME>_URL", "http://<name>:8000")` to `SERVICES` in `services/gateway/app/main.py`, and `- <NAME>_URL=http://<name>:8000` to the gateway's compose `environment`. The env var name is the service name upper-cased with `-` → `_`, as with `COST_OPTIMISER_URL`. Once it is in `SERVICES`, a non-`ok` health **fails** the `gateway.health` conformance check. Also add the env var to the gateway-test block in `docker-compose.test.yml`, pointing at a stub target (`http://identity-test:8000`) like the other unused services there.
 - **aepx-console:** add it to `SVC` in `platform/aepx-console/app/main.py` and add its env var to that service's compose block (see `aepx-consoles`).
 - **Brain:** to have it health-monitored, add it to `MONITORED_SERVICES` in `services/brain/app/main.py`.
 - **Kafka events:** a producer uses `KAFKA_BOOTSTRAP` (default `kafka:9092`). Add every new topic to Governance's `_CONSUMED_TOPICS`, or its events never reach the audit trail.

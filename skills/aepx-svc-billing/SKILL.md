@@ -49,7 +49,7 @@ Responses:
 - **Outbound:** `POST {STRIPE_API_BASE}/checkout/sessions`, form-encoded with Stripe's bracket syntax (`line_items[0][price_data][unit_amount]`, and so on), with a 15 s timeout. The key goes only in the `Authorization: Bearer` header.
 - **Other AEP-X services:** none. It uses no Kafka and no Postgres.
 - **Fail-closed when unconfigured:** with no key it returns `configured:false`. It never returns a 5xx and never makes a live call. Stripe errors are caught, and the response names only the exception type, never the key or raw auth detail.
-- **Callers:** `platform/aepx-console` proxies `/api/billing/config` → `/billing/config` (it never proxies the key) and `/api/billing/checkout` → `/billing/checkout`, passing `CheckoutRequest.model_dump()`. It is not in Gateway's `SERVICES` health aggregate or the Brain's `MONITORED_SERVICES`.
+- **Callers:** `platform/aepx-console` proxies `/api/billing/config` → `/billing/config` (it never proxies the key) and `/api/billing/checkout` → `/billing/checkout`, passing `CheckoutRequest.model_dump()`. The Gateway polls its `/health` (`BILLING_URL`), so it is covered by the `gateway.health` conformance check. It is not in the Brain's `MONITORED_SERVICES`.
 
 ## Run & test
 ```bash

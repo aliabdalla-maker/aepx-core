@@ -76,6 +76,9 @@ services:
       - VERIFICATION_URL=http://identity-test:8000
       - COST_OPTIMISER_URL=http://identity-test:8000
       - ML_INTEGRATION_URL=http://identity-test:8000
+      - ORACLE_BRIDGE_URL=http://identity-test:8000
+      - MARKETPLACE_URL=http://identity-test:8000
+      - BILLING_URL=http://identity-test:8000
       - CONNECTOR_BUS_URL=http://connector-bus-test:8000
     depends_on: [identity-test, trust-test, registry-test, governance-test]
 

@@ -56,7 +56,7 @@ All three make real HTTPS calls with a 10s timeout. On any exception they return
 - Payload: `project` (default `"gitlab-org/gitlab"`), URL-encoded as `namespace%2Fpath`.
 - Env: `GITLAB_TOKEN`, optional, sent as the `PRIVATE-TOKEN` header. Public projects work without it.
 
-The other 8 connectors use `StubAdapter`. Note that docs/Connector-Catalogue.md still lists `gitlab` and `dockerhub` as `stub`; `catalogue.json` says `specialized`.
+The other 8 connectors use `StubAdapter`.
 
 ## API
 

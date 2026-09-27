@@ -40,9 +40,11 @@ Each variable is the base URL of a service in `SERVICES`, polled by `/health`.
 | `COST_OPTIMISER_URL` | `http://cost-optimiser:8000` |
 | `ML_INTEGRATION_URL` | `http://ml-integration:8000` |
 | `ORACLE_BRIDGE_URL` | `http://oracle-bridge:8000` |
+| `MARKETPLACE_URL` | `http://marketplace:8000` |
+| `BILLING_URL` | `http://billing:8000` |
 | `CONNECTOR_BUS_URL` | `http://connector-bus:8000` |
 
-Compose also sets `MARKETPLACE_URL` and `BILLING_URL`, but the code does not read them, so those services are not in `/health`.
+Brain (:8014) is the one service not in `SERVICES`; check it directly.
 
 ## Data & dependencies
 - It is stateless and uses no storage or Kafka.

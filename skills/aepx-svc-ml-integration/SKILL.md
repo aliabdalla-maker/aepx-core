@@ -57,7 +57,7 @@ curl -s -X POST localhost:8013/recommend -H 'Content-Type: application/json' -d 
 ```
 
 ## Changing it
-- **Known caller mismatch.** `platform/aepx-console/app/main.py` `/api/predict` sends `{"kind": req.kind, "features": ...}`, where `kind` defaults to `"cost"`. `PredictIn` requires `model`, so that request fails pydantic validation. Also, `"cost"` is not a key in `_MODELS`. The console's `static/index.html` `predKind` select offers `cost`, `demand` and `failure`, and none of those are `_MODELS` keys. Fix one side or the other.
+- **Keep the console in step.** `platform/aepx-console` `/api/predict` sends `{"model", "features"}`. Its `PredictRequest.model_name()` defaults to `cost_prediction` and maps a legacy `kind` (`"cost"`) to `<kind>_prediction`. Its `predKind` select offers exactly the `_MODELS` keys. If you add or rename a model, update that select too; `test_predict_sends_model_field_ml_integration_expects` in the console's tests guards the payload shape.
 - An unknown model returns 200 with an `error` key, not a 4xx. `tests/test_health.py::test_predict_unknown_model` asserts that. Update both if you change it.
 - When you implement the feedback consumer:
   - Subscribe to the exact topic names above.

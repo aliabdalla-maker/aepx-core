@@ -136,8 +136,19 @@ class ChatRequest(BaseModel):
 
 
 class PredictRequest(BaseModel):
-    kind: str = "cost"
+    # ml-integration's PredictIn requires `model`, keyed by its _MODELS
+    # registry (cost_prediction, demand_prediction, workflow_recommendation).
+    # `kind` is kept for older callers: "cost" -> "cost_prediction".
+    model: str | None = None
+    kind: str | None = None
     features: dict = {}
+
+    def model_name(self) -> str:
+        if self.model:
+            return self.model
+        if self.kind:
+            return self.kind if "_" in self.kind else f"{self.kind}_prediction"
+        return "cost_prediction"
 
 
 class CheckoutRequest(BaseModel):
@@ -269,7 +280,7 @@ def models():
 
 @app.post("/api/predict")
 def predict(req: PredictRequest):
-    return _svc_post("ml-integration", "/predict", {"kind": req.kind, "features": req.features})
+    return _svc_post("ml-integration", "/predict", {"model": req.model_name(), "features": req.features})
 
 
 @app.get("/api/brain/status")

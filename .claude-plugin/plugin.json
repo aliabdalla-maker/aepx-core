@@ -1,6 +1,6 @@
 {
   "name": "aepx-core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Complete AEP-X skill set for aepx-core: one skill per service, the connector bus and each connector category, plus SDK, CLI, consoles, blockchain, governance, RFCs/conformance, database, CI/Jenkins, docs and architecture.",
   "author": {
     "name": "Equality Software Ltd",

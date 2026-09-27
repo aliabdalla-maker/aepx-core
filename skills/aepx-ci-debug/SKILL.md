@@ -5,7 +5,7 @@ description: Diagnose and fix failing GitHub Actions CI on aepx-core, including 
 
 # Debug aepx-core CI
 
-The workflow is `.github/workflows/ci.yml` and runs on every push and pull request. It has three jobs: `test` (18 services), `test-soa` (bus, 11 connector categories, SDK, 3 platform apps, console) and `contracts`. Matrix contents: `aepx-test-component`.
+The workflow is `.github/workflows/ci.yml` and runs on every push and pull request. It has four jobs: `test` (18 services), `test-soa` (bus, 11 connector categories, SDK, 3 platform apps, console), `contracts` and `catalogue` (checks `docs/Connector-Catalogue.md` is regenerated from `catalogue.json`; fix with `python scripts/gen_connector_catalogue.py`). Matrix contents: `aepx-test-component`.
 
 ## 1. Find the real failure
 
@@ -40,7 +40,7 @@ Use `aepx-test-component` for the failing matrix entry: Python 3.11, the same pi
 - After pushing, watch with `gh run watch <run-id> --repo aliabdalla-maker/aepx-core`.
 - If the fix touches plugin skills, cut a plugin release too (see `scripts/release_plugin.py`).
 
-Jenkins (`Jenkinsfile`) runs a separate, older matrix with different pins, so a Jenkins result can differ from Actions. Check it only if the user mentions Jenkins (`aepx-jenkins`).
+Jenkins (`Jenkinsfile`) mirrors the Actions matrix and pins, and adds an image build and the v1 smoke test. Check it only if the user mentions Jenkins (`aepx-jenkins`).
 
 ## Related skills
 

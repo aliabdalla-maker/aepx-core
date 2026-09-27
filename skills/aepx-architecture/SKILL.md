@@ -46,7 +46,7 @@ Derived from `*_URL` env vars in `docker-compose.yml` plus each service's `os.ge
 
 | Service | Calls |
 |---|---|
-| gateway | identity, trust, registry, memory, cache, discovery, workflow, safety, governance, knowledge, verification, cost-optimiser, ml-integration, oracle-bridge, connector-bus. Compose also sets `MARKETPLACE_URL` and `BILLING_URL`, which the code does not read. |
+| gateway | identity, trust, registry, memory, cache, discovery, workflow, safety, governance, knowledge, verification, cost-optimiser, ml-integration, oracle-bridge, marketplace, billing, connector-bus (health aggregate only; brain is not polled) |
 | registry | identity (mints a did:key, fail-open), postgres |
 | discovery | registry, trust (code defaults), redis |
 | workflow | registry, memory (code defaults), kafka |

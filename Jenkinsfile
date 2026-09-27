@@ -29,11 +29,14 @@ pipeline {
                         'services/cache', 'services/gateway', 'services/discovery', 'services/workflow',
                         'services/safety', 'services/governance', 'services/knowledge', 'services/verification',
                         'services/cost-optimiser', 'services/ml-integration', 'services/brain',
+                        'services/oracle-bridge', 'services/marketplace', 'services/billing',
                         'connector-bus', 'connectors/enterprise', 'connectors/productivity', 'connectors/devtools',
                         'connectors/aiplatform', 'connectors/data', 'connectors/messaging', 'connectors/industrial',
                         'connectors/cloud', 'connectors/government', 'connectors/education', 'connectors/blockchain', 'console',
-                        'sdk/python', 'platform/conformance', 'platform/workbench',
+                        'sdk/python', 'platform/conformance', 'platform/workbench', 'platform/aepx-console',
                     ]
+                    // Keep this list and the pins below in step with
+                    // .github/workflows/ci.yml (the source of truth).
                     def branches = [:]
                     for (c in components) {
                         def dir = c
@@ -46,22 +49,39 @@ pipeline {
                                 set -e
                                 python3 -m venv "${venv}"
                                 "${venv}/bin/pip" install -q --upgrade pip
-                                "${venv}/bin/pip" install -q -r ${dir}/requirements.txt pytest==8.2.0 ruff
+                                "${venv}/bin/pip" install -q -r ${dir}/requirements.txt pytest httpx2 ruff==0.16.0
                                 if [ "${dir}" = "services/cache" ] || [ "${dir}" = "services/discovery" ]; then
-                                    "${venv}/bin/pip" install -q fakeredis==2.23.2
+                                    "${venv}/bin/pip" install -q fakeredis==2.37.0
                                 fi
                                 # the SDK's own tests and both platform services import `aepx`
                                 case "${dir}" in sdk/python|platform/*)
                                     "${venv}/bin/pip" install -q -e sdk/python ;;
                                 esac
                                 "${venv}/bin/ruff" check ${dir}
-                                (cd ${dir} && "${venv}/bin/pytest" tests -v)
+                                # python -m pytest (not bare pytest) puts the component
+                                # dir on sys.path so `app.main` imports, as in ci.yml.
+                                (cd ${dir} && "${venv}/bin/python" -m pytest tests -v)
                                 rm -rf "${venv}"
                             """
                         }
                     }
                     parallel branches
                 }
+            }
+        }
+
+        stage('Contracts') {
+            // RFC-0006/0008 Solidity integration on an in-memory EVM — mirrors
+            // the `contracts` job in ci.yml. No Docker or anvil needed.
+            steps {
+                sh '''
+                    set -e
+                    python3 -m venv "$WORKSPACE/.venv-contracts"
+                    "$WORKSPACE/.venv-contracts/bin/pip" install -q --upgrade pip
+                    "$WORKSPACE/.venv-contracts/bin/pip" install -q -r tests/requirements.txt
+                    "$WORKSPACE/.venv-contracts/bin/python" -m pytest tests/test_contracts.py -v
+                    rm -rf "$WORKSPACE/.venv-contracts"
+                '''
             }
         }
 
@@ -83,7 +103,10 @@ pipeline {
 
     post {
         always {
-            sh 'docker compose -p ${COMPOSE_PROJECT_NAME} -f docker-compose.test.yml down -v --remove-orphans || true'
+            // tests/v1/run_smoke_test.sh brings the v1 env up as project
+            // `aepx-test`; tear down that project (its own EXIT trap normally
+            // does this already — this is the backstop).
+            sh 'docker compose -p aepx-test -f docker-compose.test.yml down -v --remove-orphans || true'
         }
         success {
             echo 'AEP-X: lint, unit tests, image build, and the v1 smoke test all passed.'

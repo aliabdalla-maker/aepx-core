@@ -67,3 +67,30 @@ def test_health_map_never_blanks_when_targets_down():
     for svc in ("oracle-bridge", "connector-bus", "governance", "memory", "workflow", "brain", "billing"):
         assert svc in body, f"{svc} missing from health map"
         assert body[svc]["up"] is False
+
+
+def test_predict_sends_model_field_ml_integration_expects(monkeypatch):
+    # ml-integration's PredictIn requires `model` (a _MODELS key); sending
+    # `kind` failed validation. Legacy `kind` still maps to <kind>_prediction.
+    import app.main as main
+
+    sent = []
+
+    class _Resp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"ok": True}
+
+    def fake_post(url, json=None, **kw):
+        sent.append((url, json))
+        return _Resp()
+
+    monkeypatch.setattr(main.httpx, "post", fake_post)
+    assert client.post("/api/predict", json={"model": "demand_prediction"}).status_code == 200
+    assert client.post("/api/predict", json={"kind": "cost"}).status_code == 200
+    assert client.post("/api/predict", json={}).status_code == 200
+    models = [body["model"] for _, body in sent]
+    assert models == ["demand_prediction", "cost_prediction", "cost_prediction"]
+    assert all(url.endswith("/predict") and "kind" not in body for url, body in sent)

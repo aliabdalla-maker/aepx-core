@@ -46,7 +46,7 @@ The gate **fails closed**. If Trust or Governance cannot be reached, nothing is 
 - **Kafka:** none. It neither publishes nor consumes.
   - The docstring says the durable record is Governance's audit trail. However, Governance only audits Kafka topics, and `/policy/evaluate` writes no audit row.
   - So publish decisions are **not** audited today. Add a Kafka event, and a matching Governance `_CONSUMED_TOPICS` entry, if you need them audited.
-- **Monitoring:** not in Gateway's `SERVICES` health aggregate (even though compose sets `MARKETPLACE_URL` on the gateway), and not in the Brain's `MONITORED_SERVICES`. `platform/aepx-console` lists it.
+- **Monitoring:** the Gateway polls its `/health` (`MARKETPLACE_URL`), so it is covered by the `gateway.health` conformance check. It is not in the Brain's `MONITORED_SERVICES`. `platform/aepx-console` lists it.
 
 ## Run & test
 ```bash
