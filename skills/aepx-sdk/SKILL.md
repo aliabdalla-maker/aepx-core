@@ -40,7 +40,7 @@ Tests use no live services: `conftest.py`'s `fake_api` fixture monkeypatches `ae
 ```python
 from aepx import Agent
 agent = Agent("tutor")                  # gateway :8000, registry :8003 by default
-agent.execute("Explain Newton's Laws")  # auto-registers, then POST gateway /execute
+agent.execute("Explain Newton's Laws")  # auto-registers, then POST gateway /execute; the result carries a "route" decision
 agent.client.did.create()               # full protocol surface via agent.client
 ```
 

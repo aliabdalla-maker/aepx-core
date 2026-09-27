@@ -14,7 +14,7 @@ Risk classes in this category: AIA-R0 x8, AIA-R1 x3.
 ## Where
 
 - Code: `connectors/productivity/app/main.py` (routes) and `connectors/productivity/app/adapters.py` (`StubAdapter`, specialized adapters, `SPECIALIZED` registry). Tests: `connectors/productivity/tests/test_health.py`. Deps: `connectors/productivity/requirements.txt` (fastapi==0.111.0, uvicorn[standard]==0.30.0, pydantic==2.7.1, httpx==0.27.0).
-- Compose service **`connector-productivity`**, host port **8024** -> container 8000, catalogue mounted read-only at `/app/catalogue.json`. No `environment:` block in compose (so `SLACK_BOT_TOKEN` is unset by default).
+- Compose service **`connector-productivity`**, host port **8024** -> container 8000, catalogue mounted read-only at `/app/catalogue.json`. Compose passes `SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN:-}` from `.env` (listed in `.env.example`); it is empty by default, so the adapter degrades.
 - `CATEGORY` env: not set in compose. The code default `os.getenv("CATEGORY", "productivity")` applies. `CATALOGUE_PATH` defaults to `/app/catalogue.json`.
 - The bus reaches it at `http://connector-productivity:8000`, overridable with `CONNECTOR_URL_PRODUCTIVITY` on the connector-bus.
 

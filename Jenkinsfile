@@ -1,6 +1,6 @@
 // AEP-X CI pipeline. Point a "Pipeline script from SCM" (or Multibranch
 // Pipeline) job at this repo's GitHub remote to run it — see
-// docs/Operational-Manual.html for the one-time Jenkins setup steps
+// docs/Operational-Manual.html §10 for the one-time Jenkins setup steps
 // (docker-compose.jenkins.yml, opt-in, not started by default).
 //
 // Design note: this Jenkins runs with the HOST's docker.sock mounted
@@ -96,7 +96,14 @@ pipeline {
 
         stage('v1 Integration Smoke Test') {
             steps {
-                sh 'bash tests/v1/run_smoke_test.sh'
+                // Test ports are published on the Docker HOST, not in this
+                // container — reach them via host.docker.internal (mapped in
+                // docker-compose.jenkins.yml). The test compose file's
+                // relative bind mounts also need JENKINS_HOME_MOUNT set: see
+                // docs/Operational-Manual.html §10.
+                withEnv(['AEPX_TEST_HOST=host.docker.internal']) {
+                    sh 'bash tests/v1/run_smoke_test.sh'
+                }
             }
         }
     }

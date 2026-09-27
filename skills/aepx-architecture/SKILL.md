@@ -12,7 +12,7 @@ AEP-X is an interoperability layer for agentic AI. It has a **microservices core
 | Layer | Components |
 |---|---|
 | Clients | `sdk/python/aepx` (Agent, AepxClient + plugins), `cli/aepx_cli`, and the GUIs `console` (:8080), `workbench` (:8081), `conformance` (:8082), `aepx-console` (:8083) |
-| Edge | `gateway` (:8000): aggregate `/health`, plus `/execute`, which is currently a passthrough (it fetches the agent from Registry) |
+| Edge | `gateway` (:8000): aggregate `/health`, plus `/execute`, which fetches the agent from Registry and asks Cost Optimiser for a cache-first routing decision |
 | Tier 1, synchronous | identity, trust, registry, memory, cache, discovery |
 | Tier 2, event-driven over Kafka | workflow, safety, governance |
 | v2 additions | knowledge, verification, cost-optimiser, ml-integration, brain |

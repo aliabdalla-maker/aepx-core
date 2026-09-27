@@ -23,8 +23,19 @@ services:
       - "50000:50000" # inbound agent connections
     environment:
       - JAVA_OPTS=-Xmx768m -Xms256m
+    # The jenkins user must be able to use the host's docker.sock. Set
+    # DOCKER_GID to the socket's group id: DOCKER_GID=$(stat -c %g /var/run/docker.sock)
+    group_add:
+      - "${DOCKER_GID:-999}"
+    # The v1 smoke stage reaches the test stack's published ports on the host.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
-      - jenkins-home:/var/jenkins_home
+      # Default: a named volume (lint, tests, contracts and image builds all
+      # work). For the smoke stage, set JENKINS_HOME_MOUNT=/var/jenkins_home
+      # so the workspace exists at the SAME path on the host and the test
+      # compose file's relative bind mounts resolve (Operational Manual §10).
+      - ${JENKINS_HOME_MOUNT:-jenkins-home}:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:

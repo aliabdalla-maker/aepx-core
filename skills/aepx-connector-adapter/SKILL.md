@@ -39,7 +39,7 @@ Good references:
   - `.env.example`, with an empty or placeholder value
   - that category service's `environment:` in `docker-compose.yml` (e.g. `- SMTP_HOST=${SMTP_HOST:-}`)
 
-  Several existing adapters skip this, reading `SLACK_BOT_TOKEN`, `GITHUB_TOKEN`, `GITLAB_TOKEN` and `EVM_PRIVATE_KEY` without either. Don't repeat that.
+  Use the `${NAME:-}` form so an unset variable arrives as empty, and treat empty as unset in the adapter (`if not self.token`). The existing slack, github, gitlab and ethereum adapters follow this pattern.
 - Degrade cleanly when credentials are absent: return a clear error, don't crash. The repo's convention is that everything runs with zero external config.
 - Add any client library to `connectors/<category>/requirements.txt` with a pinned version.
 - Return errors in the body rather than raising. The bus doesn't inspect the category service's HTTP status, so a 4xx/5xx from your service would still be recorded as `invoked`.

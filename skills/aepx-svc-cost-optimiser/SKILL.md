@@ -12,7 +12,7 @@ Accuracy + Trust + Compliance + Performance − Cost − Latency − Energy − 
 
 Its explanation text cites Law 5 (Reuse Before Computation): "Routing chooses highest utility, not highest intelligence".
 
-The docs make it the one deliberate synchronous Tier 2 service. The Gateway is meant to call `POST /route/decide` before an LLM call, with a budget under 20 ms (§4.1). That wiring does not exist yet: `services/gateway` `/execute` is a passthrough, and its comment says cost-optimiser routing "lands once wired here".
+The docs make it the one deliberate synchronous Tier 2 service. The Gateway is meant to call `POST /route/decide` before an LLM call, with a budget under 20 ms (§4.1). The Gateway now does this: `/execute` posts one `/route/decide` per candidate tier (default `cache`, `small_model`, `large_model`, or the single `route` the caller pins) and returns the highest-utility tier. Each call has a 2s timeout, and there is no 20 ms budget enforcement yet.
 
 ## Where
 - Code: `services/cost-optimiser/app/main.py`.
@@ -47,7 +47,8 @@ The docs make it the one deliberate synchronous Tier 2 service. The Gateway is m
 - **Trust:** the service calls Trust on every request with a 2 s timeout. If the Trust JSON has no `trust_score` key, it uses 50.
 - **Failure behaviour:** the Trust call is **not** wrapped in try/except. If Trust is unreachable or returns non-JSON, the exception propagates and the request fails with a 5xx. It does not degrade gracefully.
 - **Kafka:** none. `ml.prediction.made` is documented as an optional input, but the service does not consume it.
-- **Callers:** none call `/route/decide` today. Gateway, Brain and the aepx-console poll `/health` only.
+- **Callers:** `services/gateway` `/execute` (`_decide_route`) calls `/route/decide`. Brain and the aepx-console poll `/health` only.
+- Gateway keeps its own copy of `ROUTES` so it can reject an unknown `route` with a 422. If you change `ROUTES` here, change it in `services/gateway/app/main.py` too.
 
 ## Run & test
 ```bash

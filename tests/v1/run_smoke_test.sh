@@ -22,6 +22,10 @@ PY=python3
 command -v python3 >/dev/null 2>&1 || PY=python
 
 COMPOSE="docker compose -p aepx-test -f docker-compose.test.yml"
+# Host the published test ports are reached on. localhost when run on the
+# Docker host itself; inside the Jenkins container (Docker-outside-of-Docker)
+# localhost is Jenkins, so the Jenkinsfile sets host.docker.internal.
+TEST_HOST="${AEPX_TEST_HOST:-localhost}"
 KEEP=0
 [ "${1:-}" = "--keep" ] && KEEP=1
 
@@ -67,7 +71,7 @@ ready=0
 for i in $(seq 1 40); do
   all_up=1
   for port in $READY_PORTS; do
-    curl -sf --max-time 3 "http://localhost:$port/health" >/dev/null 2>&1 || { all_up=0; break; }
+    curl -sf --max-time 3 "http://$TEST_HOST:$port/health" >/dev/null 2>&1 || { all_up=0; break; }
   done
   if [ "$all_up" -eq 1 ]; then
     ready=1
@@ -88,32 +92,32 @@ fi
 # with a timeout that can absorb a full cold start, so check 5 below always
 # lands on an already-warm model instead of racing those budgets.
 echo "=== warming the ML box (cold model load can take up to ~90s) ==="
-curl -s --max-time 120 -X POST http://localhost:11434/api/generate \
+curl -s --max-time 120 -X POST http://$TEST_HOST:11434/api/generate \
   -H "Content-Type: application/json" \
   -d '{"model":"llama3.2:1b","prompt":"hi","stream":false}' >/dev/null 2>&1
 
 echo "=== running checks ==="
 
 # 1. Gateway aggregate health
-status=$(curl -s --max-time 10 http://localhost:8100/health | "$PY" -c "import sys,json; d=json.load(sys.stdin); print('ok' if d.get('identity',{}).get('status')=='ok' else 'fail')" 2>/dev/null)
+status=$(curl -s --max-time 10 http://$TEST_HOST:8100/health | "$PY" -c "import sys,json; d=json.load(sys.stdin); print('ok' if d.get('identity',{}).get('status')=='ok' else 'fail')" 2>/dev/null)
 check "gateway aggregates identity health" "ok" "${status:-fail}"
 
 # 2. Register an agent via the test Registry
-agent_json=$(curl -s --max-time 10 -X POST http://localhost:8103/agents -H "Content-Type: application/json" -d '{"name":"v1-smoke-agent"}')
+agent_json=$(curl -s --max-time 10 -X POST http://$TEST_HOST:8103/agents -H "Content-Type: application/json" -d '{"name":"v1-smoke-agent"}')
 agent_id=$(echo "$agent_json" | "$PY" -c "import sys,json; print(json.load(sys.stdin).get('id',''))" 2>/dev/null)
 check "agent registered with an id" "1" "$([ -n "$agent_id" ] && echo 1 || echo 0)"
 
 # 3. Trust check — a fresh agent should get the default score
-trust_score=$(curl -s --max-time 10 "http://localhost:8102/trust/$agent_id" | "$PY" -c "import sys,json; print(json.load(sys.stdin).get('trust_score',''))" 2>/dev/null)
+trust_score=$(curl -s --max-time 10 "http://$TEST_HOST:8102/trust/$agent_id" | "$PY" -c "import sys,json; print(json.load(sys.stdin).get('trust_score',''))" 2>/dev/null)
 check "trust score defaults to 50" "50" "${trust_score:-}"
 
 # 4. Governance policy evaluation
-allowed=$(curl -s --max-time 10 -X POST "http://localhost:8109/policy/evaluate?risk_level=AIA-R1" | "$PY" -c "import sys,json; print(json.load(sys.stdin).get('allowed',''))" 2>/dev/null)
+allowed=$(curl -s --max-time 10 -X POST "http://$TEST_HOST:8109/policy/evaluate?risk_level=AIA-R1" | "$PY" -c "import sys,json; print(json.load(sys.stdin).get('allowed',''))" 2>/dev/null)
 check "policy allows a low-risk connector" "True" "${allowed:-}"
 
 # 5. The centrepiece: a real completion from the machine-learning box,
 #    through the full trust -> policy -> connector chain
-chat_resp=$(curl -s --max-time 40 -X POST http://localhost:8180/api/chat -H "Content-Type: application/json" \
+chat_resp=$(curl -s --max-time 40 -X POST http://$TEST_HOST:8180/api/chat -H "Content-Type: application/json" \
   -d '{"prompt":"Reply with exactly one word: online.","attachment_ids":[]}')
 maturity=$(echo "$chat_resp" | "$PY" -c "import sys,json; print(json.load(sys.stdin).get('maturity',''))" 2>/dev/null)
 check "console chat reaches the ML box (specialized or degraded, never absent)" "1" \
@@ -124,7 +128,7 @@ check "console chat reaches the ML box (specialized or degraded, never absent)" 
 #    a connector the bus knows from the catalogue but has no live backend
 #    for — the trust/policy gate must still fire before ever trying to
 #    reach it)
-deny_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -X POST http://localhost:8120/bus/route \
+deny_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -X POST http://$TEST_HOST:8120/bus/route \
   -H "Content-Type: application/json" \
   -d '{"sender":"aepx://agent/x","receiver":"aepx://connector/opcua","payload":{}}')
 check "bus denies a policy-restricted connector" "403" "$deny_code"

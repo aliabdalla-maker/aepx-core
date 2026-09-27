@@ -88,6 +88,7 @@
 <li><a href="#backup">7. Backup &amp; Restore</a></li>
 <li><a href="#connectors">8. Connector Operations</a></li>
 <li><a href="#dod">9. Operational Definition of Done</a></li>
+<li><a href="#jenkins">10. Jenkins CI (opt-in)</a></li>
 </ol>
 </nav>
 
@@ -402,7 +403,7 @@
     <text x="84" y="388" fill="#5a6b82">200 response + confidence + evidence contract</text>
   </g>
 </svg>
-<div class="diagram-caption">Fig. 4 — Cache-first execution (RFC-0005/0008). The Cost Optimiser's <code>/route/decide</code> is the single synchronous Tier-2 exception (&lt;20&nbsp;ms budget); L5 federation-cache writes additionally require a Governance policy check.</div>
+<div class="diagram-caption">Fig. 4 — Cache-first execution (RFC-0005/0008). The Cost Optimiser's <code>/route/decide</code> is the single synchronous Tier-2 exception (&lt;20&nbsp;ms budget); L5 federation-cache writes additionally require a Governance policy check. <strong>Implementation status:</strong> the Gateway's <code>/execute</code> performs the <code>/route/decide</code> step. It scores <code>cache</code>, <code>small_model</code> and <code>large_model</code>, or a single pinned <code>?route=</code>, returns the winning tier as <code>route.selected</code>, and on a tie picks the cheaper tier. Executing the chosen tier (the Cache and ML Connector steps) is not wired yet. If the Cost Optimiser is down, <code>route.status</code> is <code>unavailable</code> and the call still returns 200.</div>
 </div>
 
 <div class="part-divider">
@@ -533,11 +534,73 @@ curl -s -X POST http://localhost:8012/route/decide -H "Content-Type: application
 <h2 id="dod">9. Operational Definition of Done</h2>
 <ul>
 <li>All 35 containers up; <code>postgres</code>, <code>redis</code>, <code>neo4j</code>, <code>ollama</code> report <code>(healthy)</code>.</li>
-<li>Gateway <code>/health</code>: all 16 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 107</code>, 11 categories. Brain <code>/health</code>: <code>monitoring: 16</code>.</li>
+<li>Gateway <code>/health</code>: all 17 services <code>ok</code>. Bus <code>/health</code>: <code>connector_count: 107</code>, 11 categories. Brain <code>/health</code>: <code>monitoring: 16</code>.</li>
 <li>Smoke test (§5) passes all six criteria, including both 403 governance gates. v1 test environment (<code>tests/v1/run_smoke_test.sh</code>) passes all 6 checks in isolation.</li>
 <li>A workflow execution appears in <code>GET /audit</code> within 2 seconds (choreography chain alive); a Brain circuit-breaker trip appears there too (Law 8 covers self-healing actions, not just application events).</li>
 <li>Backups current (§7) and the restore path tested at least once per release.</li>
 </ul>
+
+<h2 id="jenkins">10. Jenkins CI (opt-in)</h2>
+<p>GitHub Actions (<code>.github/workflows/ci.yml</code>) is the source-of-truth CI. Jenkins is a second, local pipeline (<code>Jenkinsfile</code>) that adds an image build and the v1 integration smoke test. It lives in <code>docker-compose.jenkins.yml</code>, outside the main stack, and is never started by default, because Jenkins wants 512&nbsp;MB–1&nbsp;GB of heap on a host that can run low on RAM with the full stack up.</p>
+
+<h3>10.1 Prerequisites</h3>
+<ul>
+<li>A Docker host with about 1&nbsp;GB of free RAM. If the full stack is up, stop some connector categories first, for example <code>docker compose stop connector-industrial connector-government connector-education</code>.</li>
+<li>For the smoke stage only: the main stack's <code>ollama</code> running on host port 11434 with <code>llama3.2:1b</code> pulled. The smoke test reuses it instead of loading a second model.</li>
+<li>Host ports 8090 and 50000 (Jenkins), and 8100–8180 (the v1 test stack) free.</li>
+</ul>
+
+<h3>10.2 Start Jenkins</h3>
+<pre><code># the Docker socket's group id, so the jenkins user can drive the host daemon
+export DOCKER_GID=$(stat -c %g /var/run/docker.sock)
+
+# Linux hosts, to enable the smoke stage: give the Jenkins home the SAME path on the host
+sudo mkdir -p /var/jenkins_home &amp;&amp; sudo chown 1000:1000 /var/jenkins_home
+export JENKINS_HOME_MOUNT=/var/jenkins_home
+
+docker compose -f docker-compose.jenkins.yml up -d --build
+docker compose -f docker-compose.jenkins.yml exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</code></pre>
+<p>Open <code>http://localhost:8090</code> and paste the initial password. Choose <em>Select plugins to install</em>, then <em>None</em>: the image already carries every plugin the Jenkinsfile needs (<code>jenkins/plugins.txt</code>). Create a real admin user; do not keep using <code>admin</code> with the initial password.</p>
+<div class="table-wrap"><table>
+<tr><th>Variable</th><th>Default</th><th>Why</th></tr>
+<tr><td style="white-space:nowrap"><code>DOCKER_GID</code></td><td style="white-space:nowrap"><code>999</code></td><td>Added to the jenkins user via <code>group_add</code> so <code>docker</code> commands can use the mounted socket. If it is wrong, every Docker stage fails with <code>permission denied … docker.sock</code>.</td></tr>
+<tr><td style="white-space:nowrap"><code>JENKINS_HOME_MOUNT</code></td><td style="white-space:nowrap">named volume <code>jenkins-home</code></td><td>With the named volume, lint, tests, contracts and image builds all work. The smoke stage starts <code>docker-compose.test.yml</code>, whose <em>relative</em> bind mounts (<code>./schemas/sql</code>, <code>./connectors/catalogue.json</code>) are resolved by the <em>host</em> daemon. They only resolve when the workspace exists at the same path on the host, so set this to <code>/var/jenkins_home</code>. On Docker Desktop, either share that path with Docker, or skip the smoke stage and run <code>bash tests/v1/run_smoke_test.sh</code> on the host.</td></tr>
+</table></div>
+
+<h3>10.3 Create the job</h3>
+<ol>
+<li><strong>New Item → Multibranch Pipeline</strong>, for example <code>aepx-core</code>. A plain <em>Pipeline → Pipeline script from SCM</em> job works too.</li>
+<li><strong>Branch Sources → GitHub</strong>, repository URL <code>https://github.com/aliabdalla-maker/aepx-core</code>. A public repo needs no credential. For a private fork, or to avoid API rate limits, add <em>Username with password</em> credentials: your GitHub username plus a fine-grained token with read-only <em>Contents</em> and <em>Metadata</em>.</li>
+<li><strong>Build Configuration:</strong> by Jenkinsfile, script path <code>Jenkinsfile</code>.</li>
+<li><strong>Scan triggers:</strong> <em>Periodically if not otherwise run</em>, every 1 hour. GitHub webhooks need Jenkins reachable from the internet, which §10.6 rules out, so poll instead.</li>
+<li>Save. Jenkins scans branches and runs the pipeline for <code>master</code>.</li>
+</ol>
+
+<h3>10.4 What a run does</h3>
+<div class="table-wrap"><table>
+<tr><th>Stage</th><th>What it runs</th><th>Matches Actions</th></tr>
+<tr><td>Lint + Unit Tests</td><td>One parallel branch per component, each in its own venv: <code>pip install -r &lt;dir&gt;/requirements.txt pytest httpx2 ruff==0.16.0</code>, then <code>ruff check</code> and <code>python -m pytest tests -v</code>.</td><td><code>test</code> + <code>test-soa</code></td></tr>
+<tr><td>Contracts</td><td><code>python -m pytest tests/test_contracts.py -v</code></td><td><code>contracts</code></td></tr>
+<tr><td>Build Images</td><td><code>docker compose build</code> (build contexts stream to the host daemon)</td><td>—</td></tr>
+<tr><td>v1 Integration Smoke Test</td><td><code>tests/v1/run_smoke_test.sh</code> with <code>AEPX_TEST_HOST=host.docker.internal</code>: brings up project <code>aepx-test</code> on 8100–8180, runs its six checks, tears down</td><td>—</td></tr>
+</table></div>
+<p>Add or change a component or a tool pin in <code>ci.yml</code> and the Jenkinsfile in the same PR. The Jenkinsfile's <code>components</code> list carries a comment saying so. The connector-catalogue freshness check runs only in Actions; locally, run <code>python scripts/gen_connector_catalogue.py --check</code>.</p>
+
+<h3>10.5 Troubleshooting</h3>
+<div class="table-wrap"><table>
+<tr><th>Symptom</th><th>Cause and fix</th></tr>
+<tr><td><code>permission denied while trying to connect to the Docker daemon socket</code></td><td><code>DOCKER_GID</code> doesn't match the socket's group. Re-export it (§10.2) and run <code>up -d</code> again.</td></tr>
+<tr><td>Smoke stage: bus or aiplatform exit at once, or Postgres starts with no schema</td><td>The bind mounts resolved to host paths that don't exist. Set <code>JENKINS_HOME_MOUNT=/var/jenkins_home</code> (§10.2).</td></tr>
+<tr><td>Smoke stage: <code>curl</code> to 81xx never becomes ready</td><td>Jenkins can't reach the host's published ports. Check that <code>extra_hosts: host.docker.internal:host-gateway</code> is present, and that the stage's <code>AEPX_TEST_HOST</code> is set.</td></tr>
+<tr><td>Smoke stage: chat check fails or times out</td><td>The main stack's Ollama is down or cold. Start it and send one warm-up request, then re-run.</td></tr>
+<tr><td>Ports 8100–8180 already allocated</td><td>A previous run left the test stack up. Run <code>docker compose -p aepx-test -f docker-compose.test.yml down -v --remove-orphans</code>.</td></tr>
+<tr><td>Jenkins container restarts or is OOM-killed</td><td>Free more RAM (§10.1), or lower <code>-Xmx</code> in <code>JAVA_OPTS</code>.</td></tr>
+</table></div>
+
+<h3>10.6 Security and teardown</h3>
+<p>The socket mount gives Jenkins root-equivalent control of the host. Keep a real admin password, keep port 8090 on a trusted network (never expose it publicly), and store tokens only as Jenkins credentials, never in the job config.</p>
+<pre><code>docker compose -f docker-compose.jenkins.yml down      # stop; jobs and history kept
+docker compose -f docker-compose.jenkins.yml down -v   # also wipe the named jenkins-home volume</code></pre>
 
 <footer>AEP-X — Operational Manual · Companion to Handoff, ADLC-Plan, Instructional-Manual, Microservices-Implementation-Guide, and SOA-Architecture · 8 July 2026</footer>
 </div>

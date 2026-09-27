@@ -14,7 +14,7 @@ Risk classes in this category: AIA-R0 x7, AIA-R1 x4.
 ## Where
 
 - Code: `connectors/devtools/app/main.py` (routes) and `connectors/devtools/app/adapters.py` (`StubAdapter`, specialized adapters, `SPECIALIZED` registry). Tests: `connectors/devtools/tests/test_health.py`. Deps: `connectors/devtools/requirements.txt` (fastapi==0.111.0, uvicorn[standard]==0.30.0, pydantic==2.7.1, httpx==0.27.0).
-- Compose service **`connector-devtools`**, host port **8023** -> container 8000, catalogue mounted read-only at `/app/catalogue.json`. No `environment:` block in compose (so `GITHUB_TOKEN` and `GITLAB_TOKEN` are unset by default and both adapters run unauthenticated).
+- Compose service **`connector-devtools`**, host port **8023** -> container 8000, catalogue mounted read-only at `/app/catalogue.json`. Compose passes `GITHUB_TOKEN=${GITHUB_TOKEN:-}` and `GITLAB_TOKEN=${GITLAB_TOKEN:-}` from `.env` (listed in `.env.example`); both are empty by default, so the adapters run unauthenticated.
 - `CATEGORY` env: not set in compose. The code default `os.getenv("CATEGORY", "devtools")` applies. `CATALOGUE_PATH` defaults to `/app/catalogue.json`.
 - The bus reaches it at `http://connector-devtools:8000`, overridable with `CONNECTOR_URL_DEVTOOLS` on the connector-bus.
 

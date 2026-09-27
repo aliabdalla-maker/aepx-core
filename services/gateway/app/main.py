@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import httpx
 import os
 
@@ -36,10 +36,51 @@ async def health():
     return results
 
 
+# RFC-0008 reuse-before-computation hierarchy, cheapest first. Must stay in
+# sync with services/cost-optimiser ROUTES.
+ROUTES = ["cache", "memory", "knowledge", "workflow", "tool", "small_model", "medium_model", "large_model", "human"]
+# Tiers scored when the caller doesn't pin one. Order matters: on a utility
+# tie the earlier (cheaper) tier wins — cache-first routing (Law 5).
+DEFAULT_CANDIDATES = ["cache", "small_model", "large_model"]
+
+
+async def _decide_route(client: httpx.AsyncClient, agent_id: str, capability: str, candidates: list[str]) -> dict:
+    """Ask Cost Optimiser to score each candidate; return the best decision.
+
+    Degrades cleanly: if Cost Optimiser is unreachable or errors, the result is
+    {"status": "unavailable", ...} and /execute still answers 200.
+    """
+    decisions = []
+    for candidate in candidates:
+        try:
+            resp = await client.post(
+                f"{SERVICES['cost-optimiser']}/route/decide",
+                json={"agent_id": agent_id, "capability": capability, "candidate_route": candidate},
+                timeout=2.0,
+            )
+            resp.raise_for_status()
+            decisions.append(resp.json())
+        except Exception as e:
+            return {"status": "unavailable", "error": f"cost-optimiser: {e}", "candidates": candidates}
+    best = max(decisions, key=lambda d: d.get("utility_score", float("-inf")))
+    return {
+        "status": "decided",
+        "selected": best.get("candidate_route"),
+        "utility_score": best.get("utility_score"),
+        "explanation": best.get("explanation"),
+        "scores": {d.get("candidate_route"): d.get("utility_score") for d in decisions},
+    }
+
+
 @app.post("/execute")
-async def execute(agent_id: str, capability: str, payload: dict):
-    # v0.0.1: passthrough only. Cache-first routing (RFC-0008 hierarchy,
-    # now implemented by services/cost-optimiser) lands once wired here.
+async def execute(agent_id: str, capability: str, payload: dict, route: str | None = None):
+    # Looks the agent up in Registry, then asks Cost Optimiser which tier of
+    # the RFC-0008 hierarchy should serve the call. Executing the chosen tier
+    # is not wired yet: the decision is returned alongside the request.
+    if route is not None and route not in ROUTES:
+        raise HTTPException(status_code=422, detail=f"unknown route '{route}'; expected one of {ROUTES}")
+    candidates = [route] if route else DEFAULT_CANDIDATES
     async with httpx.AsyncClient(timeout=5.0) as client:
         agent = await client.get(f"{SERVICES['registry']}/agents/{agent_id}")
-        return {"agent": agent.json(), "capability": capability, "payload": payload}
+        decision = await _decide_route(client, agent_id, capability, candidates)
+        return {"agent": agent.json(), "capability": capability, "payload": payload, "route": decision}
