@@ -3,14 +3,13 @@ set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/aliabdalla-maker/aepx-core}"
 RUNNER_NAME="${RUNNER_NAME:-oci-aepx-$(hostname)}"
-RUNNER_LABELS="${RUNNER_LABELS:-oci-aepx}"
 RUNNER_HOME="${RUNNER_HOME:-/opt/actions-runner}"
 RUNNER_USER="${RUNNER_USER:-${SUDO_USER:-$(id -un)}}"
 RUNNER_TOKEN="${RUNNER_TOKEN:-}"
 
 if [[ -z "$RUNNER_TOKEN" ]]; then
-  echo "RUNNER_TOKEN is required. Generate a short-lived registration token from:"
-  echo "https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners/new"
+  echo "RUNNER_TOKEN is required. Generate a fresh short-lived token from:"
+  echo "https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners/new?arch=x64&os=linux"
   exit 2
 fi
 
@@ -47,7 +46,6 @@ else
     --url "$REPO_URL" \
     --token "$RUNNER_TOKEN" \
     --name "$RUNNER_NAME" \
-    --labels "$RUNNER_LABELS" \
     --unattended \
     --replace
 fi
@@ -56,5 +54,5 @@ sudo ./svc.sh install "$RUNNER_USER" || true
 sudo ./svc.sh start
 sudo ./svc.sh status
 
-echo "Self-hosted runner configured with label: $RUNNER_LABELS"
+echo "Self-hosted runner configured using GitHub default labels (self-hosted, linux, architecture)."
 echo "Next: install deploy/oci/nginx-aepx-location.conf in the active HTTPS server block and test nginx."
