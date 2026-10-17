@@ -31,40 +31,32 @@ jobs:
           echo "runner=$(hostname) user=$(id -un) arch=$(uname -m)"
           test -f platform/ecosystem-tracker/index.html
           test -f platform/ecosystem-tracker/data/portals.json
-          command -v rsync >/dev/null
-          command -v nginx >/dev/null
+          test -x /usr/local/sbin/deploy-aepx
           command -v curl >/dev/null
 
-      - name: Publish atomically on OCI
+      - name: Publish constrained versioned release on OCI
         run: |
           set -euo pipefail
-          TARGET=/var/www/softwareequality.com/aep-x
-          STAGE=/var/www/softwareequality.com/.aep-x-next
-          PREV=/var/www/softwareequality.com/aep-x.prev
+          sudo /usr/local/sbin/deploy-aepx \
+            "$GITHUB_WORKSPACE/platform/ecosystem-tracker" \
+            "$GITHUB_SHA"
 
-          sudo rm -rf "$STAGE"
-          sudo mkdir -p "$STAGE"
-          sudo rsync -a --delete platform/ecosystem-tracker/ "$STAGE/"
-          sudo chown -R www-data:www-data "$STAGE"
+      - name: Verify release on disk
+        run: |
+          set -euo pipefail
+          test -f /srv/aepx/current/index.html
+          test -f /srv/aepx/current/data/portals.json
 
-          sudo rm -rf "$PREV"
-          if [ -d "$TARGET" ]; then
-            sudo mv "$TARGET" "$PREV"
-          fi
-          sudo mv "$STAGE" "$TARGET"
-
-          sudo nginx -t
-          sudo systemctl reload nginx
-
-      - name: Verify production URL
+      - name: Verify production URLs
         run: |
           set -euo pipefail
           for url in \
             https://softwareequality.com/aep-x/ \
             https://www.softwareequality.com/aep-x/; do
             ok=0
-            for i in 1 2 3 4 5; do
-              if curl --fail --silent --show-error --location "$url" >/dev/null; then
+            for i in 1 2 3 4 5 6; do
+              if curl --fail --silent --show-error --location \
+                --max-time 10 "$url" | grep -q 'AEP-X'; then
                 ok=1
                 break
               fi
