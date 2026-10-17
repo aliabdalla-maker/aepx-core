@@ -9,73 +9,66 @@ on:
       - '.github/workflows/deploy-oci.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: aepx-oci-production
   cancel-in-progress: false
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, oci-aepx]
     environment: production
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate static app
+      - name: Validate OCI runner and static app
         run: |
+          set -euo pipefail
+          echo "runner=$(hostname) user=$(id -un)"
           test -f platform/ecosystem-tracker/index.html
           test -f platform/ecosystem-tracker/data/portals.json
+          command -v rsync >/dev/null
+          command -v nginx >/dev/null
+          command -v curl >/dev/null
 
-      - name: Configure SSH
-        env:
-          OCI_HOST: ${{ secrets.OCI_HOST }}
-          OCI_SSH_PRIVATE_KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+      - name: Publish atomically on OCI
         run: |
-          test -n "$OCI_HOST"
-          test -n "$OCI_SSH_PRIVATE_KEY"
-          install -d -m 700 ~/.ssh
-          printf '%s\n' "$OCI_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "$OCI_HOST" >> ~/.ssh/known_hosts
-
-      - name: Upload release to OCI
-        env:
-          OCI_HOST: ${{ secrets.OCI_HOST }}
-          OCI_USER: ${{ secrets.OCI_USER }}
-        run: |
-          test -n "$OCI_USER"
-          rsync -az --delete \
-            -e "ssh -i ~/.ssh/id_ed25519" \
-            platform/ecosystem-tracker/ \
-            "$OCI_USER@$OCI_HOST:~/aep-x-release/"
-
-      - name: Publish atomically
-        env:
-          OCI_HOST: ${{ secrets.OCI_HOST }}
-          OCI_USER: ${{ secrets.OCI_USER }}
-        run: |
-          ssh -i ~/.ssh/id_ed25519 "$OCI_USER@$OCI_HOST" <<'REMOTE'
           set -euo pipefail
           TARGET=/var/www/softwareequality.com/aep-x
           STAGE=/var/www/softwareequality.com/.aep-x-next
+          PREV=/var/www/softwareequality.com/aep-x.prev
+
           sudo rm -rf "$STAGE"
           sudo mkdir -p "$STAGE"
-          sudo rsync -a --delete "$HOME/aep-x-release/" "$STAGE/"
+          sudo rsync -a --delete platform/ecosystem-tracker/ "$STAGE/"
           sudo chown -R www-data:www-data "$STAGE"
-          sudo rm -rf "$TARGET.prev"
-          if [ -d "$TARGET" ]; then sudo mv "$TARGET" "$TARGET.prev"; fi
+
+          sudo rm -rf "$PREV"
+          if [ -d "$TARGET" ]; then
+            sudo mv "$TARGET" "$PREV"
+          fi
           sudo mv "$STAGE" "$TARGET"
+
           sudo nginx -t
           sudo systemctl reload nginx
-          REMOTE
 
       - name: Verify production URL
         run: |
-          for i in 1 2 3 4 5; do
-            if curl --fail --silent --show-error --location \
-              https://www.softwareequality.com/aep-x/ >/dev/null; then
-              exit 0
-            fi
-            sleep 5
+          set -euo pipefail
+          for url in \
+            https://softwareequality.com/aep-x/ \
+            https://www.softwareequality.com/aep-x/; do
+            ok=0
+            for i in 1 2 3 4 5; do
+              if curl --fail --silent --show-error --location "$url" >/dev/null; then
+                ok=1
+                break
+              fi
+              sleep 5
+            done
+            test "$ok" -eq 1
           done
-          exit 1
