@@ -1,0 +1,81 @@
+name: Deploy AEP-X GUI to OCI
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'platform/ecosystem-tracker/**'
+      - 'deploy/oci/**'
+      - '.github/workflows/deploy-oci.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: aepx-oci-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate static app
+        run: |
+          test -f platform/ecosystem-tracker/index.html
+          test -f platform/ecosystem-tracker/data/portals.json
+
+      - name: Configure SSH
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_SSH_PRIVATE_KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+        run: |
+          test -n "$OCI_HOST"
+          test -n "$OCI_SSH_PRIVATE_KEY"
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$OCI_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$OCI_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload release to OCI
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_USER: ${{ secrets.OCI_USER }}
+        run: |
+          test -n "$OCI_USER"
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            platform/ecosystem-tracker/ \
+            "$OCI_USER@$OCI_HOST:~/aep-x-release/"
+
+      - name: Publish atomically
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_USER: ${{ secrets.OCI_USER }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 "$OCI_USER@$OCI_HOST" <<'REMOTE'
+          set -euo pipefail
+          TARGET=/var/www/softwareequality.com/aep-x
+          STAGE=/var/www/softwareequality.com/.aep-x-next
+          sudo rm -rf "$STAGE"
+          sudo mkdir -p "$STAGE"
+          sudo rsync -a --delete "$HOME/aep-x-release/" "$STAGE/"
+          sudo chown -R www-data:www-data "$STAGE"
+          sudo rm -rf "$TARGET.prev"
+          if [ -d "$TARGET" ]; then sudo mv "$TARGET" "$TARGET.prev"; fi
+          sudo mv "$STAGE" "$TARGET"
+          sudo nginx -t
+          sudo systemctl reload nginx
+          REMOTE
+
+      - name: Verify production URL
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --location \
+              https://www.softwareequality.com/aep-x/ >/dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 1
