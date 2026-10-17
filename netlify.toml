@@ -1,5 +1,12 @@
 [build]
+  base = "."
   publish = "platform/ecosystem-tracker"
+  command = "test -f platform/ecosystem-tracker/index.html"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [[headers]]
   for = "/*"
