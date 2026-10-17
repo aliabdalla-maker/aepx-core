@@ -31,33 +31,15 @@ jobs:
           echo "runner=$(hostname) user=$(id -un) arch=$(uname -m)"
           test -f platform/ecosystem-tracker/index.html
           test -f platform/ecosystem-tracker/data/portals.json
-          command -v rsync >/dev/null
+          test -x /usr/local/sbin/deploy-aepx
           command -v curl >/dev/null
 
-      - name: Publish versioned release on OCI
-        env:
-          RELEASE_SHA: ${{ github.sha }}
+      - name: Publish constrained versioned release on OCI
         run: |
           set -euo pipefail
-          ROOT=/srv/aepx
-          RELEASES="$ROOT/releases"
-          RELEASE="$RELEASES/$RELEASE_SHA"
-          CURRENT="$ROOT/current"
-
-          sudo mkdir -p "$RELEASES"
-          sudo rm -rf "$RELEASE"
-          sudo mkdir -p "$RELEASE"
-          sudo rsync -a --delete platform/ecosystem-tracker/ "$RELEASE/"
-          sudo chmod -R a+rX "$RELEASE"
-          sudo ln -sfn "releases/$RELEASE_SHA" "$ROOT/current.next"
-          sudo mv -Tf "$ROOT/current.next" "$CURRENT"
-
-          # Keep only the five newest releases. Caddy serves /srv/aepx/current
-          # through a read-only bind mount owned by the existing Good Hour stack.
-          mapfile -t old < <(sudo find "$RELEASES" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -nr | awk 'NR>5 {$1=""; sub(/^ /,""); print}')
-          if ((${#old[@]})); then
-            sudo rm -rf -- "${old[@]}"
-          fi
+          sudo /usr/local/sbin/deploy-aepx \
+            "$GITHUB_WORKSPACE/platform/ecosystem-tracker" \
+            "$GITHUB_SHA"
 
       - name: Verify release on disk
         run: |
