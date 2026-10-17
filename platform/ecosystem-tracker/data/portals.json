@@ -1,0 +1,26 @@
+{
+  "version": "2026.10.17",
+  "source": "aliabdalla-maker/aepx-core",
+  "portals": [
+    {"id":"crm","name":"CRM","status":"active","scope":"Customer relationship and sales workflows","connectors":["salesforce","hubspot","zoho-crm","dynamics365"]},
+    {"id":"erp","name":"ERP","status":"active","scope":"Enterprise resource planning and finance","connectors":["sap","oracle-erp","dynamics365","netsuite","sage","xero","quickbooks"]},
+    {"id":"tms","name":"TMS","status":"planned","scope":"Transport and logistics coordination","connectors":[]},
+    {"id":"fde","name":"FDE","status":"planned","scope":"Field and distributed enterprise operations","connectors":[]},
+    {"id":"edu","name":"EDU","status":"active","scope":"Education integrations and agent workflows","connectors":[]},
+    {"id":"sec","name":"SEC","status":"active","scope":"Identity, trust, verification, safety and policy enforcement","connectors":[]},
+    {"id":"scm","name":"SCM","status":"in-progress","scope":"Suppliers, procurement, inventory, demand forecasting and logistics","connectors":["sap","oracle-erp","dynamics365","netsuite"]},
+    {"id":"hrm","name":"HRM","status":"in-progress","scope":"Recruitment, onboarding, workforce, leave, skills and HR analytics","connectors":["workday","bamboohr","successfactors","sap"]}
+  ],
+  "capabilityAssessment": [
+    {"id":"security","name":"Security","status":"partial","score":62,"evidence":"Identity, trust, verification and safety services exist; enterprise RBAC, tenant isolation and centralized secret policy still need hardening."},
+    {"id":"agentic-ai","name":"Agentic AI","status":"partial","score":66,"evidence":"Registry, workflow, brain, ML integration and connector execution exist; durable delegation contracts and autonomous recovery policy need expansion."},
+    {"id":"governance","name":"Governance","status":"partial","score":78,"evidence":"Policy evaluation, audit trail and ledger anchoring are implemented; durable human-approval records are the next required control."},
+    {"id":"diagnostics","name":"Diagnostics","status":"partial","score":68,"evidence":"Health endpoints and console health-map exist; full tracing, SLOs and alert routing are not yet complete."},
+    {"id":"analytics","name":"Analytics","status":"partial","score":55,"evidence":"Cost optimiser, brain reliability and audit data exist; unified token, cost, success-rate and agent KPI dashboards are still incomplete."},
+    {"id":"orchestration","name":"Orchestration","status":"partial","score":64,"evidence":"Workflow service and governed connector execution exist; checkpointing, compensation and multi-agent retry strategy need deeper implementation."},
+    {"id":"topology","name":"Topology","status":"partial","score":58,"evidence":"Service health and connector catalogue expose topology inputs; dependency graph visualization is added in this tracker but runtime dependency discovery remains limited."},
+    {"id":"administration","name":"Administration","status":"early","score":38,"evidence":"No complete enterprise tenant/user administration plane is present yet; identity and registry provide foundations."},
+    {"id":"scm","name":"SCM","status":"in-progress","score":52,"evidence":"First-class SCM domain registry, connector affinity, capability metadata and domain-bound execution are implemented on the feature branch."},
+    {"id":"hrm","name":"HRM","status":"in-progress","score":50,"evidence":"First-class HRM domain registry, connector affinity, sensitive-data classes and approval-required operations are implemented on the feature branch."}
+  ]
+}
