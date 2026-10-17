@@ -1,66 +1,90 @@
 # OCI production hosting for AEP-X GUI
 
-This replaces the previous Netlify deployment path. The production source remains `aliabdalla-maker/aepx-core` on `master`; GitHub Actions deploys the static tracker to the Oracle Cloud Infrastructure server that hosts `softwareequality.com`.
+AEP-X is hosted directly on the Oracle Cloud Infrastructure server for `softwareequality.com`. Netlify is not part of the production path.
 
 ## Production URL
 
-`https://www.softwareequality.com/aep-x/`
+Primary URL: `https://softwareequality.com/aep-x/`
 
-The existing Software Equality website remains at `/`. AEP-X is mounted under `/aep-x/` so this deployment does not overwrite the corporate site.
+Also verify: `https://www.softwareequality.com/aep-x/`
+
+The existing Software Equality website remains at `/`. AEP-X is mounted under `/aep-x/` so deployment does not replace the corporate site.
 
 ## OCI region
 
 Target account/region: `uk-london-1`.
 
-## One-time server preparation
+## Deployment architecture
 
-On the OCI compute instance:
+`GitHub master -> GitHub Actions -> self-hosted runner on OCI -> local rsync -> Nginx -> softwareequality.com/aep-x/`
+
+No `OCI_HOST`, `OCI_USER`, or `OCI_SSH_PRIVATE_KEY` deployment secrets are required once the self-hosted runner is registered. The only registration credential is GitHub's short-lived runner registration token used during one-time runner setup.
+
+## 1. Register the OCI server as a GitHub self-hosted runner
+
+Open:
+
+`https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners/new?arch=x64&os=linux`
+
+Generate a fresh registration token, then on the OCI instance either follow GitHub's Linux x64 commands exactly or run the repository installer:
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y nginx rsync
-sudo mkdir -p /var/www/softwareequality.com/aep-x
-sudo chown -R www-data:www-data /var/www/softwareequality.com
+cd /path/to/aepx-core
+chmod +x deploy/oci/install-self-hosted-runner.sh
+sudo -v
+RUNNER_TOKEN='<short-lived-token>' ./deploy/oci/install-self-hosted-runner.sh
 ```
 
-Add the contents of `deploy/oci/nginx-aepx-location.conf` inside the existing HTTPS `server { ... }` block for `softwareequality.com` / `www.softwareequality.com`, then run:
+Do not save the registration token in the repository, shell history, GitHub secrets, or application configuration. It is only needed to register the runner.
+
+The production workflow intentionally uses GitHub's default labels only:
+
+```yaml
+runs-on: [self-hosted, linux, x64]
+```
+
+This matches the default labels GitHub assigns to a Linux x64 repository runner, so no custom `oci-aepx` label is required.
+
+The runner is installed as a system service so it continues receiving jobs after logout or reboot.
+
+## 2. Configure Nginx
+
+Add the contents of `deploy/oci/nginx-aepx-location.conf` inside the existing HTTPS `server { ... }` block serving `softwareequality.com` and `www.softwareequality.com`.
+
+Then run:
 
 ```bash
+sudo mkdir -p /var/www/softwareequality.com/aep-x
+sudo chown -R www-data:www-data /var/www/softwareequality.com/aep-x
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Do not replace the existing server block; the snippet is intentionally a location-only configuration so the corporate website stays intact.
+Do not replace the existing server block. The supplied file is a location-only configuration so the existing Software Equality website stays intact.
 
-## GitHub production secrets
+## 3. Permit local deployment commands
 
-Create these repository or `production` environment secrets:
+The runner account needs non-interactive sudo for the deployment commands used by `.github/workflows/deploy-oci.yml`: `rm`, `mkdir`, `rsync`, `chown`, `mv`, `nginx -t`, and `systemctl reload nginx`.
 
-- `OCI_HOST` — public IP or SSH hostname of the OCI instance
-- `OCI_USER` — SSH account, commonly `ubuntu` on Ubuntu images or `opc` on Oracle Linux
-- `OCI_SSH_PRIVATE_KEY` — private SSH key whose public key is authorised on the instance
-
-The deploy account needs passwordless sudo for `mkdir`, `rm`, `mv`, `rsync`, `chown`, `nginx -t`, and `systemctl reload nginx`, or an equivalent locked-down deployment mechanism.
+Use the narrowest sudoers policy practical for the actual runner username. Do not grant unrestricted passwordless sudo unless that is already an accepted server policy.
 
 ## Deployment flow
 
-A push to `master` affecting `platform/ecosystem-tracker/**`, `deploy/oci/**`, or the deployment workflow triggers `.github/workflows/deploy-oci.yml`.
+A push to `master` affecting `platform/ecosystem-tracker/**`, `deploy/oci/**`, or `.github/workflows/deploy-oci.yml` triggers the OCI deployment workflow.
 
-The workflow validates the static app, rsyncs it to the instance, atomically publishes it at `/var/www/softwareequality.com/aep-x`, validates Nginx, reloads Nginx, then checks the public HTTPS URL.
+The workflow runs on the OCI host itself, validates the application, stages the current GitHub checkout under `/var/www/softwareequality.com/.aep-x-next`, keeps the previous version as `/var/www/softwareequality.com/aep-x.prev`, reloads Nginx, and verifies both production URLs.
 
-## DNS
+Because the job is local to the OCI host there is no SSH upload step and no OCI private key stored in GitHub Actions.
 
-If `softwareequality.com` and `www.softwareequality.com` already resolve to this OCI instance, no DNS change is required. If they currently point elsewhere, change their A/AAAA records to the OCI instance public address only after the existing website has also been migrated to the instance.
+## DNS and TLS
 
-OCI DNS can host the zone, but it is not required; the registrar or current DNS provider can keep hosting the zone. An A record maps a hostname to an IPv4 address.
+If `softwareequality.com` and `www.softwareequality.com` already resolve to this OCI instance, no DNS change is required. If they point elsewhere, do not change DNS until the existing Software Equality website is also available from the target OCI server.
 
-## TLS
-
-Keep the existing certificate if the server already terminates HTTPS for the domain. If the OCI instance is new, obtain a certificate for both `softwareequality.com` and `www.softwareequality.com` before moving DNS. Certbot with the Nginx plugin is a common option on Ubuntu.
+Keep the existing TLS certificate if Nginx already serves HTTPS for both hostnames. Otherwise provision a certificate covering both hostnames before switching DNS.
 
 ## Rollback
 
-The deploy keeps the immediately previous release at:
+The immediately previous AEP-X release is retained at:
 
 `/var/www/softwareequality.com/aep-x.prev`
 
@@ -72,3 +96,18 @@ sudo mv /var/www/softwareequality.com/aep-x /var/www/softwareequality.com/aep-x.
 sudo mv /var/www/softwareequality.com/aep-x.prev /var/www/softwareequality.com/aep-x
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+## Runner health
+
+On the OCI server:
+
+```bash
+cd /opt/actions-runner
+sudo ./svc.sh status
+```
+
+In GitHub, the runner should appear online under:
+
+`https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners`
+
+For a Linux x64 runner, the workflow expects GitHub's default labels: `self-hosted`, `linux`, and `x64`.
