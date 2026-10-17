@@ -1,0 +1,16 @@
+{
+  "name": "aepx-ecosystem-tracker",
+  "private": true,
+  "type": "module",
+  "description": "AEP-X agentic ecosystem tracker GUI (Netlify site + API)",
+  "dependencies": {
+    "@netlify/database": "^2.0.1",
+    "@netlify/functions": "^6.0.2",
+    "drizzle-orm": "^1.0.0-beta.22"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "drizzle-kit": "^1.0.0-beta.22",
+    "typescript": "^7.0.2"
+  }
+}
