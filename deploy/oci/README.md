@@ -1,24 +1,23 @@
 # OCI production hosting for AEP-X GUI
 
-AEP-X is hosted directly on the Oracle Cloud Infrastructure server for `softwareequality.com`. Netlify is not part of the production path.
+AEP-X is hosted directly on the Oracle Cloud Infrastructure server that already serves `softwareequality.com`. Netlify is not part of the production path.
 
-## Production URL
+## Production URLs
 
-Primary URL: `https://softwareequality.com/aep-x/`
+- `https://softwareequality.com/aep-x/`
+- `https://www.softwareequality.com/aep-x/` (redirects to the apex host)
 
-Also verify: `https://www.softwareequality.com/aep-x/`
+## Actual production stack
 
-The existing Software Equality website remains at `/`. AEP-X is mounted under `/aep-x/` so deployment does not replace the corporate site.
+The Software Equality site is served by the existing **Caddy** container in `aliabdalla-maker/good-hour`, not Nginx. The AEP-X deployment therefore publishes into a dedicated host path mounted read-only into Caddy:
+
+`GitHub master -> self-hosted GitHub Actions runner on OCI -> /srv/aepx -> Caddy -> softwareequality.com/aep-x/`
+
+The website repository remains independently synced into `/srv/sites/softwareequality-website`; AEP-X is deliberately kept outside that Git checkout so the site's two-minute `git reset --hard` sync cannot remove or overwrite AEP-X releases.
 
 ## OCI region
 
-Target account/region: `uk-london-1`.
-
-## Deployment architecture
-
-`GitHub master -> GitHub Actions -> self-hosted runner on OCI -> local rsync -> Nginx -> softwareequality.com/aep-x/`
-
-No `OCI_HOST`, `OCI_USER`, or `OCI_SSH_PRIVATE_KEY` deployment secrets are required once the self-hosted runner is registered. The only registration credential is GitHub's short-lived runner registration token used during one-time runner setup.
+Target region: `uk-london-1`.
 
 ## 1. Register the OCI server as a GitHub self-hosted runner
 
@@ -26,7 +25,15 @@ Open:
 
 `https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners/new?arch=x64&os=linux`
 
-Generate a fresh registration token, then on the OCI instance either follow GitHub's Linux x64 commands exactly or run the repository installer:
+Generate a fresh short-lived registration token and register the runner on the OCI host. The production workflow uses GitHub's default Linux x64 labels:
+
+```yaml
+runs-on: [self-hosted, linux, x64]
+```
+
+No long-lived `OCI_HOST`, `OCI_USER`, or `OCI_SSH_PRIVATE_KEY` secrets are required once the runner is registered.
+
+The supplied helper can be used for one-time installation:
 
 ```bash
 cd /path/to/aepx-core
@@ -35,79 +42,91 @@ sudo -v
 RUNNER_TOKEN='<short-lived-token>' ./deploy/oci/install-self-hosted-runner.sh
 ```
 
-Do not save the registration token in the repository, shell history, GitHub secrets, or application configuration. It is only needed to register the runner.
+Never commit or persist the registration token.
 
-The production workflow intentionally uses GitHub's default labels only:
+## 2. Caddy integration
+
+The production Caddy configuration lives in:
+
+`aliabdalla-maker/good-hour/deploy/Caddyfile`
+
+It must route `/aep-x/` to `/srv/aepx/current` and the Caddy service must bind-mount:
 
 ```yaml
-runs-on: [self-hosted, linux, x64]
+- /srv/aepx:/srv/aepx:ro
 ```
 
-This matches the default labels GitHub assigns to a Linux x64 repository runner, so no custom `oci-aepx` label is required.
+The runner workflow creates versioned releases under:
 
-The runner is installed as a system service so it continues receiving jobs after logout or reboot.
-
-## 2. Configure Nginx
-
-Add the contents of `deploy/oci/nginx-aepx-location.conf` inside the existing HTTPS `server { ... }` block serving `softwareequality.com` and `www.softwareequality.com`.
-
-Then run:
-
-```bash
-sudo mkdir -p /var/www/softwareequality.com/aep-x
-sudo chown -R www-data:www-data /var/www/softwareequality.com/aep-x
-sudo nginx -t
-sudo systemctl reload nginx
+```text
+/srv/aepx/releases/<git-sha>/
 ```
 
-Do not replace the existing server block. The supplied file is a location-only configuration so the existing Software Equality website stays intact.
+and atomically switches:
 
-## 3. Permit local deployment commands
+```text
+/srv/aepx/current -> releases/<git-sha>
+```
 
-The runner account needs non-interactive sudo for the deployment commands used by `.github/workflows/deploy-oci.yml`: `rm`, `mkdir`, `rsync`, `chown`, `mv`, `nginx -t`, and `systemctl reload nginx`.
+This avoids partial website updates and keeps the five newest releases available on the host.
 
-Use the narrowest sudoers policy practical for the actual runner username. Do not grant unrestricted passwordless sudo unless that is already an accepted server policy.
+## 3. Runner permissions
+
+The runner account needs narrowly scoped non-interactive sudo for deployment into `/srv/aepx`: `mkdir`, `rm`, `rsync`, `chmod`, `ln`, `mv`, and `find`.
+
+Do not grant unrestricted passwordless sudo unless that is already an accepted server policy.
 
 ## Deployment flow
 
-A push to `master` affecting `platform/ecosystem-tracker/**`, `deploy/oci/**`, or `.github/workflows/deploy-oci.yml` triggers the OCI deployment workflow.
+A push to `master` affecting `platform/ecosystem-tracker/**`, `deploy/oci/**`, or `.github/workflows/deploy-oci.yml` triggers the deployment.
 
-The workflow runs on the OCI host itself, validates the application, stages the current GitHub checkout under `/var/www/softwareequality.com/.aep-x-next`, keeps the previous version as `/var/www/softwareequality.com/aep-x.prev`, reloads Nginx, and verifies both production URLs.
+The workflow:
 
-Because the job is local to the OCI host there is no SSH upload step and no OCI private key stored in GitHub Actions.
+1. validates the static app and required tools,
+2. creates a release directory keyed by the Git commit SHA,
+3. switches `/srv/aepx/current` atomically,
+4. verifies the release files on disk,
+5. verifies both public HTTPS URLs contain the AEP-X application.
+
+Caddy does not need to reload for each AEP-X content deployment because it serves the stable `/srv/aepx/current` path through the mounted parent directory.
 
 ## DNS and TLS
 
-If `softwareequality.com` and `www.softwareequality.com` already resolve to this OCI instance, no DNS change is required. If they point elsewhere, do not change DNS until the existing Software Equality website is also available from the target OCI server.
-
-Keep the existing TLS certificate if Nginx already serves HTTPS for both hostnames. Otherwise provision a certificate covering both hostnames before switching DNS.
+Current public hosting already serves `softwareequality.com` from the OCI server. Keep the existing DNS and Caddy-managed TLS configuration. Caddy automatically handles certificate issuance and renewal for the configured hostnames.
 
 ## Rollback
 
-The immediately previous AEP-X release is retained at:
-
-`/var/www/softwareequality.com/aep-x.prev`
-
-Rollback example:
+List recent releases:
 
 ```bash
-sudo rm -rf /var/www/softwareequality.com/aep-x.bad
-sudo mv /var/www/softwareequality.com/aep-x /var/www/softwareequality.com/aep-x.bad
-sudo mv /var/www/softwareequality.com/aep-x.prev /var/www/softwareequality.com/aep-x
-sudo nginx -t && sudo systemctl reload nginx
+sudo ls -1dt /srv/aepx/releases/*
+```
+
+Point `current` at the desired release:
+
+```bash
+cd /srv/aepx
+sudo ln -sfn releases/<previous-sha> current.next
+sudo mv -Tf current.next current
+```
+
+Then verify:
+
+```bash
+curl -fsSL https://softwareequality.com/aep-x/ | grep -q 'AEP-X'
 ```
 
 ## Runner health
 
-On the OCI server:
+On OCI:
 
 ```bash
 cd /opt/actions-runner
 sudo ./svc.sh status
 ```
 
-In GitHub, the runner should appear online under:
+In GitHub:
 
 `https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners`
 
-For a Linux x64 runner, the workflow expects GitHub's default labels: `self-hosted`, `linux`, and `x64`.
+The Linux x64 runner must appear online with `self-hosted`, `linux`, and `x64` labels.
