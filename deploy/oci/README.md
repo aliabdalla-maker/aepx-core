@@ -24,9 +24,9 @@ No `OCI_HOST`, `OCI_USER`, or `OCI_SSH_PRIVATE_KEY` deployment secrets are requi
 
 Open:
 
-`https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners/new`
+`https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners/new?arch=x64&os=linux`
 
-Generate a registration token, then on the OCI instance run:
+Generate a fresh registration token, then on the OCI instance either follow GitHub's Linux x64 commands exactly or run the repository installer:
 
 ```bash
 cd /path/to/aepx-core
@@ -37,11 +37,13 @@ RUNNER_TOKEN='<short-lived-token>' ./deploy/oci/install-self-hosted-runner.sh
 
 Do not save the registration token in the repository, shell history, GitHub secrets, or application configuration. It is only needed to register the runner.
 
-The installer labels the runner `oci-aepx`. The production workflow requires:
+The production workflow intentionally uses GitHub's default labels only:
 
 ```yaml
-runs-on: [self-hosted, linux, oci-aepx]
+runs-on: [self-hosted, linux, x64]
 ```
+
+This matches the default labels GitHub assigns to a Linux x64 repository runner, so no custom `oci-aepx` label is required.
 
 The runner is installed as a system service so it continues receiving jobs after logout or reboot.
 
@@ -104,6 +106,8 @@ cd /opt/actions-runner
 sudo ./svc.sh status
 ```
 
-In GitHub, the runner should appear online with label `oci-aepx` under:
+In GitHub, the runner should appear online under:
 
 `https://github.com/aliabdalla-maker/aepx-core/settings/actions/runners`
+
+For a Linux x64 runner, the workflow expects GitHub's default labels: `self-hosted`, `linux`, and `x64`.
