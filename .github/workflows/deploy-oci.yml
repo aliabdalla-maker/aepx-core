@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, linux, oci-aepx]
+    runs-on: [self-hosted, linux, x64]
     environment: production
     timeout-minutes: 10
     steps:
@@ -28,7 +28,7 @@ jobs:
       - name: Validate OCI runner and static app
         run: |
           set -euo pipefail
-          echo "runner=$(hostname) user=$(id -un)"
+          echo "runner=$(hostname) user=$(id -un) arch=$(uname -m)"
           test -f platform/ecosystem-tracker/index.html
           test -f platform/ecosystem-tracker/data/portals.json
           command -v rsync >/dev/null
