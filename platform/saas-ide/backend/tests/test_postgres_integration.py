@@ -330,3 +330,72 @@ def test_phase25_quarantine_reconcile_and_tenant_metrics(prepared_db, tokens):
             assert tenant_metrics(db,"alpha")["unresolved_reservations"]==0
     finally:
         admin.dispose()
+
+
+def test_phase26_parallel_fenced_claims(prepared_db, tokens):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from app.phase23 import fenced_claim
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase26-parallel"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Parallel lease race verification"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+              fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+              WHERE tenant_id='alpha' AND run_id<>:run AND state IN ('pending','leased')"""),{"run":rid})
+    finally:
+        admin.dispose()
+    gate=Barrier(8)
+    def contender(i):
+        with main.SessionLocal() as db:
+            gate.wait(timeout=10)
+            return fenced_claim(db,"alpha",f"worker-{i}")
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        outcomes=list(pool.map(contender,range(8)))
+    winners=[item for item in outcomes if item]
+    assert len(winners)==1
+    assert winners[0]["run_id"]==rid
+
+
+def test_phase26_parallel_mcp_approval_single_use(prepared_db, tokens, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from app.phase22 import consume_tool
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase26-mcp"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Parallel MCP approval race verification"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL","https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS","search")
+    body={"server":"knowledge","tool":"search","arguments":{"query":"phase26"}}
+    requested=client.post(f"/api/v1/agent-runs/{rid}/tool-requests",headers=owner,json=body)
+    assert requested.status_code==201,requested.text
+    assert client.post(f"/api/v1/tool-approvals/{requested.json()['id']}/decision?approved=true",
+                       headers=owner).status_code==200
+    gate=Barrier(8)
+    def contender(i):
+        with main.SessionLocal() as db:
+            gate.wait(timeout=10)
+            try:
+                consume_tool(db,"alpha",rid,"knowledge","search",{"query":"phase26"})
+                return True
+            except PermissionError:
+                return False
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        outcomes=list(pool.map(contender,range(8)))
+    assert outcomes.count(True)==1
+    with main.SessionLocal() as db:
+        with pytest.raises(PermissionError):
+            consume_tool(db,"beta",rid,"knowledge","search",{"query":"phase26"})
