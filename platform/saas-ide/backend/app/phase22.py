@@ -150,6 +150,13 @@ def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: st
     # unaudited approval. Do not log raw arguments or service credentials.
     from .supervisor import AgentAudit
     try:
+        # One execution per approval. The unique approval/key constraints are
+        # the database backstop against concurrent duplicate dispatch.
+        db.execute(text("""INSERT INTO ide_mcp_executions
+          (id,tenant_id,run_id,approval_id,idempotency_key,state)
+          VALUES (:id,:tenant,:run,:approval,:key,'reserved')"""),
+          {"id":str(uuid.uuid4()),"tenant":tenant_id,"run":run_id,
+           "approval":updated[0],"key":"mcp:"+updated[0]})
         db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant_id, run_id=run_id,
                           actor="mcp-worker", action="tool_consumed"))
         db.commit()
