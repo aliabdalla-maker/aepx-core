@@ -63,14 +63,16 @@ jobs:
         run: |
           docker compose -f ../security/phase211-isolated-compose.yml config --quiet
           docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps worker
-      - name: Offline Compose gateway denies CONNECT from isolated worker
+      - name: Offline Compose TLS gateway denies metadata CONNECT from isolated worker
         run: |
+          set -euo pipefail
           mkdir -p ../security/test-certs
           openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/gateway.key -out ../security/test-certs/gateway.crt -days 1 -subj "/CN=gateway" -addext "subjectAltName=DNS:gateway" >/dev/null 2>&1
+          trap 'docker compose -f ../security/phase211-isolated-compose.yml logs gateway || true; docker compose -f ../security/phase211-isolated-compose.yml down || true' EXIT
           docker compose -f ../security/phase211-isolated-compose.yml up -d gateway
-          sleep 2
-          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps -v "$(pwd)/../security/test-certs:/test-certs:ro" worker python -c 'import socket,ssl; c=ssl.create_default_context(cafile="/test-certs/gateway.crt"); s=c.wrap_socket(socket.create_connection(("gateway",8080),timeout=5),server_hostname="gateway"); s.sendall(b"CONNECT 169.254.169.254:443 HTTP/1.1\\r\\nHost: 169.254.169.254\\r\\n\\r\\n"); response=s.recv(256); assert response.startswith(b"HTTP/1.1 403"),response; print("TLS authenticated gateway denied metadata CONNECT")'
-          docker compose -f ../security/phase211-isolated-compose.yml down
+          docker compose -f ../security/phase211-isolated-compose.yml ps -a
+          docker compose -f ../security/phase211-isolated-compose.yml exec -T gateway python -c 'import socket; s=socket.create_connection(("127.0.0.1",8080),timeout=5); s.close(); print("TLS gateway listener ready")'
+          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps -v "$(pwd)/../security/test-certs:/test-certs:ro" worker python -c 'import socket,ssl; c=ssl.create_default_context(cafile="/test-certs/gateway.crt"); s=c.wrap_socket(socket.create_connection(("gateway",8080),timeout=5),server_hostname="gateway"); s.sendall(b"CONNECT 169.254.169.254:443 HTTP/1.1\r\nHost: 169.254.169.254\r\n\r\n"); response=s.recv(256); assert response.startswith(b"HTTP/1.1 403"),response; print("Verified TLS gateway denied metadata CONNECT")'
 
   frontend:
     runs-on: ubuntu-24.04
