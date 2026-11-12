@@ -789,3 +789,56 @@ def test_mcp_cancelled_run_cannot_consume_approved_tool(prepared_db, tokens, mon
             "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
             "AND run_id=:run AND action='tool_consumed'"),
             {"run": run_id}).scalar() == 0
+
+
+def test_mcp_cancellation_commit_wins_concurrent_consumption(prepared_db, tokens, monkeypatch):
+    """A concurrent consumer must observe cancellation committed under the run lock."""
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+    from app.phase22 import consume_tool
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "race-cancel"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"], "task": "Race cancellation with MCP"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "race"}
+    requested = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                            headers=owner, json={"server": "knowledge",
+                                                 "tool": "search", "arguments": args})
+    assert requested.status_code == 201, requested.text
+    approval_id = requested.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    started = Event()
+    def consumer():
+        started.set()
+        with main.SessionLocal() as db:
+            with pytest.raises(PermissionError, match="not active"):
+                consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+    with main.SessionLocal() as cancelling:
+        cancelling.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        cancelling.execute(text(
+            "SELECT id FROM ide_agent_runs WHERE tenant_id='alpha' AND id=:run FOR UPDATE"),
+            {"run": run_id}).first()
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(consumer)
+            assert started.wait(timeout=5)
+            cancelling.execute(text(
+                "UPDATE ide_agent_runs SET status='cancelled' "
+                "WHERE tenant_id='alpha' AND id=:run"), {"run": run_id})
+            cancelling.commit()
+            future.result(timeout=15)
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT state FROM ide_tool_approvals WHERE id=:id"),
+                          {"id": approval_id}).scalar() == "approved"
+        assert db.execute(text(
+            "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
+            "AND run_id=:run AND action='tool_consumed'"), {"run": run_id}).scalar() == 0
