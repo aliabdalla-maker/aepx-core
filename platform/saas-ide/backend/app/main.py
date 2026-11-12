@@ -361,3 +361,72 @@ def operational_alerts(p: Principal = Depends(principal), db: Session = Depends(
         raise HTTPException(403,"Operations access requires owner or admin")
     from .alerts29 import evaluate_tenant_alerts
     return {"tenant_id":p.tenant_id,"alerts":evaluate_tenant_alerts(db,p.tenant_id)}
+
+
+# Phase 2.18: tenant-scoped, owner/admin-only MCP operations.
+class MCPReconcileRequest(BaseModel):
+    outcome: str = Field(pattern="^(succeeded|failed)$")
+    signed_receipt: str = Field(min_length=1, max_length=4096)
+
+@app.get("/api/v1/operations/mcp/executions")
+def list_mcp_executions(p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin"):
+        raise HTTPException(403, "Operations access requires owner or admin")
+    rows = db.execute(text("""SELECT approval_id,run_id,state,created_at,
+        dispatch_started_at,completed_at FROM ide_mcp_executions
+        WHERE tenant_id=:tenant ORDER BY created_at DESC LIMIT 100"""),
+        {"tenant": p.tenant_id}).mappings().all()
+    return {"executions": [dict(x) for x in rows]}
+
+@app.get("/api/v1/operations/mcp/executions/{approval_id}")
+def mcp_execution_detail(approval_id: str, p: Principal = Depends(principal),
+                         db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin"):
+        raise HTTPException(403, "Operations access requires owner or admin")
+    from .mcp_execution214 import execution_status
+    result = execution_status(db, p.tenant_id, approval_id)
+    if result is None:
+        raise HTTPException(404, "Execution not found")
+    return result
+
+@app.post("/api/v1/operations/mcp/executions/{approval_id}/reconcile")
+def reconcile_mcp_execution(approval_id: str, body: MCPReconcileRequest,
+                            p: Principal = Depends(principal),
+                            db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin"):
+        raise HTTPException(403, "Operations access requires owner or admin")
+    from .mcp_execution214 import execution_status, resolve_unknown
+    existing = execution_status(db, p.tenant_id, approval_id)
+    if existing is None:
+        raise HTTPException(404, "Execution not found")
+    try:
+        resolved = resolve_unknown(db, p.tenant_id, existing["run_id"], approval_id,
+                                   verified_outcome=body.outcome, actor=p.subject,
+                                   evidence_reference=body.signed_receipt, principal=p)
+    except PermissionError:
+        raise HTTPException(403, "Provider receipt not verified or authorization denied")
+    if not resolved:
+        raise HTTPException(409, "Execution not awaiting reconciliation")
+    return {"approval_id": approval_id, "state": body.outcome, "reconciled": True}
+
+@app.post("/api/v1/operations/mcp/recover-stale")
+def recover_stale_mcp(age_seconds: int = 300, p: Principal = Depends(principal),
+                      db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin"):
+        raise HTTPException(403, "Operations access requires owner or admin")
+    from .mcp_execution214 import reconcile_stale
+    try:
+        count = reconcile_stale(db, p.tenant_id, age_seconds)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    return {"quarantined": count, "automatic_replay": False}
+
+@app.get("/api/v1/operations/mcp/metrics")
+def mcp_execution_metrics(p: Principal = Depends(principal),
+                          db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin"):
+        raise HTTPException(403, "Operations access requires owner or admin")
+    rows = db.execute(text("""SELECT state,COUNT(*) AS total FROM ide_mcp_executions
+        WHERE tenant_id=:tenant GROUP BY state"""), {"tenant": p.tenant_id}).all()
+    return {"counts": {state: count for state, count in rows},
+            "automatic_replay_enabled": False}
