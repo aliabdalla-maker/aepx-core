@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS ide_mcp_executions (
  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
  dispatch_started_at TIMESTAMPTZ,
  completed_at TIMESTAMPTZ,
+ reconciliation_reference VARCHAR(160),
+ reconciled_by VARCHAR(255),
  UNIQUE(tenant_id,approval_id),
  UNIQUE(tenant_id,idempotency_key),
  FOREIGN KEY(tenant_id,run_id) REFERENCES ide_agent_runs(tenant_id,id),
