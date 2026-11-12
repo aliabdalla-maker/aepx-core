@@ -175,3 +175,42 @@ def test_phase22_durable_queue_tool_approval_and_rls(prepared_db, tokens, monkey
         db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
         assert db.execute(text("SELECT count(*) FROM ide_agent_jobs")).scalar()>=1
         assert db.execute(text("SELECT count(*) FROM ide_tool_approvals")).scalar()>=1
+
+
+def test_phase23_fencing_budget_and_rls(prepared_db, tokens):
+    from app.phase23 import fenced_claim, heartbeat, fenced_finish, reserve_budget, settle_budget
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase23"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Validate fencing and budget accounting"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    with main.SessionLocal() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        db.execute(text("""INSERT INTO ide_agent_budgets(tenant_id,max_tokens,max_cost_microusd)
+          VALUES('alpha',2000,1000000)"""))
+        db.commit()
+    with main.SessionLocal() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        lease=fenced_claim(db,"alpha","worker-a")
+        assert lease and lease["fencing_token"]==1
+        assert heartbeat(db,"alpha",lease["job_id"],"worker-a",0) is False
+        assert heartbeat(db,"alpha",lease["job_id"],"worker-a",1) is True
+        reservation=reserve_budget(db,"alpha",lease["job_id"],1,1000,500000)
+        assert reserve_budget(db,"alpha",lease["job_id"],1,1000,500000)==reservation
+        with pytest.raises(PermissionError):
+            reserve_budget(db,"alpha",lease["job_id"],1,1500,600000)
+        settle_budget(db,"alpha",reservation,800,400000)
+        assert fenced_finish(db,"alpha",lease["job_id"],"worker-a",0,True) is False
+        assert fenced_finish(db,"alpha",lease["job_id"],"worker-a",1,True) is True
+        assert fenced_finish(db,"alpha",lease["job_id"],"worker-a",1,True) is False
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        row=db.execute(text("SELECT spent_tokens,spent_microusd FROM ide_agent_budgets WHERE tenant_id='alpha'")).first()
+        assert tuple(row)==(800,400000)
+        db.rollback()
+    with main.engine.connect() as db:
+        assert db.execute(text("SELECT count(*) FROM ide_agent_spend")).scalar()==0
+        assert db.execute(text("SELECT count(*) FROM ide_agent_budgets")).scalar()==0
