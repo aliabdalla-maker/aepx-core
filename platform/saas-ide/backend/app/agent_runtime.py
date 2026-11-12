@@ -52,7 +52,7 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     from .phase22 import consume_tool
     from .mcp_execution214 import begin_dispatch, complete_dispatch, mark_unknown
     approval_id = consume_tool(db, tenant_id, run_id, name, tool, arguments)
-    begin_dispatch(db, tenant_id, run_id, approval_id)
+    execution_key = begin_dispatch(db, tenant_id, run_id, approval_id)
     # A network-level egress proxy is mandatory; URL checks alone cannot prevent
     # DNS rebinding or a resolved private address. No direct connections allowed.
     import httpx
@@ -61,6 +61,11 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     try:
         async with sdk_async_http_client() as http:
             http.headers["Authorization"] = f"Bearer {token}"
+            # Optional provider transport contract; this header does not prove
+            # the remote tool deduplicates side effects.
+            contract = os.getenv("IDE_MCP_" + name.upper().replace("-", "_") + "_IDEMPOTENCY_CONTRACT")
+            if contract == "http-header-v1":
+                http.headers["Idempotency-Key"] = execution_key
             # Stable key is available for future provider-specific idempotency
             # support; do not assume an arbitrary MCP server honors it.
             async with streamable_http_client(allowed_mcp_endpoint(name), http_client=http) as (read, write, _):
