@@ -444,3 +444,70 @@ def test_phase27_crash_after_budget_reservation_and_mock_billing(prepared_db, to
                 reconcile(db,"beta",reservation,"mock-receipt-other",37,3200,actor="test")
     finally:
         admin.dispose()
+
+
+@pytest.mark.parametrize("boundary",["before_reservation","after_reservation","after_provider","after_settlement","success"])
+def test_phase28_mock_lifecycle_fault_boundaries(prepared_db,tokens,boundary):
+    """PostgreSQL-backed simulated process loss; never dispatch a live provider."""
+    from app.phase23 import (fenced_claim,reserve_budget,settle_reserved_maximum,
+                             record_fenced_result)
+    from app.recovery25 import quarantine_expired,reconcile
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase28-"+boundary}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Offline mock-provider lifecycle"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+              fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+              WHERE tenant_id='alpha' AND run_id<>:run AND state IN ('pending','leased')"""),{"run":rid})
+        with main.SessionLocal() as db:
+            lease=fenced_claim(db,"alpha","phase28-worker")
+        assert lease and lease["run_id"]==rid
+        reservation=None
+        if boundary!="before_reservation":
+            with main.SessionLocal() as db:
+                reservation=reserve_budget(db,"alpha",lease["job_id"],lease["fencing_token"],100,10000)
+        # A deterministic offline mock inference; no external credentials or network.
+        mock_calls=0
+        output=None
+        if boundary in ("after_provider","after_settlement","success"):
+            mock_calls+=1
+            output="MOCK: validated response"
+        if boundary in ("after_settlement","success"):
+            with main.SessionLocal() as db:
+                settle_reserved_maximum(db,"alpha",reservation)
+        if boundary=="success":
+            with main.SessionLocal() as db:
+                assert record_fenced_result(db,"alpha",lease["job_id"],"phase28-worker",
+                    lease["fencing_token"],output,True)
+            assert client.get(f"/api/v1/agent-runs/{rid}",headers=owner).json()["status"]=="completed"
+            with main.SessionLocal() as db:
+                with pytest.raises(ValueError):
+                    settle_reserved_maximum(db,"alpha",reservation)
+        else:
+            with admin.begin() as conn:
+                conn.execute(text("""UPDATE ide_agent_jobs SET lease_until=now()-interval '1 second'
+                  WHERE tenant_id='alpha' AND id=:job"""),{"job":lease["job_id"]})
+            with main.SessionLocal() as db:
+                assert quarantine_expired(db,"alpha")>=1
+                assert fenced_claim(db,"alpha","replacement-worker") is None
+                assert record_fenced_result(db,"alpha",lease["job_id"],"phase28-worker",
+                    lease["fencing_token"],"late",True) is False
+            if reservation:
+                with main.SessionLocal() as db:
+                    if boundary!="after_settlement":
+                        reconcile(db,"alpha",reservation,"mock-"+rid,10,1000,actor="test-operator")
+                    else:
+                        reconcile(db,"alpha",reservation,"mock-"+rid,10,1000,actor="test-operator")
+                    with pytest.raises(ValueError):
+                        reconcile(db,"alpha",reservation,"mock-"+rid,10,1000,actor="test-operator")
+        assert mock_calls==(1 if boundary in ("after_provider","after_settlement","success") else 0)
+    finally:
+        admin.dispose()
