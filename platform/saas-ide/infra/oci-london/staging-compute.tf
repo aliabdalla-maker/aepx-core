@@ -56,6 +56,7 @@ resource "oci_core_instance" "staging" {
   source_details {
     source_type = "image"
     source_id   = var.image_ocid
+    boot_volume_size_in_gbs = 50
   }
   create_vnic_details {
     subnet_id        = oci_core_subnet.private.id
