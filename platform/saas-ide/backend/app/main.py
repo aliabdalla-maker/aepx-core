@@ -24,7 +24,7 @@ if "/.well-known/" in OIDC_ISSUER:
     raise RuntimeError("Use issuer URL, not discovery URL")
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-SessionLocal = sessionmaker(bind=engine)
+SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 app = FastAPI(title="AEP-X Hybrid IDE API", version="0.2.0")
 origin = os.getenv("IDE_WEB_ORIGIN", "http://localhost:3000")
 app.add_middleware(CORSMiddleware, allow_origins=[origin], allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type", "X-Tenant-ID"])
