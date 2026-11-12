@@ -1,0 +1,46 @@
+name: Codespaces configuration validation
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.devcontainer/**'
+      - 'compose.codespaces.yml'
+      - 'compose.codespaces-core.yml'
+      - 'scripts/codespaces*.sh'
+      - '.github/workflows/codespaces-validation.yml'
+  push:
+    branches: [master]
+    paths:
+      - '.devcontainer/**'
+      - 'compose.codespaces.yml'
+      - 'scripts/codespaces*.sh'
+      - '.github/workflows/codespaces-validation.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate devcontainer JSON
+        run: python -m json.tool .devcontainer/devcontainer.json >/dev/null
+      - name: Shell syntax
+        run: bash -n scripts/codespaces*.sh
+      - name: Create development network
+        run: docker network create aepx-dev-shared
+      - name: Validate Docker Compose
+        run: |
+          docker compose -f compose.codespaces.yml config --quiet
+          docker compose -f docker-compose.yml -f compose.codespaces-core.yml config --quiet
+      - name: Build console image
+        run: docker compose -f compose.codespaces.yml build aepx-console
+      - name: Start console
+        run: docker compose -f compose.codespaces.yml up -d --no-build
+      - name: Verify console endpoint
+        run: bash scripts/codespaces-verify.sh
+      - name: Container logs on failure
+        if: failure()
+        run: docker compose -f compose.codespaces.yml logs --tail=150
+      - name: Tear down
+        if: always()
+        run: docker compose -f compose.codespaces.yml down

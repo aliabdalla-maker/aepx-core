@@ -14,7 +14,7 @@
       "visibility": "private"
     }
   },
-  "postCreateCommand": "bash scripts/codespaces-verify.sh --prerequisites",
+  "postCreateCommand": "bash scripts/codespaces-start.sh",
   "customizations": {
     "vscode": {
       "extensions": [
