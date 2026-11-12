@@ -889,3 +889,49 @@ def test_phase214_durable_dispatch_replay_and_recovery(prepared_db, tokens, monk
         assert db.execute(text(
             "SELECT count(*) FROM ide_mcp_executions WHERE approval_id=:approval"),
             {"approval": approval_id}).scalar() == 0
+
+
+def test_phase214_concurrent_dispatch_claim_is_single_use(prepared_db, tokens, monkeypatch):
+    """Two isolated DB sessions cannot claim the same durable dispatch."""
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from app.phase22 import consume_tool
+    from app.mcp_execution214 import begin_dispatch
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "ledger-race"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"], "task": "Concurrent ledger claims"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "race"}
+    req = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                      headers=owner, json={"server": "knowledge",
+                                           "tool": "search", "arguments": args})
+    assert req.status_code == 201, req.text
+    approval_id = req.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    with main.SessionLocal() as db:
+        consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+    barrier = Barrier(2)
+    def attempt():
+        with main.SessionLocal() as db:
+            barrier.wait(timeout=10)
+            try:
+                return ("claimed", begin_dispatch(db, "alpha", run_id, approval_id))
+            except PermissionError:
+                return ("denied", None)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(lambda _: attempt(), range(2)))
+    assert sorted(result[0] for result in results) == ["claimed", "denied"]
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text(
+            "SELECT state FROM ide_mcp_executions WHERE approval_id=:approval"),
+            {"approval": approval_id}).scalar() == "dispatching"
