@@ -34,6 +34,17 @@ class MockTLSHandler(socketserver.BaseRequestHandler):
                 chunk=conn.recv(4096)
                 if not chunk: return
                 payload+=chunk
+            # Read complete request bodies before returning a response. Closing a TLS
+            # socket with unread POST bytes can reset real SDK/MCP connections.
+            head,body=payload.split(b"\\r\\n\\r\\n",1)
+            content_length=0
+            for line in head.split(b"\\r\\n")[1:]:
+                if line.lower().startswith(b"content-length:"):
+                    content_length=int(line.split(b":",1)[1].strip())
+            while len(body)<content_length:
+                chunk=conn.recv(min(4096,content_length-len(body)))
+                if not chunk: break
+                body+=chunk
             self.server.requests_seen.append(payload.split(b"\r\n",1)[0])
             if b"/redirect" in payload.split(b"\r\n",1)[0]:
                 conn.sendall(b"HTTP/1.1 302 Found\r\nLocation: https://169.254.169.254/secret\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")
