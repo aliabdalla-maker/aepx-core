@@ -68,6 +68,7 @@ jobs:
           set -euo pipefail
           mkdir -p ../security/test-certs
           openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/gateway.key -out ../security/test-certs/gateway.crt -days 1 -subj "/CN=gateway" -addext "subjectAltName=DNS:gateway" >/dev/null 2>&1
+          chmod 644 ../security/test-certs/gateway.crt ../security/test-certs/gateway.key
           trap 'docker compose -f ../security/phase211-isolated-compose.yml logs gateway || true; docker compose -f ../security/phase211-isolated-compose.yml down || true' EXIT
           docker compose -f ../security/phase211-isolated-compose.yml up -d gateway
           docker compose -f ../security/phase211-isolated-compose.yml ps -a
