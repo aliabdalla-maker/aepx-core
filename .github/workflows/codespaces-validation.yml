@@ -32,12 +32,16 @@ jobs:
         run: |
           docker compose -f compose.codespaces.yml config --quiet
           docker compose -f docker-compose.yml -f compose.codespaces-core.yml config --quiet
+      - name: Check Codespaces port exposure
+        run: bash scripts/codespaces-security-check.sh
       - name: Build console image
         run: docker compose -f compose.codespaces.yml build aepx-console
       - name: Start console
         run: docker compose -f compose.codespaces.yml up -d --no-build
       - name: Verify console endpoint
-        run: bash scripts/codespaces-verify.sh
+        run: |
+          bash scripts/codespaces-verify.sh
+          bash scripts/codespaces-smoke.sh
       - name: Container logs on failure
         if: failure()
         run: docker compose -f compose.codespaces.yml logs --tail=150
