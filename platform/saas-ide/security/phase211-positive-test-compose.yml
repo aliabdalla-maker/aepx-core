@@ -1,0 +1,42 @@
+# CI ONLY: no production gateway forwarding. Synthetic mock provider.
+services:
+  worker:
+    image: python:3.12-slim
+    command: ["python","/tests/verify_offline_tunnel.py"]
+    volumes:
+      - ./tests:/tests:ro
+      - ./test-certs:/certs:ro
+    networks: [isolated]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    depends_on: [gateway]
+  gateway:
+    image: python:3.12-slim
+    command: ["python","/tests/offline_gateway.py"]
+    environment:
+      IDE_GATEWAY_TLS_CERT_FILE: /certs/gateway.crt
+      IDE_GATEWAY_TLS_KEY_FILE: /certs/gateway.key
+    volumes:
+      - ./egress_gateway.py:/opt/gateway/egress_gateway.py:ro
+      - ./tests:/tests:ro
+      - ./test-certs:/certs:ro
+    networks: [isolated, provider]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+  mock-provider:
+    image: python:3.12-slim
+    command: ["python","/tests/mock_tls_provider.py"]
+    volumes:
+      - ./tests:/tests:ro
+      - ./test-certs:/certs:ro
+    networks: [provider]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+networks:
+  isolated:
+    internal: true
+  provider:
+    internal: true
