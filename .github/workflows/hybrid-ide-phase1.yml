@@ -64,7 +64,8 @@ jobs:
       - name: Offline Compose gateway denies CONNECT from isolated worker
         run: |
           docker compose -f ../security/phase211-isolated-compose.yml up -d gateway
-          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps worker python -c "import socket,time; response=b''; exec('for attempt in range(20):\\n try:\\n  s=socket.create_connection((\\\"gateway\\\",8080),timeout=2); break\\n except OSError: time.sleep(.25)'); s.sendall(b'CONNECT 169.254.169.254:443 HTTP/1.1\\r\\nHost: 169.254.169.254\\r\\n\\r\\n'); response=s.recv(256); assert response.startswith(b'HTTP/1.1 403'),response; print('gateway denied metadata CONNECT')"
+          sleep 2
+          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps worker python -c 'import socket; s=socket.create_connection(("gateway",8080),timeout=5); s.sendall(b"CONNECT 169.254.169.254:443 HTTP/1.1\r\nHost: 169.254.169.254\r\n\r\n"); response=s.recv(256); assert response.startswith(b"HTTP/1.1 403"),response; print("gateway denied metadata CONNECT")'
           docker compose -f ../security/phase211-isolated-compose.yml down
 
   frontend:
