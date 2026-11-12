@@ -1,0 +1,38 @@
+openapi: 3.1.0
+info:
+  title: AEP-X Hybrid IDE Read-only Operations
+  version: 0.1.0
+  description: Draft API schema; requires authenticated account linking and review before publication.
+servers:
+  - url: https://ide.softwareequality.com
+paths:
+  /api/v1/operations/mcp/metrics:
+    get:
+      operationId: getMcpExecutionMetrics
+      summary: Read tenant-scoped MCP execution metrics
+      security:
+        - OAuth2: [aepx.operations.read]
+      responses:
+        '200':
+          description: Counts by execution state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  counts:
+                    type: object
+                    additionalProperties: {type: integer}
+                  automatic_replay_enabled: {type: boolean}
+        '401': {description: Unauthenticated}
+        '403': {description: Forbidden}
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.softwareequality.com/authorize
+          tokenUrl: https://auth.softwareequality.com/token
+          scopes:
+            aepx.operations.read: Read MCP execution metrics
