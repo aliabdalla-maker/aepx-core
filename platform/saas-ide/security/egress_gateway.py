@@ -69,7 +69,7 @@ class Handler(socketserver.BaseRequestHandler):
                     # internally even when its underlying fd is not readable.
                     # Drain them before waiting on select, otherwise a CONNECT
                     # followed by nested provider TLS can deadlock.
-                    ready=[self.request] if self.request.pending() else []
+                    ready=[self.request] if isinstance(self.request, ssl.SSLSocket) and self.request.pending() else []
                     if not ready:
                         ready,_,_=select.select(sockets,[],[],30)
                     if not ready: break
