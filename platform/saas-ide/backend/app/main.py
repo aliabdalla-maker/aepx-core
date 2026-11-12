@@ -312,3 +312,43 @@ def vector_knowledge(project_id: str, body: SearchIn, p: Principal = Depends(pri
         return {"matches": search_vectors(db, p, project_id, body.query)}
     except PermissionError as exc:
         raise HTTPException(403, str(exc))
+
+from .phase22 import ToolRequest, AgentJob, ToolApproval, enqueue, request_tool, decide_tool
+
+@app.post("/api/v1/agent-runs/{run_id}/enqueue")
+def enqueue_agent_run(run_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    try:
+        job=enqueue(db,p,run_id)
+    except LookupError:
+        raise HTTPException(404,"Run not found")
+    except PermissionError as exc:
+        raise HTTPException(403,str(exc))
+    except ValueError as exc:
+        raise HTTPException(409,str(exc))
+    return {"job_id":job.id,"state":job.state,"execution_started":False}
+
+@app.post("/api/v1/agent-runs/{run_id}/tool-requests", status_code=201)
+def request_agent_tool(run_id: str, body: ToolRequest, p: Principal = Depends(principal),
+                       db: Session = Depends(db_session)):
+    try:
+        item=request_tool(db,p,run_id,body)
+    except LookupError:
+        raise HTTPException(404,"Run not found")
+    except PermissionError as exc:
+        raise HTTPException(403,str(exc))
+    except (ValueError,RuntimeError) as exc:
+        raise HTTPException(400,str(exc))
+    return {"id":item.id,"state":item.state,"args_sha256":item.args_sha256}
+
+@app.post("/api/v1/tool-approvals/{approval_id}/decision")
+def decide_agent_tool(approval_id: str, approved: bool, p: Principal = Depends(principal),
+                      db: Session = Depends(db_session)):
+    try:
+        item=decide_tool(db,p,approval_id,approved)
+    except LookupError:
+        raise HTTPException(404,"Approval not found")
+    except PermissionError as exc:
+        raise HTTPException(403,str(exc))
+    except ValueError as exc:
+        raise HTTPException(409,str(exc))
+    return {"id":item.id,"state":item.state}
