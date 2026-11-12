@@ -78,6 +78,18 @@ jobs:
           # absent credentials, metadata targets and blocked direct sockets.
           docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps -v "$(pwd)/../security/test-certs:/test-certs:ro" worker python -c 'import socket,ssl; ctx=ssl.create_default_context(cafile="/test-certs/gateway.crt"); cases=[b"CONNECT 169.254.169.254:443 HTTP/1.1\r\n\r\n",b"CONNECT 127.0.0.1:443 HTTP/1.1\r\n\r\n",b"CONNECT provider.example:80 HTTP/1.1\r\n\r\n",b"GET / HTTP/1.1\r\n\r\n",b"CONNECT provider.example:443 HTTP/1.1\r\n\r\n"]; responses=[]; [(lambda c: (c.sendall(p),responses.append(c.recv(256)),c.close()))(ctx.wrap_socket(socket.create_connection(("gateway",8080),timeout=5),server_hostname="gateway")) for p in cases]; assert all(x.startswith(b"HTTP/1.1 403") for x in responses),responses; targets=[("1.1.1.1",443),("169.254.169.254",80)]; results=[]; [(lambda s: (s.settimeout(2),results.append(s.connect_ex(t)),s.close()))(socket.socket()) for t in targets]; assert all(x!=0 for x in results),results; print("Docker TLS gateway adversarial denies and direct-socket isolation passed")'
 
+      - name: Positive offline three-container authenticated TLS gateway integration
+        run: |
+          set -euo pipefail
+          mkdir -p ../security/test-certs
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/gateway.key -out ../security/test-certs/gateway.crt -days 1 -subj "/CN=gateway" -addext "subjectAltName=DNS:gateway" >/dev/null 2>&1
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/provider.key -out ../security/test-certs/provider.crt -days 1 -subj "/CN=provider.example" -addext "subjectAltName=DNS:provider.example" >/dev/null 2>&1
+          chmod 644 ../security/test-certs/*.key ../security/test-certs/*.crt
+          trap 'docker compose -f ../security/phase211-positive-test-compose.yml logs || true; docker compose -f ../security/phase211-positive-test-compose.yml down --remove-orphans || true' EXIT
+          docker compose -f ../security/phase211-positive-test-compose.yml build worker
+          docker compose -f ../security/phase211-positive-test-compose.yml up -d gateway mock-provider
+          docker compose -f ../security/phase211-positive-test-compose.yml run --rm --no-deps worker
+
   frontend:
     runs-on: ubuntu-24.04
     defaults:
