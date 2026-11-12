@@ -41,6 +41,9 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     approved_mcp_tool(name, tool)
     if db is None or not tenant_id or not run_id:
         raise PermissionError("Tenant-bound single-use approval context required")
+    proxy = os.getenv("IDE_MCP_EGRESS_PROXY", "")
+    if not proxy.startswith("https://"):
+        raise PermissionError("Approved HTTPS egress proxy required")
     # Consume exact-argument approval before any network access. This is at-most-once
     # dispatch, not exactly-once remote execution.
     from .phase22 import consume_tool
@@ -50,9 +53,6 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
         raise RuntimeError("MCP service token required")
     # A network-level egress proxy is mandatory; URL checks alone cannot prevent
     # DNS rebinding or a resolved private address. No direct connections allowed.
-    proxy = os.getenv("IDE_MCP_EGRESS_PROXY", "")
-    if not proxy.startswith("https://"):
-        raise PermissionError("Approved HTTPS egress proxy required")
     import httpx
     from mcp import ClientSession
     from mcp.client.streamable_http import streamable_http_client
