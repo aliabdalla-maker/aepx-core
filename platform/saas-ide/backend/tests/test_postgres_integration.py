@@ -220,3 +220,25 @@ def test_phase23_fencing_budget_and_rls(prepared_db, tokens):
     with main.engine.connect() as db:
         assert db.execute(text("SELECT count(*) FROM ide_agent_spend")).scalar()==0
         assert db.execute(text("SELECT count(*) FROM ide_agent_budgets")).scalar()==0
+
+
+def test_phase24_cancel_invalidates_fenced_worker(prepared_db, tokens):
+    from app.phase23 import fenced_claim, record_fenced_result
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase24-cancel"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Cancellation race regression"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    with main.SessionLocal() as db:
+        lease=fenced_claim(db,"alpha","cancel-worker")
+        assert lease and lease["run_id"]==rid
+    assert client.post(f"/api/v1/agent-runs/{rid}/cancel",headers=owner).status_code==200
+    with main.SessionLocal() as db:
+        assert record_fenced_result(db,"alpha",lease["job_id"],"cancel-worker",
+                                    lease["fencing_token"],"SHOULD NOT PERSIST",True) is False
+    detail=client.get(f"/api/v1/agent-runs/{rid}",headers=owner).json()
+    assert detail["status"]=="cancelled" and "SHOULD NOT PERSIST" not in detail["result"]
