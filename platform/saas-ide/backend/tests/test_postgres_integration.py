@@ -567,3 +567,61 @@ def test_phase29_authenticated_alerts_rbac_and_cross_tenant(prepared_db,tokens):
     unknown=dict(alpha,**{"X-Tenant-ID":"unregistered-phase29"})
     assert client.get("/api/v1/operations/alerts",headers=unknown).status_code==403
     assert client.get("/api/v1/operations/alerts",headers={"X-Tenant-ID":"alpha"}).status_code==401
+
+
+@pytest.mark.skipif(sys.platform=="win32",reason="SIGKILL requires POSIX")
+def test_sigkill_after_real_postgres_lease_then_quarantine(prepared_db,tokens):
+    """Kill an isolated PostgreSQL lease-holder; ensure stale fence cannot persist.
+
+    No provider network or credentials are passed to the subprocess.
+    """
+    from fastapi.testclient import TestClient
+    from sqlalchemy import create_engine,text
+    from app import main
+    from app.recovery25 import quarantine_expired
+    from app.phase23 import fenced_claim,record_fenced_result
+    client=TestClient(main.app)
+    h=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=h,json={"name":"sigkill-lease"}).json()
+    run=client.post("/api/v1/agent-runs",headers=h,json={"project_id":project["id"],"task":"Offline kill test"}).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=h).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=h).status_code==200
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+              fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+              WHERE tenant_id='alpha' AND run_id<>:run AND state IN ('pending','leased')"""),{"run":rid})
+        # Subprocess claims a genuine database lease, prints fence, then sleeps.
+        script="""import os,time
+from app.main import SessionLocal
+from app.phase23 import fenced_claim
+with SessionLocal() as db:
+    claim=fenced_claim(db,'alpha','killed-worker',lease_seconds=45)
+assert claim is not None
+print(claim['job_id']+'|'+str(claim['fencing_token']),flush=True)
+time.sleep(120)
+"""
+        proc=subprocess.Popen([sys.executable,"-c",script],cwd=os.getcwd(),
+             env={k:v for k,v in os.environ.items() if not k.startswith("IDE_LLM_") and "TOKEN" not in k},
+             stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        try:
+            line=proc.stdout.readline().strip()
+            assert "|" in line,proc.stderr.read() if proc.poll() is not None else "claim failed"
+            job,fence=line.split("|")
+            proc.send_signal(signal.SIGKILL)
+            proc.wait(timeout=5)
+            with admin.begin() as conn:
+                conn.execute(text("""UPDATE ide_agent_jobs SET lease_until=now()-interval '1 second'
+                  WHERE tenant_id='alpha' AND id=:job"""),{"job":job})
+            with main.SessionLocal() as db:
+                assert quarantine_expired(db,"alpha")>=1
+                assert record_fenced_result(db,"alpha",job,"killed-worker",int(fence),"late",True) is False
+                assert fenced_claim(db,"alpha","replacement") is None
+        finally:
+            if proc.poll() is None:
+                proc.kill()
+                proc.wait()
+    finally:
+        admin.dispose()
