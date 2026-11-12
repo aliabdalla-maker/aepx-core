@@ -55,7 +55,7 @@ def reconcile(db, tenant: str, reservation: str, reference: str,
         raise ValueError("Reservation already reconciled")
     old_tokens=row.actual_tokens if row.state=="settled" else 0
     old_cost=row.actual_microusd if row.state=="settled" else 0
-    db.execute(text("""UPDATE ide_agent_budgets SET
+    updated=db.execute(text("""UPDATE ide_agent_budgets SET
       reserved_tokens=reserved_tokens-:rt,
       reserved_microusd=reserved_microusd-:rc,
       spent_tokens=spent_tokens+:tokens-:old_tokens,
@@ -65,6 +65,9 @@ def reconcile(db, tenant: str, reservation: str, reference: str,
       {"tenant":tenant,"rt":row.reserved_tokens if row.state=="reserved" else 0,
        "rc":row.reserved_microusd if row.state=="reserved" else 0,
        "tokens":tokens,"cost":microusd,"old_tokens":old_tokens,"old_cost":old_cost})
+    if updated.rowcount != 1:
+        db.rollback()
+        raise PermissionError("Budget missing or inconsistent")
     db.execute(text("""UPDATE ide_agent_spend SET state='settled',actual_tokens=:tokens,
       actual_microusd=:cost,reconciled_at=now(),reconciliation_reference=:reference
       WHERE tenant_id=:tenant AND id=:reservation"""),
