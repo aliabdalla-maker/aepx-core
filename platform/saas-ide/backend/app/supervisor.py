@@ -126,7 +126,9 @@ def decide(db: Session, p: Principal, run_id: str, approve: bool) -> AgentRun:
 
 
 def cancel(db: Session, p: Principal, run_id: str) -> AgentRun:
-    run = get_run(db, p, run_id)
+    # Match the row lock acquired by consume_tool to serialize cancellation.
+    run = db.scalar(select(AgentRun).where(AgentRun.id == run_id,
+        AgentRun.tenant_id == p.tenant_id).with_for_update())
     if run is None:
         raise LookupError("Run not found")
     if p.role not in ("owner", "admin") and p.subject != run.subject:
