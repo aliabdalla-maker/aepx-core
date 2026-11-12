@@ -287,3 +287,46 @@ def test_phase24_competing_claims_only_one_wins(prepared_db, tokens):
         from app.phase23 import record_fenced_result
         assert record_fenced_result(third,"alpha",lease["job_id"],"worker-second",
                                     lease["fencing_token"],"forged",True) is False
+
+
+def test_phase25_quarantine_reconcile_and_tenant_metrics(prepared_db, tokens):
+    from app.phase23 import fenced_claim, reserve_budget, record_fenced_result
+    from app.recovery25 import quarantine_expired, reconcile, tenant_metrics
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase25-recovery"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Verify ambiguous delivery recovery"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    # Keep this test independent of earlier approved jobs.
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+                fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+                WHERE tenant_id='alpha' AND run_id<>:run AND state IN ('pending','leased')"""),{"run":rid})
+        with main.SessionLocal() as db:
+            lease=fenced_claim(db,"alpha","recovery-worker")
+            assert lease and lease["run_id"]==rid
+        with main.SessionLocal() as db:
+            reservation=reserve_budget(db,"alpha",lease["job_id"],lease["fencing_token"],100,10000)
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET lease_until=now()-interval '1 second'
+                WHERE tenant_id='alpha' AND id=:job"""),{"job":lease["job_id"]})
+        with main.SessionLocal() as db:
+            assert quarantine_expired(db,"alpha")>=1
+            assert record_fenced_result(db,"alpha",lease["job_id"],"recovery-worker",
+                       lease["fencing_token"],"unsafe late result",True) is False
+        with main.SessionLocal() as db:
+            assert tenant_metrics(db,"alpha")["unresolved_reservations"]>=1
+            with pytest.raises(LookupError):
+                reconcile(db,"beta",reservation,"provider-25",50,5000,actor="test-operator")
+            reconcile(db,"alpha",reservation,"provider-25",50,5000,actor="test-operator")
+            with pytest.raises(ValueError):
+                reconcile(db,"alpha",reservation,"provider-25",50,5000,actor="test-operator")
+            assert tenant_metrics(db,"alpha")["unresolved_reservations"]==0
+    finally:
+        admin.dispose()
