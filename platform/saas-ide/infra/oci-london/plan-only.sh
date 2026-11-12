@@ -16,4 +16,6 @@ terraform fmt -check -recursive
 terraform validate
 # Terraform plan is non-provisioning; reviewed plan and separate approvals are required before apply.
 terraform plan -input=false -lock=true -var='enable_staging_compute=true' -out=staging.tfplan
+terraform show -json staging.tfplan > staging.plan.json
+python3 verify-plan.py staging.plan.json
 echo "Plan saved locally. NO apply performed. Review: terraform show staging.tfplan"
