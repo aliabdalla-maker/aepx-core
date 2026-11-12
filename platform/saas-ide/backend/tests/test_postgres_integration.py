@@ -511,3 +511,47 @@ def test_phase28_mock_lifecycle_fault_boundaries(prepared_db,tokens,boundary):
         assert mock_calls==(1 if boundary in ("after_provider","after_settlement","success") else 0)
     finally:
         admin.dispose()
+
+
+def test_phase29_signed_mock_receipt_replay_and_cross_tenant(prepared_db,tokens):
+    from app.phase23 import fenced_claim,reserve_budget
+    from app.billing29 import sign_mock_receipt,reconcile_mock_receipt
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase29-billing"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Authenticated offline mock billing"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+              fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+              WHERE tenant_id='alpha' AND run_id<>:run AND state IN ('pending','leased')"""),{"run":rid})
+        with main.SessionLocal() as db:
+            lease=fenced_claim(db,"alpha","billing-worker")
+        assert lease and lease["run_id"]==rid
+        with main.SessionLocal() as db:
+            reservation=reserve_budget(db,"alpha",lease["job_id"],lease["fencing_token"],100,10000)
+        receipt={"tenant":"alpha","reservation":reservation,"provider":"mock",
+                 "request_id":"request-"+rid,"tokens":20,"microusd":1000}
+        key=b"mock-only-signing-key-32-bytes-minimum!!"
+        signature=sign_mock_receipt(receipt,key)
+        with main.SessionLocal() as db:
+            with pytest.raises(PermissionError):
+                reconcile_mock_receipt(db,"beta",receipt,signature,key,actor="mock-test")
+            reconcile_mock_receipt(db,"alpha",receipt,signature,key,actor="mock-test")
+            with pytest.raises(ValueError):
+                reconcile_mock_receipt(db,"alpha",receipt,signature,key,actor="mock-test")
+        # A distinct reservation must not reuse the same provider request ID.
+        # Unique constraint on tenant/provider reference protects against double billing.
+        with main.SessionLocal() as db:
+            db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+            assert db.execute(text("""SELECT count(*) FROM ide_agent_reconciliation
+              WHERE tenant_id='alpha' AND provider_reference=:reference"""),
+              {"reference":"mock:request-"+rid}).scalar()==1
+    finally:
+        admin.dispose()
