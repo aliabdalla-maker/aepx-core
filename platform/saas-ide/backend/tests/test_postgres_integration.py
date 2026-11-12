@@ -119,3 +119,26 @@ def test_phase2_run_approval_and_tenant_isolation(prepared_db, tokens):
     result = client.post(f"/api/v1/projects/{project['id']}/knowledge/search", headers=owner, json={"query": "PostgreSQL"})
     assert result.status_code == 200 and result.json()["matches"]
     assert client.post(f"/api/v1/projects/{project['id']}/knowledge/search", headers=viewer, json={"query": "PostgreSQL"}).status_code == 404
+
+
+def test_phase21_audit_cancel_and_vector_rls(prepared_db, tokens):
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    viewer = headers(tokens(), "beta")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "phase21"}).json()
+    run = client.post("/api/v1/agent-runs", headers=owner, json={
+        "project_id": project["id"], "task": "Review security controls"
+    }).json()
+    audit = client.get(f"/api/v1/agent-runs/{run['id']}/audit", headers=owner)
+    assert audit.status_code == 200 and audit.json()[0]["action"] == "created"
+    assert client.get(f"/api/v1/agent-runs/{run['id']}/audit", headers=viewer).status_code == 404
+    cancelled = client.post(f"/api/v1/agent-runs/{run['id']}/cancel", headers=owner)
+    assert cancelled.status_code == 200 and cancelled.json()["status"] == "cancelled"
+    assert client.post(f"/api/v1/agent-runs/{run['id']}/retry", headers=owner).status_code == 409
+    with main.engine.connect() as db:
+        assert db.execute(text("SELECT count(*) FROM ide_agent_audit")).scalar() == 0
+        assert db.execute(text("SELECT count(*) FROM ide_knowledge_vectors")).scalar() == 0
+        db.execute(text("SELECT set_config('ide.tenant_id', 'alpha', true)"))
+        assert db.execute(text("SELECT count(*) FROM ide_agent_audit")).scalar() >= 2
+        db.rollback()
+        assert db.execute(text("SELECT count(*) FROM ide_agent_audit")).scalar() == 0
