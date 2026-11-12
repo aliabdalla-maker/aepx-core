@@ -4,9 +4,17 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+def _scope(db: Session, tenant: str):
+    # SET LOCAL expires at commit; each public operation establishes a new scope.
+    # Tenant identity must be authorized by the caller, never by this helper.
+    if not tenant or len(tenant)>128:
+        raise ValueError("Invalid tenant")
+    db.execute(text("SELECT set_config('ide.tenant_id', :tenant, true)"), {"tenant":tenant})
+
 def fenced_claim(db: Session, tenant: str, owner: str, lease_seconds: int = 45):
     if not tenant or not owner or len(owner)>100 or not 5<=lease_seconds<=60:
         raise ValueError("Invalid worker identity or lease")
+    _scope(db, tenant)
     row=db.execute(text("""
       SELECT j.id,j.run_id,j.fencing_token FROM ide_agent_jobs j
       JOIN ide_agent_runs r ON r.id=j.run_id AND r.tenant_id=j.tenant_id
@@ -30,6 +38,7 @@ def fenced_claim(db: Session, tenant: str, owner: str, lease_seconds: int = 45):
 def heartbeat(db: Session, tenant: str, job_id: str, owner: str, token: int, seconds: int = 45) -> bool:
     if not 5<=seconds<=60:
         raise ValueError("Invalid lease duration")
+    _scope(db, tenant)
     result=db.execute(text("""UPDATE ide_agent_jobs
        SET lease_until=now()+(:seconds * interval '1 second')
        WHERE tenant_id=:tenant AND id=:job AND lease_owner=:owner AND fencing_token=:token
@@ -40,6 +49,7 @@ def heartbeat(db: Session, tenant: str, job_id: str, owner: str, token: int, sec
 
 def fenced_finish(db: Session, tenant: str, job_id: str, owner: str, token: int, success: bool) -> bool:
     # A stale worker can never commit results after lease expiry or replacement.
+    _scope(db, tenant)
     row=db.execute(text("""UPDATE ide_agent_jobs SET state=:state,completed_at=now(),
        lease_owner=NULL,lease_until=NULL
        WHERE tenant_id=:tenant AND id=:job AND lease_owner=:owner
@@ -56,6 +66,7 @@ def fenced_finish(db: Session, tenant: str, job_id: str, owner: str, token: int,
 def reserve_budget(db: Session, tenant: str, job: str, token: int, tokens: int, micro_usd: int) -> str:
     if not 1<=tokens<=2000 or not 1<=micro_usd<=5_000_000:
         raise ValueError("Invalid reservation")
+    _scope(db, tenant)
     lease=db.execute(text("""SELECT 1 FROM ide_agent_jobs WHERE tenant_id=:tenant AND id=:job
        AND fencing_token=:token AND state='leased' AND lease_until>now() FOR UPDATE"""),
        {"tenant":tenant,"job":job,"token":token}).first()
@@ -88,6 +99,7 @@ def reserve_budget(db: Session, tenant: str, job: str, token: int, tokens: int, 
 def settle_budget(db: Session, tenant: str, reservation: str, actual_tokens: int, actual_micro_usd: int):
     if actual_tokens<0 or actual_micro_usd<0:
         raise ValueError("Invalid usage")
+    _scope(db, tenant)
     row=db.execute(text("""SELECT reserved_tokens,reserved_microusd FROM ide_agent_spend
       WHERE tenant_id=:tenant AND id=:id AND state='reserved' FOR UPDATE"""),
       {"tenant":tenant,"id":reservation}).first()
