@@ -9,6 +9,7 @@ for i in $(seq 1 40); do
   sleep 3
 done
 docker info >/dev/null || { echo "Docker daemon not ready"; exit 1; }
+docker network inspect aepx-dev-shared >/dev/null 2>&1 || docker network create aepx-dev-shared
 docker compose -f compose.codespaces.yml config --quiet
 docker compose -f compose.codespaces.yml up -d --build
 bash scripts/codespaces-verify.sh
