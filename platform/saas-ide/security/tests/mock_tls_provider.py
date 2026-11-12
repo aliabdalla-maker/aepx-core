@@ -16,11 +16,22 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if length>65536:
             self.send_error(413)
             return
-        self.rfile.read(length)
+        self._last_body=self.rfile.read(length)
         if self.path=="/v1/chat/completions":
             data=b'{"id":"chatcmpl-offline","object":"chat.completion","created":1,"model":"mock-model","choices":[{"index":0,"message":{"role":"assistant","content":"offline-openai-ok"},"finish_reason":"stop"}]}'
         elif self.path=="/v1/messages":
             data=b'{"id":"msg_offline","type":"message","role":"assistant","model":"mock-model","content":[{"type":"text","text":"offline-anthropic-ok"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":1,"output_tokens":1}}'
+        elif self.path=="/mcp":
+            import json
+            request=json.loads(self._last_body)
+            if request.get("method")=="tools/list":
+                data=json.dumps({"jsonrpc":"2.0","id":request["id"],"result":{"tools":[{"name":"offline_echo","description":"Synthetic test tool","inputSchema":{"type":"object","properties":{"value":{"type":"string"}}}}]}}).encode()
+            elif request.get("method")=="tools/call" and request.get("params",{}).get("name")=="offline_echo":
+                value=request["params"].get("arguments",{}).get("value","")
+                data=json.dumps({"jsonrpc":"2.0","id":request["id"],"result":{"content":[{"type":"text","text":"offline:"+value}],"isError":False}}).encode()
+            else:
+                self.send_error(400)
+                return
         else:
             self.send_error(404)
             return
