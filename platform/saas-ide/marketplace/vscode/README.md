@@ -1,0 +1,2 @@
+# AEP-X VS Code extension (draft)
+Adds the command **AEP-X: Open Hybrid IDE**, opening the approved HTTPS IDE in the user's browser. It requests no filesystem access and never stores credentials. The URL must resolve to a verified production IDE before marketplace publication. The publisher identity `softwareequality` must be registered and verified; it is not claimed to exist. Build/package only; do not publish automatically.
