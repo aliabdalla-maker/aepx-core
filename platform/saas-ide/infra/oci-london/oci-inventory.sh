@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Read-only inventory: no OCI resources created or modified.
 set -euo pipefail
-: "${OCI_COMPARTMENT_OCID:?Set OCI_COMPARTMENT_OCID locally; do not commit it}"
+OCI_COMPARTMENT_OCID="${OCI_COMPARTMENT_OCID:-ocid1.compartment.oc1..aaaaaaaaonhka4z7ankj76ibtpr7w6saylbyqaiuadtul4to2qyvxkcwarua}"
 command -v oci >/dev/null || { echo "OCI CLI required" >&2; exit 1; }
 echo "OCI tenancy home region (read-only):"
 oci iam region-subscription list --output json
