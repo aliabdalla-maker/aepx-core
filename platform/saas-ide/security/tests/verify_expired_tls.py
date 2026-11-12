@@ -4,6 +4,7 @@ Both gateway and upstream-provider TLS roles are tested with real handshakes.
 No network outside the isolated test worker is used.
 """
 import datetime as dt
+import ipaddress
 import socket
 import ssl
 import tempfile
@@ -162,7 +163,7 @@ with tempfile.TemporaryDirectory() as directory:
         .serial_number(x509.random_serial_number())
         .not_valid_before(now - dt.timedelta(days=1))
         .not_valid_after(now + dt.timedelta(days=1))
-        .add_extension(x509.SubjectAlternativeName([x509.DNSName("gateway")]), critical=False)
+        .add_extension(x509.SubjectAlternativeName([x509.DNSName("gateway"), x509.IPAddress(ipaddress.ip_address("127.0.0.1"))]), critical=False)
         .sign(gateway_private_key, hashes.SHA256()))
     gateway_cert_path = Path(directory) / "valid-gateway.crt"
     gateway_key_path = Path(directory) / "valid-gateway.key"
