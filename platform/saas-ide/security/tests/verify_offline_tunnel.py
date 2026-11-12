@@ -98,3 +98,20 @@ with httpx.Client(proxy=httpx.Proxy("https://gateway:8080",
     else:
         raise AssertionError("Untrusted gateway TLS certificate accepted")
 print("Negative authentication, destination and both TLS trust boundaries verified")
+
+# Offline MCP JSON-RPC transport acceptance (not an MCP SDK conformance test).
+# The mock never executes external tools or accesses real provider endpoints.
+with sdk_http_client() as transport:
+    listed=transport.post("https://provider.example/mcp",
+        json={"jsonrpc":"2.0","id":101,"method":"tools/list","params":{}})
+    listed.raise_for_status()
+    assert listed.json()["result"]["tools"][0]["name"]=="offline_echo"
+    invoked=transport.post("https://provider.example/mcp",
+        json={"jsonrpc":"2.0","id":102,"method":"tools/call",
+              "params":{"name":"offline_echo","arguments":{"value":"gateway"}}})
+    invoked.raise_for_status()
+    result=invoked.json()
+    assert result["id"]==102
+    assert result["result"]["content"][0]["text"]=="offline:gateway"
+    assert result["result"]["isError"] is False
+print("Offline MCP JSON-RPC tool discovery and synthetic tool invocation verified")
