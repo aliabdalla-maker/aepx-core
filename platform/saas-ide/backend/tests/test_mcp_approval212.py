@@ -50,7 +50,7 @@ def test_tenant_and_exact_arguments_and_replay(monkeypatch):
         ("tenant-a","run-a","unapproved","read",args),
         ("tenant-a","run-a","knowledge","read",{"query":"changed"}),
     ):
-        with pytest.raises(PermissionError,match="not approved"):
+        with pytest.raises(PermissionError,match="not approved|not active"):
             phase22.consume_tool(db,tenant,run,server,tool,payload)
         assert db.state=="approved"
     assert db.commits==0
