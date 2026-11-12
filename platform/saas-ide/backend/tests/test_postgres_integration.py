@@ -4,6 +4,9 @@ Requires IDE_TEST_ADMIN_DATABASE_URL (admin) and IDE_DATABASE_URL (ide_runtime).
 CI creates the roles and applies migration before running this file.
 """
 import os
+import subprocess
+import signal
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
