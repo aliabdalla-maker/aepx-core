@@ -14,12 +14,19 @@ def inspect(plan):
     if not changes:
         problems.append("No planned resource changes; check configuration")
     instances = 0
+    seen = set()
     for resource in changes:
         kind = resource.get("type")
+        address = resource.get("address")
+        if address in seen:
+            problems.append(f"Duplicate resource change: {address}")
+        seen.add(address)
         actions = resource.get("change", {}).get("actions", [])
         after = resource.get("change", {}).get("after") or {}
         if kind not in ALLOWED:
             problems.append(f"Unexpected resource type: {kind}")
+        if actions != ["create"]:
+            problems.append(f"Only new resource creation allowed: {address}")
         if any(action not in ("create", "no-op", "read") for action in actions):
             problems.append(f"Existing resource mutation prohibited: {resource.get('address')}")
         if kind == "oci_core_instance" and "create" in actions:
@@ -41,6 +48,8 @@ def inspect(plan):
             source = after.get("source_details")
             if not isinstance(source, list) or len(source) != 1 or source[0].get("boot_volume_size_in_gbs") != 50:
                 problems.append("Boot volume must be 50 GB")
+        if kind == "oci_core_subnet" and after.get("prohibit_public_ip_on_vnic") is not True:
+            problems.append("Subnet must prohibit public IP addresses")
         if kind == "oci_objectstorage_bucket" and after.get("access_type") != "NoPublicAccess":
             problems.append("Bucket must remain private")
     if instances != 1:
