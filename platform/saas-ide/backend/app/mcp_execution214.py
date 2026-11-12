@@ -14,6 +14,14 @@ def begin_dispatch(db: Session, tenant: str, run_id: str, approval_id: str) -> s
     dispatch began fails closed, even if the previous worker crashed.
     """
     _scope(db, tenant)
+    # Serialize final dispatch authorization with cancellation.
+    active = db.execute(text("""SELECT id FROM ide_agent_runs
+        WHERE tenant_id=:tenant AND id=:run
+          AND status IN ('approved','running') FOR UPDATE"""),
+        {"tenant":tenant,"run":run_id}).first()
+    if active is None:
+        db.rollback()
+        raise PermissionError("MCP run inactive or cancelled before dispatch")
     row = db.execute(text("""UPDATE ide_mcp_executions e SET
         state='dispatching',dispatch_started_at=now()
         WHERE e.tenant_id=:tenant AND e.run_id=:run AND e.approval_id=:approval
