@@ -43,9 +43,8 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     approved_mcp_tool(name, tool)
     if db is None or not tenant_id or not run_id:
         raise PermissionError("Tenant-bound single-use approval context required")
-    proxy = os.getenv("IDE_MCP_EGRESS_PROXY", "")
-    if not proxy.startswith("https://"):
-        raise PermissionError("Approved HTTPS egress proxy required")
+    from .transport211 import sdk_async_http_client, approved_proxy_url
+    approved_proxy_url()
     # Consume exact-argument approval before any network access. This is at-most-once
     # dispatch, not exactly-once remote execution.
     from .phase22 import consume_tool
@@ -58,8 +57,8 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     import httpx
     from mcp import ClientSession
     from mcp.client.streamable_http import streamable_http_client
-    async with httpx.AsyncClient(headers={"Authorization": f"Bearer {token}"}, timeout=15,
-                                 follow_redirects=False, trust_env=False, proxy=proxy) as http:
+    async with sdk_async_http_client() as http:
+        http.headers["Authorization"] = f"Bearer {token}"
         async with streamable_http_client(allowed_mcp_endpoint(name), http_client=http) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
