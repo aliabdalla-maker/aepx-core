@@ -22,6 +22,21 @@ def begin_dispatch(db: Session, tenant: str, run_id: str, approval_id: str) -> s
     if active is None:
         db.rollback()
         raise PermissionError("MCP run inactive or cancelled before dispatch")
+    # Revalidate both requesting and approving memberships under the run lock.
+    # A revoked or downgraded member cannot authorize a new dispatch.
+    valid = db.execute(text("""SELECT a.id FROM ide_tool_approvals a
+        JOIN ide_memberships requester ON requester.tenant_id=a.tenant_id
+          AND requester.subject=a.requested_by
+          AND requester.role IN ('owner','admin','editor')
+        JOIN ide_memberships approver ON approver.tenant_id=a.tenant_id
+          AND approver.subject=a.decided_by
+          AND approver.role IN ('owner','admin')
+        WHERE a.tenant_id=:tenant AND a.run_id=:run AND a.id=:approval
+          AND a.state='consumed'"""),
+        {"tenant":tenant,"run":run_id,"approval":approval_id}).first()
+    if valid is None:
+        db.rollback()
+        raise PermissionError("MCP authorization revoked before dispatch")
     row = db.execute(text("""UPDATE ide_mcp_executions e SET
         state='dispatching',dispatch_started_at=now()
         WHERE e.tenant_id=:tenant AND e.run_id=:run AND e.approval_id=:approval
