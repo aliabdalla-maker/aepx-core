@@ -26,6 +26,16 @@ class PlanTests(unittest.TestCase):
                 "create_vnic_details": [{"assign_public_ip": False}]}}}]}
         self.assertIn("Explicit A1 sizing required", mod.inspect(plan))
 
+    def test_rejects_public_subnet(self):
+        plan = {"resource_changes": [{"address": "oci_core_subnet.private", "type": "oci_core_subnet",
+                "change": {"actions": ["create"], "after": {"prohibit_public_ip_on_vnic": False}}}]}
+        self.assertIn("Subnet must prohibit public IP addresses", mod.inspect(plan))
+
+    def test_rejects_existing_resource_noop(self):
+        plan = {"resource_changes": [{"address": "oci_core_vcn.aepx", "type": "oci_core_vcn",
+                "change": {"actions": ["no-op"], "after": {}}}]}
+        self.assertTrue(any("Only new resource creation" in x for x in mod.inspect(plan)))
+
     def test_accepts_private_a1_create(self):
         plan = {"resource_changes": [{"address": "oci_core_instance.staging[0]", "type": "oci_core_instance",
                 "change": {"actions": ["create"], "after": {"shape": "VM.Standard.A1.Flex",
