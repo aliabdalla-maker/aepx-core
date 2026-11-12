@@ -27,6 +27,7 @@ def test_sdk_transport_does_not_trust_ambient_proxy(monkeypatch):
         monkeypatch.setenv(key,"true")
     monkeypatch.setenv("IDE_EGRESS_CONNECT_PROXY","http://gateway:8080")
     monkeypatch.setenv("IDE_GATEWAY_TOKEN","x"*40)
+    monkeypatch.setenv("IDE_GATEWAY_CA_FILE",__import__("certifi").where())
     monkeypatch.setenv("HTTPS_PROXY","http://evil.invalid:9000")
     with sdk_http_client() as client:
         assert client.follow_redirects is False
