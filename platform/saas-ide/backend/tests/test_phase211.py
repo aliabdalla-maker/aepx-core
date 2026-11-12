@@ -23,3 +23,26 @@ def test_independent_authority_signature_and_tamper():
         verify_independent_receipt(receipt,"invalid",pub)
     with pytest.raises(PermissionError):
         reconcile_independent_receipt(None,"beta",receipt,sig,pub,actor="offline")
+
+
+def test_separate_offline_authority_subprocess(tmp_path):
+    import json,os,subprocess,sys
+    from pathlib import Path
+    key=Ed25519PrivateKey.generate()
+    private=key.private_bytes(encoding=serialization.Encoding.Raw,
+        format=serialization.PrivateFormat.Raw,encryption_algorithm=serialization.NoEncryption())
+    keyfile=tmp_path/"offline.key"
+    keyfile.write_bytes(private)
+    keyfile.chmod(0o600)
+    pub=key.public_key().public_bytes(encoding=serialization.Encoding.Raw,
+        format=serialization.PublicFormat.Raw)
+    receipt={"tenant":"alpha","reservation":"res-1","provider":"mock",
+             "request_id":"immutable-1","tokens":5,"microusd":50}
+    result=subprocess.run([sys.executable,"mock_billing_authority.py"],input=json.dumps(receipt),
+        text=True,capture_output=True,timeout=10,
+        env={"IDE_MOCK_BILLING_PRIVATE_KEY_FILE":str(keyfile),"PATH":os.getenv("PATH","")})
+    assert result.returncode==0,result.stderr
+    signed=json.loads(result.stdout)
+    verify_independent_receipt(signed["receipt"],signed["signature"],pub)
+    with pytest.raises(PermissionError):
+        verify_independent_receipt({**receipt,"request_id":"immutable-2"},signed["signature"],pub)
