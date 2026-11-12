@@ -17,3 +17,8 @@ Keep IDE_EXTERNAL_EXECUTION_ENABLED=false and all other external/MCP execution f
 
 ## Offline topology added in this iteration
 `security/phase211-isolated-compose.yml` uses a Docker internal network for the worker, while a distinct gateway placeholder has a second network. CI launches the actual worker container and asserts direct public and metadata sockets fail. The gateway **does not forward traffic**; this is deliberately not a functioning HTTPS egress gateway. Production SDK/MCP traffic tests remain blocked until a real, authenticated forwarding gateway is implemented.
+
+## Experimental CONNECT gateway (added)
+`security/egress_gateway.py` implements an authenticated HTTP CONNECT tunnel restricted to explicit hostname allowlists and TCP 443, resolves a single globally routable IP and pins that socket destination, and rejects other methods. It does not terminate TLS: SDK/MCP clients must verify TLS hostname certificates themselves. The gateway has an independent bearer credential and a separate forwarding switch. Compose mounts it with forwarding **disabled**, no allowlist, and no credential; it cannot send traffic by default. Unit tests cover private/metadata DNS, mixed DNS, malformed hosts and arbitrary ports.
+
+**Still not a verified end-to-end production gateway:** actual SDKs are not wired to this proxy, the MCP adapter expects an HTTPS proxy whereas this gateway accepts plaintext HTTP CONNECT over the private Docker network, and the existing Compose test only proves worker direct-socket denial. An authenticated TLS-wrapped proxy and actual SDK/MCP transport tests are required before enabling. Redirect handling must be enforced at clients and separately tested. Do not set forwarding or external execution flags.
