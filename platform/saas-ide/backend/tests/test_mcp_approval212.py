@@ -85,3 +85,21 @@ def test_tool_decision_rejects_non_admin_and_records_audit(monkeypatch):
     assert events==[("tenant-a","run-a","tool_rejected")]
     with pytest.raises(ValueError,match="Already decided"):
         phase22.decide_tool(db,owner,"approval-1",True)
+
+
+def test_consumption_rolls_back_when_audit_commit_fails(monkeypatch):
+    monkeypatch.setattr(phase23, "_scope", lambda db, tenant: None)
+    class FailedCommitDB(FakeDB):
+        def commit(self):
+            raise RuntimeError("synthetic audit persistence failure")
+        def rollback(self):
+            super().rollback()
+            self.state = "approved"
+            self.audit_rows.clear()
+    db = FailedCommitDB("tenant-a", "run-a", "knowledge", "read", {"query": "safe"})
+    with pytest.raises(RuntimeError, match="synthetic audit"):
+        phase22.consume_tool(db, "tenant-a", "run-a", "knowledge", "read",
+                             {"query": "safe"})
+    assert db.rollbacks == 1
+    assert db.state == "approved"
+    assert db.audit_rows == []
