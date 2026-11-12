@@ -26,3 +26,10 @@ Status: **HOLD — not approved for production**. PR #25 remains draft.
 - [ ] Add crash-injection and permission-revocation integration tests.
 - [ ] Document provider-specific idempotency contracts before enabling any side-effecting tool.
 - [ ] Independent security review and explicit release authorization.
+
+## Phase 2.15 incremental hardening (unverified until CI completes)
+- Added `execution_status` tenant-scoped, read-only operational lookup.
+- Added evidence-backed `resolve_unknown` transition with durable evidence reference, operator identity, and audit event; never resets to reserved.
+- Added PostgreSQL tests for evidence requirements, cross-tenant status isolation, no replay, and stale-dispatch crash simulation.
+- **Not yet implemented:** authenticated operator role enforcement for reconciliation; independent provider evidence validation; provider-specific idempotency propagation; permission-revocation race coverage. The internal reconciliation function must not be exposed to untrusted callers.
+- These tests simulate an interrupted worker through a stale timestamp; they are not a full process-kill/remote-side-effect integration test.
