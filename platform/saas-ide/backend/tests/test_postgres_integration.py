@@ -233,6 +233,17 @@ def test_phase24_cancel_invalidates_fenced_worker(prepared_db, tokens):
     rid=run["id"]
     assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
     assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    # Earlier module tests leave approved jobs. Cancel those unrelated jobs so
+    # this test exercises its own queue entry without changing production FIFO.
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+                fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+                WHERE tenant_id='alpha' AND run_id<>:run
+                  AND state IN ('pending','leased')"""),{"run":rid})
+    finally:
+        admin.dispose()
     with main.SessionLocal() as db:
         lease=fenced_claim(db,"alpha","cancel-worker")
         assert lease and lease["run_id"]==rid
@@ -255,6 +266,17 @@ def test_phase24_competing_claims_only_one_wins(prepared_db, tokens):
     rid=run["id"]
     assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
     assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    # Earlier module tests leave approved jobs. Cancel those unrelated jobs so
+    # this test exercises its own queue entry without changing production FIFO.
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+                fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+                WHERE tenant_id='alpha' AND run_id<>:run
+                  AND state IN ('pending','leased')"""),{"run":rid})
+    finally:
+        admin.dispose()
     with main.SessionLocal() as first:
         lease=fenced_claim(first,"alpha","worker-first")
         assert lease and lease["run_id"]==rid
