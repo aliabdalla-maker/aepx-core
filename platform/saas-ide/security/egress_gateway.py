@@ -24,7 +24,7 @@ def permitted_destination(authority, hosts, resolver=socket.getaddrinfo):
         raise PermissionError("Malformed hostname")
     answers=resolver(host,443,type=socket.SOCK_STREAM)
     ips={item[4][0] for item in answers}
-    if len(ips)!=1 or any(not ipaddress.ip_address(ip).is_global for ip in ips):
+    if len(ips)!=1 or any((not ipaddress.ip_address(ip).is_global) or ipaddress.ip_address(ip).is_multicast for ip in ips):
         raise PermissionError("DNS not pinned to a single public address")
     return next(iter(ips))
 
