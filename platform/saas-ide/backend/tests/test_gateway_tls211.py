@@ -125,3 +125,34 @@ def test_https_redirect_to_metadata_not_followed(tls_gateway):
         assert response.status_code==302
         assert response.headers["location"]=="https://169.254.169.254/secret"
     assert len(seen)==1
+
+def test_gateway_ingress_tls_and_authentication(tls_gateway,monkeypatch):
+    _,cert,_=tls_gateway
+    monkeypatch.setenv("IDE_GATEWAY_FORWARD_ENABLED","false")
+    context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.minimum_version=ssl.TLSVersion.TLSv1_2
+    context.load_cert_chain(cert,str(Path(cert).with_name("mock.key")))
+    with gateway.TLSServer(("127.0.0.1",0),gateway.Handler,context) as server:
+        thread=threading.Thread(target=server.serve_forever,daemon=True)
+        thread.start()
+        try:
+            port=server.server_address[1]
+            with socket.create_connection(("127.0.0.1",port),timeout=3) as plain:
+                plain.sendall(b"CONNECT provider.example:443 HTTP/1.1\\r\\n\\r\\n")
+                with pytest.raises((OSError,ConnectionError,TimeoutError)):
+                    data=plain.recv(256)
+                    if not data:
+                        raise ConnectionError("Plaintext ingress rejected")
+            client_context=ssl.create_default_context(cafile=cert)
+            with client_context.wrap_socket(socket.create_connection(("127.0.0.1",port),timeout=3),
+                                            server_hostname="provider.example") as encrypted:
+                encrypted.sendall(b"CONNECT provider.example:443 HTTP/1.1\\r\\nProxy-Authorization: Bearer "+b"t"*40+b"\\r\\n\\r\\n")
+                assert encrypted.recv(256).startswith(b"HTTP/1.1 403")
+            with pytest.raises(ssl.SSLCertVerificationError):
+                with ssl.create_default_context().wrap_socket(
+                    socket.create_connection(("127.0.0.1",port),timeout=3),
+                    server_hostname="provider.example"):
+                    pass
+        finally:
+            server.shutdown()
+            thread.join(timeout=5)
