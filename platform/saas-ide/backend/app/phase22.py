@@ -128,6 +128,13 @@ def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: st
     digest=digest_arguments(arguments)
     from .phase23 import _scope
     _scope(db,tenant_id)
+    # Lock the parent run to serialize consumption with cancellation.
+    active=db.execute(text("""SELECT id FROM ide_agent_runs
+      WHERE tenant_id=:tenant AND id=:run AND status IN ('approved','running')
+      FOR UPDATE"""), {"tenant":tenant_id,"run":run_id}).first()
+    if active is None:
+        db.rollback()
+        raise PermissionError("Run not active for tool consumption")
     updated=db.execute(text("""UPDATE ide_tool_approvals a SET state='consumed'
       WHERE a.tenant_id=:tenant AND a.run_id=:run AND a.server_name=:server
         AND a.tool_name=:tool AND a.args_sha256=:digest AND a.state='approved'
