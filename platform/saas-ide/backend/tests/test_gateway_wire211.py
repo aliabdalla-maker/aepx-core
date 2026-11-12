@@ -28,16 +28,16 @@ def gateway_server(monkeypatch):
         server.shutdown()
         thread.join(timeout=5)
 
-@pytest.mark.parametrize("request",[
+@pytest.mark.parametrize("wire_payload",[
     b"GET http://provider.example/ HTTP/1.1\r\nHost: provider.example\r\n\r\n",
     b"CONNECT 169.254.169.254:443 HTTP/1.1\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\n\r\n",
     b"CONNECT provider.example:80 HTTP/1.1\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\n\r\n",
     b"CONNECT provider.example:443 HTTP/1.1\r\nProxy-Authorization: Bearer invalid\r\n\r\n",
     b"CONNECT provider.example:443 HTTP/1.1\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\n\r\n",
 ])
-def test_gateway_denies_wire_bypasses(gateway_server,request):
+def test_gateway_denies_wire_bypasses(gateway_server,wire_payload):
     with socket.create_connection(("127.0.0.1",gateway_server),timeout=2) as conn:
-        conn.sendall(request)
+        conn.sendall(wire_payload)
         assert conn.recv(256).startswith(b"HTTP/1.1 403")
 
 def test_httpx_real_connect_denied_without_proxy_credential(gateway_server):
