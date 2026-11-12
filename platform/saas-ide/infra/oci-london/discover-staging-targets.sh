@@ -14,8 +14,6 @@ echo "=== Available platform images (verify Arm64 architecture manually) ==="
 oci compute image list --region "$REGION" --compartment-id "$COMPARTMENT" --lifecycle-state AVAILABLE --all --output json
 echo "=== Existing compute instances ==="
 oci compute instance list --region "$REGION" --compartment-id "$COMPARTMENT" --all --output json
-echo "=== Existing boot volumes by AD (review in Console for tenancy-wide usage) ==="
-oci bv boot-volume-attachment list --region "$REGION" --compartment-id "$COMPARTMENT" --output json
 echo "=== Object Storage namespace ==="
 oci os ns get --region "$REGION" --output json
 echo "STOP: review A1 usage across all compartments, image Arm64 compatibility, quotas and pricing. No changes made."
