@@ -138,4 +138,10 @@ def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: st
     if updated is None:
         db.rollback()
         raise PermissionError("Exact tool call not approved or already consumed")
+    # The audit record and approval state transition share the same transaction.
+    # A failed audit insert rolls back consumption rather than leaving an
+    # unaudited approval. Do not log raw arguments or service credentials.
+    from .supervisor import AgentAudit
+    db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant_id, run_id=run_id,
+                      actor="mcp-worker", action="tool_consumed"))
     db.commit()
