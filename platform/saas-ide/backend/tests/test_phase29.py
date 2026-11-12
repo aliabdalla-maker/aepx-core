@@ -57,3 +57,23 @@ def test_dns_metadata_and_private_rebinding_denied():
         with pytest.raises(PermissionError):
             resolve_public("provider.example.test",resolver=lambda *a,ip=address,**kw:
                            [(2,1,6,"",(ip,443))])
+
+
+def test_alerts_endpoint_requires_verified_identity_and_admin_role():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    client=TestClient(app)
+    assert client.get("/api/v1/operations/alerts",headers={"X-Tenant-ID":"alpha"}).status_code==401
+
+def test_provider_sdk_stays_disabled_without_explicit_gate(monkeypatch):
+    from app.providers import generate
+    monkeypatch.delenv("IDE_EXTERNAL_EXECUTION_ENABLED",raising=False)
+    with pytest.raises(PermissionError):
+        generate("openai","Never dispatch this request")
+
+def test_mcp_stays_disabled_without_explicit_gate(monkeypatch):
+    import asyncio
+    from app.agent_runtime import invoke_mcp_tool
+    monkeypatch.delenv("IDE_EXTERNAL_EXECUTION_ENABLED",raising=False)
+    with pytest.raises(PermissionError):
+        asyncio.run(invoke_mcp_tool("knowledge","search",{"q":"x"}))
