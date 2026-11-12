@@ -5,6 +5,7 @@ policy. Does not terminate TLS; clients verify provider certificates themselves.
 No HTTP forwarding, DNS tunnelling, arbitrary ports, or authentication fallback.
 """
 import ipaddress
+import hmac
 import os
 import select
 import socket
@@ -50,7 +51,7 @@ class Handler(socketserver.BaseRequestHandler):
                     raise PermissionError("Malformed proxy headers")
                 headers[key.lower()]=value.strip()
             token=os.environ.get("IDE_GATEWAY_TOKEN","")
-            if len(token)<32 or headers.get(b"proxy-authorization")!=("Bearer "+token).encode():
+            if len(token)<32 or not hmac.compare_digest(headers.get(b"proxy-authorization",b""),("Bearer "+token).encode()):
                 raise PermissionError("Gateway authorization required")
             hosts={x for x in os.environ.get("IDE_GATEWAY_ALLOWED_HOSTS","").split(",") if x}
             ip=permitted_destination(authority,hosts)
