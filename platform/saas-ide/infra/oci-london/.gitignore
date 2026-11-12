@@ -5,3 +5,8 @@
 *.tfvars
 .terraform.lock.hcl
 crash.log
+
+staging.env
+secrets/
+approval.local.json
+*.plan.json
