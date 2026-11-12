@@ -5,7 +5,14 @@ terraform {
   }
 }
 provider "oci" { region = "uk-london-1" }
-variable "compartment_ocid" { type = string }
+variable "compartment_ocid" {
+  type    = string
+  default = "ocid1.compartment.oc1..aaaaaaaaonhka4z7ankj76ibtpr7w6saylbyqaiuadtul4to2qyvxkcwarua"
+  validation {
+    condition     = startswith(var.compartment_ocid, "ocid1.compartment.oc1.")
+    error_message = "OCI compartment OCID must be valid."
+  }
+}
 variable "name_prefix" {
   type = string
   default = "aepx-staging"
