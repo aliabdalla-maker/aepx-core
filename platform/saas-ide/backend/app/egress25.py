@@ -6,7 +6,9 @@ def validate_https_destination(url: str, *, allowed_hosts: set[str]) -> str:
     parsed=urlsplit(url)
     if parsed.scheme!="https" or not parsed.hostname or parsed.username or parsed.password or parsed.fragment:
         raise PermissionError("HTTPS destination required")
-    host=parsed.hostname.rstrip(".").lower()
+    if parsed.hostname.endswith("."):
+        raise PermissionError("Noncanonical hostname forbidden")
+    host=parsed.hostname.lower()
     if host not in allowed_hosts or not host or any(c.isspace() for c in host):
         raise PermissionError("Destination not allowlisted")
     try:
