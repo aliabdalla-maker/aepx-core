@@ -33,20 +33,31 @@ def approved_mcp_tool(name: str, tool: str) -> str:
     return tool
 
 
-async def invoke_mcp_tool(name: str, tool: str, arguments: dict) -> object:
+async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, tenant_id=None, run_id=None) -> object:
     if os.getenv("IDE_EXTERNAL_EXECUTION_ENABLED") != "true" or os.getenv("IDE_MCP_EXECUTION_ENABLED") != "true":
         raise PermissionError("MCP execution disabled")
     if len(str(arguments)) > 4000:
         raise ValueError("MCP arguments too large")
     approved_mcp_tool(name, tool)
+    if db is None or not tenant_id or not run_id:
+        raise PermissionError("Tenant-bound single-use approval context required")
+    # Consume exact-argument approval before any network access. This is at-most-once
+    # dispatch, not exactly-once remote execution.
+    from .phase22 import consume_tool
+    consume_tool(db, tenant_id, run_id, name, tool, arguments)
     token = os.getenv("IDE_MCP_" + name.upper().replace("-", "_") + "_TOKEN", "")
     if not token:
         raise RuntimeError("MCP service token required")
+    # A network-level egress proxy is mandatory; URL checks alone cannot prevent
+    # DNS rebinding or a resolved private address. No direct connections allowed.
+    proxy = os.getenv("IDE_MCP_EGRESS_PROXY", "")
+    if not proxy.startswith("https://"):
+        raise PermissionError("Approved HTTPS egress proxy required")
     import httpx
     from mcp import ClientSession
     from mcp.client.streamable_http import streamable_http_client
     async with httpx.AsyncClient(headers={"Authorization": f"Bearer {token}"}, timeout=15,
-                                 follow_redirects=False, trust_env=False) as http:
+                                 follow_redirects=False, trust_env=False, proxy=proxy) as http:
         async with streamable_http_client(allowed_mcp_endpoint(name), http_client=http) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
