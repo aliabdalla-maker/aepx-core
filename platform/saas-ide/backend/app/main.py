@@ -17,8 +17,9 @@ if not DATABASE_URL.startswith(("postgresql+psycopg://", "postgresql://")):
     raise RuntimeError("IDE_DATABASE_URL must specify PostgreSQL (psycopg)")
 OIDC_ISSUER = os.getenv("IDE_OIDC_ISSUER", "").rstrip("/")
 OIDC_AUDIENCE = os.getenv("IDE_OIDC_AUDIENCE", "")
-if not OIDC_ISSUER.startswith("https://") or not OIDC_AUDIENCE:
-    raise RuntimeError("HTTPS IDE_OIDC_ISSUER and IDE_OIDC_AUDIENCE are required")
+OIDC_JWKS_URL = os.getenv("IDE_OIDC_JWKS_URL", "")
+if not OIDC_ISSUER.startswith("https://") or not OIDC_AUDIENCE or not OIDC_JWKS_URL.startswith("https://"):
+    raise RuntimeError("HTTPS IDE_OIDC_ISSUER, IDE_OIDC_JWKS_URL and IDE_OIDC_AUDIENCE are required")
 if "/.well-known/" in OIDC_ISSUER:
     raise RuntimeError("Use issuer URL, not discovery URL")
 
@@ -71,7 +72,7 @@ def db_session(tenant_id: Annotated[str | None, Header(alias="X-Tenant-ID")] = N
 
 @lru_cache(maxsize=1)
 def jwks_client():
-    return PyJWKClient(OIDC_ISSUER + "/.well-known/jwks.json", cache_jwk_set=True, lifespan=300)
+    return PyJWKClient(OIDC_JWKS_URL, cache_jwk_set=True, lifespan=300)
 
 
 def verified_subject(authorization: Annotated[str | None, Header()] = None) -> str:
