@@ -970,9 +970,24 @@ def test_phase215_manual_reconciliation_requires_evidence(prepared_db, tokens, m
                             verified_outcome="succeeded", actor="operator",
                             evidence_reference="")
         assert execution_status(db, "beta", approval_id) is None
+        from types import SimpleNamespace
+        admin = SimpleNamespace(tenant_id="alpha", role="admin", subject="operator")
+        verifier = lambda tenant, run, approval, outcome, reference: (
+            tenant == "alpha" and run == run_id and approval == approval_id
+            and outcome == "succeeded" and reference == "provider-case-215")
+        with pytest.raises(PermissionError, match="authorization"):
+            resolve_unknown(db, "alpha", run_id, approval_id,
+                            verified_outcome="succeeded", actor="operator",
+                            evidence_reference="provider-case-215")
+        with pytest.raises(PermissionError, match="verified"):
+            resolve_unknown(db, "alpha", run_id, approval_id,
+                            verified_outcome="succeeded", actor="operator",
+                            evidence_reference="provider-case-215",
+                            principal=admin, evidence_verifier=lambda *args: False)
         assert resolve_unknown(db, "alpha", run_id, approval_id,
                                verified_outcome="succeeded", actor="operator",
-                               evidence_reference="provider-case-215")
+                               evidence_reference="provider-case-215",
+                               principal=admin, evidence_verifier=verifier)
         assert not resolve_unknown(db, "alpha", run_id, approval_id,
                                    verified_outcome="failed", actor="operator",
                                    evidence_reference="provider-case-216")
