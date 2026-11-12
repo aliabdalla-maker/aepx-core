@@ -7,7 +7,7 @@ from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
 from .main import SessionLocal
-from .supervisor import AgentRun
+from .supervisor import AgentRun, AgentAudit
 from .providers import generate
 
 MAX_ATTEMPTS = 2
@@ -38,6 +38,8 @@ def execute_one(tenant_id: str, run_id: str, *, inference=generate) -> str:
             return "unconfigured"
         run.attempts += 1
         run.status = "running"
+        db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant_id, run_id=run_id,
+                          actor="system:worker", action="started"))
         prompt, provider = run.request, run.model_route
         db.commit()
     try:
@@ -61,5 +63,7 @@ def execute_one(tenant_id: str, run_id: str, *, inference=generate) -> str:
             return "state_changed"
         run.result = output[:20000]
         run.status = outcome
+        db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant_id, run_id=run_id,
+                          actor="system:worker", action=outcome))
         db.commit()
     return outcome
