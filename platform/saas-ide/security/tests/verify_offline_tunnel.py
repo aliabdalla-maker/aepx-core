@@ -115,3 +115,38 @@ with sdk_http_client() as transport:
     assert result["result"]["content"][0]["text"]=="offline:gateway"
     assert result["result"]["isError"] is False
 print("Offline MCP JSON-RPC tool discovery and synthetic tool invocation verified")
+
+
+# Negative DNS rebinding and canonical-host policy checks against the
+# production resolver, using deterministic injected DNS answers.
+import importlib.util
+spec=importlib.util.spec_from_file_location("production_gateway","/opt/gateway/egress_gateway.py")
+production_gateway=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(production_gateway)
+def dns_answers(*ips):
+    def resolve(host,port,**kwargs):
+        return [(socket.AF_INET,socket.SOCK_STREAM,6,"",(ip,port)) for ip in ips]
+    return resolve
+for resolver in (
+    dns_answers("203.0.113.10","127.0.0.1"),
+    dns_answers("203.0.113.10","169.254.169.254"),
+    dns_answers("127.0.0.1"),
+    dns_answers("169.254.169.254"),
+):
+    try:
+        production_gateway.permitted_destination(
+            "provider.example:443",{"provider.example"},resolver=resolver)
+    except PermissionError:
+        pass
+    else:
+        raise AssertionError("Unsafe DNS resolution was accepted")
+for authority in ("provider.example:80","PROVIDER.EXAMPLE:443",
+                  "provider.example.:443","127.0.0.1:443"):
+    try:
+        production_gateway.permitted_destination(
+            authority,{"provider.example"},resolver=dns_answers("203.0.113.10"))
+    except PermissionError:
+        pass
+    else:
+        raise AssertionError("Noncanonical or disallowed CONNECT authority accepted")
+print("Deterministic DNS rebinding, metadata IP and canonical-host checks passed")
