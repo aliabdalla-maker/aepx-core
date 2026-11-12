@@ -88,7 +88,7 @@ jobs:
           trap 'docker compose -f ../security/phase211-positive-test-compose.yml logs || true; docker compose -f ../security/phase211-positive-test-compose.yml down --remove-orphans || true' EXIT
           docker compose -f ../security/phase211-positive-test-compose.yml build worker
           docker compose -f ../security/phase211-positive-test-compose.yml up -d gateway mock-provider
-          docker compose -f ../security/phase211-positive-test-compose.yml exec -T mock-provider python -c 'import socket,time; [(lambda s: (s.close()))(socket.create_connection(("127.0.0.1",8443),timeout=2)) for _ in range(1)]; print("Mock HTTPS provider ready")'
+          docker compose -f ../security/phase211-positive-test-compose.yml exec -T mock-provider python -c 'import socket,time; exec("for i in range(30):\n try:\n  socket.create_connection((\"127.0.0.1\",8443),timeout=2).close(); print(\"Mock HTTPS provider ready\"); break\n except OSError:\n  if i==29: raise\n  time.sleep(1)")'
           docker compose -f ../security/phase211-positive-test-compose.yml run --rm --no-deps worker
 
   frontend:
