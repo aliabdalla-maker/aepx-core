@@ -7,6 +7,14 @@ from pathlib import Path
 OCID = re.compile(r"^ocid1\.(?:compartment|tenancy|image)\.[a-z0-9._-]+$")
 def check(data):
     errors = []
+    if data.get("tenancy_home_region") != "uk-london-1":
+        errors.append("Always Free resources require tenancy home region uk-london-1")
+    if data.get("instance_shape") != "VM.Standard.A1.Flex":
+        errors.append("Only Always Free VM.Standard.A1.Flex permitted")
+    if data.get("existing_a1_ocpus", -1) < 0 or data.get("existing_a1_memory_gb", -1) < 0:
+        errors.append("Existing A1 tenancy usage must be verified")
+    elif data.get("existing_a1_ocpus", 0) + data.get("instance_ocpus", 1) > 2 or data.get("existing_a1_memory_gb", 0) + data.get("instance_memory_gb", 6) > 12:
+        errors.append("A1 usage would exceed Always Free tenancy allowance")
     if data.get("region") != "uk-london-1":
         errors.append("Region must be uk-london-1")
     for key, prefix in (("compartment_ocid", "ocid1.compartment."), ("image_ocid", "ocid1.image.")):
