@@ -90,15 +90,26 @@ def execution_status(db: Session, tenant: str, approval_id: str) -> dict | None:
 
 
 def resolve_unknown(db: Session, tenant: str, run_id: str, approval_id: str,
-                    *, verified_outcome: str, actor: str, evidence_reference: str) -> bool:
+                    *, verified_outcome: str, actor: str, evidence_reference: str,
+                    principal=None, evidence_verifier=None) -> bool:
     """Manual reconciliation requires an externally verified outcome.
 
     This never resets a dispatch to reserved and never triggers a replay.
     """
+    # This is a privileged service function, not a public unauthenticated API.
+    if principal is None or principal.tenant_id != tenant or principal.role not in ("owner", "admin"):
+        raise PermissionError("Tenant owner/admin authorization required")
+    if principal.subject != actor:
+        raise PermissionError("Reconciliation actor must match authenticated principal")
+    if evidence_verifier is None or not callable(evidence_verifier):
+        raise PermissionError("Independent evidence verifier required")
     if verified_outcome not in ("succeeded", "failed"):
         raise ValueError("Verified outcome must be succeeded or failed")
     if not actor or len(actor)>255 or not evidence_reference or len(evidence_reference)>160:
         raise ValueError("Authorized actor and evidence reference required")
+    # Fail closed unless a trusted provider adapter validates the evidence.
+    if evidence_verifier(tenant, run_id, approval_id, verified_outcome, evidence_reference) is not True:
+        raise PermissionError("Provider evidence could not be verified")
     _scope(db, tenant)
     from .supervisor import AgentAudit
     import uuid
