@@ -104,16 +104,14 @@ def resolve_unknown(db: Session, tenant: str, run_id: str, approval_id: str,
     import uuid
     try:
         row = db.execute(text("""UPDATE ide_mcp_executions
-            SET state=:outcome,completed_at=now()
+            SET state=:outcome,completed_at=now(), reconciliation_reference=:evidence, reconciled_by=:actor
             WHERE tenant_id=:tenant AND run_id=:run AND approval_id=:approval
               AND state='outcome_unknown' RETURNING id"""),
             {"outcome":verified_outcome,"tenant":tenant,"run":run_id,
-             "approval":approval_id}).first()
+             "approval":approval_id,"evidence":evidence_reference,"actor":actor}).first()
         if row is None:
             db.rollback()
             return False
-        # Evidence references must be retained in the operator's secured
-        # reconciliation record; this minimal audit schema stores no payload.
         db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant, run_id=run_id,
                           actor=actor, action="mcp_reconciled"))
         db.commit()
