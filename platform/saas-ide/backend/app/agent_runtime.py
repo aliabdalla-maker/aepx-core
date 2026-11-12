@@ -36,6 +36,8 @@ def approved_mcp_tool(name: str, tool: str) -> str:
 async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, tenant_id=None, run_id=None) -> object:
     if os.getenv("IDE_EXTERNAL_EXECUTION_ENABLED") != "true" or os.getenv("IDE_MCP_EXECUTION_ENABLED") != "true":
         raise PermissionError("MCP execution disabled")
+    from .egress210 import assert_network_isolated
+    assert_network_isolated()
     if len(str(arguments)) > 4000:
         raise ValueError("MCP arguments too large")
     approved_mcp_tool(name, tool)
@@ -67,6 +69,8 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
 def execute_crewai_plan(task: str, provider: str) -> str:
     if os.getenv("IDE_EXTERNAL_EXECUTION_ENABLED") != "true" or os.getenv("IDE_CREWAI_EXECUTION_ENABLED") != "true":
         raise PermissionError("CrewAI execution disabled")
+    from .egress210 import assert_network_isolated
+    assert_network_isolated()
     if provider == "unconfigured" or provider != route_model(provider):
         raise RuntimeError("Provider not enabled")
     model = configured_model(provider)
