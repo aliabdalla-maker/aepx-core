@@ -242,3 +242,26 @@ def test_phase24_cancel_invalidates_fenced_worker(prepared_db, tokens):
                                     lease["fencing_token"],"SHOULD NOT PERSIST",True) is False
     detail=client.get(f"/api/v1/agent-runs/{rid}",headers=owner).json()
     assert detail["status"]=="cancelled" and "SHOULD NOT PERSIST" not in detail["result"]
+
+
+def test_phase24_competing_claims_only_one_wins(prepared_db, tokens):
+    from app.phase23 import fenced_claim
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase24-race"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Competing claim verification"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    with main.SessionLocal() as first:
+        lease=fenced_claim(first,"alpha","worker-first")
+        assert lease and lease["run_id"]==rid
+    with main.SessionLocal() as second:
+        # No second worker may take an unexpired lease.
+        assert fenced_claim(second,"alpha","worker-second") is None
+    with main.SessionLocal() as third:
+        from app.phase23 import record_fenced_result
+        assert record_fenced_result(third,"alpha",lease["job_id"],"worker-second",
+                                    lease["fencing_token"],"forged",True) is False
