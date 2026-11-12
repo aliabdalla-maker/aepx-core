@@ -41,3 +41,11 @@ Status: **HOLD — not approved for production**. PR #25 remains draft.
 - Previous stale-dispatch test simulates a crash; a true killed-process and remote-side-effect test remains outstanding.
 - CI is required on the final commit; passing checks on older commits do not authorize release.
 - Explicit production release authorization and independent security sign-off have **not** been granted.
+
+## Phase 2.17 — implementation and verification
+- Latest Phase 2.16 dedicated workflow passed at `0f8d7b79`; full repository CI remained queued when inspected.
+- Implemented fail-closed offline Ed25519 provider receipt verification. Receipt must bind tenant, run, approval, outcome, and provider reference; trusted public key supplied via `IDE_MCP_RECEIPT_ED25519_PUBLIC_KEY`. No private provider key is stored. Added synthetic signed/tampered/cross-tenant tests.
+- Reconciliation defaults to the signed receipt verifier. Injectable verifier is retained for offline tests and trusted internal service composition; never expose an arbitrary verifier selection to callers.
+- Added PostgreSQL subprocess test that commits dispatch, exits via `os._exit(99)`, and checks replay remains denied before and after stale quarantine. This does not simulate an actual provider side effect.
+- Provider idempotency header is opt-in; end-to-end provider deduplication and independent signed receipt issuance require an external provider contract and remain **unverified**.
+- Acceptance requires green CI at the final SHA, independent security review, verified provider contract, and explicit human authorization. **HOLD: do not merge, deploy, or enable live execution.**
