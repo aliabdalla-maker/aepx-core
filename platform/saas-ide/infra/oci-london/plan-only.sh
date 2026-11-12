@@ -11,11 +11,11 @@ if [[ "${TF_VAR_instance_shape:-VM.Standard.A1.Flex}" != "VM.Standard.A1.Flex" ]
   echo "Refusing non-Always-Free Compute shape" >&2
   exit 1
 fi
-if [[ ! "${TF_VAR_compartment_ocid}" =~ ^ocid1\\.compartment\\. ]]; then
+if [[ ! "${TF_VAR_compartment_ocid}" =~ ^ocid1[.]compartment[.] ]]; then
   echo "Invalid compartment OCID" >&2
   exit 1
 fi
-if [[ ! "${TF_VAR_image_ocid}" =~ ^ocid1\\.image\\. ]]; then
+if [[ ! "${TF_VAR_image_ocid}" =~ ^ocid1[.]image[.] ]]; then
   echo "Invalid image OCID" >&2
   exit 1
 fi
@@ -25,6 +25,10 @@ if [[ ! "${TF_VAR_ssh_public_key}" =~ ^(ssh-ed25519|ssh-rsa|ecdsa-sha2-) ]]; the
 fi
 if [[ "${TF_VAR_instance_ocpus:-1}" != "1" || "${TF_VAR_instance_memory_gb:-6}" != "6" ]]; then
   echo "Phase 2.26 requires the conservative 1 OCPU / 6 GB configuration" >&2
+  exit 1
+fi
+if [[ "${TF_VAR_enable_staging_compute:-false}" == "true" ]]; then
+  echo "Do not enable staging through environment; planning only" >&2
   exit 1
 fi
 terraform init -input=false
