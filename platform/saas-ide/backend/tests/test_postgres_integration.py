@@ -990,7 +990,8 @@ def test_phase215_manual_reconciliation_requires_evidence(prepared_db, tokens, m
                                principal=admin, evidence_verifier=verifier)
         assert not resolve_unknown(db, "alpha", run_id, approval_id,
                                    verified_outcome="failed", actor="operator",
-                                   evidence_reference="provider-case-216")
+                                   evidence_reference="provider-case-216",
+                                   principal=admin, evidence_verifier=lambda *args: True)
         with pytest.raises(PermissionError):
             begin_dispatch(db, "alpha", run_id, approval_id)
     with main.engine.connect() as db:
