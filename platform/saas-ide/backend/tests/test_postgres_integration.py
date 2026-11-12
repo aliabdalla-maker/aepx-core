@@ -1143,3 +1143,27 @@ os._exit(99)
         assert reconcile_stale(db, "alpha", 30) == 1
         with pytest.raises(PermissionError, match="already dispatched"):
             begin_dispatch(db, "alpha", run_id, approval_id)
+
+
+def test_phase218_operations_api_is_tenant_scoped_and_admin_only(prepared_db, tokens):
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    viewer = headers(tokens("user-beta"), "beta")
+    for suffix in ("/executions", "/metrics"):
+        url = "/api/v1/operations/mcp" + suffix
+        assert client.get(url, headers=owner).status_code == 200
+        assert client.get(url, headers=viewer).status_code == 403
+    assert client.get("/api/v1/operations/mcp/executions/absent",
+                      headers=owner).status_code == 404
+    assert client.get("/api/v1/operations/mcp/executions/absent",
+                      headers=viewer).status_code == 403
+    assert client.post("/api/v1/operations/mcp/recover-stale?age_seconds=10",
+                       headers=owner).status_code == 400
+    assert client.post("/api/v1/operations/mcp/recover-stale",
+                       headers=viewer).status_code == 403
+    assert client.post("/api/v1/operations/mcp/executions/absent/reconcile",
+                       headers=owner, json={"outcome": "succeeded",
+                                            "signed_receipt": "invalid"}).status_code == 404
+    assert client.post("/api/v1/operations/mcp/executions/absent/reconcile",
+                       headers=viewer, json={"outcome": "succeeded",
+                                             "signed_receipt": "invalid"}).status_code == 403
