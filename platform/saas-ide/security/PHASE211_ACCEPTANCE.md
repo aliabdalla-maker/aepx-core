@@ -10,8 +10,8 @@ Status: **HOLD / NOT APPROVED**. This document does not authorize merging, deplo
 
 ## Pending acceptance gates
 - [ ] DNS validation tests pass CI after fixing missing worker source mount at `0c8817b2`. Earlier run 43204863801 failed with FileNotFoundError, not a policy assertion.
-- [ ] Test expired upstream TLS certificate rejection through the gateway using a real expired certificate.
-- [ ] Test expired gateway ingress TLS certificate rejection.
+- [ ] Verify expired upstream TLS rejection through the actual gateway. A local trusted-but-expired handshake regression was added at `8aa7f505`; CI result pending.
+- [ ] Verify expired gateway ingress TLS rejection against the actual gateway listener. A local trusted-but-expired handshake regression was added at `8aa7f505`; CI result pending.
 - [ ] Exercise DNS rebinding across a running Docker network, not just injected resolver responses.
 - [ ] Verify full repository CI completion; full CI runs have been queued.
 - [ ] Independent review of the gateway forwarding policy and network isolation.
