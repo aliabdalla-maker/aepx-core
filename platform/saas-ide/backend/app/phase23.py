@@ -122,16 +122,35 @@ def settle_budget(db: Session, tenant: str, reservation: str, actual_tokens: int
     db.commit()
 
 def settle_reserved_maximum(db: Session, tenant: str, reservation: str) -> None:
-    """Charge the full reserved envelope if usage is unknown (timeout/crash)."""
-    _scope(db, tenant)
-    row=db.execute(text("""SELECT reserved_tokens,reserved_microusd
-        FROM ide_agent_spend WHERE tenant_id=:tenant AND id=:id AND state='reserved'"""),
-        {"tenant":tenant,"id":reservation}).first()
+    """Atomically charge the full envelope when provider usage is unknown.
+
+    Never release the row lock between reading and settling. Concurrent
+    reconciliation/settlement cannot double-debit a reservation.
+    """
+    _scope(db,tenant)
+    row=db.execute(text("""SELECT reserved_tokens,reserved_microusd FROM ide_agent_spend
+      WHERE tenant_id=:tenant AND id=:id AND state='reserved' FOR UPDATE"""),
+      {"tenant":tenant,"id":reservation}).first()
     if row is None:
         db.rollback()
         raise ValueError("Reservation missing or already settled")
-    db.rollback()
-    settle_budget(db,tenant,reservation,row.reserved_tokens,row.reserved_microusd)
+    updated=db.execute(text("""UPDATE ide_agent_budgets SET
+      reserved_tokens=reserved_tokens-:tokens,
+      reserved_microusd=reserved_microusd-:cost,
+      spent_tokens=spent_tokens+:tokens,
+      spent_microusd=spent_microusd+:cost
+      WHERE tenant_id=:tenant AND reserved_tokens>=:tokens
+        AND reserved_microusd>=:cost"""),
+      {"tenant":tenant,"tokens":row.reserved_tokens,"cost":row.reserved_microusd})
+    if updated.rowcount!=1:
+        db.rollback()
+        raise PermissionError("Budget inconsistent during settlement")
+    db.execute(text("""UPDATE ide_agent_spend SET state='settled',
+      actual_tokens=:tokens,actual_microusd=:cost
+      WHERE tenant_id=:tenant AND id=:id AND state='reserved'"""),
+      {"tenant":tenant,"id":reservation,"tokens":row.reserved_tokens,
+       "cost":row.reserved_microusd})
+    db.commit()
 
 def record_fenced_result(db: Session, tenant: str, job_id: str, owner: str,
                          token: int, result: str, success: bool) -> bool:
