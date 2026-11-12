@@ -33,6 +33,7 @@ class AgentAudit(Base):
     run_id: Mapped[str] = mapped_column(String(36), nullable=False)
     actor: Mapped[str] = mapped_column(String(255), nullable=False)
     action: Mapped[str] = mapped_column(String(50), nullable=False)
+    __table_args__ = (ForeignKeyConstraint(["tenant_id", "run_id"], ["ide_agent_runs.tenant_id", "ide_agent_runs.id"]),)
 
 
 def audit(db: Session, p: Principal, run_id: str, action: str) -> None:
@@ -99,6 +100,7 @@ def create_run(db: Session, p: Principal, body: RunRequest) -> AgentRun:
                    subject=p.subject, request=body.task, model_route=route,
                    status="awaiting_approval", plan=json.dumps(plan_steps(body.task)))
     db.add(run)
+    db.flush()
     audit(db, p, run.id, "created")
     db.commit()
     return run
