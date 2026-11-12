@@ -628,3 +628,68 @@ time.sleep(120)
                 proc.wait()
     finally:
         admin.dispose()
+
+
+def test_mcp_single_use_concurrent_postgres_approval_and_audit(prepared_db, tokens, monkeypatch):
+    """Two independent PostgreSQL sessions race for one exact approved tool call."""
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from app.phase22 import consume_tool
+
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner,
+                          json={"name": "concurrent-mcp-approval"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"],
+                            "task": "Offline concurrent approval regression"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    decision = client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                           headers=owner)
+    assert decision.status_code == 200, decision.text
+    arguments = {"query": "concurrency"}
+    approval = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                           headers=owner, json={"server": "knowledge",
+                                                "tool": "search",
+                                                "arguments": arguments})
+    assert approval.status_code == 201, approval.text
+    approval_id = approval.json()["id"]
+    approved = client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                           headers=owner)
+    assert approved.status_code == 200, approved.text
+
+    barrier = Barrier(2)
+    def consume_once():
+        with main.SessionLocal() as db:
+            barrier.wait(timeout=10)
+            try:
+                consume_tool(db, "alpha", run_id, "knowledge", "search", arguments)
+                return "consumed"
+            except PermissionError:
+                return "denied"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(consume_once) for _ in range(2)]
+        outcomes = [future.result(timeout=20) for future in futures]
+    assert sorted(outcomes) == ["consumed", "denied"], outcomes
+
+    # RLS must hide the approval from other tenants, and the decision
+    # must have produced a durable audit event.
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','beta',true)"))
+        assert db.execute(text(
+            "SELECT count(*) FROM ide_tool_approvals WHERE id=:id"),
+            {"id": approval_id}).scalar() == 0
+        db.rollback()
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text(
+            "SELECT state FROM ide_tool_approvals WHERE id=:id"),
+            {"id": approval_id}).scalar() == "consumed"
+        assert db.execute(text(
+            "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
+            "AND run_id=:run AND action='tool_approved'"),
+            {"run": run_id}).scalar() >= 1
