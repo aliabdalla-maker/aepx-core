@@ -124,11 +124,18 @@ def decide_tool(db: Session, p: Principal, approval_id: str, approved: bool) -> 
     return item
 
 def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: str, arguments: dict) -> None:
+    """Atomic single-use approval consumption; no cross-tenant or cancelled-run dispatch."""
     digest=digest_arguments(arguments)
-    item=db.scalar(select(ToolApproval).where(ToolApproval.tenant_id==tenant_id,
-      ToolApproval.run_id==run_id,ToolApproval.server_name==server,
-      ToolApproval.tool_name==tool,ToolApproval.args_sha256==digest).with_for_update())
-    if item is None or item.state!="approved":
-        raise PermissionError("Exact tool call not approved")
-    item.state="consumed"
+    from .phase23 import _scope
+    _scope(db,tenant_id)
+    updated=db.execute(text("""UPDATE ide_tool_approvals a SET state='consumed'
+      WHERE a.tenant_id=:tenant AND a.run_id=:run AND a.server_name=:server
+        AND a.tool_name=:tool AND a.args_sha256=:digest AND a.state='approved'
+        AND EXISTS (SELECT 1 FROM ide_agent_runs r WHERE r.tenant_id=a.tenant_id
+          AND r.id=a.run_id AND r.status IN ('approved','running'))
+      RETURNING a.id"""),{"tenant":tenant_id,"run":run_id,"server":server,
+                          "tool":tool,"digest":digest}).first()
+    if updated is None:
+        db.rollback()
+        raise PermissionError("Exact tool call not approved or already consumed")
     db.commit()
