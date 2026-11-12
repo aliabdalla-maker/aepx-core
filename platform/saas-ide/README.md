@@ -1,45 +1,19 @@
-# AEP-X Hybrid SaaS IDE — initial implementation
+# AEP-X Hybrid SaaS IDE
 
-This folder is a **development-only** foundation for the hybrid IDE.
-It does not claim to be a finished SaaS product.
+Phase 1 implementation lives in this directory. See [Phase 1 setup](PHASE1-SETUP.md) and the [OCI London deployment plan](OCI-LONDON-DEPLOYMENT.md).
 
-## Implemented
-- FastAPI project metadata endpoints and OpenAPI schema
-- SQLite persistence for local development
-- Tenant-scoped project create/list/get
-- Development API key required; missing key fails closed
-- Production mode refuses requests until real OIDC is integrated
-- Automated tenant isolation and authentication regression tests
+## Phase 1 source
+- `backend/app/main.py`: FastAPI with verified OIDC RS256 access tokens, PostgreSQL tenant membership and role-based project/file endpoints
+- `backend/migrations/001_phase1.sql`: PostgreSQL tenant row-level security and tenant-consistent workspace foreign keys
+- `backend/tests/`: authentication/path smoke tests and PostgreSQL/OIDC integration tests
+- `web/`: Next.js and Monaco browser editor with OIDC PKCE login and workspace persistence
+- `.github/workflows/hybrid-ide-phase1.yml`: backend tests against PostgreSQL and frontend typecheck/build
+- `monetization/`: AdSense and AdMob identifiers, with live ads disabled
 
-## Not implemented
-OIDC, RBAC, multi-user membership, Postgres, Monaco frontend,
-AEP-X execution integration, MCP, RAG, LLM routing, sandboxes,
-GitHub PR automation, Stripe entitlements and OCI deployment.
+## Security and deployment
+No public deployment is authorised. A real OIDC provider, least-privileged PostgreSQL role, membership provisioning, successful CI and independent tenant-isolation verification are required before staging. The database tenant header selects an RLS scope; it is not proof of tenant membership. The authenticated subject must have an approved membership in that tenant.
 
-## Run locally
+Do not use the previous development API-key design: it has been replaced. Do not copy local credentials into GitHub. The OCI London Compute console remains a documented target, not an active deployment.
 
-```bash
-cd platform/saas-ide/backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-export IDE_ENV=development
-export IDE_DEV_API_KEY=replace-with-a-long-random-local-secret
-export IDE_DB_PATH=./ide.sqlite3
-uvicorn app.main:app --reload --port 8090
-python -m pytest tests -v
-```
-
-PowerShell: use `.venv\\Scripts\\Activate.ps1` and `$env:IDE_DEV_API_KEY="..."`.
-The API documentation is at http://localhost:8090/docs.
-
-**Security note:** The development API key is shared across tenants, so it
-does **not** establish tenant identity against malicious clients. It is suitable
-only for isolated local testing. Never expose this API publicly; replace
-the development boundary with validated OIDC subject, issuer, audience,
-roles and tenant membership, plus Postgres RLS, before any external pilot.
-
-## Next milestone
-Introduce production-grade OIDC and tenant membership checks, PostgreSQL
-migrations and a minimal Next.js + Monaco workspace UI. Only then integrate
-AEP-X governed agent execution behind isolated workers.
+## Status
+The source is committed to a **draft** pull request. Automated test results and end-to-end runtime behaviour must be verified from GitHub Actions and an actual staging environment before claiming readiness.
