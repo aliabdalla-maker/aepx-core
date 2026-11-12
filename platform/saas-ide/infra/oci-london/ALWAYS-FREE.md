@@ -1,7 +1,7 @@
 # OCI Always Free staging — uk-london-1
 
 Current Oracle Always Free tenancy allowances (verify in your own Console):
-- Ampere A1 Flex: 1,500 OCPU-hours and 9,000 GB-hours per month, equivalent to **2 OCPUs and 12 GB** continuously for Always Free tenancies.
+- Ampere A1 Flex capacity is subject to current Oracle service limits and shared tenancy usage. **AEP-X intentionally caps its own staging deployment at 2 OCPUs / 12 GB**. This is a conservative project limit, not Oracle's full Always Free allowance. Verify the current OCPU-hour and GB-hour allowances in the OCI console.
 - A1 uses **Arm64**, not x86_64. Select an Always Free-eligible Arm64 Oracle Linux or Ubuntu image. Confirm application dependencies and container image architecture.
 - Always Free eligibility applies **only in the tenancy home region**. If home region is not uk-london-1, this deployment is blocked.
 - The allowance is shared with existing A1 instances. Proposed VM defaults to **1 OCPU / 6 GB**, subject to verified remaining allowance.
