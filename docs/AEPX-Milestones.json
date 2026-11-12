@@ -1,0 +1,58 @@
+{
+  "project": "AEP-X",
+  "as_of": "2026-11-12",
+  "method": "Planning estimates, not measured code coverage or production acceptance. Percentages reflect documented GitHub implementation and verification evidence only.",
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "GitHub repository and CI",
+      "completion": 100,
+      "status": "verified",
+      "evidence": "PR #28 and PR #29 merged; Codespaces validation and CI success"
+    },
+    {
+      "id": "M2",
+      "name": "Codespaces and console configuration",
+      "completion": 90,
+      "status": "configured_not_live_verified",
+      "evidence": "Devcontainer and console Compose merged; CI smoke successful; private Codespace unverified"
+    },
+    {
+      "id": "M3",
+      "name": "Core backend orchestration",
+      "completion": 65,
+      "status": "partially_verified",
+      "evidence": "Compose definitions and shared network merged; no full core runtime evidence"
+    },
+    {
+      "id": "M4",
+      "name": "Agentic AI / MCP / RAG integration",
+      "completion": 25,
+      "status": "unverified",
+      "evidence": "Services named in repository; end-to-end acceptance evidence not available"
+    },
+    {
+      "id": "M5",
+      "name": "Security and governance",
+      "completion": 30,
+      "status": "development_only",
+      "evidence": "Development security check exists; hard-coded dev credentials and exposed ports remain"
+    },
+    {
+      "id": "M6",
+      "name": "Observability, backup and recovery",
+      "completion": 15,
+      "status": "not_verified",
+      "evidence": "No evidence of restore drills or production monitoring"
+    },
+    {
+      "id": "M7",
+      "name": "Production release and handover",
+      "completion": 10,
+      "status": "not_deployed",
+      "evidence": "Handoff documentation prepared; no production deployment evidence"
+    }
+  ],
+  "overall_estimate_percent": 48,
+  "overall_note": "Unweighted arithmetic mean, rounded. Do not interpret as production readiness."
+}
