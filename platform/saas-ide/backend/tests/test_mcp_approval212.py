@@ -26,6 +26,8 @@ class FakeDB:
         self.audit_rows.append(row)
     def execute(self, statement, params):
         self.attempts.append(dict(params))
+        if "SELECT id FROM ide_agent_runs" in str(statement):
+            return SimpleNamespace(first=lambda: ("run-a",) if params["tenant"]=="tenant-a" and params["run"]=="run-a" else None)
         allowed=(params["tenant"]==self.tenant and params["run"]==self.run
                  and params["server"]==self.server and params["tool"]==self.tool
                  and params["digest"]==self.digest and self.state=="approved")
