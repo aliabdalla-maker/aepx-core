@@ -244,3 +244,71 @@ def agent_capabilities(p: Principal = Depends(principal)):
             "mcp_execution_enabled": False,
             "knowledge_retrieval": "lexical",
             "approval_required": True}
+
+from .supervisor import cancel as cancel_agent_run, retry as retry_agent_run, AgentAudit
+from .rag import index_document, search_vectors
+
+@app.get("/api/v1/projects/{project_id}/agent-runs")
+def list_agent_runs(project_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    project_or_404(db, p.tenant_id, project_id)
+    runs = db.scalars(select(AgentRun).where(
+        AgentRun.tenant_id == p.tenant_id, AgentRun.project_id == project_id
+    ).order_by(AgentRun.id.desc()).limit(50)).all()
+    return [{"id": r.id, "status": r.status, "model_route": r.model_route,
+             "task": r.request[:200], "attempts": r.attempts, "result": r.result[:500]}
+            for r in runs]
+
+@app.get("/api/v1/agent-runs/{run_id}/audit")
+def agent_audit(run_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    if get_run(db, p, run_id) is None:
+        raise HTTPException(404, "Run not found")
+    records = db.scalars(select(AgentAudit).where(
+        AgentAudit.tenant_id == p.tenant_id, AgentAudit.run_id == run_id
+    ).order_by(AgentAudit.id).limit(100)).all()
+    return [{"actor": a.actor, "action": a.action} for a in records]
+
+@app.post("/api/v1/agent-runs/{run_id}/cancel")
+def cancel_run(run_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    try:
+        r = cancel_agent_run(db, p, run_id)
+    except LookupError:
+        raise HTTPException(404, "Run not found")
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
+    except ValueError as exc:
+        raise HTTPException(409, str(exc))
+    return {"id": r.id, "status": r.status}
+
+@app.post("/api/v1/agent-runs/{run_id}/retry")
+def retry_run(run_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    try:
+        r = retry_agent_run(db, p, run_id)
+    except LookupError:
+        raise HTTPException(404, "Run not found")
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
+    except ValueError as exc:
+        raise HTTPException(409, str(exc))
+    return {"id": r.id, "status": r.status}
+
+@app.post("/api/v1/projects/{project_id}/knowledge/{document_id}/index")
+def index_knowledge(project_id: str, document_id: str, p: Principal = Depends(principal),
+                    db: Session = Depends(db_session)):
+    try:
+        count = index_document(db, p, project_id, document_id,
+            db.execute(text("""SELECT content FROM ide_knowledge_documents
+              WHERE id=:doc AND tenant_id=:tenant AND project_id=:project"""),
+              {"doc": document_id, "tenant": p.tenant_id, "project": project_id}).scalar() or "")
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
+    except LookupError:
+        raise HTTPException(404, "Document not found")
+    return {"chunks_indexed": count}
+
+@app.post("/api/v1/projects/{project_id}/knowledge/vector-search")
+def vector_knowledge(project_id: str, body: SearchIn, p: Principal = Depends(principal),
+                     db: Session = Depends(db_session)):
+    try:
+        return {"matches": search_vectors(db, p, project_id, body.query)}
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
