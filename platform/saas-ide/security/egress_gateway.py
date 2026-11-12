@@ -65,7 +65,13 @@ class Handler(socketserver.BaseRequestHandler):
                 upstream.settimeout(None)
                 sockets=[self.request,upstream]
                 while True:
-                    ready,_,_=select.select(sockets,[],[],30)
+                    # TLS ingress may have decrypted application bytes buffered
+                    # internally even when its underlying fd is not readable.
+                    # Drain them before waiting on select, otherwise a CONNECT
+                    # followed by nested provider TLS can deadlock.
+                    ready=[self.request] if self.request.pending() else []
+                    if not ready:
+                        ready,_,_=select.select(sockets,[],[],30)
                     if not ready: break
                     for sock in ready:
                         chunk=sock.recv(65536)
