@@ -11,9 +11,10 @@ def check(data):
         errors.append("Always Free resources require tenancy home region uk-london-1")
     if data.get("instance_shape") != "VM.Standard.A1.Flex":
         errors.append("Only Always Free VM.Standard.A1.Flex permitted")
-    if data.get("existing_a1_ocpus", -1) < 0 or data.get("existing_a1_memory_gb", -1) < 0:
-        errors.append("Existing A1 tenancy usage must be verified")
-    elif data.get("existing_a1_ocpus", 0) + data.get("instance_ocpus", 1) > 2 or data.get("existing_a1_memory_gb", 0) + data.get("instance_memory_gb", 6) > 12:
+    usage_keys = ("existing_a1_ocpus", "existing_a1_memory_gb", "instance_ocpus", "instance_memory_gb")
+    if any(not isinstance(data.get(k), (int, float)) or data[k] < 0 for k in usage_keys):
+        errors.append("Existing A1 tenancy usage and proposed sizing must be verified")
+    elif data["existing_a1_ocpus"] + data["instance_ocpus"] > 2 or data["existing_a1_memory_gb"] + data["instance_memory_gb"] > 12:
         errors.append("A1 usage would exceed Always Free tenancy allowance")
     if data.get("region") != "uk-london-1":
         errors.append("Region must be uk-london-1")
