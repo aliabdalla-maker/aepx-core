@@ -399,3 +399,48 @@ def test_phase26_parallel_mcp_approval_single_use(prepared_db, tokens, monkeypat
     with main.SessionLocal() as db:
         with pytest.raises(PermissionError):
             consume_tool(db,"beta",rid,"knowledge","search",{"query":"phase26"})
+
+
+def test_phase27_crash_after_budget_reservation_and_mock_billing(prepared_db, tokens):
+    """Simulated process death after reservation: no replay; verified mock receipt settles."""
+    from app.phase23 import fenced_claim,reserve_budget,record_fenced_result
+    from app.recovery25 import quarantine_expired,reconcile,tenant_metrics
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase27-crash"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Simulated crash before provider receipt"
+    }).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
+    admin=create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+              fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+              WHERE tenant_id='alpha' AND run_id<>:run AND state IN ('pending','leased')"""),{"run":rid})
+        with main.SessionLocal() as db:
+            lease=fenced_claim(db,"alpha","crashed-worker")
+        assert lease and lease["run_id"]==rid
+        with main.SessionLocal() as db:
+            reservation=reserve_budget(db,"alpha",lease["job_id"],lease["fencing_token"],100,10000)
+        # Process is gone: no result or settlement. Force expiry using privileged test setup.
+        with admin.begin() as conn:
+            conn.execute(text("""UPDATE ide_agent_jobs SET lease_until=now()-interval '1 second'
+              WHERE tenant_id='alpha' AND id=:job"""),{"job":lease["job_id"]})
+        with main.SessionLocal() as db:
+            assert quarantine_expired(db,"alpha")>=1
+            assert fenced_claim(db,"alpha","replacement") is None
+            assert record_fenced_result(db,"alpha",lease["job_id"],"crashed-worker",
+                lease["fencing_token"],"late response",True) is False
+        # Mock provider evidence: receipt number + bounded token/cost accounting.
+        with main.SessionLocal() as db:
+            with pytest.raises(PermissionError):
+                reconcile(db,"alpha",reservation,"mock-receipt-phase27",101,10001,actor="test")
+            reconcile(db,"alpha",reservation,"mock-receipt-phase27",37,3200,actor="test")
+            assert tenant_metrics(db,"alpha")["unresolved_reservations"]==0
+            with pytest.raises(LookupError):
+                reconcile(db,"beta",reservation,"mock-receipt-other",37,3200,actor="test")
+    finally:
+        admin.dispose()
