@@ -1,0 +1,19 @@
+# Reference only. Never deploy without a network egress proxy, secrets and sandbox review.
+services:
+  agent-worker:
+    build:
+      context: .
+      dockerfile: worker.Dockerfile
+    read_only: true
+    user: "10001:10001"
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 512m
+    cpus: 0.5
+    network_mode: "none"
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    environment:
+      IDE_EXTERNAL_EXECUTION_ENABLED: "false"
+    restart: "no"
