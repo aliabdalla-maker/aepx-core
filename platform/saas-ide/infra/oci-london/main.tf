@@ -6,8 +6,14 @@ terraform {
 }
 provider "oci" { region = "uk-london-1" }
 variable "compartment_ocid" { type = string }
-variable "name_prefix" { type = string  default = "aepx-staging" }
-variable "vcn_cidr" { type = string  default = "10.74.0.0/16" }
+variable "name_prefix" {
+  type = string
+  default = "aepx-staging"
+}
+variable "vcn_cidr" {
+  type = string
+  default = "10.74.0.0/16"
+}
 resource "oci_core_vcn" "aepx" {
   compartment_id = var.compartment_ocid
   cidr_blocks = [var.vcn_cidr]
