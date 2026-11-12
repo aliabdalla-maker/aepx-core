@@ -13,11 +13,15 @@ spec.loader.exec_module(gateway)
 real_connect=socket.create_connection
 
 def test_destination(authority, hosts, resolver=socket.getaddrinfo):
+    print("TEST destination",repr(authority),repr(hosts),flush=True)
     if authority!="provider.example:443" or hosts!={"provider.example"}:
         raise PermissionError("Test-only allowlist violation")
-    return socket.gethostbyname("mock-provider")
+    ip=socket.gethostbyname("mock-provider")
+    print("TEST resolved mock provider",ip,flush=True)
+    return ip
 
 def connect(address, timeout=None, source_address=None, **kwargs):
+    print("TEST connect",repr(address),flush=True)
     if address[1]==443 and address[0]==socket.gethostbyname("mock-provider"):
         return real_connect(("mock-provider",8443),timeout,source_address,**kwargs)
     return real_connect(address,timeout,source_address,**kwargs)
