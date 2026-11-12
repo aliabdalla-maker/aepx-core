@@ -46,6 +46,22 @@ class MockTLSHandler(socketserver.BaseRequestHandler):
                 if not chunk: break
                 body+=chunk
             self.server.requests_seen.append(payload.split(b"\r\n",1)[0])
+            if b"POST /mcp " in payload.split(b"\r\n",1)[0]:
+                import json
+                msg=json.loads(body)
+                if "id" not in msg:
+                    conn.sendall(b"HTTP/1.1 202 Accepted\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")
+                    return
+                method=msg.get("method")
+                if method=="initialize":
+                    result={"protocolVersion":"2025-03-26","capabilities":{"tools":{}},"serverInfo":{"name":"offline-mcp","version":"1"}}
+                elif method=="tools/call":
+                    result={"content":[{"type":"text","text":"offline-tool-result"}],"isError":False}
+                else:
+                    result={"tools":[{"name":"ping","description":"offline","inputSchema":{"type":"object","properties":{}}}]}
+                data=json.dumps({"jsonrpc":"2.0","id":msg["id"],"result":result}).encode()
+                conn.sendall(b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: "+str(len(data)).encode()+b"\r\nConnection: close\r\n\r\n"+data)
+                return
             if b"/redirect" in payload.split(b"\r\n",1)[0]:
                 conn.sendall(b"HTTP/1.1 302 Found\r\nLocation: https://169.254.169.254/secret\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")
             else:
