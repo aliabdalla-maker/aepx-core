@@ -18,8 +18,11 @@ services:
     command: ["python","/opt/gateway/egress_gateway.py"]
     volumes:
       - ./egress_gateway.py:/opt/gateway/egress_gateway.py:ro
+      - ./test-certs:/opt/gateway/certs:ro
     environment:
       IDE_GATEWAY_LISTEN_ENABLED: "true"
+      IDE_GATEWAY_TLS_CERT_FILE: "/opt/gateway/certs/gateway.crt"
+      IDE_GATEWAY_TLS_KEY_FILE: "/opt/gateway/certs/gateway.key"
       IDE_GATEWAY_FORWARD_ENABLED: "false"
       IDE_GATEWAY_ALLOWED_HOSTS: ""
       IDE_EXTERNAL_EXECUTION_ENABLED: "false"
