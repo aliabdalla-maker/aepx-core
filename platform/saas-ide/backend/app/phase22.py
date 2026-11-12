@@ -149,6 +149,10 @@ def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: st
     # A failed audit insert rolls back consumption rather than leaving an
     # unaudited approval. Do not log raw arguments or service credentials.
     from .supervisor import AgentAudit
-    db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant_id, run_id=run_id,
-                      actor="mcp-worker", action="tool_consumed"))
-    db.commit()
+    try:
+        db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant_id, run_id=run_id,
+                          actor="mcp-worker", action="tool_consumed"))
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
