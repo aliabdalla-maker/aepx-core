@@ -120,3 +120,51 @@ def settle_budget(db: Session, tenant: str, reservation: str, actual_tokens: int
       {"tenant":tenant,"reserved_tokens":row.reserved_tokens,
        "reserved_cost":row.reserved_microusd,"tokens":actual_tokens,"cost":actual_micro_usd})
     db.commit()
+
+def settle_reserved_maximum(db: Session, tenant: str, reservation: str) -> None:
+    """Charge the full reserved envelope if usage is unknown (timeout/crash)."""
+    _scope(db, tenant)
+    row=db.execute(text("""SELECT reserved_tokens,reserved_microusd
+        FROM ide_agent_spend WHERE tenant_id=:tenant AND id=:id AND state='reserved'"""),
+        {"tenant":tenant,"id":reservation}).first()
+    if row is None:
+        db.rollback()
+        raise ValueError("Reservation missing or already settled")
+    db.rollback()
+    settle_budget(db,tenant,reservation,row.reserved_tokens,row.reserved_microusd)
+
+def record_fenced_result(db: Session, tenant: str, job_id: str, owner: str,
+                         token: int, result: str, success: bool) -> bool:
+    """Atomically persist result and finish only for a current, uncancelled lease."""
+    _scope(db,tenant)
+    row=db.execute(text("""SELECT j.run_id FROM ide_agent_jobs j
+      JOIN ide_agent_runs r ON r.tenant_id=j.tenant_id AND r.id=j.run_id
+      WHERE j.tenant_id=:tenant AND j.id=:job AND j.lease_owner=:owner
+        AND j.fencing_token=:token AND j.state='leased' AND j.lease_until>now()
+        AND r.status IN ('approved','running')
+      FOR UPDATE OF j,r"""),{"tenant":tenant,"job":job_id,"owner":owner,"token":token}).first()
+    if row is None:
+        db.rollback()
+        return False
+    state="completed" if success else "failed"
+    db.execute(text("""UPDATE ide_agent_runs SET status=:state,result=:result
+      WHERE tenant_id=:tenant AND id=:run"""),
+      {"state":state,"result":result[:20000],"tenant":tenant,"run":row.run_id})
+    db.execute(text("""UPDATE ide_agent_jobs SET state=:state,completed_at=now(),
+      lease_owner=NULL,lease_until=NULL WHERE tenant_id=:tenant AND id=:job"""),
+      {"state":state,"tenant":tenant,"job":job_id})
+    db.execute(text("""INSERT INTO ide_agent_audit(id,tenant_id,run_id,actor,action)
+      VALUES(:id,:tenant,:run,:actor,:action)"""),
+      {"id":str(uuid.uuid4()),"tenant":tenant,"run":row.run_id,"actor":"system:governed-worker","action":state})
+    db.commit()
+    return True
+
+def cancel_job(db: Session, tenant: str, run_id: str) -> bool:
+    """Invalidate a leased worker's fencing token on cancellation."""
+    _scope(db,tenant)
+    row=db.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+      fencing_token=fencing_token+1,lease_owner=NULL,lease_until=NULL
+      WHERE tenant_id=:tenant AND run_id=:run AND state IN ('pending','leased')
+      RETURNING id"""),{"tenant":tenant,"run":run_id}).first()
+    db.commit()
+    return row is not None
