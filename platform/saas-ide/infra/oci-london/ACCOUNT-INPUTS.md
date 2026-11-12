@@ -9,7 +9,7 @@ Confirmed by operator: home region `uk-london-1`; `VM.Standard.A1.Flex` appears 
 2. Open **Identity & Security → Compartments**. Open the selected compartment and verify its displayed name, active lifecycle state, and IAM permissions. Do not create another compartment.
 3. Configure OCI CLI securely on your own workstation or an approved CI runner; never paste API private keys, passwords, session tokens or auth codes into GitHub issues or chat.
 4. Set `OCI_TENANCY_OCID` locally and run `bash discover-account.sh` for visible compartments and namespace.
-5. The inventory script defaults to the selected compartment. Run `bash oci-inventory.sh` to inspect region, instances, shapes, availability domains and namespace.
+5. The inventory script defaults to the selected compartment. Run `bash oci-inventory.sh` to inspect region, instances, shapes, availability domains and namespace. Run `bash discover-staging-targets.sh` for the selected compartment details, image candidates and A1 shape offerings. Both scripts are read-only; review their output locally rather than posting full inventory publicly.
 6. In the console, verify **actual remaining** A1 OCPU/memory, image architecture (Arm64), existing boot/block volume allocations, Object Storage consumption, IAM permissions, and cost exposure.
 7. Only after verification, set `TF_VAR_object_storage_namespace`, `TF_VAR_availability_domain`, `TF_VAR_image_ocid` and `TF_VAR_ssh_public_key` locally. Do not supply private keys.
 8. Run `bash plan-only.sh` from this directory. This runs Terraform init/validate/plan and a read-only JSON plan checker. It **does not** apply changes.
