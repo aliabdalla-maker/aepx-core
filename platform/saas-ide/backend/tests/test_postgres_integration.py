@@ -142,3 +142,36 @@ def test_phase21_audit_cancel_and_vector_rls(prepared_db, tokens):
         assert db.execute(text("SELECT count(*) FROM ide_agent_audit")).scalar() >= 2
         db.rollback()
         assert db.execute(text("SELECT count(*) FROM ide_agent_audit")).scalar() == 0
+
+
+def test_phase22_durable_queue_tool_approval_and_rls(prepared_db, tokens, monkeypatch):
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    viewer=headers(tokens(),"beta")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"phase22"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Design audited task queue"
+    }).json()
+    run_id=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/enqueue",headers=owner).status_code==409
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",headers=owner).status_code==200
+    job=client.post(f"/api/v1/agent-runs/{run_id}/enqueue",headers=owner)
+    assert job.status_code==200,job.text
+    duplicate=client.post(f"/api/v1/agent-runs/{run_id}/enqueue",headers=owner)
+    assert duplicate.json()["job_id"]==job.json()["job_id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/enqueue",headers=viewer).status_code==403
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL","https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS","search")
+    body={"server":"knowledge","tool":"search","arguments":{"query":"security"}}
+    approval=client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",headers=owner,json=body)
+    assert approval.status_code==201,approval.text
+    approval_id=approval.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",headers=viewer).status_code==403
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",headers=owner).status_code==200
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",headers=owner).status_code==409
+    with main.engine.connect() as db:
+        assert db.execute(text("SELECT count(*) FROM ide_agent_jobs")).scalar()==0
+        assert db.execute(text("SELECT count(*) FROM ide_tool_approvals")).scalar()==0
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT count(*) FROM ide_agent_jobs")).scalar()>=1
+        assert db.execute(text("SELECT count(*) FROM ide_tool_approvals")).scalar()>=1
