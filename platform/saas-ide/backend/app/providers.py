@@ -33,14 +33,17 @@ def generate(provider: str, prompt: str, max_tokens: int = 1200) -> str:
     if not 1 <= max_tokens <= 2000 or len(prompt) > 16000:
         raise ValueError("Model budget exceeded")
     model = configured_model(provider)
+    from .transport211 import sdk_http_client
+    if provider not in ("openai", "anthropic"):
+        raise PermissionError("Provider SDK transport not gateway-integrated; disabled")
     if provider == "openai":
         from openai import OpenAI
-        with OpenAI(timeout=30, max_retries=0) as client:
+        with sdk_http_client() as transport, OpenAI(timeout=30, max_retries=0, http_client=transport) as client:
             response = client.responses.create(model=model, input=prompt, max_output_tokens=max_tokens)
             return response.output_text
     if provider == "anthropic":
         from anthropic import Anthropic
-        with Anthropic(timeout=30, max_retries=0) as client:
+        with sdk_http_client() as transport, Anthropic(timeout=30, max_retries=0, http_client=transport) as client:
             response = client.messages.create(model=model, max_tokens=max_tokens,
                 messages=[{"role": "user", "content": prompt}])
             return "".join(x.text for x in response.content if x.type == "text")
