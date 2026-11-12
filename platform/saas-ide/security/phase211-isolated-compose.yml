@@ -1,0 +1,26 @@
+# Offline integration topology. No external provider execution.
+# The worker has no external network; gateway owns a separate egress interface.
+# This example proves container routing boundaries, not a production TLS proxy.
+services:
+  worker:
+    image: python:3.12-slim
+    command: ["python","-c","import socket; s=socket.socket(); s.settimeout(2); assert s.connect_ex(('1.1.1.1',443))!=0; assert s.connect_ex(('169.254.169.254',80))!=0; print('direct internet and metadata denied')"]
+    networks: [isolated]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    environment:
+      IDE_EXTERNAL_EXECUTION_ENABLED: "false"
+      IDE_MCP_EXECUTION_ENABLED: "false"
+      IDE_GOVERNED_WORKER_ENABLED: "false"
+  gateway:
+    image: python:3.12-slim
+    command: ["python","-c","import http.server; http.server.HTTPServer(('0.0.0.0',8080),http.server.BaseHTTPRequestHandler).serve_forever()"]
+    networks: [isolated, external]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+networks:
+  isolated:
+    internal: true
+  external: {}
