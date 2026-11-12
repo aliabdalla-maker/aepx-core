@@ -1046,3 +1046,49 @@ def test_phase215_crash_recovery_quarantines_stale_dispatch(prepared_db, tokens,
         assert db.execute(text("SELECT state FROM ide_mcp_executions "
                                "WHERE approval_id=:approval"),
                           {"approval": approval_id}).scalar() == "outcome_unknown"
+
+
+def test_phase216_revoked_membership_blocks_dispatch(prepared_db, tokens, monkeypatch):
+    """A role downgrade after approval must block a new external dispatch."""
+    from app.phase22 import consume_tool
+    from app.mcp_execution214 import begin_dispatch
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "revocation216"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"], "task": "Revocation gate"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "revoked"}
+    req = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                      headers=owner, json={"server": "knowledge",
+                                           "tool": "search", "arguments": args})
+    assert req.status_code == 201, req.text
+    approval_id = req.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    with main.SessionLocal() as db:
+        consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+    admin_engine = create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin_engine.begin() as db:
+            db.execute(text("UPDATE ide_memberships SET role='viewer' "
+                            "WHERE tenant_id='alpha' AND subject='user-alpha'"))
+        with main.SessionLocal() as db:
+            with pytest.raises(PermissionError, match="revoked"):
+                begin_dispatch(db, "alpha", run_id, approval_id)
+        with main.engine.connect() as db:
+            db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+            assert db.execute(text("SELECT state FROM ide_mcp_executions "
+                                   "WHERE approval_id=:approval"),
+                              {"approval": approval_id}).scalar() == "reserved"
+    finally:
+        with admin_engine.begin() as db:
+            db.execute(text("UPDATE ide_memberships SET role='owner' "
+                            "WHERE tenant_id='alpha' AND subject='user-alpha'"))
+        admin_engine.dispose()
