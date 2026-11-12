@@ -11,6 +11,25 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Length",str(len(data)))
         self.end_headers()
         self.wfile.write(data)
+    def do_POST(self):
+        length=int(self.headers.get("Content-Length","0"))
+        if length>65536:
+            self.send_error(413)
+            return
+        self.rfile.read(length)
+        if self.path=="/v1/chat/completions":
+            data=b'{"id":"chatcmpl-offline","object":"chat.completion","created":1,"model":"mock-model","choices":[{"index":0,"message":{"role":"assistant","content":"offline-openai-ok"},"finish_reason":"stop"}]}'
+        elif self.path=="/v1/messages":
+            data=b'{"id":"msg_offline","type":"message","role":"assistant","model":"mock-model","content":[{"type":"text","text":"offline-anthropic-ok"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":1,"output_tokens":1}}'
+        else:
+            self.send_error(404)
+            return
+        self.send_response(200)
+        self.send_header("Content-Type","application/json")
+        self.send_header("Content-Length",str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
     def log_message(self,*args):
         pass
 
