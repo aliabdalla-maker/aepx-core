@@ -20,7 +20,7 @@ def fenced_claim(db: Session, tenant: str, owner: str, lease_seconds: int = 45):
       JOIN ide_agent_runs r ON r.id=j.run_id AND r.tenant_id=j.tenant_id
       WHERE j.tenant_id=:tenant AND j.attempt<2
         AND j.next_attempt_at<=now()
-        AND (j.state='pending' OR (j.state='leased' AND j.lease_until<now()))
+        AND j.state='pending'
         AND r.status IN ('approved','running')
       ORDER BY j.created_at,j.id FOR UPDATE OF j SKIP LOCKED LIMIT 1
     """),{"tenant":tenant}).mappings().first()
