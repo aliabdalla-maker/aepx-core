@@ -150,3 +150,23 @@ for authority in ("provider.example:80","PROVIDER.EXAMPLE:443",
     else:
         raise AssertionError("Noncanonical or disallowed CONNECT authority accepted")
 print("Deterministic DNS rebinding, metadata IP and canonical-host checks passed")
+
+
+# Negative MCP transport cases: the mock must never dispatch unknown tools,
+# malformed JSON-RPC, or oversized requests. Authorization is enforced by
+# the CONNECT gateway, not by this synthetic provider.
+with sdk_http_client() as transport:
+    unknown=transport.post("https://provider.example/mcp",
+        json={"jsonrpc":"2.0","id":201,"method":"tools/call",
+              "params":{"name":"unapproved_tool","arguments":{}}})
+    assert unknown.status_code==400,unknown.text
+    malformed=transport.post("https://provider.example/mcp",
+        content=b'{"jsonrpc":',headers={"Content-Type":"application/json"})
+    assert malformed.status_code==400,malformed.text
+    invalid=transport.post("https://provider.example/mcp",
+        json={"id":202,"method":"tools/list"})
+    assert invalid.status_code==400,invalid.text
+    oversized=transport.post("https://provider.example/mcp",
+        content=b"x"*65537,headers={"Content-Type":"application/json"})
+    assert oversized.status_code==413,oversized.text
+print("Negative MCP unknown-tool, malformed-request and payload-size checks passed")
