@@ -44,7 +44,8 @@ jobs:
         run: |
           psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -c "CREATE ROLE ide_runtime LOGIN PASSWORD 'runtime_test_only' NOSUPERUSER NOBYPASSRLS;"
           psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/001_phase1.sql
-          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -c "GRANT USAGE ON SCHEMA public TO ide_runtime; GRANT SELECT ON ide_memberships TO ide_runtime; GRANT SELECT, INSERT, UPDATE ON ide_projects, ide_workspace_files TO ide_runtime;"
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/002_phase2.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -c "GRANT USAGE ON SCHEMA public TO ide_runtime; GRANT SELECT ON ide_memberships TO ide_runtime; GRANT SELECT, INSERT, UPDATE ON ide_projects, ide_workspace_files, ide_agent_runs TO ide_runtime; GRANT SELECT, INSERT ON ide_knowledge_documents TO ide_runtime;"
       - run: python -m pytest tests -v
   frontend:
     runs-on: ubuntu-24.04
