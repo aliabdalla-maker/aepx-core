@@ -15,6 +15,9 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: '1.9.8'
+      - name: Check shell scripts without OCI credentials
+        run: |
+          find platform/saas-ide/infra/oci-london -maxdepth 1 -name '*.sh' -print0 | xargs -0 -r -n 1 bash -n
       - name: Run offline approval-gate unit tests
         working-directory: platform/saas-ide/infra/oci-london
         run: python3 -m unittest discover -v -p 'test_*.py'
