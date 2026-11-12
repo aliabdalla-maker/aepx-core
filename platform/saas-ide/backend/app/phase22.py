@@ -123,7 +123,7 @@ def decide_tool(db: Session, p: Principal, approval_id: str, approved: bool) -> 
     db.commit()
     return item
 
-def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: str, arguments: dict) -> None:
+def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: str, arguments: dict) -> str:
     """Atomic single-use approval consumption; no cross-tenant or cancelled-run dispatch."""
     digest=digest_arguments(arguments)
     from .phase23 import _scope
@@ -163,3 +163,4 @@ def consume_tool(db: Session, tenant_id: str, run_id: str, server: str, tool: st
     except Exception:
         db.rollback()
         raise
+    return updated[0]
