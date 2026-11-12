@@ -29,3 +29,10 @@ services:
       CONNECTOR_BUS_URL: http://connector-bus:8000
       ORACLE_BRIDGE_URL: http://oracle-bridge:8000
       CONNECTOR_URL_BLOCKCHAIN: http://connector-blockchain:8000
+    networks:
+      - aepx-dev-shared
+
+networks:
+  aepx-dev-shared:
+    external: true
+    name: aepx-dev-shared
