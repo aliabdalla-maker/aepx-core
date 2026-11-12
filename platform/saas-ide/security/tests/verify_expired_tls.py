@@ -4,7 +4,6 @@ Both gateway and upstream-provider TLS roles are tested with real handshakes.
 No network outside the isolated test worker is used.
 """
 import datetime as dt
-import ipaddress
 import socket
 import ssl
 import tempfile
@@ -80,3 +79,35 @@ def check_role(role):
 
 for role in ("gateway", "provider"):
     check_role(role)
+
+# End-to-end ingress acceptance: run the real gateway TLS listener and
+# reject its expired certificate before any CONNECT request is sent.
+import importlib.util
+spec = importlib.util.spec_from_file_location(
+    "production_gateway", "/opt/gateway/egress_gateway.py")
+gateway = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(gateway)
+with tempfile.TemporaryDirectory() as directory:
+    crt, key = certificate("gateway")
+    cert_path = Path(directory) / "gateway.crt"
+    key_path = Path(directory) / "gateway.key"
+    cert_path.write_bytes(crt)
+    key_path.write_bytes(key)
+    server_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    server_context.load_cert_chain(str(cert_path), str(key_path))
+    with gateway.TLSServer(("127.0.0.1", 0), gateway.Handler, server_context) as server:
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            trusted = ssl.create_default_context(cafile=str(cert_path))
+            try:
+                with socket.create_connection(server.server_address, timeout=5) as raw:
+                    with trusted.wrap_socket(raw, server_hostname="gateway"):
+                        raise AssertionError("Real gateway accepted expired ingress TLS")
+            except ssl.SSLCertVerificationError as exc:
+                assert "expired" in str(exc).lower(), str(exc)
+        finally:
+            server.shutdown()
+            thread.join(timeout=5)
+            assert not thread.is_alive(), "Gateway fixture did not stop"
+print("Real gateway listener rejects expired ingress TLS certificate")
