@@ -935,3 +935,55 @@ def test_phase214_concurrent_dispatch_claim_is_single_use(prepared_db, tokens, m
         assert db.execute(text(
             "SELECT state FROM ide_mcp_executions WHERE approval_id=:approval"),
             {"approval": approval_id}).scalar() == "dispatching"
+
+
+def test_phase215_manual_reconciliation_requires_evidence(prepared_db, tokens, monkeypatch):
+    """Unknown outcomes cannot be replayed and evidence is durable on resolution."""
+    from app.phase22 import consume_tool
+    from app.mcp_execution214 import begin_dispatch, mark_unknown, resolve_unknown, execution_status
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "reconcile215"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"], "task": "Manual reconciliation evidence"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "reconcile"}
+    req = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                      headers=owner, json={"server": "knowledge", "tool": "search",
+                                           "arguments": args})
+    assert req.status_code == 201, req.text
+    approval_id = req.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    with main.SessionLocal() as db:
+        consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+        begin_dispatch(db, "alpha", run_id, approval_id)
+        mark_unknown(db, "alpha", run_id, approval_id)
+        with pytest.raises(ValueError, match="evidence"):
+            resolve_unknown(db, "alpha", run_id, approval_id,
+                            verified_outcome="succeeded", actor="operator",
+                            evidence_reference="")
+        assert execution_status(db, "beta", approval_id) is None
+        assert resolve_unknown(db, "alpha", run_id, approval_id,
+                               verified_outcome="succeeded", actor="operator",
+                               evidence_reference="provider-case-215")
+        assert not resolve_unknown(db, "alpha", run_id, approval_id,
+                                   verified_outcome="failed", actor="operator",
+                                   evidence_reference="provider-case-216")
+        with pytest.raises(PermissionError):
+            begin_dispatch(db, "alpha", run_id, approval_id)
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        row = db.execute(text(
+            "SELECT state,reconciliation_reference,reconciled_by FROM ide_mcp_executions "
+            "WHERE approval_id=:approval"), {"approval": approval_id}).first()
+        assert tuple(row) == ("succeeded", "provider-case-215", "operator")
+        assert db.execute(text(
+            "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
+            "AND run_id=:run AND action='mcp_reconciled'"), {"run": run_id}).scalar() == 1
