@@ -748,3 +748,44 @@ def test_mcp_denied_attempts_do_not_consume_approval(prepared_db, tokens, monkey
         db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
         assert db.execute(text("SELECT state FROM ide_tool_approvals WHERE id=:id"),
                           {"id": approval_id}).scalar() == "consumed"
+
+
+def test_mcp_cancelled_run_cannot_consume_approved_tool(prepared_db, tokens, monkeypatch):
+    """Cancellation invalidates a previously approved, unconsumed tool call."""
+    from app.phase22 import consume_tool
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner,
+                          json={"name": "mcp-cancellation"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"],
+                            "task": "Verify cancellation blocks approved MCP"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "cancelled"}
+    request = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                          headers=owner, json={"server": "knowledge",
+                                               "tool": "search", "arguments": args})
+    assert request.status_code == 201, request.text
+    approval_id = request.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    cancelled = client.post(f"/api/v1/agent-runs/{run_id}/cancel", headers=owner)
+    assert cancelled.status_code == 200, cancelled.text
+    assert cancelled.json()["status"] == "cancelled"
+    with main.SessionLocal() as db:
+        with pytest.raises(PermissionError, match="not approved"):
+            consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT state FROM ide_tool_approvals WHERE id=:id"),
+                          {"id": approval_id}).scalar() == "approved"
+        assert db.execute(text(
+            "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
+            "AND run_id=:run AND action='tool_consumed'"),
+            {"run": run_id}).scalar() == 0
