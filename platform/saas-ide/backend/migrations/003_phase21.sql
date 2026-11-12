@@ -15,14 +15,15 @@ CREATE TABLE IF NOT EXISTS ide_agent_audit (
   occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT ide_agent_audit_run_fk FOREIGN KEY (tenant_id, run_id) REFERENCES ide_agent_runs(tenant_id, id) ON DELETE CASCADE
 );
+CREATE UNIQUE INDEX IF NOT EXISTS ide_knowledge_docs_tenant_project_id ON ide_knowledge_documents(tenant_id,project_id,id);
 CREATE TABLE IF NOT EXISTS ide_knowledge_vectors (
   id VARCHAR(36) PRIMARY KEY,
   tenant_id VARCHAR(128) NOT NULL,
   project_id VARCHAR(36) NOT NULL,
-  document_id VARCHAR(36) NOT NULL REFERENCES ide_knowledge_documents(id) ON DELETE CASCADE,
+  document_id VARCHAR(36) NOT NULL,
   chunk TEXT NOT NULL,
   embedding vector(1536) NOT NULL,
-  FOREIGN KEY (tenant_id,project_id) REFERENCES ide_projects(tenant_id,id) ON DELETE CASCADE
+  FOREIGN KEY (tenant_id,project_id,document_id) REFERENCES ide_knowledge_documents(tenant_id,project_id,id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS ide_knowledge_vectors_tenant_project ON ide_knowledge_vectors(tenant_id,project_id);
 ALTER TABLE ide_agent_audit ENABLE ROW LEVEL SECURITY;
