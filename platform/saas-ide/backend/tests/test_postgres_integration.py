@@ -965,13 +965,14 @@ def test_phase215_manual_reconciliation_requires_evidence(prepared_db, tokens, m
         consume_tool(db, "alpha", run_id, "knowledge", "search", args)
         begin_dispatch(db, "alpha", run_id, approval_id)
         mark_unknown(db, "alpha", run_id, approval_id)
+        from types import SimpleNamespace
+        admin = SimpleNamespace(tenant_id="alpha", role="admin", subject="operator")
         with pytest.raises(ValueError, match="evidence"):
             resolve_unknown(db, "alpha", run_id, approval_id,
                             verified_outcome="succeeded", actor="operator",
-                            evidence_reference="")
+                            evidence_reference="", principal=admin,
+                            evidence_verifier=lambda *args: True)
         assert execution_status(db, "beta", approval_id) is None
-        from types import SimpleNamespace
-        admin = SimpleNamespace(tenant_id="alpha", role="admin", subject="operator")
         verifier = lambda tenant, run, approval, outcome, reference: (
             tenant == "alpha" and run == run_id and approval == approval_id
             and outcome == "succeeded" and reference == "provider-case-215")
