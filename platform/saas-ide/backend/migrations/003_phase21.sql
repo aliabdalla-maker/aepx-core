@@ -5,6 +5,7 @@ ALTER TABLE ide_agent_runs ADD COLUMN IF NOT EXISTS attempts INTEGER NOT NULL DE
 ALTER TABLE ide_agent_runs DROP CONSTRAINT IF EXISTS ide_agent_runs_status_check;
 ALTER TABLE ide_agent_runs ADD CONSTRAINT ide_agent_runs_status_check CHECK (
   status IN ('awaiting_approval','approved','rejected','running','completed','failed','cancelled'));
+CREATE UNIQUE INDEX IF NOT EXISTS ide_runs_tenant_id_unique ON ide_agent_runs(tenant_id, id);
 CREATE TABLE IF NOT EXISTS ide_agent_audit (
   id VARCHAR(36) PRIMARY KEY,
   tenant_id VARCHAR(128) NOT NULL,
@@ -12,13 +13,8 @@ CREATE TABLE IF NOT EXISTS ide_agent_audit (
   actor VARCHAR(255) NOT NULL,
   action VARCHAR(50) NOT NULL,
   occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  FOREIGN KEY (tenant_id, run_id) REFERENCES ide_agent_runs(tenant_id, id) ON DELETE CASCADE
+  CONSTRAINT ide_agent_audit_run_fk FOREIGN KEY (tenant_id, run_id) REFERENCES ide_agent_runs(tenant_id, id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX IF NOT EXISTS ide_runs_tenant_id_unique ON ide_agent_runs(tenant_id, id);
--- Ensure the FK is valid for tenant-specific run references.
-ALTER TABLE ide_agent_audit DROP CONSTRAINT IF EXISTS ide_agent_audit_tenant_id_run_id_fkey;
-ALTER TABLE ide_agent_audit ADD CONSTRAINT ide_agent_audit_run_fk
-  FOREIGN KEY (tenant_id,run_id) REFERENCES ide_agent_runs(tenant_id,id) ON DELETE CASCADE;
 CREATE TABLE IF NOT EXISTS ide_knowledge_vectors (
   id VARCHAR(36) PRIMARY KEY,
   tenant_id VARCHAR(128) NOT NULL,
