@@ -33,3 +33,11 @@ Status: **HOLD — not approved for production**. PR #25 remains draft.
 - Added PostgreSQL tests for evidence requirements, cross-tenant status isolation, no replay, and stale-dispatch crash simulation.
 - **Not yet implemented:** authenticated operator role enforcement for reconciliation; independent provider evidence validation; provider-specific idempotency propagation; permission-revocation race coverage. The internal reconciliation function must not be exposed to untrusted callers.
 - These tests simulate an interrupted worker through a stale timestamp; they are not a full process-kill/remote-side-effect integration test.
+
+## Phase 2.16 implementation — release still HOLD
+- Reconciliation now requires an authenticated tenant owner/admin principal matching the recorded actor, plus an independent trusted evidence-verifier callback. There is no public reconciliation API; provider verification integrations are not yet configured.
+- Dispatch now revalidates requester (owner/admin/editor) and approver (owner/admin) membership in PostgreSQL immediately before claiming execution. A PostgreSQL integration test downgrades the member after approval and asserts dispatch denial.
+- MCP transport supports an optional `IDE_MCP_<SERVER>_IDEMPOTENCY_CONTRACT=http-header-v1` header contract using the stable execution key. It is off by default. This is **not proof of provider-side exactly-once semantics**; enabling requires documented provider acceptance and end-to-end verification.
+- Previous stale-dispatch test simulates a crash; a true killed-process and remote-side-effect test remains outstanding.
+- CI is required on the final commit; passing checks on older commits do not authorize release.
+- Explicit production release authorization and independent security sign-off have **not** been granted.
