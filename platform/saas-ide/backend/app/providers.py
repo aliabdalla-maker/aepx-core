@@ -28,6 +28,8 @@ def generate(provider: str, prompt: str, max_tokens: int = 1200) -> str:
     """Text-only provider-specific SDK calls; caller enforces approvals, budgets and timeouts."""
     if os.getenv("IDE_EXTERNAL_EXECUTION_ENABLED") != "true":
         raise PermissionError("External model execution disabled")
+    from .egress210 import assert_network_isolated
+    assert_network_isolated()
     if not 1 <= max_tokens <= 2000 or len(prompt) > 16000:
         raise ValueError("Model budget exceeded")
     model = configured_model(provider)
