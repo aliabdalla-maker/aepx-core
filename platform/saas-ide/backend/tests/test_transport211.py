@@ -9,7 +9,7 @@ def test_proxy_disabled_by_default(monkeypatch):
         approved_proxy_url()
 
 @pytest.mark.parametrize("proxy",[
-    "https://gateway:8080","http://localhost:8080","http://gateway:3128",
+    "http://gateway:8080","http://localhost:8080","http://gateway:3128",
     "http://gateway:8080@evil.invalid:8080","http://gateway:8080/redirect",
     "http://gateway:8080?target=169.254.169.254",
     "http://169.254.169.254:8080","http://gateway.evil.invalid:8080",
@@ -25,7 +25,7 @@ def test_proxy_bypass_denied(monkeypatch,proxy):
 def test_sdk_transport_does_not_trust_ambient_proxy(monkeypatch):
     for key in ("IDE_EXTERNAL_EXECUTION_ENABLED","IDE_NETWORK_ISOLATION_ATTESTED","IDE_EGRESS_GATEWAY_VERIFIED"):
         monkeypatch.setenv(key,"true")
-    monkeypatch.setenv("IDE_EGRESS_CONNECT_PROXY","http://gateway:8080")
+    monkeypatch.setenv("IDE_EGRESS_CONNECT_PROXY","https://gateway:8080")
     monkeypatch.setenv("IDE_GATEWAY_TOKEN","x"*40)
     monkeypatch.setenv("IDE_GATEWAY_CA_FILE",__import__("certifi").where())
     monkeypatch.setenv("HTTPS_PROXY","http://evil.invalid:9000")
