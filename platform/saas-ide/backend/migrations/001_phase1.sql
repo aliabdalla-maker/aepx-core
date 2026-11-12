@@ -12,12 +12,15 @@ CREATE TABLE IF NOT EXISTS ide_projects (
   description TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_ide_projects_tenant ON ide_projects (tenant_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_ide_projects_tenant_id ON ide_projects (tenant_id, id);
 CREATE TABLE IF NOT EXISTS ide_workspace_files (
   tenant_id VARCHAR(128) NOT NULL,
-  project_id VARCHAR(36) NOT NULL REFERENCES ide_projects(id) ON DELETE CASCADE,
+  project_id VARCHAR(36) NOT NULL,
   path VARCHAR(255) NOT NULL,
   content TEXT NOT NULL DEFAULT '',
-  PRIMARY KEY (tenant_id, project_id, path)
+  PRIMARY KEY (tenant_id, project_id, path),
+  CONSTRAINT ide_workspace_project_tenant_fk FOREIGN KEY (tenant_id, project_id)
+    REFERENCES ide_projects (tenant_id, id) ON DELETE CASCADE
 );
 -- Database-level defense in depth. Runtime role must not own tables or have BYPASSRLS.
 ALTER TABLE ide_memberships ENABLE ROW LEVEL SECURITY;
