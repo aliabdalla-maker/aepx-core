@@ -1,0 +1,49 @@
+name: AEP-X release readiness
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/aepx-release-audit.sh'
+      - 'scripts/codespaces*.sh'
+      - 'docs/AEPX-Milestones.json'
+      - 'docs/AEPX-HANDOFF.md'
+      - 'compose.codespaces*.yml'
+      - '.github/workflows/aepx-release-readiness.yml'
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate milestones JSON
+        run: |
+          python3 -m json.tool docs/AEPX-Milestones.json >/dev/null
+          python3 scripts/aepx-progress.py --validate
+      - name: Prepare shared Docker network
+        run: docker network create aepx-dev-shared
+      - name: Build and start console
+        run: docker compose -f compose.codespaces.yml up -d --build
+      - name: Run release audit
+        run: bash scripts/aepx-release-audit.sh
+      - name: Generate milestone report
+        if: always()
+        run: python3 scripts/aepx-progress.py --output artifacts/aepx-progress.md
+      - name: Upload audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aepx-release-readiness
+          path: |
+            artifacts/aepx-release-audit.json
+            artifacts/aepx-progress.md
+          if-no-files-found: warn
+      - name: Console logs on failure
+        if: failure()
+        run: docker compose -f compose.codespaces.yml logs --tail=120
+      - name: Stop console
+        if: always()
+        run: docker compose -f compose.codespaces.yml down
