@@ -9,7 +9,7 @@ Status: **HOLD / NOT APPROVED**. This document does not authorize merging, deplo
 - Synthetic MCP JSON-RPC `tools/list` and `tools/call` at `da1d988f`: backend and frontend passed (run 43204529841).
 
 ## Pending acceptance gates
-- [ ] Latest DNS validation tests at `5a1be1e8` pass CI (run 43204863801).
+- [ ] DNS validation tests pass CI after fixing missing worker source mount at `0c8817b2`. Earlier run 43204863801 failed with FileNotFoundError, not a policy assertion.
 - [ ] Test expired upstream TLS certificate rejection through the gateway using a real expired certificate.
 - [ ] Test expired gateway ingress TLS certificate rejection.
 - [ ] Exercise DNS rebinding across a running Docker network, not just injected resolver responses.
