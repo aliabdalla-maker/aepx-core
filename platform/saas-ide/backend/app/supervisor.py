@@ -135,6 +135,11 @@ def cancel(db: Session, p: Principal, run_id: str) -> AgentRun:
         raise ValueError("Run cannot be cancelled")
     run.status = "cancelled"
     audit(db, p, run.id, "cancelled")
+    # Invalidate queued/leased jobs in the same transaction as cancellation.
+    db.execute(text("""UPDATE ide_agent_jobs SET state='cancelled',
+      fencing_token=fencing_token+1, lease_owner=NULL, lease_until=NULL
+      WHERE tenant_id=:tenant AND run_id=:run AND state IN ('pending','leased')"""),
+      {"tenant":p.tenant_id,"run":run.id})
     db.commit()
     return run
 
