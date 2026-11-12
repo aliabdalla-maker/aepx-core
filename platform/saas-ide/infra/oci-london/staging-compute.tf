@@ -21,22 +21,26 @@ variable "ssh_public_key" {
 }
 variable "instance_shape" {
   type    = string
-  default = "VM.Standard.E4.Flex"
+  default = "VM.Standard.A1.Flex"
+  validation {
+    condition     = var.instance_shape == "VM.Standard.A1.Flex"
+    error_message = "Only OCI Always Free Ampere A1 shape is allowed."
+  }
 }
 variable "instance_ocpus" {
   type    = number
   default = 1
   validation {
-    condition = var.instance_ocpus >= 1 && var.instance_ocpus <= 4
-    error_message = "Staging CPU budget guardrail: 1 to 4 OCPUs."
+    condition = var.instance_ocpus >= 1 && var.instance_ocpus <= 2
+    error_message = "Staging CPU budget guardrail: 1 to 2 OCPUs."
   }
 }
 variable "instance_memory_gb" {
   type    = number
-  default = 8
+  default = 6
   validation {
-    condition = var.instance_memory_gb >= 4 && var.instance_memory_gb <= 32
-    error_message = "Staging memory guardrail: 4 to 32 GB."
+    condition = var.instance_memory_gb >= 4 && var.instance_memory_gb <= 12
+    error_message = "Staging memory guardrail: 4 to 12 GB."
   }
 }
 resource "oci_core_instance" "staging" {
@@ -65,6 +69,7 @@ resource "oci_core_instance" "staging" {
     precondition {
       condition = !var.enable_staging_compute || (
         startswith(var.image_ocid, "ocid1.image.") &&
+        var.instance_memory_gb <= var.instance_ocpus * 6 &&
         length(var.availability_domain) > 5 &&
         startswith(var.ssh_public_key, "ssh-")
       )
