@@ -189,3 +189,58 @@ def save_file(project_id: str, path: str, body: FileIn, p: Principal = Depends(p
         file.content = body.content
     db.commit()
     return {"path": path, "saved": True}
+
+# Phase 2 endpoints reuse the verified OIDC subject and tenant-scoped DB session.
+from .supervisor import RunRequest, KnowledgeIn, SearchIn, AgentRun, KnowledgeDocument, create_run, get_run, decide, search_knowledge, save_knowledge, route_model
+from .agent_runtime import allowed_mcp_endpoint
+
+@app.post("/api/v1/agent-runs", status_code=201)
+def submit_agent_run(body: RunRequest, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    try:
+        run = create_run(db, p, body)
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    return {"id": run.id, "status": run.status, "model_route": run.model_route, "plan": run.plan}
+
+@app.get("/api/v1/agent-runs/{run_id}")
+def agent_run_detail(run_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    run = get_run(db, p, run_id)
+    if run is None:
+        raise HTTPException(404, "Run not found")
+    return {"id": run.id, "status": run.status, "model_route": run.model_route, "plan": run.plan, "result": run.result}
+
+@app.post("/api/v1/agent-runs/{run_id}/decision")
+def decide_agent_run(run_id: str, approved: bool, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    try:
+        run = decide(db, p, run_id, approved)
+    except LookupError:
+        raise HTTPException(404, "Run not found")
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
+    except ValueError as exc:
+        raise HTTPException(409, str(exc))
+    return {"id": run.id, "status": run.status, "execution_started": False}
+
+@app.post("/api/v1/projects/{project_id}/knowledge", status_code=201)
+def add_knowledge(project_id: str, body: KnowledgeIn, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    try:
+        doc = save_knowledge(db, p, project_id, body)
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc))
+    return {"id": doc.id, "title": doc.title}
+
+@app.post("/api/v1/projects/{project_id}/knowledge/search")
+def query_knowledge(project_id: str, body: SearchIn, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    return {"matches": search_knowledge(db, p, project_id, body.query)}
+
+@app.get("/api/v1/agent-capabilities")
+def agent_capabilities(p: Principal = Depends(principal)):
+    return {"providers": {name: os.getenv("IDE_LLM_" + name.upper() + "_ENABLED") == "true"
+                            for name in ("oci", "openai", "anthropic", "gemini")},
+            "crewai_execution_enabled": False,
+            "mcp_allowlisted_servers": ["knowledge", "github-readonly"],
+            "mcp_execution_enabled": False,
+            "knowledge_retrieval": "lexical",
+            "approval_required": True}
