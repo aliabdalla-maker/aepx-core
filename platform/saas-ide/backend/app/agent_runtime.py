@@ -45,24 +45,35 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
         raise PermissionError("Tenant-bound single-use approval context required")
     from .transport211 import sdk_async_http_client, approved_proxy_url
     approved_proxy_url()
-    # Consume exact-argument approval before any network access. This is at-most-once
-    # dispatch, not exactly-once remote execution.
-    from .phase22 import consume_tool
-    consume_tool(db, tenant_id, run_id, name, tool, arguments)
     token = os.getenv("IDE_MCP_" + name.upper().replace("-", "_") + "_TOKEN", "")
     if not token:
         raise RuntimeError("MCP service token required")
+    # Reserve and audit before dispatch; retries never repeat an uncertain call.
+    from .phase22 import consume_tool
+    from .mcp_execution214 import begin_dispatch, complete_dispatch, mark_unknown
+    approval_id = consume_tool(db, tenant_id, run_id, name, tool, arguments)
+    begin_dispatch(db, tenant_id, run_id, approval_id)
     # A network-level egress proxy is mandatory; URL checks alone cannot prevent
     # DNS rebinding or a resolved private address. No direct connections allowed.
     import httpx
     from mcp import ClientSession
     from mcp.client.streamable_http import streamable_http_client
-    async with sdk_async_http_client() as http:
-        http.headers["Authorization"] = f"Bearer {token}"
-        async with streamable_http_client(allowed_mcp_endpoint(name), http_client=http) as (read, write, _):
-            async with ClientSession(read, write) as session:
-                await session.initialize()
-                return await session.call_tool(tool, arguments=arguments)
+    try:
+        async with sdk_async_http_client() as http:
+            http.headers["Authorization"] = f"Bearer {token}"
+            # Stable key is available for future provider-specific idempotency
+            # support; do not assume an arbitrary MCP server honors it.
+            async with streamable_http_client(allowed_mcp_endpoint(name), http_client=http) as (read, write, _):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    result = await session.call_tool(tool, arguments=arguments)
+        complete_dispatch(db, tenant_id, run_id, approval_id, True)
+        return result
+    except BaseException:
+        # Timeouts, cancellations and worker exceptions may occur after remote
+        # side effects. Quarantine the outcome rather than automatically replay.
+        mark_unknown(db, tenant_id, run_id, approval_id)
+        raise
 
 
 def execute_crewai_plan(task: str, provider: str) -> str:
