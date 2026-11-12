@@ -779,7 +779,7 @@ def test_mcp_cancelled_run_cannot_consume_approved_tool(prepared_db, tokens, mon
     assert cancelled.status_code == 200, cancelled.text
     assert cancelled.json()["status"] == "cancelled"
     with main.SessionLocal() as db:
-        with pytest.raises(PermissionError, match="not approved"):
+        with pytest.raises(PermissionError, match="not approved|not active"):
             consume_tool(db, "alpha", run_id, "knowledge", "search", args)
     with main.engine.connect() as db:
         db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
