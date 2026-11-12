@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS ide_agent_budgets (
  reserved_microusd BIGINT NOT NULL DEFAULT 0 CHECK(reserved_microusd>=0),
  spent_microusd BIGINT NOT NULL DEFAULT 0 CHECK(spent_microusd>=0)
 );
+CREATE UNIQUE INDEX IF NOT EXISTS ide_agent_jobs_tenant_id ON ide_agent_jobs(tenant_id,id);
 CREATE TABLE IF NOT EXISTS ide_agent_spend (
  id VARCHAR(36) PRIMARY KEY,
  tenant_id VARCHAR(128) NOT NULL,
@@ -24,8 +25,6 @@ CREATE TABLE IF NOT EXISTS ide_agent_spend (
  UNIQUE(tenant_id,job_id,fencing_token),
  FOREIGN KEY(tenant_id,job_id) REFERENCES ide_agent_jobs(tenant_id,id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX IF NOT EXISTS ide_agent_jobs_tenant_id ON ide_agent_jobs(tenant_id,id);
--- Composite foreign key above needs the unique index before CREATE TABLE.
 ALTER TABLE ide_agent_budgets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ide_agent_budgets FORCE ROW LEVEL SECURITY;
 ALTER TABLE ide_agent_spend ENABLE ROW LEVEL SECURITY;
