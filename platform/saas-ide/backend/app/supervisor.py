@@ -22,7 +22,22 @@ class AgentRun(Base):
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="awaiting_approval")
     plan: Mapped[str] = mapped_column(Text, nullable=False)
     result: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    attempts: Mapped[int] = mapped_column(nullable=False, default=0)
     __table_args__ = (ForeignKeyConstraint(["tenant_id", "project_id"], ["ide_projects.tenant_id", "ide_projects.id"]),)
+
+
+class AgentAudit(Base):
+    __tablename__ = "ide_agent_audit"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    run_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    actor: Mapped[str] = mapped_column(String(255), nullable=False)
+    action: Mapped[str] = mapped_column(String(50), nullable=False)
+
+
+def audit(db: Session, p: Principal, run_id: str, action: str) -> None:
+    db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=p.tenant_id, run_id=run_id,
+                      actor=p.subject, action=action))
 
 
 class KnowledgeDocument(Base):
@@ -84,6 +99,7 @@ def create_run(db: Session, p: Principal, body: RunRequest) -> AgentRun:
                    subject=p.subject, request=body.task, model_route=route,
                    status="awaiting_approval", plan=json.dumps(plan_steps(body.task)))
     db.add(run)
+    audit(db, p, run.id, "created")
     db.commit()
     return run
 
@@ -102,6 +118,36 @@ def decide(db: Session, p: Principal, run_id: str, approve: bool) -> AgentRun:
         raise ValueError("Run already decided")
     # Approval authorizes a planning-only worker, not arbitrary tool/code execution.
     run.status = "approved" if approve else "rejected"
+    audit(db, p, run.id, "approved" if approve else "rejected")
+    db.commit()
+    return run
+
+
+def cancel(db: Session, p: Principal, run_id: str) -> AgentRun:
+    run = get_run(db, p, run_id)
+    if run is None:
+        raise LookupError("Run not found")
+    if p.role not in ("owner", "admin") and p.subject != run.subject:
+        raise PermissionError("Only requestor or owner/admin may cancel")
+    if run.status not in ("awaiting_approval", "approved", "running", "failed"):
+        raise ValueError("Run cannot be cancelled")
+    run.status = "cancelled"
+    audit(db, p, run.id, "cancelled")
+    db.commit()
+    return run
+
+
+def retry(db: Session, p: Principal, run_id: str) -> AgentRun:
+    run = get_run(db, p, run_id)
+    if run is None:
+        raise LookupError("Run not found")
+    if p.role not in ("owner", "admin"):
+        raise PermissionError("Only owner/admin may retry")
+    if run.status != "failed" or run.attempts >= 2:
+        raise ValueError("Retry not permitted")
+    run.status = "awaiting_approval"
+    run.result = ""
+    audit(db, p, run.id, "retry_requested")
     db.commit()
     return run
 
