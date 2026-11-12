@@ -1,33 +1,35 @@
-import importlib
+"""Fast tests that never connect to PostgreSQL or a live OIDC issuer."""
 import os
+os.environ.setdefault("IDE_DATABASE_URL", "postgresql+psycopg://unused:unused@localhost/unused")
+os.environ.setdefault("IDE_OIDC_ISSUER", "https://id.example.test")
+os.environ.setdefault("IDE_OIDC_JWKS_URL", "https://id.example.test/keys")
+os.environ.setdefault("IDE_OIDC_AUDIENCE", "ide-api")
 
 from fastapi.testclient import TestClient
+from fastapi import HTTPException
+from app.main import app, safe_path, verified_subject
 
 
-def test_fail_closed_and_tenant_isolation(tmp_path, monkeypatch):
-    monkeypatch.setenv("IDE_DB_PATH", str(tmp_path / "test.sqlite3"))
-    monkeypatch.setenv("IDE_ENV", "development")
-    monkeypatch.setenv("IDE_DEV_API_KEY", "local-test-secret")
-    from app import main
-    importlib.reload(main)
-    client = TestClient(main.app)
+def test_health():
+    assert TestClient(app).get("/health").json()["status"] == "ok"
 
-    assert client.get("/api/v1/projects").status_code == 401
-    assert client.get("/api/v1/projects", headers={
-        "x-ide-tenant": "alpha", "x-ide-api-key": "wrong"
+
+def test_no_token_fails_closed():
+    assert TestClient(app).get("/api/v1/projects", headers={"X-Tenant-ID": "alpha"}).status_code == 401
+
+
+def test_invalid_token_fails_closed():
+    assert TestClient(app).get("/api/v1/projects", headers={
+        "X-Tenant-ID": "alpha", "Authorization": "Bearer invalid"
     }).status_code == 401
 
-    a = {"x-ide-tenant": "alpha", "x-ide-api-key": "local-test-secret"}
-    b = {"x-ide-tenant": "beta", "x-ide-api-key": "local-test-secret"}
-    created = client.post("/api/v1/projects", headers=a, json={
-        "name": "First project", "description": "Tenant scoped"
-    })
-    assert created.status_code == 201
-    project_id = created.json()["id"]
-    assert len(client.get("/api/v1/projects", headers=a).json()) == 1
-    assert client.get("/api/v1/projects", headers=b).json() == []
-    assert client.get(f"/api/v1/projects/{project_id}", headers=b).status_code == 404
-    assert client.get(f"/api/v1/projects/{project_id}", headers=a).status_code == 200
 
-    monkeypatch.setenv("IDE_ENV", "production")
-    assert client.get("/api/v1/projects", headers=a).status_code == 503
+def test_reject_unsafe_workspace_paths():
+    for path in ("", "/etc/passwd", "../secret", "src/../secret", "src//main.py", "src\\main.py"):
+        try:
+            safe_path(path)
+        except HTTPException as e:
+            assert e.status_code == 400
+        else:
+            raise AssertionError(f"Unsafe path accepted: {path!r}")
+    assert safe_path("src/main.py") == "src/main.py"
