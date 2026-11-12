@@ -693,3 +693,54 @@ def test_mcp_single_use_concurrent_postgres_approval_and_audit(prepared_db, toke
             "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
             "AND run_id=:run AND action='tool_approved'"),
             {"run": run_id}).scalar() >= 1
+
+
+def test_mcp_consumption_rolls_back_with_outer_transaction(prepared_db, tokens, monkeypatch):
+    """A consumed approval must revert if its enclosing transaction rolls back.
+
+    This regression documents current commit semantics and protects against
+    accidentally treating a committed approval as rollback-safe.
+    """
+    from app.phase22 import consume_tool
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "mcp-rollback"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"], "task": "Offline rollback acceptance"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "rollback"}
+    requested = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                            headers=owner, json={"server": "knowledge",
+                                                 "tool": "search", "arguments": args})
+    assert requested.status_code == 201, requested.text
+    approval_id = requested.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+
+    # Wrong-tenant and altered arguments must fail without consuming approval.
+    with main.SessionLocal() as db:
+        with pytest.raises(PermissionError):
+            consume_tool(db, "beta", run_id, "knowledge", "search", args)
+        with pytest.raises(PermissionError):
+            consume_tool(db, "alpha", run_id, "knowledge", "search", {"query": "tampered"})
+
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT state FROM ide_tool_approvals WHERE id=:id"),
+                          {"id": approval_id}).scalar() == "approved"
+        db.rollback()
+
+    with main.SessionLocal() as db:
+        consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+        with pytest.raises(PermissionError):
+            consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT state FROM ide_tool_approvals WHERE id=:id"),
+                          {"id": approval_id}).scalar() == "consumed"
