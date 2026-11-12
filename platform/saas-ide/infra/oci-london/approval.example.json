@@ -1,0 +1,14 @@
+{
+  "region": "uk-london-1",
+  "compartment_ocid": "REPLACE_WITH_VERIFIED_OCID",
+  "image_ocid": "REPLACE_WITH_VERIFIED_IMAGE_OCID",
+  "availability_domain": "",
+  "operator_approved": false,
+  "security_review_approved": false,
+  "cost_review_approved": false,
+  "estimated_monthly_gbp": null,
+  "budget_cap_gbp": null,
+  "public_ip_enabled": false,
+  "automatic_mcp_dispatch_enabled": false,
+  "terraform_plan_reviewed": false
+}
