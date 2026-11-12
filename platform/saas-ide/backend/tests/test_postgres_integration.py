@@ -695,7 +695,7 @@ def test_mcp_single_use_concurrent_postgres_approval_and_audit(prepared_db, toke
             {"run": run_id}).scalar() >= 1
 
 
-def test_mcp_consumption_rolls_back_with_outer_transaction(prepared_db, tokens, monkeypatch):
+def test_mcp_denied_attempts_do_not_consume_approval(prepared_db, tokens, monkeypatch):
     """A consumed approval must revert if its enclosing transaction rolls back.
 
     This regression documents current commit semantics and protects against
