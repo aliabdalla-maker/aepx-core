@@ -29,4 +29,25 @@ with httpx.Client(proxy=httpx.Proxy("https://gateway:8080",ssl_context=proxyctx,
     response=client.get("https://provider.example/")
     assert response.status_code==200,response.text
     assert response.json()=={"mock":"ok","offline":True}
-print("Authenticated gateway TLS and upstream provider TLS verified offline")
+# SDKs use their real HTTPX transport through the same authenticated
+# proxy, but receive only synthetic responses from the local mock.
+from openai import OpenAI
+from anthropic import Anthropic
+def sdk_http_client():
+    return httpx.Client(
+        proxy=httpx.Proxy("https://gateway:8080",ssl_context=proxyctx,
+                          headers={"Proxy-Authorization":"Bearer "+token}),
+        verify=ctx,trust_env=False,timeout=10)
+with sdk_http_client() as transport:
+    sdk=OpenAI(api_key="offline-test-key",base_url="https://provider.example/v1",
+               http_client=transport,max_retries=0)
+    result=sdk.chat.completions.create(model="mock-model",
+                 messages=[{"role":"user","content":"offline test"}])
+    assert result.choices[0].message.content=="offline-openai-ok"
+with sdk_http_client() as transport:
+    sdk=Anthropic(api_key="offline-test-key",base_url="https://provider.example",
+                  http_client=transport,max_retries=0)
+    result=sdk.messages.create(model="mock-model",max_tokens=16,
+                               messages=[{"role":"user","content":"offline test"}])
+    assert result.content[0].text=="offline-anthropic-ok"
+print("Authenticated gateway TLS, mock provider, OpenAI SDK and Anthropic SDK verified offline")
