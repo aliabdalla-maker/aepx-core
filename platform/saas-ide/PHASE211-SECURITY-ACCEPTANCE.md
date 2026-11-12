@@ -14,3 +14,6 @@
 
 ## Safety
 Keep IDE_EXTERNAL_EXECUTION_ENABLED=false and all other external/MCP execution flags disabled. Draft PR #25 only. Do not merge or deploy.
+
+## Offline topology added in this iteration
+`security/phase211-isolated-compose.yml` uses a Docker internal network for the worker, while a distinct gateway placeholder has a second network. CI launches the actual worker container and asserts direct public and metadata sockets fail. The gateway **does not forward traffic**; this is deliberately not a functioning HTTPS egress gateway. Production SDK/MCP traffic tests remain blocked until a real, authenticated forwarding gateway is implemented.
