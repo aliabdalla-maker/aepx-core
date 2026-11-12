@@ -555,3 +555,15 @@ def test_phase29_signed_mock_receipt_replay_and_cross_tenant(prepared_db,tokens)
               {"reference":"mock:request-"+rid}).scalar()==1
     finally:
         admin.dispose()
+
+
+def test_phase29_authenticated_alerts_rbac_and_cross_tenant(prepared_db,tokens):
+    client=TestClient(main.app)
+    alpha=headers(tokens(),"alpha")
+    beta=headers(tokens(),"beta")
+    assert client.get("/api/v1/operations/alerts",headers=alpha).status_code==200
+    assert client.get("/api/v1/operations/alerts",headers=beta).status_code in (200,403)
+    # Unknown tenant is not authorized by X-Tenant-ID alone.
+    unknown=dict(alpha,**{"X-Tenant-ID":"unregistered-phase29"})
+    assert client.get("/api/v1/operations/alerts",headers=unknown).status_code==403
+    assert client.get("/api/v1/operations/alerts",headers={"X-Tenant-ID":"alpha"}).status_code==401
