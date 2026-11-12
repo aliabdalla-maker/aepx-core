@@ -93,3 +93,29 @@ def test_rls_enforced_by_runtime_role(prepared_db):
         assert db.execute(text("SELECT count(*) FROM ide_workspace_files")).scalar() == 0
         db.rollback()
         assert db.execute(text("SELECT count(*) FROM ide_projects")).scalar() == 0
+
+
+def test_phase2_run_approval_and_tenant_isolation(prepared_db, tokens):
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    viewer = headers(tokens(), "beta")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "phase2"}).json()
+    created = client.post("/api/v1/agent-runs", headers=owner, json={
+        "project_id": project["id"], "task": "Design a secure SaaS application"
+    })
+    assert created.status_code == 201, created.text
+    run_id = created.json()["id"]
+    assert created.json()["status"] == "awaiting_approval"
+    assert client.get(f"/api/v1/agent-runs/{run_id}", headers=viewer).status_code == 404
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true", headers=viewer).status_code == 404
+    approved = client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true", headers=owner)
+    assert approved.status_code == 200, approved.text
+    assert approved.json()["execution_started"] is False
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true", headers=owner).status_code == 409
+    doc = client.post(f"/api/v1/projects/{project['id']}/knowledge", headers=owner, json={
+        "title": "Architecture", "content": "PostgreSQL tenant security with OIDC and RLS"
+    })
+    assert doc.status_code == 201, doc.text
+    result = client.post(f"/api/v1/projects/{project['id']}/knowledge/search", headers=owner, json={"query": "PostgreSQL"})
+    assert result.status_code == 200 and result.json()["matches"]
+    assert client.post(f"/api/v1/projects/{project['id']}/knowledge/search", headers=viewer, json={"query": "PostgreSQL"}).status_code == 404
