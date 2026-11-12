@@ -36,9 +36,9 @@ class MockTLSHandler(socketserver.BaseRequestHandler):
                 payload+=chunk
             # Read complete request bodies before returning a response. Closing a TLS
             # socket with unread POST bytes can reset real SDK/MCP connections.
-            head,body=payload.split(b"\\r\\n\\r\\n",1)
+            head,body=payload.split(b"\r\n\r\n",1)
             content_length=0
-            for line in head.split(b"\\r\\n")[1:]:
+            for line in head.split(b"\r\n")[1:]:
                 if line.lower().startswith(b"content-length:"):
                     content_length=int(line.split(b":",1)[1].strip())
             while len(body)<content_length:
