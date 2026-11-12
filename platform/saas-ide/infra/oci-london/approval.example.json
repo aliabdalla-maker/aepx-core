@@ -10,5 +10,11 @@
   "budget_cap_gbp": null,
   "public_ip_enabled": false,
   "automatic_mcp_dispatch_enabled": false,
-  "terraform_plan_reviewed": false
+  "terraform_plan_reviewed": false,
+  "tenancy_home_region": "",
+  "instance_shape": "VM.Standard.A1.Flex",
+  "instance_ocpus": 1,
+  "instance_memory_gb": 6,
+  "existing_a1_ocpus": null,
+  "existing_a1_memory_gb": null
 }
