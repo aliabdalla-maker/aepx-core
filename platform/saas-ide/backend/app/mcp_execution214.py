@@ -116,7 +116,10 @@ def resolve_unknown(db: Session, tenant: str, run_id: str, approval_id: str,
         raise PermissionError("Tenant owner/admin authorization required")
     if principal.subject != actor:
         raise PermissionError("Reconciliation actor must match authenticated principal")
-    if evidence_verifier is None or not callable(evidence_verifier):
+    if evidence_verifier is None:
+        from .provider_evidence217 import verify_signed_receipt
+        evidence_verifier = verify_signed_receipt
+    if not callable(evidence_verifier):
         raise PermissionError("Independent evidence verifier required")
     if verified_outcome not in ("succeeded", "failed"):
         raise ValueError("Verified outcome must be succeeded or failed")
