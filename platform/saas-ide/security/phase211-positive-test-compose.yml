@@ -1,7 +1,9 @@
 # CI ONLY: no production gateway forwarding. Synthetic mock provider.
 services:
   worker:
-    image: python:3.12-slim
+    build:
+      context: ./tests
+      dockerfile: Dockerfile.worker
     command: ["python","/tests/verify_offline_tunnel.py"]
     volumes:
       - ./tests:/tests:ro
