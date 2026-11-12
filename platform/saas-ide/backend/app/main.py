@@ -352,3 +352,12 @@ def decide_agent_tool(approval_id: str, approved: bool, p: Principal = Depends(p
     except ValueError as exc:
         raise HTTPException(409,str(exc))
     return {"id":item.id,"state":item.state}
+
+
+# Read-only tenant alerts. Tenant identity is derived from verified OIDC membership.
+@app.get("/api/v1/operations/alerts")
+def operational_alerts(p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    if p.role not in ("owner","admin"):
+        raise HTTPException(403,"Operations access requires owner or admin")
+    from .alerts29 import evaluate_tenant_alerts
+    return {"tenant_id":p.tenant_id,"alerts":evaluate_tenant_alerts(db,p.tenant_id)}
