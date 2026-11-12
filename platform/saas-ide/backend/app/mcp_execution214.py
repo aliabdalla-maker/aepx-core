@@ -76,3 +76,48 @@ def reconcile_stale(db: Session, tenant: str, older_than_seconds: int = 300) -> 
         RETURNING id"""), {"tenant":tenant,"age":older_than_seconds}).all()
     db.commit()
     return len(rows)
+
+
+def execution_status(db: Session, tenant: str, approval_id: str) -> dict | None:
+    """Read-only, tenant-scoped operational status without credentials or arguments."""
+    _scope(db, tenant)
+    row = db.execute(text("""SELECT id,run_id,idempotency_key,state,
+        created_at,dispatch_started_at,completed_at
+        FROM ide_mcp_executions WHERE tenant_id=:tenant AND approval_id=:approval"""),
+        {"tenant":tenant,"approval":approval_id}).mappings().first()
+    db.rollback()
+    return dict(row) if row else None
+
+
+def resolve_unknown(db: Session, tenant: str, run_id: str, approval_id: str,
+                    *, verified_outcome: str, actor: str, evidence_reference: str) -> bool:
+    """Manual reconciliation requires an externally verified outcome.
+
+    This never resets a dispatch to reserved and never triggers a replay.
+    """
+    if verified_outcome not in ("succeeded", "failed"):
+        raise ValueError("Verified outcome must be succeeded or failed")
+    if not actor or len(actor)>255 or not evidence_reference or len(evidence_reference)>160:
+        raise ValueError("Authorized actor and evidence reference required")
+    _scope(db, tenant)
+    from .supervisor import AgentAudit
+    import uuid
+    try:
+        row = db.execute(text("""UPDATE ide_mcp_executions
+            SET state=:outcome,completed_at=now()
+            WHERE tenant_id=:tenant AND run_id=:run AND approval_id=:approval
+              AND state='outcome_unknown' RETURNING id"""),
+            {"outcome":verified_outcome,"tenant":tenant,"run":run_id,
+             "approval":approval_id}).first()
+        if row is None:
+            db.rollback()
+            return False
+        # Evidence references must be retained in the operator's secured
+        # reconciliation record; this minimal audit schema stores no payload.
+        db.add(AgentAudit(id=str(uuid.uuid4()), tenant_id=tenant, run_id=run_id,
+                          actor=actor, action="mcp_reconciled"))
+        db.commit()
+        return True
+    except Exception:
+        db.rollback()
+        raise
