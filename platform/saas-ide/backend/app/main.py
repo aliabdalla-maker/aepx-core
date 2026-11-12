@@ -9,7 +9,7 @@ from jwt import PyJWKClient
 from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from sqlalchemy import ForeignKey, String, Text, create_engine, select
+from sqlalchemy import String, Text, create_engine, select, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 DATABASE_URL = os.getenv("IDE_DATABASE_URL", "")
@@ -56,9 +56,17 @@ class WorkspaceFile(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False, default="")
 
 
-def db_session():
+def db_session(tenant_id: Annotated[str | None, Header(alias="X-Tenant-ID")] = None):
+    if not tenant_id or len(tenant_id) > 128:
+        raise HTTPException(400, "X-Tenant-ID required")
     with SessionLocal() as db:
-        yield db
+        # Header only selects a row-level scope; it does NOT authenticate membership.
+        # SET LOCAL expires at transaction end and prevents pool tenant leakage.
+        db.execute(text("SELECT set_config('ide.tenant_id', :tenant, true)"), {"tenant": tenant_id})
+        try:
+            yield db
+        finally:
+            db.rollback()
 
 
 @lru_cache(maxsize=1)
@@ -77,7 +85,7 @@ def verified_subject(authorization: Annotated[str | None, Header()] = None) -> s
         if not isinstance(subject, str) or not subject or len(subject) > 255:
             raise ValueError("Invalid subject")
         return subject
-    except (jwt.PyJWTError, ValueError, Exception) as exc:
+    except Exception:
         # Never echo token or internal signing details.
         raise HTTPException(401, "Invalid access token") from None
 
