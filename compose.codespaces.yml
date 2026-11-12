@@ -1,0 +1,31 @@
+# Lightweight Codespaces profile; run with docker compose -f compose.codespaces.yml up -d --build
+# Full stack remains in docker-compose.yml and needs substantially more resources.
+services:
+  aepx-console:
+    build:
+      context: .
+      dockerfile: platform/aepx-console/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8083:8000"
+    environment:
+      GATEWAY_URL: http://gateway:8000
+      IDENTITY_URL: http://identity:8000
+      TRUST_URL: http://trust:8000
+      REGISTRY_URL: http://registry:8000
+      MEMORY_URL: http://memory:8000
+      CACHE_URL: http://cache:8000
+      DISCOVERY_URL: http://discovery:8000
+      WORKFLOW_URL: http://workflow:8000
+      SAFETY_URL: http://safety:8000
+      GOVERNANCE_URL: http://governance:8000
+      KNOWLEDGE_URL: http://knowledge:8000
+      VERIFICATION_URL: http://verification:8000
+      COST_OPTIMISER_URL: http://cost-optimiser:8000
+      ML_INTEGRATION_URL: http://ml-integration:8000
+      BRAIN_URL: http://brain:8000
+      MARKETPLACE_URL: http://marketplace:8000
+      BILLING_URL: http://billing:8000
+      CONNECTOR_BUS_URL: http://connector-bus:8000
+      ORACLE_BRIDGE_URL: http://oracle-bridge:8000
+      CONNECTOR_URL_BLOCKCHAIN: http://connector-blockchain:8000
