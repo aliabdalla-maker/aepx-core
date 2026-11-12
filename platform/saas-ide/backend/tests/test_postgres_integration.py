@@ -693,6 +693,10 @@ def test_mcp_single_use_concurrent_postgres_approval_and_audit(prepared_db, toke
             "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
             "AND run_id=:run AND action='tool_approved'"),
             {"run": run_id}).scalar() >= 1
+        assert db.execute(text(
+            "SELECT count(*) FROM ide_agent_audit WHERE tenant_id='alpha' "
+            "AND run_id=:run AND action='tool_consumed'"),
+            {"run": run_id}).scalar() == 1
 
 
 def test_mcp_denied_attempts_do_not_consume_approval(prepared_db, tokens, monkeypatch):
