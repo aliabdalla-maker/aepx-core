@@ -1,0 +1,32 @@
+{
+  "name": "aepx-hybrid-ide",
+  "displayName": "AEP-X Hybrid IDE",
+  "description": "Open the governed AEP-X Hybrid IDE workspace",
+  "version": "0.1.0",
+  "publisher": "softwareequality",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:aepx.openIde"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aepx.openIde",
+        "title": "AEP-X: Open Hybrid IDE"
+      }
+    ]
+  },
+  "scripts": {
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.2.0"
+  }
+}

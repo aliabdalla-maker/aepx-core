@@ -1,0 +1,48 @@
+{
+  "name": "aepx-hybrid-ide-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AEP-X Hybrid IDE secure desktop client",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.4.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.softwareequality.aepx",
+    "productName": "AEP-X Hybrid IDE",
+    "files": [
+      "main.cjs",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "category": "Development"
+    },
+    "publish": null
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "publisherId": "pub-2980680946304710",
+  "adsense": {
+    "client": "ca-pub-2980680946304710",
+    "enabled": false,
+    "reason": "Website approval and web AdSense ad slot IDs must be verified separately"
+  },
+  "admob": {
+    "appId": "ca-app-pub-2980680946304710~2617421798",
+    "adUnits": [
+      "ca-app-pub-2980680946304710/1032845563",
+      "ca-app-pub-2980680946304710/2172884450",
+      "ca-app-pub-2980680946304710/3668921616",
+      "ca-app-pub-2980680946304710/5953999752",
+      "ca-app-pub-2980680946304710/6184281650",
+      "ca-app-pub-2980680946304710/6514576804"
+    ],
+    "enabled": false,
+    "reason": "Ad format and app association must be verified in AdMob before production use"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "id": "com.softwareequality.aepx.hybrid-ide",
+  "name": "AEP-X Hybrid IDE",
+  "version": "0.1.0",
+  "publisher": "Equality Software Ltd",
+  "description": "Governed agentic development with approval-gated MCP operations",
+  "homepage": "https://softwareequality.com",
+  "privacy_policy_url": "https://softwareequality.com/privacy",
+  "capabilities": [
+    "workspace.read",
+    "workspace.write",
+    "agent.plan",
+    "mcp.status.read"
+  ],
+  "permissions": {
+    "default": [
+      "workspace.read",
+      "mcp.status.read"
+    ],
+    "elevated": [
+      "workspace.write",
+      "agent.plan"
+    ],
+    "never_automatic": [
+      "mcp.dispatch",
+      "mcp.reconcile"
+    ]
+  },
+  "authentication": {
+    "type": "oidc",
+    "tenant_scoped": true
+  },
+  "distribution": {
+    "status": "draft",
+    "marketplace_ids": [],
+    "published": false
+  }
+}

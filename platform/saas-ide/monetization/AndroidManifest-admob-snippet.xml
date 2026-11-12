@@ -1,0 +1,4 @@
+<!-- Merge this meta-data into the <application> element of the actual Android app manifest. -->
+<meta-data
+    android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="ca-app-pub-2980680946304710~2617421798" />

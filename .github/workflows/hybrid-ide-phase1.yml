@@ -1,0 +1,115 @@
+name: Hybrid IDE Phase 1 checks
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/**'
+      - '.github/workflows/hybrid-ide-phase1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ide
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ide"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 15
+    defaults:
+      run:
+        working-directory: platform/saas-ide/backend
+    env:
+      IDE_DATABASE_URL: postgresql+psycopg://ide_runtime:runtime_test_only@localhost:5432/ide
+      IDE_TEST_ADMIN_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/ide
+      IDE_OIDC_ISSUER: https://id.example.test
+      IDE_OIDC_JWKS_URL: https://id.example.test/keys
+      IDE_OIDC_AUDIENCE: ide-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Install isolated SDK integration test dependencies
+        run: python -m pip install 'openai>=1,<3' 'anthropic>=0.40,<1' 'mcp>=1,<2'
+      - name: Provision test-only roles and migration
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -c "CREATE ROLE ide_runtime LOGIN PASSWORD 'runtime_test_only' NOSUPERUSER NOBYPASSRLS;"
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/001_phase1.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/002_phase2.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/003_phase21.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/004_phase22.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/005_phase23.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/006_phase25.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/007_phase214.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -f migrations/008_phase218.sql
+          psql -h localhost -U postgres -d ide -v ON_ERROR_STOP=1 -c "GRANT USAGE ON SCHEMA public TO ide_runtime; GRANT SELECT ON ide_memberships TO ide_runtime; GRANT SELECT, INSERT, UPDATE ON ide_projects, ide_workspace_files, ide_agent_runs TO ide_runtime; GRANT SELECT, INSERT ON ide_knowledge_documents TO ide_runtime; GRANT SELECT, INSERT ON ide_agent_audit TO ide_runtime; GRANT SELECT, INSERT, DELETE ON ide_knowledge_vectors TO ide_runtime; GRANT SELECT, INSERT, UPDATE ON ide_agent_jobs, ide_tool_approvals TO ide_runtime; GRANT SELECT, INSERT, UPDATE ON ide_agent_spend TO ide_runtime; GRANT SELECT, UPDATE ON ide_agent_budgets TO ide_runtime; GRANT SELECT, INSERT ON ide_agent_reconciliation TO ide_runtime; GRANT SELECT, INSERT, UPDATE ON ide_mcp_executions TO ide_runtime;"
+      - run: python -m pytest tests -v
+      - name: Verify test-only worker has kernel-isolated network
+        run: |
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges python:3.12-slim python -c "import socket; s=socket.socket(); s.settimeout(2); assert s.connect_ex(('1.1.1.1',443)) != 0"
+      - name: Verify provider and MCP direct socket bypasses are blocked in isolated worker
+        run: |
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges python:3.12-slim python -c "import socket; targets=[('1.1.1.1',443),('169.254.169.254',80),('127.0.0.1',443)]; results=[socket.socket().connect_ex(target) for target in targets]; assert all(code!=0 for code in results),results"
+      - name: Validate isolated worker and gateway Compose topology
+        run: |
+          docker compose -f ../security/phase211-isolated-compose.yml config --quiet
+          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps worker
+      - name: Offline Compose TLS gateway denies metadata CONNECT from isolated worker
+        run: |
+          set -euo pipefail
+          mkdir -p ../security/test-certs
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/gateway.key -out ../security/test-certs/gateway.crt -days 1 -subj "/CN=gateway" -addext "subjectAltName=DNS:gateway" >/dev/null 2>&1
+          chmod 644 ../security/test-certs/gateway.crt ../security/test-certs/gateway.key
+          trap 'docker compose -f ../security/phase211-isolated-compose.yml logs gateway || true; docker compose -f ../security/phase211-isolated-compose.yml down || true' EXIT
+          docker compose -f ../security/phase211-isolated-compose.yml up -d gateway
+          docker compose -f ../security/phase211-isolated-compose.yml ps -a
+          docker compose -f ../security/phase211-isolated-compose.yml exec -T gateway python -c 'import socket; s=socket.create_connection(("127.0.0.1",8080),timeout=5); s.close(); print("TLS gateway listener ready")'
+          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps -v "$(pwd)/../security/test-certs:/test-certs:ro" worker python -c 'import socket,ssl; c=ssl.create_default_context(cafile="/test-certs/gateway.crt"); s=c.wrap_socket(socket.create_connection(("gateway",8080),timeout=5),server_hostname="gateway"); s.sendall(b"CONNECT 169.254.169.254:443 HTTP/1.1\r\nHost: 169.254.169.254\r\n\r\n"); response=s.recv(256); assert response.startswith(b"HTTP/1.1 403"),response; print("Verified TLS gateway denied metadata CONNECT")'
+          # Container-level negative cases: disallowed authority, malformed CONNECT,
+          # absent credentials, metadata targets and blocked direct sockets.
+          docker compose -f ../security/phase211-isolated-compose.yml run --rm --no-deps -v "$(pwd)/../security/test-certs:/test-certs:ro" worker python -c 'import socket,ssl; ctx=ssl.create_default_context(cafile="/test-certs/gateway.crt"); cases=[b"CONNECT 169.254.169.254:443 HTTP/1.1\r\n\r\n",b"CONNECT 127.0.0.1:443 HTTP/1.1\r\n\r\n",b"CONNECT provider.example:80 HTTP/1.1\r\n\r\n",b"GET / HTTP/1.1\r\n\r\n",b"CONNECT provider.example:443 HTTP/1.1\r\n\r\n"]; responses=[]; [(lambda c: (c.sendall(p),responses.append(c.recv(256)),c.close()))(ctx.wrap_socket(socket.create_connection(("gateway",8080),timeout=5),server_hostname="gateway")) for p in cases]; assert all(x.startswith(b"HTTP/1.1 403") for x in responses),responses; targets=[("1.1.1.1",443),("169.254.169.254",80)]; results=[]; [(lambda s: (s.settimeout(2),results.append(s.connect_ex(t)),s.close()))(socket.socket()) for t in targets]; assert all(x!=0 for x in results),results; print("Docker TLS gateway adversarial denies and direct-socket isolation passed")'
+
+      - name: Positive offline three-container authenticated TLS gateway integration
+        run: |
+          set -euo pipefail
+          mkdir -p ../security/test-certs
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/gateway.key -out ../security/test-certs/gateway.crt -days 1 -subj "/CN=gateway" -addext "subjectAltName=DNS:gateway" >/dev/null 2>&1
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout ../security/test-certs/provider.key -out ../security/test-certs/provider.crt -days 1 -subj "/CN=provider.example" -addext "subjectAltName=DNS:provider.example" >/dev/null 2>&1
+          chmod 644 ../security/test-certs/*.key ../security/test-certs/*.crt
+          trap 'docker compose -f ../security/phase211-positive-test-compose.yml logs || true; docker compose -f ../security/phase211-positive-test-compose.yml down --remove-orphans || true' EXIT
+          docker compose -f ../security/phase211-positive-test-compose.yml build worker
+          docker compose -f ../security/phase211-positive-test-compose.yml up -d gateway mock-provider
+          docker compose -f ../security/phase211-positive-test-compose.yml exec -T mock-provider python -c 'import socket,time; exec("for i in range(30):\n try:\n  socket.create_connection((\"127.0.0.1\",8443),timeout=2).close(); print(\"Mock HTTPS provider ready\"); break\n except OSError:\n  if i==29: raise\n  time.sleep(1)")'
+          docker compose -f ../security/phase211-positive-test-compose.yml run --rm --no-deps worker
+          docker compose -f ../security/phase211-positive-test-compose.yml run --rm --no-deps worker python /tests/verify_expired_tls.py
+          docker compose -f ../security/phase211-positive-test-compose.yml run --rm --no-deps worker python /tests/verify_runtime_dns.py
+
+  frontend:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: platform/saas-ide/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_OIDC_AUTHORITY: https://id.example.test
+          NEXT_PUBLIC_OIDC_CLIENT_ID: ide-browser
+          NEXT_PUBLIC_IDE_TENANT: demo-tenant
+          NEXT_PUBLIC_IDE_API_URL: http://localhost:8090
