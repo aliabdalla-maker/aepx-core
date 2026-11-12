@@ -188,11 +188,19 @@ def test_phase23_fencing_budget_and_rls(prepared_db, tokens):
     rid=run["id"]
     assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",headers=owner).status_code==200
     assert client.post(f"/api/v1/agent-runs/{rid}/enqueue",headers=owner).status_code==200
-    with main.SessionLocal() as db:
-        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
-        db.execute(text("""INSERT INTO ide_agent_budgets(tenant_id,max_tokens,max_cost_microusd)
-          VALUES('alpha',2000,1000000)"""))
-        db.commit()
+    # Budget provisioning is an administrative operation, not a runtime permission.
+    # Keep ide_runtime unable to INSERT/DELETE tenant budgets.
+    admin = create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    try:
+        with admin.begin() as db:
+            db.execute(text("""INSERT INTO ide_agent_budgets
+                (tenant_id,max_tokens,max_cost_microusd)
+                VALUES ('alpha',2000,1000000)
+                ON CONFLICT (tenant_id) DO UPDATE SET
+                  max_tokens=EXCLUDED.max_tokens,
+                  max_cost_microusd=EXCLUDED.max_cost_microusd"""))
+    finally:
+        admin.dispose()
     with main.SessionLocal() as db:
         db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
         lease=fenced_claim(db,"alpha","worker-a")
