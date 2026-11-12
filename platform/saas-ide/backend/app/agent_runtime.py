@@ -41,6 +41,8 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     if len(str(arguments)) > 4000:
         raise ValueError("MCP arguments too large")
     approved_mcp_tool(name, tool)
+    if db is None or not tenant_id or not run_id:
+        raise PermissionError("Tenant-bound single-use approval context required")
     # Fail closed for tools explicitly classified as side-effecting.
     # An unclassified tool is not automatically certified safe; deployers must
     # maintain a reviewed classification and deny unreviewed operations.
@@ -54,8 +56,7 @@ async def invoke_mcp_tool(name: str, tool: str, arguments: dict, *, db=None, ten
     if tool in side_effecting:
         from .provider_adapters218 import require_side_effect_contract
         require_side_effect_contract(name)
-    if db is None or not tenant_id or not run_id:
-        raise PermissionError("Tenant-bound single-use approval context required")
+
     from .transport211 import sdk_async_http_client, approved_proxy_url
     approved_proxy_url()
     token = os.getenv("IDE_MCP_" + name.upper().replace("-", "_") + "_TOKEN", "")
