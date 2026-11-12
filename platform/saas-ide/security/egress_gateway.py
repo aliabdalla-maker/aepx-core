@@ -10,6 +10,7 @@ import os
 import select
 import socket
 import socketserver
+import ssl
 
 def permitted_destination(authority, hosts, resolver=socket.getaddrinfo):
     if not isinstance(authority,str) or authority.count(":")!=1:
@@ -80,8 +81,32 @@ class Server(socketserver.ThreadingTCPServer):
     allow_reuse_address=True
     daemon_threads=True
 
+class TLSServer(Server):
+    """Require encrypted gateway ingress independently of upstream provider TLS."""
+    def __init__(self, address, handler, context):
+        self.tls_context=context
+        super().__init__(address,handler)
+
+    def get_request(self):
+        conn,addr=super().get_request()
+        try:
+            return self.tls_context.wrap_socket(conn,server_side=True),addr
+        except Exception:
+            conn.close()
+            raise
+
+def gateway_tls_context():
+    cert=os.getenv("IDE_GATEWAY_TLS_CERT_FILE","")
+    key=os.getenv("IDE_GATEWAY_TLS_KEY_FILE","")
+    if not cert or not key:
+        raise RuntimeError("Gateway TLS certificate and key required")
+    ctx=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ctx.minimum_version=ssl.TLSVersion.TLSv1_2
+    ctx.load_cert_chain(cert,key)
+    return ctx
+
 if __name__=="__main__":
     if os.environ.get("IDE_GATEWAY_LISTEN_ENABLED")!="true":
         raise SystemExit("Gateway disabled")
-    with Server(("0.0.0.0",8080),Handler) as server:
+    with TLSServer(("0.0.0.0",8080),Handler,gateway_tls_context()) as server:
         server.serve_forever()
