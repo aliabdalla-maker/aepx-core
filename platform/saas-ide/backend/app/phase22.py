@@ -4,7 +4,7 @@ import json
 import os
 import uuid
 from datetime import datetime, timedelta, timezone
-from sqlalchemy import ForeignKeyConstraint, String, select, text
+from sqlalchemy import ForeignKeyConstraint, String, DateTime, select, text
 from sqlalchemy.orm import Mapped, mapped_column, Session
 from pydantic import BaseModel, Field
 from .main import Base, Principal
@@ -18,7 +18,8 @@ class AgentJob(Base):
     state: Mapped[str] = mapped_column(String(24), default="pending")
     attempt: Mapped[int] = mapped_column(default=0)
     lease_owner: Mapped[str | None] = mapped_column(String(100))
-    lease_until: Mapped[datetime | None] = mapped_column()
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    next_attempt_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     __table_args__ = (ForeignKeyConstraint(["tenant_id","run_id"], ["ide_agent_runs.tenant_id","ide_agent_runs.id"]),)
 
 class ToolApproval(Base):
@@ -69,6 +70,7 @@ def claim(db: Session, tenant_id: str, owner: str, lease_seconds: int=60) -> tup
     # exactly-once. Use fencing tokens and provider idempotency before live activation.
     job = db.scalar(select(AgentJob).where(
         AgentJob.tenant_id==tenant_id,
+        (AgentJob.next_attempt_at <= datetime.now(timezone.utc)),
         ((AgentJob.state=="pending") | ((AgentJob.state=="leased") & (AgentJob.lease_until < datetime.now(timezone.utc))))
     ).order_by(AgentJob.id).with_for_update(skip_locked=True).limit(1))
     if job is None:
