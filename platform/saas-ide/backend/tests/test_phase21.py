@@ -6,6 +6,7 @@ os.environ.setdefault("IDE_OIDC_JWKS_URL", "https://id.example.test/keys")
 os.environ.setdefault("IDE_OIDC_AUDIENCE", "ide-api")
 
 import pytest
+import asyncio
 from app.providers import generate, configured_model
 from app.worker import execute_one
 from app.agent_runtime import invoke_mcp_tool, allowed_mcp_endpoint, approved_mcp_tool
@@ -20,11 +21,10 @@ def test_all_external_adapters_disabled(monkeypatch):
     with pytest.raises(PermissionError):
         embed("hello")
 
-@pytest.mark.asyncio
-async def test_mcp_disabled(monkeypatch):
+def test_mcp_disabled(monkeypatch):
     monkeypatch.delenv("IDE_EXTERNAL_EXECUTION_ENABLED", raising=False)
     with pytest.raises(PermissionError):
-        await invoke_mcp_tool("knowledge", "search", {})
+        asyncio.run(invoke_mcp_tool("knowledge", "search", {}))
 
 def test_provider_explicit_credentials(monkeypatch):
     monkeypatch.delenv("IDE_OPENAI_MODEL", raising=False)
