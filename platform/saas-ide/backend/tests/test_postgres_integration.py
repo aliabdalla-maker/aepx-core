@@ -1093,3 +1093,53 @@ def test_phase216_revoked_membership_blocks_dispatch(prepared_db, tokens, monkey
             db.execute(text("UPDATE ide_memberships SET role='owner' "
                             "WHERE tenant_id='alpha' AND subject='user-alpha'"))
         admin_engine.dispose()
+
+
+def test_phase217_killed_worker_cannot_replay_dispatch(prepared_db, tokens, monkeypatch):
+    """Real subprocess exits abruptly after durable dispatch claim, before result."""
+    from app.phase22 import consume_tool
+    from app.mcp_execution214 import begin_dispatch, reconcile_stale
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client = TestClient(main.app)
+    owner = headers(tokens(), "alpha")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "kill217"})
+    assert project.status_code == 201, project.text
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project.json()["id"], "task": "Killed worker test"})
+    assert run.status_code == 201, run.text
+    run_id = run.json()["id"]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    args = {"query": "kill"}
+    req = client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",
+                      headers=owner, json={"server": "knowledge", "tool": "search",
+                                           "arguments": args})
+    assert req.status_code == 201, req.text
+    approval_id = req.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval_id}/decision?approved=true",
+                       headers=owner).status_code == 200
+    with main.SessionLocal() as db:
+        consume_tool(db, "alpha", run_id, "knowledge", "search", args)
+    child = """import os,sys
+from app.main import SessionLocal
+from app.mcp_execution214 import begin_dispatch
+with SessionLocal() as db:
+    begin_dispatch(db,'alpha',sys.argv[1],sys.argv[2])
+os._exit(99)
+"""
+    result = subprocess.run([sys.executable, "-c", child, run_id, approval_id],
+                            cwd=str(Path(__file__).resolve().parents[1]),
+                            env=os.environ.copy(), capture_output=True, timeout=20)
+    assert result.returncode == 99, result.stderr.decode(errors="replace")
+    with main.SessionLocal() as db:
+        with pytest.raises(PermissionError, match="already dispatched"):
+            begin_dispatch(db, "alpha", run_id, approval_id)
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        db.execute(text("UPDATE ide_mcp_executions SET dispatch_started_at=now()-interval '10 minutes' "
+                        "WHERE tenant_id='alpha' AND approval_id=:approval"),
+                   {"approval": approval_id})
+        db.commit()
+        assert reconcile_stale(db, "alpha", 30) == 1
+        with pytest.raises(PermissionError, match="already dispatched"):
+            begin_dispatch(db, "alpha", run_id, approval_id)
