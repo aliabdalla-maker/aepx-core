@@ -4,20 +4,20 @@ variable "enable_staging_compute" {
   default = false
 }
 variable "availability_domain" {
-  type = string
+  type        = string
   description = "Verified availability domain in uk-london-1"
   default = ""
 }
 variable "image_ocid" {
-  type = string
+  type        = string
   description = "Verified compatible OCI image OCID for London"
   default = ""
 }
 variable "ssh_public_key" {
-  type = string
+  type        = string
   description = "Operator-managed SSH public key; never supply a private key"
   default = ""
-  sensitive = true
+  sensitive   = true
 }
 variable "instance_shape" {
   type    = string
@@ -31,7 +31,7 @@ variable "instance_ocpus" {
   type    = number
   default = 1
   validation {
-    condition = var.instance_ocpus >= 1 && var.instance_ocpus <= 2
+    condition     = var.instance_ocpus >= 1 && var.instance_ocpus <= 2
     error_message = "Staging CPU budget guardrail: 1 to 2 OCPUs."
   }
 }
@@ -39,7 +39,7 @@ variable "instance_memory_gb" {
   type    = number
   default = 6
   validation {
-    condition = var.instance_memory_gb >= 4 && var.instance_memory_gb <= 12
+    condition     = var.instance_memory_gb >= 4 && var.instance_memory_gb <= 12
     error_message = "Staging memory guardrail: 4 to 12 GB."
   }
 }
@@ -54,8 +54,8 @@ resource "oci_core_instance" "staging" {
     memory_in_gbs = var.instance_memory_gb
   }
   source_details {
-    source_type = "image"
-    source_id   = var.image_ocid
+    source_type             = "image"
+    source_id               = var.image_ocid
     boot_volume_size_in_gbs = 50
   }
   create_vnic_details {
