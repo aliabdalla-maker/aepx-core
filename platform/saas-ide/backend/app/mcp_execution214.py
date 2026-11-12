@@ -120,7 +120,7 @@ def resolve_unknown(db: Session, tenant: str, run_id: str, approval_id: str,
         raise PermissionError("Independent evidence verifier required")
     if verified_outcome not in ("succeeded", "failed"):
         raise ValueError("Verified outcome must be succeeded or failed")
-    if not actor or len(actor)>255 or not evidence_reference or len(evidence_reference)>160:
+    if not actor or len(actor)>255 or not evidence_reference or len(evidence_reference)>4096:
         raise ValueError("Authorized actor and evidence reference required")
     # Fail closed unless a trusted provider adapter validates the evidence.
     if evidence_verifier(tenant, run_id, approval_id, verified_outcome, evidence_reference) is not True:
