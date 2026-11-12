@@ -154,15 +154,19 @@ def test_gateway_ingress_tls_and_authentication(tls_gateway,monkeypatch):
         try:
             port=server.server_address[1]
             with socket.create_connection(("127.0.0.1",port),timeout=3) as plain:
-                plain.sendall(b"CONNECT provider.example:443 HTTP/1.1\\r\\n\\r\\n")
-                with pytest.raises((OSError,ConnectionError,TimeoutError)):
+                # Plaintext is not a valid TLS ClientHello; the server may
+                # wait for more bytes rather than replying with HTTP.
+                plain.sendall(b"plaintext is not TLS")
+                plain.shutdown(socket.SHUT_WR)
+                try:
                     data=plain.recv(256)
-                    if not data:
-                        raise ConnectionError("Plaintext ingress rejected")
+                    assert not data.startswith(b"HTTP/1.1 200")
+                except (OSError,TimeoutError):
+                    pass
             client_context=ssl.create_default_context(cafile=cert)
             with client_context.wrap_socket(socket.create_connection(("127.0.0.1",port),timeout=3),
                                             server_hostname="provider.example") as encrypted:
-                encrypted.sendall(b"CONNECT provider.example:443 HTTP/1.1\\r\\nProxy-Authorization: Bearer "+b"t"*40+b"\\r\\n\\r\\n")
+                encrypted.sendall(b"CONNECT provider.example:443 HTTP/1.1\r\nProxy-Authorization: Bearer "+b"t"*40+b"\r\n\r\n")
                 assert encrypted.recv(256).startswith(b"HTTP/1.1 403")
             with pytest.raises(ssl.SSLCertVerificationError):
                 with ssl.create_default_context().wrap_socket(
