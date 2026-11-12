@@ -1,57 +1,104 @@
-"""Phase 1 hybrid IDE API: authenticated, tenant-scoped project metadata.
-
-This service deliberately does not execute generated code or issue identity tokens.
-Run behind TLS with a managed OIDC gateway in production.
-"""
+"""Hybrid IDE Phase 1 API. OIDC access tokens + explicit PostgreSQL tenant membership."""
 import os
-import sqlite3
 import uuid
-from contextlib import contextmanager
-from pathlib import Path
+from functools import lru_cache
+from typing import Annotated
 
+import jwt
+from jwt import PyJWKClient
 from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from sqlalchemy import ForeignKey, String, Text, create_engine, select
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
-app = FastAPI(title="AEP-X Hybrid IDE API", version="0.1.0")
-DB_PATH = Path(os.getenv("IDE_DB_PATH", "/data/ide.sqlite3"))
+DATABASE_URL = os.getenv("IDE_DATABASE_URL", "")
+if not DATABASE_URL.startswith(("postgresql+psycopg://", "postgresql://")):
+    raise RuntimeError("IDE_DATABASE_URL must specify PostgreSQL (psycopg)")
+OIDC_ISSUER = os.getenv("IDE_OIDC_ISSUER", "").rstrip("/")
+OIDC_AUDIENCE = os.getenv("IDE_OIDC_AUDIENCE", "")
+if not OIDC_ISSUER.startswith("https://") or not OIDC_AUDIENCE:
+    raise RuntimeError("HTTPS IDE_OIDC_ISSUER and IDE_OIDC_AUDIENCE are required")
+if "/.well-known/" in OIDC_ISSUER:
+    raise RuntimeError("Use issuer URL, not discovery URL")
 
-
-def identity(x_ide_tenant: str | None = Header(default=None),
-             x_ide_api_key: str | None = Header(default=None)) -> str:
-    """Temporary development-only boundary. Replace with verified OIDC claims.
-
-    A tenant header is NOT identity: require an independent secret and reject
-    production deployment with this temporary authentication mode.
-    """
-    if os.getenv("IDE_ENV", "development") != "development":
-        raise HTTPException(503, "OIDC integration required outside development")
-    key = os.getenv("IDE_DEV_API_KEY", "")
-    if not key or not x_ide_api_key:
-        raise HTTPException(401, "Development API key required")
-    import hmac
-    if not hmac.compare_digest(key, x_ide_api_key):
-        raise HTTPException(401, "Invalid development API key")
-    if not x_ide_tenant or len(x_ide_tenant) > 128:
-        raise HTTPException(400, "Tenant header required")
-    return x_ide_tenant
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine)
+app = FastAPI(title="AEP-X Hybrid IDE API", version="0.2.0")
+origin = os.getenv("IDE_WEB_ORIGIN", "http://localhost:3000")
+app.add_middleware(CORSMiddleware, allow_origins=[origin], allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type", "X-Tenant-ID"])
 
 
-@contextmanager
-def database():
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    connection = sqlite3.connect(DB_PATH)
+class Base(DeclarativeBase):
+    pass
+
+
+class Membership(Base):
+    __tablename__ = "ide_memberships"
+    tenant_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    subject: Mapped[str] = mapped_column(String(255), primary_key=True)
+    role: Mapped[str] = mapped_column(String(32), nullable=False)
+
+
+class Project(Base):
+    __tablename__ = "ide_projects"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False, default="")
+
+
+class WorkspaceFile(Base):
+    __tablename__ = "ide_workspace_files"
+    tenant_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    project_id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    path: Mapped[str] = mapped_column(String(255), primary_key=True)
+    content: Mapped[str] = mapped_column(Text, nullable=False, default="")
+
+
+def db_session():
+    with SessionLocal() as db:
+        yield db
+
+
+@lru_cache(maxsize=1)
+def jwks_client():
+    return PyJWKClient(OIDC_ISSUER + "/.well-known/jwks.json", cache_jwk_set=True, lifespan=300)
+
+
+def verified_subject(authorization: Annotated[str | None, Header()] = None) -> str:
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(401, "Bearer token required")
+    token = authorization[7:]
     try:
-        connection.execute("""CREATE TABLE IF NOT EXISTS projects (
-            id TEXT PRIMARY KEY, tenant_id TEXT NOT NULL,
-            name TEXT NOT NULL, description TEXT NOT NULL DEFAULT ''
-        )""")
-        connection.execute(
-            "CREATE INDEX IF NOT EXISTS idx_projects_tenant ON projects(tenant_id)"
-        )
-        yield connection
-        connection.commit()
-    finally:
-        connection.close()
+        key = jwks_client().get_signing_key_from_jwt(token)
+        claims = jwt.decode(token, key.key, algorithms=["RS256"], audience=OIDC_AUDIENCE, issuer=OIDC_ISSUER, options={"require": ["exp", "iat", "iss", "aud", "sub"]}, leeway=30)
+        subject = claims["sub"]
+        if not isinstance(subject, str) or not subject or len(subject) > 255:
+            raise ValueError("Invalid subject")
+        return subject
+    except (jwt.PyJWTError, ValueError, Exception) as exc:
+        # Never echo token or internal signing details.
+        raise HTTPException(401, "Invalid access token") from None
+
+
+class Principal(BaseModel):
+    subject: str
+    tenant_id: str
+    role: str
+
+
+def principal(
+    subject: str = Depends(verified_subject),
+    tenant_id: Annotated[str | None, Header(alias="X-Tenant-ID")] = None,
+    db: Session = Depends(db_session),
+) -> Principal:
+    if not tenant_id or len(tenant_id) > 128:
+        raise HTTPException(400, "X-Tenant-ID required")
+    member = db.get(Membership, (tenant_id, subject))
+    if member is None:
+        raise HTTPException(403, "Not a member of this tenant")
+    return Principal(subject=subject, tenant_id=tenant_id, role=member.role)
 
 
 class ProjectIn(BaseModel):
@@ -63,39 +110,73 @@ class ProjectOut(ProjectIn):
     id: str
 
 
+class FileIn(BaseModel):
+    content: str = Field(max_length=1_000_000)
+
+
+def project_or_404(db: Session, tenant: str, project_id: str) -> Project:
+    project = db.get(Project, project_id)
+    if project is None or project.tenant_id != tenant:
+        raise HTTPException(404, "Project not found")
+    return project
+
+
+def safe_path(path: str) -> str:
+    if not path or len(path) > 255 or path.startswith("/") or "\\" in path or any(p in ("", ".", "..") for p in path.split("/")):
+        raise HTTPException(400, "Invalid workspace path")
+    return path
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "hybrid-ide-api"}
 
 
+@app.get("/api/v1/me")
+def me(p: Principal = Depends(principal)):
+    return p
+
+
 @app.post("/api/v1/projects", response_model=ProjectOut, status_code=201)
-def create_project(body: ProjectIn, tenant: str = Depends(identity)):
-    project_id = str(uuid.uuid4())
-    with database() as db:
-        db.execute(
-            "INSERT INTO projects (id, tenant_id, name, description) VALUES (?, ?, ?, ?)",
-            (project_id, tenant, body.name, body.description),
-        )
-    return ProjectOut(id=project_id, **body.model_dump())
+def create_project(body: ProjectIn, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin", "editor"):
+        raise HTTPException(403, "Read-only membership")
+    project = Project(id=str(uuid.uuid4()), tenant_id=p.tenant_id, name=body.name, description=body.description)
+    db.add(project)
+    db.commit()
+    return ProjectOut(id=project.id, name=project.name, description=project.description)
 
 
 @app.get("/api/v1/projects", response_model=list[ProjectOut])
-def list_projects(tenant: str = Depends(identity)):
-    with database() as db:
-        rows = db.execute(
-            "SELECT id, name, description FROM projects WHERE tenant_id = ? ORDER BY name",
-            (tenant,),
-        ).fetchall()
-    return [ProjectOut(id=r[0], name=r[1], description=r[2]) for r in rows]
+def list_projects(p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    projects = db.scalars(select(Project).where(Project.tenant_id == p.tenant_id).order_by(Project.name)).all()
+    return [ProjectOut(id=x.id, name=x.name, description=x.description) for x in projects]
 
 
 @app.get("/api/v1/projects/{project_id}", response_model=ProjectOut)
-def get_project(project_id: str, tenant: str = Depends(identity)):
-    with database() as db:
-        row = db.execute(
-            "SELECT id, name, description FROM projects WHERE id = ? AND tenant_id = ?",
-            (project_id, tenant),
-        ).fetchone()
-    if row is None:
-        raise HTTPException(404, "Project not found")
-    return ProjectOut(id=row[0], name=row[1], description=row[2])
+def get_project(project_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    x = project_or_404(db, p.tenant_id, project_id)
+    return ProjectOut(id=x.id, name=x.name, description=x.description)
+
+
+@app.get("/api/v1/projects/{project_id}/files")
+def list_files(project_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    project_or_404(db, p.tenant_id, project_id)
+    files = db.scalars(select(WorkspaceFile).where(WorkspaceFile.tenant_id == p.tenant_id, WorkspaceFile.project_id == project_id)).all()
+    return [{"path": x.path, "content": x.content} for x in files]
+
+
+@app.put("/api/v1/projects/{project_id}/files/{path:path}")
+def save_file(project_id: str, path: str, body: FileIn, p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    if p.role not in ("owner", "admin", "editor"):
+        raise HTTPException(403, "Read-only membership")
+    project_or_404(db, p.tenant_id, project_id)
+    path = safe_path(path)
+    file = db.get(WorkspaceFile, (p.tenant_id, project_id, path))
+    if file is None:
+        file = WorkspaceFile(tenant_id=p.tenant_id, project_id=project_id, path=path, content=body.content)
+        db.add(file)
+    else:
+        file.content = body.content
+    db.commit()
+    return {"path": path, "saved": True}
