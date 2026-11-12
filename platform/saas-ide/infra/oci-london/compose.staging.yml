@@ -1,0 +1,53 @@
+name: aepx-staging
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aepx
+      POSTGRES_USER: aepx
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aepx -d aepx"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [private]
+  api:
+    build:
+      context: ../../backend
+      dockerfile: api.Dockerfile
+    restart: unless-stopped
+    environment:
+      IDE_ENV: staging
+      IDE_EXTERNAL_EXECUTION_ENABLED: "false"
+      IDE_MCP_EXECUTION_ENABLED: "false"
+    env_file:
+      - path: ./staging.env
+        required: true
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [private]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+  web:
+    build:
+      context: ../../web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    depends_on: [api]
+    networks: [private]
+    security_opt: [no-new-privileges:true]
+volumes:
+  pgdata: {}
+networks:
+  private:
+    internal: true
+secrets:
+  db_password:
+    file: ./secrets/db_password
