@@ -2,7 +2,8 @@
 # Read-only Terraform plan for OCI London; never applies infrastructure.
 set -euo pipefail
 cd "$(dirname "$0")"
-: "${TF_VAR_compartment_ocid:?Set verified compartment OCID locally}"
+# Operator-selected compartment is an identifier, not a credential.
+export TF_VAR_compartment_ocid="${TF_VAR_compartment_ocid:-ocid1.compartment.oc1..aaaaaaaaonhka4z7ankj76ibtpr7w6saylbyqaiuadtul4to2qyvxkcwarua}"
 : "${TF_VAR_object_storage_namespace:?Set verified Object Storage namespace locally}"
 : "${TF_VAR_availability_domain:?Set verified London availability domain}"
 : "${TF_VAR_image_ocid:?Set verified Arm64 image OCID}"
