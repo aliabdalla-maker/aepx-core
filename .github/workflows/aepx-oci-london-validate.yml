@@ -17,6 +17,6 @@ jobs:
           terraform_version: '1.9.8'
       - name: Run offline approval-gate unit tests
         working-directory: platform/saas-ide/infra/oci-london
-        run: python3 -m unittest -v test_preflight.py
+        run: python3 -m unittest discover -v -p 'test_*.py'
       - name: Validate configuration without cloud credentials
         run: bash platform/saas-ide/infra/oci-london/validate.sh
