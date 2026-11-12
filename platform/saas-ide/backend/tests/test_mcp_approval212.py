@@ -21,6 +21,9 @@ class FakeDB:
         self.commits=0
         self.rollbacks=0
         self.attempts=[]
+        self.audit_rows=[]
+    def add(self, row):
+        self.audit_rows.append(row)
     def execute(self, statement, params):
         self.attempts.append(dict(params))
         allowed=(params["tenant"]==self.tenant and params["run"]==self.run
@@ -52,9 +55,14 @@ def test_tenant_and_exact_arguments_and_replay(monkeypatch):
     assert db.rollbacks==5
     phase22.consume_tool(db,"tenant-a","run-a","knowledge","read",args)
     assert db.state=="consumed" and db.commits==1
+    assert len(db.audit_rows)==1
+    assert db.audit_rows[0].tenant_id=="tenant-a"
+    assert db.audit_rows[0].run_id=="run-a"
+    assert db.audit_rows[0].action=="tool_consumed"
     with pytest.raises(PermissionError,match="already consumed"):
         phase22.consume_tool(db,"tenant-a","run-a","knowledge","read",args)
     assert db.commits==1
+    assert len(db.audit_rows)==1
 
 def test_tool_decision_rejects_non_admin_and_records_audit(monkeypatch):
     events=[]
