@@ -20,6 +20,7 @@ reply=b""
 while b"\r\n\r\n" not in reply:
     reply+=outer.recv(4096)
 assert reply.startswith(b"HTTP/1.1 200"),reply
+outer.close()
 # Nested TLS requires SSL-over-SSL BIO support; httpx supplies it for SDK use.
 import httpx
 ctx=ssl.create_default_context(cafile=provider_ca)
