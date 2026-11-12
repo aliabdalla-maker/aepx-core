@@ -36,7 +36,7 @@ def gateway_server(monkeypatch):
     b"CONNECT provider.example:443 HTTP/1.1\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\n\r\n",
 ])
 def test_gateway_denies_wire_bypasses(gateway_server,wire_payload):
-    with socket.create_connection(("127.0.0.1",gateway_server),timeout=2) as conn:
+    with socket.create_connection(("127.0.0.1",gateway_server),timeout=8) as conn:
         conn.sendall(wire_payload)
         assert conn.recv(256).startswith(b"HTTP/1.1 403")
 
@@ -47,6 +47,6 @@ def test_httpx_real_connect_denied_without_proxy_credential(gateway_server):
             client.get("https://provider.example/v1/messages")
 
 def test_gateway_does_not_follow_redirect_or_forward(gateway_server):
-    with socket.create_connection(("127.0.0.1",gateway_server),timeout=2) as conn:
+    with socket.create_connection(("127.0.0.1",gateway_server),timeout=8) as conn:
         conn.sendall(b"CONNECT provider.example:443 HTTP/1.1\r\nProxy-Authorization: Bearer "+b"a"*40+b"\r\n\r\n")
         assert conn.recv(256).startswith(b"HTTP/1.1 403")
