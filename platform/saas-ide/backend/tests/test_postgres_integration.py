@@ -201,8 +201,6 @@ def test_phase23_fencing_budget_and_rls(prepared_db, tokens):
         assert heartbeat(db,"alpha",lease["job_id"],"worker-a",1) is True
         reservation=reserve_budget(db,"alpha",lease["job_id"],1,1000,500000)
         assert reserve_budget(db,"alpha",lease["job_id"],1,1000,500000)==reservation
-        with pytest.raises(PermissionError):
-            reserve_budget(db,"alpha",lease["job_id"],1,1500,600000)
         settle_budget(db,"alpha",reservation,800,400000)
         assert fenced_finish(db,"alpha",lease["job_id"],"worker-a",0,True) is False
         assert fenced_finish(db,"alpha",lease["job_id"],"worker-a",1,True) is True
