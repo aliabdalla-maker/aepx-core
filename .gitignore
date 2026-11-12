@@ -28,3 +28,6 @@ AEP-X 1/scheduled_tasks.lock
 
 # Local dev artifacts
 console/uploads_dev/
+
+# Local Netlify folder
+.netlify
