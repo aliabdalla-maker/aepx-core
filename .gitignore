@@ -28,3 +28,8 @@ AEP-X 1/scheduled_tasks.lock
 
 # Local dev artifacts
 console/uploads_dev/
+
+# Generated acceptance reports and sensitive database backups
+/artifacts/
+*.dump
+*.dump.sha256
