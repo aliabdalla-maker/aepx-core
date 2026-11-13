@@ -5,6 +5,7 @@ A crashed or timed-out invocation stays 'uncertain' and cannot be blindly
 retried. Only trusted reconciliation can transition to confirmed/failed_safe.
 """
 from uuid import UUID
+import re
 
 class ReconciliationRequired(PermissionError):
     pass
@@ -77,6 +78,10 @@ def reconcile_remote(connection,*,tenant_id,event_id,provider,idempotency_key,
     if (not isinstance(evidence_reference,str) or len(evidence_reference.strip())<8
         or not isinstance(reviewer_id,str) or len(reviewer_id.strip())<8):
         raise ValueError("reconciliation evidence and reviewer required")
+    # Audit references must be bounded opaque tokens, never free text or URLs.
+    if (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{7,127}",evidence_reference.strip())
+        or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{7,127}",reviewer_id.strip())):
+        raise ValueError("opaque evidence and reviewer identifiers required")
     # A caller's authorization flag cannot establish a remote outcome.
     # The injected trusted verifier must validate provider evidence and
     # reviewer authority; exceptions propagate before any DB mutation.
