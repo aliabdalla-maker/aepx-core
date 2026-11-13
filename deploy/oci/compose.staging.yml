@@ -96,6 +96,6 @@ services:
       postgres:
         condition: service_healthy
       identity:
-        condition: service_started
+        condition: service_healthy
 volumes:
   staging-postgres:
