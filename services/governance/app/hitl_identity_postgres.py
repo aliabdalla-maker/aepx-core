@@ -53,8 +53,37 @@ def postgres_identity_verifiers(connection_factory):
             return False
     return membership,not_revoked
 
+# One PostgreSQL statement means freshness, membership and revocation share
+# the same statement-level MVCC snapshot (READ COMMITTED or stronger).
+_ATOMIC_IDENTITY = """SELECT (
+    EXISTS (SELECT 1 FROM hitl.identity_authority_sync
+      WHERE tenant_id=%s AND issuer=%s AND healthy IS TRUE
+        AND synced_at >= now() - interval '60 seconds')
+    AND EXISTS (SELECT 1 FROM hitl.identity_memberships
+      WHERE tenant_id=%s AND subject=%s AND issuer=%s AND active IS TRUE)
+    AND NOT EXISTS (SELECT 1 FROM hitl.identity_revocations
+      WHERE tenant_id=%s AND subject=%s AND issuer=%s AND token_id=%s)
+)"""
+
 def enforce_postgres_identity(*,connection_factory,subject,tenant_id,token_id,issuer):
-    membership,not_revoked=postgres_identity_verifiers(connection_factory)
-    return enforce_identity_policy(subject=subject,tenant_id=tenant_id,
-        token_id=token_id,issuer=issuer,verify_membership=membership,
-        verify_not_revoked=not_revoked)
+    """Fail closed on one atomic authority decision, not two DB connections."""
+    try:
+        tenant=str(UUID(str(tenant_id)))
+        if (not callable(connection_factory)
+            or not isinstance(subject,str) or not 8<=len(subject)<=128
+            or not isinstance(issuer,str) or not issuer.startswith("https://")
+            or not isinstance(token_id,str) or not 8<=len(token_id)<=256):
+            raise IdentityPolicyDenied("invalid authoritative identity inputs")
+        with connection_factory() as conn:
+            with conn.cursor() as cur:
+                cur.execute(_ATOMIC_IDENTITY,(
+                    tenant,issuer,tenant,subject,issuer,
+                    tenant,subject,issuer,token_id))
+                row=cur.fetchone()
+                if not row or row[0] is not True:
+                    raise IdentityPolicyDenied("authoritative identity denied")
+        return True
+    except IdentityPolicyDenied:
+        raise
+    except Exception as exc:
+        raise IdentityPolicyDenied("authoritative identity unavailable") from exc
