@@ -65,6 +65,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
                 cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                reserve_intent(cur, self.intent)
                 with self.assertRaises(ReservationDenied):
                     reserve_intent(cur, conflicting)
 
