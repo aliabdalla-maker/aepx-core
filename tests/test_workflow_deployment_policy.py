@@ -87,10 +87,10 @@ class DeploymentPolicyTests(unittest.TestCase):
             protected = (*NAMES, "actions-queue-diagnostics.yml")
             for name in protected:
                 (workflows / name).write_text(
-                    "name: protected\\non:\\n  workflow_dispatch:\\njobs:\\n  check:\\n    runs-on: ubuntu-latest\\n",
+                    "name: protected\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
                     encoding="utf-8")
             (workflows / "ordinary-ci.yml").write_text(
-                "name: ci\\non:\\n  push:\\n    branches: [master]\\njobs:\\n  test:\\n    runs-on: ubuntu-latest\\n",
+                "name: ci\non:\n  push:\n    branches: [master]\njobs:\n  test:\n    runs-on: ubuntu-latest\n",
                 encoding="utf-8")
             result = subprocess.run(
                 [sys.executable, str(root / "scripts" / "check_workflow_integrity.py")],
