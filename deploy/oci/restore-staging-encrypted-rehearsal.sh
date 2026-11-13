@@ -11,7 +11,8 @@ identity="${AEPX_BACKUP_AGE_IDENTITY:-}"
 }
 command -v age >/dev/null
 [[ ! -L "$encrypted.sha256" ]] || exit 2
-[[ $(( $(stat -c %a "$identity") & 077 )) -eq 0 ]] || { echo "Private age identity must be mode 600 or stricter" >&2; exit 2; }
+identity_mode="$(stat -c %a "$identity")"
+[[ $(( 8#$identity_mode & 077 )) -eq 0 ]] || { echo "Private age identity must be mode 600 or stricter" >&2; exit 2; }
 expected="$(awk 'NR==1{print $1}' "$encrypted.sha256")"
 [[ "$expected" =~ ^[0-9a-fA-F]{64}$ ]] || exit 2
 actual="$(sha256sum "$encrypted" | awk '{print $1}')"
