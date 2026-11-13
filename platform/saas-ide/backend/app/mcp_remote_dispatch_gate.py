@@ -40,7 +40,7 @@ class RemoteDispatchIntent:
     idempotency_key: str
     tool_name: str
 
-def validate_remote_dispatch(intent, context):
+def validate_remote_dispatch(intent, context, *, approved_protocol_versions=None,\n                             require_approved_version=False):
     if not isinstance(intent, RemoteDispatchIntent) or not isinstance(context, VerifiedGatewayContext):
         raise RemoteDispatchDenied("typed dispatch and trusted gateway context required")
     try:
@@ -69,7 +69,7 @@ def validate_remote_dispatch(intent, context):
             raise ValueError("noncanonical date")
     except ValueError as exc:
         raise RemoteDispatchDenied("invalid protocol version date") from exc
-    if not _TOOL.fullmatch(intent.tool_name):
+    if require_approved_version and approved_protocol_versions is None:\n        raise RemoteDispatchDenied("trusted MCP protocol allowlist required")\n    if approved_protocol_versions is not None:\n        if (not isinstance(approved_protocol_versions, (frozenset, set, tuple)) or\n            not approved_protocol_versions or\n            any(not isinstance(v, str) for v in approved_protocol_versions) or\n            intent.protocol_version not in approved_protocol_versions):\n            raise RemoteDispatchDenied("MCP protocol version not approved")\n    if not _TOOL.fullmatch(intent.tool_name):
         raise RemoteDispatchDenied("invalid tool identifier")
     if not isinstance(intent.action_hash, str) or not _HASH.fullmatch(intent.action_hash):
         raise RemoteDispatchDenied("invalid action digest")
