@@ -307,6 +307,7 @@ jobs:
           backups=("$tmpdir"/aepx-staging-*.sql.gz.age)
           [[ "${#backups[@]}" -eq 1 ]] || { echo "Expected one encrypted backup" >&2; exit 1; }
           export AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt"
+          export AEPX_RESTORE_EXPECT_AGENT_NAME="ci-persistence-check"
           bash deploy/oci/restore-staging-encrypted-rehearsal.sh "${backups[0]}"
           echo "PASS: live CI database encrypted and restored into disposable database"
       - name: Diagnostics on failure
