@@ -1,0 +1,37 @@
+name: Sequential 100-pass HITL acceptance
+on:
+  workflow_dispatch:
+    inputs:
+      passes:
+        description: 'Sequential test passes (1-100)'
+        required: true
+        default: '100'
+        type: choice
+        options: ['1','10','25','50','100']
+permissions:
+  contents: read
+concurrency:
+  group: hitl-sequential-acceptance
+  cancel-in-progress: false
+jobs:
+  sequential:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r services/governance/requirements.txt pytest httpx
+      - name: Run sequential, fail-fast acceptance
+        env:
+          AEPX_SEQUENTIAL_ACCEPTANCE_APPROVED: 'yes'
+          PYTHONPATH: services/governance
+        run: python scripts/sequential_acceptance_100.py --count ${{ inputs.passes }}
+      - name: Upload iteration-by-iteration report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sequential-hitl-acceptance
+          path: artifacts/sequential-acceptance.jsonl
+          if-no-files-found: warn
