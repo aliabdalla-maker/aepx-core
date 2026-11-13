@@ -17,3 +17,5 @@ The GitHub token is read from `gh auth token` and is never printed.
 If queues persist, inspect GitHub account/organization Actions settings,
 runner eligibility, billing/limits and GitHub Status, then escalate with
 the report to GitHub Support. Do not infer a root cause from queued status alone.
+
+Before using this diagnostic, run `python scripts/offline-ci-preflight.py` locally to execute its regression tests alongside workflow-policy checks. This does not replace hosted CI or validate runner availability.
