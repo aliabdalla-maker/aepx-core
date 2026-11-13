@@ -36,6 +36,16 @@ class VisibilityTests(unittest.TestCase):
                     list_uncertain_intents(cur, tenant_id=tenant, limit=limit)
                 self.assertIsNone(cur.query)
 
+    def test_duplicate_request_ids_fail_closed(self):
+        tenant, request = str(uuid4()), str(uuid4())
+        cur = Cursor([
+            (request, "key-00000001", None),
+            (request, "key-00000002", None),
+        ])
+        with self.assertRaises(ReconciliationVisibilityDenied):
+            list_uncertain_intents(cur, tenant_id=tenant, limit=2)
+        self.assertEqual(cur.params, (tenant, 2))
+
     def test_malformed_or_oversized_results_fail_closed(self):
         tenant = str(uuid4())
         valid = (str(uuid4()), "key-00000001", None)
