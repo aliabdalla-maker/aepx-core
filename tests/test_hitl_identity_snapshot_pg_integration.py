@@ -22,8 +22,8 @@ class SnapshotPgAcceptance(unittest.TestCase):
         # An opt-in environment flag alone is not a production safety barrier.
         with psycopg.connect(cls.dsn,connect_timeout=5) as conn:
             actual_db=conn.execute("SELECT current_database()").fetchone()[0]
-            if actual_db != "identity_test":
-                raise RuntimeError("isolated test database identity_test required")
+            if actual_db != "identity_test" or conn.info.host not in ("127.0.0.1","localhost","::1"):
+                raise RuntimeError("isolated local identity_test database required")
             conn.execute("CREATE SCHEMA IF NOT EXISTS hitl")
             conn.execute("""CREATE TABLE IF NOT EXISTS hitl.identity_authority_sync (
                 tenant_id uuid NOT NULL, issuer text NOT NULL,
