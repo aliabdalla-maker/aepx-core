@@ -265,6 +265,43 @@ jobs:
               raise AssertionError("Unscoped Trust write accepted")
           print("PASS: scoped Trust write rejects legacy key")
           PY
+      - name: Reject missing scoped credentials in strict mode
+        run: |
+          set -euo pipefail
+          PYTHONPATH=services/identity AEPX_SECURE_MODE=true AEPX_REQUIRE_SCOPED_KEYS=true IDENTITY_JWT_SECRET=0123456789abcdefghijklmnopqrstuvwxyz python3 - <<'PY'
+          from fastapi.testclient import TestClient
+          from app.main import app
+          assert TestClient(app).post("/did").status_code == 503
+          print("PASS: Identity missing scoped credential fails closed")
+          PY
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_REQUIRE_SCOPED_KEYS=true python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AgentIn,create_agent,_mint_did
+          try:
+              create_agent(AgentIn(name="test"),x_aepx_service_key="invalid")
+          except HTTPException as e:
+              assert e.status_code==503
+          else:
+              raise AssertionError("Missing Registry scoped credential accepted")
+          try:
+              _mint_did()
+          except HTTPException as e:
+              assert e.status_code==503
+          else:
+              raise AssertionError("Missing Registry-to-Identity scoped credential accepted")
+          print("PASS: Registry scoped credentials fail closed")
+          PY
+          PYTHONPATH=services/trust AEPX_REQUIRE_DATABASE=true AEPX_REQUIRE_SCOPED_KEYS=true python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AdjustIn,adjust_trust
+          try:
+              adjust_trust("agent",AdjustIn(component="behaviour",delta=1),x_aepx_service_key="invalid")
+          except HTTPException as e:
+              assert e.status_code==503
+          else:
+              raise AssertionError("Missing Trust scoped credential accepted")
+          print("PASS: Trust scoped credential fails closed")
+          PY
       - name: Reject unverified external DID claims in secure Registry
         run: |
           set -euo pipefail
