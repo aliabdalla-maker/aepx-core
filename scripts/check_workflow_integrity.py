@@ -26,6 +26,9 @@ for path in sorted(root.glob("*.yml")) + sorted(root.glob("*.yaml")):
             errors.append(f"{path.name}: missing jobs mapping")
     except yaml.YAMLError as exc:
         errors.append(f"{path.name}: invalid YAML: {exc}")
+for name in sorted(MANUAL_ONLY_DEPLOYMENTS):
+    if not (root / name).is_file():
+        errors.append(f"{name}: protected deployment workflow missing")
 if not count:
     errors.append("no workflow files found")
 for error in errors:

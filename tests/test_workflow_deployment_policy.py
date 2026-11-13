@@ -23,6 +23,12 @@ class DeploymentPolicyTests(unittest.TestCase):
     def test_validator_rejects_merge_conflict(self):
         self._assert_rejected("example.yml", "name: example\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n<<<<<<< HEAD\n", "unresolved merge conflict")
 
+    def test_validator_rejects_missing_protected_deployments(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: example\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
+            "protected deployment workflow missing")
+
     def _assert_rejected(self, name, content, expected):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
