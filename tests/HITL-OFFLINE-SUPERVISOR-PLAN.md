@@ -33,3 +33,7 @@ The initial plan deliberately leaves kill and cleanup argv unset. Once a trusted
 ## Inspect evidence hardening
 
 Before constructing any ID-bound destructive command, the offline validator now requires an explicit sha256 image ID and `HostConfig.NetworkMode=none`, `HostConfig.Privileged=false`, and `HostConfig.ReadonlyRootfs=true`. Docker inspect returns daemon-reported fields; a trusted executing supervisor must still authenticate the daemon, verify cgroup process cleanup, enforce deadlines, and check all remaining isolation options. This is not a runtime isolation certification.
+
+## Expanded fail-closed inspect validation
+
+The pure snapshot validator additionally requires capability drop ALL, no-new-privileges, explicit built-in seccomp, PID limit 8–64, memory 64–512 MiB and memory-swap equal to memory. Host Docker inspect normalization can differ by engine version; verify on the intended Docker host before integrating. This is only validation of supplied evidence and cannot certify kernel enforcement. Actual execution and cleanup remain disabled.
