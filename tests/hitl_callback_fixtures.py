@@ -17,3 +17,6 @@ def fails():
 def crashes():
     import os
     os._exit(17)  # disposable offline child only; simulate abrupt process death
+
+def invalid_result():
+    return {"not": "a verified outcome"}
