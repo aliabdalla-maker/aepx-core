@@ -11,7 +11,7 @@ class SandboxPolicyDenied(ValueError):
 _DIGEST = re.compile(r"^[a-z0-9][a-z0-9._/-]*@sha256:[0-9a-f]{64}$")
 
 def offline_container_argv(*, image_digest, command, memory_mb=128, cpus=0.5,
-                           pids_limit=32, timeout_seconds=10):
+                           pids_limit=32):
     """Return a fail-closed argv for an explicitly offline disposable workload."""
     if not isinstance(image_digest, str) or not _DIGEST.fullmatch(image_digest):
         raise SandboxPolicyDenied("immutable sha256 image digest required")
