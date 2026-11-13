@@ -135,6 +135,56 @@ class PostgresReservationAcceptance(unittest.TestCase):
                         request_id=candidate.request_id,
                         idempotency_key=candidate.idempotency_key)
 
+    def test_simultaneous_dispatch_claims_exactly_one_winner(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="6"*64,
+            idempotency_key="claim-race-00001")
+        with psycopg.connect(RUNTIME_DSN) as writer:
+            with writer.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+            writer.commit()
+        barrier = threading.Barrier(2)
+        outcomes, errors = [], []
+        lock = threading.Lock()
+        def worker():
+            try:
+                with psycopg.connect(RUNTIME_DSN) as conn:
+                    with conn.cursor() as cur:
+                        bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                             expected_runtime_role="aepx_runtime")
+                        barrier.wait(timeout=10)
+                        try:
+                            claim_dispatch(cur, tenant_id=self.tenant,
+                                request_id=candidate.request_id,
+                                idempotency_key=candidate.idempotency_key)
+                            outcome = "claimed"
+                        except DispatchClaimDenied:
+                            outcome = "denied"
+                    conn.commit()
+                with lock:
+                    outcomes.append(outcome)
+            except Exception as exc:
+                with lock:
+                    errors.append(exc)
+        workers = [threading.Thread(target=worker) for _ in range(2)]
+        for thread in workers:
+            thread.start()
+        for thread in workers:
+            thread.join(timeout=15)
+        self.assertFalse(any(thread.is_alive() for thread in workers), "claim worker hung")
+        self.assertFalse(errors, str(errors))
+        self.assertCountEqual(outcomes, ["claimed", "denied"])
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT state FROM mcp_remote_execution_intents WHERE request_id = %s",
+                            (candidate.request_id,))
+                self.assertEqual(cur.fetchone()[0], "dispatched")
+
     def test_runtime_role_cannot_bypass_rls(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
