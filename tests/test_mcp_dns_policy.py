@@ -3,7 +3,7 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"platform/saas-ide/backend"))
-from app.mcp_dns_policy import validate_mcp_dns_answers
+from app.mcp_dns_policy import validate_mcp_dns_answers, validate_mcp_connected_peer
 from app.mcp_contract_gate import MCPContractDenied
 
 URL="https://mcp.example.test/mcp"
@@ -28,3 +28,21 @@ class TestDNSPolicy(unittest.TestCase):
             validate_mcp_dns_answers(endpoint=URL,
                 approved_endpoints={"https://other.example.test/mcp"},
                 addresses=["8.8.8.8"])
+
+class TestConnectedPeerPolicy(unittest.TestCase):
+    def test_pinned_public_peer_allowed(self):
+        result=validate_mcp_connected_peer(endpoint=URL,approved_endpoints={URL},
+            addresses=["8.8.8.8","1.1.1.1"],peer_address="1.1.1.1")
+        self.assertEqual(result["hostname"],"mcp.example.test")
+
+    def test_unpinned_or_private_peer_rejected(self):
+        for peer in ("8.8.4.4","127.0.0.1","169.254.169.254",
+                     "::ffff:8.8.8.8","1.1.1.1%eth0",""):
+            with self.subTest(peer=peer),self.assertRaises(MCPContractDenied):
+                validate_mcp_connected_peer(endpoint=URL,approved_endpoints={URL},
+                    addresses=["8.8.8.8","1.1.1.1"],peer_address=peer)
+
+    def test_mixed_dns_set_rejected_even_when_peer_is_public(self):
+        with self.assertRaises(MCPContractDenied):
+            validate_mcp_connected_peer(endpoint=URL,approved_endpoints={URL},
+                addresses=["8.8.8.8","10.0.0.2"],peer_address="8.8.8.8")

@@ -35,3 +35,17 @@ def validate_mcp_dns_answers(*, endpoint, approved_endpoints, addresses):
         raise MCPContractDenied("duplicate MCP DNS address")
     return {"hostname":urlsplit(endpoint).hostname,
             "addresses":tuple(sorted(str(addr) for addr in normalized))}
+
+
+def validate_mcp_connected_peer(*, endpoint, approved_endpoints, addresses, peer_address):
+    """Offline peer-address check for a transport-provided connection address.
+
+    This does not inspect a real socket. The enforced gateway MUST obtain the
+    peer from its own connected socket, not from request or response headers.
+    """
+    policy = validate_mcp_dns_answers(
+        endpoint=endpoint, approved_endpoints=approved_endpoints, addresses=addresses
+    )
+    if not isinstance(peer_address, str) or peer_address not in policy["addresses"]:
+        raise MCPContractDenied("MCP peer is not in the approved pinned DNS set")
+    return policy
