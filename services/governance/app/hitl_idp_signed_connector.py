@@ -7,6 +7,7 @@ import hashlib
 import hmac
 from urllib.parse import urlsplit
 import ipaddress
+import re
 from uuid import UUID
 from .hitl_identity_payload import MAX_SNAPSHOT_BYTES,parse_snapshot_payload
 from .hitl_identity_snapshot import SnapshotRejected,publish_identity_snapshot
@@ -39,11 +40,17 @@ def validate_pinned_snapshot_url(url, *, expected_host):
         parsed=urlsplit(url)
         if (not isinstance(url,str) or not isinstance(expected_host,str)
             or not expected_host or expected_host!=expected_host.lower()
+            or len(expected_host)>253
+            or not re.fullmatch(r"[a-z0-9-]+(?:\\.[a-z0-9-]+)+",expected_host)
+            or any(label.startswith("-") or label.endswith("-") or len(label)>63
+                   for label in expected_host.split("."))
             or any(ch.isspace() for ch in expected_host)
             or parsed.scheme!="https"
             or parsed.hostname!=expected_host or parsed.port not in (None,443)
             or parsed.username is not None or parsed.password is not None
             or parsed.fragment or parsed.query
+            or (parsed.path and not parsed.path.startswith("/"))
+            or "\\" in url or "@" in parsed.netloc
             or parsed.hostname in ("localhost",)
             or any(ch.isspace() for ch in url)):
             raise ValueError("invalid pinned snapshot origin")
