@@ -62,6 +62,10 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_migration_check.py' -v
       - name: Validate OCI Always Free staging guard
         run: python3 scripts/aepx-oci-compose-guard.py
+      - name: Validate OCI staging Compose rendering
+        env:
+          AEPX_POSTGRES_PASSWORD: ci-only-placeholder-not-a-real-secret-123
+        run: docker compose -f deploy/oci-always-free/compose.yml config --quiet
       - name: Validate shell syntax
         run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh deploy/oci-always-free/preflight.sh
       - name: Check static security blockers (informational for development)
