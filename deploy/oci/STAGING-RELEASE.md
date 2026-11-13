@@ -88,3 +88,14 @@ The ephemeral integration workflow now restarts Registry and verifies that its t
 `deploy/oci/monitor-staging.sh` requires every container to report Docker health `healthy`; missing or unconfigured health checks fail closed. Optionally set `AEPX_ALERT_WEBHOOK_URL` to a trusted HTTPS endpoint in the monitor's runtime environment. The script sends a generic JSON `text` notification only on failure and never transmits credentials. Confirm the receiver accepts this payload format and test delivery before relying on it. Cron/systemd scheduling, delivery retries, deduplication, paging and escalation remain operator tasks. The webhook URL itself may be sensitive; store it in a restricted environment file, never in Git.
 
 Registry startup now requires Identity's healthy state. This improves initial ordering but does not guarantee continued downstream availability after startup; use the smoke test and monitor for ongoing checks.
+
+
+## Encrypted backups (new)
+
+Install the `age` CLI on the staging host. Generate an age recipient/identity pair on a trusted administrator system, and protect the private identity separately from the staging VM. Set `AEPX_BACKUP_AGE_RECIPIENT` to the public `age1...` recipient and run:
+
+```bash
+AEPX_BACKUP_AGE_RECIPIENT='age1...' bash deploy/oci/backup-staging-encrypted.sh /absolute/private/backup-directory
+```
+
+The encrypted `.sql.gz.age` and checksum must be transferred off-host to access-controlled storage using an operator-approved mechanism. For recovery rehearsal, supply a private key file via `AEPX_BACKUP_AGE_IDENTITY=/secure/path/identity.txt` and run `bash deploy/oci/restore-staging-encrypted-rehearsal.sh /absolute/backup.sql.gz.age`. The script decrypts into a private temporary directory, validates gzip, and restores to a disposable PostgreSQL container, not staging or production. Do not store the private identity in Git or alongside backups. The temporary decrypted file may be written to disk during the rehearsal: use an encrypted filesystem and secure host. These scripts have been committed but have not yet been executed on OCI.
