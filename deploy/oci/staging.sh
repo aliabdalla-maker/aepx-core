@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 cd "$(dirname "$0")/../.."
-COMPOSE=(docker compose -p aepx-oci-staging -f deploy/oci/compose.staging.yml)
+COMPOSE=(docker compose --project-directory "$PWD" -p aepx-oci-staging -f deploy/oci/compose.staging.yml)
 case "${1:---validate}" in
   --validate)
     python3 deploy/oci/validate-secrets.py
     "${COMPOSE[@]}" config --quiet
     python3 - <<'PY'
 import json,subprocess
-cfg=json.loads(subprocess.check_output(["docker","compose","-p","aepx-oci-staging","-f","deploy/oci/compose.staging.yml","config","--format","json"],text=True))
+cfg=json.loads(subprocess.check_output(["docker","compose","--project-directory",".","-p","aepx-oci-staging","-f","deploy/oci/compose.staging.yml","config","--format","json"],text=True))
 for name,svc in cfg["services"].items():
     assert not svc.get("ports"),f"Public port prohibited: {name}"
     assert not svc.get("privileged"),f"Privileged service prohibited: {name}"
