@@ -29,7 +29,13 @@ class TestOfflineCleanupEvidence(unittest.TestCase):
                       dict(snapshot, HostConfig={**snapshot["HostConfig"], "CapDrop": []}),
                       dict(snapshot, HostConfig={**snapshot["HostConfig"], "SecurityOpt": ["seccomp=unconfined"]}),
                       dict(snapshot, HostConfig={**snapshot["HostConfig"], "PidsLimit": -1}),
-                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "MemorySwap": -1})):
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "MemorySwap": -1}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "SecurityOpt": ["seccomp"]}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "SecurityOpt": ["seccomp=builtin", "seccomp=unconfined", "no-new-privileges=true"]}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "PidMode": "host"}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "IpcMode": "host"}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "Binds": ["/:/host"]}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "Devices": [{"PathOnHost": "/dev/sda"}]})):
             with self.assertRaises(SandboxPolicyDenied):
                 verify_offline_container_snapshot(
                     wrong, expected_name="aepx-offline-"+"a"*32,
