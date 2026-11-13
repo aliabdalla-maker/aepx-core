@@ -50,3 +50,19 @@ If runs continue to fail before jobs after workflow validity and account
 settings have been checked, open a GitHub Support case with the redacted
 triage report, affected run URLs, timestamps, repo, commit SHA, and a precise
 description of missing jobs/checks. Do not assert a root cause without evidence.
+
+
+## Stuck-run support escalation (13 November 2026)
+
+GitHub's 9 November Actions/Checks incident postmortem acknowledges that some jobs remained stuck and reduced available concurrency after mitigation. This is a **hypothesis**, not a confirmed diagnosis for this repository. See https://www.githubstatus.com/ and https://docs.github.com/en/actions/how-tos/troubleshoot-workflows .
+
+1. Preserve read-only evidence locally: `python scripts/local-actions-queue-triage.py --repo aliabdalla-maker/aepx-core --output actions-triage.json`. Treat the resulting JSON as internal diagnostic data; inspect before sharing externally.
+2. For each oldest stuck run, record run ID, URL, workflow path, commit SHA, created/updated times, run status, job count, check-run count and any concurrency group in the workflow YAML. Record whether the run is using GitHub-hosted or self-hosted runners.
+3. Inspect repository Settings > Actions > General (permissions, allowed actions and runners), account Actions usage/billing, and GitHub Status. Check YAML validity independently using `actionlint` on a trusted local checkout. Do not change settings or trigger mass reruns merely to test a hypothesis.
+4. If authorized by the repository owner, attempt normal cancellation of **one** confirmed obsolete stuck run; document the result. Do not bulk-cancel or force-cancel production-critical runs.
+5. If cancellation fails, or a queued run has no jobs and blocks later runs, contact GitHub Support with the read-only evidence. GitHub's troubleshooting guide explicitly warns that self-service cancellation may not clear out-of-sync check suites.
+6. After recovery, require successful mandatory checks on the exact candidate SHA, plus tenant isolation, HITL, billing/recovery and OCI staging acceptance. A green diagnostic sample alone never authorizes release.
+
+Support case summary: "Repository aliabdalla-maker/aepx-core has repeated queued/pending Actions runs with missing or nonstarting jobs. Please inspect check-suite state, concurrency locks and runner assignment, and whether stuck runs from the November 9 incident affect this repository. We have not established the root cause. Run IDs and JSON diagnostics are attached."
+
+**Safety:** Do not disable required checks, weaken branch protection, merge pending changes, enable external execution, or provision chargeable OCI resources as a workaround.
