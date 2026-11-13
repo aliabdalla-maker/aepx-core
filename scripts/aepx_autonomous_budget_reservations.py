@@ -55,6 +55,10 @@ def initialize(conn, cap_usd):
         elif cap > row[0]:
             raise BudgetDenied("budget cap escalation denied")
         else:
+            spent = conn.execute("SELECT spent FROM budget WHERE singleton=1").fetchone()[0]
+            held = conn.execute("SELECT COALESCE(SUM(reserved),0) FROM reservations WHERE status IN ('reserved','uncertain')").fetchone()[0]
+            if cap <= spent + held:
+                raise BudgetDenied("new cap cannot invalidate existing spending and holds")
             conn.execute("UPDATE budget SET cap=? WHERE singleton=1",(cap,))
         conn.execute("COMMIT")
     except BaseException:
