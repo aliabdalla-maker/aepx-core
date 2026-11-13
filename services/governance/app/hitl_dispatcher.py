@@ -50,7 +50,9 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
                 raise PermissionError("unsupported event")
             if not lease_is_current(connection, tenant_id=tenant, event_id=event_id,
                                     worker_id=worker_id, attempt_number=attempt):
-                raise PermissionError("lease expired or reassigned before delivery")
+                # Never settle a lease that is no longer owned by this worker.
+                stale += 1
+                continue
             deliver(event_id=str(event_id), topic=topic, payload=payload,
                     tenant_id=tenant)
             ok = True
