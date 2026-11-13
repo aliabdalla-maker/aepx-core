@@ -11,15 +11,34 @@ class IdentitySnapshotTests(unittest.TestCase):
     def setUp(self):
         self.conn=MagicMock()
         self.cur=self.conn.cursor.return_value.__enter__.return_value
+        self.cur.fetchone.return_value=(0,)
         self.args=dict(connection=self.conn,tenant_id=str(uuid4()),
             issuer="https://identity.example",memberships=["operator-123"],
             revoked_tokens=[("operator-123","token-123456")],
-            captured_at=datetime.now(timezone.utc))
+            captured_at=datetime.now(timezone.utc),revision=1)
     def test_atomic_snapshot_committed(self):
         self.assertTrue(publish_identity_snapshot(**self.args))
         self.conn.commit.assert_called_once()
         self.assertEqual(self.cur.execute.call_count,8)
         self.assertIn("healthy=true",self.cur.execute.call_args.args[0])
+    def test_duplicate_revision_denied(self):
+        self.cur.fetchone.return_value=(1,)
+        with self.assertRaises(SnapshotRejected):
+            publish_identity_snapshot(**self.args)
+        self.conn.commit.assert_not_called()
+        self.conn.rollback.assert_called_once()
+    def test_older_revision_denied(self):
+        self.cur.fetchone.return_value=(9,)
+        with self.assertRaises(SnapshotRejected):
+            publish_identity_snapshot(**self.args)
+    def test_boolean_revision_denied(self):
+        self.args["revision"]=True
+        with self.assertRaises(SnapshotRejected):
+            publish_identity_snapshot(**self.args)
+    def test_next_revision_accepted(self):
+        self.cur.fetchone.return_value=(8,)
+        self.args["revision"]=9
+        self.assertTrue(publish_identity_snapshot(**self.args))
     def test_stale_snapshot_denied_before_writes(self):
         self.args["captured_at"]-=timedelta(minutes=2)
         with self.assertRaises(SnapshotRejected):
