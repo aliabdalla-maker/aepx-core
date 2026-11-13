@@ -30,3 +30,6 @@ Staging policy additionally rejects custom network modes, `extra_hosts` override
 
 ## Read-only validation parity
 `staging.sh --validate` now executes the same static resource/security policy checker used by `--start`, before Docker Compose validation. This prevents a green validation result for configurations that startup would reject. Install PyYAML on the operator's isolated Ubuntu environment before using the validator; CI installs it for offline policy regression tests. Registry manifest inspection, backup restore and actual service startup are still separate acceptance gates.
+
+## HITL tenant-aware foreign key migration
+`db/migrations/20261113_hitl_tenant_fk.sql` is an additive, transactional migration for an existing HITL database. It checks for historical cross-tenant event references, aborts if found, and adds/validates `(tenant_id, approval_id)` foreign-key enforcement. Apply only via an approved migration process with database backup and rollback plan; it has **not** been applied to OCI. RLS still requires integration tests using a non-owner, non-BYPASSRLS application role, and the authenticated HITL HTTP routes are not yet implemented.
