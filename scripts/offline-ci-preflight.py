@@ -27,13 +27,17 @@ def main(argv=None):
     if importlib.util.find_spec("yaml") is None:
         print("ERROR: PyYAML is required; install with python -m pip install 'PyYAML>=6,<7'", file=sys.stderr)
         return 2
-    revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
-                              capture_output=True, check=False)
+    try:
+        revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
+                                  capture_output=True, check=False, timeout=args.timeout)
+        commit = revision.stdout.strip() if revision.returncode == 0 else None
+    except (subprocess.TimeoutExpired, OSError):
+        commit = None
     evidence = {
         "schema_version": 1,
         "scope": "workflow-policy-only",
         "created_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "git_commit": revision.stdout.strip() if revision.returncode == 0 else None,
+        "git_commit": commit,
         "checks": [],
     }
     for command in CHECKS:
