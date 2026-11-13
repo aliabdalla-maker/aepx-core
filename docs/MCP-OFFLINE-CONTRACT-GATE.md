@@ -89,3 +89,7 @@ The outbound POST gate can now require `MCP-Protocol-Version` to exactly match a
 ## Initialize response gate (offline)
 
 `mcp_initialize_gate.validate_mcp_initialize_response` parses a bounded JSON-RPC initialization result, requires request ID correlation, server name, capabilities and trusted version policy, and rejects malformed or downgraded responses. It does **not** authenticate server identity or establish a session; the response bytes must originate from a verified TLS/OAuth connection. Client initialization request, `notifications/initialized`, capability compatibility, live POST/SSE transport and end-to-end conformance remain pending.
+
+## CI trigger correction and approved server-name binding
+
+The PR workflow now watches POST, version-policy and initialize-gate files (previously these were only in the push path filter), so changing these files should schedule the offline contract job. The initialization gate optionally requires the returned `serverInfo.name` to match a trusted approved name. This is a consistency check on supplied bytes, **not** authentication: the future gateway must bind TLS identity and token audience to the approved MCP resource.
