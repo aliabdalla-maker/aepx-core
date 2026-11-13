@@ -25,6 +25,12 @@ class PolicyTests(unittest.TestCase):
     def test_missing_memory_rejected(self):
         self.cfg["services"]["trust"].pop("mem_limit")
         self.assertTrue(m.check(self.cfg))
+    def test_zero_memory_rejected(self):
+        self.cfg["services"]["redis"]["mem_limit"]="0m"
+        self.assertTrue(m.check(self.cfg))
+    def test_duplicate_database_mount_rejected(self):
+        self.cfg["services"]["postgres"]["volumes"].append("another-volume:/var/lib/postgresql/data")
+        self.assertTrue(m.check(self.cfg))
     def test_excess_memory_rejected(self):
         self.cfg["services"]["postgres"]["mem_limit"]="3000m"
         self.assertTrue(m.check(self.cfg))
