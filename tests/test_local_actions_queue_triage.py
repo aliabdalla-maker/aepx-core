@@ -76,6 +76,19 @@ class QueueTriageTests(unittest.TestCase):
         evidence = triage.check_run_evidence("org/repo", [{"run_id": 5}], "fake")
         self.assertEqual(evidence[0]["error_type"], "MissingHeadSHA")
 
+    def test_failure_and_success_conclusions_are_separate(self):
+        now = datetime.datetime(2026, 11, 13, tzinfo=datetime.timezone.utc)
+        runs = [
+            {"id": 1, "status": "completed", "conclusion": "failure"},
+            {"id": 2, "status": "completed", "conclusion": "success"},
+            {"id": 3, "status": "queued", "conclusion": None,
+             "created_at": "2026-11-13T00:00:00Z"},
+        ]
+        report = triage.summarize(runs, now)
+        self.assertEqual(report["status_counts"], {"completed": 2, "queued": 1})
+        self.assertEqual(report["conclusion_counts"],
+                         {"failure": 1, "success": 1, "not_completed": 1})
+
     def test_queued_sample_is_bounded(self):
         now = datetime.datetime(2026, 11, 13, tzinfo=datetime.timezone.utc)
         runs = [{"id": i, "status": "queued", "created_at": "2026-11-13T00:00:00Z"}
