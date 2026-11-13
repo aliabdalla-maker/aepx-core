@@ -20,6 +20,23 @@ def evaluate(report):
         errors.append("invalid conclusion count")
     if type(sample) is int and sum(counts.values()) != sample:
         errors.append("conclusion counts do not match sample")
+    allowed = {"success", "failure", "cancelled", "not_completed"}
+    unknown = set(counts) - allowed
+    if unknown:
+        errors.append("unknown conclusions: " + ", ".join(sorted(unknown)))
+    statuses = report.get("status_counts")
+    if not isinstance(statuses, dict):
+        errors.append("missing status_counts")
+    else:
+        valid_statuses = {"queued", "in_progress", "pending", "waiting", "requested", "completed"}
+        if set(statuses) - valid_statuses:
+            errors.append("unknown workflow statuses")
+        if any(type(v) is not int or v < 0 for v in statuses.values()):
+            errors.append("invalid status count")
+        if type(sample) is int and sum(statuses.values()) != sample:
+            errors.append("status counts do not match sample")
+        if statuses.get("completed", 0) != sample:
+            errors.append("not all sampled runs completed")
     if counts.get("failure", 0) or counts.get("cancelled", 0):
         errors.append("failed or cancelled runs present")
     if counts.get("not_completed", 0):
