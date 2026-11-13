@@ -6,6 +6,9 @@ uncommitted reservation transaction.
 """
 from dataclasses import dataclass
 from uuid import UUID
+import re
+
+_KEY = re.compile(r'[A-Za-z0-9][A-Za-z0-9._:-]{7,127}\\Z')
 
 class DispatchNotCommitted(PermissionError):
     pass
@@ -23,11 +26,12 @@ def verify_committed_intent(cursor, *, tenant_id, request_id, idempotency_key):
     orchestrator must enforce separate connections and trusted tenant context.
     """
     try:
-        if str(UUID(tenant_id)) != tenant_id or str(UUID(request_id)) != request_id:
+        if (type(tenant_id) is not str or type(request_id) is not str
+                or str(UUID(tenant_id)) != tenant_id or str(UUID(request_id)) != request_id):
             raise ValueError("noncanonical")
     except (TypeError, AttributeError, ValueError) as exc:
         raise DispatchNotCommitted("invalid intent identifiers") from exc
-    if not isinstance(idempotency_key, str) or not idempotency_key:
+    if type(idempotency_key) is not str or _KEY.fullmatch(idempotency_key) is None:
         raise DispatchNotCommitted("missing idempotency key")
     cursor.execute(
         """SELECT state FROM mcp_remote_execution_intents
