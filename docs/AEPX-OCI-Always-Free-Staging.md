@@ -32,3 +32,8 @@ docker compose -f deploy/oci-always-free/compose.yml ps
 
 ## Read-only smoke test after manual staging start
 Run `python3 scripts/aepx-oci-staging-smoke.py` on the VM. This probes only the loopback gateway `/health` and fails on unavailable or non-2xx responses. A passing health check does **not** establish application readiness, external TLS security, HITL/MCP/RAG integration or Always Free cost eligibility. CI now also renders the Compose configuration with a disposable test-only placeholder password; this is syntax validation, not an OCI deployment.
+
+## Conservative container budgets
+The nine staging services now have explicit Compose `mem_limit` and `cpus` settings. The sum of memory caps is approximately **2.62 GiB**, excluding Docker, the Ubuntu host, page cache, build-time memory and other processes. CPU caps are per-container ceilings, **not** guaranteed CPU reservations. A free-eligible OCI VM must have adequate real memory and disk; never infer eligibility from these caps alone.
+
+Container memory caps can trigger OOM kills, particularly during image builds, Python startup or PostgreSQL initialization. Use `docker stats --no-stream`, `docker compose -f deploy/oci-always-free/compose.yml ps`, and `docker inspect` to diagnose. Stop and resize the service footprint within verified free resources rather than silently moving to paid shapes. Validate actual service health and workload-specific load tests before accepting staging.
