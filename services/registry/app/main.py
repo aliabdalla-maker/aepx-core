@@ -52,7 +52,7 @@ def _mint_did() -> str | None:
     # being unreachable must never block agent registration, same as the
     # Connector Bus's circuit-breaker check (connector-bus/app/main.py).
     try:
-        resp = httpx.post(f"{IDENTITY_URL}/did", timeout=3.0)
+        resp = httpx.post(f"{IDENTITY_URL}/did", headers={"X-AEPX-Service-Key": os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")} if os.getenv("AEPX_REQUIRE_DATABASE") == "true" else {}, timeout=3.0)
         resp.raise_for_status()
         return resp.json().get("did")
     except Exception:
