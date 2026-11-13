@@ -5,7 +5,7 @@ cd "$(dirname "$0")/../.."
 umask 077
 encrypted="${1:-}"
 identity="${AEPX_BACKUP_AGE_IDENTITY:-}"
-[[ "$encrypted" = /* && -f "$encrypted" && ! -L "$encrypted" && -f "$encrypted.sha256" && ! -L "$encrypted.sha256" && -f "$identity" && ! -L "$identity" ]] || {
+[[ "$encrypted" = /* && "$identity" = /* && -f "$encrypted" && ! -L "$encrypted" && -f "$encrypted.sha256" && ! -L "$encrypted.sha256" && -f "$identity" && ! -L "$identity" ]] || {
   echo "Usage: AEPX_BACKUP_AGE_IDENTITY=/private/identity.txt $0 /absolute/backup.sql.gz.age" >&2
   exit 2
 }
@@ -17,6 +17,7 @@ expected="$(awk 'NR==1{print $1}' "$encrypted.sha256")"
 [[ "$expected" =~ ^[0-9a-fA-F]{64}$ ]] || exit 2
 actual="$(sha256sum "$encrypted" | awk '{print $1}')"
 [[ "${actual,,}" == "${expected,,}" ]] || { echo "Encrypted backup checksum mismatch" >&2; exit 2; }
+[[ ! -L "$(dirname "$encrypted")" ]] || { echo "Symlinked backup parent rejected" >&2; exit 2; }
 tmpdir="$(mktemp -d)"
 chmod 700 "$tmpdir"
 trap 'rm -rf -- "$tmpdir"' EXIT
