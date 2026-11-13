@@ -4,6 +4,7 @@ cd "$(dirname "$0")/../.."
 COMPOSE=(docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml)
 case "${1:---validate}" in
   --validate)
+    python3 deploy/oci/check-staging-policy.py
     python3 deploy/oci/validate-secrets.py
     "${COMPOSE[@]}" config --quiet
     python3 - <<'PY'
