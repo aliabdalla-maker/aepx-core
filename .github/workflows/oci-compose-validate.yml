@@ -59,3 +59,8 @@ jobs:
           PY
           chmod 600 .env
           bash deploy/oci/staging.sh --validate
+          if AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --start; then
+            echo "ERROR: staging started without backup and image approval" >&2
+            exit 1
+          fi
+          echo "PASS: unapproved staging startup rejected"
