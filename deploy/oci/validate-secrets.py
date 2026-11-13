@@ -28,6 +28,14 @@ for key in required:
         sys.exit(f"ERROR: {key} looks like a placeholder")
 if len({pairs[k] for k in required}) != len(required):
     sys.exit("ERROR: PostgreSQL and Neo4j secrets must differ")
+scoped = ["AEPX_REGISTRY_IDENTITY_KEY", "AEPX_REGISTRY_WRITE_KEY", "AEPX_TRUST_WRITE_KEY"]
+for key in scoped:
+    value = pairs.get(key, "")
+    if value and not re.fullmatch(r"[A-Za-z0-9_-]{32,128}", value):
+        sys.exit(f"ERROR: {key} must be 32-128 URL-safe characters")
+configured = [pairs[k] for k in scoped if pairs.get(k)]
+if len(configured) != len(set(configured)) or any(v in (pairs[k] for k in required) for v in configured):
+    sys.exit("ERROR: scoped credentials must be distinct from each other and legacy credentials")
 if os.name == "posix" and env_file.stat().st_mode & 0o077:
     sys.exit("ERROR: .env must not be group/world accessible; chmod 600 .env")
 print("PASS: OCI secret format and file permissions validated (values hidden)")
