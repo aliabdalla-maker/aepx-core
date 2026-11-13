@@ -84,6 +84,8 @@ def create_agent(payload: AgentIn):
             return Agent(id=str(row[0]), name=row[1], organisation_id=str(row[2]) if row[2] else None,
                          version=row[3], trust_score=row[4], did=row[5])
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             pass
         finally:
             conn.close()
@@ -141,6 +143,8 @@ def list_agents():
                 for r in rows
             ]
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             pass
         finally:
             conn.close()
