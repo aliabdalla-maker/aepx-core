@@ -66,3 +66,5 @@ GitHub's 9 November Actions/Checks incident postmortem acknowledges that some jo
 Support case summary: "Repository aliabdalla-maker/aepx-core has repeated queued/pending Actions runs with missing or nonstarting jobs. Please inspect check-suite state, concurrency locks and runner assignment, and whether stuck runs from the November 9 incident affect this repository. We have not established the root cause. Run IDs and JSON diagnostics are attached."
 
 **Safety:** Do not disable required checks, weaken branch protection, merge pending changes, enable external execution, or provision chargeable OCI resources as a workaround.
+
+The read-only queue triage report now emits `pre_job_failure_sample_count`, `pre_job_failure_sample_ids` and `pre_job_failure_warning`. These summarize **sampled** completed failures with no jobs returned; a nonzero count is escalation evidence, not proof of a specific root cause. Capture the JSON and preserve run URLs before requesting GitHub Support investigation.
