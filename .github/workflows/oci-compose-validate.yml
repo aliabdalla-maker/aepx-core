@@ -31,4 +31,5 @@ jobs:
                   assert port.get('host_ip')=='127.0.0.1',(name,port)
           print('All published ports are loopback-only')
           PY
+          python3 deploy/oci/preflight.py
           rm -f .env
