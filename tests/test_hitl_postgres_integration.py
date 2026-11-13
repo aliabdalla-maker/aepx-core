@@ -230,6 +230,24 @@ class HitlPostgresIntegration(unittest.TestCase):
         self.assertEqual(own["alerts"],[])
         self.assertEqual(other_health["alerts"],[])
 
+    def test_expired_lease_health_alert_is_tenant_scoped(self):
+        tenant = uuid4()
+        other = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            rows = claim(conn, tenant_id=tenant, worker_id="health-worker", limit=1)
+        self.assertEqual(len(rows), 1)
+        self._expire_lease(tenant, event)
+        with self.connect() as conn:
+            own = outbox_health(conn, tenant_id=tenant)
+        with self.connect() as conn:
+            other_health = outbox_health(conn, tenant_id=other)
+        self.assertEqual(own["expired_leases"], 1)
+        self.assertIn("expired_leases", own["alerts"])
+        self.assertFalse(own["healthy"])
+        self.assertEqual(other_health["expired_leases"], 0)
+        self.assertNotIn("expired_leases", other_health["alerts"])
+
     def test_concurrent_local_receipt_applies_once(self):
         tenant=uuid4()
         event=self._seed_outbox(tenant)

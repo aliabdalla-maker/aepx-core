@@ -9,9 +9,9 @@ class HealthQueryDenied(PermissionError):
     pass
 
 def outbox_health(connection,*,tenant_id,warning_pending=100,warning_dead=1,
-                  warning_oldest_seconds=300):
+                  warning_oldest_seconds=300,warning_expired_leases=1):
     if any(not isinstance(x,int) or isinstance(x,bool) or x<0
-           for x in (warning_pending,warning_dead,warning_oldest_seconds)):
+           for x in (warning_pending,warning_dead,warning_oldest_seconds,warning_expired_leases)):
         raise ValueError("nonnegative integer alert thresholds required")
     tenant=str(UUID(str(tenant_id)))
     try:
@@ -31,6 +31,10 @@ def outbox_health(connection,*,tenant_id,warning_pending=100,warning_dead=1,
                            AND status='pending'""",(tenant,))
             row=cur.fetchone()
             age=max(0,int(row[0] or 0))
+            cur.execute("""SELECT count(*)::bigint FROM hitl.outbox
+                           WHERE tenant_id=%s AND status='leased'
+                             AND leased_until<now()""",(tenant,))
+            expired_leases=int(cur.fetchone()[0])
         connection.commit()
     except Exception:
         connection.rollback()
@@ -42,5 +46,7 @@ def outbox_health(connection,*,tenant_id,warning_pending=100,warning_dead=1,
         alerts.append("dead_letters")
     if counts["pending"] and age>=warning_oldest_seconds:
         alerts.append("oldest_pending_age")
-    return {"tenant_id":tenant,"counts":counts,"oldest_pending_seconds":age,
+    if expired_leases>=warning_expired_leases and expired_leases>0:
+        alerts.append("expired_leases")
+    return {"tenant_id":tenant,"expired_leases":expired_leases,"counts":counts,"oldest_pending_seconds":age,
             "alerts":alerts,"healthy":not alerts}
