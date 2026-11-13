@@ -50,14 +50,13 @@ class StateTests(unittest.TestCase):
         with self.assertRaises(state.StateDenied):
             self.advance("uncertain","dispatched")
 
-    def test_attempt_limit(self):
-        for _ in range(3):
-            state.transition(self.conn,"req-1","planned","reserved",
-                             evidence="repair attempt",increment_attempt=True) if _==0 else None
+    def test_attempt_increment_and_type_guard(self):
+        result=state.transition(self.conn,"req-1","planned","reserved",
+                                evidence="first attempt",increment_attempt=True)
+        self.assertEqual(result["attempt"],1)
         with self.assertRaises(state.StateDenied):
             state.transition(self.conn,"req-1","reserved","dispatched",
-                             evidence="attempt overflow",increment_attempt=True) if False else state.transition(
-                                 self.conn,"req-1","reserved","dispatched",evidence="invalid",increment_attempt="yes")
+                             evidence="invalid",increment_attempt="yes")
 
     def test_missing_evidence_denied(self):
         with self.assertRaises(state.StateDenied):
