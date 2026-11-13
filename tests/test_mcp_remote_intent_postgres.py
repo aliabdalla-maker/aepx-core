@@ -185,6 +185,72 @@ class PostgresReservationAcceptance(unittest.TestCase):
                             (candidate.request_id,))
                 self.assertEqual(cur.fetchone()[0], "dispatched")
 
+    def test_rolled_back_dispatch_claim_remains_reservable(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="5"*64,
+            idempotency_key="claim-rollback-001")
+        with psycopg.connect(RUNTIME_DSN) as writer:
+            with writer.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+            writer.commit()
+        with psycopg.connect(RUNTIME_DSN) as abandoned:
+            with abandoned.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                claim_dispatch(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+            abandoned.rollback()
+        with psycopg.connect(RUNTIME_DSN) as recovery:
+            with recovery.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT state FROM mcp_remote_execution_intents WHERE request_id = %s",
+                            (candidate.request_id,))
+                self.assertEqual(cur.fetchone()[0], "reserved")
+                claim_dispatch(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+            recovery.commit()
+        with psycopg.connect(RUNTIME_DSN) as verify:
+            with verify.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT state FROM mcp_remote_execution_intents WHERE request_id = %s",
+                            (candidate.request_id,))
+                self.assertEqual(cur.fetchone()[0], "dispatched")
+
+    def test_committed_claim_cannot_be_replayed_after_restart(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="4"*64,
+            idempotency_key="claim-restart-001")
+        with psycopg.connect(RUNTIME_DSN) as writer:
+            with writer.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+            writer.commit()
+        with psycopg.connect(RUNTIME_DSN) as first:
+            with first.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                claim_dispatch(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+            first.commit()
+        with psycopg.connect(RUNTIME_DSN) as restarted:
+            with restarted.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                with self.assertRaises(DispatchClaimDenied):
+                    claim_dispatch(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id,
+                        idempotency_key=candidate.idempotency_key)
+
     def test_runtime_role_cannot_bypass_rls(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
