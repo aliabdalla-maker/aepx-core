@@ -28,6 +28,14 @@ def check(config):
             errors.append(f"{name}: privileged/host networking prohibited")
         if svc.get("ports"):
             errors.append(f"{name}: published ports prohibited")
+        if svc.get("pid") == "host" or svc.get("ipc") == "host":
+            errors.append(f"{name}: host PID/IPC namespace prohibited")
+        if svc.get("cap_add") or svc.get("devices"):
+            errors.append(f"{name}: added capabilities/devices prohibited")
+        if svc.get("userns_mode") == "host":
+            errors.append(f"{name}: host user namespace prohibited")
+        if any((isinstance(v,str) and (v.startswith("/var/run/docker.sock:") or v.startswith("/run/docker.sock:"))) or (isinstance(v,dict) and v.get("source") in ("/var/run/docker.sock","/run/docker.sock")) for v in svc.get("volumes",[])):
+            errors.append(f"{name}: Docker socket mount prohibited")
         if "no-new-privileges:true" not in svc.get("security_opt",[]):
             errors.append(f"{name}: privilege escalation protection required")
         if svc.get("restart")!="unless-stopped":
