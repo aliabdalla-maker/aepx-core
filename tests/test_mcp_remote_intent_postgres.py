@@ -135,6 +135,41 @@ class PostgresReservationAcceptance(unittest.TestCase):
                         request_id=candidate.request_id,
                         idempotency_key=candidate.idempotency_key)
 
+    def test_runtime_role_cannot_bypass_rls(self):
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT rolname, rolsuper, rolbypassrls, rolcreaterole, rolcreatedb "
+                    "FROM pg_catalog.pg_roles WHERE rolname = current_user"
+                )
+                role = cur.fetchone()
+                self.assertIsNotNone(role)
+                self.assertEqual(role[0], "aepx_runtime")
+                self.assertEqual(tuple(role[1:]), (False, False, False, False))
+
+    def test_table_forces_rls_and_policy_is_tenant_scoped(self):
+        with psycopg.connect(DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT relrowsecurity, relforcerowsecurity "
+                    "FROM pg_catalog.pg_class "
+                    "WHERE oid = 'public.mcp_remote_execution_intents'::regclass"
+                )
+                self.assertEqual(cur.fetchone(), (True, True))
+                cur.execute(
+                    "SELECT policyname, cmd, qual, with_check "
+                    "FROM pg_catalog.pg_policies "
+                    "WHERE schemaname = 'public' "
+                    "AND tablename = 'mcp_remote_execution_intents'"
+                )
+                policies = cur.fetchall()
+                self.assertEqual(len(policies), 1)
+                name, command, using, check = policies[0]
+                self.assertEqual(name, "mcp_remote_intent_tenant")
+                self.assertEqual(command, "ALL")
+                self.assertIn("app.tenant_id", using)
+                self.assertIn("app.tenant_id", check)
+
     def test_wrong_runtime_role_fails_closed(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
