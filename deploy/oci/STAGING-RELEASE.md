@@ -44,3 +44,26 @@ Check `bash deploy/oci/staging.sh --status` and Docker logs for failed services.
 ## Operational monitoring
 
 Run `bash deploy/oci/monitor-staging.sh` on the staging VM to check container availability and Docker health states without restarting or modifying services. It exits nonzero when a container is missing, stopped or unhealthy. Use a host-side scheduler and an external notification mechanism to alert on nonzero exit codes; neither alert delivery nor production monitoring is configured by this script. For application health and PostgreSQL/Redis probes run `bash deploy/oci/staging.sh --smoke`. Avoid logging environment files or credentials.
+
+
+## CI integration acceptance (required before VM staging)
+
+The `integration` job in `.github/workflows/oci-compose-validate.yml` builds an ephemeral Docker Compose stack, waits for PostgreSQL, Redis, Identity, Trust and Registry HTTP readiness, verifies authenticated DID issuance, persists an agent, reads it back, rejects an unverified external DID, and destroys CI volumes on completion. Check the actual Actions job logs and green status; a committed workflow is **not** evidence of execution. No OCI credentials are used by this job.
+
+## Network and credentials policy
+
+Staging publishes no host ports. Access is through a trusted administrative session or a separate, reviewed TLS ingress with restricted access; do not expose port 8000 or PostgreSQL to the public internet. The internal DID service key is a temporary shared credential and must be replaced by scoped service identities before public exposure. JWT issuance in secure mode remains disabled. Do not treat the health endpoint as an authentication mechanism.
+
+## Release checklist
+
+- [ ] Confirm PR checks pass, including the ephemeral integration job
+- [ ] Verify a **dedicated non-production** OCI Ubuntu host and image architecture
+- [ ] Confirm host sizing, available storage, and private secret permissions
+- [ ] Verify encrypted off-host backups and a disposable restore rehearsal
+- [ ] Review staging ingress, TLS and firewall configuration (no public service ports by default)
+- [ ] Start staging only with truthful operator approval flags
+- [ ] Run `bash deploy/oci/staging.sh --smoke` and `bash deploy/oci/monitor-staging.sh`
+- [ ] Configure alert delivery, secret rotation and documented rollback
+- [ ] Obtain security and functional acceptance before merging or releasing
+
+No script in this repository can independently certify OCI access, TLS, off-host encryption, or a production rollout.
