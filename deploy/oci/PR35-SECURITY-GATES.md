@@ -24,3 +24,6 @@ On a verified isolated staging host, with explicit approval, run `AEPX_STAGING_A
 
 ## Container host-isolation guard
 Static staging policy validation additionally rejects host PID/IPC/user namespaces, Docker socket mounts, added Linux capabilities and host devices. Five regression tests cover common escalation paths. This static check does not substitute for Docker daemon hardening, image scanning, runtime security validation or rootless execution review.
+
+## Network override guard
+Staging policy additionally rejects custom network modes, `extra_hosts` overrides, explicit `read_only: false`, and service URL settings that incorrectly route inter-container calls through localhost/127.0.0.1. Four offline regression tests cover these cases. This is a static configuration guard; OCI network policy, metadata endpoint restrictions, DNS resolution and outbound connectivity still need host-level verification.
