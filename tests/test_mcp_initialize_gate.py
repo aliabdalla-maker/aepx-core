@@ -46,6 +46,18 @@ class TestInitializeGate(unittest.TestCase):
                     response_body=body,expected_request_id=11,
                     client_versions=["2025-11-25"],expected_server_name=name)
 
+    def test_strict_server_identity_binding(self):
+        body=json.dumps(RESULT)
+        common=dict(response_body=body,expected_request_id=11,
+                    client_versions=["2025-11-25"],require_server_binding=True)
+        with self.assertRaises(MCPContractDenied):
+            validate_mcp_initialize_response(**common)
+        self.assertEqual(validate_mcp_initialize_response(
+            **common,expected_server_name="crm")["server_name"],"crm")
+        with self.assertRaises(MCPContractDenied):
+            validate_mcp_initialize_response(
+                **common,expected_server_name="untrusted")
+
     def test_id_type_must_match_exactly(self):
         for received,expected in ((11,"11"),("11",11),(1,True)):
             value={**RESULT,"id":received}
