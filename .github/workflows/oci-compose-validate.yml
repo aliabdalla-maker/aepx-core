@@ -246,6 +246,8 @@ jobs:
               fetched=client.get(f"http://127.0.0.1:8000/agents/{agent['id']}")
               assert fetched.status_code==200,fetched.text
               assert fetched.json()["id"]==agent["id"]
+              malformed=client.get("http://127.0.0.1:8000/agents/not-a-uuid")
+              assert malformed.status_code==404,malformed.text
               rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"},headers=headers)
               assert rejected.status_code==403,rejected.text
               trust_unauth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1})
