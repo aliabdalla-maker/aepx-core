@@ -36,6 +36,26 @@ class ClaimTests(unittest.TestCase):
         for row in (None,(str(uuid4()),)):
             with self.subTest(row=row),self.assertRaises(DispatchClaimDenied):
                 self.claim(Cursor(row))
+    def test_schema_invalid_keys_are_rejected_without_sql(self):
+        for key in ("short", "bad/key-00001", " bad-key-00001",
+                    "bad\\nkey-00001", "a" * 129, 42, True):
+            with self.subTest(key=key):
+                cur = Cursor((self.request,))
+                with self.assertRaises(DispatchClaimDenied):
+                    self.claim(cur, idempotency_key=key)
+                self.assertIsNone(cur.sql)
+
+    def test_noncanonical_identifiers_are_rejected_without_sql(self):
+        from uuid import UUID
+        for kw in (dict(tenant_id=self.tenant.upper()),
+                   dict(request_id=UUID(self.request)),
+                   dict(tenant_id=None), dict(request_id=True)):
+            with self.subTest(kw=kw):
+                cur = Cursor((self.request,))
+                with self.assertRaises(DispatchClaimDenied):
+                    self.claim(cur, **kw)
+                self.assertIsNone(cur.sql)
+
     def test_invalid_identity_and_key_rejected_before_sql(self):
         for kw in (dict(tenant_id="bad"),dict(request_id="bad"),
                    dict(idempotency_key=""),dict(idempotency_key=None)):

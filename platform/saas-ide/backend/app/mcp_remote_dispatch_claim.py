@@ -6,6 +6,9 @@ No provider call is made here. Ambiguous dispatch must be reconciled, not retrie
 """
 from dataclasses import dataclass
 from uuid import UUID
+import re
+
+_KEY = re.compile(r'[A-Za-z0-9][A-Za-z0-9._:-]{7,127}\Z')
 
 class DispatchClaimDenied(PermissionError):
     pass
@@ -23,7 +26,7 @@ def claim_dispatch(cursor, *, tenant_id, request_id, idempotency_key):
                 raise ValueError("noncanonical UUID")
         except (ValueError, TypeError, AttributeError) as exc:
             raise DispatchClaimDenied("canonical tenant and request IDs required") from exc
-    if type(idempotency_key) is not str or not 8 <= len(idempotency_key) <= 128:
+    if type(idempotency_key) is not str or _KEY.fullmatch(idempotency_key) is None:
         raise DispatchClaimDenied("invalid idempotency key")
     cursor.execute(
         """UPDATE mcp_remote_execution_intents
