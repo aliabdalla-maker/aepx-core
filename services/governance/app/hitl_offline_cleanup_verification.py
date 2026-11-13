@@ -25,7 +25,8 @@ def verify_offline_container_snapshot(snapshot, *, expected_name, expected_image
         not isinstance(host["SecurityOpt"], list) or
         not any(opt in ("no-new-privileges", "no-new-privileges=true")
                 for opt in host["SecurityOpt"]) or
-        not any(opt in ("seccomp=builtin", "seccomp") for opt in host["SecurityOpt"])):
+        "seccomp=builtin" not in host["SecurityOpt"] or
+        any(opt in ("seccomp=unconfined", "no-new-privileges=false") for opt in host["SecurityOpt"])):
         raise SandboxPolicyDenied("security controls not verified")
     if (host.get("PidsLimit") is None or
         type(host["PidsLimit"]) is not int or
@@ -34,6 +35,13 @@ def verify_offline_container_snapshot(snapshot, *, expected_name, expected_image
         not 64 * 1024 * 1024 <= host["Memory"] <= 512 * 1024 * 1024 or
         host.get("MemorySwap") != host["Memory"]):
         raise SandboxPolicyDenied("resource limits not verified")
+    if (host.get("PidMode") not in ("", None) or
+        host.get("IpcMode") not in ("private", "", None) or
+        host.get("Binds") not in (None, []) or
+        host.get("Mounts") not in (None, []) or
+        host.get("Devices") not in (None, []) or
+        host.get("Privileged") is not False):
+        raise SandboxPolicyDenied("host namespace or mount access not verified")
     state = snapshot.get("State")
     if not isinstance(state, dict) or type(state.get("Running")) is not bool:
         raise SandboxPolicyDenied("container state not verified")
