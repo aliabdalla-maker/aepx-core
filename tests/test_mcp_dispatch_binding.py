@@ -17,7 +17,7 @@ class TestMCPDispatchBinding(unittest.TestCase):
                     tool_name="crm.update", arguments=ARGS, allowed_tools={"crm.update"},
                     trusted_approval={"tenant_id": "tenant-A", "run_id": "run-A",
                                       "id": "approval-A", "state": "consumed",
-                                      "tool_name": "crm.update", "arguments_sha256": DIGEST},
+                                      "tool_name": "crm.update", "args_sha256": DIGEST},
                     trusted_execution={"tenant_id": "tenant-A", "run_id": "run-A",
                                        "approval_id": "approval-A", "state": "reserved",
                                        "idempotency_key": "stable-123"})
