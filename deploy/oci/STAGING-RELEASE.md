@@ -124,3 +124,10 @@ The isolated Compose overlay supports three optional independent secrets: `AEPX_
 ## Scoped authorization regression tests
 
 CI now includes negative tests proving that a configured dedicated Registry→Identity credential, Registry write credential, and Trust write credential each supersede the legacy shared credential at the corresponding endpoint. The secret validator rejects symlinked `.env` files. These tests are committed but must pass in GitHub Actions before the migration can be accepted. Coordinate credential rotation and client configuration before disabling the fallback. Never apply staging secrets or deployment commands to production.
+
+
+## Current acceptance evidence and remaining blockers
+
+The ephemeral integration workflow now asserts that a GET for an unknown Trust entity leaves no row in PostgreSQL. The isolated logical restore rejects non-absolute or symlinked backup paths and checksum manifests. Neither change constitutes a successful CI run: inspect the Actions job results and logs before approving the release.
+
+**Next engineering gates (in order):** (1) run and repair CI to green; (2) provision and rotate three scoped secrets, update authorised callers and remove shared-key fallback; (3) implement DID proof-of-possession and persistent, protected signing-key custody (prefer managed KMS/HSM, never return raw private keys in secure mode); (4) verify actual OCI instance shape/architecture and image compatibility; (5) deploy only to approved isolated staging, configure private TLS access and monitoring; (6) test encrypted off-host recovery, application-level restore and rollback with measured RTO/RPO. Production is out of scope until separately approved.
