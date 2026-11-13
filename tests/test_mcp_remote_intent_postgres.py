@@ -11,6 +11,8 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "platform/saas-ide/backend"))
 from app.mcp_remote_intent_reservation import IntentReservation, reserve_intent
 from app.mcp_remote_intent_schema import DDL
+from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
+from app.mcp_remote_intent_state import IntentState
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
 RUNTIME_DSN = os.environ.get("AEPX_TEST_PG_RUNTIME_DSN")
@@ -39,11 +41,13 @@ class PostgresReservationAcceptance(unittest.TestCase):
             with conn.cursor() as cur:
                 cur.execute("DROP TABLE IF EXISTS mcp_remote_execution_intents")
 
-    def _reserve(self, intent, results, errors):
+    def _reserve(self, intent, results, errors, barrier=None):
         try:
             with psycopg.connect(RUNTIME_DSN) as conn:
                 with conn.cursor() as cur:
                     cur.execute("SET LOCAL app.tenant_id = %s", (intent.tenant_id,))
+                    if barrier is not None:
+                        barrier.wait(timeout=10)
                     results.append(reserve_intent(cur, intent))
         except Exception as exc:
             errors.append(exc)
@@ -52,13 +56,34 @@ class PostgresReservationAcceptance(unittest.TestCase):
         results, errors = [], []
         from dataclasses import replace
         concurrent_intent = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()), idempotency_key="race-00000001")
-        workers = [threading.Thread(target=self._reserve, args=(concurrent_intent,results,errors))
+        barrier = threading.Barrier(2)
+        workers = [threading.Thread(target=self._reserve, args=(concurrent_intent,results,errors,barrier))
                    for _ in range(2)]
         for worker in workers: worker.start()
         for worker in workers: worker.join(timeout=15)
         self.assertFalse(any(worker.is_alive() for worker in workers), "worker hung")
         self.assertFalse(errors, str(errors))
         self.assertCountEqual(results, ["created", "existing"])
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                cur.execute("SELECT count(*) FROM mcp_remote_execution_intents WHERE request_id = %s",
+                            (concurrent_intent.request_id,))
+                self.assertEqual(cur.fetchone()[0], 1)
+
+    def test_same_key_different_request_is_denied(self):
+        from dataclasses import replace
+        from app.mcp_remote_intent_reservation import ReservationDenied
+        first = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()),
+                        idempotency_key="collision-000001", action_hash="e"*64)
+        second = replace(first, request_id=str(uuid4()), approval_id=str(uuid4()),
+                         action_hash="f"*64)
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                self.assertEqual(reserve_intent(cur, first), "created")
+                with self.assertRaises(ReservationDenied):
+                    reserve_intent(cur, second)
 
     def test_conflicting_request_key_rejected(self):
         from dataclasses import replace
@@ -70,6 +95,30 @@ class PostgresReservationAcceptance(unittest.TestCase):
                 reserve_intent(cur, self.intent)
                 with self.assertRaises(ReservationDenied):
                     reserve_intent(cur, conflicting)
+
+    def test_atomic_transition_rejects_stale_and_cross_tenant(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="9"*64,
+            idempotency_key="transition-000001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+                self.assertEqual(transition_intent(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id, current=IntentState.RESERVED,
+                    target=IntentState.DISPATCHED), IntentState.DISPATCHED)
+                with self.assertRaises(TransitionDenied):
+                    transition_intent(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id, current=IntentState.RESERVED,
+                        target=IntentState.DISPATCHED)
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (str(uuid4()),))
+                with self.assertRaises(TransitionDenied):
+                    transition_intent(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id, current=IntentState.DISPATCHED,
+                        target=IntentState.UNCERTAIN)
 
     def test_cross_tenant_write_rejected(self):
         other_tenant = str(uuid4())
