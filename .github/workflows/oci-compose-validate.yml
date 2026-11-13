@@ -131,6 +131,25 @@ jobs:
             exit 1
           fi
           echo "PASS: isolated restore and checksum rejection"
+      - name: Test encrypted backup recovery and checksum rejection
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          age-keygen -o "$tmpdir/identity.txt" 2>"$tmpdir/keygen.log"
+          chmod 600 "$tmpdir/identity.txt"
+          recipient="$(age-keygen -y "$tmpdir/identity.txt")"
+          printf 'CREATE TABLE encrypted_restore_probe (id integer PRIMARY KEY);\nINSERT INTO encrypted_restore_probe VALUES (1);\n' | gzip -c | age -r "$recipient" -o "$tmpdir/fixture.sql.gz.age"
+          (cd "$tmpdir" && sha256sum fixture.sql.gz.age > fixture.sql.gz.age.sha256)
+          AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt" bash deploy/oci/restore-staging-encrypted-rehearsal.sh "$tmpdir/fixture.sql.gz.age"
+          printf 'corruption' >> "$tmpdir/fixture.sql.gz.age"
+          if AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt" bash deploy/oci/restore-staging-encrypted-rehearsal.sh "$tmpdir/fixture.sql.gz.age"; then
+            echo "FAIL: encrypted backup corruption was accepted" >&2
+            exit 1
+          fi
+          echo "PASS: encrypted backup restore and corruption rejection"
       - name: Verify secure staging identity and persistence configuration
         run: |
           python3 - <<'PY'
