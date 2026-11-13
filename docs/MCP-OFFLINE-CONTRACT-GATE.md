@@ -85,3 +85,7 @@ The outbound POST gate can now require `MCP-Protocol-Version` to exactly match a
 ## Offline protocol version policy
 
 `mcp_version_policy.select_mcp_protocol_version` accepts only an explicitly trusted server version present in both the client and supported-version allowlists, and returns a deliberately restricted POST-only profile. Current local policy defaults to 2025-11-25 as a version label, **not** proof of complete compatibility with all 2025-11-25 features. A future authenticated initialization exchange must supply server evidence; GET/session/resume support and capability negotiation need separate implementations and conformance tests. Never silently downgrade.
+
+## Initialize response gate (offline)
+
+`mcp_initialize_gate.validate_mcp_initialize_response` parses a bounded JSON-RPC initialization result, requires request ID correlation, server name, capabilities and trusted version policy, and rejects malformed or downgraded responses. It does **not** authenticate server identity or establish a session; the response bytes must originate from a verified TLS/OAuth connection. Client initialization request, `notifications/initialized`, capability compatibility, live POST/SSE transport and end-to-end conformance remain pending.
