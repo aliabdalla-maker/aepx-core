@@ -1,0 +1,25 @@
+name: MCP remote intent offline acceptance
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_*.py'
+      - 'tests/test_mcp_remote_intent_ledger.py'
+      - '.github/workflows/mcp-remote-intent-offline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  intent-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and test offline remote intent policy
+        run: |
+          python -m py_compile platform/saas-ide/backend/app/mcp_remote_intent_schema.py platform/saas-ide/backend/app/mcp_remote_intent_state.py
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_ledger.py' -v
