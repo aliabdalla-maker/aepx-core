@@ -18,10 +18,16 @@ def verify_bearer_identity(authorization, *, expected_tenant, connection_factory
     try:
         # Import lazily to permit security-regression tests with injected decoder.
         from app.hitl_oidc import _settings
-        from app.hitl_jwt_shared import decode_verified_jwt
         issuer,audience,jwks=_settings(settings)
-        claims=decode_verified_jwt(token,issuer=issuer,audience=audience,
-            jwks_url=jwks,key_client=key_client,jwt_module=jwt_module)
+        if jwt_module is None:
+            import jwt as jwt_module
+        if key_client is None:
+            key_client=jwt_module.PyJWKClient(
+                jwks,cache_jwk_set=True,lifespan=300,timeout=5)
+        key=key_client.get_signing_key_from_jwt(token).key
+        claims=jwt_module.decode(token,key,algorithms=["RS256"],
+            issuer=issuer,audience=audience,leeway=0,
+            options={"require":["exp","iat","nbf","iss","aud","sub","jti","tenant_id"]})
         if not isinstance(claims,dict) or claims.get("iss")!=issuer:
             raise ValueError("issuer mismatch")
         return enforce_verified_claims_identity(
