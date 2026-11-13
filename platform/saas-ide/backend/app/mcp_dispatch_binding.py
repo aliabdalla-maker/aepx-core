@@ -28,7 +28,7 @@ def bind_approved_mcp_dispatch(*, tenant_id, run_id, approval_id,
     call = canonical_tool_call(
         tool_name=tool_name, arguments=arguments, allowed_tools=allowed_tools,
         approved_tool=trusted_approval.get("tool_name"),
-        approved_arguments_sha256=trusted_approval.get("arguments_sha256"),
+        approved_arguments_sha256=trusted_approval.get("args_sha256"),
         idempotency_key=trusted_execution.get("idempotency_key"),
     )
     return {"tenant_id": tenant_id, "run_id": run_id,
