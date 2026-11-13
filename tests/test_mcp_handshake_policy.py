@@ -30,7 +30,7 @@ class TestHandshakePolicy(unittest.TestCase):
             {"approved_protocol_version":"2025-03-26"},
             {"approved_protocol_version":""},
             {"approved_protocol_version":None},
-            {"client_versions":None},
+            {"client_versions":None},\n            {"client_versions":[]},\n            {"client_versions":["2025-11-25", 123]},\n            {"client_versions":["2025-11-25"]*33},\n            {"client_versions":["2025-11-25", "x"*40]},
             {"initialize_request_id":True},
             {"initialize_request_id":"11"},
             {"initialized_notification":json.dumps({**ACK,"id":11})},
