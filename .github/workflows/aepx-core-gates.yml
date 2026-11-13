@@ -1,0 +1,32 @@
+name: AEP-X core integration gates
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/aepx-core-integration.py'
+      - 'scripts/aepx-dev-acceptance.sh'
+      - 'scripts/aepx-static-security.py'
+      - 'docs/AEPX-Core-Integration-Runbook.md'
+      - '.github/workflows/aepx-core-gates.yml'
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Python syntax
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py
+      - name: Validate shell syntax
+        run: bash -n scripts/aepx-dev-acceptance.sh
+      - name: Check static security blockers (informational for development)
+        run: python3 scripts/aepx-static-security.py
+      - name: Validate milestone tracking
+        run: python3 scripts/aepx-progress.py --validate
+      - name: Upload security evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: aepx-core-static-evidence
+          path: artifacts/aepx-static-security.json
