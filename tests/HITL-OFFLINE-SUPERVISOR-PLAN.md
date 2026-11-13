@@ -21,3 +21,7 @@ enforcement or cleanup. Before enabling an actual supervisor:
 
 The plan has no external execution, live dispatch, OCI provisioning, or
 production deployment capability.
+
+## Verified cleanup prerequisites
+
+Do not use `docker run --rm` in the plan: automatic removal destroys the exited container's inspectable state. A trusted supervisor must inspect the exact daemon-issued container ID, verify its image and stopped state, remove it, and independently establish both Docker absence and absence of matching cgroup/process-tree members. The pure verification functions only check supplied evidence; they do not authenticate the Docker daemon or collect OS process evidence. Never report successful cleanup from a name-only check or a failed inspect command alone.
