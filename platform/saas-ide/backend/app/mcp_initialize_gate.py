@@ -9,7 +9,7 @@ from .mcp_version_policy import select_mcp_protocol_version
 MAX_INITIALIZE_BYTES=65536
 
 def validate_mcp_initialize_response(*, response_body, expected_request_id,
-                                     client_versions, expected_server_name=None):
+                                     client_versions, expected_server_name=None,\n                                     require_server_binding=False):
     if not isinstance(response_body,(bytes,str)):
         raise MCPContractDenied("invalid MCP initialize response")
     try:
@@ -41,7 +41,7 @@ def validate_mcp_initialize_response(*, response_body, expected_request_id,
         not result["serverInfo"]["name"] or
         len(result["serverInfo"]["name"])>256):
         raise MCPContractDenied("incomplete MCP server initialization")
-    if expected_server_name is not None and (
+    if require_server_binding and expected_server_name is None:\n        raise MCPContractDenied("trusted MCP server name binding required")\n    if expected_server_name is not None and (
         not isinstance(expected_server_name,str) or
         not expected_server_name or
         result["serverInfo"]["name"] != expected_server_name
