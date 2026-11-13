@@ -50,6 +50,18 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual(result["deferred"], 1)
         self.deliver.assert_not_called()
     @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.time.monotonic", side_effect=[100.0, 131.0])
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_slow_claim_consumes_batch_deadline(self, reap, claim, clock):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["deferred"], 1)
+        self.deliver.assert_not_called()
+        self.lease_check.assert_not_called()
+        reap.assert_called_once()
+        claim.assert_called_once()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
     @patch("app.hitl_dispatcher.settle")
     @patch("app.hitl_dispatcher.claim")
     @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
