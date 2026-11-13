@@ -63,6 +63,14 @@ class OIDCVerificationTests(unittest.TestCase):
             verify_oidc_operator(self.token(),issuer=self.issuer,
                 audience=self.audience,jwks_url="http://insecure.example",
                 jwk_client=self.client)
+    def test_cross_host_jwks_rejected(self):
+        with self.assertRaises(IdentityVerificationError):
+            verify_oidc_operator(self.token(),issuer=self.issuer,
+                audience=self.audience,jwks_url="https://untrusted.example/jwks",
+                jwk_client=self.client)
+    def test_whitespace_token_rejected(self):
+        with self.assertRaises(IdentityVerificationError):
+            self.verify(" " + self.token())
     def test_expired_token(self):
         with self.assertRaises(IdentityVerificationError):
             self.verify(self.token(exp=self.now-1))
