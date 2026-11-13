@@ -53,6 +53,23 @@ class RemoteReceiptTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             reconcile_remote(self.db,**self.kw,verified_state="confirmed",
                              evidence_reference="",reviewer_id="reviewer-123",authorized=True,verify_evidence=lambda **kw: True)
+    def test_evidence_reference_rejects_sensitive_free_text(self):
+        for evidence in ("https://provider.example/proof/123",
+                         "customer email: person@example.com",
+                         "proof\nmalicious-log-entry",
+                         "x"*129):
+            with self.subTest(evidence=evidence):
+                with self.assertRaises(ValueError):
+                    reconcile_remote(self.db,**self.kw,verified_state="confirmed",
+                        evidence_reference=evidence,reviewer_id="reviewer-123",
+                        authorized=True,verify_evidence=lambda **kw: True)
+        self.db.cursor.assert_not_called()
+    def test_reviewer_identifier_rejects_free_text(self):
+        with self.assertRaises(ValueError):
+            reconcile_remote(self.db,**self.kw,verified_state="confirmed",
+                evidence_reference="provider-proof-123",reviewer_id="name with spaces",
+                authorized=True,verify_evidence=lambda **kw: True)
+        self.db.cursor.assert_not_called()
     def test_reconciliation_without_verifier_fails_closed(self):
         with self.assertRaises(ReconciliationRequired):
             reconcile_remote(self.db,**self.kw,verified_state="confirmed",
