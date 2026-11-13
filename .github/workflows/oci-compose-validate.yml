@@ -46,3 +46,16 @@ jobs:
                   assert port.get('host_ip') == '127.0.0.1', (name, port)
           print('PASS: unique services and loopback-only ports')
           PY
+      - name: Validate isolated OCI staging stack
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          bash deploy/oci/staging.sh --validate
