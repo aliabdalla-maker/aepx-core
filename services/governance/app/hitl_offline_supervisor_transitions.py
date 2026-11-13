@@ -11,7 +11,8 @@ from .hitl_offline_cleanup_verification import (
 
 def offline_supervisor_transition(*, phase, snapshot=None, expected_name=None,
                                   expected_image_id=None, elapsed_seconds=None,
-                                  timeout_seconds=None, inspect_not_found=None,
+                                  timeout_seconds=None, expected_container_id=None,
+                                  inspect_not_found=None,
                                   matching_processes_absent=None):
     """Choose the next allowed action from independently verified evidence.
 
@@ -25,6 +26,8 @@ def offline_supervisor_transition(*, phase, snapshot=None, expected_name=None,
             snapshot, expected_name=expected_name,
             expected_image_id=expected_image_id,
         )
+        if expected_container_id is not None and commands["container_id"] != expected_container_id:
+            raise SandboxPolicyDenied("created container ID mismatch")
         if snapshot["State"]["Running"]:
             raise SandboxPolicyDenied("newly created container unexpectedly running")
         return {"phase": "verified", "action": "start_by_id",
@@ -41,6 +44,10 @@ def offline_supervisor_transition(*, phase, snapshot=None, expected_name=None,
             snapshot, expected_name=expected_name,
             expected_image_id=expected_image_id,
         )
+        if (not isinstance(expected_container_id, str) or
+            len(expected_container_id) != 64 or
+            commands["container_id"] != expected_container_id):
+            raise SandboxPolicyDenied("running container ID not fenced")
         if not snapshot["State"]["Running"]:
             return {"phase": "stopped", "action": "inspect_exit_by_id",
                     "container_id": commands["container_id"]}
