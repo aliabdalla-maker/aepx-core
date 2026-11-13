@@ -191,3 +191,17 @@ jobs:
                   raise AssertionError("Identity outage did not fail closed")
           print("PASS: Registry authenticated DID requests and fail-closed outage handling")
           PY
+      - name: Reject unverified external DID claims in secure Registry
+        run: |
+          set -euo pipefail
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AgentIn, create_agent
+          try:
+              create_agent(AgentIn(name="unverified", did="did:key:zUnverified"))
+          except HTTPException as exc:
+              assert exc.status_code == 403, exc
+          else:
+              raise AssertionError("Registry accepted unverified DID claim")
+          print("PASS: secure Registry rejects unverified DID ownership")
+          PY
