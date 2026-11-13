@@ -4,7 +4,7 @@ From the repository root on a trusted developer workstation:
 
 ```bash
 python -m pip install 'PyYAML>=6,<7'
-python scripts/offline-ci-preflight.py
+python scripts/offline-ci-preflight.py --json-output artifacts/offline-ci-preflight.json
 ```
 
 This executes the workflow-integrity validator and three policy regression suites using the local Python interpreter. It exits nonzero if any check fails. It does not access OCI, deploy, merge, or run production services.
@@ -14,3 +14,5 @@ This executes the workflow-integrity validator and three policy regression suite
 If GitHub Actions jobs remain queued, inspect runner assignment, repository Actions settings, workflow approvals, billing/spending restrictions and GitHub Status. Do not bypass required branch protection or merge without required green checks.
 
 For the tracked remediation work, see issue #230.
+
+The optional JSON evidence records the local Git commit, UTC timestamp, scope and per-check exit codes. Review and retain it as *partial* evidence only; it is not a GitHub required status check or a production release authorization.
