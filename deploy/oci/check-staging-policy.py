@@ -58,12 +58,30 @@ def check(config):
     if total>MAX_MEMORY_MIB:
         errors.append(f"staging memory budget {total} MiB exceeds {MAX_MEMORY_MIB} MiB")
     postgres_volumes=services.get("postgres",{}).get("volumes",[])
-    if not any(isinstance(v,str) and v.split(":",1)[0]=="staging-postgres" and v.split(":")[1]=="/var/lib/postgresql/data" for v in postgres_volumes if ":" in v):
-        errors.append("postgres data directory must use staging-postgres named volume")
-    if sum(isinstance(v,str) and v.split(":")[1:2]==["/var/lib/postgresql/data"] for v in postgres_volumes)>1:
-        errors.append("postgres: multiple mounts target the database data directory")
-    if any(isinstance(v,str) and v.startswith("/") for v in postgres_volumes):
-        errors.append("postgres: host bind mount prohibited for database data")
+    # Compose accepts both short and long volume syntax. Parse defensively:
+    # malformed entries must fail closed, never crash the policy checker.
+    data_mounts=[]
+    for volume in postgres_volumes:
+        if isinstance(volume,str):
+            parts=volume.split(":")
+            if len(parts)<2:
+                errors.append("postgres: invalid volume specification")
+                continue
+            source,target=parts[:2]
+            readonly=len(parts)>2 and "ro" in parts[2].split(",")
+        elif isinstance(volume,dict):
+            source=volume.get("source","")
+            target=volume.get("target","")
+            readonly=bool(volume.get("read_only",False))
+        else:
+            errors.append("postgres: invalid volume specification")
+            continue
+        if target=="/var/lib/postgresql/data":
+            data_mounts.append((source,readonly))
+        if isinstance(source,str) and source.startswith("/"):
+            errors.append("postgres: host bind mount prohibited")
+    if data_mounts != [("staging-postgres",False)]:
+        errors.append("postgres data directory must have exactly one writable staging-postgres named volume")
     if "staging-postgres" not in config.get("volumes",{}):
         errors.append("persistent staging PostgreSQL volume missing")
     return errors
