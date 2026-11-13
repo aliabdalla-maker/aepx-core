@@ -6,8 +6,8 @@ non-executing argument vector for an offline disposable workload. It does
 external provider requests. The caller must supply an already-present,
 digest-pinned image and a trusted command.
 
-The profile denies networking, removes Linux capabilities, enables the
-built-in seccomp profile, disallows privilege escalation, uses a read-only
+The profile denies networking, removes Linux capabilities, relies on Docker's default
+seccomp profile (subject to host verification), disallows privilege escalation, uses a read-only
 root filesystem and a non-root UID, and applies CPU, memory and PID limits.
 Docker documents these run options: https://docs.docker.com/reference/cli/docker/container/run/
 
