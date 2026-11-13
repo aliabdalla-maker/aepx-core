@@ -11,6 +11,7 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "platform/saas-ide/backend"))
 from app.mcp_remote_intent_reservation import IntentReservation, reserve_intent
 from app.mcp_remote_intent_schema import DDL
+from app.mcp_remote_tenant_context import bind_verified_tenant, UnsafeTenantContext
 from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
 from app.mcp_remote_intent_state import IntentState
 
@@ -45,12 +46,19 @@ class PostgresReservationAcceptance(unittest.TestCase):
         try:
             with psycopg.connect(RUNTIME_DSN) as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SET LOCAL app.tenant_id = %s", (intent.tenant_id,))
+                    bind_verified_tenant(cur, verified_tenant_id=intent.tenant_id, expected_runtime_role="aepx_runtime")
                     if barrier is not None:
                         barrier.wait(timeout=10)
                     results.append(reserve_intent(cur, intent))
         except Exception as exc:
             errors.append(exc)
+
+    def test_wrong_runtime_role_fails_closed(self):
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                with self.assertRaises(UnsafeTenantContext):
+                    bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                         expected_runtime_role="unexpected_role")
 
     def test_two_workers_single_reservation(self):
         results, errors = [], []
@@ -66,7 +74,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
         self.assertCountEqual(results, ["created", "existing"])
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant, expected_runtime_role="aepx_runtime")
                 cur.execute("SELECT count(*) FROM mcp_remote_execution_intents WHERE request_id = %s",
                             (concurrent_intent.request_id,))
                 self.assertEqual(cur.fetchone()[0], 1)
@@ -126,7 +134,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
             "b"*64, "resource-other", "tool.read", "2025-11-25", "cross-tenant-0001")
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (other_tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=other_tenant, expected_runtime_role="aepx_runtime")
                 with self.assertRaises(psycopg.errors.InsufficientPrivilege):
                     reserve_intent(cur, candidate)
 
