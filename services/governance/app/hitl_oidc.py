@@ -41,15 +41,9 @@ def verify_bearer(authorization, *, env=None, key_client=None, jwt_module=None):
     if not token or len(token)>16384 or any(ch.isspace() for ch in token):
         raise AuthenticationDenied("invalid bearer token")
     try:
-        if jwt_module is None:
-            import jwt as jwt_module
-        if key_client is None:
-            key_client=jwt_module.PyJWKClient(jwks,cache_jwk_set=True,lifespan=300,timeout=5)
-        key=key_client.get_signing_key_from_jwt(token).key
-        claims=jwt_module.decode(token,key,algorithms=["RS256"],
-                                 issuer=issuer,audience=audience,
-                                 options={"require":["exp","iat","nbf","iss","aud","sub"]},
-                                 leeway=0)
+        from app.hitl_jwt_shared import decode_verified_jwt
+        claims=decode_verified_jwt(token,issuer=issuer,audience=audience,
+            jwks_url=jwks,key_client=key_client,jwt_module=jwt_module)
         subject=claims["sub"]
         tenant=UUID(str(claims["tenant_id"]))
         roles=claims["roles"]
