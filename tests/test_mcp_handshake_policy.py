@@ -15,7 +15,8 @@ class TestHandshakePolicy(unittest.TestCase):
     def call(self,**changes):
         args=dict(initialize_response=json.dumps(INIT),initialize_request_id=11,
                   initialized_notification=json.dumps(ACK),
-                  client_versions=["2025-11-25"],approved_server_name="crm")
+                  client_versions=["2025-11-25"],approved_server_name="crm",
+                  approved_protocol_version="2025-11-25")
         args.update(changes)
         return validate_mcp_handshake(**args)
     def test_valid_offline_sequence(self):
@@ -26,6 +27,10 @@ class TestHandshakePolicy(unittest.TestCase):
         cases=[
             {"approved_server_name":"other"},
             {"approved_server_name":""},
+            {"approved_protocol_version":"2025-03-26"},
+            {"approved_protocol_version":""},
+            {"approved_protocol_version":None},
+            {"client_versions":None},
             {"initialize_request_id":True},
             {"initialize_request_id":"11"},
             {"initialized_notification":json.dumps({**ACK,"id":11})},
