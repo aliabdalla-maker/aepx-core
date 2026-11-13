@@ -18,8 +18,8 @@ class TestOfflineSupervisorPlan(unittest.TestCase):
         self.assertNotIn("--rm", plan["run_argv"])
         self.assertTrue(plan["requires_identity_verification"])
         self.assertTrue(plan["requires_post_cleanup_absence_check"])
-        self.assertEqual(plan["kill_argv"], ("docker", "kill", plan["name"]))
-        self.assertEqual(plan["cleanup_argv"], ("docker", "rm", "--force", plan["name"]))
+        self.assertIsNone(plan["kill_argv"])
+        self.assertIsNone(plan["cleanup_argv"])
         self.assertTrue(plan["requires_cleanup_verification"])
 
     def test_rejects_invalid_identity_and_deadline(self):
