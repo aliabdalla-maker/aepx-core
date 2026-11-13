@@ -15,6 +15,7 @@ from app.mcp_remote_tenant_context import bind_verified_tenant, UnsafeTenantCont
 from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
 from app.mcp_remote_intent_state import IntentState
 from app.mcp_remote_dispatch_claim import claim_dispatch, DispatchClaimDenied
+from app.mcp_remote_reconciliation import mark_stale_dispatch_uncertain, ReconciliationDenied
 from app.mcp_remote_dispatch_commit_gate import verify_committed_intent, DispatchNotCommitted
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
@@ -441,6 +442,60 @@ class PostgresReservationAcceptance(unittest.TestCase):
                     transition_intent(cur, tenant_id=self.tenant,
                         request_id=candidate.request_id, current=IntentState.DISPATCHED,
                         target=IntentState.UNCERTAIN)
+
+    def test_stale_dispatch_quarantined_once(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()),
+            action_hash="5"*64, idempotency_key="reconcile-pg-0001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+            conn.commit()
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                claim_dispatch(cur, tenant_id=self.tenant, request_id=candidate.request_id,
+                               idempotency_key=candidate.idempotency_key)
+            conn.commit()
+        with psycopg.connect(DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE mcp_remote_execution_intents SET updated_at = now() - interval '120 seconds' WHERE tenant_id = %s AND request_id = %s",
+                            (self.tenant, candidate.request_id))
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(mark_stale_dispatch_uncertain(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id, minimum_age_seconds=60), "uncertain")
+                with self.assertRaises(ReconciliationDenied):
+                    mark_stale_dispatch_uncertain(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id, minimum_age_seconds=60)
+                cur.execute("SELECT state FROM mcp_remote_execution_intents WHERE tenant_id = %s AND request_id = %s",
+                            (self.tenant, candidate.request_id))
+                self.assertEqual(cur.fetchone()[0], "uncertain")
+
+    def test_recent_dispatch_not_quarantined(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()),
+            action_hash="4"*64, idempotency_key="reconcile-fresh-01")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                reserve_intent(cur, candidate)
+            conn.commit()
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                claim_dispatch(cur, tenant_id=self.tenant, request_id=candidate.request_id,
+                               idempotency_key=candidate.idempotency_key)
+                with self.assertRaises(ReconciliationDenied):
+                    mark_stale_dispatch_uncertain(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id, minimum_age_seconds=3600)
 
     def test_cross_tenant_write_rejected(self):
         other_tenant = str(uuid4())
