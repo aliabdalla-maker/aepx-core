@@ -20,7 +20,7 @@ from app.hitl_outbox import claim, settle, reap_exhausted
 from app.hitl_recovery import requeue_dead_letter,RecoveryDenied
 from app.hitl_execution_receipts import execute_local_once
 from app.hitl_health import outbox_health
-from app.hitl_remote_reconciliation import reserve_remote,ReconciliationRequired
+from app.hitl_remote_reconciliation import reserve_remote,reconcile_remote,ReconciliationRequired
 
 @unittest.skipUnless(os.getenv("HITL_TEST_DATABASE_URL") and os.getenv("HITL_TEST_DISPOSABLE")=="yes",
                      "requires explicit disposable PostgreSQL test DB approval")
@@ -119,6 +119,53 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
+
+    def test_remote_reconciliation_requires_verified_evidence(self):
+        tenant=uuid4()
+        event=self._seed_outbox(tenant)
+        provider="sandbox-mcp"
+        key="reconcile-"+str(uuid4())
+        with self.connect() as conn:
+            reserve_remote(conn,tenant_id=tenant,event_id=event,
+                           provider=provider,idempotency_key=key)
+        kwargs=dict(tenant_id=tenant,event_id=event,provider=provider,
+                    idempotency_key=key,verified_state="confirmed",
+                    evidence_reference="sandbox-confirmation-123",
+                    reviewer_id="reviewer-verified",authorized=True)
+        with self.connect() as conn:
+            with self.assertRaises(ReconciliationRequired):
+                reconcile_remote(conn,**kwargs)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("""SELECT state FROM hitl.remote_delivery_receipts
+                               WHERE tenant_id=%s AND event_id=%s""",
+                            (str(tenant),event))
+                self.assertEqual(cur.fetchone()[0],"uncertain")
+        with self.connect() as conn:
+            result=reconcile_remote(
+                conn,**kwargs,
+                verify_evidence=lambda **e: (
+                    e["tenant_id"]==str(tenant)
+                    and e["event_id"]==str(event)
+                    and e["idempotency_key"]==key
+                    and e["verified_state"]=="confirmed"))
+        self.assertEqual(result["state"],"confirmed")
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("""SELECT state FROM hitl.remote_delivery_receipts
+                               WHERE tenant_id=%s AND event_id=%s""",
+                            (str(tenant),event))
+                self.assertEqual(cur.fetchone()[0],"confirmed")
+                cur.execute("""SELECT count(*) FROM hitl.events
+                               WHERE tenant_id=%s AND actor_id=%s
+                                 AND event LIKE 'remote_confirmed:%%'""",
+                            (str(tenant),"reviewer-verified"))
+                self.assertEqual(cur.fetchone()[0],1)
+        with self.connect() as conn:
+            with self.assertRaises(ReconciliationRequired):
+                reconcile_remote(conn,**kwargs,verify_evidence=lambda **e: True)
 
     def test_concurrent_remote_reservation_only_one_wins(self):
         tenant=uuid4()
