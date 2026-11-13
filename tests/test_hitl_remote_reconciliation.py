@@ -65,6 +65,20 @@ class RemoteReceiptTests(unittest.TestCase):
                 evidence_reference="provider-proof-123",reviewer_id="reviewer-123",
                 authorized=True,verify_evidence=lambda **kw: False)
         self.db.cursor.assert_not_called()
+    def test_verifier_exception_never_mutates_database(self):
+        def broken_verifier(**kwargs):
+            raise RuntimeError("provider status unavailable")
+        with self.assertRaises(RuntimeError):
+            reconcile_remote(self.db,**self.kw,verified_state="confirmed",
+                evidence_reference="provider-proof-123",reviewer_id="reviewer-123",
+                authorized=True,verify_evidence=broken_verifier)
+        self.db.cursor.assert_not_called()
+    def test_authorization_flag_still_required_with_verifier(self):
+        with self.assertRaises(ReconciliationRequired):
+            reconcile_remote(self.db,**self.kw,verified_state="confirmed",
+                evidence_reference="provider-proof-123",reviewer_id="reviewer-123",
+                authorized=False,verify_evidence=lambda **kwargs: True)
+        self.db.cursor.assert_not_called()
     def test_reconcile_writes_audit_in_same_transaction(self):
         self.cur.fetchone.return_value=(str(self.kw["event_id"]),)
         self.cur.rowcount=1
