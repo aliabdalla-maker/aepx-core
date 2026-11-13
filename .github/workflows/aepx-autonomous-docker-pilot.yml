@@ -1,0 +1,23 @@
+name: AEP-X Docker sandbox policy
+on:
+  pull_request:
+    paths:
+      - 'scripts/aepx_autonomous_docker_pilot.py'
+      - 'tests/test_aepx_autonomous_docker_pilot.py'
+      - '.github/workflows/aepx-autonomous-docker-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify Docker command policy without launching Docker
+        run: python -m unittest discover -s tests -p 'test_aepx_autonomous_docker_pilot.py' -v
