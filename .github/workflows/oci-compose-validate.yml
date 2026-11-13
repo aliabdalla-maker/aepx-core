@@ -166,3 +166,28 @@ jobs:
           assert response.json().get("did", "").startswith("did:key:"), response.text
           print("PASS: secure identity rejects unauthorized calls and permits internal service calls")
           PY
+      - name: Exercise Registry to Identity authentication contract
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q fastapi==0.111.0 httpx==0.27.0 pydantic==2.7.1 'psycopg[binary]>=3.1,<4'
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 python3 - <<'PY'
+          from unittest.mock import patch
+          import httpx
+          from fastapi import HTTPException
+          from app import main
+          calls=[]
+          def success(url, **kwargs):
+              calls.append((url, kwargs))
+              return httpx.Response(200, json={"did":"did:key:zTest"}, request=httpx.Request("POST",url))
+          with patch.object(main.httpx, "post", side_effect=success):
+              assert main._mint_did() == "did:key:zTest"
+          assert calls[0][1]["headers"]["X-AEPX-Service-Key"] == "abcdefghijklmnopqrstuvwxyz0123456789"
+          with patch.object(main.httpx, "post", side_effect=httpx.ConnectError("unavailable")):
+              try:
+                  main._mint_did()
+              except HTTPException as exc:
+                  assert exc.status_code == 503
+              else:
+                  raise AssertionError("Identity outage did not fail closed")
+          print("PASS: Registry authenticated DID requests and fail-closed outage handling")
+          PY
