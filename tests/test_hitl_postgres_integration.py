@@ -149,7 +149,11 @@ class HitlPostgresIntegration(unittest.TestCase):
                     e["tenant_id"]==str(tenant)
                     and e["event_id"]==str(event)
                     and e["idempotency_key"]==key
-                    and e["verified_state"]=="confirmed"))
+                    and e["verified_state"]=="confirmed"),
+                verify_operator=lambda **o: (
+                    o["tenant_id"]==str(tenant) and
+                    o["reviewer_id"]=="reviewer-verified" and
+                    o["permission"]=="hitl.remote.reconcile"))
         self.assertEqual(result["state"],"confirmed")
         with self.connect() as conn:
             with conn.cursor() as cur:
@@ -165,7 +169,8 @@ class HitlPostgresIntegration(unittest.TestCase):
                 self.assertEqual(cur.fetchone()[0],1)
         with self.connect() as conn:
             with self.assertRaises(ReconciliationRequired):
-                reconcile_remote(conn,**kwargs,verify_evidence=lambda **e: True)
+                reconcile_remote(conn,**kwargs,verify_evidence=lambda **e: True,
+                                 verify_operator=lambda **o: True)
 
     def test_concurrent_remote_reservation_only_one_wins(self):
         tenant=uuid4()
