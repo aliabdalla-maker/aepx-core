@@ -29,6 +29,7 @@ class StrictWorkflowLoader(yaml.BaseLoader):
 
 root = Path(__file__).resolve().parents[1] / ".github" / "workflows"
 MANUAL_ONLY_DEPLOYMENTS = {"deploy-oci.yml", "azure-container-webapp.yml", "aws.yml", "google.yml", "alibabacloud.yml", "ibm.yml", "openshift.yml", "tencent.yml", "octopusdeploy.yml"}
+MANUAL_ONLY_DIAGNOSTICS = {"actions-queue-diagnostics.yml"}
 errors = []
 count = 0
 for path in sorted(root.glob("*.yml")) + sorted(root.glob("*.yaml")):
@@ -46,6 +47,8 @@ for path in sorted(root.glob("*.yml")) + sorted(root.glob("*.yaml")):
                 errors.append(f"{path.name}: missing on trigger")
             if path.name in MANUAL_ONLY_DEPLOYMENTS and (not isinstance(doc.get("on"), dict) or set(doc["on"]) != {"workflow_dispatch"}):
                 errors.append(f"{path.name}: deployment must use workflow_dispatch only")
+            if path.name in MANUAL_ONLY_DIAGNOSTICS and (not isinstance(doc.get("on"), dict) or set(doc["on"]) != {"workflow_dispatch"}):
+                errors.append(f"{path.name}: diagnostics must use workflow_dispatch only")
             if not isinstance(doc.get("jobs"), dict) or not doc["jobs"]:
                 errors.append(f"{path.name}: missing jobs mapping")
     except yaml.YAMLError as exc:
@@ -53,6 +56,9 @@ for path in sorted(root.glob("*.yml")) + sorted(root.glob("*.yaml")):
 for name in sorted(MANUAL_ONLY_DEPLOYMENTS):
     if not (root / name).is_file():
         errors.append(f"{name}: protected deployment workflow missing")
+for name in sorted(MANUAL_ONLY_DIAGNOSTICS):
+    if not (root / name).is_file():
+        errors.append(f"{name}: protected diagnostics workflow missing")
 if not count:
     errors.append("no workflow files found")
 for error in errors:
