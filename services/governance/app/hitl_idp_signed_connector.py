@@ -49,7 +49,7 @@ def validate_pinned_snapshot_url(url, *, expected_host):
             or parsed.hostname!=expected_host or parsed.port not in (None,443)
             or parsed.username is not None or parsed.password is not None
             or parsed.fragment or parsed.query
-            or not parsed.path.startswith("/")
+            or (parsed.path and not parsed.path.startswith("/"))
             or "\\" in url or "@" in parsed.netloc
             or parsed.hostname in ("localhost",)
             or any(ch.isspace() for ch in url)):
