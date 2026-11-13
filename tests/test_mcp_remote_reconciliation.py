@@ -44,5 +44,46 @@ class ReconciliationTests(unittest.TestCase):
             mark_stale_dispatch_uncertain(FakeCursor(None), tenant_id="not-a-uuid",
                 request_id=str(uuid4()), minimum_age_seconds=60)
 
+    def test_invalid_inputs_never_execute_sql(self):
+        from uuid import UUID
+        tenant, request = str(uuid4()), str(uuid4())
+        cases = (
+            (UUID(tenant), request, 60),
+            (tenant.upper(), request, 60),
+            (tenant, UUID(request), 60),
+            (tenant, request.upper(), 60),
+            (tenant, request, 0),
+            (tenant, request, True),
+            (tenant, request, 86401),
+        )
+        for tenant_id, request_id, age in cases:
+            with self.subTest(tenant_id=tenant_id, request_id=request_id, age=age):
+                cur = FakeCursor((request,))
+                with self.assertRaises(ReconciliationDenied):
+                    mark_stale_dispatch_uncertain(
+                        cur, tenant_id=tenant_id, request_id=request_id,
+                        minimum_age_seconds=age)
+                self.assertIsNone(cur.query)
+                self.assertIsNone(cur.params)
+
+    def test_mismatched_returning_row_fails_closed(self):
+        request = str(uuid4())
+        cur = FakeCursor((str(uuid4()),))
+        with self.assertRaises(ReconciliationDenied):
+            mark_stale_dispatch_uncertain(
+                cur, tenant_id=str(uuid4()), request_id=request,
+                minimum_age_seconds=60)
+
+    def test_valid_reconciliation_age_boundaries(self):
+        for age in (1, 86400):
+            with self.subTest(age=age):
+                request = str(uuid4())
+                cur = FakeCursor((request,))
+                self.assertEqual(
+                    mark_stale_dispatch_uncertain(
+                        cur, tenant_id=str(uuid4()), request_id=request,
+                        minimum_age_seconds=age), "uncertain")
+                self.assertEqual(cur.params[2], age)
+
 if __name__ == "__main__":
     unittest.main()
