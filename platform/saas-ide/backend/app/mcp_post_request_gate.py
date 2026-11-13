@@ -54,6 +54,7 @@ def validate_mcp_post_request(*, endpoint, approved_endpoints, method,
         not isinstance(message.get("method"),str) or
         not message["method"] or "result" in message or "error" in message or
         message.get("id")!=expected_request_id or
+        type(message.get("id")) is not type(expected_request_id) or
         isinstance(message.get("id"),bool) or
         not isinstance(message.get("id"),(str,int))):
         raise MCPContractDenied("invalid or uncorrelated MCP JSON-RPC request")
