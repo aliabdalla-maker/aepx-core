@@ -1,0 +1,23 @@
+name: AEP-X offline pilot safety
+on:
+  pull_request:
+    paths:
+      - 'scripts/aepx_autonomous_pilot.py'
+      - 'tests/test_aepx_autonomous_pilot.py'
+      - '.github/workflows/aepx-autonomous-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify offline pilot restrictions
+        run: python -m unittest discover -s tests -p 'test_aepx_autonomous_pilot.py' -v
