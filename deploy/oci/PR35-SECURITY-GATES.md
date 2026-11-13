@@ -18,3 +18,6 @@ Before `staging.sh --start`, the operator must export `AEPX_BACKUP_RESTORE_VERIF
 
 ## PostgreSQL staging smoke (operator-only)
 After explicitly approving and starting the **isolated** staging project, run `AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --db-smoke`. The command checks the Compose project and service labels, opens a temporary SQL table, inserts and reads a probe row, then rolls back. This is a real PostgreSQL read/write availability probe, not a full durability, restart, migration, RLS, or cross-tenant test. It does not run in CI against a live OCI host. Do not run it on production or set approval flags without verifying the target host.
+
+## Committed-write PostgreSQL staging acceptance
+On a verified isolated staging host, with explicit approval, run `AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --db-commit`. This creates a uniquely named probe table in the staging database, commits an insert, reads it from another session and removes the table on exit. It does **not** restart PostgreSQL and therefore does not prove restart durability. Do not run alongside database maintenance or on production. Review database permissions and the resulting output before recording evidence. A real restart durability rehearsal, two-tenant RLS integration, migration rollback and encrypted backup restore remain release blockers.
