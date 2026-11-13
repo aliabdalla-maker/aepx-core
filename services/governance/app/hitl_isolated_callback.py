@@ -64,12 +64,18 @@ def run_isolated_callback(*, entrypoint, arguments, allowed_entrypoints,
                 raise CallbackIsolationError("callback exited without result: outcome uncertain")
             raise CallbackIsolationError("callback timed out: outcome uncertain")
         try:
-            status, result = receiver.recv()
+            message = receiver.recv()
         except (EOFError, OSError) as exc:
             raise CallbackIsolationError("callback IPC failed: outcome uncertain") from exc
+        if not isinstance(message, tuple) or len(message) != 2:
+            raise CallbackIsolationError("invalid callback IPC message: outcome uncertain")
+        status, result = message
         process.join(max(0, deadline - time.monotonic()))
         if process.is_alive():
             raise CallbackIsolationError("callback failed to exit: outcome uncertain")
+        if (not isinstance(status, str) or status not in ("ok", "error") or
+            result is not None and not isinstance(result, bool)):
+            raise CallbackIsolationError("invalid callback result: outcome uncertain")
         if process.exitcode != 0 or status != "ok":
             raise CallbackIsolationError("callback failed: outcome uncertain")
         return result

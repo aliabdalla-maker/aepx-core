@@ -31,3 +31,7 @@ The child exception path must use `Connection.send`, not `Queue.put`, and must c
 ## Early child-exit detection
 
 The parent waits on both the result pipe and child process sentinel, using one deadline that begins before process startup. An abruptly exited child must fail closed promptly instead of waiting the full adapter timeout. This does not provide cgroup process-tree termination or guarantee that an external provider request was cancelled.
+
+## IPC result validation
+
+The parent requires an exact two-item tuple containing an approved status and a Boolean-or-None result. Invalid adapter return types are rejected by the child; malformed IPC messages are rejected by the parent. A result remains untrusted until the child exits successfully. This does not replace a sandbox or provider-side idempotency.
