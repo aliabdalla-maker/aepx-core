@@ -10,8 +10,7 @@ class ExecutionDenied(PermissionError):
 
 def execute_local_once(connection,*,tenant_id,event_id,action_hash,tool_name,
                        apply_local,approved=False):
-    if not approved:
-        raise ExecutionDenied("independent approval verification required")
+    # The legacy approved flag is not an authorization decision.
     if not callable(apply_local):
         raise TypeError("local transaction callback required")
     if not isinstance(action_hash,str) or len(action_hash)!=64 or any(
@@ -34,6 +33,17 @@ def execute_local_once(connection,*,tenant_id,event_id,action_hash,tool_name,
             payload=row[1]
             if not isinstance(payload,dict) or payload.get("action_hash")!=action_hash:
                 raise ExecutionDenied("event action mismatch")
+            try:
+                approval_id=str(UUID(str(payload["approval_id"])))
+            except (KeyError,TypeError,ValueError) as exc:
+                raise ExecutionDenied("event approval identifier invalid") from exc
+            cur.execute("""SELECT status,action_hash,approver_id,expires_at>now()
+                           FROM hitl.approvals
+                           WHERE tenant_id=%s AND id=%s FOR SHARE""",(tenant,approval_id))
+            approval=cur.fetchone()
+            if (not approval or approval[0]!="consumed" or
+                approval[1]!=action_hash or not approval[2] or approval[3] is not True):
+                raise ExecutionDenied("authoritative approval verification failed")
             cur.execute("""SELECT action_hash,tool_name FROM hitl.execution_receipts
                            WHERE tenant_id=%s AND event_id=%s""",(tenant,event))
             existing=cur.fetchone()
