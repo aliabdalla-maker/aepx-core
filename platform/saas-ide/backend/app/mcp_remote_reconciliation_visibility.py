@@ -33,6 +33,7 @@ def list_uncertain_intents(cursor, *, tenant_id, limit=50):
     if type(rows) not in (list, tuple) or len(rows) > limit:
         raise ReconciliationVisibilityDenied("invalid or unbounded result set")
     result = []
+    seen_request_ids = set()
     for row in rows:
         if type(row) not in (tuple, list) or len(row) != 3:
             raise ReconciliationVisibilityDenied("malformed result row")
@@ -44,5 +45,9 @@ def list_uncertain_intents(cursor, *, tenant_id, limit=50):
             raise ReconciliationVisibilityDenied("invalid request ID") from exc
         if type(idempotency_key) is not str or not 8 <= len(idempotency_key) <= 128:
             raise ReconciliationVisibilityDenied("invalid idempotency key")
-        result.append(UncertainIntent(str(request_id), idempotency_key, updated_at))
+        canonical_id = str(request_id)
+        if canonical_id in seen_request_ids:
+            raise ReconciliationVisibilityDenied("duplicate request ID in result")
+        seen_request_ids.add(canonical_id)
+        result.append(UncertainIntent(canonical_id, idempotency_key, updated_at))
     return tuple(result)
