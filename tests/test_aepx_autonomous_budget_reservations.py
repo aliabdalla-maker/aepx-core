@@ -68,6 +68,31 @@ class BudgetTests(unittest.TestCase):
             budget.initialize(self.conn,"7")
         self.assertEqual(budget.snapshot(self.conn)["cap_usd"],"10")
 
+    def test_uncertain_requires_verified_receipt(self):
+        budget.reserve(self.conn,"r1","4")
+        budget.mark_uncertain(self.conn,"r1")
+        with self.assertRaises(budget.BudgetDenied):
+            budget.reconcile_uncertain(self.conn,"r1","2",receipt_id="proof-1")
+        self.assertEqual(budget.snapshot(self.conn)["held_usd"],"4")
+        budget.reconcile_uncertain(self.conn,"r1","2",receipt_id="proof-1",verified=True)
+        self.assertEqual(budget.snapshot(self.conn)["spent_usd"],"2")
+        with self.assertRaises(budget.BudgetDenied):
+            budget.reconcile_uncertain(self.conn,"r1","2",receipt_id="proof-2",verified=True)
+
+    def test_receipt_replay_denied(self):
+        budget.reserve(self.conn,"r1","2")
+        budget.reserve(self.conn,"r2","2")
+        budget.mark_uncertain(self.conn,"r1")
+        budget.mark_uncertain(self.conn,"r2")
+        budget.reconcile_uncertain(self.conn,"r1","1",receipt_id="proof",verified=True)
+        with self.assertRaises(sqlite3.IntegrityError):
+            budget.reconcile_uncertain(self.conn,"r2","1",receipt_id="proof",verified=True)
+        self.assertEqual(budget.snapshot(self.conn)["held_usd"],"2")
+
+    def test_sqlite_integer_overflow_denied(self):
+        with self.assertRaises(budget.BudgetDenied):
+            budget.units("999999999999999999999")
+
     def test_bad_amounts_denied(self):
         for amount in ("NaN","Infinity","-1","0.0000000001",True,1.5):
             with self.subTest(amount=amount),self.assertRaises(budget.BudgetDenied):
