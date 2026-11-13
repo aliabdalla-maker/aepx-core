@@ -34,4 +34,4 @@ The parent waits on both the result pipe and child process sentinel, using one d
 
 ## IPC result validation
 
-The parent requires an exact two-item tuple containing an approved status and a Boolean-or-None result. Invalid adapter return types are rejected by the child; malformed IPC messages are rejected by the parent. A result remains untrusted until the child exits successfully. This does not replace a sandbox or provider-side idempotency.
+The parent requires exactly one byte from the fixed T/F/N/E protocol (true, false, none, error). The child rejects invalid adapter return types. The parent uses recv_bytes(maxlength=1) and never unpickles child-supplied IPC data; malformed or oversized IPC messages fail closed. A result remains untrusted until the child exits successfully. This does not replace a sandbox or provider-side idempotency.
