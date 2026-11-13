@@ -38,6 +38,16 @@ def check(config):
             errors.append(f"{name}: Docker socket mount prohibited")
         if "no-new-privileges:true" not in svc.get("security_opt",[]):
             errors.append(f"{name}: privilege escalation protection required")
+        if svc.get("read_only") is False:
+            errors.append(f"{name}: explicit writable root filesystem prohibited")
+        if svc.get("network_mode") not in (None,""):
+            errors.append(f"{name}: custom network mode prohibited")
+        if svc.get("extra_hosts"):
+            errors.append(f"{name}: extra host overrides prohibited")
+        if svc.get("environment") and isinstance(svc["environment"],dict):
+            for key,value in svc["environment"].items():
+                if key.endswith("_URL") and isinstance(value,str) and ("localhost" in value or "127.0.0.1" in value):
+                    errors.append(f"{name}: service URL must use Compose DNS, not loopback")
         if svc.get("restart")!="unless-stopped":
             errors.append(f"{name}: unexpected restart policy")
     if total>MAX_MEMORY_MIB:
