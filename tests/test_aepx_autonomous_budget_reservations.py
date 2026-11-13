@@ -62,6 +62,12 @@ class BudgetTests(unittest.TestCase):
             budget.initialize(self.conn,"11")
         budget.initialize(self.conn,"9")
 
+    def test_cannot_lower_cap_below_existing_holds(self):
+        budget.reserve(self.conn,"r1","8")
+        with self.assertRaises(budget.BudgetDenied):
+            budget.initialize(self.conn,"7")
+        self.assertEqual(budget.snapshot(self.conn)["cap_usd"],"10")
+
     def test_bad_amounts_denied(self):
         for amount in ("NaN","Infinity","-1","0.0000000001",True,1.5):
             with self.subTest(amount=amount),self.assertRaises(budget.BudgetDenied):
