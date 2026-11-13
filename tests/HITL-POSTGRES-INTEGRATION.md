@@ -15,6 +15,6 @@ export HITL_TEST_DATABASE_URL='postgresql://<restricted-role>:<password>@<privat
 PYTHONPATH=services/governance python -m unittest discover -s tests -p 'test_hitl_postgres_integration.py' -v
 ```
 
-The suite skips unless both explicit environment settings are present. It asserts that the connected role is neither superuser nor BYPASSRLS nor the approvals table owner. It tests request, cross-tenant denial, self-approval denial, decision, consumption, replay and second-consumption denial. **This is a functional acceptance test, not a substitute for concurrency/load testing.** It writes durable records; destroy the disposable database after the run.
+The suite skips unless both explicit environment settings are present. It asserts that the connected role is neither superuser nor BYPASSRLS nor the approvals table owner. It tests request, cross-tenant denial, self-approval denial, decision, consumption, replay and second-consumption denial. The suite now includes two-session concurrent decision and consumption tests, asserting a single winner and one outbox event. **This is not a substitute for broader load and fault-injection testing.** It writes durable records; destroy the disposable database after the run.
 
-Still required: simultaneous consumption and competing decisions, outbox worker recovery, grants verification for all tables, migration rollback rehearsal, and independent security review. No OCI deployment is performed by this test.
+Still required: outbox worker recovery, grants verification for all tables, migration rollback rehearsal, broader load/fault-injection tests, and independent security review. No OCI deployment is performed by this test.
