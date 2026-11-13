@@ -234,6 +234,34 @@ class HitlPostgresIntegration(unittest.TestCase):
         self.assertEqual(other_health["uncertain_remote_deliveries"], 0)
         self.assertNotIn("uncertain_remote_delivery", other_health["alerts"])
 
+    def test_uncertain_remote_age_escalation_is_tenant_scoped(self):
+        tenant = uuid4()
+        other = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            reserve_remote(conn, tenant_id=tenant, event_id=event,
+                           provider="sandbox-mcp",
+                           idempotency_key="age-remote-" + str(uuid4()))
+        # Alter only a disposable test receipt; never mutate production records.
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(tenant),))
+                cur.execute("""UPDATE hitl.remote_delivery_receipts
+                               SET created_at=now()-interval '600 seconds'
+                               WHERE tenant_id=%s AND event_id=%s""",
+                            (str(tenant), event))
+                self.assertEqual(cur.rowcount, 1)
+        with self.connect() as conn:
+            own = outbox_health(conn, tenant_id=tenant,
+                                warning_uncertain_age_seconds=300)
+        with self.connect() as conn:
+            other_health = outbox_health(conn, tenant_id=other,
+                                         warning_uncertain_age_seconds=300)
+        self.assertGreaterEqual(own["oldest_uncertain_remote_seconds"], 300)
+        self.assertIn("oldest_uncertain_remote_age", own["alerts"])
+        self.assertEqual(other_health["oldest_uncertain_remote_seconds"], 0)
+        self.assertNotIn("oldest_uncertain_remote_age", other_health["alerts"])
+
     def test_outbox_health_is_tenant_isolated(self):
         tenant=uuid4()
         other=uuid4()
