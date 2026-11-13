@@ -180,6 +180,20 @@ class DispatcherTests(unittest.TestCase):
         settle.assert_called_once()
         self.lease_check.assert_called_once()
 
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_invalid_claim_event_identifier_never_delivers(self, reap, claim, settle):
+        for event_id in ("not-a-uuid", "22222222-2222-4222-8222-222222222222 "):
+            with self.subTest(event_id=event_id):
+                claim.return_value = [(event_id, "hitl.approval.consumed", {}, 1)]
+                with self.assertRaises(ValueError):
+                    dispatch_batch(**self.kw)
+        self.deliver.assert_not_called()
+        self.lease_check.assert_not_called()
+        settle.assert_not_called()
+
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
