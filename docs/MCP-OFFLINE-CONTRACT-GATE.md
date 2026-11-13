@@ -73,3 +73,7 @@ The PostgreSQL integration suite now asserts that a previously approved, consume
 ## Transport module syntax repair and peer regression
 
 A merged version of `mcp_transport_policy.py` contained literal escaped newline tokens that prevented Python compilation. The repair restores valid source formatting and adds offline tests for approved versus substituted connected peers. Peer identity is still supplied by a caller and therefore **does not establish socket-level enforcement**. The actual gateway must obtain peer identity from its connected socket and enforce TLS, DNS/IP pinning and egress controls.
+
+## MCP 2026-07-28 outbound POST contract (offline)
+
+`mcp_post_request_gate.validate_mcp_post_request` checks exact allowlisted HTTPS endpoint, POST method, JSON content type, both JSON and SSE Accept media types, bounded correlated JSON-RPC request and rejects legacy session/resume headers, duplicate JSON keys and malformed values. It does **not** build or send HTTP requests, handle OAuth resource indicators or independently authenticate any request metadata. A production gateway must enforce token audience, TLS and socket-level destination policy; keep execution disabled.
