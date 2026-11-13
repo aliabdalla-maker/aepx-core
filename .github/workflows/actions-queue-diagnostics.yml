@@ -17,7 +17,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import collections, json, os, urllib.request
+          import collections, datetime, json, os, urllib.request
           repo = os.environ["GH_REPO"]
           token = os.environ["GH_TOKEN"]
           request = urllib.request.Request(
@@ -34,12 +34,21 @@ jobs:
                    f"Sample: {len(runs)} most recent workflow runs", "",
                    "## Status counts"]
           lines += [f"- {key}: {value}" for key, value in sorted(counts.items())]
+          now = datetime.datetime.now(datetime.timezone.utc)
           lines += ["", "## Queued runs (first 20)"]
+          shown = 0
           for run in (r for r in runs if r.get("status") == "queued"):
-              lines.append(f"- {run.get('name')} | {run.get('created_at')} | {run.get('html_url')}")
-              if sum(" | " in line for line in lines) >= 20:
+              created = datetime.datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
+              age_minutes = max(0, int((now - created).total_seconds() // 60))
+              lines.append(f"- {run.get('name')} | queued {age_minutes} min | {run.get('html_url')}")
+              shown += 1
+              if shown >= 20:
                   break
-          lines += ["", "This report is observational. It cannot establish runner capacity or account billing status."]
+          lines += ["", "## Follow-up checks",
+                    "- Inspect queued job runner labels and required approvals",
+                    "- Review Actions permissions, account billing and runner availability",
+                    "- Check GitHub Status and contact Support for persistently stuck runs",
+                    "", "Sample is limited to the latest 100 runs; no runner or billing diagnosis is inferred."]
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
               output.write("\n".join(lines) + "\n")
           print("\n".join(lines))
