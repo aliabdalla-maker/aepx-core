@@ -23,3 +23,7 @@ proof that an external action did not occur. Do not blindly replay it.
   into live dispatch.
 
 No OCI resources, external providers or production workloads are touched.
+
+## Child exception regression
+
+The child exception path must use `Connection.send`, not `Queue.put`, and must close its pipe endpoint. The offline failure test asserts the precise `callback failed: outcome uncertain` result so a broken IPC exception handler cannot silently degrade into a timeout. This remains an opt-in local prototype, not a production sandbox.
