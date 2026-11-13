@@ -24,11 +24,17 @@ class TestMCPEnvelope(unittest.TestCase):
         self.assertEqual(result["headers"]["Mcp-Name"], "crm.update")
         self.assertEqual(result["headers"]["MCP-Protocol-Version"], "2026-07-28")
         self.assertEqual(result["jsonrpc"]["params"]["arguments"], {"x": 1})
+        meta = result["jsonrpc"]["params"]["_meta"]
+        self.assertEqual(meta["io.modelcontextprotocol/protocolVersion"], result["headers"]["MCP-Protocol-Version"])
+        self.assertEqual(meta["io.modelcontextprotocol/clientCapabilities"], {})
+        self.assertEqual(result["headers"]["Content-Type"], "application/json")
         self.assertEqual(result["jsonrpc"]["params"]["_meta"]
                          ["io.modelcontextprotocol/clientInfo"]["name"], "aepx")
 
     def test_rejects_tampering_and_bad_headers(self):
-        for key, value in (("request_id", True), ("client_name", "evil\nname"),
+        for key, value in (("request_id", True), ("request_id", ""),
+                           ("request_id", "bad\nvalue"), ("request_id", 2**60),
+                           ("client_name", "evil\nname"),
                            ("client_version", ""), ("bound_call", {})):
             data = self.fixture()
             data[key] = value

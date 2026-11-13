@@ -17,3 +17,7 @@ The pure `bind_approved_mcp_dispatch` helper now requires matching tenant, run a
 ## MCP 2026-07-28 stateless envelope
 
 `mcp_protocol_envelope.build_mcp_tool_call` serializes an already-bound tool call into JSON-RPC `tools/call`, including the `MCP-Protocol-Version`, `Mcp-Method`, and `Mcp-Name` routing headers and client metadata. It revalidates canonical argument integrity before constructing the request. This is **offline serialization only**, not an HTTP client or authentication layer. Real integration must follow the 2026-07-28 stateless specification, authenticate the destination and issuer, enforce TLS/egress policy and validate responses. Never pass user-created `bound_call` as trusted evidence.
+
+## 2026-07-28 metadata correction
+
+The stateless request now mirrors `MCP-Protocol-Version` into `_meta.io.modelcontextprotocol/protocolVersion` and includes `_meta.io.modelcontextprotocol/clientCapabilities` (empty for this offline builder), plus `Content-Type: application/json`. Tests check header/body consistency and reject unsafe JSON-RPC IDs. The builder intentionally does not support schema-defined `x-mcp-header` parameter mirroring or MRTR and is not yet a conformant full transport client. Those features, authenticated transport, trusted server policy, real gateway enforcement and response validation remain release blockers.
