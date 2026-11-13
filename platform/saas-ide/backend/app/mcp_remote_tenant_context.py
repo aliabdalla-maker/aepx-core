@@ -26,6 +26,11 @@ def bind_verified_tenant(cursor, *, verified_tenant_id, expected_runtime_role):
     identity = cursor.fetchone()
     if not identity or identity[0] != expected_runtime_role or identity[1] != "on":
         raise UnsafeTenantContext("database role or row security mismatch")
+    cursor.execute(
+        "SELECT rolbypassrls, rolsuper FROM pg_catalog.pg_roles WHERE rolname = current_user")
+    role_flags = cursor.fetchone()
+    if not role_flags or role_flags[0] is not False or role_flags[1] is not False:
+        raise UnsafeTenantContext("runtime role can bypass row-level security")
     cursor.execute("SELECT set_config('app.tenant_id', %s, true)", (canonical,))
     actual = cursor.fetchone()
     if not actual or actual[0] != canonical:
