@@ -133,3 +133,7 @@ The intent schema had a corrupted duplicated SQL string with unterminated CHECK 
 ## Disposable PostgreSQL CI dependency and destination guard
 
 The disposable PostgreSQL acceptance workflow now triggers for tenant-context binding, intent transition/state changes, and its test runner, not only intent schema and test file patterns. The runner refuses non-loopback database hosts and database names other than `aepx_mcp_test`, even when explicit test opt-in is set. This is a safety check for the CI entrypoint, not a general-purpose guarantee about arbitrary PostgreSQL connections. Passing test results and service isolation still require verification before merging.
+
+## Exact disposable database role separation
+
+The PostgreSQL acceptance runner additionally enforces admin DSN user `postgres`, runtime DSN user `aepx_runtime`, TCP port `5432`, explicit credentials, and no URL query/fragment overrides. These checks close a gap where either DSN could previously use the administrator role while still pointing at the disposable database, bypassing meaningful RLS assertions. CI must still demonstrate passing, non-skipped tests; the guard does not validate production infrastructure.
