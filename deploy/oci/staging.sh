@@ -29,9 +29,23 @@ PY
     echo "PASS: staging PostgreSQL and Redis respond; application HTTP acceptance tests still required"
     ;;
   --start)
-    echo "Refusing automatic start: host inventory, backups and image compatibility must be verified."
-    echo "After independent approval, run the isolated compose command manually on the staging VM."
-    exit 3
+    echo "Staging startup is a controlled change on the selected Ubuntu host."
+    [[ "${AEPX_STAGING_APPROVED:-}" == "yes" ]] || {
+      echo "BLOCKED: set AEPX_STAGING_APPROVED=yes only after confirming the target is NOT the production host." >&2
+      exit 3
+    }
+    bash deploy/oci/verify-release-gates.sh
+    [[ "${AEPX_BACKUP_RESTORE_VERIFIED:-}" == "yes" ]] || {
+      echo "BLOCKED: isolated backup restore evidence required" >&2
+      exit 3
+    }
+    [[ "${AEPX_IMAGE_PLATFORMS_VERIFIED:-}" == "yes" ]] || {
+      echo "BLOCKED: target architecture image verification required" >&2
+      exit 3
+    }
+    echo "Starting isolated staging Compose project (no host ports)."
+    "${COMPOSE[@]}" up -d --build
+    "${COMPOSE[@]}" ps
     ;;
   *)
     echo "Usage: $0 [--validate|--status|--smoke|--start]" >&2
