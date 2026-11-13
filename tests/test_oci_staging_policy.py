@@ -58,6 +58,9 @@ class PolicyTests(unittest.TestCase):
     def test_host_device_rejected(self):
         self.cfg["services"]["redis"]["devices"]=["/dev/sda:/dev/sda"]
         self.assertTrue(m.check(self.cfg))
+    def test_host_data_bind_rejected(self):
+        self.cfg["services"]["postgres"]["volumes"].append("/srv/host-db:/var/lib/postgresql/data")
+        self.assertTrue(m.check(self.cfg))
     def test_unmounted_named_volume_rejected(self):
         self.cfg["services"]["postgres"]["volumes"]=["other-volume:/var/lib/postgresql/data"]
         self.assertTrue(m.check(self.cfg))
