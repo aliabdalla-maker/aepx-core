@@ -281,6 +281,34 @@ class HitlPostgresIntegration(unittest.TestCase):
                 outbox_health(conn, tenant_id=tenant,
                               warning_uncertain_age_seconds=True)
 
+    def test_reconciled_remote_receipt_clears_uncertain_alert(self):
+        tenant = uuid4()
+        event = self._seed_outbox(tenant)
+        provider = "sandbox-mcp"
+        key = "reconciled-health-" + str(uuid4())
+        with self.connect() as conn:
+            reserve_remote(conn, tenant_id=tenant, event_id=event,
+                           provider=provider, idempotency_key=key)
+        with self.connect() as conn:
+            before = outbox_health(conn, tenant_id=tenant)
+        self.assertEqual(before["uncertain_remote_deliveries"], 1)
+        with self.connect() as conn:
+            reconcile_remote(
+                conn, tenant_id=tenant, event_id=event,
+                provider=provider, idempotency_key=key,
+                verified_state="confirmed",
+                evidence_reference="sandbox-evidence-12345",
+                reviewer_id="sandbox-reviewer-12345",
+                authorized=True,
+                verify_operator=lambda **kwargs: kwargs["permission"] == "hitl.remote.reconcile",
+                verify_evidence=lambda **kwargs: kwargs["idempotency_key"] == key)
+        with self.connect() as conn:
+            after = outbox_health(conn, tenant_id=tenant)
+        self.assertEqual(after["uncertain_remote_deliveries"], 0)
+        self.assertEqual(after["oldest_uncertain_remote_seconds"], 0)
+        self.assertNotIn("uncertain_remote_delivery", after["alerts"])
+        self.assertNotIn("oldest_uncertain_remote_age", after["alerts"])
+
     def test_outbox_health_is_tenant_isolated(self):
         tenant=uuid4()
         other=uuid4()
