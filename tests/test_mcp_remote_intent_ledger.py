@@ -25,6 +25,12 @@ class IntentLedgerTests(unittest.TestCase):
         with self.assertRaises(IntentTransitionDenied):
             validate_transition(IntentState.SUCCEEDED, IntentState.DISPATCHED)
 
+    def test_schema_is_single_complete_statement(self):
+        self.assertEqual(DDL.count("CREATE TABLE IF NOT EXISTS"), 1)
+        self.assertEqual(DDL.count("CREATE POLICY mcp_remote_intent_tenant"), 1)
+        self.assertEqual(DDL.count("ALTER TABLE mcp_remote_execution_intents FORCE"), 1)
+        self.assertNotIn("),\\n", DDL)
+
     def test_schema_requires_rls_and_dedupe(self):
         for required in ("FORCE ROW LEVEL SECURITY", "UNIQUE (tenant_id, idempotency_key)",
                          "UNIQUE (tenant_id, approval_id, action_hash)", "app.tenant_id",
