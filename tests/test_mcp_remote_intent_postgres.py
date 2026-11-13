@@ -16,6 +16,7 @@ from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
 from app.mcp_remote_intent_state import IntentState
 from app.mcp_remote_dispatch_claim import claim_dispatch, DispatchClaimDenied
 from app.mcp_remote_reconciliation import mark_stale_dispatch_uncertain, ReconciliationDenied
+from app.mcp_remote_reconciliation_visibility import list_uncertain_intents
 from app.mcp_remote_dispatch_commit_gate import verify_committed_intent, DispatchNotCommitted
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
@@ -594,6 +595,49 @@ class PostgresReservationAcceptance(unittest.TestCase):
                 cur.execute("SELECT state FROM mcp_remote_execution_intents WHERE tenant_id = %s AND request_id = %s",
                             (self.tenant, candidate.request_id))
                 self.assertEqual(cur.fetchone()[0], "dispatched")
+
+    def test_uncertain_visibility_respects_postgres_rls_and_state(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()),
+                            action_hash="9"*64, idempotency_key="visibility-pg-0001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                reserve_intent(cur, candidate)
+            conn.commit()
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                before = list_uncertain_intents(cur, tenant_id=self.tenant, limit=100)
+                self.assertNotIn(candidate.request_id, [row.request_id for row in before])
+                claim_dispatch(cur, tenant_id=self.tenant, request_id=candidate.request_id,
+                               idempotency_key=candidate.idempotency_key)
+            conn.commit()
+        with psycopg.connect(DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE mcp_remote_execution_intents SET updated_at = now() - interval '120 seconds' WHERE tenant_id = %s AND request_id = %s",
+                            (self.tenant, candidate.request_id))
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                mark_stale_dispatch_uncertain(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id, minimum_age_seconds=60)
+            conn.commit()
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                visible = list_uncertain_intents(cur, tenant_id=self.tenant, limit=100)
+                self.assertIn(candidate.request_id, [row.request_id for row in visible])
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=str(uuid4()),
+                                     expected_runtime_role="aepx_runtime")
+                invisible = list_uncertain_intents(cur, tenant_id=self.tenant, limit=100)
+                self.assertNotIn(candidate.request_id, [row.request_id for row in invisible])
 
     def test_recent_dispatch_not_quarantined(self):
         from dataclasses import replace
