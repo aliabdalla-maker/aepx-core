@@ -38,6 +38,13 @@ class TestIsolatedCallback(unittest.TestCase):
         with self.assertRaises(CallbackIsolationError):
             self.run_adapter("crashes", timeout=2)
 
+    def test_abrupt_exit_fails_without_waiting_full_timeout(self):
+        import time
+        started = time.monotonic()
+        with self.assertRaisesRegex(CallbackIsolationError, "outcome uncertain"):
+            self.run_adapter("crashes", timeout=5)
+        self.assertLess(time.monotonic() - started, 4)
+
     def test_timeout_is_bounded(self):
         import time
         started = time.monotonic()

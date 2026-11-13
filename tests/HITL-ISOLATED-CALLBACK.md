@@ -27,3 +27,7 @@ No OCI resources, external providers or production workloads are touched.
 ## Child exception regression
 
 The child exception path must use `Connection.send`, not `Queue.put`, and must close its pipe endpoint. The offline failure test asserts the precise `callback failed: outcome uncertain` result so a broken IPC exception handler cannot silently degrade into a timeout. This remains an opt-in local prototype, not a production sandbox.
+
+## Early child-exit detection
+
+The parent waits on both the result pipe and child process sentinel, using one deadline that begins before process startup. An abruptly exited child must fail closed promptly instead of waiting the full adapter timeout. This does not provide cgroup process-tree termination or guarantee that an external provider request was cancelled.
