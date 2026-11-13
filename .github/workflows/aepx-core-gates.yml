@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/aepx-core-integration.py'
+      - 'tests/test_aepx_core_integration.py'
       - 'scripts/aepx-dev-acceptance.sh'
       - 'scripts/aepx-static-security.py'
       - 'docs/AEPX-Core-Integration-Runbook.md'
@@ -19,6 +20,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate Python syntax
         run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py
+      - name: Run core acceptance regression tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
       - name: Validate shell syntax
         run: bash -n scripts/aepx-dev-acceptance.sh
       - name: Check static security blockers (informational for development)
