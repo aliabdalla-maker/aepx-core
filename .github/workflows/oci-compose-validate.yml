@@ -292,6 +292,23 @@ jobs:
               assert any(a["name"]=="ci-persistence-check" and a["did"].startswith("did:key:") for a in agents.json()),agents.text
           print("PASS: agent record survives Registry process restart")
           PY
+      - name: Verify live staging database encrypted backup and isolated restore
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          age-keygen -o "$tmpdir/identity.txt" 2>"$tmpdir/keygen.log"
+          chmod 600 "$tmpdir/identity.txt"
+          export AEPX_BACKUP_AGE_RECIPIENT="$(age-keygen -y "$tmpdir/identity.txt")"
+          bash deploy/oci/backup-staging-encrypted.sh "$tmpdir"
+          shopt -s nullglob
+          backups=("$tmpdir"/aepx-staging-*.sql.gz.age)
+          [[ "${#backups[@]}" -eq 1 ]] || { echo "Expected one encrypted backup" >&2; exit 1; }
+          export AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt"
+          bash deploy/oci/restore-staging-encrypted-rehearsal.sh "${backups[0]}"
+          echo "PASS: live CI database encrypted and restored into disposable database"
       - name: Diagnostics on failure
         if: failure()
         run: |
