@@ -129,3 +129,7 @@ The intent schema had a corrupted duplicated SQL string with unterminated CHECK 
 ## Disposable PostgreSQL acceptance job
 
 `.github/workflows/mcp-disposable-postgres.yml` starts an ephemeral PostgreSQL 16 service in GitHub Actions, creates a non-superuser, non-BYPASSRLS runtime role, and runs the remote intent reservation acceptance suite. `tests/check_mcp_pg_ci.py` rejects skipped, failed or missing tests. Transaction-local tenant identity is set through parameterized `set_config`. Database passwords in this workflow are disposable test-only values, not deployment credentials. The job neither connects to OCI nor touches production databases. Passing this job is a prerequisite for, not proof of, production readiness.
+
+## Disposable PostgreSQL CI dependency and destination guard
+
+The disposable PostgreSQL acceptance workflow now triggers for tenant-context binding, intent transition/state changes, and its test runner, not only intent schema and test file patterns. The runner refuses non-loopback database hosts and database names other than `aepx_mcp_test`, even when explicit test opt-in is set. This is a safety check for the CI entrypoint, not a general-purpose guarantee about arbitrary PostgreSQL connections. Passing test results and service isolation still require verification before merging.
