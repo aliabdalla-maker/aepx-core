@@ -21,3 +21,7 @@ The pure `bind_approved_mcp_dispatch` helper now requires matching tenant, run a
 ## 2026-07-28 metadata correction
 
 The stateless request now mirrors `MCP-Protocol-Version` into `_meta.io.modelcontextprotocol/protocolVersion` and includes `_meta.io.modelcontextprotocol/clientCapabilities` (empty for this offline builder), plus `Content-Type: application/json`. Tests check header/body consistency and reject unsafe JSON-RPC IDs. The builder intentionally does not support schema-defined `x-mcp-header` parameter mirroring or MRTR and is not yet a conformant full transport client. Those features, authenticated transport, trusted server policy, real gateway enforcement and response validation remain release blockers.
+
+## Offline response gate and Streamable HTTP Accept
+
+The request builder now advertises both `application/json` and `text/event-stream` via `Accept`. `mcp_response_gate.validate_mcp_json_response` checks bounded JSON-RPC response bodies, duplicate keys, exact request-ID correlation, protocol errors and tool-level `isError`. It **does not** process SSE frames or implement an HTTP transport. Real transport must authenticate TLS/OAuth, handle SSE safely, validate response content schemas, manage deadlines, and quarantine uncertain side effects rather than retrying them.
