@@ -33,9 +33,9 @@ class ScopedCredentialsTests(unittest.TestCase):
         import tempfile
         with tempfile.TemporaryDirectory() as folder:
             env=Path(folder)/".env"
-            env.write_text("A=1\\nA=2\\n")
+            env.write_text("A=1\nA=2\n")
             with self.assertRaises(ValueError):
                 m.effective_env(env,{})
     def test_newline_rejected(self):
-        with self.assertRaises(ValueError):m.validate({**BASE,"AEPX_REGISTRY_WRITE_KEY":"B"*40+"\\n"})
+        with self.assertRaises(ValueError):m.validate({**BASE,"AEPX_REGISTRY_WRITE_KEY":"B"*40+"\n"})
 if __name__=="__main__":unittest.main()
