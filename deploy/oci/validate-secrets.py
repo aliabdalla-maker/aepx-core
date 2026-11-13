@@ -24,7 +24,7 @@ for key in required:
     value = pairs.get(key, "")
     if not re.fullmatch(r"[A-Za-z0-9_-]{24,128}", value):
         sys.exit(f"ERROR: {key} must be 24-128 URL-safe characters")
-    if value.lower().startswith(("test", "demo", "password", "change", "aepx_dev")):
+    if value.lower().startswith(("test", "demo", "password", "change", "aepx_dev", "citestonly")):
         sys.exit(f"ERROR: {key} looks like a placeholder")
 if pairs[required[0]] == pairs[required[1]]:
     sys.exit("ERROR: PostgreSQL and Neo4j secrets must differ")
