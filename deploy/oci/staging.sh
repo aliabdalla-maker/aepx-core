@@ -26,6 +26,9 @@ PY
     [[ "${AEPX_STAGING_APPROVED:-}" == "yes" ]] || { echo "BLOCKED: explicit staging operator approval required" >&2; exit 3; }
     "${COMPOSE[@]}" stop
     ;;
+  --db-commit)
+    bash deploy/oci/test-staging-db-commit.sh
+    ;;
   --db-smoke)
     bash deploy/oci/test-staging-postgres.sh
     ;;
@@ -70,7 +73,7 @@ PY
     "${COMPOSE[@]}" ps
     ;;
   *)
-    echo "Usage: $0 [--validate|--status|--logs|--smoke|--db-smoke|--start|--stop]" >&2
+    echo "Usage: $0 [--validate|--status|--logs|--smoke|--db-smoke|--db-commit|--start|--stop]" >&2
     exit 2
     ;;
 esac
