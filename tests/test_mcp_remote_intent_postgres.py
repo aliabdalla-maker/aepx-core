@@ -14,6 +14,7 @@ from app.mcp_remote_intent_schema import DDL
 from app.mcp_remote_tenant_context import bind_verified_tenant, UnsafeTenantContext
 from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
 from app.mcp_remote_intent_state import IntentState
+from app.mcp_remote_dispatch_commit_gate import verify_committed_intent, DispatchNotCommitted
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
 RUNTIME_DSN = os.environ.get("AEPX_TEST_PG_RUNTIME_DSN")
@@ -76,6 +77,34 @@ class PostgresReservationAcceptance(unittest.TestCase):
             with conn.cursor() as cur:
                 cur.execute("SELECT current_setting('app.tenant_id', true)")
                 self.assertNotEqual(cur.fetchone()[0], self.tenant)
+
+    def test_dispatch_gate_requires_committed_reservation(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="8"*64,
+            idempotency_key="commit-gate-0001")
+        with psycopg.connect(RUNTIME_DSN) as writer:
+            with writer.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+                with psycopg.connect(RUNTIME_DSN) as reader:
+                    with reader.cursor() as read_cur:
+                        bind_verified_tenant(read_cur, verified_tenant_id=self.tenant,
+                                             expected_runtime_role="aepx_runtime")
+                        with self.assertRaises(DispatchNotCommitted):
+                            verify_committed_intent(read_cur, tenant_id=self.tenant,
+                                request_id=candidate.request_id,
+                                idempotency_key=candidate.idempotency_key)
+            writer.commit()
+        with psycopg.connect(RUNTIME_DSN) as reader:
+            with reader.cursor() as read_cur:
+                bind_verified_tenant(read_cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                verified = verify_committed_intent(read_cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+                self.assertEqual(verified.request_id, candidate.request_id)
 
     def test_wrong_runtime_role_fails_closed(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
