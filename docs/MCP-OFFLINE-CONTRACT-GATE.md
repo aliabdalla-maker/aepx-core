@@ -81,3 +81,7 @@ A merged version of `mcp_transport_policy.py` contained literal escaped newline 
 ## Negotiated protocol version pinning
 
 The outbound POST gate can now require `MCP-Protocol-Version` to exactly match a trusted, already-negotiated protocol version, rejecting missing, duplicate and downgraded values. The gate does not itself negotiate or authenticate a version. Note: protocol features differ by version; the 2025-11-25 Streamable HTTP specification supports GET, session IDs and resume. The offline request gate deliberately rejects session/resume headers and supports only a restricted POST subset, so it is **not a general conformant client for all negotiated versions**. Do not enable live transport until version-specific interoperability tests pass.
+
+## Offline protocol version policy
+
+`mcp_version_policy.select_mcp_protocol_version` accepts only an explicitly trusted server version present in both the client and supported-version allowlists, and returns a deliberately restricted POST-only profile. Current local policy defaults to 2025-11-25 as a version label, **not** proof of complete compatibility with all 2025-11-25 features. A future authenticated initialization exchange must supply server evidence; GET/session/resume support and capability negotiation need separate implementations and conformance tests. Never silently downgrade.
