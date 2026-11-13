@@ -7,7 +7,7 @@ This is **not** the existing production website or the full AEP-X stack. Do not 
 1. Identify the intended Ubuntu Compute instance and its CPU architecture using `oci-inventory.sh` and `host-readiness.sh`.
 2. Confirm it is a dedicated staging host and that Docker and disk/memory capacity are sufficient. The 3.5 GB memory gate is a floor, **not** a measured sizing guarantee.
 3. Confirm every image supports the VM architecture and that application builds succeed.
-4. Use unique, strong passwords in an untracked `.env` with `chmod 600 .env`. Never commit secrets.
+4. Use unique, strong passwords in an untracked repository-root `.env` with `chmod 600 .env`. The staging script passes `--env-file .env` explicitly; never commit secrets.
 5. Take an encrypted off-host backup where applicable and complete an isolated restore rehearsal. Record evidence outside the repository.
 6. Verify GitHub Actions checks on the PR head commit.
 
