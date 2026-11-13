@@ -5,6 +5,8 @@ fetch identity data or provide a public HTTP endpoint. Its DB role must be
 restricted to the required tenant-scoped tables.
 """
 from datetime import datetime, timezone
+from itertools import islice
+from urllib.parse import urlsplit
 from uuid import UUID
 
 class SnapshotRejected(PermissionError):
@@ -20,7 +22,11 @@ def publish_identity_snapshot(connection, *, tenant_id, issuer, memberships,
     """
     try:
         tenant=str(UUID(str(tenant_id)))
-        if (not isinstance(issuer,str) or not issuer.startswith("https://")
+        parsed=urlsplit(issuer) if isinstance(issuer,str) else None
+        if (not parsed or parsed.scheme!="https" or not parsed.hostname
+            or parsed.username is not None or parsed.password is not None
+            or parsed.query or parsed.fragment or parsed.path not in ("","/")
+            or any(ch.isspace() for ch in issuer)
             or len(issuer)>512 or not isinstance(captured_at,datetime)
             or captured_at.tzinfo is None or not 0<max_age_seconds<=60
             or type(revision) is not int or not 1<=revision<=9223372036854775807):
@@ -28,8 +34,9 @@ def publish_identity_snapshot(connection, *, tenant_id, issuer, memberships,
         age=(datetime.now(timezone.utc)-captured_at.astimezone(timezone.utc)).total_seconds()
         if age < -5 or age > max_age_seconds:
             raise ValueError("stale or future snapshot")
-        members=list(memberships)
-        revoked=list(revoked_tokens)
+        # Cap materialisation even when upstream passes infinite generators.
+        members=list(islice(iter(memberships),100001))
+        revoked=list(islice(iter(revoked_tokens),1000001))
         if len(members)>100000 or len(revoked)>1000000:
             raise ValueError("snapshot too large")
         if any(not isinstance(x,str) or not 8<=len(x)<=128 for x in members):
