@@ -26,6 +26,7 @@ jobs:
           Path('.env').write_text(
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -55,6 +56,7 @@ jobs:
           Path('.env').write_text(
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -73,6 +75,7 @@ jobs:
           Path('.env').write_text(
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -90,6 +93,7 @@ jobs:
           Path('.env').write_text(
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
