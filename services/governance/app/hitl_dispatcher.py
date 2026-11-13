@@ -7,7 +7,7 @@ import os
 import hashlib
 import time
 from uuid import UUID
-from app.hitl_outbox import claim, settle, reap_exhausted
+from app.hitl_outbox import claim, settle, reap_exhausted, lease_is_current
 
 class DispatchDisabled(PermissionError):
     pass
@@ -48,6 +48,9 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
         try:
             if topic != "hitl.approval.consumed" or not isinstance(payload, dict):
                 raise PermissionError("unsupported event")
+            if not lease_is_current(connection, tenant_id=tenant, event_id=event_id,
+                                    worker_id=worker_id, attempt_number=attempt):
+                raise PermissionError("lease expired or reassigned before delivery")
             deliver(event_id=str(event_id), topic=topic, payload=payload,
                     tenant_id=tenant)
             ok = True
