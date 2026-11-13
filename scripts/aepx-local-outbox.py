@@ -26,7 +26,11 @@ class Outbox:
             db.execute("BEGIN IMMEDIATE")
             db.execute("INSERT OR IGNORE INTO outbox(id,idempotency_key,topic,payload,status,created_at) VALUES(?,?,?,?,?,?)",
                        (event_id,idempotency_key,topic,json.dumps(payload,sort_keys=True),"pending",time.time()))
-            result=db.execute("SELECT id FROM outbox WHERE idempotency_key=?",(idempotency_key,)).fetchone()[0]
+            existing=db.execute("SELECT id,topic,payload FROM outbox WHERE idempotency_key=?",(idempotency_key,)).fetchone()
+            if existing[1]!=topic or existing[2]!=json.dumps(payload,sort_keys=True):
+                db.rollback()
+                raise ValueError("idempotency key reused for different event")
+            result=existing[0]
             db.commit()
         return result
     def pending(self,limit=100):
