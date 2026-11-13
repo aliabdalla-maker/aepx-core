@@ -22,3 +22,14 @@ a missing revocation row does NOT prove a token is valid if synchronization
 is stale. The current adapter does not itself enforce synchronization
 freshness or bind `jti` to a live route. Do not deploy it as a complete
 revocation solution. No external execution is enabled.
+
+## Freshness enforcement (added)
+
+Both membership and revocation queries now require a per-tenant, per-issuer
+`identity_authority_sync` heartbeat with `healthy=true` and
+`synced_at` within the last 60 seconds, evaluated by PostgreSQL time.
+A missing, stale or unhealthy heartbeat denies authorization. The trusted
+synchronizer must update the heartbeat **only after** completing the full
+membership and revocation refresh. Synchronizer implementation, race-safe
+snapshot publication and live route wiring remain outstanding. The 60-second
+threshold is an initial security default and requires operational validation.
