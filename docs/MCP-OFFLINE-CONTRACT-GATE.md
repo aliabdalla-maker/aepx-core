@@ -49,3 +49,7 @@ The persisted `ide_tool_approvals` digest column is `args_sha256`, not `argument
 ## PostgreSQL atomic-claim integration regression
 
 The real-PostgreSQL integration suite now includes a competing two-session `claim_approved_mcp_call` race, tampered argument denial, cross-tenant denial, single-use replay rejection and execution-ledger RLS checks. It requires the configured PostgreSQL integration environment and remains **unverified until CI actually executes it**. This tests the DB claim only; authenticated MCP transport, worker integration and provider side effects are deliberately absent. A separate cancellation-vs-claim stress test and independent security review remain release blockers.
+
+## Cancellation-before-claim PostgreSQL acceptance
+
+The PostgreSQL integration suite now asserts that a previously approved, consumed and reserved MCP execution cannot be claimed after its run is cancelled through the API. This checks the fail-closed cancelled-run path, but is **not** a simultaneous cancellation-versus-claim stress test. True concurrent cancellation/claim interleavings, worker crash outcomes, external-provider idempotency and verified egress isolation remain mandatory before live execution.
