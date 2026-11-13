@@ -270,6 +270,9 @@ jobs:
               assert malformed.status_code==404,malformed.text
               rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"},headers=headers)
               assert rejected.status_code==403,rejected.text
+              trust_before=client.get("http://trust:8000/trust/ci-read-only-unknown-entity")
+              assert trust_before.status_code==200,trust_before.text
+              assert trust_before.json()["trust_score"]==50
               invalid_component=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"unknown","delta":1},headers=headers)
               assert invalid_component.status_code==422,invalid_component.text
               trust_unauth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1})
