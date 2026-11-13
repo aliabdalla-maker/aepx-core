@@ -38,7 +38,12 @@ def issue_did(x_aepx_service_key: str | None = Header(default=None)):
     # RFC-0006 — did:key: self-certifying, no chain or registry needed to
     # resolve it (see app/did.py). Returns the private key once; it is
     # never persisted server-side.
-    return create_did()
+    result = create_did()
+    if os.getenv("AEPX_SECURE_MODE") == "true":
+        # The Registry currently stores only the DID, not the signing key.
+        # Never disclose an orphaned private key to an intermediary.
+        return {"did": result["did"], "did_document": result["did_document"]}
+    return result
 
 
 @app.get("/did/{did}")
