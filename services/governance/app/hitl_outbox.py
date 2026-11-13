@@ -37,8 +37,8 @@ def claim(connection,*,tenant_id,worker_id,limit=10,lease_seconds=60,max_attempt
         raise
 
 def settle(connection,*,tenant_id,event_id,worker_id,delivered,error=None,
-           retry_seconds=30,max_attempts=8):
-    if not worker_id or not 1<=retry_seconds<=86400 or max_attempts<1:
+           retry_seconds=30,max_attempts=8,attempt_number=None):
+    if not worker_id or not 1<=retry_seconds<=86400 or max_attempts<1 or not isinstance(attempt_number,int) or attempt_number<1:
         raise ValueError("invalid worker or retry policy")
     try:
         with connection.cursor() as cur:
@@ -51,11 +51,11 @@ def settle(connection,*,tenant_id,event_id,worker_id,delivered,error=None,
               next_attempt_at=now()+(%s * interval '1 second'),
               last_error=%s,lease_owner=NULL,leased_until=NULL
               WHERE tenant_id=%s AND id=%s AND status='leased'
-                AND lease_owner=%s AND leased_until>now()
+                AND lease_owner=%s AND attempts=%s AND leased_until>now()
               RETURNING id""",
               (delivered,max_attempts,delivered,retry_seconds,
                None if delivered else (error or "delivery failed")[:500],
-               tenant,str(uuid.UUID(str(event_id))),worker_id))
+               tenant,str(uuid.UUID(str(event_id))),worker_id,attempt_number))
             row=cur.fetchone()
             if not row:
                 raise PermissionError("lease missing, expired or not owned")
