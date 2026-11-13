@@ -70,6 +70,27 @@ class PolicyTests(unittest.TestCase):
     def test_unmounted_named_volume_rejected(self):
         self.cfg["services"]["postgres"]["volumes"]=["other-volume:/var/lib/postgresql/data"]
         self.assertTrue(m.check(self.cfg))
+    def test_long_form_writable_named_volume_accepted(self):
+        self.cfg["services"]["postgres"]["volumes"]=[
+            {"type":"volume","source":"staging-postgres","target":"/var/lib/postgresql/data"}
+        ]
+        self.assertEqual(m.check(self.cfg),[])
+    def test_long_form_readonly_database_rejected(self):
+        self.cfg["services"]["postgres"]["volumes"]=[
+            {"type":"volume","source":"staging-postgres","target":"/var/lib/postgresql/data","read_only":True}
+        ]
+        self.assertTrue(m.check(self.cfg))
+    def test_short_form_readonly_database_rejected(self):
+        self.cfg["services"]["postgres"]["volumes"]=["staging-postgres:/var/lib/postgresql/data:ro"]
+        self.assertTrue(m.check(self.cfg))
+    def test_invalid_volume_type_fails_closed(self):
+        self.cfg["services"]["postgres"]["volumes"]=[42]
+        self.assertTrue(m.check(self.cfg))
+    def test_long_form_host_bind_rejected(self):
+        self.cfg["services"]["postgres"]["volumes"]=[
+            {"type":"bind","source":"/srv/postgres","target":"/var/lib/postgresql/data"}
+        ]
+        self.assertTrue(m.check(self.cfg))
     def test_missing_volume_rejected(self):
         self.cfg["volumes"].pop("staging-postgres")
         self.assertTrue(m.check(self.cfg))
