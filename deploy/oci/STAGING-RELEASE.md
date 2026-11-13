@@ -32,6 +32,10 @@ bash deploy/oci/staging.sh --smoke
 
 These approval flags record operator assertions; the script **cannot prove** backup restoration or image compatibility. Never set them without real evidence. Startup can build images, create volumes, and consume host resources. It does not change the production Nginx or DNS configuration.
 
+## Staging PostgreSQL backup
+
+Once the isolated staging database is running, create a restricted logical backup with `bash deploy/oci/backup-staging.sh /absolute/private/backup/directory`. The script uses `pg_dump`, gzip integrity checking and SHA-256, and does not modify the database. The output is **not encrypted automatically**: transfer it using an encrypted off-host backup mechanism and perform an independent restore rehearsal in a disposable database before asserting the backup gate. Never store backups in Git.
+
 ## Recovery and next gates
 
 Check `bash deploy/oci/staging.sh --status` and Docker logs for failed services. Do not use `docker compose down -v` on staging: that deletes its database. Application HTTP endpoint tests, database restore, security acceptance, TLS/reverse-proxy design and release approval remain separate gates. The existing x86 self-hosted static-site workflow must remain unchanged.
