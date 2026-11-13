@@ -93,3 +93,7 @@ The outbound POST gate can now require `MCP-Protocol-Version` to exactly match a
 ## CI trigger correction and approved server-name binding
 
 The PR workflow now watches POST, version-policy and initialize-gate files (previously these were only in the push path filter), so changing these files should schedule the offline contract job. The initialization gate optionally requires the returned `serverInfo.name` to match a trusted approved name. This is a consistency check on supplied bytes, **not** authentication: the future gateway must bind TLS identity and token audience to the approved MCP resource.
+
+## Initialized notification contract
+
+`mcp_initialized_gate.validate_mcp_initialized_notification` validates the bounded JSON-RPC `notifications/initialized` message, rejects request IDs and unexpected payloads, and binds the supplied version to a trusted expected value. It does not transmit the notification, authenticate the initialization result or establish a live MCP session. CI compiles and tests the gate; the authenticated initialize/initialized handshake and interoperability remain pending.
