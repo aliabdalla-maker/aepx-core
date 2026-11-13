@@ -23,3 +23,20 @@ def verify_offline_cleanup_absent(inspect_not_found, *, matching_processes_absen
     if inspect_not_found is not True or matching_processes_absent is not True:
         raise SandboxPolicyDenied("container cleanup not verified")
     return True
+
+def verified_container_commands(snapshot, *, expected_name, expected_image_id):
+    """Return destructive argv only after identity and image validation.
+
+    Callers MUST independently authenticate the Docker daemon and prevent
+    time-of-check/time-of-use replacement of the verified container ID.
+    """
+    evidence = verify_offline_container_snapshot(
+        snapshot, expected_name=expected_name, expected_image_id=expected_image_id
+    )
+    cid = evidence["container_id"]
+    return {
+        "container_id": cid,
+        "kill_argv": ("docker", "kill", cid),
+        "inspect_argv": ("docker", "inspect", "--type=container", cid),
+        "cleanup_argv": ("docker", "rm", "--force", cid),
+    }

@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "services/governance"))
 from app.hitl_offline_cleanup_verification import (
-    verify_offline_container_snapshot, verify_offline_cleanup_absent)
+    verify_offline_container_snapshot, verify_offline_cleanup_absent, verified_container_commands)
 from app.hitl_offline_container_policy import SandboxPolicyDenied
 
 class TestOfflineCleanupEvidence(unittest.TestCase):
@@ -15,6 +15,9 @@ class TestOfflineCleanupEvidence(unittest.TestCase):
             snapshot, expected_name="aepx-offline-"+"a"*32,
             expected_image_id="sha256:"+"c"*64)
         self.assertFalse(result["running"])
+        commands = verified_container_commands(snapshot, expected_name="aepx-offline-"+"a"*32, expected_image_id="sha256:"+"c"*64)
+        self.assertEqual(commands["kill_argv"], ("docker", "kill", "b"*64))
+        self.assertEqual(commands["cleanup_argv"], ("docker", "rm", "--force", "b"*64))
         for wrong in (dict(snapshot, Name="/wrong"), dict(snapshot, Id="short"),
                       dict(snapshot, Image="sha256:"+"d"*64)):
             with self.assertRaises(SandboxPolicyDenied):
