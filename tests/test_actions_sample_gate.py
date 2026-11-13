@@ -26,9 +26,23 @@ class ActionsSampleGateTests(unittest.TestCase):
         self.assertTrue(gate.evaluate({"sample_size": 2, "conclusion_counts":
                                       {"success": 1}}))
 
+    def test_unknown_conclusion_blocks(self):
+        report = {"sample_size": 2, "status_counts": {"completed": 2},
+                  "conclusion_counts": {"success": 1, "action_required": 1}}
+        self.assertTrue(gate.evaluate(report))
+
+    def test_queued_status_blocks_even_if_conclusions_claim_success(self):
+        report = {"sample_size": 1, "status_counts": {"queued": 1},
+                  "conclusion_counts": {"success": 1}}
+        self.assertTrue(gate.evaluate(report))
+
+    def test_missing_status_counts_blocks(self):
+        self.assertTrue(gate.evaluate({"sample_size": 1,
+                                       "conclusion_counts": {"success": 1}}))
+
     def test_successful_sample_only_passes_sample_health(self):
-        self.assertEqual(gate.evaluate({"sample_size": 3, "conclusion_counts":
-                                       {"success": 3}}), [])
+        self.assertEqual(gate.evaluate({"sample_size": 3, "status_counts": {"completed": 3},
+                                       "conclusion_counts": {"success": 3}}), [])
 
 
 if __name__ == "__main__":
