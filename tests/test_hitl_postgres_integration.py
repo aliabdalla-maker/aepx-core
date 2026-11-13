@@ -18,6 +18,7 @@ from app.hitl_postgres import consume_with_outbox,ApprovalError
 from app.hitl_replay import find_matching_replay
 from app.hitl_outbox import claim, settle, reap_exhausted
 from app.hitl_recovery import requeue_dead_letter,RecoveryDenied
+from app.hitl_execution_receipts import execute_local_once
 
 @unittest.skipUnless(os.getenv("HITL_TEST_DATABASE_URL") and os.getenv("HITL_TEST_DISPOSABLE")=="yes",
                      "requires explicit disposable PostgreSQL test DB approval")
@@ -116,6 +117,38 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
+
+    def test_concurrent_local_receipt_applies_once(self):
+        tenant=uuid4()
+        event=self._seed_outbox(tenant)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("SELECT payload->>'action_hash' FROM hitl.outbox WHERE id=%s",(event,))
+                action_hash=cur.fetchone()[0]
+        def attempt(_):
+            with self.connect() as conn:
+                def local_effect(cur):
+                    # A transactional, local effect. No external calls.
+                    cur.execute("""INSERT INTO hitl.events
+                                   (tenant_id,approval_id,event,actor_id)
+                                   SELECT tenant_id,(payload->>'approval_id')::uuid,
+                                          'local_receipt_applied','receipt-test'
+                                   FROM hitl.outbox WHERE tenant_id=%s AND id=%s""",
+                                (str(tenant),event))
+                return execute_local_once(
+                    conn,tenant_id=tenant,event_id=event,action_hash=action_hash,
+                    tool_name="local.receipt-test",apply_local=local_effect,approved=True)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes=list(pool.map(attempt,range(2)))
+        self.assertCountEqual(outcomes,["applied","duplicate"])
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("""SELECT count(*) FROM hitl.events
+                               WHERE tenant_id=%s AND event='local_receipt_applied'""",
+                            (str(tenant),))
+                self.assertEqual(cur.fetchone()[0],1)
 
     def test_audited_dead_letter_requeue_requires_operator_gate(self):
         tenant=uuid4()
