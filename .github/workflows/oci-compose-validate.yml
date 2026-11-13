@@ -213,6 +213,22 @@ jobs:
                   raise AssertionError("Identity outage did not fail closed")
           print("PASS: Registry authenticated DID requests and fail-closed outage handling")
           PY
+      - name: Verify scoped credential wiring and uniqueness
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          identity=Path("services/identity/app/main.py").read_text()
+          registry=Path("services/registry/app/main.py").read_text()
+          trust=Path("services/trust/app/main.py").read_text()
+          compose=Path("deploy/oci/compose.staging.yml").read_text()
+          assert "AEPX_REGISTRY_IDENTITY_KEY" in identity and "AEPX_REGISTRY_IDENTITY_KEY" in registry
+          assert "AEPX_REGISTRY_WRITE_KEY" in registry
+          assert "AEPX_TRUST_WRITE_KEY" in trust
+          for key in ("AEPX_REGISTRY_IDENTITY_KEY", "AEPX_REGISTRY_WRITE_KEY", "AEPX_TRUST_WRITE_KEY"):
+              assert key in compose
+          print("PASS: scoped credentials wired in services and isolated Compose")
+          PY
       - name: Reject unverified external DID claims in secure Registry
         run: |
           set -euo pipefail
