@@ -17,7 +17,7 @@ for service in postgres redis identity trust registry; do
   fi
   health="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}not-configured{{end}}' "$cid")"
   if [[ "$health" == unhealthy || "$health" == starting ]]; then
-    echo "CRITICAL: $service health=unhealthy"; failed=1
+    echo "CRITICAL: $service health=$health"; failed=1
   else
     echo "OK: $service running health=$health"
   fi
