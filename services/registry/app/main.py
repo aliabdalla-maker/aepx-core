@@ -47,17 +47,14 @@ class Agent(AgentIn):
 
 
 def _mint_did() -> str | None:
-    # RFC-0006 — Law 1 (Identity Before Interaction): every agent gets a
-    # did:key if one isn't supplied. Best-effort and fail-open: Identity
-    # being unreachable must never block agent registration, same as the
-    # Connector Bus's circuit-breaker check (connector-bus/app/main.py).
+    # Secure staging requires an authenticated Identity request and fails closed.
     try:
         resp = httpx.post(f"{IDENTITY_URL}/did", headers={"X-AEPX-Service-Key": os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")} if os.getenv("AEPX_REQUIRE_DATABASE") == "true" else {}, timeout=3.0)
         resp.raise_for_status()
         return resp.json().get("did")
-    except Exception:
+    except Exception as exc:
         if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
-            raise
+            raise HTTPException(503, "Identity service unavailable") from exc
         return None
 
 
