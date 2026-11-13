@@ -71,7 +71,31 @@ class PostgresReservationAcceptance(unittest.TestCase):
                 with self.assertRaises(ReservationDenied):
                     reserve_intent(cur, conflicting)
 
+    def test_cross_tenant_write_rejected(self):
+        other_tenant = str(uuid4())
+        candidate = IntentReservation(self.tenant, str(uuid4()), str(uuid4()),
+            "b"*64, "resource-other", "tool.read", "2025-11-25", "cross-tenant-0001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (other_tenant,))
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                    reserve_intent(cur, candidate)
+
+    def test_runtime_without_tenant_context_cannot_insert(self):
+        candidate = IntentReservation(self.tenant, str(uuid4()), str(uuid4()),
+            "c"*64, "resource-unscoped", "tool.read", "2025-11-25", "unscoped-000001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                    reserve_intent(cur, candidate)
+
     def test_cross_tenant_read_denied(self):
+        seed = IntentReservation(self.tenant, str(uuid4()), str(uuid4()),
+            "d"*64, "resource-seed", "tool.read", "2025-11-25", "read-seed-00001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                reserve_intent(cur, seed)
         other_tenant = str(uuid4())
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
