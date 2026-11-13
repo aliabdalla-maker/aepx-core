@@ -1,0 +1,32 @@
+name: HITL atomic identity PostgreSQL acceptance
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  atomic-identity-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: identity_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: isolated-test-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d identity_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      HITL_IDENTITY_TEST_ISOLATED: "yes"
+      HITL_IDENTITY_TEST_DSN: postgresql://postgres:isolated-test-only@localhost:5432/identity_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'psycopg[binary]==3.2.1'
+      - run: python -m unittest discover -s tests -p test_hitl_atomic_identity_pg_integration.py -v
