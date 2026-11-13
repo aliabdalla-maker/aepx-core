@@ -10,6 +10,8 @@ on:
       - 'tests/test_aepx_workflow_guards.py'
       - 'scripts/aepx-agentic-contracts.py'
       - 'scripts/aepx-hitl-store.py'
+      - 'scripts/aepx-local-outbox.py'
+      - 'tests/test_aepx_local_outbox.py'
       - 'tests/test_aepx_hitl_store.py'
       - 'tests/test_aepx_agentic_contracts.py'
       - 'docs/AEPX-Agentic-Next-Implementation.md'
@@ -33,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Python syntax
-        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py scripts/aepx-hitl-store.py
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py scripts/aepx-hitl-store.py scripts/aepx-local-outbox.py
       - name: Run core acceptance regression tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
       - name: Run agentic acceptance contract tests
@@ -46,6 +48,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_aepx_agentic_contracts.py' -v
       - name: Run durable local HITL tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_store.py' -v
+      - name: Run local outbox tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_local_outbox.py' -v
       - name: Validate shell syntax
         run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh
       - name: Check static security blockers (informational for development)
