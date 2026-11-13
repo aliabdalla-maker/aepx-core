@@ -11,22 +11,37 @@ class RemoteReceiptTests(unittest.TestCase):
     def setUp(self):
         self.db=MagicMock()
         self.cur=self.db.cursor.return_value.__enter__.return_value
+        self.approval_id=uuid4()
+        self.payload={"approval_id":str(self.approval_id),"actor_id":"worker","action_hash":"a"*64}
+        self.approval=("consumed","a"*64,"approver",True)
         self.kw=dict(tenant_id=uuid4(),event_id=uuid4(),provider="trusted-mcp",
                      idempotency_key="event-key-123456")
     def test_reservation_commits_uncertain_before_external_call(self):
-        self.cur.fetchone.side_effect=[("hitl.approval.consumed",),(str(self.kw["event_id"]),)]
+        self.cur.fetchone.side_effect=[("hitl.approval.consumed",self.payload),self.approval,(True,),(str(self.kw["event_id"]),)]
         self.assertEqual(reserve_remote(self.db,**self.kw)["state"],"uncertain")
         self.db.commit.assert_called_once()
         sql=" ".join(c.args[0] for c in self.cur.execute.call_args_list)
         self.assertIn("FOR UPDATE",sql)
         self.assertIn("ON CONFLICT",sql)
     def test_duplicate_reservation_rejected(self):
-        self.cur.fetchone.side_effect=[("hitl.approval.consumed",),None]
+        self.cur.fetchone.side_effect=[("hitl.approval.consumed",self.payload),self.approval,(True,),None]
         with self.assertRaises(ReconciliationRequired):
             reserve_remote(self.db,**self.kw)
         self.db.rollback.assert_called_once()
     def test_wrong_topic_denied(self):
-        self.cur.fetchone.return_value=("unapproved.topic",)
+        self.cur.fetchone.return_value=("unapproved.topic",self.payload)
+        with self.assertRaises(ReconciliationRequired):
+            reserve_remote(self.db,**self.kw)
+    def test_missing_consumption_provenance_denied(self):
+        self.cur.fetchone.side_effect=[
+            ("hitl.approval.consumed",self.payload),self.approval,(False,)]
+        with self.assertRaises(ReconciliationRequired):
+            reserve_remote(self.db,**self.kw)
+        self.db.rollback.assert_called_once()
+    def test_expired_approval_denied(self):
+        self.cur.fetchone.side_effect=[
+            ("hitl.approval.consumed",self.payload),
+            ("consumed","a"*64,"approver",False)]
         with self.assertRaises(ReconciliationRequired):
             reserve_remote(self.db,**self.kw)
     def test_reconcile_requires_authorization(self):
