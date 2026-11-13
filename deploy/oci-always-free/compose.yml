@@ -11,6 +11,7 @@ services:
       POSTGRES_PASSWORD: ${AEPX_POSTGRES_PASSWORD:?set AEPX_POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ../../schemas/sql:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U aepx -d aepx"]
       interval: 10s
