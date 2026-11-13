@@ -7,7 +7,7 @@ This draft adds `POST /hitl/consume` to the Governance FastAPI service.
 - Successful consumption atomically updates the approval and queues an outbox event. **No external tool is executed.**
 - Invalid approval, expired approval or action fingerprint mismatch returns 409; persistence failure returns a redacted 503.
 - Idempotency keys are restricted to 8–200 ASCII characters (letters, digits, dash, underscore and dot).
-- An approval can be consumed once. **Replays currently return 409, not the original event ID.** Implement an idempotent replay contract before exposing this endpoint to automatic retrying clients.
+- An approval can be consumed once. On a retry after a committed consumption, the API returns the original event ID **only** when tenant, idempotency key, approval ID, action fingerprint and actor all match. Otherwise it returns 409. Concurrency and real PostgreSQL RLS acceptance are still required before automatic retries are enabled.
 
 ## Required before merging
 
