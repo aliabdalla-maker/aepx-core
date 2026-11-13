@@ -15,13 +15,18 @@ if os.environ.get("AEPX_ALLOW_DISPOSABLE_PG_TESTS") != "yes" or any(
 # The workflow is exclusively for its throwaway local GitHub Actions service.
 # Refuse remote hosts or non-test databases even with the opt-in flag set.
 for key in REQUIRED:
+    expected_role = "postgres" if key == "AEPX_TEST_PG_DSN" else "aepx_runtime"
     try:
         parsed = urlsplit(os.environ[key])
         safe = (
             parsed.scheme in ("postgres", "postgresql")
             and parsed.hostname in ("127.0.0.1", "localhost", "::1")
             and parsed.path == "/aepx_mcp_test"
-            and parsed.username in ("postgres", "aepx_runtime")
+            and parsed.username == expected_role
+            and parsed.port == 5432
+            and parsed.password is not None
+            and parsed.query == ""
+            and parsed.fragment == ""
         )
     except (ValueError, TypeError):
         safe = False
