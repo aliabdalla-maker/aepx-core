@@ -24,6 +24,10 @@ class TestMCPEnvelope(unittest.TestCase):
         self.assertEqual(result["headers"]["Mcp-Name"], "crm.update")
         self.assertEqual(result["headers"]["MCP-Protocol-Version"], "2026-07-28")
         self.assertEqual(result["jsonrpc"]["params"]["arguments"], {"x": 1})
+        meta = result["jsonrpc"]["params"]["_meta"]
+        self.assertEqual(meta["io.modelcontextprotocol/protocolVersion"], result["headers"]["MCP-Protocol-Version"])
+        self.assertEqual(meta["io.modelcontextprotocol/clientCapabilities"], {})
+        self.assertEqual(result["headers"]["Content-Type"], "application/json")
         self.assertEqual(result["jsonrpc"]["params"]["_meta"]
                          ["io.modelcontextprotocol/clientInfo"]["name"], "aepx")
 
