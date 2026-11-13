@@ -95,3 +95,27 @@ def reap_exhausted(connection,*,tenant_id,max_attempts=8,limit=100):
     except Exception:
         connection.rollback()
         raise
+
+def lease_is_current(connection, *, tenant_id, event_id, worker_id, attempt_number):
+    """Read-only preflight; settlement still enforces the authoritative fence.
+
+    A successful preflight does NOT reserve the lease for external execution.
+    """
+    if not isinstance(worker_id, str) or not worker_id.strip():
+        raise ValueError("worker identity required")
+    if not isinstance(attempt_number, int) or isinstance(attempt_number, bool) or attempt_number < 1:
+        raise ValueError("valid attempt number required")
+    try:
+        with connection.cursor() as cur:
+            tenant = _scope(cur, tenant_id)
+            cur.execute("""SELECT EXISTS(
+                SELECT 1 FROM hitl.outbox WHERE tenant_id=%s AND id=%s
+                AND status='leased' AND lease_owner=%s
+                AND attempts=%s AND leased_until>now()
+            )""", (tenant, str(uuid.UUID(str(event_id))), worker_id, attempt_number))
+            row = cur.fetchone()
+        connection.commit()
+        return bool(row and row[0] is True)
+    except Exception:
+        connection.rollback()
+        raise
