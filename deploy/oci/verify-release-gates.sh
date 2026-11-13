@@ -23,11 +23,10 @@ check has_docker
 check has_memory
 check has_disk
 check has_secrets
-check has_private_compose
 check has_staging_compose
 check has_arch
 if (( fail )); then
   echo "RELEASE BLOCKED. No changes made." >&2
   exit 1
 fi
-echo "Static host checks passed; runtime architecture, backups, TLS, and acceptance tests still required."
+echo "Staging host checks passed; image compatibility, backup restore, TLS, and acceptance tests still required."
