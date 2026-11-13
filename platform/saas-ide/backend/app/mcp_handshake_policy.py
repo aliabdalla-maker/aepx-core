@@ -9,7 +9,7 @@ def validate_mcp_handshake(*, initialize_response, initialize_request_id,
     if not isinstance(approved_server_name,str) or not approved_server_name:
         raise MCPContractDenied("trusted MCP server identity required")
     if (not isinstance(client_versions,(tuple,list,set,frozenset)) or
-        not isinstance(approved_protocol_version,str) or not approved_protocol_version or
+        not client_versions or len(client_versions)>32 or\n        any(not isinstance(v,str) or not v or len(v)>32 for v in client_versions) or\n        not isinstance(approved_protocol_version,str) or not approved_protocol_version or
         approved_protocol_version not in client_versions):
         raise MCPContractDenied("trusted MCP protocol version required")
     initialized=validate_mcp_initialize_response(
