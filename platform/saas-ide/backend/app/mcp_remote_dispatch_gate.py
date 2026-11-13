@@ -4,11 +4,15 @@ This is a pure validation boundary. It never sends requests, verifies TLS,
 checks JWT signatures, or guarantees provider-side exactly-once effects.
 """
 from dataclasses import dataclass
+from datetime import date
 from uuid import UUID
 import re
 
 _HASH = re.compile(r"^[0-9a-f]{64}$")
 _TOKEN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$")
+_RESOURCE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$")
+_VERSION = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+_TOOL = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,127}$")
 
 class RemoteDispatchDenied(PermissionError):
     pass
@@ -56,8 +60,17 @@ def validate_remote_dispatch(intent, context):
         context.resource_id, context.protocol_version, context.tool_name
     )):
         raise RemoteDispatchDenied("missing resource, protocol or tool binding")
-    if len(intent.tool_name) > 128 or len(intent.resource_id) > 256:
-        raise RemoteDispatchDenied("dispatch identifier too long")
+    if not _RESOURCE.fullmatch(intent.resource_id):
+        raise RemoteDispatchDenied("invalid resource identifier")
+    if not _VERSION.fullmatch(intent.protocol_version):
+        raise RemoteDispatchDenied("invalid protocol version format")
+    try:
+        if date.fromisoformat(intent.protocol_version).isoformat() != intent.protocol_version:
+            raise ValueError("noncanonical date")
+    except ValueError as exc:
+        raise RemoteDispatchDenied("invalid protocol version date") from exc
+    if not _TOOL.fullmatch(intent.tool_name):
+        raise RemoteDispatchDenied("invalid tool identifier")
     if not isinstance(intent.action_hash, str) or not _HASH.fullmatch(intent.action_hash):
         raise RemoteDispatchDenied("invalid action digest")
     if not isinstance(intent.idempotency_key, str) or not _TOKEN.fullmatch(intent.idempotency_key):

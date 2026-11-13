@@ -47,9 +47,28 @@ class RemoteDispatchGateTests(unittest.TestCase):
         with self.assertRaises(RemoteDispatchDenied):
             validate_remote_dispatch(replace(self.intent, action_hash="A" * 64), self.ctx)
 
-if __name__ == "__main__":
-    unittest.main()
-
     def test_substituted_tool_name_rejected(self):
         with self.assertRaises(RemoteDispatchDenied):
             validate_remote_dispatch(replace(self.intent,tool_name="tool.delete"),self.ctx)
+
+    def test_invalid_identifier_shapes_rejected(self):
+        cases = (
+            ("resource_id", "resource\\nspoof"),
+            ("resource_id", "resource with spaces"),
+            ("tool_name", "tool\\x00execute"),
+            ("tool_name", "tool\\nexecute"),
+            ("protocol_version", "2025-11-25\\n"),
+            ("protocol_version", "latest"),
+            ("protocol_version", "2025-13-25"),
+            ("protocol_version", "2025-02-30"),
+        )
+        for field, value in cases:
+            with self.subTest(field=field, value=value), self.assertRaises(RemoteDispatchDenied):
+                validate_remote_dispatch(replace(self.intent, **{field: value}), self.ctx)
+
+    def test_truthy_nonboolean_gateway_assertion_rejected(self):
+        with self.assertRaises(RemoteDispatchDenied):
+            validate_remote_dispatch(self.intent, replace(self.ctx, tls_peer_verified=1))
+
+if __name__ == "__main__":
+    unittest.main()
