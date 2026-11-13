@@ -17,6 +17,11 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
         return {"mode": "dry-run", "claimed": 0, "delivered": 0, "failed": 0}
     if not callable(deliver):
         raise DispatchDisabled("explicit idempotent delivery adapter required")
+    if (not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 100 or
+        not isinstance(lease_seconds, int) or isinstance(lease_seconds, bool) or not 1 <= lease_seconds <= 3600 or
+        not isinstance(max_attempts, int) or isinstance(max_attempts, bool) or max_attempts < 1 or
+        not isinstance(retry_seconds, int) or isinstance(retry_seconds, bool) or not 1 <= retry_seconds <= 86400):
+        raise ValueError("invalid dispatcher bounds")
     tenant = str(UUID(str(tenant_id)))
     if not isinstance(worker_id, str) or not worker_id.strip():
         raise ValueError("verified worker identity required")
@@ -27,6 +32,8 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
                  max_attempts=max_attempts)
     delivered = failed = stale = 0
     for event_id, topic, payload, attempt in rows:
+        if not isinstance(attempt, int) or isinstance(attempt, bool) or attempt < 1:
+            raise ValueError("invalid lease fencing attempt")
         ok = False
         try:
             if topic != "hitl.approval.consumed" or not isinstance(payload, dict):
