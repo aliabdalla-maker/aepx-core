@@ -83,6 +83,27 @@ def failed_before_jobs_evidence(repo, runs, token, fetch=fetch_json):
     return evidence
 
 
+def check_run_evidence(repo, failed_runs, token, fetch=fetch_json):
+    """Bounded check-run inspection for failed workflows; no mutation or diagnosis."""
+    result = []
+    for run in failed_runs[:3]:
+        item = {"run_id": run["run_id"], "head_sha": run.get("head_sha")}
+        sha = run.get("head_sha")
+        if not sha:
+            item["error_type"] = "MissingHeadSHA"
+            result.append(item)
+            continue
+        try:
+            url = f"https://api.github.com/repos/{repo}/commits/{sha}/check-runs?per_page=100"
+            payload = fetch(url, token)
+            item["check_run_count"] = payload.get("total_count", len(payload.get("check_runs", [])))
+            item["no_check_runs_returned"] = not bool(payload.get("check_runs"))
+        except (OSError, ValueError, KeyError, urllib.error.URLError) as exc:
+            item["error_type"] = type(exc).__name__
+        result.append(item)
+    return result
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", required=True, help="owner/repository")
@@ -102,6 +123,7 @@ def main(argv=None):
                               datetime.datetime.now(datetime.timezone.utc))}
         report["runner_assignment_sample"] = runner_evidence(args.repo, report["queued"], token)
         report["failed_run_job_sample"] = failed_before_jobs_evidence(args.repo, data.get("workflow_runs", []), token)
+        report["failed_run_check_sample"] = check_run_evidence(args.repo, report["failed_run_job_sample"], token)
         report["investigation_guidance"] = (
             "If runs are queued, inspect runner eligibility and Actions limits. "
             "If runs fail without jobs, inspect workflow validity and GitHub Actions policies. "
