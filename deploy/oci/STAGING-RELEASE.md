@@ -76,3 +76,8 @@ Secure Identity now omits `private_key_hex` from DID issuance responses to preve
 ## Write endpoint authorization
 
 In secure staging, Registry `POST /agents` and Trust `POST /trust/{entity_id}/adjust` require the shared `X-AEPX-Service-Key` credential. The CI integration job checks both allowed and rejected writes. This is an interim control: replace it with service-specific credentials and per-operation authorization before exposing the services beyond the isolated staging network.
+
+
+## CI persistence and sensitive logging
+
+The ephemeral integration workflow now restarts Registry and verifies that its test agent remains readable from PostgreSQL. A passing test proves only that CI's disposable environment persisted this record across an application restart; it does not establish recovery from host loss or an OCI backup. CI failure diagnostics intentionally omit application logs because DID responses and service credentials may be sensitive. Collect and redact logs only through an approved restricted incident process.
