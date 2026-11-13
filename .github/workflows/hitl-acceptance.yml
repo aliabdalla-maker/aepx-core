@@ -62,6 +62,7 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f db/migrations/20261113_hitl_tenant_fk.sql
           psql -v ON_ERROR_STOP=1 -f db/migrations/20261113_hitl_recovery_audit.sql
           psql -v ON_ERROR_STOP=1 -f db/migrations/20261113_hitl_execution_receipts.sql
+          psql -v ON_ERROR_STOP=1 -f db/migrations/20261113_hitl_remote_delivery_receipts.sql
       - name: Provision restricted non-owner test role
         run: |
           psql -v ON_ERROR_STOP=1 <<'SQL'
