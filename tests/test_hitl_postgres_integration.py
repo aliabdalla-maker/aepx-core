@@ -413,6 +413,19 @@ class HitlPostgresIntegration(unittest.TestCase):
                             (str(tenant), event))
                 self.assertEqual(cur.fetchone()[0], "pending")
 
+    def test_cross_tenant_outbox_delete_is_not_granted(self):
+        tenant = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""SELECT has_table_privilege(current_user,
+                               'hitl.outbox', 'DELETE')""")
+                self.assertIs(cur.fetchone()[0], False)
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(tenant),))
+                cur.execute("SELECT count(*) FROM hitl.outbox WHERE tenant_id=%s AND id=%s",
+                            (str(tenant), event))
+                self.assertEqual(cur.fetchone()[0], 1)
+
     def test_multi_worker_claim_and_stale_settlement(self):
         tenant=uuid4()
         event=self._seed_outbox(tenant)
