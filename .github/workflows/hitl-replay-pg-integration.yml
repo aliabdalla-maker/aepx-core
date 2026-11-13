@@ -1,0 +1,30 @@
+name: HITL receipt replay PostgreSQL integration
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  replay-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: replay_test
+          POSTGRES_PASSWORD: replay_test_only
+          POSTGRES_DB: replay_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U replay_test -d replay_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      HITL_REPLAY_TEST_DSN: postgresql://replay_test:replay_test_only@127.0.0.1:5432/replay_test
+      HITL_REPLAY_ALLOW_ISOLATED_TEST: 'yes'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'psycopg[binary]==3.2.1' pytest
+      - run: python -m pytest -q tests/test_hitl_receipt_replay_pg_integration.py tests/test_hitl_receipt_replay_postgres.py
