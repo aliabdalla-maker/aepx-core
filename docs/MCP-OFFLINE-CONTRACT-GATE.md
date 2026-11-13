@@ -113,3 +113,7 @@ The offline handshake composer now requires an **independently approved** `appro
 ## Handshake Python syntax repair
 
 A merged version of `mcp_handshake_policy.py` included literal backslash-n characters inside a conditional, preventing Python parsing. The correction restores actual source line breaks and extends regression coverage for invalid or oversized client version collections. CI must compile and execute the handshake test before the fix is considered verified. No network execution is enabled.
+
+## CI master-push parity and syntax coverage
+
+The MCP offline workflow now uses the same file filters for pull requests and master pushes, preventing a merged change to an MCP preflight/transport/atomic-claim module or its test from silently skipping the post-merge job. The job also runs `compileall` over the SaaS IDE backend before individual offline tests, catching malformed Python source outside the explicit MCP file list. This is a fail-closed CI gate only; queued runs or skipped workflows do not count as passing security tests.
