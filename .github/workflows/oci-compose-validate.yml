@@ -194,11 +194,11 @@ jobs:
       - name: Reject unverified external DID claims in secure Registry
         run: |
           set -euo pipefail
-          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true python3 - <<'PY'
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 python3 - <<'PY'
           from fastapi import HTTPException
           from app.main import AgentIn, create_agent
           try:
-              create_agent(AgentIn(name="unverified", did="did:key:zUnverified"))
+              create_agent(AgentIn(name="unverified", did="did:key:zUnverified"), x_aepx_service_key="abcdefghijklmnopqrstuvwxyz0123456789")
           except HTTPException as exc:
               assert exc.status_code == 403, exc
           else:
@@ -231,16 +231,20 @@ jobs:
           bash deploy/oci/staging.sh --smoke
           docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml exec -T registry python - <<'PY'
           import httpx
+          import os
           payload={"name":"ci-persistence-check"}
+          headers={"X-AEPX-Service-Key":os.environ["AEPX_INTERNAL_SERVICE_KEY"]}
           with httpx.Client(timeout=10) as client:
-              created=client.post("http://127.0.0.1:8000/agents",json=payload)
+              unauthorized=client.post("http://127.0.0.1:8000/agents",json=payload)
+              assert unauthorized.status_code==403,unauthorized.text
+              created=client.post("http://127.0.0.1:8000/agents",json=payload,headers=headers)
               assert created.status_code==200,created.text
               agent=created.json()
               assert agent["did"].startswith("did:key:"),agent
               fetched=client.get(f"http://127.0.0.1:8000/agents/{agent['id']}")
               assert fetched.status_code==200,fetched.text
               assert fetched.json()["id"]==agent["id"]
-              rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"})
+              rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"},headers=headers)
               assert rejected.status_code==403,rejected.text
           print("PASS: DID issuance, agent persistence and unverified DID rejection")
           PY
