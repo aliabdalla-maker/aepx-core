@@ -11,6 +11,7 @@ ALLOW = frozenset({
     "hitl_callback_fixtures:rejects",
     "hitl_callback_fixtures:hangs",
     "hitl_callback_fixtures:fails",
+    "hitl_callback_fixtures:crashes",
 })
 
 class TestIsolatedCallback(unittest.TestCase):
@@ -32,6 +33,17 @@ class TestIsolatedCallback(unittest.TestCase):
     def test_failure_is_uncertain(self):
         with self.assertRaises(CallbackIsolationError):
             self.run_adapter("fails")
+
+    def test_abrupt_process_crash_is_uncertain(self):
+        with self.assertRaises(CallbackIsolationError):
+            self.run_adapter("crashes", timeout=2)
+
+    def test_timeout_is_bounded(self):
+        import time
+        started = time.monotonic()
+        with self.assertRaises(CallbackIsolationError):
+            self.run_adapter("hangs", timeout=0.2)
+        self.assertLess(time.monotonic() - started, 4)
 
     def test_non_allowlisted_adapter_rejected(self):
         with self.assertRaises(CallbackIsolationError):

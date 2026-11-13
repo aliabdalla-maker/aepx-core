@@ -6,7 +6,7 @@ isolation remain separate mandatory deployment controls.
 """
 import importlib
 import multiprocessing as mp
-import queue
+import time
 
 class CallbackIsolationError(RuntimeError):
     pass
@@ -17,9 +17,9 @@ def _child(entrypoint, arguments, output):
         fn = getattr(importlib.import_module(module_name), function_name)
         result = fn(**arguments)
         if result is not None and not isinstance(result, bool):
-            output.put(("error", None))
+            output.send(("error", None))
         else:
-            output.put(("ok", result))
+            output.send(("ok", result))
     except BaseException:
         output.put(("error", None))
 
@@ -43,31 +43,33 @@ def run_isolated_callback(*, entrypoint, arguments, allowed_entrypoints,
         not 0 < timeout_seconds <= 60):
         raise ValueError("bounded timeout required")
     ctx = mp.get_context("spawn")
-    output = ctx.Queue(maxsize=1)
-    process = ctx.Process(target=_child, args=(entrypoint, arguments, output))
+    receiver, sender = ctx.Pipe(duplex=False)
+    process = ctx.Process(target=_child, args=(entrypoint, arguments, sender))
     process.daemon = True
     try:
         process.start()
-        process.join(timeout_seconds)
+        sender.close()
+        deadline = time.monotonic() + timeout_seconds
+        # Read before join: a Queue feeder may deadlock if joined before drain.
+        # A single bounded Pipe message avoids that feeder thread.
+        if not receiver.poll(max(0, deadline - time.monotonic())):
+            raise CallbackIsolationError("callback timed out or exited: outcome uncertain")
+        try:
+            status, result = receiver.recv()
+        except (EOFError, OSError) as exc:
+            raise CallbackIsolationError("callback IPC failed: outcome uncertain") from exc
+        process.join(max(0, deadline - time.monotonic()))
         if process.is_alive():
+            raise CallbackIsolationError("callback failed to exit: outcome uncertain")
+        if process.exitcode != 0 or status != "ok":
+            raise CallbackIsolationError("callback failed: outcome uncertain")
+        return result
+    finally:
+        receiver.close()
+        sender.close()
+        if process.pid is not None and process.is_alive():
             process.terminate()
             process.join(1)
             if process.is_alive():
                 process.kill()
                 process.join(1)
-            raise CallbackIsolationError("callback timed out: outcome uncertain")
-        if process.exitcode != 0:
-            raise CallbackIsolationError("callback process exited abnormally")
-        try:
-            status, result = output.get(timeout=0.5)
-        except queue.Empty as exc:
-            raise CallbackIsolationError("callback returned no verified outcome") from exc
-        if status != "ok":
-            raise CallbackIsolationError("callback failed: outcome uncertain")
-        return result
-    finally:
-        if process.pid is not None and process.is_alive():
-            process.kill()
-            process.join(1)
-        output.close()
-        output.join_thread()
