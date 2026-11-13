@@ -4,8 +4,12 @@ on:
   pull_request:
     paths:
       - 'scripts/aepx-core-integration.py'
+      - 'scripts/aepx-agentic-acceptance.py'
+      - 'tests/test_aepx_agentic_acceptance.py'
+      - 'services/workflow/app/main.py'
+      - 'docs/AEPX-Agentic-Acceptance.md'
       - 'tests/test_aepx_core_integration.py'
-      - 'scripts/aepx-compose-exposure.py'
+      - 'scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py'
       - 'scripts/aepx-backup-postgres.sh'
       - 'scripts/aepx-release-evidence.sh'
       - 'docs/AEPX-Production-Readiness.md'
@@ -26,6 +30,8 @@ jobs:
         run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py
       - name: Run core acceptance regression tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
+      - name: Run agentic acceptance contract tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_agentic_acceptance.py' -v
       - name: Validate shell syntax
         run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh
       - name: Check static security blockers (informational for development)
