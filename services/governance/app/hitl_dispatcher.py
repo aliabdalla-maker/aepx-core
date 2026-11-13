@@ -47,6 +47,11 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
             break
         if not isinstance(attempt, int) or isinstance(attempt, bool) or attempt < 1:
             raise ValueError("invalid lease fencing attempt")
+        # Fail closed on malformed identifiers from the claim boundary.
+        # Do not pass unvalidated IDs to external adapters or settlement.
+        event_uuid = UUID(str(event_id))
+        if str(event_uuid) != str(event_id):
+            raise ValueError("noncanonical event identifier")
         # Defend against a faulty claim implementation returning duplicate rows.
         # Never invoke an external adapter twice for the same event in one batch.
         if str(event_id) in seen_events:
