@@ -5,6 +5,8 @@ services:
   postgres:
     image: pgvector/pgvector:pg16
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     mem_limit: 512m
     pids_limit: 128
     environment:
@@ -23,6 +25,8 @@ services:
     restart: unless-stopped
     mem_limit: 192m
     pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -30,6 +34,8 @@ services:
   identity:
     mem_limit: 384m
     pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
     environment:
       AEPX_SECURE_MODE: "true"
       AEPX_INTERNAL_SERVICE_KEY: ${AEPX_INTERNAL_SERVICE_KEY:?Set AEPX_INTERNAL_SERVICE_KEY}
@@ -43,6 +49,8 @@ services:
   trust:
     mem_limit: 384m
     pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
     build:
       context: ../../services/trust
     restart: unless-stopped
@@ -55,6 +63,8 @@ services:
   registry:
     mem_limit: 384m
     pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
     build:
       context: ../../services/registry
     restart: unless-stopped
