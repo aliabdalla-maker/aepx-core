@@ -19,7 +19,10 @@ CHECKS = [
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json-output", type=Path, help="Optional local JSON evidence file")
+    parser.add_argument("--timeout", type=int, default=120, help="Seconds per check (default: 120)")
     args = parser.parse_args(argv)
+    if args.timeout < 1:
+        parser.error("--timeout must be a positive number")
     if importlib.util.find_spec("yaml") is None:
         print("ERROR: PyYAML is required; install with python -m pip install 'PyYAML>=6,<7'", file=sys.stderr)
         return 2
@@ -34,14 +37,21 @@ def main(argv=None):
     }
     for command in CHECKS:
         print("+", " ".join(command), flush=True)
-        result = subprocess.run(command, cwd=ROOT, check=False)
+        try:
+            result = subprocess.run(command, cwd=ROOT, check=False, timeout=args.timeout)
+            exit_code = result.returncode
+            timed_out = False
+        except subprocess.TimeoutExpired:
+            exit_code = 124
+            timed_out = True
         evidence["checks"].append({
             "command": command[1:],
-            "exit_code": result.returncode,
-            "passed": result.returncode == 0,
+            "exit_code": exit_code,
+            "passed": exit_code == 0,
+            "timed_out": timed_out,
         })
-        if result.returncode:
-            print(f"FAIL (exit {result.returncode})", file=sys.stderr, flush=True)
+        if exit_code:
+            print(f"FAIL (exit {exit_code}; timed_out={timed_out})", file=sys.stderr, flush=True)
     passed = sum(check["passed"] for check in evidence["checks"])
     evidence["passed"] = passed
     evidence["total"] = len(CHECKS)
