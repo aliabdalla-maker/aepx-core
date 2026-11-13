@@ -20,7 +20,8 @@ class MCPPreflight:
 
 def validate_mcp_https_endpoint(endpoint, *, allowed_hosts, timeout_seconds=10,
                                 max_response_bytes=1048576, authorization=None):
-    if type(endpoint) is not str or not endpoint or len(endpoint) > 2048:
+    if (type(endpoint) is not str or not endpoint or len(endpoint) > 2048
+            or any(ord(ch) < 33 or ord(ch) > 126 for ch in endpoint)):
         raise MCPPreflightDenied("invalid endpoint")
     if type(allowed_hosts) not in (frozenset, tuple, list) or not allowed_hosts:
         raise MCPPreflightDenied("explicit hostname allowlist required")
@@ -44,7 +45,7 @@ def validate_mcp_https_endpoint(endpoint, *, allowed_hosts, timeout_seconds=10,
             or parsed.netloc.endswith(".") or "%" in parsed.netloc
             or "\\" in endpoint):
         raise MCPPreflightDenied("HTTPS endpoint violates strict transport policy")
-    if host != host.lower() or host not in allowed_hosts:
+    if host not in allowed_hosts:
         raise MCPPreflightDenied("hostname not allowlisted")
     if any(type(item) is not str or item != item.lower() for item in allowed_hosts):
         raise MCPPreflightDenied("invalid allowlist entry")
