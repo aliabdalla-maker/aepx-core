@@ -21,7 +21,10 @@ def check(config):
         if not isinstance(mem,str) or not mem.lower().endswith("m") or not mem[:-1].isdigit():
             errors.append(f"{name}: explicit MiB memory limit required")
         else:
-            total+=int(mem[:-1])
+            mib=int(mem[:-1])
+            if mib<64:
+                errors.append(f"{name}: memory limit below safe minimum")
+            total+=mib
         if not isinstance(svc.get("pids_limit"),int) or svc["pids_limit"]<1:
             errors.append(f"{name}: PID limit required")
         if svc.get("privileged") or svc.get("network_mode")=="host":
@@ -57,6 +60,8 @@ def check(config):
     postgres_volumes=services.get("postgres",{}).get("volumes",[])
     if not any(isinstance(v,str) and v.split(":",1)[0]=="staging-postgres" and v.split(":")[1]=="/var/lib/postgresql/data" for v in postgres_volumes if ":" in v):
         errors.append("postgres data directory must use staging-postgres named volume")
+    if sum(isinstance(v,str) and v.split(":")[1:2]==["/var/lib/postgresql/data"] for v in postgres_volumes)>1:
+        errors.append("postgres: multiple mounts target the database data directory")
     if any(isinstance(v,str) and v.startswith("/") for v in postgres_volumes):
         errors.append("postgres: host bind mount prohibited for database data")
     if "staging-postgres" not in config.get("volumes",{}):
