@@ -75,6 +75,7 @@ jobs:
           for service, spec in cfg["services"].items():
               assert spec.get("mem_limit"), f"{service} missing memory limit"
               assert spec.get("pids_limit"), f"{service} missing PID limit"
+              assert "no-new-privileges:true" in spec.get("security_opt", []), f"{service} missing privilege escalation protection"
           print("PASS: staging resource limits")
           PY
           if AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --start; then
@@ -162,5 +163,6 @@ jobs:
           assert client.post("/did", headers={"X-AEPX-Service-Key":"invalid"}).status_code == 403
           response=client.post("/did", headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"})
           assert response.status_code == 200, response.text
+          assert response.json().get("did", "").startswith("did:key:"), response.text
           print("PASS: secure identity rejects unauthorized calls and permits internal service calls")
           PY
