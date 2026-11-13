@@ -25,13 +25,15 @@ def prepare_mcp_transport_policy(*, endpoint, approved_endpoints, dns_answers,
 
 def validate_mcp_transport_result(*, policy, endpoint, server_id, status_code,
                                   content_type, response_body, expected_request_id,
-                                  connected_peer=None):
+                                  connected_peer=None, require_connected_peer=False):
     """Check immutable preflight identity before offline response validation."""
     if (not isinstance(policy,dict) or policy.get("endpoint") != endpoint or
         policy.get("server_id") != server_id or
         not isinstance(policy.get("addresses"),tuple) or
         not policy["addresses"]):
         raise MCPContractDenied("MCP transport policy mismatch")
+    if require_connected_peer and connected_peer is None:
+        raise MCPContractDenied("MCP connected peer evidence required")
     if connected_peer is not None:
         validate_mcp_connected_peer(
             endpoint=endpoint, approved_endpoints={policy["endpoint"]},
