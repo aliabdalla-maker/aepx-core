@@ -63,8 +63,16 @@ def evaluate_required(report, sha, workflows):
                    and run.get("workflow_path") == workflow]
         if not matches:
             errors.append(f"missing required workflow: {workflow} at {sha}")
-        elif not (matches[0].get("status") == "completed" and
-                  matches[0].get("conclusion") == "success"):
+        elif not all(isinstance(run.get("created_at"), str) and
+                     isinstance(run.get("run_attempt"), int) and
+                     type(run.get("id")) is int for run in matches):
+            errors.append(f"missing run ordering evidence: {workflow} at {sha}")
+        elif not (max(matches, key=lambda run: (
+                      run["created_at"], run["run_attempt"], run["id"]
+                  )).get("status") == "completed" and
+                  max(matches, key=lambda run: (
+                      run["created_at"], run["run_attempt"], run["id"]
+                  )).get("conclusion") == "success"):
             errors.append(f"required workflow not successful: {workflow} at {sha}")
     return errors
 
