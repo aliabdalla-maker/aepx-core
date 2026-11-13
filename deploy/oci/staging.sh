@@ -24,7 +24,10 @@ PY
     "${COMPOSE[@]}" exec -T postgres pg_isready -U aepx -d aepx
     "${COMPOSE[@]}" exec -T redis redis-cli ping
     for service in identity trust registry; do
-      [[ -n "$("${COMPOSE[@]}" ps -q "$service")" ]] || { echo "Missing staging service: $service" >&2; exit 1; }
+      cid="$("${COMPOSE[@]}" ps -q "$service")"
+      [[ -n "$cid" ]] || { echo "Missing staging service: $service" >&2; exit 1; }
+      state="$(docker inspect --format "{{.State.Status}}" "$cid")"
+      [[ "$state" == "running" ]] || { echo "Staging service not running: $service ($state)" >&2; exit 1; }
     done
     echo "PASS: staging PostgreSQL and Redis respond; application HTTP acceptance tests still required"
     ;;
