@@ -1,0 +1,49 @@
+name: MCP reservation PostgreSQL acceptance
+on:
+  pull_request:
+    paths:
+      - 'tests/test_mcp_remote_intent_postgres.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_reservation.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_schema.py'
+      - '.github/workflows/mcp-reservation-postgres.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  postgres-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated test dependencies
+        run: python -m pip install 'psycopg[binary]>=3.1,<4'
+      - name: Create non-superuser test database
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -c "CREATE ROLE aepx_test LOGIN PASSWORD 'disposable-only' NOSUPERUSER NOBYPASSRLS;"
+          psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE aepx_acceptance OWNER aepx_test;"
+      - name: Run disposable PostgreSQL tests
+        env:
+          AEPX_ALLOW_DISPOSABLE_PG_TESTS: "yes"
+          AEPX_TEST_PG_DSN: postgresql://aepx_test:disposable-only@localhost:5432/aepx_acceptance
+        run: python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
