@@ -1,5 +1,6 @@
 -- Operator recovery audit for HITL dead letters. Apply in isolated staging first.
 BEGIN;
+CREATE UNIQUE INDEX IF NOT EXISTS hitl_outbox_tenant_id_id_uidx ON hitl.outbox(tenant_id,id);
 CREATE TABLE IF NOT EXISTS hitl.outbox_recovery_audit (
  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
  tenant_id uuid NOT NULL,
@@ -8,7 +9,7 @@ CREATE TABLE IF NOT EXISTS hitl.outbox_recovery_audit (
  ticket_id text NOT NULL,
  reason text NOT NULL,
  recorded_at timestamptz NOT NULL DEFAULT now(),
- CONSTRAINT recovery_event_fk FOREIGN KEY (event_id) REFERENCES hitl.outbox(id)
+ CONSTRAINT recovery_event_fk FOREIGN KEY (tenant_id,event_id) REFERENCES hitl.outbox(tenant_id,id)
 );
 CREATE INDEX IF NOT EXISTS outbox_recovery_tenant_event_idx
  ON hitl.outbox_recovery_audit(tenant_id,event_id,recorded_at);
