@@ -49,6 +49,7 @@ PY
       echo "BLOCKED: set AEPX_STAGING_APPROVED=yes only after confirming the target is NOT the production host." >&2
       exit 3
     }
+    python3 deploy/oci/validate-scoped-credentials.py
     bash deploy/oci/verify-release-gates.sh
     [[ "${AEPX_BACKUP_RESTORE_VERIFIED:-}" == "yes" ]] || {
       echo "BLOCKED: isolated backup restore evidence required" >&2
