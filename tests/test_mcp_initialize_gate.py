@@ -33,3 +33,15 @@ class TestInitializeGate(unittest.TestCase):
                     json.dumps(RESULT)*10000):
             with self.assertRaises(MCPContractDenied):
                 self.call(raw)
+
+    def test_server_name_binding(self):
+        body=json.dumps(RESULT)
+        ok=validate_mcp_initialize_response(
+            response_body=body,expected_request_id=11,
+            client_versions=["2025-11-25"],expected_server_name="crm")
+        self.assertEqual(ok["server_name"],"crm")
+        for name in ("other","",123):
+            with self.subTest(name=name),self.assertRaises(MCPContractDenied):
+                validate_mcp_initialize_response(
+                    response_body=body,expected_request_id=11,
+                    client_versions=["2025-11-25"],expected_server_name=name)
