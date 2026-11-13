@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test committed-write staging database probe guards
+        run: python3 -m unittest discover -s tests -p 'test_oci_db_commit_probe.py' -v
       - name: Test isolated staging PostgreSQL smoke guard
         run: python3 -m unittest discover -s tests -p 'test_oci_staging_db_smoke.py' -v
       - name: Test OCI staging resource and security policy
