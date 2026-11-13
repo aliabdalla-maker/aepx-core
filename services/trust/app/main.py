@@ -136,6 +136,8 @@ def adjust_trust(entity_id: str, payload: AdjustIn):
                 )
             return _row_to_dict(entity_id, tuple(scores.values()))
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             pass
         finally:
             conn.close()
