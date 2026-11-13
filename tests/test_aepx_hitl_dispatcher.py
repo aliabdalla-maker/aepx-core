@@ -58,8 +58,9 @@ class DispatcherTests(unittest.TestCase):
         self.lease_check.return_value = False
         result = dispatch_batch(**self.kw)
         self.deliver.assert_not_called()
-        self.assertEqual(result["failed"], 1)
-        self.assertFalse(settle.call_args.kwargs["delivered"])
+        self.assertEqual(result["failed"], 0)
+        self.assertEqual(result["stale"], 1)
+        settle.assert_not_called()
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
