@@ -44,6 +44,22 @@ jobs:
               shown += 1
               if shown >= 20:
                   break
+          lines += ["", "## Runner assignment evidence (first 5 queued runs)"]
+          for run in [r for r in runs if r.get("status") == "queued"][:5]:
+              job_request = urllib.request.Request(
+                  f"https://api.github.com/repos/{repo}/actions/runs/{run['id']}/jobs?per_page=20",
+                  headers={"Authorization": f"Bearer {token}",
+                           "Accept": "application/vnd.github+json",
+                           "User-Agent": "aepx-queue-diagnostics"})
+              try:
+                  with urllib.request.urlopen(job_request, timeout=20) as response:
+                      jobs = json.load(response).get("jobs", [])
+                  for job in jobs:
+                      labels = ",".join(job.get("labels") or [])
+                      assigned = job.get("runner_id") is not None
+                      lines.append(f"- run {run['id']} | job {job.get('name')} | status {job.get('status')} | labels {labels} | runner assigned: {assigned}")
+              except Exception as exc:
+                  lines.append(f"- run {run['id']}: job metadata unavailable ({type(exc).__name__})")
           lines += ["", "## Follow-up checks",
                     "- Inspect queued job runner labels and required approvals",
                     "- Review Actions permissions, account billing and runner availability",
