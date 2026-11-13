@@ -32,10 +32,18 @@ class HitlPostgresIntegration(unittest.TestCase):
         cls.dsn=os.environ["HITL_TEST_DATABASE_URL"]
         with psycopg.connect(cls.dsn) as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user")
-                superuser,bypass=cur.fetchone()
-                if superuser or bypass:
-                    raise AssertionError("test application role must not bypass RLS")
+                cur.execute("""SELECT current_database(), r.rolsuper, r.rolbypassrls,
+                                      r.rolcreatedb, r.rolcreaterole,
+                                      d.datdba = r.oid
+                               FROM pg_roles r JOIN pg_database d
+                                 ON d.datname = current_database()
+                               WHERE r.rolname = current_user""")
+                database, superuser, bypass, createdb, createrole, owns_db = cur.fetchone()
+                expected_db = os.getenv("HITL_TEST_EXPECTED_DATABASE")
+                if not expected_db or database != expected_db:
+                    raise AssertionError("explicit disposable database name mismatch")
+                if superuser or bypass or createdb or createrole or owns_db:
+                    raise AssertionError("test role must be restricted and not own database")
                 cur.execute("""SELECT EXISTS (
                     SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
                     WHERE n.nspname='hitl' AND c.relname='approvals'

@@ -2,6 +2,7 @@ name: HITL P0 acceptance
 on:
   push:
   pull_request:
+  merge_group:
   workflow_dispatch:
 permissions:
   contents: read
@@ -63,9 +64,13 @@ jobs:
           GRANT SELECT,INSERT,UPDATE ON ALL TABLES IN SCHEMA hitl TO hitl_ci_app;
           GRANT USAGE,SELECT ON ALL SEQUENCES IN SCHEMA hitl TO hitl_ci_app;
           SQL
+      - name: Verify restricted application role and disposable database
+        run: |
+          PGPASSWORD=disposable-only psql -h localhost -U hitl_ci_app -d hitl_ci -v ON_ERROR_STOP=1 -Atc "SELECT CASE WHEN current_database() = 'hitl_ci' AND NOT rolsuper AND NOT rolbypassrls AND NOT rolcreatedb AND NOT rolcreaterole THEN 'safe' ELSE 'unsafe' END FROM pg_roles WHERE rolname = current_user" | grep -qx safe
       - name: Execute real PostgreSQL tenant and concurrency tests
         env:
           PYTHONPATH: services/governance
           HITL_TEST_DISPOSABLE: 'yes'
+          HITL_TEST_EXPECTED_DATABASE: hitl_ci
           HITL_TEST_DATABASE_URL: postgresql://hitl_ci_app:disposable-only@localhost:5432/hitl_ci
         run: python -m pytest tests/test_hitl_postgres_integration.py -v
