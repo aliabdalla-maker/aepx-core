@@ -1,0 +1,434 @@
+name: OCI Docker deployment validation
+on:
+  pull_request:
+    paths:
+      - 'deploy/oci/**'
+      - 'docker-compose.yml'
+      - 'services/identity/**'
+      - 'services/registry/**'
+      - 'services/trust/**'
+      - 'schemas/sql/**'
+      - '.github/workflows/oci-compose-validate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test committed-write staging database probe guards
+        run: python3 -m unittest discover -s tests -p 'test_oci_db_commit_probe.py' -v
+      - name: Test isolated staging PostgreSQL smoke guard
+        run: python3 -m unittest discover -s tests -p 'test_oci_staging_db_smoke.py' -v
+      - name: Test OCI staging resource and security policy
+        run: |
+          python3 -m pip install -q pyyaml
+          python3 -m unittest discover -s tests -p 'test_oci_staging_policy.py' -v
+      - name: Test OCI staging release evidence guard
+        run: python3 -m unittest discover -s tests -p 'test_oci_release_evidence.py' -v
+      - name: Test OCI image platform manifest guard
+        run: python3 -m unittest discover -s tests -p 'test_oci_image_platforms.py' -v
+      - name: Test fail-closed scoped credentials
+        run: python3 -m unittest discover -s tests -p 'test_oci_scoped_credentials.py' -v
+      - name: Check shell syntax
+        run: |
+          for script in deploy/oci/*.sh; do bash -n "$script"; done
+          python3 -m py_compile deploy/oci/*.py
+      - name: Validate OCI Compose overlay
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          bash deploy/oci/deploy.sh --validate-only
+          python3 - <<'PY'
+          import json
+          import re
+          import subprocess
+          from pathlib import Path
+          text = Path('deploy/oci/compose.secure.generated.yml').read_text()
+          section = text.split('\nvolumes:\n')[0]
+          names = re.findall(r'^  ([a-zA-Z0-9_-]+):$', section, re.M)
+          assert len(names) == len(set(names)), 'Duplicate service entries'
+          cmd = ['docker','compose','-f','docker-compose.yml','-f','deploy/oci/compose.secure.generated.yml','config','--format','json']
+          config = json.loads(subprocess.check_output(cmd, text=True))
+          for name, service in config['services'].items():
+              for port in service.get('ports', []):
+                  assert port.get('host_ip') == '127.0.0.1', (name, port)
+          print('PASS: unique services and loopback-only ports')
+          PY
+      - name: Validate isolated OCI staging stack
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          python3 -m pip install -q pyyaml
+          bash deploy/oci/staging.sh --validate
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          import yaml
+          cfg = yaml.safe_load(Path("deploy/oci/compose.staging.yml").read_text())
+          for service, spec in cfg["services"].items():
+              assert spec.get("mem_limit"), f"{service} missing memory limit"
+              assert spec.get("pids_limit"), f"{service} missing PID limit"
+              assert "no-new-privileges:true" in spec.get("security_opt", []), f"{service} missing privilege escalation protection"
+          print("PASS: staging resource limits")
+          PY
+          if AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --start; then
+            echo "ERROR: staging started without backup and image approval" >&2
+            exit 1
+          fi
+          echo "PASS: unapproved staging startup rejected"
+      - name: Verify staging deployment cannot start without operator approval
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          if bash deploy/oci/staging.sh --start; then
+            echo "FAIL: unapproved staging deployment was permitted" >&2
+            exit 1
+          fi
+          echo "PASS: staging requires explicit operator approval"
+      - name: Build isolated staging application images
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml build identity trust registry
+      - name: Exercise isolated PostgreSQL restore rehearsal
+        run: |
+          set -euo pipefail
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          printf 'CREATE TABLE restore_probe (id integer PRIMARY KEY);\nINSERT INTO restore_probe VALUES (1);\n' | gzip -c > "$tmpdir/fixture.sql.gz"
+          (cd "$tmpdir" && sha256sum fixture.sql.gz > fixture.sql.gz.sha256)
+          bash deploy/oci/restore-staging-rehearsal.sh "$tmpdir/fixture.sql.gz"
+          printf 'corruption' >> "$tmpdir/fixture.sql.gz"
+          if bash deploy/oci/restore-staging-rehearsal.sh "$tmpdir/fixture.sql.gz"; then
+            echo "FAIL: corrupted backup was accepted" >&2
+            exit 1
+          fi
+          echo "PASS: isolated restore and checksum rejection"
+      - name: Test encrypted backup recovery and checksum rejection
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          age-keygen -o "$tmpdir/identity.txt" 2>"$tmpdir/keygen.log"
+          chmod 600 "$tmpdir/identity.txt"
+          recipient="$(age-keygen -y "$tmpdir/identity.txt")"
+          printf 'CREATE TABLE encrypted_restore_probe (id integer PRIMARY KEY);\nINSERT INTO encrypted_restore_probe VALUES (1);\n' | gzip -c | age -r "$recipient" -o "$tmpdir/fixture.sql.gz.age"
+          (cd "$tmpdir" && sha256sum fixture.sql.gz.age > fixture.sql.gz.age.sha256)
+          AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt" bash deploy/oci/restore-staging-encrypted-rehearsal.sh "$tmpdir/fixture.sql.gz.age"
+          printf 'corruption' >> "$tmpdir/fixture.sql.gz.age"
+          if AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt" bash deploy/oci/restore-staging-encrypted-rehearsal.sh "$tmpdir/fixture.sql.gz.age"; then
+            echo "FAIL: encrypted backup corruption was accepted" >&2
+            exit 1
+          fi
+          echo "PASS: encrypted backup restore and corruption rejection"
+      - name: Verify secure staging identity and persistence configuration
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          identity=Path("services/identity/app/main.py").read_text()
+          registry=Path("services/registry/app/main.py").read_text()
+          trust=Path("services/trust/app/main.py").read_text()
+          compose=Path("deploy/oci/compose.staging.yml").read_text()
+          assert 'AEPX_SECURE_MODE' in identity
+          assert 'Service authentication required' in identity
+          assert 'hmac.compare_digest' in identity
+          assert 'AEPX_REQUIRE_DATABASE' in registry and 'AEPX_REQUIRE_DATABASE' in trust
+          assert compose.count('AEPX_REQUIRE_DATABASE: "true"') == 2
+          assert compose.count("AEPX_INTERNAL_SERVICE_KEY:") == 3
+          assert 'AEPX_IDENTITY_JWT_SECRET:?' in compose
+          print("PASS: secure staging configuration assertions")
+          PY
+      - name: Exercise secure Identity HTTP authentication
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q fastapi==0.111.0 httpx==0.27.0 pyjwt==2.8.0 cryptography==42.0.5 base58==2.1.1
+          PYTHONPATH=services/identity AEPX_SECURE_MODE=true IDENTITY_JWT_SECRET=0123456789abcdefghijklmnopqrstuvwxyz AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 python3 - <<'PY'
+          from fastapi.testclient import TestClient
+          from app.main import app
+          client=TestClient(app)
+          assert client.get("/health").status_code == 200
+          token="/token?subject=test-agent"
+          assert client.post(token).status_code == 403
+          assert client.post(token, headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"}).status_code == 403
+          assert client.post("/did").status_code == 403
+          assert client.post("/did", headers={"X-AEPX-Service-Key":"invalid"}).status_code == 403
+          response=client.post("/did", headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"})
+          assert response.status_code == 200, response.text
+          assert response.json().get("did", "").startswith("did:key:"), response.text
+          assert "private_key_hex" not in response.json(), "Secure Identity leaked signing key"
+          print("PASS: secure identity rejects unauthorized calls and permits internal service calls")
+          PY
+      - name: Exercise Registry to Identity authentication contract
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q fastapi==0.111.0 httpx==0.27.0 pydantic==2.7.1 'psycopg[binary]>=3.1,<4'
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 python3 - <<'PY'
+          from unittest.mock import patch
+          import httpx
+          from fastapi import HTTPException
+          from app import main
+          calls=[]
+          def success(url, **kwargs):
+              calls.append((url, kwargs))
+              return httpx.Response(200, json={"did":"did:key:zTest"}, request=httpx.Request("POST",url))
+          with patch.object(main.httpx, "post", side_effect=success):
+              assert main._mint_did() == "did:key:zTest"
+          assert calls[0][1]["headers"]["X-AEPX-Service-Key"] == "abcdefghijklmnopqrstuvwxyz0123456789"
+          with patch.object(main.httpx, "post", side_effect=httpx.ConnectError("unavailable")):
+              try:
+                  main._mint_did()
+              except HTTPException as exc:
+                  assert exc.status_code == 503
+              else:
+                  raise AssertionError("Identity outage did not fail closed")
+          print("PASS: Registry authenticated DID requests and fail-closed outage handling")
+          PY
+      - name: Verify scoped credential wiring and uniqueness
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          identity=Path("services/identity/app/main.py").read_text()
+          registry=Path("services/registry/app/main.py").read_text()
+          trust=Path("services/trust/app/main.py").read_text()
+          compose=Path("deploy/oci/compose.staging.yml").read_text()
+          assert "AEPX_REGISTRY_IDENTITY_KEY" in identity and "AEPX_REGISTRY_IDENTITY_KEY" in registry
+          assert "AEPX_REGISTRY_WRITE_KEY" in registry
+          assert "AEPX_TRUST_WRITE_KEY" in trust
+          for key in ("AEPX_REGISTRY_IDENTITY_KEY", "AEPX_REGISTRY_WRITE_KEY", "AEPX_TRUST_WRITE_KEY"):
+              assert key in compose
+          print("PASS: scoped credentials wired in services and isolated Compose")
+          PY
+      - name: Test scoped service authorization boundaries
+        run: |
+          set -euo pipefail
+          PYTHONPATH=services/identity AEPX_SECURE_MODE=true IDENTITY_JWT_SECRET=0123456789abcdefghijklmnopqrstuvwxyz AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 AEPX_REGISTRY_IDENTITY_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 python3 - <<'PY'
+          from fastapi.testclient import TestClient
+          from app.main import app
+          client=TestClient(app)
+          assert client.post("/did",headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"}).status_code==403
+          assert client.post("/did",headers={"X-AEPX-Service-Key":"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"}).status_code==200
+          print("PASS: scoped Identity credential rejects legacy key")
+          PY
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 AEPX_REGISTRY_WRITE_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 AEPX_REGISTRY_IDENTITY_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 python3 - <<'PY'
+          from unittest.mock import patch
+          from fastapi import HTTPException
+          from app.main import AgentIn, create_agent
+          with patch("app.main._mint_did",return_value="did:key:zMock"):
+              for supplied in ("abcdefghijklmnopqrstuvwxyz0123456789","invalid"):
+                  try:
+                      create_agent(AgentIn(name="test"),x_aepx_service_key=supplied)
+                  except HTTPException as exc:
+                      assert exc.status_code==403
+                  else:
+                      raise AssertionError("Unscoped Registry write accepted")
+          print("PASS: scoped Registry write rejects legacy key")
+          PY
+          PYTHONPATH=services/trust AEPX_REQUIRE_DATABASE=true AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 AEPX_TRUST_WRITE_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AdjustIn, adjust_trust
+          try:
+              adjust_trust("agent",AdjustIn(component="behaviour",delta=1),x_aepx_service_key="abcdefghijklmnopqrstuvwxyz0123456789")
+          except HTTPException as exc:
+              assert exc.status_code==403
+          else:
+              raise AssertionError("Unscoped Trust write accepted")
+          print("PASS: scoped Trust write rejects legacy key")
+          PY
+      - name: Reject missing scoped credentials in strict mode
+        run: |
+          set -euo pipefail
+          PYTHONPATH=services/identity AEPX_SECURE_MODE=true AEPX_REQUIRE_SCOPED_KEYS=true IDENTITY_JWT_SECRET=0123456789abcdefghijklmnopqrstuvwxyz python3 - <<'PY'
+          from fastapi.testclient import TestClient
+          from app.main import app
+          assert TestClient(app).post("/did").status_code == 503
+          print("PASS: Identity missing scoped credential fails closed")
+          PY
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_REQUIRE_SCOPED_KEYS=true python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AgentIn,create_agent,_mint_did
+          try:
+              create_agent(AgentIn(name="test"),x_aepx_service_key="invalid")
+          except HTTPException as e:
+              assert e.status_code==503
+          else:
+              raise AssertionError("Missing Registry scoped credential accepted")
+          try:
+              _mint_did()
+          except HTTPException as e:
+              assert e.status_code==503
+          else:
+              raise AssertionError("Missing Registry-to-Identity scoped credential accepted")
+          print("PASS: Registry scoped credentials fail closed")
+          PY
+          PYTHONPATH=services/trust AEPX_REQUIRE_DATABASE=true AEPX_REQUIRE_SCOPED_KEYS=true python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AdjustIn,adjust_trust
+          try:
+              adjust_trust("agent",AdjustIn(component="behaviour",delta=1),x_aepx_service_key="invalid")
+          except HTTPException as e:
+              assert e.status_code==503
+          else:
+              raise AssertionError("Missing Trust scoped credential accepted")
+          print("PASS: Trust scoped credential fails closed")
+          PY
+      - name: Reject unverified external DID claims in secure Registry
+        run: |
+          set -euo pipefail
+          PYTHONPATH=services/registry AEPX_REQUIRE_DATABASE=true AEPX_INTERNAL_SERVICE_KEY=abcdefghijklmnopqrstuvwxyz0123456789 python3 - <<'PY'
+          from fastapi import HTTPException
+          from app.main import AgentIn, create_agent
+          try:
+              create_agent(AgentIn(name="unverified", did="did:key:zUnverified"), x_aepx_service_key="abcdefghijklmnopqrstuvwxyz0123456789")
+          except HTTPException as exc:
+              assert exc.status_code == 403, exc
+          else:
+              raise AssertionError("Registry accepted unverified DID claim")
+          print("PASS: secure Registry rejects unverified DID ownership")
+          PY
+  integration:
+    name: Ephemeral staging integration (CI only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate temporary CI credentials
+        run: |
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          keys = ["AEPX_POSTGRES_PASSWORD", "AEPX_NEO4J_PASSWORD", "AEPX_IDENTITY_JWT_SECRET", "AEPX_INTERNAL_SERVICE_KEY"]
+          Path(".env").write_text("".join(f"{key}={secrets.token_urlsafe(32)}\n" for key in keys))
+          PY
+          chmod 600 .env
+      - name: Build and start isolated containers
+        run: |
+          set -euo pipefail
+          bash deploy/oci/staging.sh --validate
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml up -d --build --wait --wait-timeout 180
+      - name: Verify health and Registry persistence
+        run: |
+          set -euo pipefail
+          bash deploy/oci/staging.sh --smoke
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml exec -T registry python - <<'PY'
+          import httpx
+          import os
+          payload={"name":"ci-persistence-check"}
+          headers={"X-AEPX-Service-Key":os.environ["AEPX_INTERNAL_SERVICE_KEY"]}
+          with httpx.Client(timeout=10) as client:
+              unauthorized=client.post("http://127.0.0.1:8000/agents",json=payload)
+              assert unauthorized.status_code==403,unauthorized.text
+              created=client.post("http://127.0.0.1:8000/agents",json=payload,headers=headers)
+              assert created.status_code==200,created.text
+              agent=created.json()
+              assert agent["did"].startswith("did:key:"),agent
+              fetched=client.get(f"http://127.0.0.1:8000/agents/{agent['id']}")
+              assert fetched.status_code==200,fetched.text
+              assert fetched.json()["id"]==agent["id"]
+              malformed=client.get("http://127.0.0.1:8000/agents/not-a-uuid")
+              assert malformed.status_code==404,malformed.text
+              rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"},headers=headers)
+              assert rejected.status_code==403,rejected.text
+              trust_before=client.get("http://trust:8000/trust/ci-read-only-unknown-entity")
+              assert trust_before.status_code==200,trust_before.text
+              assert trust_before.json()["trust_score"]==50
+              invalid_component=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"unknown","delta":1},headers=headers)
+              assert invalid_component.status_code==422,invalid_component.text
+              trust_unauth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1})
+              assert trust_unauth.status_code==403,trust_unauth.text
+              trust_auth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1},headers=headers)
+              assert trust_auth.status_code==200,trust_auth.text
+          print("PASS: authenticated Registry, DID issuance, persistence and Trust writes")
+          PY
+          count="$(docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml exec -T postgres psql -U aepx -d aepx -Atc "SELECT count(*) FROM trust_scores WHERE entity_id='ci-read-only-unknown-entity'")"
+          [[ "$count" == 0 ]] || { echo "FAIL: Trust GET persisted an unknown entity" >&2; exit 1; }
+          echo "PASS: Trust GET caused no persistent database write"
+      - name: Verify agent survives Registry restart
+        run: |
+          set -euo pipefail
+          compose=(docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml)
+          "${compose[@]}" restart registry
+          for attempt in $(seq 1 30); do
+            if "${compose[@]}" exec -T registry python -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/health",timeout=3)' >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          "${compose[@]}" exec -T registry python - <<'PY'
+          import httpx
+          with httpx.Client(timeout=10) as client:
+              agents=client.get("http://127.0.0.1:8000/agents")
+              assert agents.status_code==200,agents.text
+              assert any(a["name"]=="ci-persistence-check" and a["did"].startswith("did:key:") for a in agents.json()),agents.text
+          print("PASS: agent record survives Registry process restart")
+          PY
+      - name: Verify live staging database encrypted backup and isolated restore
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          age-keygen -o "$tmpdir/identity.txt" 2>"$tmpdir/keygen.log"
+          chmod 600 "$tmpdir/identity.txt"
+          export AEPX_BACKUP_AGE_RECIPIENT="$(age-keygen -y "$tmpdir/identity.txt")"
+          bash deploy/oci/backup-staging-encrypted.sh "$tmpdir"
+          shopt -s nullglob
+          backups=("$tmpdir"/aepx-staging-*.sql.gz.age)
+          [[ "${#backups[@]}" -eq 1 ]] || { echo "Expected one encrypted backup" >&2; exit 1; }
+          export AEPX_BACKUP_AGE_IDENTITY="$tmpdir/identity.txt"
+          export AEPX_RESTORE_EXPECT_AGENT_NAME="ci-persistence-check"
+          bash deploy/oci/restore-staging-encrypted-rehearsal.sh "${backups[0]}"
+          echo "PASS: live CI database encrypted and restored into disposable database"
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml ps || true
+          echo "Sensitive application logs omitted; inspect securely with manual redaction."
+      - name: Destroy ephemeral CI environment
+        if: always()
+        run: |
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml down -v --remove-orphans || true
+          rm -f .env

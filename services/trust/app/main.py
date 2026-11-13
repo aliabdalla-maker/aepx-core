@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 import os
+import hmac
 
 app = FastAPI(title="AEP-X Trust Service", version="0.1.0")
 
@@ -21,10 +22,14 @@ _FALLBACK: dict[str, dict] = {}
 
 def _get_conn():
     if not _PG_AVAILABLE:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise RuntimeError("PostgreSQL driver unavailable in secure staging")
         return None
     try:
         return psycopg.connect(DATABASE_URL, connect_timeout=3)
-    except Exception:
+    except Exception as exc:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise RuntimeError("PostgreSQL connection unavailable in secure staging") from exc
         return None
 
 
@@ -66,8 +71,8 @@ def _row_to_dict(entity_id: str, row) -> dict:
 @app.get("/trust/{entity_id}")
 def get_trust(entity_id: str, entity_type: str = "agent"):
     # RFC-0002 5-component formula: identity, behaviour, security, evidence,
-    # reputation — averaged into a single 0-100 score. Fetch-or-create so
-    # any never-seen-before entity gets a sane default row rather than 404.
+    # reputation — averaged into a single 0-100 score. Reads must not mutate
+    # persistent state; unknown entities receive a non-persisted default.
     conn = _get_conn()
     if conn:
         try:
@@ -78,15 +83,11 @@ def get_trust(entity_id: str, entity_type: str = "agent"):
                 )
                 row = cur.fetchone()
                 if not row:
-                    defaults = [_DEFAULT] * len(_COMPONENTS)
-                    cur.execute(
-                        "INSERT INTO trust_scores (entity_id, entity_type, identity_score, behaviour_score, "
-                        "security_score, evidence_score, reputation_score) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                        (entity_id, entity_type, *defaults),
-                    )
-                    row = tuple(defaults)
+                    row = tuple(_DEFAULT for _ in _COMPONENTS)
             return _row_to_dict(entity_id, row)
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             # A query-level error (not just "no connection") must degrade
             # the same way — a bad row must never 500 the Connector Bus's
             # trust check for every agent behind it.
@@ -100,13 +101,20 @@ def get_trust(entity_id: str, entity_type: str = "agent"):
 
 
 @app.post("/trust/{entity_id}/adjust")
-def adjust_trust(entity_id: str, payload: AdjustIn):
+def adjust_trust(entity_id: str, payload: AdjustIn, x_aepx_service_key: str | None = Header(default=None)):
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+        scoped = os.getenv("AEPX_TRUST_WRITE_KEY", "")
+        if os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(scoped) < 32:
+            raise HTTPException(503, "Scoped service credential not configured")
+        expected = scoped or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
+            raise HTTPException(403, "Service authentication required")
     # Internal signal endpoint — e.g. the Connector Bus nudges behaviour_score
     # up on a successful invocation, so trust reflects real usage over time
     # instead of sitting at a flat default forever.
     component = _normalise_component(payload.component)
     if component not in _COMPONENTS:
-        return {"error": f"unknown component '{payload.component}'"}
+        raise HTTPException(status_code=422, detail="Unknown trust component")
 
     conn = _get_conn()
     if conn:
@@ -132,6 +140,8 @@ def adjust_trust(entity_id: str, payload: AdjustIn):
                 )
             return _row_to_dict(entity_id, tuple(scores.values()))
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             pass
         finally:
             conn.close()
