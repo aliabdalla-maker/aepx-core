@@ -14,7 +14,8 @@ def probe(name, base, attempts, delay):
                 data=json.loads(body)
                 if r.status!=200 or not isinstance(data,dict) or not data.get("openapi") or not isinstance(data.get("paths"),dict):
                     raise ValueError("Missing OpenAPI version or paths")
-                result.update(passed=True,title=data.get("info",{}).get("title",""),path_count=len(data["paths"]))\n                result.pop("error",None)
+                result.update(passed=True,title=data.get("info",{}).get("title",""),path_count=len(data["paths"]))
+                result.pop("error",None)
                 return result
         except Exception as e:
             result["error"]=f"{type(e).__name__}: {str(e)[:250]}"
