@@ -26,6 +26,7 @@ services:
   identity:
     environment:
       AEPX_SECURE_MODE: "true"
+      AEPX_INTERNAL_SERVICE_KEY: ${AEPX_INTERNAL_SERVICE_KEY:?Set AEPX_INTERNAL_SERVICE_KEY}
       IDENTITY_JWT_SECRET: ${AEPX_IDENTITY_JWT_SECRET:?Set AEPX_IDENTITY_JWT_SECRET}
     build:
       context: ../../services/identity
@@ -51,6 +52,7 @@ services:
       AEPX_REQUIRE_DATABASE: "true"
       DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
       IDENTITY_URL: http://identity:8000
+      AEPX_INTERNAL_SERVICE_KEY: ${AEPX_INTERNAL_SERVICE_KEY:?Set AEPX_INTERNAL_SERVICE_KEY}
     depends_on:
       postgres:
         condition: service_healthy
