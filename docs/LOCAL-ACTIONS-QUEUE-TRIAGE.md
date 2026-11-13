@@ -21,3 +21,5 @@ the report to GitHub Support. Do not infer a root cause from queued status alone
 Before using this diagnostic, run `python scripts/offline-ci-preflight.py` locally to execute its regression tests alongside workflow-policy checks. This does not replace hosted CI or validate runner availability.
 
 The report additionally samples job runner labels and assignment for up to five queued runs (up to 20 jobs each). Missing assignments are evidence only; they do not prove an account, billing, or capacity cause. Individual job-metadata failures are recorded without discarding the run summary.
+
+When workflow runs transition from queued to completed/failure, the report also samples up to five failed runs and records whether the Jobs API returned any jobs. A completed failure with no returned jobs warrants investigating workflow initialization, repository Actions policy and GitHub service/account state before debugging application tests. This signal alone does not identify the cause.
