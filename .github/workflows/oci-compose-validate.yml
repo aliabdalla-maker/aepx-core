@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test OCI staging resource and security policy
+        run: |
+          python3 -m pip install -q pyyaml
+          python3 -m unittest discover -s tests -p 'test_oci_staging_policy.py' -v
       - name: Test OCI staging release evidence guard
         run: python3 -m unittest discover -s tests -p 'test_oci_release_evidence.py' -v
       - name: Test OCI image platform manifest guard
