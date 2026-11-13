@@ -53,3 +53,7 @@ The real-PostgreSQL integration suite now includes a competing two-session `clai
 ## Cancellation-before-claim PostgreSQL acceptance
 
 The PostgreSQL integration suite now asserts that a previously approved, consumed and reserved MCP execution cannot be claimed after its run is cancelled through the API. This checks the fail-closed cancelled-run path, but is **not** a simultaneous cancellation-versus-claim stress test. True concurrent cancellation/claim interleavings, worker crash outcomes, external-provider idempotency and verified egress isolation remain mandatory before live execution.
+
+## HTTP response media and status gate
+
+`mcp_http_response_gate.validate_mcp_http_response` rejects non-200 statuses, missing/unsupported media types, oversized bodies, malformed JSON and uncorrelated SSE or JSON responses. It selects the existing bounded offline JSON or SSE validator. This matches the 2026-07-28 Streamable HTTP request-response media types but **does not** implement HTTP connections, OAuth/TLS, SSE incremental notifications, subscriptions, request cancellation, redirects or egress isolation. In 2026-07-28, legacy GET streams, protocol-level sessions and Last-Event-ID resume are removed; do not implement those as required current-version features. Keep external execution disabled.
