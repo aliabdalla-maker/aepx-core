@@ -39,5 +39,9 @@ done
 [[ "$ready" == 1 ]] || { echo "Disposable PostgreSQL did not become ready" >&2; exit 1; }
 gzip -dc "$backup" | docker exec -i "$name" psql -X -v ON_ERROR_STOP=1 -U aepx -d aepx >/dev/null
 docker exec "$name" psql -X -v ON_ERROR_STOP=1 -U aepx -d aepx -Atqc 'SELECT 1' | grep -qx 1
+if [[ -n "${AEPX_RESTORE_EXPECT_AGENT_NAME:-}" ]]; then
+  count="$(docker exec "$name" psql -X -v ON_ERROR_STOP=1 -v expected_name="$AEPX_RESTORE_EXPECT_AGENT_NAME" -U aepx -d aepx -Atc "SELECT count(*) FROM agents WHERE name = :'expected_name'")"
+  [[ "$count" =~ ^[0-9]+$ && "$count" -ge 1 ]] || { echo "Expected agent missing after restore" >&2; exit 1; }
+fi
 echo "PASS: backup checksum, gzip, isolated restore and database query"
 echo "This verifies logical restoration only; application-level recovery and off-host encryption remain separate gates."
