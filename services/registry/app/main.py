@@ -23,10 +23,14 @@ _AGENTS: dict[str, dict] = {}
 
 def _get_conn():
     if not _PG_AVAILABLE:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise RuntimeError("PostgreSQL driver unavailable in secure staging")
         return None
     try:
         return psycopg.connect(DATABASE_URL, connect_timeout=3)
-    except Exception:
+    except Exception as exc:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise RuntimeError("PostgreSQL connection unavailable in secure staging") from exc
         return None
 
 
