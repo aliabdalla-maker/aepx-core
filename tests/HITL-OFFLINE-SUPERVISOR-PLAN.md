@@ -29,3 +29,7 @@ Do not use `docker run --rm` in the plan: automatic removal destroys the exited 
 ## Destructive command identity binding
 
 The initial plan deliberately leaves kill and cleanup argv unset. Once a trusted supervisor has authenticated the daemon and inspected the named container, `verified_container_commands` validates its name, full 64-hex-character container ID and expected image ID and returns ID-bound kill/inspect/remove argv. Never kill or remove by name. The caller must guard against stale evidence, daemon substitution and time-of-check/time-of-use races. This is still pure planning code, not a running supervisor.
+
+## Inspect evidence hardening
+
+Before constructing any ID-bound destructive command, the offline validator now requires an explicit sha256 image ID and `HostConfig.NetworkMode=none`, `HostConfig.Privileged=false`, and `HostConfig.ReadonlyRootfs=true`. Docker inspect returns daemon-reported fields; a trusted executing supervisor must still authenticate the daemon, verify cgroup process cleanup, enforce deadlines, and check all remaining isolation options. This is not a runtime isolation certification.

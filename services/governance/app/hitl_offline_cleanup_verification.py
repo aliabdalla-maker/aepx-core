@@ -5,14 +5,21 @@ snapshots from the daemon and verify container identity independently.
 """
 from .hitl_offline_container_policy import SandboxPolicyDenied
 
-def verify_offline_container_snapshot(snapshot, *, expected_name, expected_image_id=None):
+def verify_offline_container_snapshot(snapshot, *, expected_name, expected_image_id):
     if (not isinstance(snapshot, dict) or
         snapshot.get("Name") != "/" + expected_name or
         not isinstance(snapshot.get("Id"), str) or len(snapshot["Id"]) != 64 or
         any(ch not in "0123456789abcdef" for ch in snapshot["Id"])):
         raise SandboxPolicyDenied("container identity not verified")
-    if expected_image_id is not None and snapshot.get("Image") != expected_image_id:
+    if (not isinstance(expected_image_id, str) or
+        not expected_image_id.startswith("sha256:") or
+        len(expected_image_id) != 71 or
+        any(ch not in "0123456789abcdef" for ch in expected_image_id[7:]) or
+        snapshot.get("Image") != expected_image_id):
         raise SandboxPolicyDenied("container image identity mismatch")
+    host = snapshot.get("HostConfig")
+    if not isinstance(host, dict) or host.get("NetworkMode") != "none" or host.get("Privileged") is not False or host.get("ReadonlyRootfs") is not True:
+        raise SandboxPolicyDenied("offline isolation not verified")
     state = snapshot.get("State")
     if not isinstance(state, dict) or type(state.get("Running")) is not bool:
         raise SandboxPolicyDenied("container state not verified")

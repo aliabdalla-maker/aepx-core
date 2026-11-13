@@ -10,7 +10,8 @@ from app.hitl_offline_container_policy import SandboxPolicyDenied
 class TestOfflineCleanupEvidence(unittest.TestCase):
     def test_identity_and_state(self):
         snapshot = {"Name": "/aepx-offline-" + "a"*32, "Id": "b"*64,
-                    "Image": "sha256:"+"c"*64, "State": {"Running": False}}
+                    "Image": "sha256:"+"c"*64, "State": {"Running": False},
+                    "HostConfig": {"NetworkMode": "none", "Privileged": False, "ReadonlyRootfs": True}}
         result = verify_offline_container_snapshot(
             snapshot, expected_name="aepx-offline-"+"a"*32,
             expected_image_id="sha256:"+"c"*64)
@@ -19,7 +20,10 @@ class TestOfflineCleanupEvidence(unittest.TestCase):
         self.assertEqual(commands["kill_argv"], ("docker", "kill", "b"*64))
         self.assertEqual(commands["cleanup_argv"], ("docker", "rm", "--force", "b"*64))
         for wrong in (dict(snapshot, Name="/wrong"), dict(snapshot, Id="short"),
-                      dict(snapshot, Image="sha256:"+"d"*64)):
+                      dict(snapshot, Image="sha256:"+"d"*64),
+                      dict(snapshot, HostConfig={"NetworkMode": "host", "Privileged": False, "ReadonlyRootfs": True}),
+                      dict(snapshot, HostConfig={"NetworkMode": "none", "Privileged": True, "ReadonlyRootfs": True}),
+                      dict(snapshot, HostConfig={"NetworkMode": "none", "Privileged": False, "ReadonlyRootfs": False})):
             with self.assertRaises(SandboxPolicyDenied):
                 verify_offline_container_snapshot(
                     wrong, expected_name="aepx-offline-"+"a"*32,
