@@ -21,6 +21,8 @@ def snapshot(running):
                            "MemorySwap": 134217728}}
 
 def transition(phase, running=False, **kwargs):
+    if phase == "running" and "expected_container_id" not in kwargs:
+        kwargs["expected_container_id"] = CID
     return step(phase=phase, snapshot=snapshot(running),
                 expected_name=NAME, expected_image_id=IMAGE, **kwargs)
 
@@ -46,6 +48,15 @@ class TestOfflineSupervisorTransitions(unittest.TestCase):
             step(phase="running", snapshot={**snapshot(True), "Id": "x"},
                  expected_name=NAME, expected_image_id=IMAGE,
                  elapsed_seconds=11, timeout_seconds=10)
+
+    def test_running_rejects_container_substitution(self):
+        with self.assertRaises(SandboxPolicyDenied):
+            transition("running", running=True, elapsed_seconds=10,
+                       timeout_seconds=10, expected_container_id="d" * 64)
+        with self.assertRaises(SandboxPolicyDenied):
+            step(phase="running", snapshot=snapshot(True),
+                 expected_name=NAME, expected_image_id=IMAGE,
+                 elapsed_seconds=10, timeout_seconds=10)
 
     def test_cleanup_requires_both_signals(self):
         self.assertEqual(step(phase="removed", inspect_not_found=True,
