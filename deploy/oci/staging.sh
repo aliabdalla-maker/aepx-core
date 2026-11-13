@@ -37,7 +37,10 @@ PY
       state="$(docker inspect --format "{{.State.Status}}" "$cid")"
       [[ "$state" == "running" ]] || { echo "Staging service not running: $service ($state)" >&2; exit 1; }
     done
-    echo "PASS: staging PostgreSQL and Redis respond; application HTTP acceptance tests still required"
+    for service in identity trust registry; do
+      "${COMPOSE[@]}" exec -T "$service" python -c 'import json,urllib.request,sys; d=json.load(urllib.request.urlopen("http://127.0.0.1:8000/health",timeout=8)); assert d.get("status")=="ok" and d.get("service")==sys.argv[1],d; print("PASS: HTTP health",sys.argv[1])' "$service"
+    done
+    echo "PASS: staging PostgreSQL, Redis, and application HTTP health endpoints respond"
     ;;
   --start)
     echo "Staging startup is a controlled change on the selected Ubuntu host."
