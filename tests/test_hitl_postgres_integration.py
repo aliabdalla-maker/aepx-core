@@ -116,6 +116,27 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
 
+    def test_rls_requires_tenant_context_and_restricted_role(self):
+        tenant=uuid4()
+        event=self._seed_outbox(tenant)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""SELECT rolsuper,rolbypassrls FROM pg_roles
+                               WHERE rolname=current_user""")
+                self.assertEqual(cur.fetchone(),(False,False))
+                cur.execute("""SELECT has_table_privilege(current_user,'hitl.outbox','DELETE'),
+                                      has_table_privilege(current_user,'hitl.approvals','TRUNCATE')""")
+                self.assertEqual(cur.fetchone(),(False,False))
+                # With no app.tenant_id, FORCE RLS must deny visibility.
+                cur.execute("SELECT count(*) FROM hitl.outbox WHERE id=%s",(event,))
+                self.assertEqual(cur.fetchone()[0],0)
+                cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(uuid4()),))
+                cur.execute("SELECT count(*) FROM hitl.outbox WHERE id=%s",(event,))
+                self.assertEqual(cur.fetchone()[0],0)
+                cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
+                cur.execute("SELECT count(*) FROM hitl.outbox WHERE id=%s",(event,))
+                self.assertEqual(cur.fetchone()[0],1)
+
     def test_multi_worker_claim_and_stale_settlement(self):
         tenant=uuid4()
         event=self._seed_outbox(tenant)
