@@ -4,6 +4,7 @@ Default is dry-run. External adapters must implement event-id idempotency;
 remote delivery and PostgreSQL settlement are NOT atomic.
 """
 import os
+import hashlib
 from uuid import UUID
 from app.hitl_outbox import claim, settle, reap_exhausted
 
@@ -45,10 +46,13 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
             # Avoid leaking payloads, credentials or exception strings to DB.
             pass
         try:
+            # Deterministic per-event jitter prevents synchronized retry storms.
+            jitter = int.from_bytes(hashlib.sha256(str(event_id).encode()).digest()[:2], "big") % 11
+            delay = min(86400, retry_seconds * (2 ** min(attempt - 1, 11)) + jitter)
             settle(connection, tenant_id=tenant, event_id=event_id,
                    worker_id=worker_id, attempt_number=attempt,
                    delivered=ok, error=None if ok else "delivery adapter failed",
-                   retry_seconds=min(86400, retry_seconds * (2 ** min(attempt-1, 11))),
+                   retry_seconds=delay,
                    max_attempts=max_attempts)
         except PermissionError:
             # Stale lease must never be settled by an older worker.
