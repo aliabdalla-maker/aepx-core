@@ -5,6 +5,7 @@ import sys
 import yaml
 
 root = Path(__file__).resolve().parents[1] / ".github" / "workflows"
+MANUAL_ONLY_DEPLOYMENTS = {"deploy-oci.yml", "azure-container-webapp.yml", "aws.yml", "google.yml", "alibabacloud.yml", "ibm.yml", "openshift.yml", "tencent.yml", "octopusdeploy.yml"}
 errors = []
 count = 0
 for path in sorted(root.glob("*.yml")) + sorted(root.glob("*.yaml")):
@@ -19,6 +20,8 @@ for path in sorted(root.glob("*.yml")) + sorted(root.glob("*.yaml")):
             errors.append(f"{path.name}: YAML root must be a mapping")
         elif "on" not in doc:
             errors.append(f"{path.name}: missing on trigger")
+        elif path.name in MANUAL_ONLY_DEPLOYMENTS and (not isinstance(doc.get("on"), dict) or set(doc["on"]) != {"workflow_dispatch"}):
+            errors.append(f"{path.name}: deployment must use workflow_dispatch only")
         elif not isinstance(doc.get("jobs"), dict) or not doc["jobs"]:
             errors.append(f"{path.name}: missing jobs mapping")
     except yaml.YAMLError as exc:
