@@ -2,6 +2,7 @@
 """Fail-closed evaluation of sampled Actions evidence; never authorizes deployment."""
 import argparse
 import json
+from datetime import datetime
 from pathlib import Path
 
 
@@ -46,6 +47,27 @@ def evaluate(report):
     return errors
 
 
+def valid_run_order(run):
+    """Reject malformed or ambiguous metadata before comparing run ordering."""
+    if type(run.get("id")) is not int or run["id"] <= 0:
+        return False
+    if type(run.get("run_attempt")) is not int or run["run_attempt"] <= 0:
+        return False
+    created = run.get("created_at")
+    if not isinstance(created, str):
+        return False
+    try:
+        parsed = datetime.fromisoformat(created.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None and parsed.utcoffset() is not None
+
+
+def run_order(run):
+    return (datetime.fromisoformat(run["created_at"].replace("Z", "+00:00")),
+            run["run_attempt"], run["id"])
+
+
 def evaluate_required(report, sha, workflows):
     """Verify each required workflow has a successful completed run on exact SHA."""
     if not isinstance(report, dict) or not isinstance(report.get("runs"), list):
@@ -63,13 +85,10 @@ def evaluate_required(report, sha, workflows):
                    and run.get("workflow_path") == workflow]
         if not matches:
             errors.append(f"missing required workflow: {workflow} at {sha}")
-        elif not all(isinstance(run.get("created_at"), str) and
-                     isinstance(run.get("run_attempt"), int) and
-                     type(run.get("id")) is int for run in matches):
+        elif not all(valid_run_order(run) for run in matches):
             errors.append(f"missing run ordering evidence: {workflow} at {sha}")
         else:
-            latest = max(matches, key=lambda run: (
-                run["created_at"], run["run_attempt"], run["id"]))
+            latest = max(matches, key=run_order)
             if latest.get("status") != "completed" or latest.get("conclusion") != "success":
                 errors.append(f"required workflow not successful: {workflow} at {sha}")
     return errors

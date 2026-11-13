@@ -94,6 +94,29 @@ class ActionsSampleGateTests(unittest.TestCase):
              "status": "completed", "conclusion": "success"}]}
         self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
 
+    def test_invalid_ordering_metadata_blocks(self):
+        sha, workflow = "a" * 40, ".github/workflows/ci.yml"
+        valid = {"id": 1, "created_at": "2026-11-13T10:00:00Z",
+                 "run_attempt": 1, "head_sha": sha, "workflow_path": workflow,
+                 "status": "completed", "conclusion": "success"}
+        for key, value in [("id", True), ("id", 0), ("run_attempt", 0),
+                           ("run_attempt", True), ("created_at", "nonsense"),
+                           ("created_at", "2026-11-13T10:00:00")]:
+            bad = dict(valid)
+            bad[key] = value
+            self.assertTrue(gate.evaluate_required({"runs": [bad]}, sha, [workflow]))
+
+    def test_timestamps_with_offsets_compare_chronologically(self):
+        sha, workflow = "a" * 40, ".github/workflows/ci.yml"
+        report = {"runs": [
+            {"id": 1, "created_at": "2026-11-13T11:00:00+02:00", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
+             "status": "completed", "conclusion": "success"},
+            {"id": 2, "created_at": "2026-11-13T10:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
+             "status": "completed", "conclusion": "failure"}]}
+        self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
+
     def test_successful_sample_only_passes_sample_health(self):
         self.assertEqual(gate.evaluate({"sample_size": 3, "status_counts": {"completed": 3},
                                        "conclusion_counts": {"success": 3}}), [])
