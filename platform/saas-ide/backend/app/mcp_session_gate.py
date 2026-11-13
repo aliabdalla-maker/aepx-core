@@ -11,7 +11,7 @@ class SessionState:
 
 def accept_initialize(state, *, negotiated_version, expected_version,
                       server_name, approved_server_name):
-    if state.phase != "new":
+    if not isinstance(state, SessionState) or state.phase != "new":
         raise MCPContractDenied("initialize out of order")
     if not all(isinstance(v, str) and v for v in
                (negotiated_version, expected_version, server_name, approved_server_name)):
@@ -21,7 +21,7 @@ def accept_initialize(state, *, negotiated_version, expected_version,
     return SessionState("initialized_response_validated", negotiated_version, server_name)
 
 def accept_initialized(state, *, body, expected_version):
-    if state.phase != "initialized_response_validated":
+    if not isinstance(state, SessionState) or state.phase != "initialized_response_validated":
         raise MCPContractDenied("initialized notification out of order")
     validate_mcp_initialized_notification(
         body=body, initialized_version=state.version, expected_version=expected_version)
