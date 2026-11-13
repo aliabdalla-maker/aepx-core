@@ -34,6 +34,12 @@ class PostgresReservationAcceptance(unittest.TestCase):
             "a"*64, "approved-resource", "tool.read", "2025-11-25", "request-000001")
         with psycopg.connect(DSN) as conn:
             with conn.cursor() as cur:
+                cur.execute("SELECT current_database(), current_user, inet_server_addr()")
+                db_name, db_role, server_ip = cur.fetchone()
+                if db_name != "aepx_acceptance" or db_role != "aepx_test":
+                    raise RuntimeError("refusing destructive test setup outside disposable aepx_acceptance/aepx_test")
+                if server_ip is not None and str(server_ip) not in ("127.0.0.1", "::1"):
+                    raise RuntimeError("refusing non-loopback PostgreSQL acceptance database")
                 cur.execute(DDL)
                 cur.execute("GRANT USAGE ON SCHEMA public TO aepx_runtime")
                 cur.execute("GRANT SELECT, INSERT, UPDATE ON mcp_remote_execution_intents TO aepx_runtime")
@@ -42,6 +48,12 @@ class PostgresReservationAcceptance(unittest.TestCase):
     def tearDownClass(cls):
         with psycopg.connect(DSN) as conn:
             with conn.cursor() as cur:
+                cur.execute("SELECT current_database(), current_user, inet_server_addr()")
+                db_name, db_role, server_ip = cur.fetchone()
+                if db_name != "aepx_acceptance" or db_role != "aepx_test":
+                    raise RuntimeError("refusing destructive cleanup outside disposable acceptance database")
+                if server_ip is not None and str(server_ip) not in ("127.0.0.1", "::1"):
+                    raise RuntimeError("refusing non-loopback acceptance cleanup")
                 cur.execute("DROP TABLE IF EXISTS mcp_remote_execution_intents")
 
     def _reserve(self, intent, results, errors, barrier=None):
