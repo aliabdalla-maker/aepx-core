@@ -6,6 +6,7 @@ isolation remain separate mandatory deployment controls.
 """
 import importlib
 import multiprocessing as mp
+from multiprocessing.connection import wait
 import time
 
 class CallbackIsolationError(RuntimeError):
@@ -51,14 +52,17 @@ def run_isolated_callback(*, entrypoint, arguments, allowed_entrypoints,
     receiver, sender = ctx.Pipe(duplex=False)
     process = ctx.Process(target=_child, args=(entrypoint, arguments, sender))
     process.daemon = True
+    deadline = time.monotonic() + timeout_seconds
     try:
         process.start()
         sender.close()
-        deadline = time.monotonic() + timeout_seconds
-        # Read before join: a Queue feeder may deadlock if joined before drain.
-        # A single bounded Pipe message avoids that feeder thread.
-        if not receiver.poll(max(0, deadline - time.monotonic())):
-            raise CallbackIsolationError("callback timed out or exited: outcome uncertain")
+        # Wait for either a result or child exit, without waiting out the entire
+        # timeout after an early crash. Include spawn time in the deadline.
+        ready = wait([receiver, process.sentinel], timeout=max(0, deadline - time.monotonic()))
+        if receiver not in ready:
+            if process.sentinel in ready:
+                raise CallbackIsolationError("callback exited without result: outcome uncertain")
+            raise CallbackIsolationError("callback timed out: outcome uncertain")
         try:
             status, result = receiver.recv()
         except (EOFError, OSError) as exc:
