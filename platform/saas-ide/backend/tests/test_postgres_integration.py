@@ -1167,3 +1167,62 @@ def test_phase218_operations_api_is_tenant_scoped_and_admin_only(prepared_db, to
     assert client.post("/api/v1/operations/mcp/executions/absent/reconcile",
                        headers=viewer, json={"outcome": "succeeded",
                                              "signed_receipt": "invalid"}).status_code == 403
+
+
+def test_mcp_atomic_claim_postgres_concurrency_and_tenant_rls(prepared_db, tokens, monkeypatch):
+    """Real PostgreSQL: one exact contract wins; tenant isolation and replay denial."""
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from app.phase22 import consume_tool
+    from app.mcp_atomic_claim import claim_approved_mcp_call
+    from app.mcp_contract_gate import MCPContractDenied
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL", "https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS", "search")
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"atomic-claim"}).json()
+    run=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"Atomic MCP claim race"}).json()
+    rid=run["id"]
+    assert client.post(f"/api/v1/agent-runs/{rid}/decision?approved=true",
+                       headers=owner).status_code==200
+    args={"query":"atomic"}
+    request=client.post(f"/api/v1/agent-runs/{rid}/tool-requests",
+                        headers=owner,json={"server":"knowledge","tool":"search",
+                                            "arguments":args})
+    assert request.status_code==201,request.text
+    approval=request.json()["id"]
+    assert client.post(f"/api/v1/tool-approvals/{approval}/decision?approved=true",
+                       headers=owner).status_code==200
+    with main.SessionLocal() as db:
+        assert consume_tool(db,"alpha",rid,"knowledge","search",args)==approval
+    kw=dict(tenant_id="alpha",run_id=rid,approval_id=approval,server_id="knowledge",
+            tool_name="search",arguments=args,allowed_tools={"search"})
+    with main.SessionLocal() as db:
+        with pytest.raises(MCPContractDenied):
+            claim_approved_mcp_call(db,**{**kw,"arguments":{"query":"tampered"}})
+        with pytest.raises(MCPContractDenied):
+            claim_approved_mcp_call(db,**{**kw,"tenant_id":"beta"})
+    barrier=Barrier(2)
+    def attempt():
+        with main.SessionLocal() as db:
+            barrier.wait(timeout=10)
+            try:
+                return ("claimed",claim_approved_mcp_call(db,**kw)["idempotency_key"])
+            except MCPContractDenied:
+                return ("denied",None)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(lambda _:attempt(),range(2)))
+    assert sorted(x[0] for x in results)==["claimed","denied"]
+    assert [x[1] for x in results if x[0]=="claimed"]==["mcp:"+approval]
+    with main.SessionLocal() as db:
+        with pytest.raises(MCPContractDenied):
+            claim_approved_mcp_call(db,**kw)
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT state FROM ide_mcp_executions WHERE approval_id=:a"),
+                          {"a":approval}).scalar()=="dispatching"
+        db.rollback()
+        db.execute(text("SELECT set_config('ide.tenant_id','beta',true)"))
+        assert db.execute(text("SELECT count(*) FROM ide_mcp_executions WHERE approval_id=:a"),
+                          {"a":approval}).scalar()==0
