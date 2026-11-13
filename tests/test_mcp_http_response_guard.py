@@ -48,6 +48,27 @@ class ResponseGuardTests(unittest.TestCase):
         with self.assertRaises(MCPResponseDenied):
             enforce_mcp_response_chunk(16, b"x", policy=self.policy)
 
+    def test_unsafe_policy_rejected(self):
+        for media in (frozenset(), frozenset({"text/html"}),
+                      frozenset({"application/json", "text/html"}),
+                      {"application/json"}, "application/json"):
+            with self.subTest(media=media):
+                policy = MCPResponsePolicy(16, media)
+                with self.assertRaises(MCPResponseDenied):
+                    validate_mcp_response(200, {"Content-Type": "application/json"},
+                                          policy=policy)
+                with self.assertRaises(MCPResponseDenied):
+                    enforce_mcp_response_chunk(0, b"x", policy=policy)
+
+    def test_redirect_location_and_transfer_encoding_rejected(self):
+        for extra in ({"Location": "https://mcp.example.com/other"},
+                      {"Transfer-Encoding": "chunked"},
+                      {"Transfer-Encoding": "identity", "Content-Length": "1"}):
+            with self.subTest(extra=extra), self.assertRaises(MCPResponseDenied):
+                validate_mcp_response(
+                    200, {"Content-Type": "application/json", **extra},
+                    policy=self.policy)
+
     def test_invalid_budget_and_chunk_fail_closed(self):
         for policy in (MCPResponsePolicy(0), MCPResponsePolicy(True), None):
             with self.subTest(policy=policy), self.assertRaises(MCPResponseDenied):
