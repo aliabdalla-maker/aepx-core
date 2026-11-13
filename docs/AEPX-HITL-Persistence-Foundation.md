@@ -26,3 +26,8 @@ python3 -m unittest discover -s tests -p 'test_aepx_hitl_store.py' -v
 
 ## Additional local outbox prototype
 `scripts/aepx-local-outbox.py` provides SQLite-backed idempotent enqueue, pending event inspection and delivery marking, with tests. It does not send events, authenticate producers, or atomically combine HITL consumption with external side effects. It must not be treated as exactly-once delivery or a production event bus.
+
+## PostgreSQL migration draft
+`db/migrations/20261113_hitl_staging.sql` defines tenant-scoped approval, event and outbox tables with RLS. **Not applied.** It is a draft, not a repeatable migration (CREATE POLICY is not idempotent). A privileged migration role must apply it only in a reviewed staging environment. Runtime roles must not own tables, bypass RLS or hold BYPASSRLS. Set `app.tenant_id` transaction-locally only after verifying an authenticated tenant membership; never trust caller-supplied tenant IDs. Validate missing tenant context fails closed, cross-tenant reads/writes are denied, and a pooled connection cannot leak tenant context.
+
+The local outbox now rejects conflicting idempotency-key reuse. The outbox remains a separate local store, **not atomic** with HITL consumption, and does not deliver events.
