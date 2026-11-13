@@ -144,6 +144,7 @@ jobs:
           assert 'hmac.compare_digest' in identity
           assert 'AEPX_REQUIRE_DATABASE' in registry and 'AEPX_REQUIRE_DATABASE' in trust
           assert compose.count('AEPX_REQUIRE_DATABASE: "true"') == 2
+          assert compose.count("AEPX_INTERNAL_SERVICE_KEY:") == 3
           assert 'AEPX_IDENTITY_JWT_SECRET:?' in compose
           print("PASS: secure staging configuration assertions")
           PY
@@ -246,7 +247,11 @@ jobs:
               assert fetched.json()["id"]==agent["id"]
               rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"},headers=headers)
               assert rejected.status_code==403,rejected.text
-          print("PASS: DID issuance, agent persistence and unverified DID rejection")
+          trust_unauth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1})
+          assert trust_unauth.status_code==403,trust_unauth.text
+          trust_auth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1},headers=headers)
+          assert trust_auth.status_code==200,trust_auth.text
+          print("PASS: authenticated Registry, DID issuance, persistence and Trust writes")
           PY
       - name: Diagnostics on failure
         if: failure()
