@@ -125,3 +125,7 @@ The MCP offline workflow now uses the same file filters for pull requests and ma
 ## Remote intent PostgreSQL DDL integrity
 
 The intent schema had a corrupted duplicated SQL string with unterminated CHECK patterns, making disposable PostgreSQL integration fail even when tests were enabled. The repair restores one CREATE TABLE, one RLS policy, strict tenant scoping and deduplication constraints. Ledger unit-test syntax is also repaired. This does not run a migration; test against a disposable database with non-bypass-RLS runtime credentials before any deployment. Production schema changes require a separate reviewed migration and rollback plan.
+
+## Disposable PostgreSQL acceptance job
+
+`.github/workflows/mcp-disposable-postgres.yml` starts an ephemeral PostgreSQL 16 service in GitHub Actions, creates a non-superuser, non-BYPASSRLS runtime role, and runs the remote intent reservation acceptance suite. `tests/check_mcp_pg_ci.py` rejects skipped, failed or missing tests. Transaction-local tenant identity is set through parameterized `set_config`. Database passwords in this workflow are disposable test-only values, not deployment credentials. The job neither connects to OCI nor touches production databases. Passing this job is a prerequisite for, not proof of, production readiness.
