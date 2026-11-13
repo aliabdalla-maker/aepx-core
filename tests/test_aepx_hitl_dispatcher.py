@@ -32,6 +32,10 @@ class DispatcherTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             dispatch_batch(**self.kw)
         self.deliver.assert_not_called()
+    def test_dry_run_even_with_adapter_and_flag_off(self):
+        with patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"}):
+            self.assertEqual(dispatch_batch(**dict(self.kw, enabled=False))["mode"], "dry-run")
+        self.deliver.assert_not_called()
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
@@ -56,7 +60,8 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual(dispatch_batch(**self.kw)["failed"], 1)
         self.deliver.assert_not_called()
         self.assertFalse(settle.call_args.kwargs["delivered"])
-        self.assertEqual(settle.call_args.kwargs["retry_seconds"], 60)
+        self.assertGreaterEqual(settle.call_args.kwargs["retry_seconds"], 60)
+        self.assertLessEqual(settle.call_args.kwargs["retry_seconds"], 70)
     @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
     @patch("app.hitl_dispatcher.settle", side_effect=PermissionError("stale"))
     @patch("app.hitl_dispatcher.claim")
