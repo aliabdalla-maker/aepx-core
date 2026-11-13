@@ -36,6 +36,11 @@ for key in scoped:
 configured = [pairs[k] for k in scoped if pairs.get(k)]
 if len(configured) != len(set(configured)) or any(v in (pairs[k] for k in required) for v in configured):
     sys.exit("ERROR: scoped credentials must be distinct from each other and legacy credentials")
+if pairs.get("AEPX_REQUIRE_SCOPED_KEYS", "false").lower() == "true":
+    if any(not pairs.get(k) for k in scoped):
+        sys.exit("ERROR: strict scoped mode requires all three dedicated service credentials")
+elif pairs.get("AEPX_REQUIRE_SCOPED_KEYS", "false").lower() not in ("false", ""):
+    sys.exit("ERROR: AEPX_REQUIRE_SCOPED_KEYS must be true or false")
 if env_file.is_symlink():
     sys.exit("ERROR: .env must not be a symlink")
 if os.name == "posix" and env_file.stat().st_mode & 0o077:
