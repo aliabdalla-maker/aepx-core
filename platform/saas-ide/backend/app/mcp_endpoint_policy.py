@@ -43,6 +43,11 @@ def validate_mcp_endpoint(*, endpoint, approved_endpoints):
         pass
     else:
         raise MCPContractDenied("IP-literal MCP endpoint prohibited")
+    # Disallow dot segments and empty internal segments that proxies may normalize
+    # differently from the policy checker, even for exact allowlist entries.
+    segments = url.path.split("/")
+    if any(segment in (".", "..") for segment in segments) or "//" in url.path:
+        raise MCPContractDenied("ambiguous MCP endpoint path")
     if ("%" in endpoint or "\\" in endpoint or
         endpoint != url.geturl()):
         raise MCPContractDenied("noncanonical MCP endpoint")
