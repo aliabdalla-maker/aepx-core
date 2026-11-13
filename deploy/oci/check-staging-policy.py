@@ -34,9 +34,6 @@ def check(config):
             errors.append(f"{name}: unexpected restart policy")
     if total>MAX_MEMORY_MIB:
         errors.append(f"staging memory budget {total} MiB exceeds {MAX_MEMORY_MIB} MiB")
-    if not config.get("volumes",{}).get("staging-postgres") == None:
-        # YAML null is valid for a named volume; non-null configuration is reviewed separately.
-        pass
     if "staging-postgres" not in config.get("volumes",{}):
         errors.append("persistent staging PostgreSQL volume missing")
     return errors
