@@ -70,5 +70,16 @@ class RemoteDispatchGateTests(unittest.TestCase):
         with self.assertRaises(RemoteDispatchDenied):
             validate_remote_dispatch(self.intent, replace(self.ctx, tls_peer_verified=1))
 
+    def test_trusted_protocol_allowlist(self):
+        self.assertEqual(validate_remote_dispatch(
+            self.intent,self.ctx,require_approved_version=True,
+            approved_protocol_versions=frozenset({"2025-11-25"})),self.intent)
+        for versions in (None, frozenset(), frozenset({"2025-03-26"}),
+                         ["2025-11-25"], frozenset({123})):
+            with self.subTest(versions=versions),self.assertRaises(RemoteDispatchDenied):
+                validate_remote_dispatch(
+                    self.intent,self.ctx,require_approved_version=True,
+                    approved_protocol_versions=versions)
+
 if __name__ == "__main__":
     unittest.main()
