@@ -27,6 +27,11 @@ class TestEndpointPolicy(unittest.TestCase):
             "https://mcp.example.test/\\\\mcp",
             "https://mcp.example.test/mcp\n",
         ]
+        urls.extend([
+            "https://mcp.example.test/a/../mcp",
+            "https://mcp.example.test/a/./mcp",
+            "https://mcp.example.test//mcp",
+        ])
         for url in urls:
             with self.subTest(url=url),self.assertRaises(MCPContractDenied):
                 validate_mcp_endpoint(endpoint=url,approved_endpoints={url})
