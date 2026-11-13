@@ -4,6 +4,12 @@ The connection factory must use a restricted, non-owner identity-read role.
 The database must be maintained by an independent trusted identity service.
 """
 from uuid import UUID
+
+# Authority freshness is checked in the database, not the application clock.
+_AUTHORITY_FRESH = """SELECT EXISTS(
+    SELECT 1 FROM hitl.identity_authority_sync
+    WHERE tenant_id=%s AND issuer=%s AND healthy IS TRUE
+      AND synced_at >= now() - interval '60 seconds')"""
 from .hitl_identity_policy import enforce_identity_policy,IdentityPolicyDenied
 
 def postgres_identity_verifiers(connection_factory):
@@ -15,6 +21,10 @@ def postgres_identity_verifiers(connection_factory):
             tenant=str(UUID(str(tenant_id)))
             with connection_factory() as conn:
                 with conn.cursor() as cur:
+                    cur.execute(_AUTHORITY_FRESH,(tenant,issuer))
+                    fresh=cur.fetchone()
+                    if not fresh or fresh[0] is not True:
+                        return False
                     cur.execute("""SELECT EXISTS(
                         SELECT 1 FROM hitl.identity_memberships
                         WHERE tenant_id=%s AND subject=%s AND issuer=%s
@@ -29,6 +39,10 @@ def postgres_identity_verifiers(connection_factory):
             tenant=str(UUID(str(tenant_id)))
             with connection_factory() as conn:
                 with conn.cursor() as cur:
+                    cur.execute(_AUTHORITY_FRESH,(tenant,issuer))
+                    fresh=cur.fetchone()
+                    if not fresh or fresh[0] is not True:
+                        return False
                     cur.execute("""SELECT EXISTS(
                         SELECT 1 FROM hitl.identity_revocations
                         WHERE tenant_id=%s AND subject=%s AND issuer=%s
