@@ -44,3 +44,17 @@ class TestPostRequestGate(unittest.TestCase):
                            "mcp-protocol-version":"2025-11-25"}):
             with self.subTest(headers=candidate),self.assertRaises(MCPContractDenied):
                 self.call(headers=candidate,negotiated_protocol_version="2025-11-25")
+
+    def test_strict_protocol_pin_fails_closed(self):
+        version="2025-11-25"
+        headers={**HEADERS,"MCP-Protocol-Version":version}
+        with self.assertRaises(MCPContractDenied):
+            self.call(headers=headers,require_protocol_pin=True)
+        with self.assertRaises(MCPContractDenied):
+            self.call(require_protocol_pin=True)
+        self.assertEqual(self.call(
+            headers=headers,negotiated_protocol_version=version,
+            require_protocol_pin=True)["request_id"],9)
+        with self.assertRaises(MCPContractDenied):
+            self.call(headers=headers,negotiated_protocol_version="2025-03-26",
+                      require_protocol_pin=True)
