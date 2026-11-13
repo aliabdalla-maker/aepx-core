@@ -29,6 +29,7 @@ def validate_mcp_initialize_response(*, response_body, expected_request_id,
         raise MCPContractDenied("invalid MCP initialize JSON") from exc
     if (not isinstance(msg,dict) or msg.get("jsonrpc")!="2.0" or
         msg.get("id")!=expected_request_id or
+        type(msg.get("id")) is not type(expected_request_id) or
         isinstance(msg.get("id"),bool) or
         not isinstance(msg.get("id"),(str,int)) or
         "error" in msg or "method" in msg or
