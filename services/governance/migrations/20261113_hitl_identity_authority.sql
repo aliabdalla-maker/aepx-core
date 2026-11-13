@@ -21,3 +21,16 @@ REVOKE ALL ON hitl.identity_revocations FROM PUBLIC;
 -- Grant SELECT only to a dedicated restricted identity-check role.
 -- Grant writes only to the trusted identity synchronizer. Never grant
 -- identity mutation permissions to the HITL HTTP service role.
+
+-- Trusted synchronizer updates this heartbeat only AFTER completing
+-- authoritative membership and revocation refresh for the tenant/issuer.
+CREATE TABLE IF NOT EXISTS hitl.identity_authority_sync (
+ tenant_id uuid NOT NULL,
+ issuer text NOT NULL CHECK (issuer LIKE 'https://%'),
+ synced_at timestamptz NOT NULL,
+ healthy boolean NOT NULL DEFAULT false,
+ PRIMARY KEY(tenant_id,issuer)
+);
+REVOKE ALL ON hitl.identity_authority_sync FROM PUBLIC;
+-- Dedicated HITL identity reader: SELECT only. Trusted IdP sync writer:
+-- INSERT/UPDATE only, with tenant scoping and auditable credentials.
