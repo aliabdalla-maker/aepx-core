@@ -41,3 +41,7 @@ The pure snapshot validator additionally requires capability drop ALL, no-new-pr
 ## Host escape denial
 
 Inspection must show an explicit `seccomp=builtin` option, not an ambiguous `seccomp` value, and must not contain a conflicting `seccomp=unconfined` or `no-new-privileges=false`. Host PID/IPC namespace modes, bind mounts, mount entries and host devices are denied. These are fail-closed offline snapshot checks only. Docker inspect representations vary by version; verify the exact target host before trusting these predicates, and keep the executing supervisor disabled until independent isolation and cleanup tests pass.
+
+## Pure lifecycle transitions
+
+`hitl_offline_supervisor_transitions.offline_supervisor_transition` now models verified created→start-by-ID, running→poll/inspect-exit/kill-by-ID based on trusted monotonic elapsed time, and removed→clean only after independent daemon-absence and process-tree absence signals. Unexpected phases and malformed evidence fail closed. No Docker commands execute. A future trusted supervisor must own monotonic timing, authenticated daemon observations, container ID binding, cleanup and SIGKILL recovery; these pure decisions do not satisfy those gates.

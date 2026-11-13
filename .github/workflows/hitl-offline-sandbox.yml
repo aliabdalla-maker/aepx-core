@@ -29,9 +29,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile sandbox modules
-        run: python -m compileall -q services/governance/app/hitl_offline_container_policy.py services/governance/app/hitl_offline_supervisor_plan.py services/governance/app/hitl_offline_cleanup_verification.py
+        run: python -m compileall -q services/governance/app/hitl_offline_container_policy.py services/governance/app/hitl_offline_supervisor_plan.py services/governance/app/hitl_offline_cleanup_verification.py services/governance/app/hitl_offline_supervisor_transitions.py
       - name: Run offline unit tests (no Docker execution)
         run: |
           python -m unittest discover -s tests -p 'test_hitl_offline_container_policy.py' -v
           python -m unittest discover -s tests -p 'test_hitl_offline_supervisor_plan.py' -v
           python -m unittest discover -s tests -p 'test_hitl_offline_cleanup_verification.py' -v
+          python -m unittest discover -s tests -p 'test_hitl_offline_supervisor_transitions.py' -v
