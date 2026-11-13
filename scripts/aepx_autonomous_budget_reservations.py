@@ -7,6 +7,8 @@ import sqlite3
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
+MAX_SQLITE_INTEGER = 2**63 - 1
+
 class BudgetDenied(ValueError):
     pass
 
@@ -21,7 +23,10 @@ def units(value):
         raise BudgetDenied("invalid amount") from exc
     if not amount.is_finite() or amount < 0 or amount * SCALE != (amount * SCALE).to_integral_value():
         raise BudgetDenied("invalid precision or negative/nonfinite amount")
-    return int(amount * SCALE)
+    result = int(amount * SCALE)
+    if result > MAX_SQLITE_INTEGER:
+        raise BudgetDenied("amount exceeds SQLite integer range")
+    return result
 
 def connect(path):
     path = Path(path)
@@ -119,3 +124,33 @@ def snapshot(conn):
             "spent_usd":str(Decimal(budget[1])/SCALE),
             "held_usd":str(Decimal(held)/SCALE),
             "available_usd":str(Decimal(budget[0]-budget[1]-held)/SCALE)}
+
+def reconcile_uncertain(conn, request_id, charge_usd, *, receipt_id, verified=False):
+    """Settle an ambiguous request only after independent billing verification.
+
+    A distinct receipt identifier is unique across reconciliations; callers
+    must independently verify receipt authenticity and amount.
+    """
+    if verified is not True:
+        raise BudgetDenied("independent billing verification required")
+    if not isinstance(receipt_id, str) or not 1 <= len(receipt_id) <= 256:
+        raise BudgetDenied("valid external receipt id required")
+    charge = units(charge_usd)
+    conn.execute("BEGIN IMMEDIATE")
+    try:
+        conn.execute("""CREATE TABLE IF NOT EXISTS reconciliation_receipts(
+            receipt_id TEXT PRIMARY KEY, request_id TEXT UNIQUE NOT NULL,
+            charge INTEGER NOT NULL CHECK(charge>=0))""")
+        row = conn.execute("SELECT reserved,status FROM reservations WHERE request_id=?",
+                           (request_id,)).fetchone()
+        if row is None or row[1] != "uncertain" or charge > row[0]:
+            raise BudgetDenied("only uncertain reservations within cap can reconcile")
+        conn.execute("INSERT INTO reconciliation_receipts(receipt_id,request_id,charge) VALUES(?,?,?)",
+                     (receipt_id,request_id,charge))
+        conn.execute("UPDATE reservations SET charged=?,status='settled' WHERE request_id=?",
+                     (charge,request_id))
+        conn.execute("UPDATE budget SET spent=spent+? WHERE singleton=1",(charge,))
+        conn.execute("COMMIT")
+    except BaseException:
+        conn.execute("ROLLBACK")
+        raise
