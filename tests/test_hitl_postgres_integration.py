@@ -11,6 +11,7 @@ import unittest
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from uuid import uuid4
+from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"services/governance"))
 from app.hitl_lifecycle import create_request,decide_request,DecisionConflict
 from app.hitl_postgres import consume_with_outbox,ApprovalError
@@ -39,6 +40,59 @@ class HitlPostgresIntegration(unittest.TestCase):
                     raise AssertionError("application role must not own HITL approvals")
     def connect(self):
         return self.psycopg.connect(self.dsn)
+    def test_concurrent_decisions_only_one_wins(self):
+        tenant=uuid4()
+        action={"test_id":str(uuid4()),"operation":"concurrent-decision"}
+        with self.connect() as conn:
+            approval=create_request(conn,tenant_id=tenant,action=action,
+                                    requester_id="requester",
+                                    expires_at=datetime.now(timezone.utc)+timedelta(minutes=10))
+        def attempt(actor):
+            try:
+                with self.connect() as conn:
+                    decide_request(conn,tenant_id=tenant,approval_id=approval,
+                                   approver_id=actor,decision="approved")
+                return "success"
+            except DecisionConflict:
+                return "conflict"
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes=list(pool.map(attempt,("approver-a","approver-b")))
+        self.assertCountEqual(outcomes,["success","conflict"])
+
+    def test_concurrent_consumption_one_outbox_event(self):
+        tenant=uuid4()
+        action={"test_id":str(uuid4()),"operation":"concurrent-consume"}
+        with self.connect() as conn:
+            approval=create_request(conn,tenant_id=tenant,action=action,
+                                    requester_id="requester",
+                                    expires_at=datetime.now(timezone.utc)+timedelta(minutes=10))
+        with self.connect() as conn:
+            decide_request(conn,tenant_id=tenant,approval_id=approval,
+                           approver_id="approver",decision="approved")
+        key="concurrent-"+str(uuid4())
+        def attempt(_):
+            try:
+                with self.connect() as conn:
+                    return ("success",consume_with_outbox(
+                        conn,tenant_id=tenant,approval_id=approval,action=action,
+                        idempotency_key=key,actor_id="worker"))
+            except ApprovalError:
+                return ("conflict",None)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes=list(pool.map(attempt,range(2)))
+        self.assertCountEqual([x[0] for x in outcomes],["success","conflict"])
+        event=next(x[1] for x in outcomes if x[0]=="success")
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
+                cur.execute("SELECT count(*) FROM hitl.outbox WHERE tenant_id=%s AND idempotency_key=%s",
+                            (str(tenant),key))
+                self.assertEqual(cur.fetchone()[0],1)
+        with self.connect() as conn:
+            self.assertEqual(find_matching_replay(
+                conn,tenant_id=tenant,approval_id=approval,action=action,
+                idempotency_key=key,actor_id="worker"),event)
+
     def test_tenant_isolation_and_lifecycle(self):
         tenant_a,tenant_b=uuid4(),uuid4()
         action={"test_id":str(uuid4()),"operation":"no-external-side-effect"}
