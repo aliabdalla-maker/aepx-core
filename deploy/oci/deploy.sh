@@ -5,7 +5,7 @@ command -v docker >/dev/null
 docker compose version >/dev/null
 command -v python3 >/dev/null
 [[ -f .env ]] || { echo "Create a private .env file first"; exit 1; }
-[[ "$(stat -c %a .env)" == "600" ]] || { echo "Run chmod 600 .env"; exit 1; }
+python3 deploy/oci/validate-secrets.py
 TMP="$(mktemp)"
 trap 'rm -f "$TMP"' EXIT
 docker compose -f docker-compose.yml config --format json > "$TMP"
