@@ -1,0 +1,55 @@
+# Isolated AEP-X staging: does not reference the production Compose project.
+# Explicitly run with: docker compose -p aepx-oci-staging -f deploy/oci/compose.staging.yml ...
+name: aepx-oci-staging
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aepx
+      POSTGRES_USER: aepx
+      POSTGRES_PASSWORD: ${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}
+    volumes:
+      - staging-postgres:/var/lib/postgresql/data
+      - ../../schemas/sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aepx -d aepx"]
+      interval: 10s
+      retries: 10
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+  identity:
+    build:
+      context: ../../services/identity
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+  trust:
+    build:
+      context: ../../services/trust
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
+    depends_on:
+      postgres:
+        condition: service_healthy
+  registry:
+    build:
+      context: ../../services/registry
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
+      IDENTITY_URL: http://identity:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      identity:
+        condition: service_started
+volumes:
+  staging-postgres:
