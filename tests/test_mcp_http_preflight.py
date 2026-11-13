@@ -30,12 +30,13 @@ class PreflightTests(unittest.TestCase):
                     "https://mcp.example.com/mcp#fragment",
                     "https://mcp.example.com./mcp",
                     "https://mcp.example.com%2eevil.test/mcp",
-                    "https://mcp.example.com\\@evil.test/mcp"):
+                    "https://mcp.example.com\\@evil.test/mcp",
+                    "https://mcp.example.com/mcp" + chr(10)):
             with self.subTest(url=url), self.assertRaises(MCPPreflightDenied):
                 self.check(url)
 
     def test_rejects_missing_or_invalid_authentication(self):
-        for value in (None, "", "Basic abc", "Bearer ", "Bearer abc\\r\\nX:evil", 1):
+        for value in (None, "", "Basic abc", "Bearer ", "Bearer abc" + chr(13) + chr(10) + "X:evil", 1):
             with self.subTest(value=value), self.assertRaises(MCPPreflightDenied):
                 self.check(authorization=value)
 
