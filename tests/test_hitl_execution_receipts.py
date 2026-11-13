@@ -59,6 +59,43 @@ class ReceiptTests(unittest.TestCase):
         with self.assertRaises(ExecutionDenied):
             execute_local_once(self.db,**self.kw)
         self.effect.assert_not_called()
+    def test_missing_approval_id_denied(self):
+        self.cur.fetchone.return_value=("hitl.approval.consumed",{"action_hash":"a"*64})
+        with self.assertRaises(ExecutionDenied):
+            execute_local_once(self.db,**self.kw)
+        self.effect.assert_not_called()
+        self.db.rollback.assert_called_once()
+
+    def test_approval_action_mismatch_denied(self):
+        self.cur.fetchone.side_effect=[
+            ("hitl.approval.consumed",self.payload),
+            ("consumed","b"*64,"approver",True)]
+        with self.assertRaises(ExecutionDenied):
+            execute_local_once(self.db,**self.kw)
+        self.effect.assert_not_called()
+
+    def test_unconsumed_approval_denied(self):
+        self.cur.fetchone.side_effect=[
+            ("hitl.approval.consumed",self.payload),
+            ("pending","a"*64,"approver",True)]
+        with self.assertRaises(ExecutionDenied):
+            execute_local_once(self.db,**self.kw)
+        self.effect.assert_not_called()
+
+    def test_missing_approver_denied(self):
+        self.cur.fetchone.side_effect=[
+            ("hitl.approval.consumed",self.payload),
+            ("consumed","a"*64,None,True)]
+        with self.assertRaises(ExecutionDenied):
+            execute_local_once(self.db,**self.kw)
+        self.effect.assert_not_called()
+
+    def test_caller_approved_false_cannot_override_db_authority(self):
+        self.cur.fetchone.side_effect=[
+            ("hitl.approval.consumed",self.payload),self.verified,None]
+        self.assertEqual(execute_local_once(self.db,**dict(self.kw,approved=False)),"applied")
+        self.effect.assert_called_once_with(self.cur)
+
     def test_action_mismatch_denied(self):
         self.cur.fetchone.return_value=("hitl.approval.consumed",{"action_hash":"b"*64})
         with self.assertRaises(ExecutionDenied):
