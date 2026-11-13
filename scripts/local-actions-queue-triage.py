@@ -64,12 +64,16 @@ def failed_before_jobs_evidence(repo, runs, token, fetch=fetch_json):
                 if run.get("status") == "completed" and run.get("conclusion") == "failure"]
     for run in failures[:5]:
         item = {"run_id": run["id"], "name": run.get("name"),
-                "url": run.get("html_url")}
+                "url": run.get("html_url"), "workflow_path": run.get("path"),
+                "head_sha": run.get("head_sha"),
+                "created_at": run.get("created_at"), "updated_at": run.get("updated_at")}
         try:
             url = f"https://api.github.com/repos/{repo}/actions/runs/{run['id']}/jobs?per_page=20"
             jobs = fetch(url, token).get("jobs", [])
             item["job_count_in_first_page"] = len(jobs)
             item["no_jobs_returned"] = not bool(jobs)
+            if not jobs:
+                item["triage_hint"] = "Inspect workflow validation errors, Actions policy, billing/limits, and GitHub service status; no root cause inferred."
         except (OSError, ValueError, KeyError, urllib.error.URLError) as exc:
             item["error_type"] = type(exc).__name__
         evidence.append(item)
