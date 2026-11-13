@@ -77,3 +77,7 @@ A merged version of `mcp_transport_policy.py` contained literal escaped newline 
 ## MCP 2026-07-28 outbound POST contract (offline)
 
 `mcp_post_request_gate.validate_mcp_post_request` checks exact allowlisted HTTPS endpoint, POST method, JSON content type, both JSON and SSE Accept media types, bounded correlated JSON-RPC request and rejects legacy session/resume headers, duplicate JSON keys and malformed values. It does **not** build or send HTTP requests, handle OAuth resource indicators or independently authenticate any request metadata. A production gateway must enforce token audience, TLS and socket-level destination policy; keep execution disabled.
+
+## Negotiated protocol version pinning
+
+The outbound POST gate can now require `MCP-Protocol-Version` to exactly match a trusted, already-negotiated protocol version, rejecting missing, duplicate and downgraded values. The gate does not itself negotiate or authenticate a version. Note: protocol features differ by version; the 2025-11-25 Streamable HTTP specification supports GET, session IDs and resume. The offline request gate deliberately rejects session/resume headers and supports only a restricted POST subset, so it is **not a general conformant client for all negotiated versions**. Do not enable live transport until version-specific interoperability tests pass.
