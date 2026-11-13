@@ -23,3 +23,6 @@ python3 -m unittest discover -s tests -p 'test_aepx_hitl_store.py' -v
 5. Wire CrewAI supervisor to MCP through HITL, with deterministic integration fixtures.
 6. Add OpenTelemetry, SLOs, restore drill, encrypted backups and rollback.
 7. Deploy to restricted OCI staging after VCN quota/network resolution; never use reference Compose for production.
+
+## Additional local outbox prototype
+`scripts/aepx-local-outbox.py` provides SQLite-backed idempotent enqueue, pending event inspection and delivery marking, with tests. It does not send events, authenticate producers, or atomically combine HITL consumption with external side effects. It must not be treated as exactly-once delivery or a production event bus.
