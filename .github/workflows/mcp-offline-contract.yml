@@ -29,6 +29,12 @@ on:
       - 'tests/test_mcp_dns_policy.py'
       - 'tests/test_mcp_transport_policy.py'
       - '.github/workflows/mcp-offline-contract.yml'
+      - 'platform/saas-ide/backend/app/mcp_post_request_gate.py'
+      - 'tests/test_mcp_post_request_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_version_policy.py'
+      - 'tests/test_mcp_version_policy.py'
+      - 'platform/saas-ide/backend/app/mcp_initialize_gate.py'
+      - 'tests/test_mcp_initialize_gate.py'
   push:
     branches: [master]
     paths:
