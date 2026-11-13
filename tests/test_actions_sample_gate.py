@@ -59,6 +59,26 @@ class ActionsSampleGateTests(unittest.TestCase):
                             "status": "queued", "conclusion": None}]}
         self.assertTrue(gate.evaluate_required(report, sha, [".github/workflows/ci.yml"]))
 
+    def test_latest_matching_failure_overrides_earlier_success(self):
+        sha = "a" * 40
+        workflow = ".github/workflows/ci.yml"
+        report = {"runs": [
+            {"head_sha": sha, "workflow_path": workflow,
+             "status": "completed", "conclusion": "failure"},
+            {"head_sha": sha, "workflow_path": workflow,
+             "status": "completed", "conclusion": "success"}]}
+        self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
+
+    def test_latest_matching_queued_overrides_earlier_success(self):
+        sha = "a" * 40
+        workflow = ".github/workflows/ci.yml"
+        report = {"runs": [
+            {"head_sha": sha, "workflow_path": workflow,
+             "status": "queued", "conclusion": None},
+            {"head_sha": sha, "workflow_path": workflow,
+             "status": "completed", "conclusion": "success"}]}
+        self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
+
     def test_successful_sample_only_passes_sample_health(self):
         self.assertEqual(gate.evaluate({"sample_size": 3, "status_counts": {"completed": 3},
                                        "conclusion_counts": {"success": 3}}), [])
