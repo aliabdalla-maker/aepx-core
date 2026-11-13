@@ -32,3 +32,13 @@ The integration test requires both `HITL_REPLAY_TEST_DSN` and
 `HITL_REPLAY_ALLOW_ISOLATED_TEST=yes`. **Never point it at production:**
 the test creates schema/table objects and writes test rows. Verify the
 connection string targets an isolated disposable database before running.
+
+## Integrated verification adapter
+
+`verify_receipt_with_postgres` in `hitl_signed_receipt_postgres.py`
+now connects signed receipt validation directly to the durable replay claim
+callback. Invalid signatures are rejected before database access. Duplicate
+claims and database outages fail closed. This adapter has four additional
+offline regression cases. It does not provision a production database or
+read provider status over the network. Staging migration and end-to-end
+concurrency acceptance remain mandatory before enabling any external effect.
