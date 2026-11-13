@@ -32,7 +32,7 @@ def issue_token(subject: str):
 @app.post("/did")
 def issue_did(x_aepx_service_key: str | None = Header(default=None)):
     if os.getenv("AEPX_SECURE_MODE") == "true":
-        expected = os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        expected = os.getenv("AEPX_REGISTRY_IDENTITY_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
         if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
             raise HTTPException(status_code=403, detail="Service authentication required")
     # RFC-0006 — did:key: self-certifying, no chain or registry needed to
