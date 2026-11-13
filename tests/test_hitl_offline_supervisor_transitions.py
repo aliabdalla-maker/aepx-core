@@ -21,7 +21,7 @@ def snapshot(running):
                            "MemorySwap": 134217728}}
 
 def transition(phase, running=False, **kwargs):
-    if phase == "running" and "expected_container_id" not in kwargs:
+    if phase in ("running", "stopped", "timed_out") and "expected_container_id" not in kwargs:
         kwargs["expected_container_id"] = CID
     return step(phase=phase, snapshot=snapshot(running),
                 expected_name=NAME, expected_image_id=IMAGE, **kwargs)
@@ -58,6 +58,22 @@ class TestOfflineSupervisorTransitions(unittest.TestCase):
                  expected_name=NAME, expected_image_id=IMAGE,
                  elapsed_seconds=10, timeout_seconds=10)
 
+    def test_stopped_removal_is_id_bound(self):
+        result = transition("stopped")
+        self.assertEqual(result["argv"], ("docker", "rm", "--force", CID))
+        with self.assertRaises(SandboxPolicyDenied):
+            transition("stopped", running=True)
+        with self.assertRaises(SandboxPolicyDenied):
+            transition("stopped", expected_container_id="d" * 64)
+
+    def test_timed_out_requires_reinspection_before_removal(self):
+        result = transition("timed_out", running=True)
+        self.assertEqual(result["argv"], ("docker", "kill", CID))
+        result = transition("timed_out", running=False)
+        self.assertEqual(result["argv"], ("docker", "rm", "--force", CID))
+        with self.assertRaises(SandboxPolicyDenied):
+            transition("timed_out", running=False, expected_container_id="d" * 64)
+
     def test_cleanup_requires_both_signals(self):
         self.assertEqual(step(phase="removed", inspect_not_found=True,
                               matching_processes_absent=True)["phase"], "clean")
@@ -66,6 +82,6 @@ class TestOfflineSupervisorTransitions(unittest.TestCase):
                 step(phase="removed", inspect_not_found=a, matching_processes_absent=b)
 
     def test_no_implicit_destructive_actions(self):
-        for phase in ("", "verified", "timed_out", "stopped", "clean"):
+        for phase in ("", "verified", "removing", "clean"):
             with self.subTest(phase=phase), self.assertRaises(SandboxPolicyDenied):
                 transition(phase)
