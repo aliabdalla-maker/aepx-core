@@ -30,13 +30,15 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
     tenant = str(UUID(str(tenant_id)))
     if not isinstance(worker_id, str) or not worker_id.strip():
         raise ValueError("verified worker identity required")
+    # Begin the deadline before database work, so slow claim/recovery time
+    # cannot silently extend the permitted batch processing window.
+    deadline = time.monotonic() + max_batch_seconds
     # Recover crashed workers that exhausted attempts; do not redeliver them.
     reaped = reap_exhausted(connection, tenant_id=tenant, max_attempts=max_attempts)
     rows = claim(connection, tenant_id=tenant, worker_id=worker_id,
                  limit=limit, lease_seconds=lease_seconds,
                  max_attempts=max_attempts)
     delivered = failed = stale = 0
-    deadline = time.monotonic() + max_batch_seconds
     for event_id, topic, payload, attempt in rows:
         # Never begin another callback once the bounded batch window expires.
         # Unprocessed leased rows recover through lease expiry.
