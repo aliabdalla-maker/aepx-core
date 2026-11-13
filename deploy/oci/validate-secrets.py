@@ -19,7 +19,7 @@ for line in env_file.read_text().splitlines():
     if key in pairs:
         sys.exit(f"ERROR: duplicate key {key}")
     pairs[key] = value
-required = ["AEPX_POSTGRES_PASSWORD", "AEPX_NEO4J_PASSWORD", "AEPX_IDENTITY_JWT_SECRET"]
+required = ["AEPX_POSTGRES_PASSWORD", "AEPX_NEO4J_PASSWORD", "AEPX_IDENTITY_JWT_SECRET", "AEPX_INTERNAL_SERVICE_KEY"]
 for key in required:
     value = pairs.get(key, "")
     if not re.fullmatch(r"[A-Za-z0-9_-]{24,128}", value):
