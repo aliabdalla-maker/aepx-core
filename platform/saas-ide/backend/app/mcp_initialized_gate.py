@@ -23,7 +23,7 @@ def validate_mcp_initialized_notification(*, body, initialized_version,
             return result
         msg=json.loads(raw,object_pairs_hook=unique,
                        parse_constant=lambda _: (_ for _ in ()).throw(ValueError()))
-    except (UnicodeError,ValueError,TypeError) as exc:
+    except (UnicodeError,ValueError,TypeError,RecursionError) as exc:
         raise MCPContractDenied("invalid initialized notification JSON") from exc
     if (not isinstance(msg,dict) or msg.get("jsonrpc")!="2.0" or
         msg.get("method")!="notifications/initialized" or
