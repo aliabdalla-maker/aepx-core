@@ -19,7 +19,7 @@ class TestMCPPreflight(unittest.TestCase):
             trusted_tool_allowlist={"crm-prod":{"crm.update"}},
             trusted_approval={"tenant_id":"tenant-a","run_id":"run-a",
                               "id":"approval-a","state":"consumed",
-                              "tool_name":"crm.update","arguments_sha256":digest},
+                              "tool_name":"crm.update","args_sha256":digest},
             trusted_execution={"tenant_id":"tenant-a","run_id":"run-a",
                                "approval_id":"approval-a","state":"reserved",
                                "idempotency_key":"stable-1"},
