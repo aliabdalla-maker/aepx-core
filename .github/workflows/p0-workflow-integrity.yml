@@ -5,12 +5,14 @@ on:
       - '.github/workflows/**'
       - 'scripts/check_workflow_integrity.py'
       - 'tests/test_workflow_deployment_policy.py'
+      - 'tests/test_release_audit_workflow_policy.py'
   push:
     branches: [master]
     paths:
       - '.github/workflows/**'
       - 'scripts/check_workflow_integrity.py'
       - 'tests/test_workflow_deployment_policy.py'
+      - 'tests/test_release_audit_workflow_policy.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,3 +33,5 @@ jobs:
         run: python scripts/check_workflow_integrity.py
       - name: Verify manual-only deployment regression
         run: python -m unittest discover -s tests -p 'test_workflow_deployment_policy.py' -v
+      - name: Verify release audit safety policy
+        run: python -m unittest discover -s tests -p 'test_release_audit_workflow_policy.py' -v
