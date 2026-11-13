@@ -32,3 +32,12 @@ class TestInitializedGate(unittest.TestCase):
                 self.call(raw)
         with self.assertRaises(MCPContractDenied):
             self.call(json.dumps(GOOD),version="2025-03-26")
+
+    def test_deeply_nested_json_fails_closed(self):
+        # JSON decoding can raise RecursionError before shape validation.
+        nested = "[" * 1500 + "0" + "]" * 1500
+        with self.assertRaises(MCPContractDenied):
+            self.call(nested)
+    def test_invalid_utf8_fails_closed(self):
+        with self.assertRaises(MCPContractDenied):
+            self.call(b"\\xff")
