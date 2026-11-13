@@ -20,6 +20,7 @@ class VerifiedGatewayContext:
     action_hash: str
     resource_id: str
     protocol_version: str
+    tool_name: str
     tls_peer_verified: bool
     audience_verified: bool
     resource_authorized: bool
@@ -52,7 +53,7 @@ def validate_remote_dispatch(intent, context):
         raise RemoteDispatchDenied("missing verified gateway assertion")
     if not all(isinstance(v, str) and v for v in (
         intent.resource_id, intent.protocol_version, intent.tool_name,
-        context.resource_id, context.protocol_version
+        context.resource_id, context.protocol_version, context.tool_name
     )):
         raise RemoteDispatchDenied("missing resource, protocol or tool binding")
     if len(intent.tool_name) > 128 or len(intent.resource_id) > 256:
@@ -61,7 +62,7 @@ def validate_remote_dispatch(intent, context):
         raise RemoteDispatchDenied("invalid action digest")
     if not isinstance(intent.idempotency_key, str) or not _TOKEN.fullmatch(intent.idempotency_key):
         raise RemoteDispatchDenied("invalid idempotency key")
-    for field in ("tenant_id", "approval_id", "action_hash", "resource_id", "protocol_version"):
+    for field in ("tenant_id", "approval_id", "action_hash", "resource_id", "protocol_version", "tool_name"):
         if getattr(intent, field) != getattr(context, field):
             raise RemoteDispatchDenied("gateway binding mismatch: " + field)
     return intent
