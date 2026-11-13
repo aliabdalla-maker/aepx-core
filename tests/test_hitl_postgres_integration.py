@@ -16,7 +16,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"services/governance")
 from app.hitl_lifecycle import create_request,decide_request,DecisionConflict
 from app.hitl_postgres import consume_with_outbox,ApprovalError
 from app.hitl_replay import find_matching_replay
-from app.hitl_outbox import claim, settle, reap_exhausted
+from app.hitl_outbox import claim, settle, reap_exhausted, lease_is_current
 from app.hitl_recovery import requeue_dead_letter,RecoveryDenied
 from app.hitl_execution_receipts import execute_local_once
 from app.hitl_health import outbox_health
@@ -448,6 +448,43 @@ class HitlPostgresIntegration(unittest.TestCase):
         with self.connect() as conn:
             settle(conn,tenant_id=tenant,event_id=event,worker_id="worker-new",
                    attempt_number=replacement[0][3],delivered=True)
+
+    def test_lease_preflight_rejects_expired_and_reassigned_worker(self):
+        tenant = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            first = claim(conn, tenant_id=tenant, worker_id="worker-old", limit=1)
+        self.assertEqual(len(first), 1)
+        first_attempt = first[0][3]
+        with self.connect() as conn:
+            self.assertTrue(lease_is_current(
+                conn, tenant_id=tenant, event_id=event,
+                worker_id="worker-old", attempt_number=first_attempt))
+        self._expire_lease(tenant, event)
+        with self.connect() as conn:
+            self.assertFalse(lease_is_current(
+                conn, tenant_id=tenant, event_id=event,
+                worker_id="worker-old", attempt_number=first_attempt))
+        with self.connect() as conn:
+            second = claim(conn, tenant_id=tenant, worker_id="worker-new", limit=1)
+        self.assertEqual(len(second), 1)
+        self.assertEqual(second[0][3], first_attempt + 1)
+        with self.connect() as conn:
+            self.assertFalse(lease_is_current(
+                conn, tenant_id=tenant, event_id=event,
+                worker_id="worker-old", attempt_number=first_attempt))
+            self.assertTrue(lease_is_current(
+                conn, tenant_id=tenant, event_id=event,
+                worker_id="worker-new", attempt_number=second[0][3]))
+        with self.connect() as conn:
+            with self.assertRaises(PermissionError):
+                settle(conn, tenant_id=tenant, event_id=event,
+                       worker_id="worker-old", attempt_number=first_attempt,
+                       delivered=True)
+        with self.connect() as conn:
+            settle(conn, tenant_id=tenant, event_id=event,
+                   worker_id="worker-new", attempt_number=second[0][3],
+                   delivered=True)
 
     def test_exhausted_crashed_lease_is_dead_lettered(self):
         tenant=uuid4()
