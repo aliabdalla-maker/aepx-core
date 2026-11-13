@@ -16,6 +16,7 @@ jobs:
       - name: Check shell syntax
         run: |
           for script in deploy/oci/*.sh; do bash -n "$script"; done
+          python3 -m py_compile deploy/oci/*.py
       - name: Validate OCI Compose overlay
         run: |
           trap 'rm -f .env' EXIT
