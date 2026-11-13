@@ -20,10 +20,6 @@ def execute_next(tenant_id: str, *, owner: str | None = None,
         raise PermissionError("Reviewed network egress gateway required")
     if inference is generate and os.getenv("IDE_PROVIDER_USAGE_RECONCILIATION_ENABLED")!="true":
         raise PermissionError("Provider spend reconciliation required")
-    # A verified gateway alone is not authorization to execute external effects.
-    # A trusted caller must provide a fresh, scoped, fail-closed HITL decision.
-    if not callable(authorize_dispatch):
-        raise PermissionError("Trusted pre-dispatch authorization required")
     if not tenant_id or len(tenant_id)>128:
         raise ValueError("Invalid tenant")
     # No implicit price fallback. Ceiling covers a bounded input+output envelope.
@@ -32,6 +28,10 @@ def execute_next(tenant_id: str, *, owner: str | None = None,
     seconds=int(os.getenv("IDE_WORKER_TIMEOUT_SECONDS","0"))
     if not 1<=tokens<=2000 or not 1<=cost<=5_000_000 or not 1<=seconds<=30:
         raise ValueError("Worker budgets and deadline must be explicitly configured")
+    # A verified gateway alone is not authorization to execute external effects.
+    # A trusted caller must provide a fresh, scoped, fail-closed HITL decision.
+    if not callable(authorize_dispatch):
+        raise PermissionError("Trusted pre-dispatch authorization required")
     owner=owner or str(uuid.uuid4())
     with SessionLocal() as db:
         claim=fenced_claim(db,tenant_id,owner,lease_seconds=60)
