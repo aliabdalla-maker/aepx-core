@@ -109,3 +109,7 @@ The outbound POST and initialize response validators now reject numeric-string I
 ## Trusted handshake version binding correction
 
 The offline handshake composer now requires an **independently approved** `approved_protocol_version` from the caller and checks that the server's initialize result matches it. Previously the initialized-notification validator compared the response-derived version against itself, which did not detect a changed but otherwise supported server version. An invalid or missing trusted version fails closed. This does not authenticate the source of the caller's trusted value or enable network execution.
+
+## Handshake Python syntax repair
+
+A merged version of `mcp_handshake_policy.py` included literal backslash-n characters inside a conditional, preventing Python parsing. The correction restores actual source line breaks and extends regression coverage for invalid or oversized client version collections. CI must compile and execute the handshake test before the fix is considered verified. No network execution is enabled.
