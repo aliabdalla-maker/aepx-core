@@ -23,11 +23,36 @@ def reserve_remote(connection,*,tenant_id,event_id,provider,idempotency_key):
     try:
         with connection.cursor() as cur:
             cur.execute("SELECT set_config('app.tenant_id',%s,true)",(tenant,))
-            cur.execute("""SELECT topic FROM hitl.outbox WHERE tenant_id=%s AND id=%s
+            cur.execute("""SELECT topic,payload FROM hitl.outbox WHERE tenant_id=%s AND id=%s
                            FOR UPDATE""",(tenant,event))
             row=cur.fetchone()
             if not row or row[0]!="hitl.approval.consumed":
                 raise ReconciliationRequired("eligible outbox event not found")
+            payload=row[1]
+            if not isinstance(payload,dict):
+                raise ReconciliationRequired("invalid outbox payload")
+            try:
+                approval_id=str(UUID(str(payload["approval_id"])))
+            except (KeyError,TypeError,ValueError) as exc:
+                raise ReconciliationRequired("invalid approval identifier") from exc
+            actor=payload.get("actor_id")
+            action_hash=payload.get("action_hash")
+            if not isinstance(actor,str) or not actor.strip():
+                raise ReconciliationRequired("missing authenticated event actor")
+            cur.execute("""SELECT status,action_hash,approver_id,expires_at>now()
+                           FROM hitl.approvals WHERE tenant_id=%s AND id=%s
+                           FOR SHARE""",(tenant,approval_id))
+            approval=cur.fetchone()
+            if (not approval or approval[0]!="consumed" or
+                approval[1]!=action_hash or not approval[2] or approval[3] is not True):
+                raise ReconciliationRequired("approval verification failed")
+            cur.execute("""SELECT EXISTS(SELECT 1 FROM hitl.events
+                           WHERE tenant_id=%s AND approval_id=%s
+                             AND actor_id=%s AND event='consumed')""",
+                        (tenant,approval_id,actor))
+            provenance=cur.fetchone()
+            if not provenance or provenance[0] is not True:
+                raise ReconciliationRequired("consumption provenance missing")
             cur.execute("""INSERT INTO hitl.remote_delivery_receipts
                            (tenant_id,event_id,provider,idempotency_key,state)
                            VALUES(%s,%s,%s,%s,'uncertain')
