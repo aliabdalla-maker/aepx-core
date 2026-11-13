@@ -11,7 +11,7 @@ class SnapshotRejected(PermissionError):
     pass
 
 def publish_identity_snapshot(connection, *, tenant_id, issuer, memberships,
-                              revoked_tokens, captured_at, max_age_seconds=30):
+                              revoked_tokens, captured_at, revision, max_age_seconds=30):
     """Replace a tenant/issuer snapshot and heartbeat in one transaction.
 
     memberships: sequence of subject strings (active members).
@@ -22,7 +22,8 @@ def publish_identity_snapshot(connection, *, tenant_id, issuer, memberships,
         tenant=str(UUID(str(tenant_id)))
         if (not isinstance(issuer,str) or not issuer.startswith("https://")
             or len(issuer)>512 or not isinstance(captured_at,datetime)
-            or captured_at.tzinfo is None or not 0<max_age_seconds<=60):
+            or captured_at.tzinfo is None or not 0<max_age_seconds<=60
+            or type(revision) is not int or not 1<=revision<=9223372036854775807):
             raise ValueError("invalid authority metadata")
         age=(datetime.now(timezone.utc)-captured_at.astimezone(timezone.utc)).total_seconds()
         if age < -5 or age > max_age_seconds:
@@ -46,9 +47,11 @@ def publish_identity_snapshot(connection, *, tenant_id, issuer, memberships,
                 (tenant_id,issuer,synced_at,healthy)
                 VALUES (%s,%s,now(),false)
                 ON CONFLICT (tenant_id,issuer) DO NOTHING""",(tenant,issuer))
-            cur.execute("""SELECT synced_at FROM hitl.identity_authority_sync
+            cur.execute("""SELECT revision FROM hitl.identity_authority_sync
                 WHERE tenant_id=%s AND issuer=%s FOR UPDATE""",(tenant,issuer))
-            cur.fetchone()
+            current=cur.fetchone()
+            if not current or current[0] is None or revision<=current[0]:
+                raise ValueError("snapshot revision is not newer")
             cur.execute("""UPDATE hitl.identity_authority_sync SET healthy=false
                 WHERE tenant_id=%s AND issuer=%s""",(tenant,issuer))
             cur.execute("""DELETE FROM hitl.identity_memberships
@@ -64,8 +67,8 @@ def publish_identity_snapshot(connection, *, tenant_id, issuer, memberships,
                     (tenant_id,issuer,subject,token_id)
                     VALUES (%s,%s,%s,%s)""",(tenant,issuer,subject,token_id))
             cur.execute("""UPDATE hitl.identity_authority_sync
-                SET synced_at=now(),healthy=true
-                WHERE tenant_id=%s AND issuer=%s""",(tenant,issuer))
+                SET synced_at=now(),healthy=true,revision=%s
+                WHERE tenant_id=%s AND issuer=%s""",(revision,tenant,issuer))
         connection.commit()
         return True
     except Exception as exc:
