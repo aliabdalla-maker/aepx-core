@@ -4,6 +4,7 @@ This is a pure validation boundary. It never sends requests, verifies TLS,
 checks JWT signatures, or guarantees provider-side exactly-once effects.
 """
 from dataclasses import dataclass
+from datetime import date
 from uuid import UUID
 import re
 
@@ -63,6 +64,11 @@ def validate_remote_dispatch(intent, context):
         raise RemoteDispatchDenied("invalid resource identifier")
     if not _VERSION.fullmatch(intent.protocol_version):
         raise RemoteDispatchDenied("invalid protocol version format")
+    try:
+        if date.fromisoformat(intent.protocol_version).isoformat() != intent.protocol_version:
+            raise ValueError("noncanonical date")
+    except ValueError as exc:
+        raise RemoteDispatchDenied("invalid protocol version date") from exc
     if not _TOOL.fullmatch(intent.tool_name):
         raise RemoteDispatchDenied("invalid tool identifier")
     if not isinstance(intent.action_hash, str) or not _HASH.fullmatch(intent.action_hash):
