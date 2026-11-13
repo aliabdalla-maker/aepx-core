@@ -66,3 +66,20 @@ class TestTransportPolicy(unittest.TestCase):
             validate_mcp_transport_result(**common)
         self.assertTrue(validate_mcp_transport_result(
             **common,connected_peer="1.1.1.1")["ok"])
+
+    def test_mutated_transport_policy_fails_closed(self):
+        common=dict(endpoint=URL,server_id="crm",status_code=200,
+                    content_type="application/json",response_body=BODY,
+                    expected_request_id=7,connected_peer="1.1.1.1",
+                    require_connected_peer=True)
+        for mutation in (
+            {"addresses":("127.0.0.1",)},
+            {"addresses":("1.1.1.1","10.0.0.1")},
+            {"addresses":("1.1.1.1","1.1.1.1")},
+            {"addresses":("8.8.8.8","1.1.1.1")},
+            {"hostname":"other.example.test"},
+        ):
+            policy=self.policy()
+            policy.update(mutation)
+            with self.subTest(mutation=mutation),self.assertRaises(MCPContractDenied):
+                validate_mcp_transport_result(policy=policy,**common)
