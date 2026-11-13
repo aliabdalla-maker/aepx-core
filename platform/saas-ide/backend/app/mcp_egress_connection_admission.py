@@ -25,10 +25,9 @@ def admit_mcp_connection(preflight, pin, *, connected_address, tls_server_name,
     if (preflight.hostname != pin.hostname or preflight.port != 443
             or type(tls_server_name) is not str
             or tls_server_name != preflight.hostname
-            or preflight.endpoint not in (f"https://{preflight.hostname}/mcp",
-                                           f"https://{preflight.hostname}:443/mcp")
-            and not preflight.endpoint.startswith(f"https://{preflight.hostname}/")
-            and not preflight.endpoint.startswith(f"https://{preflight.hostname}:443/")):
+            or not preflight.endpoint.startswith(
+                (f"https://{preflight.hostname}/",
+                 f"https://{preflight.hostname}:443/"))):
         raise MCPEgressDenied("endpoint and TLS hostname mismatch")
     verify_pinned_destination(pin, hostname=preflight.hostname,
                               connected_address=connected_address)
