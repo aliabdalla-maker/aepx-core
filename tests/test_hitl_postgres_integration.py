@@ -262,6 +262,59 @@ class HitlPostgresIntegration(unittest.TestCase):
                             (str(tenant),))
                 self.assertEqual(cur.fetchone()[0],1)
 
+    def test_failed_local_effect_rolls_back_and_retry_applies_once(self):
+        tenant = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(tenant),))
+                cur.execute("SELECT payload->>'action_hash' FROM hitl.outbox WHERE id=%s", (event,))
+                action_hash = cur.fetchone()[0]
+
+        def local_effect(cur):
+            cur.execute("""INSERT INTO hitl.events
+                           (tenant_id,approval_id,event,actor_id)
+                           SELECT tenant_id,(payload->>'approval_id')::uuid,
+                                  'rollback_probe','local-test'
+                           FROM hitl.outbox WHERE tenant_id=%s AND id=%s""",
+                        (str(tenant), event))
+
+        def failing_effect(cur):
+            local_effect(cur)
+            raise RuntimeError("simulated worker failure before receipt")
+
+        kwargs = dict(tenant_id=tenant, event_id=event, action_hash=action_hash,
+                      tool_name="local.rollback-probe")
+        with self.connect() as conn:
+            with self.assertRaisesRegex(RuntimeError, "simulated worker failure"):
+                execute_local_once(conn, apply_local=failing_effect, **kwargs)
+
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(tenant),))
+                cur.execute("""SELECT count(*) FROM hitl.events
+                               WHERE tenant_id=%s AND event='rollback_probe'""", (str(tenant),))
+                self.assertEqual(cur.fetchone()[0], 0)
+                cur.execute("""SELECT count(*) FROM hitl.execution_receipts
+                               WHERE tenant_id=%s AND event_id=%s""", (str(tenant), event))
+                self.assertEqual(cur.fetchone()[0], 0)
+
+        with self.connect() as conn:
+            self.assertEqual(execute_local_once(conn, apply_local=local_effect, **kwargs),
+                             "applied")
+        with self.connect() as conn:
+            self.assertEqual(execute_local_once(conn, apply_local=local_effect, **kwargs),
+                             "duplicate")
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(tenant),))
+                cur.execute("""SELECT count(*) FROM hitl.events
+                               WHERE tenant_id=%s AND event='rollback_probe'""", (str(tenant),))
+                self.assertEqual(cur.fetchone()[0], 1)
+                cur.execute("""SELECT count(*) FROM hitl.execution_receipts
+                               WHERE tenant_id=%s AND event_id=%s""", (str(tenant), event))
+                self.assertEqual(cur.fetchone()[0], 1)
+
     def test_audited_dead_letter_requeue_requires_operator_gate(self):
         tenant=uuid4()
         event=self._seed_outbox(tenant)
