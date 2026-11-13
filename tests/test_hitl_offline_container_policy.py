@@ -15,7 +15,7 @@ class TestOfflineSandboxPolicy(unittest.TestCase):
                      "--init"):
             self.assertIn(flag, argv)
         self.assertEqual(argv[-3:], [IMAGE, "python", "-V"])
-        self.assertNotIn("--security-opt=seccomp=builtin", argv)
+        self.assertIn("--security-opt=seccomp=builtin", argv)
         self.assertNotIn("--privileged", argv)
         self.assertNotIn("-v", argv)
         self.assertNotIn("--volume", argv)
