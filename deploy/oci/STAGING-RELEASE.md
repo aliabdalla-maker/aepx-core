@@ -109,3 +109,8 @@ The OCI validation workflow includes a disposable `age` encryption/decryption an
 ## Backup script hardening (current branch)
 
 Encrypted backup filenames include a random suffix to avoid same-second collisions. The script validates the public age recipient format and stages both ciphertext and checksum before publication. Recovery requires absolute backup and private identity paths and rejects directly symlinked backup parents. These are defense-in-depth checks, not a substitute for protected filesystem mounts, off-host immutable storage, or verified restore evidence. Run `bash -n deploy/oci/backup-staging-encrypted.sh deploy/oci/restore-staging-encrypted-rehearsal.sh` and the CI encrypted recovery job before approving a deployment.
+
+
+## Trust API safety
+
+The Trust read endpoint no longer inserts rows for unknown entity IDs. It returns a default score of 50 without persistence; only authenticated adjustment writes create/update records in secure staging. Unknown adjustment components return HTTP 422. The OCI validation workflow now triggers on `schemas/sql/**` changes and includes integration checks for default trust reads and invalid adjustments. Verify the full workflow before approving staging deployment.
