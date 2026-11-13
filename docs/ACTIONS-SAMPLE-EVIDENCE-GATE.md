@@ -13,3 +13,5 @@ indicates that the **sample** contains at least one success and no failed
 or unfinished runs. It **does not** prove that required workflow gates ran,
 that the SHA is correct, or that production deployment is authorized.
 Mandatory release acceptance and explicit human approval remain required.
+
+The validator also requires a consistent `status_counts` object with every sampled run marked `completed`. Unrecognized conclusion values, status values, or inconsistent totals block acceptance. This is a sampled diagnostics gate, not a substitute for named mandatory checks on the exact release SHA.
