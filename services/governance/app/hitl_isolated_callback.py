@@ -21,7 +21,12 @@ def _child(entrypoint, arguments, output):
         else:
             output.send(("ok", result))
     except BaseException:
-        output.put(("error", None))
+        try:
+            output.send(("error", None))
+        except (OSError, EOFError, BrokenPipeError):
+            pass
+    finally:
+        output.close()
 
 def run_isolated_callback(*, entrypoint, arguments, allowed_entrypoints,
                           timeout_seconds=5):
