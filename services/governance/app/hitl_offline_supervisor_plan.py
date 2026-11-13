@@ -26,6 +26,7 @@ def offline_supervisor_plan(*, execution_id, image_digest, command,
     )
     # The name identifies the exact disposable workload. A real supervisor
     # must confirm daemon identity and reject pre-existing name collisions.
+    run.remove("--rm")  # Retain exited container for identity and exit-state inspection.
     run[2:2] = ["--name", name]
     return {
         "name": name,
@@ -35,4 +36,6 @@ def offline_supervisor_plan(*, execution_id, image_digest, command,
         "cleanup_argv": ("docker", "rm", "--force", name),
         "timeout_seconds": timeout_seconds,
         "requires_cleanup_verification": True,
+        "requires_identity_verification": True,
+        "requires_post_cleanup_absence_check": True,
     }
