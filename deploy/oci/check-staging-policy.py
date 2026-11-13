@@ -34,6 +34,9 @@ def check(config):
             errors.append(f"{name}: unexpected restart policy")
     if total>MAX_MEMORY_MIB:
         errors.append(f"staging memory budget {total} MiB exceeds {MAX_MEMORY_MIB} MiB")
+    postgres_volumes=services.get("postgres",{}).get("volumes",[])
+    if not any(isinstance(v,str) and v.split(":",1)[0]=="staging-postgres" and v.split(":")[1]=="/var/lib/postgresql/data" for v in postgres_volumes if ":" in v):
+        errors.append("postgres data directory must use staging-postgres named volume")
     if "staging-postgres" not in config.get("volumes",{}):
         errors.append("persistent staging PostgreSQL volume missing")
     return errors
