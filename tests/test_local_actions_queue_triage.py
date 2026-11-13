@@ -21,6 +21,7 @@ class QueueTriageTests(unittest.TestCase):
         report = triage.summarize(runs, now)
         self.assertEqual(report["sample_size"], 2)
         self.assertEqual(report["status_counts"], {"queued": 1, "completed": 1})
+        self.assertEqual(report["conclusion_counts"], {"not_completed": 2})
         self.assertEqual(report["queued"][0]["age_minutes"], 30)
 
     def test_runner_evidence_is_bounded_and_read_only(self):

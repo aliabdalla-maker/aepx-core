@@ -23,3 +23,5 @@ Before using this diagnostic, run `python scripts/offline-ci-preflight.py` local
 The report additionally samples job runner labels and assignment for up to five queued runs (up to 20 jobs each). Missing assignments are evidence only; they do not prove an account, billing, or capacity cause. Individual job-metadata failures are recorded without discarding the run summary.
 
 When workflow runs transition from queued to completed/failure, the report also samples up to five failed runs and records whether the Jobs API returned any jobs. A completed failure with no returned jobs warrants investigating workflow initialization, repository Actions policy and GitHub service/account state before debugging application tests. This signal alone does not identify the cause.
+
+The report includes both `status_counts` (queued/in_progress/completed) and `conclusion_counts` (success/failure/cancelled/not_completed). Keep these separate: `completed` does not mean `success`. Check GitHub's official workflow troubleshooting documentation and validate workflow YAML before attributing missing jobs to runners.

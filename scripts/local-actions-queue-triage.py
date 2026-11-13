@@ -33,7 +33,9 @@ def summarize(runs, now):
             "url": run.get("html_url"),
             "age_minutes": max(0, int((now - created).total_seconds() // 60)),
         })
-    return {"sample_size": len(runs), "status_counts": dict(counts), "queued": queued[:20]}
+    conclusions = collections.Counter(run.get("conclusion") or "not_completed" for run in runs)
+    return {"sample_size": len(runs), "status_counts": dict(counts),
+            "conclusion_counts": dict(conclusions), "queued": queued[:20]}
 
 
 def runner_evidence(repo, queued, token, fetch=fetch_json):
@@ -99,6 +101,10 @@ def main(argv=None):
                               datetime.datetime.now(datetime.timezone.utc))}
         report["runner_assignment_sample"] = runner_evidence(args.repo, report["queued"], token)
         report["failed_run_job_sample"] = failed_before_jobs_evidence(args.repo, data.get("workflow_runs", []), token)
+        report["investigation_guidance"] = (
+            "If runs are queued, inspect runner eligibility and Actions limits. "
+            "If runs fail without jobs, inspect workflow validity and GitHub Actions policies. "
+            "Neither status establishes root cause.")
         rendered = json.dumps(report, indent=2) + "\n"
         if args.output:
             from pathlib import Path
