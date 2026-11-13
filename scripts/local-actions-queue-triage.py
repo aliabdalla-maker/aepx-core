@@ -57,6 +57,25 @@ def runner_evidence(repo, queued, token, fetch=fetch_json):
     return evidence
 
 
+def failed_before_jobs_evidence(repo, runs, token, fetch=fetch_json):
+    """Sample completed failures with no job records, without inferring cause."""
+    evidence = []
+    failures = [run for run in runs
+                if run.get("status") == "completed" and run.get("conclusion") == "failure"]
+    for run in failures[:5]:
+        item = {"run_id": run["id"], "name": run.get("name"),
+                "url": run.get("html_url")}
+        try:
+            url = f"https://api.github.com/repos/{repo}/actions/runs/{run['id']}/jobs?per_page=20"
+            jobs = fetch(url, token).get("jobs", [])
+            item["job_count_in_first_page"] = len(jobs)
+            item["no_jobs_returned"] = not bool(jobs)
+        except (OSError, ValueError, KeyError, urllib.error.URLError) as exc:
+            item["error_type"] = type(exc).__name__
+        evidence.append(item)
+    return evidence
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", required=True, help="owner/repository")
@@ -75,6 +94,7 @@ def main(argv=None):
                   **summarize(data.get("workflow_runs", []),
                               datetime.datetime.now(datetime.timezone.utc))}
         report["runner_assignment_sample"] = runner_evidence(args.repo, report["queued"], token)
+        report["failed_run_job_sample"] = failed_before_jobs_evidence(args.repo, data.get("workflow_runs", []), token)
         rendered = json.dumps(report, indent=2) + "\n"
         if args.output:
             from pathlib import Path
