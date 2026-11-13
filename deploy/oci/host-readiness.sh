@@ -19,3 +19,12 @@ else
   echo "Docker not installed"
 fi
 echo "No services or firewall rules changed."
+
+echo "Host classification:"
+case "$(uname -m)" in
+  aarch64|arm64) echo "ARM64: verify every image supports linux/arm64";;
+  x86_64|amd64) echo "x86_64: verify linux/amd64 images and available capacity";;
+  *) echo "Unsupported/unverified architecture: $(uname -m)";;
+esac
+echo "Docker Compose minimum for !override: 2.24.4"
+echo "Private deployment only; do not publish ports until TLS/auth gates pass."
