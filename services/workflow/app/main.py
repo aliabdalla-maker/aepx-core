@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import httpx
 import json
@@ -56,7 +56,9 @@ def create_workflow(w: WorkflowIn):
 
 @app.post("/workflows/{wf_id}/execute")
 async def execute_workflow(wf_id: str):
-    wf = _WORKFLOWS[wf_id]
+    wf = _WORKFLOWS.get(wf_id)
+    if wf is None:
+        raise HTTPException(status_code=404, detail="workflow not found")
     wf["status"] = "RUNNING"
     results = []
     async with httpx.AsyncClient(timeout=5.0) as client:
