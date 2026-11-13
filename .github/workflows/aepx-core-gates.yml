@@ -7,6 +7,10 @@ on:
       - 'scripts/aepx-agentic-acceptance.py'
       - 'tests/test_aepx_agentic_acceptance.py'
       - 'services/workflow/app/main.py'
+      - 'tests/test_aepx_workflow_guards.py'
+      - 'scripts/aepx-agentic-contracts.py'
+      - 'tests/test_aepx_agentic_contracts.py'
+      - 'docs/AEPX-Agentic-Next-Implementation.md'
       - 'docs/AEPX-Agentic-Acceptance.md'
       - 'tests/test_aepx_core_integration.py'
       - 'scripts/aepx-compose-exposure.py'
@@ -27,11 +31,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Python syntax
-        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py
       - name: Run core acceptance regression tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
       - name: Run agentic acceptance contract tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_agentic_acceptance.py' -v
+      - name: Install workflow test dependencies
+        run: python3 -m pip install -r services/workflow/requirements.txt
+      - name: Run workflow security tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_workflow_guards.py' -v
+      - name: Run offline MCP RAG HITL security contracts
+        run: python3 -m unittest discover -s tests -p 'test_aepx_agentic_contracts.py' -v
       - name: Validate shell syntax
         run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh
       - name: Check static security blockers (informational for development)
