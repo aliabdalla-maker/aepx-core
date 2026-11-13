@@ -44,6 +44,19 @@ def execute_local_once(connection,*,tenant_id,event_id,action_hash,tool_name,
             if (not approval or approval[0]!="consumed" or
                 approval[1]!=action_hash or not approval[2] or approval[3] is not True):
                 raise ExecutionDenied("authoritative approval verification failed")
+            actor_id=payload.get("actor_id")
+            if not isinstance(actor_id,str) or not actor_id.strip():
+                raise ExecutionDenied("event actor missing")
+            # Verify that the event originated from a durable consumption
+            # record, rather than trusting the outbox JSON alone.
+            cur.execute("""SELECT EXISTS(
+                             SELECT 1 FROM hitl.events
+                             WHERE tenant_id=%s AND approval_id=%s
+                               AND event='consumed' AND actor_id=%s
+                           )""",(tenant,approval_id,actor_id))
+            provenance=cur.fetchone()
+            if not provenance or provenance[0] is not True:
+                raise ExecutionDenied("approval consumption provenance missing")
             cur.execute("""SELECT action_hash,tool_name FROM hitl.execution_receipts
                            WHERE tenant_id=%s AND event_id=%s""",(tenant,event))
             existing=cur.fetchone()
