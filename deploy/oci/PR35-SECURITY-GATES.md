@@ -21,3 +21,6 @@ After explicitly approving and starting the **isolated** staging project, run `A
 
 ## Committed-write PostgreSQL staging acceptance
 On a verified isolated staging host, with explicit approval, run `AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --db-commit`. This creates a uniquely named probe table in the staging database, commits an insert, reads it from another session and removes the table on exit. It does **not** restart PostgreSQL and therefore does not prove restart durability. Do not run alongside database maintenance or on production. Review database permissions and the resulting output before recording evidence. A real restart durability rehearsal, two-tenant RLS integration, migration rollback and encrypted backup restore remain release blockers.
+
+## Container host-isolation guard
+Static staging policy validation additionally rejects host PID/IPC/user namespaces, Docker socket mounts, added Linux capabilities and host devices. Five regression tests cover common escalation paths. This static check does not substitute for Docker daemon hardening, image scanning, runtime security validation or rootless execution review.
