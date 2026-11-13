@@ -1,0 +1,16 @@
+# Offline CI preflight (no GitHub runner required)
+
+From the repository root on a trusted developer workstation:
+
+```bash
+python -m pip install 'PyYAML>=6,<7'
+python scripts/offline-ci-preflight.py
+```
+
+This executes the workflow-integrity validator and three policy regression suites using the local Python interpreter. It exits nonzero if any check fails. It does not access OCI, deploy, merge, or run production services.
+
+**Scope limitation:** These checks are static workflow-policy checks only. They do **not** replace MCP/PostgreSQL, HITL, durable execution, billing, Docker or OCI acceptance tests. They do not certify production readiness.
+
+If GitHub Actions jobs remain queued, inspect runner assignment, repository Actions settings, workflow approvals, billing/spending restrictions and GitHub Status. Do not bypass required branch protection or merge without required green checks.
+
+For the tracked remediation work, see issue #230.
