@@ -20,6 +20,9 @@ class DeploymentPolicyTests(unittest.TestCase):
     def test_validator_rejects_automatic_deployment_trigger(self):
         self._assert_rejected("deploy-oci.yml", "name: forbidden\non:\n  push:\n    branches: [master]\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n", "workflow_dispatch only")
 
+    def test_validator_rejects_automatic_diagnostics_trigger(self):
+        self._assert_rejected("actions-queue-diagnostics.yml", "name: forbidden\non:\n  schedule:\n    - cron: \"0 * * * *\"\njobs:\n  inspect:\n    runs-on: ubuntu-latest\n", "diagnostics must use workflow_dispatch only")
+
     def test_validator_rejects_merge_conflict(self):
         self._assert_rejected("example.yml", "name: example\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n<<<<<<< HEAD\n", "unresolved merge conflict")
 
