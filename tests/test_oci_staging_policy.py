@@ -26,6 +26,9 @@ class PolicyTests(unittest.TestCase):
     def test_unapproved_service_rejected(self):
         self.cfg["services"]["unknown"]={}
         self.assertTrue(m.check(self.cfg))
+    def test_unmounted_named_volume_rejected(self):
+        self.cfg["services"]["postgres"]["volumes"]=["other-volume:/var/lib/postgresql/data"]
+        self.assertTrue(m.check(self.cfg))
     def test_missing_volume_rejected(self):
         self.cfg["volumes"].pop("staging-postgres")
         self.assertTrue(m.check(self.cfg))
