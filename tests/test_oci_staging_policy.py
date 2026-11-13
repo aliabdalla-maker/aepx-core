@@ -26,6 +26,21 @@ class PolicyTests(unittest.TestCase):
     def test_unapproved_service_rejected(self):
         self.cfg["services"]["unknown"]={}
         self.assertTrue(m.check(self.cfg))
+    def test_docker_socket_mount_rejected(self):
+        self.cfg["services"]["identity"]["volumes"]=["/var/run/docker.sock:/var/run/docker.sock"]
+        self.assertTrue(m.check(self.cfg))
+    def test_host_pid_namespace_rejected(self):
+        self.cfg["services"]["trust"]["pid"]="host"
+        self.assertTrue(m.check(self.cfg))
+    def test_host_ipc_namespace_rejected(self):
+        self.cfg["services"]["trust"]["ipc"]="host"
+        self.assertTrue(m.check(self.cfg))
+    def test_extra_capability_rejected(self):
+        self.cfg["services"]["registry"]["cap_add"]=["SYS_ADMIN"]
+        self.assertTrue(m.check(self.cfg))
+    def test_host_device_rejected(self):
+        self.cfg["services"]["redis"]["devices"]=["/dev/sda:/dev/sda"]
+        self.assertTrue(m.check(self.cfg))
     def test_unmounted_named_volume_rejected(self):
         self.cfg["services"]["postgres"]["volumes"]=["other-volume:/var/lib/postgresql/data"]
         self.assertTrue(m.check(self.cfg))
