@@ -1,14 +1,7 @@
 name: AEP-X HITL dispatcher safety regression
 on:
   pull_request:
-    paths:
-      - 'services/governance/app/hitl_dispatcher.py'
-      - 'services/governance/app/hitl_outbox.py'
-      - 'tests/test_aepx_hitl_dispatcher.py'
-      - 'tests/test_aepx_hitl_outbox.py'
-      - '.github/workflows/aepx-post-pr56-dispatcher.yml'
-      - 'db/migrations/**'
-      - 'tests/test_aepx_hitl_*'
+  merge_group:
   workflow_dispatch:
 permissions:
   contents: read
