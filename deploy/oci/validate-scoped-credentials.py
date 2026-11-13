@@ -6,6 +6,7 @@ Runs before any Docker Compose mutation. Never print secret values.
 import hmac
 import os
 import sys
+from pathlib import Path
 
 NAMES=(
     "AEPX_REGISTRY_IDENTITY_KEY",
@@ -27,9 +28,22 @@ def validate(env):
                 raise ValueError("scoped service credentials must be distinct")
     return True
 
+def effective_env():
+    values={}
+    path=Path(".env")
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            line=line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key,value=line.split("=",1)
+            values[key.strip()]=value.strip().strip("\\\"").strip("\'")
+    values.update(os.environ)
+    return values
+
 if __name__=="__main__":
     try:
-        validate(os.environ)
+        validate(effective_env())
     except ValueError as exc:
         print(f"BLOCKED: {exc}",file=sys.stderr)
         raise SystemExit(3)
