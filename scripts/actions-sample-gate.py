@@ -67,13 +67,11 @@ def evaluate_required(report, sha, workflows):
                      isinstance(run.get("run_attempt"), int) and
                      type(run.get("id")) is int for run in matches):
             errors.append(f"missing run ordering evidence: {workflow} at {sha}")
-        elif not (max(matches, key=lambda run: (
-                      run["created_at"], run["run_attempt"], run["id"]
-                  )).get("status") == "completed" and
-                  max(matches, key=lambda run: (
-                      run["created_at"], run["run_attempt"], run["id"]
-                  )).get("conclusion") == "success"):
-            errors.append(f"required workflow not successful: {workflow} at {sha}")
+        else:
+            latest = max(matches, key=lambda run: (
+                run["created_at"], run["run_attempt"], run["id"]))
+            if latest.get("status") != "completed" or latest.get("conclusion") != "success":
+                errors.append(f"required workflow not successful: {workflow} at {sha}")
     return errors
 
 
