@@ -10,6 +10,8 @@ on:
       - 'platform/saas-ide/backend/app/mcp_remote_dispatch_claim.py'
       - 'platform/saas-ide/backend/app/mcp_remote_reconciliation.py'
       - 'tests/test_mcp_remote_reconciliation.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_reconciliation_visibility.py'
+      - 'tests/test_mcp_remote_reconciliation_visibility.py'
       - 'tests/test_mcp_remote_dispatch_claim.py'
       - 'tests/test_mcp_remote_dispatch_commit_gate.py'
       - 'tests/test_mcp_remote_tenant_context.py'
@@ -61,6 +63,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_mcp_remote_dispatch_commit_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_remote_dispatch_claim.py' -v
           python -m unittest discover -s tests -p 'test_mcp_remote_reconciliation.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_reconciliation_visibility.py' -v
           python -m py_compile tests/test_mcp_remote_intent_postgres.py tests/test_mcp_remote_tenant_context.py platform/saas-ide/backend/app/mcp_remote_tenant_context.py
           python -m unittest discover -s tests -p 'test_mcp_remote_tenant_context.py' -v
           python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
