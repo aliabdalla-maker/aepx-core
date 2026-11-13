@@ -13,12 +13,13 @@ from app.mcp_remote_intent_reservation import IntentReservation, reserve_intent
 from app.mcp_remote_intent_schema import DDL
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
+ALLOW_DISPOSABLE = os.environ.get("AEPX_ALLOW_DISPOSABLE_PG_TESTS") == "yes"
 try:
     import psycopg
 except ImportError:
     psycopg = None
 
-@unittest.skipUnless(DSN and psycopg, "disposable PostgreSQL DSN and psycopg required")
+@unittest.skipUnless(DSN and psycopg and ALLOW_DISPOSABLE, "explicit disposable PostgreSQL opt-in, DSN and psycopg required")
 class PostgresReservationAcceptance(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
