@@ -5,6 +5,10 @@ on:
     paths:
       - 'scripts/aepx-core-integration.py'
       - 'tests/test_aepx_core_integration.py'
+      - 'scripts/aepx-compose-exposure.py'
+      - 'scripts/aepx-backup-postgres.sh'
+      - 'scripts/aepx-release-evidence.sh'
+      - 'docs/AEPX-Production-Readiness.md'
       - 'scripts/aepx-dev-acceptance.sh'
       - 'scripts/aepx-static-security.py'
       - 'docs/AEPX-Core-Integration-Runbook.md'
@@ -19,17 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Python syntax
-        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py
       - name: Run core acceptance regression tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
       - name: Validate shell syntax
-        run: bash -n scripts/aepx-dev-acceptance.sh
+        run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh
       - name: Check static security blockers (informational for development)
         run: python3 scripts/aepx-static-security.py
       - name: Validate milestone tracking
         run: python3 scripts/aepx-progress.py --validate
+      - name: Inspect resolved Compose port exposure (development informational)
+        run: python3 scripts/aepx-compose-exposure.py
       - name: Upload security evidence
         uses: actions/upload-artifact@v4
         with:
           name: aepx-core-static-evidence
-          path: artifacts/aepx-static-security.json
+          path: |
+            artifacts/aepx-static-security.json
+            artifacts/aepx-compose-exposure.json
