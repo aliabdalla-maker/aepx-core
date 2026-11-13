@@ -27,7 +27,7 @@ class IntentLedgerTests(unittest.TestCase):
 
     def test_schema_requires_rls_and_dedupe(self):
         for required in ("FORCE ROW LEVEL SECURITY", "UNIQUE (tenant_id, idempotency_key)",
-                         "UNIQUE (tenant_id, approval_id, action_hash)", "app.tenant_id"):
+                         "UNIQUE (tenant_id, approval_id, action_hash)", "app.tenant_id",\n                         "resource_id ~", "tool_name ~", "protocol_version ~", "idempotency_key ~"):
             self.assertIn(required, DDL)
 
 if __name__ == "__main__":
