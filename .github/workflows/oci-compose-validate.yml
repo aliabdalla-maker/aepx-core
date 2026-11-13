@@ -7,6 +7,7 @@ on:
       - 'services/identity/**'
       - 'services/registry/**'
       - 'services/trust/**'
+      - 'schemas/sql/**'
       - '.github/workflows/oci-compose-validate.yml'
   workflow_dispatch:
 permissions:
@@ -269,6 +270,8 @@ jobs:
               assert malformed.status_code==404,malformed.text
               rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"},headers=headers)
               assert rejected.status_code==403,rejected.text
+              invalid_component=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"unknown","delta":1},headers=headers)
+              assert invalid_component.status_code==422,invalid_component.text
               trust_unauth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1})
               assert trust_unauth.status_code==403,trust_unauth.text
               trust_auth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1},headers=headers)
