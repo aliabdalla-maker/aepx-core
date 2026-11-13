@@ -61,9 +61,11 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
         try:
             if topic != "hitl.approval.consumed" or not isinstance(payload, dict):
                 raise PermissionError("unsupported event")
-            deliver(event_id=str(event_id), topic=topic, payload=payload,
-                    tenant_id=tenant)
-            ok = True
+            outcome = deliver(event_id=str(event_id), topic=topic, payload=payload,
+                              tenant_id=tenant)
+            # Explicit rejection is never a successful delivery. Legacy
+            # adapters that signal success by returning None remain supported.
+            ok = outcome is not False
         except PermissionError:
             # Unsupported topics may be retried/dead-lettered by policy.
             pass
