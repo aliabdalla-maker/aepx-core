@@ -9,3 +9,7 @@ Keep external execution and gateway forwarding disabled. No production claim unt
 ## Trusted approval/execution binding
 
 The pure `bind_approved_mcp_dispatch` helper now requires matching tenant, run and approval IDs from a consumed approval and a reserved execution before building the exact MCP contract. Callers must fetch these records under trusted database credentials and ensure the dispatch reservation is atomically transitioned with cancellation/fencing checks. This helper does not lock rows, authenticate records, consume approvals or invoke MCP servers. The resulting data must never be accepted as a bearer authorization token.
+
+## Offline discovered-tool policy
+
+`mcp_discovery_policy.authorize_discovered_tool` requires the server ID to be trusted, the requested tool to be server-scoped allowlisted, and the discovered tool name to exist exactly once. Duplicate, malformed or excessive discovery records fail closed. **This does not authenticate the server**: an actual MCP client must validate transport identity, OAuth credentials, capability negotiation and tool schemas; obtain trusted policy from tenant-scoped configuration; and combine this gate with the existing consumed-approval and reserved-execution gate before any side effect.
