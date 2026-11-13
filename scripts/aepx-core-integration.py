@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Dependency-free, read-only core HTTP acceptance probes. No privileged actions."""
-import argparse, datetime, json, os, sys, time, urllib.request, urllib.error
+import argparse, datetime, json, sys, time, urllib.request, urllib.error
 from pathlib import Path
 
 SERVICES = ("gateway","identity","trust","registry","memory","cache","governance")
@@ -12,9 +12,10 @@ def probe(name, base, attempts, delay):
             with urllib.request.urlopen(result["url"],timeout=8) as r:
                 body=r.read(1048576)
                 data=json.loads(body)
-                if r.status!=200 or not isinstance(data,dict) or not data.get("openapi") or not data.get("paths"):
+                if r.status!=200 or not isinstance(data,dict) or not data.get("openapi") or not isinstance(data.get("paths"),dict):
                     raise ValueError("Missing OpenAPI version or paths")
                 result.update(passed=True,title=data.get("info",{}).get("title",""),path_count=len(data["paths"]))
+                result.pop("error",None)
                 return result
         except Exception as e:
             result["error"]=f"{type(e).__name__}: {str(e)[:250]}"
