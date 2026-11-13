@@ -34,7 +34,7 @@ These approval flags record operator assertions; the script **cannot prove** bac
 
 ## Staging PostgreSQL backup
 
-Once the isolated staging database is running, create a restricted logical backup with `bash deploy/oci/backup-staging.sh /absolute/private/backup/directory`. The script uses `pg_dump`, gzip integrity checking and SHA-256, and does not modify the database. The output is **not encrypted automatically**: transfer it using an encrypted off-host backup mechanism and perform an independent restore rehearsal in a disposable database before asserting the backup gate. Never store backups in Git.
+Once the isolated staging database is running, create a restricted logical backup with `bash deploy/oci/backup-staging.sh /absolute/private/backup/directory`. The script uses `pg_dump`, gzip integrity checking and SHA-256, and does not modify the database. The output is **not encrypted automatically**: transfer it using an encrypted off-host backup mechanism and perform an independent restore rehearsal in a disposable database before asserting the backup gate. Run `bash deploy/oci/restore-staging-rehearsal.sh /absolute/private/backup/directory/<backup-file>.sql.gz` after the backup is created. This command starts a **temporary** isolated PostgreSQL container with no network access, restores the SQL dump, checks a database query, and removes the temporary container. It requires Docker image availability and sufficient temporary storage; it never restores into the staging or production database. Never store backups in Git.
 
 ## Recovery and next gates
 
