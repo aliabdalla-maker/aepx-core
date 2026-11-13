@@ -1,0 +1,30 @@
+name: HITL identity snapshot PostgreSQL acceptance
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  snapshot-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: identity_test
+          POSTGRES_PASSWORD: isolated_test_only
+          POSTGRES_DB: identity_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U identity_test -d identity_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      HITL_IDENTITY_TEST_DSN: postgresql://identity_test:isolated_test_only@127.0.0.1:5432/identity_test
+      HITL_IDENTITY_TEST_ISOLATED: 'yes'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install pytest 'psycopg[binary]==3.2.1'
+      - run: python -m pytest -q tests/test_hitl_identity_snapshot_pg_integration.py tests/test_hitl_identity_snapshot.py
