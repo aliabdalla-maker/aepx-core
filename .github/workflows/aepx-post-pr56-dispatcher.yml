@@ -1,4 +1,4 @@
-name: AEP-X post-PR56 dispatcher validation
+name: AEP-X HITL dispatcher safety regression
 on:
   pull_request:
     paths:
@@ -7,12 +7,15 @@ on:
       - 'tests/test_aepx_hitl_dispatcher.py'
       - 'tests/test_aepx_hitl_outbox.py'
       - '.github/workflows/aepx-post-pr56-dispatcher.yml'
+      - 'db/migrations/**'
+      - 'tests/test_aepx_hitl_*'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   offline:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
