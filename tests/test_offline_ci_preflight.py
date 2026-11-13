@@ -37,6 +37,19 @@ class OfflinePreflightEvidenceTests(unittest.TestCase):
             self.assertTrue(all(c["timed_out"] and c["exit_code"] == 124
                                 for c in evidence["checks"]))
 
+    def test_git_lookup_timeout_does_not_hang_preflight(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "evidence.json"
+            def run(command, **kwargs):
+                if command[:2] == ["git", "rev-parse"]:
+                    raise subprocess.TimeoutExpired(command, 1)
+                return subprocess.CompletedProcess(command, 0)
+            with patch.object(module.importlib.util, "find_spec", return_value=object()), \\
+                 patch.object(module.subprocess, "run", side_effect=run):
+                self.assertEqual(module.main(["--timeout", "1", "--json-output", str(output)]), 0)
+            evidence = json.loads(output.read_text(encoding="utf-8"))
+            self.assertIsNone(evidence["git_commit"])
+
     @staticmethod
     def _run_success(command, **kwargs):
         if command[:2] == ["git", "rev-parse"]:
