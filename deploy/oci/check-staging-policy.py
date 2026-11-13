@@ -40,6 +40,8 @@ def check(config):
             errors.append(f"{name}: privilege escalation protection required")
         if svc.get("read_only") is False:
             errors.append(f"{name}: explicit writable root filesystem prohibited")
+        if svc.get("security_opt") is None:
+            errors.append(f"{name}: security options must be explicit")
         if svc.get("network_mode") not in (None,""):
             errors.append(f"{name}: custom network mode prohibited")
         if svc.get("extra_hosts"):
@@ -55,6 +57,8 @@ def check(config):
     postgres_volumes=services.get("postgres",{}).get("volumes",[])
     if not any(isinstance(v,str) and v.split(":",1)[0]=="staging-postgres" and v.split(":")[1]=="/var/lib/postgresql/data" for v in postgres_volumes if ":" in v):
         errors.append("postgres data directory must use staging-postgres named volume")
+    if any(isinstance(v,str) and v.startswith("/") for v in postgres_volumes):
+        errors.append("postgres: host bind mount prohibited for database data")
     if "staging-postgres" not in config.get("volumes",{}):
         errors.append("persistent staging PostgreSQL volume missing")
     return errors
