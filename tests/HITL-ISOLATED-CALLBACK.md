@@ -1,7 +1,7 @@
 # Isolated HITL callback prototype
 
 The opt-in `app.hitl_isolated_callback.run_isolated_callback` runner uses a
-spawned Python child process and an explicit entrypoint allowlist. Offline
+spawned Python child process, a bounded one-way pipe for result IPC, and an explicit entrypoint allowlist. The parent reads the IPC result before joining the child to avoid multiprocessing Queue feeder-thread deadlocks. Abrupt child death and timeout remain uncertain outcomes. Offline
 tests are in `tests/test_hitl_isolated_callback.py`.
 
 This module is **not connected to dispatch_batch** and does not enable remote
