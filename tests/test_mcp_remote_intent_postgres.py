@@ -65,6 +65,18 @@ class PostgresReservationAcceptance(unittest.TestCase):
                 cur.execute("SELECT current_setting('app.tenant_id', true)")
                 self.assertNotEqual(cur.fetchone()[0], self.tenant)
 
+    def test_tenant_binding_does_not_leak_after_rollback(self):
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT current_setting('app.tenant_id', true)")
+                self.assertEqual(cur.fetchone()[0], self.tenant)
+            conn.rollback()
+            with conn.cursor() as cur:
+                cur.execute("SELECT current_setting('app.tenant_id', true)")
+                self.assertNotEqual(cur.fetchone()[0], self.tenant)
+
     def test_wrong_runtime_role_fails_closed(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
