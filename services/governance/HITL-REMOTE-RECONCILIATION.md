@@ -29,3 +29,12 @@ supports idempotency or require manual reconciliation.
 ## Required evidence verifier
 
 `reconcile_remote` now requires an injected `verify_evidence` callable returning exactly `True` after independently checking provider status, reviewer authorization, tenant, event, provider and idempotency key. `authorized=True` alone cannot mark an uncertain action confirmed or failed-safe. The caller must configure the verifier from trusted application code, not from an untrusted request. No production provider verifier is included; reconciliation remains disabled without one.
+
+## Independent operator authority
+
+Reconciliation now additionally requires a trusted `verify_operator` callable
+returning exactly `True` for the authenticated principal, tenant scope,
+reviewer identity, `hitl.remote.reconcile` permission and target outcome.
+Never supply a constant-true verifier in deployed code. The tests use injected
+stubs solely in disposable fixtures. No production identity provider binding
+is included; absent a trusted operator verifier, reconciliation fails closed.
