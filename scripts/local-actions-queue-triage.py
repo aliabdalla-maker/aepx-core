@@ -121,6 +121,13 @@ def main(argv=None):
         report = {"repository": args.repo, "sample_limit": 100,
                   **summarize(data.get("workflow_runs", []),
                               datetime.datetime.now(datetime.timezone.utc))}
+        report["runs"] = [
+            {"id": run.get("id"), "name": run.get("name"),
+             "workflow_path": run.get("path"), "head_sha": run.get("head_sha"),
+             "status": run.get("status"), "conclusion": run.get("conclusion"),
+             "url": run.get("html_url")}
+            for run in data.get("workflow_runs", [])
+        ]
         report["runner_assignment_sample"] = runner_evidence(args.repo, report["queued"], token)
         report["failed_run_job_sample"] = failed_before_jobs_evidence(args.repo, data.get("workflow_runs", []), token)
         report["failed_run_check_sample"] = check_run_evidence(args.repo, report["failed_run_job_sample"], token)
