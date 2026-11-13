@@ -58,3 +58,12 @@ class TestPostRequestGate(unittest.TestCase):
         with self.assertRaises(MCPContractDenied):
             self.call(headers=headers,negotiated_protocol_version="2025-03-26",
                       require_protocol_pin=True)
+
+    def test_id_type_must_match_exactly(self):
+        for body,expected in (
+            ('{"jsonrpc":"2.0","id":9,"method":"tools/call"}',"9"),
+            ('{"jsonrpc":"2.0","id":"9","method":"tools/call"}',9),
+            ('{"jsonrpc":"2.0","id":1,"method":"tools/call"}',True),
+        ):
+            with self.subTest(body=body,expected=expected),self.assertRaises(MCPContractDenied):
+                self.call(body=body,expected_request_id=expected)
