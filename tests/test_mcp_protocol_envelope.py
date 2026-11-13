@@ -32,7 +32,9 @@ class TestMCPEnvelope(unittest.TestCase):
                          ["io.modelcontextprotocol/clientInfo"]["name"], "aepx")
 
     def test_rejects_tampering_and_bad_headers(self):
-        for key, value in (("request_id", True), ("client_name", "evil\nname"),
+        for key, value in (("request_id", True), ("request_id", ""),
+                           ("request_id", "bad\nvalue"), ("request_id", 2**60),
+                           ("client_name", "evil\nname"),
                            ("client_version", ""), ("bound_call", {})):
             data = self.fixture()
             data[key] = value
