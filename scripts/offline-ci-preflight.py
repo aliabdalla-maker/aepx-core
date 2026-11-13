@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-"""Run the AEP-X workflow policy checks locally without GitHub Actions."""
+"""Run local workflow-policy checks and optionally emit machine-readable evidence."""
+import argparse
+import datetime
 import importlib.util
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -13,19 +16,42 @@ CHECKS = [
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_actions_queue_diagnostics_policy.py", "-v"],
 ]
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--json-output", type=Path, help="Optional local JSON evidence file")
+    args = parser.parse_args(argv)
     if importlib.util.find_spec("yaml") is None:
         print("ERROR: PyYAML is required; install with python -m pip install 'PyYAML>=6,<7'", file=sys.stderr)
         return 2
-    failed = 0
+    revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
+                              capture_output=True, check=False)
+    evidence = {
+        "schema_version": 1,
+        "scope": "workflow-policy-only",
+        "created_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "git_commit": revision.stdout.strip() if revision.returncode == 0 else None,
+        "checks": [],
+    }
     for command in CHECKS:
         print("+", " ".join(command), flush=True)
         result = subprocess.run(command, cwd=ROOT, check=False)
+        evidence["checks"].append({
+            "command": command[1:],
+            "exit_code": result.returncode,
+            "passed": result.returncode == 0,
+        })
         if result.returncode:
-            failed += 1
             print(f"FAIL (exit {result.returncode})", file=sys.stderr, flush=True)
-    print(f"Offline preflight: {len(CHECKS) - failed}/{len(CHECKS)} checks passed")
-    return 1 if failed else 0
+    passed = sum(check["passed"] for check in evidence["checks"])
+    evidence["passed"] = passed
+    evidence["total"] = len(CHECKS)
+    evidence["overall_passed"] = passed == len(CHECKS)
+    if args.json_output:
+        args.json_output.parent.mkdir(parents=True, exist_ok=True)
+        args.json_output.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+        print(f"Evidence written: {args.json_output}")
+    print(f"Offline preflight: {passed}/{len(CHECKS)} checks passed")
+    return 0 if evidence["overall_passed"] else 1
 
 if __name__ == "__main__":
     raise SystemExit(main())
