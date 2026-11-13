@@ -104,3 +104,8 @@ The encrypted `.sql.gz.age` and checksum must be transferred off-host to access-
 ## Encrypted recovery CI acceptance
 
 The OCI validation workflow includes a disposable `age` encryption/decryption and PostgreSQL restore fixture and verifies that a modified ciphertext is rejected by SHA-256 validation. The recovery identity must be an ordinary private file with no group/world permissions; the encrypted backup path must be absolute. A successful fixture does **not** establish that a real OCI backup is complete, that off-host copies are accessible, or that the application can recover within the required RTO/RPO. Run a separately approved real-data restore rehearsal before any release.
+
+
+## Backup script hardening (current branch)
+
+Encrypted backup filenames include a random suffix to avoid same-second collisions. The script validates the public age recipient format and stages both ciphertext and checksum before publication. Recovery requires absolute backup and private identity paths and rejects directly symlinked backup parents. These are defense-in-depth checks, not a substitute for protected filesystem mounts, off-host immutable storage, or verified restore evidence. Run `bash -n deploy/oci/backup-staging-encrypted.sh deploy/oci/restore-staging-encrypted-rehearsal.sh` and the CI encrypted recovery job before approving a deployment.
