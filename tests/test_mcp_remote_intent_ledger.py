@@ -31,6 +31,19 @@ class IntentLedgerTests(unittest.TestCase):
         self.assertEqual(DDL.count("ALTER TABLE mcp_remote_execution_intents FORCE"), 1)
         self.assertNotIn("),\\n", DDL)
 
+    def test_schema_rejects_corrupt_or_duplicate_ddl(self):
+        self.assertEqual(DDL.count("CREATE TABLE"), 1)
+        self.assertEqual(DDL.count("CREATE POLICY"), 1)
+        self.assertEqual(DDL.count("ENABLE ROW LEVEL SECURITY"), 1)
+        self.assertEqual(DDL.count("FORCE ROW LEVEL SECURITY"), 1)
+        self.assertEqual(DDL.count("WITH CHECK"), 1)
+        self.assertEqual(DDL.count("USING ("), 1)
+        self.assertTrue(DDL.rstrip().endswith(";"))
+        self.assertEqual(DDL.count("'''"), 0)
+        for column in ("resource_id", "tool_name", "protocol_version", "idempotency_key"):
+            with self.subTest(column=column):
+                self.assertIn(column + " text NOT NULL CHECK (", DDL)
+
     def test_schema_requires_rls_and_dedupe(self):
         for required in ("FORCE ROW LEVEL SECURITY", "UNIQUE (tenant_id, idempotency_key)",
                          "UNIQUE (tenant_id, approval_id, action_hash)", "app.tenant_id",
