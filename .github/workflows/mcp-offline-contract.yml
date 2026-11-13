@@ -8,12 +8,14 @@ on:
       - 'platform/saas-ide/backend/app/mcp_protocol_envelope.py'
       - 'platform/saas-ide/backend/app/mcp_response_gate.py'
       - 'platform/saas-ide/backend/app/mcp_sse_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_preflight.py'
       - 'tests/test_mcp_contract_gate.py'
       - 'tests/test_mcp_dispatch_binding.py'
       - 'tests/test_mcp_discovery_policy.py'
       - 'tests/test_mcp_protocol_envelope.py'
       - 'tests/test_mcp_response_gate.py'
       - 'tests/test_mcp_sse_gate.py'
+      - 'tests/test_mcp_preflight.py'
       - '.github/workflows/mcp-offline-contract.yml'
   push:
     branches: [master]
@@ -47,10 +49,11 @@ jobs:
           python-version: '3.12'
       - name: Compile and test offline MCP gate
         run: |
-          python -m py_compile platform/saas-ide/backend/app/mcp_contract_gate.py platform/saas-ide/backend/app/mcp_dispatch_binding.py platform/saas-ide/backend/app/mcp_discovery_policy.py platform/saas-ide/backend/app/mcp_protocol_envelope.py platform/saas-ide/backend/app/mcp_response_gate.py platform/saas-ide/backend/app/mcp_sse_gate.py
+          python -m py_compile platform/saas-ide/backend/app/mcp_contract_gate.py platform/saas-ide/backend/app/mcp_dispatch_binding.py platform/saas-ide/backend/app/mcp_discovery_policy.py platform/saas-ide/backend/app/mcp_protocol_envelope.py platform/saas-ide/backend/app/mcp_response_gate.py platform/saas-ide/backend/app/mcp_sse_gate.py platform/saas-ide/backend/app/mcp_preflight.py
           python -m unittest discover -s tests -p 'test_mcp_contract_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_dispatch_binding.py' -v
           python -m unittest discover -s tests -p 'test_mcp_discovery_policy.py' -v
           python -m unittest discover -s tests -p 'test_mcp_protocol_envelope.py' -v
           python -m unittest discover -s tests -p 'test_mcp_response_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_sse_gate.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_preflight.py' -v

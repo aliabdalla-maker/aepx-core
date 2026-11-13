@@ -33,3 +33,7 @@ The request builder now advertises both `application/json` and `text/event-strea
 ## SSE framing and CI follow-up
 
 The offline SSE gate now accepts standard CRLF event framing while rejecting lone carriage returns, incomplete event terminators and excessive line counts. It still deliberately handles only a bounded, complete-buffer, single-response subset: no authenticated HTTP transport, incremental stream reader, reconnect/resume support, OAuth or actual tool dispatch. MCP CI push filters now cover all offline MCP modules and tests, not only the original contract gate. Passing offline CI cannot substitute for end-to-end release gates G2–G6.
+
+## Composed offline preflight
+
+`mcp_preflight.prepare_mcp_preflight` composes the server/tool discovery allowlist, exact consumed approval and reserved execution evidence, canonical argument digest, and protocol request envelope into a single pure preflight operation. Its `trusted_*` inputs must originate from independently authenticated, tenant-scoped database/configuration queries. **It does not fetch trusted records, lock rows, transition execution state, authenticate a server or invoke a tool.** A real dispatcher must atomically claim the reserved execution after revalidating cancellation and membership, then use a sandboxed authenticated transport. No claims of exactly-once external effects are made. Remaining release gates G2–G6 are not satisfied.
