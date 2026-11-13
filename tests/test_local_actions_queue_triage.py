@@ -23,6 +23,27 @@ class QueueTriageTests(unittest.TestCase):
         self.assertEqual(report["status_counts"], {"queued": 1, "completed": 1})
         self.assertEqual(report["queued"][0]["age_minutes"], 30)
 
+    def test_runner_evidence_is_bounded_and_read_only(self):
+        requested = []
+        def fake_fetch(url, token):
+            requested.append(url)
+            return {"jobs": [{"name": "build", "status": "queued",
+                              "labels": ["ubuntu-latest"], "runner_id": None}]}
+        queued = [{"id": i} for i in range(12)]
+        evidence = triage.runner_evidence("org/repo", queued, "fake", fetch=fake_fetch)
+        self.assertEqual(len(requested), 5)
+        self.assertEqual(len(evidence), 5)
+        self.assertFalse(evidence[0]["jobs"][0]["runner_assigned"])
+        self.assertEqual(evidence[0]["jobs"][0]["labels"], ["ubuntu-latest"])
+        self.assertTrue(all("/jobs?per_page=20" in url for url in requested))
+
+    def test_runner_metadata_failure_is_reported(self):
+        def failing_fetch(url, token):
+            raise OSError("network unavailable")
+        evidence = triage.runner_evidence("org/repo", [{"id": 42}], "fake",
+                                         fetch=failing_fetch)
+        self.assertEqual(evidence[0]["error_type"], "OSError")
+
     def test_queued_sample_is_bounded(self):
         now = datetime.datetime(2026, 11, 13, tzinfo=datetime.timezone.utc)
         runs = [{"id": i, "status": "queued", "created_at": "2026-11-13T00:00:00Z"}
