@@ -18,8 +18,11 @@ Create `/opt/aepx/.env` with mode 600 containing `AEPX_POSTGRES_PASSWORD` and `A
 ```bash
 cd /opt/aepx
 chmod 600 .env
-bash deploy/oci/deploy.sh
-curl -f http://127.0.0.1:8000/health
+bash deploy/oci/deploy.sh --validate-only
+# After security review and a verified fresh-instance backup plan:
+# bash deploy/oci/deploy.sh --deploy
+## After deployment only:
+# curl -f http://127.0.0.1:8000/health
 sudo ss -lntp
 ```
 
