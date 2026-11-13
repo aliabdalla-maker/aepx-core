@@ -94,3 +94,17 @@ jobs:
           PY
           chmod 600 .env
           docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml build identity trust registry
+      - name: Exercise isolated PostgreSQL restore rehearsal
+        run: |
+          set -euo pipefail
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          printf 'CREATE TABLE restore_probe (id integer PRIMARY KEY);\nINSERT INTO restore_probe VALUES (1);\n' | gzip -c > "$tmpdir/fixture.sql.gz"
+          (cd "$tmpdir" && sha256sum fixture.sql.gz > fixture.sql.gz.sha256)
+          bash deploy/oci/restore-staging-rehearsal.sh "$tmpdir/fixture.sql.gz"
+          printf 'corruption' >> "$tmpdir/fixture.sql.gz"
+          if bash deploy/oci/restore-staging-rehearsal.sh "$tmpdir/fixture.sql.gz"; then
+            echo "FAIL: corrupted backup was accepted" >&2
+            exit 1
+          fi
+          echo "PASS: isolated restore and checksum rejection"
