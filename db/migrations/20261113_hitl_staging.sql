@@ -41,12 +41,15 @@ ALTER TABLE hitl.outbox ENABLE ROW LEVEL SECURITY;
 ALTER TABLE hitl.approvals FORCE ROW LEVEL SECURITY;
 ALTER TABLE hitl.events FORCE ROW LEVEL SECURITY;
 ALTER TABLE hitl.outbox FORCE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS approvals_tenant ON hitl.approvals;
 CREATE POLICY approvals_tenant ON hitl.approvals
  USING (tenant_id = nullif(current_setting('app.tenant_id',true),'')::uuid)
  WITH CHECK (tenant_id = nullif(current_setting('app.tenant_id',true),'')::uuid);
+DROP POLICY IF EXISTS events_tenant ON hitl.events;
 CREATE POLICY events_tenant ON hitl.events
  USING (tenant_id = nullif(current_setting('app.tenant_id',true),'')::uuid)
  WITH CHECK (tenant_id = nullif(current_setting('app.tenant_id',true),'')::uuid);
+DROP POLICY IF EXISTS outbox_tenant ON hitl.outbox;
 CREATE POLICY outbox_tenant ON hitl.outbox
  USING (tenant_id = nullif(current_setting('app.tenant_id',true),'')::uuid)
  WITH CHECK (tenant_id = nullif(current_setting('app.tenant_id',true),'')::uuid);
