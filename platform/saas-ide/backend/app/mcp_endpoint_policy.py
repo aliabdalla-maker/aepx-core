@@ -43,7 +43,7 @@ def validate_mcp_endpoint(*, endpoint, approved_endpoints):
         pass
     else:
         raise MCPContractDenied("IP-literal MCP endpoint prohibited")
-    if "%" in endpoint or "\\" in endpoint or
-        endpoint != url.geturl():
+    if ("%" in endpoint or "\\" in endpoint or
+        endpoint != url.geturl()):
         raise MCPContractDenied("noncanonical MCP endpoint")
     return endpoint
