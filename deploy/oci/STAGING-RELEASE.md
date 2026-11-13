@@ -39,3 +39,8 @@ Once the isolated staging database is running, create a restricted logical backu
 ## Recovery and next gates
 
 Check `bash deploy/oci/staging.sh --status` and Docker logs for failed services. Do not use `docker compose down -v` on staging: that deletes its database. Application HTTP endpoint tests, database restore, security acceptance, TLS/reverse-proxy design and release approval remain separate gates. The existing x86 self-hosted static-site workflow must remain unchanged.
+
+
+## Operational monitoring
+
+Run `bash deploy/oci/monitor-staging.sh` on the staging VM to check container availability and Docker health states without restarting or modifying services. It exits nonzero when a container is missing, stopped or unhealthy. Use a host-side scheduler and an external notification mechanism to alert on nonzero exit codes; neither alert delivery nor production monitoring is configured by this script. For application health and PostgreSQL/Redis probes run `bash deploy/oci/staging.sh --smoke`. Avoid logging environment files or credentials.
