@@ -32,6 +32,14 @@ def validate_mcp_transport_result(*, policy, endpoint, server_id, status_code,
         not isinstance(policy.get("addresses"),tuple) or
         not policy["addresses"]):
         raise MCPContractDenied("MCP transport policy mismatch")
+    # The policy is a mutable dict: revalidate its DNS set and hostname at
+    # use time, rather than trusting a possibly modified preflight snapshot.
+    dns = validate_mcp_dns_answers(
+        endpoint=endpoint, approved_endpoints={endpoint},
+        addresses=policy["addresses"]
+    )
+    if policy.get("hostname") != dns["hostname"] or policy["addresses"] != dns["addresses"]:
+        raise MCPContractDenied("MCP transport policy was modified")
     if require_connected_peer and connected_peer is None:
         raise MCPContractDenied("MCP connected peer evidence required")
     if connected_peer is not None:
