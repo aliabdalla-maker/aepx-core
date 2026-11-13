@@ -1,0 +1,46 @@
+name: AEP-X Actions queue diagnostics
+on:
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Summarize latest workflow runs (read-only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import collections, json, os, urllib.request
+          repo = os.environ["GH_REPO"]
+          token = os.environ["GH_TOKEN"]
+          request = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/actions/runs?per_page=100",
+              headers={"Authorization": f"Bearer {token}",
+                       "Accept": "application/vnd.github+json",
+                       "User-Agent": "aepx-queue-diagnostics"})
+          with urllib.request.urlopen(request, timeout=20) as response:
+              data = json.load(response)
+          runs = data.get("workflow_runs", [])
+          counts = collections.Counter(run.get("status", "unknown") for run in runs)
+          lines = ["# GitHub Actions queue diagnostics", "",
+                   f"Repository: {repo}",
+                   f"Sample: {len(runs)} most recent workflow runs", "",
+                   "## Status counts"]
+          lines += [f"- {key}: {value}" for key, value in sorted(counts.items())]
+          lines += ["", "## Queued runs (first 20)"]
+          for run in (r for r in runs if r.get("status") == "queued"):
+              lines.append(f"- {run.get('name')} | {run.get('created_at')} | {run.get('html_url')}")
+              if sum(" | " in line for line in lines) >= 20:
+                  break
+          lines += ["", "This report is observational. It cannot establish runner capacity or account billing status."]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
+              output.write("\n".join(lines) + "\n")
+          print("\n".join(lines))
+          PY
