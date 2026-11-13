@@ -19,7 +19,8 @@ class DispatcherTests(unittest.TestCase):
     def test_invalid_retry_and_batch_fail_before_claim(self):
         for key, value in (("retry_seconds", 0), ("retry_seconds", 86401),
                            ("limit", 0), ("limit", True),
-                           ("lease_seconds", 0), ("max_attempts", 0)):
+                           ("lease_seconds", 0), ("max_attempts", 0),
+                           ("max_batch_seconds", 60), ("max_batch_seconds", 0)):
             with self.subTest(key=key, value=value):
                 with self.assertRaises(ValueError):
                     dispatch_batch(**dict(self.kw, **{key: value}))
@@ -35,6 +36,15 @@ class DispatcherTests(unittest.TestCase):
     def test_dry_run_even_with_adapter_and_flag_off(self):
         with patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"}):
             self.assertEqual(dispatch_batch(**dict(self.kw, enabled=False))["mode"], "dry-run")
+        self.deliver.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.time.monotonic", side_effect=[100.0, 131.0])
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_expired_batch_defers_without_delivery(self, reap, claim, clock):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["deferred"], 1)
         self.deliver.assert_not_called()
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):

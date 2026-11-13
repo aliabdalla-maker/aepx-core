@@ -5,6 +5,7 @@ remote delivery and PostgreSQL settlement are NOT atomic.
 """
 import os
 import hashlib
+import time
 from uuid import UUID
 from app.hitl_outbox import claim, settle, reap_exhausted
 
@@ -13,7 +14,7 @@ class DispatchDisabled(PermissionError):
 
 def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
                    enabled=False, limit=10, lease_seconds=60,
-                   max_attempts=8, retry_seconds=30):
+                   max_attempts=8, retry_seconds=30, max_batch_seconds=30):
     if not enabled or os.getenv("HITL_DISPATCH_ENABLED") != "yes":
         return {"mode": "dry-run", "claimed": 0, "delivered": 0, "failed": 0}
     if not callable(deliver):
@@ -23,6 +24,9 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
         not isinstance(max_attempts, int) or isinstance(max_attempts, bool) or max_attempts < 1 or
         not isinstance(retry_seconds, int) or isinstance(retry_seconds, bool) or not 1 <= retry_seconds <= 86400):
         raise ValueError("invalid dispatcher bounds")
+    if (not isinstance(max_batch_seconds, (int, float)) or isinstance(max_batch_seconds, bool)
+        or not 0 < max_batch_seconds < lease_seconds):
+        raise ValueError("batch deadline must be shorter than lease")
     tenant = str(UUID(str(tenant_id)))
     if not isinstance(worker_id, str) or not worker_id.strip():
         raise ValueError("verified worker identity required")
@@ -32,7 +36,12 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
                  limit=limit, lease_seconds=lease_seconds,
                  max_attempts=max_attempts)
     delivered = failed = stale = 0
+    deadline = time.monotonic() + max_batch_seconds
     for event_id, topic, payload, attempt in rows:
+        # Never begin another callback once the bounded batch window expires.
+        # Unprocessed leased rows recover through lease expiry.
+        if time.monotonic() >= deadline:
+            break
         if not isinstance(attempt, int) or isinstance(attempt, bool) or attempt < 1:
             raise ValueError("invalid lease fencing attempt")
         ok = False
@@ -60,5 +69,5 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
             continue
         delivered += int(ok)
         failed += int(not ok)
-    return {"mode": "enabled", "claimed": len(rows), "delivered": delivered,
+    return {"mode": "enabled", "claimed": len(rows), "deferred": len(rows) - delivered - failed - stale, "delivered": delivered,
             "failed": failed, "stale": stale, "reaped": len(reaped)}
