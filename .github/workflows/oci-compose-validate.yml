@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test OCI image platform manifest guard
+        run: python3 -m unittest discover -s tests -p 'test_oci_image_platforms.py' -v
       - name: Test fail-closed scoped credentials
         run: python3 -m unittest discover -s tests -p 'test_oci_scoped_credentials.py' -v
       - name: Check shell syntax
