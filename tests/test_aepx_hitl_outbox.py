@@ -24,6 +24,17 @@ class LeaseTests(unittest.TestCase):
         self.assertIn("leased_until>now()",sql)
         self.assertIn("attempts=%s",sql)
         db.commit.assert_called_once()
+    def test_lease_preflight_false_when_expired(self):
+        db,cur=connection()
+        cur.fetchone.return_value=(False,)
+        self.assertFalse(m.lease_is_current(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",attempt_number=2))
+        db.commit.assert_called_once()
+    def test_lease_preflight_failure_rolls_back(self):
+        db,cur=connection()
+        cur.execute.side_effect=RuntimeError("database unavailable")
+        with self.assertRaises(RuntimeError):
+            m.lease_is_current(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",attempt_number=2)
+        db.rollback.assert_called_once()
     def test_reap_exhausted_uses_locked_tenant_scope(self):
         db,cur=connection()
         cur.fetchall.return_value=[(EVENT,)]
