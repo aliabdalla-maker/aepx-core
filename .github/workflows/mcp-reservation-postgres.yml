@@ -49,4 +49,6 @@ jobs:
           AEPX_ALLOW_DISPOSABLE_PG_TESTS: "yes"
           AEPX_TEST_PG_DSN: postgresql://aepx_test:disposable-only@localhost:5432/aepx_acceptance
           AEPX_TEST_PG_RUNTIME_DSN: postgresql://aepx_runtime:runtime-only@localhost:5432/aepx_acceptance
-        run: python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
+        run: |
+          python -m py_compile tests/test_mcp_remote_intent_postgres.py
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
