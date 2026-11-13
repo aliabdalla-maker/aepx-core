@@ -52,7 +52,19 @@ class RemoteReceiptTests(unittest.TestCase):
     def test_uncertain_cannot_be_declared_success_without_evidence(self):
         with self.assertRaises(ValueError):
             reconcile_remote(self.db,**self.kw,verified_state="confirmed",
-                             evidence_reference="",reviewer_id="reviewer-123",authorized=True)
+                             evidence_reference="",reviewer_id="reviewer-123",authorized=True,verify_evidence=lambda **kw: True)
+    def test_reconciliation_without_verifier_fails_closed(self):
+        with self.assertRaises(ReconciliationRequired):
+            reconcile_remote(self.db,**self.kw,verified_state="confirmed",
+                evidence_reference="provider-proof-123",reviewer_id="reviewer-123",
+                authorized=True)
+        self.db.cursor.assert_not_called()
+    def test_reconciliation_rejected_by_verifier(self):
+        with self.assertRaises(ReconciliationRequired):
+            reconcile_remote(self.db,**self.kw,verified_state="confirmed",
+                evidence_reference="provider-proof-123",reviewer_id="reviewer-123",
+                authorized=True,verify_evidence=lambda **kw: False)
+        self.db.cursor.assert_not_called()
     def test_reconcile_writes_audit_in_same_transaction(self):
         self.cur.fetchone.return_value=(str(self.kw["event_id"]),)
         self.cur.rowcount=1
