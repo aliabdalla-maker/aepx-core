@@ -20,6 +20,7 @@ from app.hitl_outbox import claim, settle, reap_exhausted
 from app.hitl_recovery import requeue_dead_letter,RecoveryDenied
 from app.hitl_execution_receipts import execute_local_once
 from app.hitl_health import outbox_health
+from app.hitl_remote_reconciliation import reserve_remote,ReconciliationRequired
 
 @unittest.skipUnless(os.getenv("HITL_TEST_DATABASE_URL") and os.getenv("HITL_TEST_DISPOSABLE")=="yes",
                      "requires explicit disposable PostgreSQL test DB approval")
@@ -118,6 +119,42 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
+
+    def test_concurrent_remote_reservation_only_one_wins(self):
+        tenant=uuid4()
+        event=self._seed_outbox(tenant)
+        key="remote-"+str(uuid4())
+        def attempt(_):
+            try:
+                with self.connect() as conn:
+                    reserve_remote(conn,tenant_id=tenant,event_id=event,
+                                   provider="sandbox-mcp",idempotency_key=key)
+                return "reserved"
+            except ReconciliationRequired:
+                return "rejected"
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes=list(pool.map(attempt,range(2)))
+        self.assertCountEqual(outcomes,["reserved","rejected"])
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("""SELECT state,count(*) FROM hitl.remote_delivery_receipts
+                               WHERE tenant_id=%s AND event_id=%s GROUP BY state""",
+                            (str(tenant),event))
+                self.assertEqual(cur.fetchall(),[("uncertain",1)])
+
+    def test_remote_receipts_not_visible_cross_tenant(self):
+        tenant=uuid4()
+        other=uuid4()
+        event=self._seed_outbox(tenant)
+        with self.connect() as conn:
+            reserve_remote(conn,tenant_id=tenant,event_id=event,
+                           provider="sandbox-mcp",idempotency_key="remote-"+str(uuid4()))
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(other),))
+                cur.execute("SELECT count(*) FROM hitl.remote_delivery_receipts")
+                self.assertEqual(cur.fetchone()[0],0)
 
     def test_outbox_health_is_tenant_isolated(self):
         tenant=uuid4()
