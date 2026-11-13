@@ -9,6 +9,11 @@ m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class PolicyTests(unittest.TestCase):
     def setUp(self):
         self.cfg=yaml.safe_load(m.COMPOSE.read_text())
+    def test_validate_command_runs_policy_before_docker(self):
+        script=(m.ROOT/"deploy/oci/staging.sh").read_text()
+        validate=script.split("  --validate)",1)[1].split("    ;;",1)[0]
+        self.assertIn("python3 deploy/oci/check-staging-policy.py",validate)
+        self.assertLess(validate.index("check-staging-policy.py"),validate.index("config --quiet"))
     def test_real_staging_config(self):
         self.assertEqual(m.check(self.cfg),[])
     def test_public_port_rejected(self):
