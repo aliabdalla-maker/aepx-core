@@ -74,9 +74,11 @@ class ActionsSampleGateTests(unittest.TestCase):
         sha = "a" * 40
         workflow = ".github/workflows/ci.yml"
         report = {"runs": [
-            {"head_sha": sha, "workflow_path": workflow,
+            {"id": 2, "created_at": "2026-11-13T11:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
              "status": "completed", "conclusion": "failure"},
-            {"head_sha": sha, "workflow_path": workflow,
+            {"id": 1, "created_at": "2026-11-13T10:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
              "status": "completed", "conclusion": "success"}]}
         self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
 
@@ -84,9 +86,11 @@ class ActionsSampleGateTests(unittest.TestCase):
         sha = "a" * 40
         workflow = ".github/workflows/ci.yml"
         report = {"runs": [
-            {"head_sha": sha, "workflow_path": workflow,
+            {"id": 2, "created_at": "2026-11-13T11:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
              "status": "queued", "conclusion": None},
-            {"head_sha": sha, "workflow_path": workflow,
+            {"id": 1, "created_at": "2026-11-13T10:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
              "status": "completed", "conclusion": "success"}]}
         self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
 
