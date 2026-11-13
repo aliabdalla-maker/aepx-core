@@ -27,3 +27,6 @@ Static staging policy validation additionally rejects host PID/IPC/user namespac
 
 ## Network override guard
 Staging policy additionally rejects custom network modes, `extra_hosts` overrides, explicit `read_only: false`, and service URL settings that incorrectly route inter-container calls through localhost/127.0.0.1. Four offline regression tests cover these cases. This is a static configuration guard; OCI network policy, metadata endpoint restrictions, DNS resolution and outbound connectivity still need host-level verification.
+
+## Read-only validation parity
+`staging.sh --validate` now executes the same static resource/security policy checker used by `--start`, before Docker Compose validation. This prevents a green validation result for configurations that startup would reject. Install PyYAML on the operator's isolated Ubuntu environment before using the validator; CI installs it for offline policy regression tests. Registry manifest inspection, backup restore and actual service startup are still separate acceptance gates.
