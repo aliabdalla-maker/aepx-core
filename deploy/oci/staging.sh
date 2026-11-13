@@ -29,7 +29,8 @@ PY
   --smoke)
     "${COMPOSE[@]}" ps --status running
     "${COMPOSE[@]}" exec -T postgres pg_isready -U aepx -d aepx
-    "${COMPOSE[@]}" exec -T redis redis-cli ping
+    redis_reply="$("${COMPOSE[@]}" exec -T redis redis-cli ping | tr -d "\r\n")"
+    [[ "$redis_reply" == "PONG" ]] || { echo "Redis smoke check failed" >&2; exit 1; }
     for service in identity trust registry; do
       cid="$("${COMPOSE[@]}" ps -q "$service")"
       [[ -n "$cid" ]] || { echo "Missing staging service: $service" >&2; exit 1; }
