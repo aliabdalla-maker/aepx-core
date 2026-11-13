@@ -14,6 +14,8 @@ from app.hitl_postgres import consume_with_outbox, ApprovalError
 from app.hitl_replay import find_matching_replay
 from app.hitl_authz import authorize_request, authorize_decision
 from app.hitl_lifecycle import create_request, decide_request, DecisionConflict
+from app.hitl_verified_bearer_identity import verify_bearer_identity
+from app.hitl_identity_policy import IdentityPolicyDenied
 
 router=APIRouter(prefix="/hitl",tags=["hitl"])
 
@@ -30,6 +32,21 @@ class ConsumeRequest(BaseModel):
             raise ValueError("idempotency key must use ASCII letters, digits, dash, underscore or dot")
         return value
 
+def _authoritative_identity(authorization, tenant_id):
+    """Fail closed before every HITL mutation if identity authority is unavailable."""
+    identity_dsn=os.getenv("HITL_IDENTITY_READ_DATABASE_URL")
+    if not identity_dsn:
+        raise HTTPException(status_code=503,detail="HITL identity authority unavailable")
+    try:
+        import psycopg
+        verify_bearer_identity(
+            authorization,expected_tenant=tenant_id,
+            connection_factory=lambda: psycopg.connect(identity_dsn,connect_timeout=3))
+    except IdentityPolicyDenied as exc:
+        raise HTTPException(status_code=403,detail="HITL identity denied") from exc
+    except Exception as exc:
+        raise HTTPException(status_code=503,detail="HITL identity authority unavailable") from exc
+
 @router.post("/consume",status_code=202)
 def consume(request: ConsumeRequest, authorization: str | None=Header(default=None)):
     try:
@@ -37,6 +54,7 @@ def consume(request: ConsumeRequest, authorization: str | None=Header(default=No
         actor=authorize_consume(principal,tenant_id=request.tenant_id)
     except (AuthenticationDenied,AuthorizationDenied,ValueError) as exc:
         raise HTTPException(status_code=403,detail="HITL authentication or authorization denied") from exc
+    _authoritative_identity(authorization,request.tenant_id)
     # Never fall back to in-memory state or development credentials.
     dsn=os.getenv("HITL_DATABASE_URL")
     if not dsn:
@@ -86,6 +104,7 @@ def _verified(authorization,tenant_id,role):
             # Role check here; self-approval is additionally enforced atomically in SQL.
             from app.hitl_authz import require_role
             require_role(principal,tenant_id=tenant_id,role="hitl:approve")
+        _authoritative_identity(authorization,tenant_id)
         return principal
     except (AuthenticationDenied,AuthorizationDenied,ValueError) as exc:
         raise HTTPException(status_code=403,detail="HITL authentication or authorization denied") from exc

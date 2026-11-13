@@ -1,0 +1,15 @@
+name: HITL live identity gate regression
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  live-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install pytest fastapi 'pydantic>=2' 'PyJWT[crypto]' 'psycopg[binary]'
+      - run: python -m pytest -q tests/test_hitl_live_identity_gate.py tests/test_hitl_verified_bearer_identity.py tests/test_hitl_verified_jti.py
