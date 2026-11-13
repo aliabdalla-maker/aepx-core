@@ -15,18 +15,16 @@ class MCPResponsePolicy:
         "application/json", "text/event-stream"
     })
 
-def _validate_policy(policy):
+def validate_mcp_response(status, headers, *, policy):
     if type(policy) is not MCPResponsePolicy:
         raise MCPResponseDenied("typed response policy required")
     if type(policy.max_response_bytes) is not int or not 1 <= policy.max_response_bytes <= 4194304:
         raise MCPResponseDenied("invalid byte budget")
-    if (type(policy.allowed_media_types) is not frozenset or not policy.allowed_media_types
-            or not policy.allowed_media_types.issubset(frozenset({"application/json", "text/event-stream"}))):
-        raise MCPResponseDenied("unsupported media type policy")
-
-
-def validate_mcp_response(status, headers, *, policy):
-    _validate_policy(policy)
+    if (type(policy.allowed_media_types) is not frozenset
+            or not policy.allowed_media_types
+            or not policy.allowed_media_types.issubset(
+                frozenset({"application/json", "text/event-stream"}))):
+        raise MCPResponseDenied("invalid media allowlist")
     if type(status) is not int or status != 200:
         raise MCPResponseDenied("non-success or redirect response rejected")
     if type(headers) is not dict:
@@ -43,11 +41,15 @@ def validate_mcp_response(status, headers, *, policy):
         if name in normalized:
             raise MCPResponseDenied("duplicate response header")
         normalized[name] = value
-    if "transfer-encoding" in normalized:
-        raise MCPResponseDenied("transfer encoding requires separate framed transport")
     if "location" in normalized:
         raise MCPResponseDenied("redirect location not permitted")
-    content_type = normalized.get("content-type", "").split(";", 1)[0].strip().lower()
+    raw_content_type = normalized.get("content-type", "")
+    parts = raw_content_type.split(";")
+    if len(parts) > 2:
+        raise MCPResponseDenied("ambiguous content type parameters")
+    if len(parts) == 2 and parts[1].strip().lower() != "charset=utf-8":
+        raise MCPResponseDenied("unsupported content type parameter")
+    content_type = parts[0].strip().lower()
     if content_type not in policy.allowed_media_types:
         raise MCPResponseDenied("unsupported content type")
     length = normalized.get("content-length")
@@ -62,7 +64,8 @@ def validate_mcp_response(status, headers, *, policy):
 
 def enforce_mcp_response_chunk(total_bytes, chunk, *, policy):
     """Validate accumulated bytes; caller must enforce this per received chunk."""
-    _validate_policy(policy)
+    if type(policy) is not MCPResponsePolicy or type(policy.max_response_bytes) is not int or not 1 <= policy.max_response_bytes <= 4194304:
+        raise MCPResponseDenied("invalid byte budget")
     if type(total_bytes) is not int or total_bytes < 0 or type(chunk) is not bytes:
         raise MCPResponseDenied("invalid response chunk")
     if len(chunk) > policy.max_response_bytes - total_bytes:
