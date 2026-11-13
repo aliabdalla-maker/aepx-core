@@ -1,29 +1,31 @@
-# Post-PR #56 validation gate (draft only)
+# Post-PR #56 HITL dispatcher validation (draft only)
 
-This branch adds an opt-in, one-batch **local PostgreSQL** dispatcher.
-It does not enable remote MCP transport, production execution or OCI deployment.
+This branch hardens the existing **opt-in, transport-adapter** dispatcher.
+It does not enable remote MCP transport, OCI deployment, or production execution.
+Default mode remains dry-run. Operational delivery requires both
+`enabled=True` and `HITL_DISPATCH_ENABLED=yes`, and an independently reviewed
+idempotent adapter. Remote delivery and DB settlement are not atomic.
 
-## Offline checks
+## Offline CI
 ```bash
 python3 -m unittest discover -s tests -p 'test_aepx_hitl_dispatcher.py' -v
 python3 -m unittest discover -s tests -p 'test_aepx_hitl_outbox.py' -v
-python3 -m unittest discover -s tests -p 'test_aepx_hitl_execution_receipts.py' -v
 ```
 
-## Disposable PostgreSQL integration checks
-Use the repository's existing HITL PostgreSQL CI workflow with its disposable
-PostgreSQL service, migrations in order, restricted non-owner test role, and
-`HITL_TEST_DATABASE_URL` plus `HITL_TEST_DISPOSABLE=yes`.
-Never point this test at production. Validate tenant isolation, concurrent
-local receipt deduplication, lease expiry, stale settlement, and dead letters.
+## Disposable PostgreSQL integration gate — NOT YET VERIFIED
+Run the repository's existing PostgreSQL HITL test suite against a **disposable**
+database with the complete migrations applied in order, a restricted non-owner
+test role, and `HITL_TEST_DATABASE_URL` plus
+`HITL_TEST_DISPOSABLE=yes`. Never point tests at production.
 
-## Required before operational enablement
-- Confirm CI results and fix any failing existing tests.
-- Prove non-owner RLS on all dispatcher connections.
-- Add end-to-end disposable-DB dispatcher tests with real connections.
-- Implement heartbeat or enforce a bounded local callback runtime shorter
-  than the lease. Otherwise a slow callback can finish after lease expiry.
-- Review error redaction, audit trails, retry jitter and alerting.
-- Do not use this module for remote MCP actions; those require separate
-  provider idempotency and external-side-effect recovery.
-- No merge, no deployment, no real external execution.
+Prove two-tenant RLS isolation, concurrent receipt deduplication, lease expiry,
+stale settlement rejection, exhaustion recovery and dead-letter behavior.
+
+## Before enabling a real adapter
+- Verify CI and disposable PostgreSQL test results.
+- Enforce non-owner RLS and authenticated tenant identity on all connections.
+- Add real-DB dispatcher integration tests and crash injection.
+- Ensure bounded delivery runtime or lease renewal before lease expiry.
+- Ensure remote consumers deduplicate by stable event ID; no exactly-once claim.
+- Add retry jitter, monitoring, rate limits and redacted audit records.
+- Do not merge, deploy or enable external execution without explicit approval.
