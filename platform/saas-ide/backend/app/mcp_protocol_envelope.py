@@ -40,6 +40,7 @@ def build_mcp_tool_call(*, bound_call, request_id, client_name, client_version):
         raise MCPContractDenied("MCP bound argument integrity mismatch")
     return {
         "headers": {"Content-Type": "application/json",
+                    "Accept": "application/json, text/event-stream",
                     "MCP-Protocol-Version": PROTOCOL_VERSION,
                     "Mcp-Method": "tools/call", "Mcp-Name": name},
         "jsonrpc": {"jsonrpc": "2.0", "id": request_id, "method": "tools/call",
