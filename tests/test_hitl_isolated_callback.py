@@ -21,6 +21,21 @@ class TestIsolatedCallback(unittest.TestCase):
                                      arguments={}, allowed_entrypoints=ALLOW,
                                      timeout_seconds=timeout)
 
+    def test_child_uses_only_bytes_ipc(self):
+        import ast
+        import inspect
+        from app import hitl_isolated_callback
+        tree = ast.parse(inspect.getsource(hitl_isolated_callback._child))
+        calls = [
+            node.func.attr for node in ast.walk(tree)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+            and isinstance(node.func.value, ast.Name)
+            and node.func.value.id == "output"
+        ]
+        self.assertNotIn("send", calls)
+        self.assertNotIn("put", calls)
+        self.assertIn("send_bytes", calls)
+
     def test_success(self):
         self.assertIs(self.run_adapter("succeeds"), True)
 
