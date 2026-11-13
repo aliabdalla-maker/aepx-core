@@ -71,5 +71,6 @@ jobs:
         env:
           PYTHONPATH: services/governance
           HITL_TEST_DISPOSABLE: 'yes'
+          HITL_TEST_EXPECTED_DATABASE: hitl_ci
           HITL_TEST_DATABASE_URL: postgresql://hitl_ci_app:disposable-only@localhost:5432/hitl_ci
         run: python -m pytest tests/test_hitl_postgres_integration.py -v
