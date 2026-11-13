@@ -45,3 +45,7 @@ The persisted `ide_tool_approvals` digest column is `args_sha256`, not `argument
 ## Atomic contract-bound dispatch claim
 
 `mcp_atomic_claim.claim_approved_mcp_call` locks the active run, consumed approval and reserved execution, checks live requester/approver membership, exact server/tool and canonical argument digest, then transitions the execution to `dispatching` before committing. The caller must provide a trusted tenant identity and independently verified tool allowlist. This function **does not call the external MCP provider**; it is not wired to the governed worker. Its SQL-interaction tests use a fake database and do not establish real PostgreSQL concurrency, RLS, cancellation race or deadlock behavior. After a committed claim, failed transport or worker crash must be recorded as `outcome_unknown`, never automatically replayed. Do not enable external dispatch before end-to-end tests and authenticated transport.
+
+## PostgreSQL atomic-claim integration regression
+
+The real-PostgreSQL integration suite now includes a competing two-session `claim_approved_mcp_call` race, tampered argument denial, cross-tenant denial, single-use replay rejection and execution-ledger RLS checks. It requires the configured PostgreSQL integration environment and remains **unverified until CI actually executes it**. This tests the DB claim only; authenticated MCP transport, worker integration and provider side effects are deliberately absent. A separate cancellation-vs-claim stress test and independent security review remain release blockers.
