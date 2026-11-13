@@ -25,3 +25,7 @@ supports idempotency or require manual reconciliation.
   inconsistent provider responses against a sandbox.
 - Add structured audit, latency metrics, alert routing and bounded retries.
 - Complete OCI staging restore and rollback drills before any deployment.
+
+## Required evidence verifier
+
+`reconcile_remote` now requires an injected `verify_evidence` callable returning exactly `True` after independently checking provider status, reviewer authorization, tenant, event, provider and idempotency key. `authorized=True` alone cannot mark an uncertain action confirmed or failed-safe. The caller must configure the verifier from trusted application code, not from an untrusted request. No production provider verifier is included; reconciliation remains disabled without one.
