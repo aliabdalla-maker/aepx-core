@@ -42,8 +42,11 @@ jobs:
         run: |
           psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -c "CREATE ROLE aepx_test LOGIN PASSWORD 'disposable-only' NOSUPERUSER NOBYPASSRLS;"
           psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE aepx_acceptance OWNER aepx_test;"
+          psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -c "CREATE ROLE aepx_runtime LOGIN PASSWORD 'runtime-only' NOSUPERUSER NOBYPASSRLS;"
+          psql -h localhost -U postgres -d aepx_acceptance -v ON_ERROR_STOP=1 -c "GRANT CONNECT ON DATABASE aepx_acceptance TO aepx_runtime;"
       - name: Run disposable PostgreSQL tests
         env:
           AEPX_ALLOW_DISPOSABLE_PG_TESTS: "yes"
           AEPX_TEST_PG_DSN: postgresql://aepx_test:disposable-only@localhost:5432/aepx_acceptance
+          AEPX_TEST_PG_RUNTIME_DSN: postgresql://aepx_runtime:runtime-only@localhost:5432/aepx_acceptance
         run: python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
