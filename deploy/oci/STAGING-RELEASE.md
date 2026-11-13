@@ -114,3 +114,8 @@ Encrypted backup filenames include a random suffix to avoid same-second collisio
 ## Trust API safety
 
 The Trust read endpoint no longer inserts rows for unknown entity IDs. It returns a default score of 50 without persistence; only authenticated adjustment writes create/update records in secure staging. Unknown adjustment components return HTTP 422. The OCI validation workflow now triggers on `schemas/sql/**` changes and includes integration checks for default trust reads and invalid adjustments. Verify the full workflow before approving staging deployment.
+
+
+## Scoped service credential migration
+
+The isolated Compose overlay supports three optional independent secrets: `AEPX_REGISTRY_IDENTITY_KEY` (Registry → Identity DID minting), `AEPX_REGISTRY_WRITE_KEY` (Registry agent creation), and `AEPX_TRUST_WRITE_KEY` (Trust score mutation). Configure all three with different 32+ character random URL-safe values in private `.env`, then update authorised clients to use the matching credential per endpoint. The validator checks uniqueness. If a dedicated key is unset, the relevant service falls back to `AEPX_INTERNAL_SERVICE_KEY` for backward compatibility; **do not treat this as completed least-privilege isolation**. The shared key remains injected into the containers and must be retired in a separate coordinated migration with contract tests. Never expose write keys in public browser clients. The DID signing-key custody / proof-of-possession issue remains a release blocker.
