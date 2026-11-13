@@ -106,6 +106,10 @@ def create_agent(payload: AgentIn, x_aepx_service_key: str | None = Header(defau
 
 @app.get("/agents/{agent_id}", response_model=Agent)
 def get_agent(agent_id: str):
+    try:
+        uuid.UUID(agent_id)
+    except (ValueError, AttributeError):
+        raise HTTPException(404, "agent not found")
     conn = _get_conn()
     if conn:
         try:
