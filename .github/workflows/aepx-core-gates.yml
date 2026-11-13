@@ -15,6 +15,8 @@ on:
       - 'db/migrations/20261113_hitl_staging.sql'
       - 'services/governance/app/hitl_postgres.py'
       - 'services/governance/app/hitl_outbox.py'
+      - 'services/governance/app/hitl_authz.py'
+      - 'tests/test_aepx_hitl_authz.py'
       - 'tests/test_aepx_hitl_outbox.py'
       - 'scripts/aepx-hitl-outbox-guard.py'
       - 'db/migrations/20261113_hitl_outbox_lease.sql'
@@ -66,6 +68,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_aepx_local_outbox.py' -v
       - name: Validate HITL outbox lease fencing
         run: python3 scripts/aepx-hitl-outbox-guard.py
+      - name: Test HITL authorization boundary
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_authz.py' -v
       - name: Test HITL outbox lease contracts
         run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_outbox.py' -v
       - name: Test PostgreSQL HITL transaction contracts
