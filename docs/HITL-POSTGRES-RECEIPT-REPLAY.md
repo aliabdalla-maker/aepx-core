@@ -19,3 +19,16 @@ PostgreSQL database; confirm permissions and concurrency with multiple
 workers; implement an authenticated provider reader and durable evidence
 store; integrate with remote reconciliation; and run end-to-end acceptance.
 No provider calls or external execution are enabled by this change.
+
+## Isolated concurrent PostgreSQL acceptance
+
+The new `hitl-replay-pg-integration.yml` workflow provisions an ephemeral
+PostgreSQL 16 service and runs 24 competing claims for the same receipt.
+The acceptance criterion is exactly one successful claim, 23 denials, and
+exactly one durable database row. It also checks that distinct receipt IDs
+can both be claimed. The workflow has not been executed successfully yet.
+
+The integration test requires both `HITL_REPLAY_TEST_DSN` and
+`HITL_REPLAY_ALLOW_ISOLATED_TEST=yes`. **Never point it at production:**
+the test creates schema/table objects and writes test rows. Verify the
+connection string targets an isolated disposable database before running.
