@@ -35,6 +35,20 @@ class PreflightTests(unittest.TestCase):
             with self.subTest(url=url), self.assertRaises(MCPPreflightDenied):
                 self.check(url)
 
+    def test_rejects_noncanonical_authority_spellings(self):
+        for url in (
+            "https://mcp.example.com:/mcp",
+            "https://mcp.example.com:0443/mcp",
+            "https://MCP.EXAMPLE.COM/mcp",
+            "https://mcp.example.com:000443/mcp",
+        ):
+            with self.subTest(url=url), self.assertRaises(MCPPreflightDenied):
+                self.check(url)
+
+    def test_explicit_canonical_tls_port_is_allowed(self):
+        self.assertEqual(
+            self.check("https://mcp.example.com:443/mcp").port, 443)
+
     def test_rejects_missing_or_invalid_authentication(self):
         for value in (None, "", "Basic abc", "Bearer ", "Bearer abc" + chr(13) + chr(10) + "X:evil", 1):
             with self.subTest(value=value), self.assertRaises(MCPPreflightDenied):
