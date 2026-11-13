@@ -23,7 +23,7 @@ jobs:
           bash -n deploy/oci/check-host.sh
       - name: Validate private deployment overlay
         run: |
-          printf 'AEPX_POSTGRES_PASSWORD=ci_test_only_1234567890\nAEPX_NEO4J_PASSWORD=ci_test_only_0987654321\n' > .env
+          printf 'AEPX_POSTGRES_PASSWORD=CITestOnly_1234567890_abcdefghi\nAEPX_NEO4J_PASSWORD=CITestOnly_0987654321_abcdefghi\n' > .env
           chmod 600 .env
           bash deploy/oci/deploy.sh --validate-only
           python3 - <<'PY'
