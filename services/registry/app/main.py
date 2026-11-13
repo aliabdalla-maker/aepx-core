@@ -49,6 +49,8 @@ class Agent(AgentIn):
 
 def _mint_did() -> str | None:
     # Secure staging requires an authenticated Identity request and fails closed.
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(os.getenv("AEPX_REGISTRY_IDENTITY_KEY", "")) < 32:
+        raise HTTPException(503, "Scoped Identity credential not configured")
     try:
         resp = httpx.post(f"{IDENTITY_URL}/did", headers={"X-AEPX-Service-Key": (os.getenv("AEPX_REGISTRY_IDENTITY_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", ""))} if os.getenv("AEPX_REQUIRE_DATABASE") == "true" else {}, timeout=3.0)
         resp.raise_for_status()
