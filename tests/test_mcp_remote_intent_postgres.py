@@ -31,7 +31,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
             with conn.cursor() as cur:
                 cur.execute(DDL)
                 cur.execute("GRANT USAGE ON SCHEMA public TO aepx_runtime")
-                cur.execute("GRANT SELECT, INSERT ON mcp_remote_execution_intents TO aepx_runtime")
+                cur.execute("GRANT SELECT, INSERT, UPDATE ON mcp_remote_execution_intents TO aepx_runtime")
 
     @classmethod
     def tearDownClass(cls):
