@@ -105,3 +105,7 @@ The outbound POST and initialize response validators now reject numeric-string I
 ## Composed offline initialization sequence
 
 `mcp_handshake_policy.validate_mcp_handshake` requires a trusted approved server name and checks a correlated initialization response, supported protocol version, strict server-name binding and a matching `notifications/initialized` message. This is **not** a live handshake or proof of authentication: the caller supplies both messages. It must not be used to enable external execution; authenticated HTTPS/OAuth, egress isolation, incremental SSE and governed-worker dispatch remain release blockers.
+
+## Trusted handshake version binding correction
+
+The offline handshake composer now requires an **independently approved** `approved_protocol_version` from the caller and checks that the server's initialize result matches it. Previously the initialized-notification validator compared the response-derived version against itself, which did not detect a changed but otherwise supported server version. An invalid or missing trusted version fails closed. This does not authenticate the source of the caller's trusted value or enable network execution.
