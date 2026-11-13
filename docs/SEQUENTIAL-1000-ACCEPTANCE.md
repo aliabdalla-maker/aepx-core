@@ -1,21 +1,23 @@
 # Sequential 1,000-pass HITL acceptance
 
-Manual GitHub Actions workflow: `.github/workflows/hitl-sequential-1000.yml`.
+The manually dispatched GitHub Actions workflow runs **one job** executing
+`scripts/sequential_acceptance_1000.py`. The orchestrator executes ten
+100-pass batches **in numeric order**, waiting for each to finish before the
+next starts. Every batch is validated against exactly 100 JSONL pass records.
+A missing, malformed, failed or incomplete batch stops the process.
 
-It executes **ten non-overlapping jobs** (`max-parallel: 1`), each running
-100 offline HITL test passes in a single process. A failed pass stops its batch;
-`fail-fast: true` cancels subsequent scheduled batches when a job fails.
-The order of numbered matrix batches is not guaranteed; they are serial, not
-necessarily numbered 1 through 10 in scheduling order.
+Each run must use a fresh report directory. The workflow uploads all ten
+batch artifacts plus `summary.jsonl`. A completed job and 1,000 verified
+records are required before claiming acceptance; a queued workflow proves
+nothing. The GitHub-hosted job has a six-hour limit; a timeout is a failure.
 
-Each batch uploads a JSONL report. An operator must inspect all ten artifacts
-and count exactly 1,000 successful records before claiming completion. The
-workflow itself does not aggregate, independently certify or attest all records.
+This is repeated **offline testing**, not 1,000 software-development cycles.
+It does not modify source, create PRs, invoke external providers or deploy.
+The workflow must be merged and manually dispatched; no execution is implied
+by committing it.
 
-**Scope:** This is test repetition, not 1,000 development/repair iterations.
-It makes no code edits, PRs, merges, cloud changes, or external provider calls.
-CI runners and GitHub-hosted job quotas must be available. A queued job means
-zero verified passes, regardless of workflow configuration.
+## Remaining blockers
 
-Next: restore runners; validate full PostgreSQL suite and trusted identity
-integration; sandbox MCP tools; governed CrewAI/RAG; OCI staging and rollback.
+Restore GitHub Actions runners; verify PostgreSQL integration tests and
+OIDC/RBAC operator identity; implement provider-side MCP evidence verification;
+govern CrewAI/RAG tool actions; validate monitoring, OCI staging and rollback.
