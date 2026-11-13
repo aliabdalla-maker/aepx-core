@@ -20,15 +20,20 @@ def validate_mcp_sse_response(*, response_body, expected_request_id):
         text = raw.decode("utf-8")
     except UnicodeError as exc:
         raise MCPContractDenied("invalid MCP SSE encoding") from exc
-    if "\r" in text or "\x00" in text:
+    if "\x00" in text or "\r" in text.replace("\r\n", ""):
         raise MCPContractDenied("unsafe MCP SSE control characters")
+    text = text.replace("\r\n", "\n")
     if not text.endswith("\n\n"):
         raise MCPContractDenied("incomplete MCP SSE event framing")
     events = 0
+    lines_seen = 0
     response = None
     data_lines = []
     event_type = "message"
-    for line in (text + "\n").split("\n"):
+    for line in text.split("\n"):
+        lines_seen += 1
+        if lines_seen > 4096:
+            raise MCPContractDenied("too many MCP SSE lines")
         if len(line.encode("utf-8")) > _MAX_LINE_BYTES:
             raise MCPContractDenied("oversized MCP SSE line")
         if not line:
