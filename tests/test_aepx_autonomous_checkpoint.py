@@ -46,6 +46,26 @@ class CheckpointTests(unittest.TestCase):
                 module.next_checkpoint(state(), outcome="passed",
                   evidence="evidence", max_spend_usd=cap, spent_usd=spent)
 
+    def test_spend_cannot_decrease_or_raise_cap(self):
+        first = module.next_checkpoint(state(), outcome="passed",
+            evidence="initial", max_spend_usd=25, spent_usd=5)
+        for spent, cap in ((4,25),(5,26)):
+            with self.subTest(spent=spent, cap=cap), self.assertRaises(module.RunnerDenied):
+                module.next_checkpoint(first, outcome="passed", evidence="retry",
+                    max_spend_usd=cap, spent_usd=spent)
+        second = module.next_checkpoint(first, outcome="passed",
+            evidence="next", max_spend_usd=20, spent_usd=6)
+        self.assertEqual(second["iteration"], 3)
+
+    def test_symlink_checkpoint_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            actual = Path(folder) / "actual.json"
+            actual.write_text("{}", encoding="utf-8")
+            link = Path(folder) / "link.json"
+            link.symlink_to(actual)
+            with self.assertRaises(module.RunnerDenied):
+                module.atomic_save(link, state())
+
     def test_requires_evidence(self):
         with self.assertRaises(module.RunnerDenied):
             module.next_checkpoint(state(), outcome="passed",
