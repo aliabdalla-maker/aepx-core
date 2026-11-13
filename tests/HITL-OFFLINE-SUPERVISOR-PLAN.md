@@ -37,3 +37,7 @@ Before constructing any ID-bound destructive command, the offline validator now 
 ## Expanded fail-closed inspect validation
 
 The pure snapshot validator additionally requires capability drop ALL, no-new-privileges, explicit built-in seccomp, PID limit 8–64, memory 64–512 MiB and memory-swap equal to memory. Host Docker inspect normalization can differ by engine version; verify on the intended Docker host before integrating. This is only validation of supplied evidence and cannot certify kernel enforcement. Actual execution and cleanup remain disabled.
+
+## Host escape denial
+
+Inspection must show an explicit `seccomp=builtin` option, not an ambiguous `seccomp` value, and must not contain a conflicting `seccomp=unconfined` or `no-new-privileges=false`. Host PID/IPC namespace modes, bind mounts, mount entries and host devices are denied. These are fail-closed offline snapshot checks only. Docker inspect representations vary by version; verify the exact target host before trusting these predicates, and keep the executing supervisor disabled until independent isolation and cleanup tests pass.
