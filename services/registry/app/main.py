@@ -50,7 +50,7 @@ class Agent(AgentIn):
 def _mint_did() -> str | None:
     # Secure staging requires an authenticated Identity request and fails closed.
     try:
-        resp = httpx.post(f"{IDENTITY_URL}/did", headers={"X-AEPX-Service-Key": os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")} if os.getenv("AEPX_REQUIRE_DATABASE") == "true" else {}, timeout=3.0)
+        resp = httpx.post(f"{IDENTITY_URL}/did", headers={"X-AEPX-Service-Key": (os.getenv("AEPX_REGISTRY_IDENTITY_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", ""))} if os.getenv("AEPX_REQUIRE_DATABASE") == "true" else {}, timeout=3.0)
         resp.raise_for_status()
         return resp.json().get("did")
     except Exception as exc:
@@ -71,7 +71,7 @@ def health():
 @app.post("/agents", response_model=Agent)
 def create_agent(payload: AgentIn, x_aepx_service_key: str | None = Header(default=None)):
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
-        expected = os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        expected = os.getenv("AEPX_REGISTRY_WRITE_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
         if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
             raise HTTPException(403, "Service authentication required")
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and payload.did is not None:
