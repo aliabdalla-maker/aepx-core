@@ -71,8 +71,8 @@ def _row_to_dict(entity_id: str, row) -> dict:
 @app.get("/trust/{entity_id}")
 def get_trust(entity_id: str, entity_type: str = "agent"):
     # RFC-0002 5-component formula: identity, behaviour, security, evidence,
-    # reputation — averaged into a single 0-100 score. Fetch-or-create so
-    # any never-seen-before entity gets a sane default row rather than 404.
+    # reputation — averaged into a single 0-100 score. Reads must not mutate
+    # persistent state; unknown entities receive a non-persisted default.
     conn = _get_conn()
     if conn:
         try:
@@ -83,13 +83,7 @@ def get_trust(entity_id: str, entity_type: str = "agent"):
                 )
                 row = cur.fetchone()
                 if not row:
-                    defaults = [_DEFAULT] * len(_COMPONENTS)
-                    cur.execute(
-                        "INSERT INTO trust_scores (entity_id, entity_type, identity_score, behaviour_score, "
-                        "security_score, evidence_score, reputation_score) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                        (entity_id, entity_type, *defaults),
-                    )
-                    row = tuple(defaults)
+                    row = tuple(_DEFAULT for _ in _COMPONENTS)
             return _row_to_dict(entity_id, row)
         except Exception:
             if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
@@ -117,7 +111,7 @@ def adjust_trust(entity_id: str, payload: AdjustIn, x_aepx_service_key: str | No
     # instead of sitting at a flat default forever.
     component = _normalise_component(payload.component)
     if component not in _COMPONENTS:
-        return {"error": f"unknown component '{payload.component}'"}
+        raise HTTPException(status_code=422, detail="Unknown trust component")
 
     conn = _get_conn()
     if conn:
