@@ -65,3 +65,7 @@ The PostgreSQL integration suite now asserts that a previously approved, consume
 ## DNS answer policy (offline)
 
 `mcp_dns_policy.validate_mcp_dns_answers` rejects empty, oversized, duplicate, malformed, private, loopback, link-local, metadata and mixed public/private address sets, including IPv4-mapped IPv6. The function does **not** resolve DNS or enforce where a socket connects. The gateway must independently resolve, pin, and revalidate the actual destination at connect time, deny redirects and bypass routes, and verify TLS hostname/certificate. DNS rebinding remains a production blocker until tested at the enforced gateway. No live MCP execution is enabled.
+
+## Offline transport policy composition
+
+`mcp_transport_policy` combines exact approved HTTPS endpoint, DNS answer and server identity checks before selecting the bounded correlated HTTP JSON/SSE response gate. Its inputs are **not independently authenticated**; callers must never use the returned policy as proof of safe network execution. No HTTP requests, TLS, OAuth, DNS lookup, sockets or MCP dispatch occur. Actual gateway destination pinning, token audience, worker integration and concurrent cancellation remain release blockers.
