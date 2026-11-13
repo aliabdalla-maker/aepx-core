@@ -12,6 +12,25 @@ def connection():
     cur=db.cursor.return_value.__enter__.return_value
     return db,cur
 class LeaseTests(unittest.TestCase):
+    def test_reap_exhausted_uses_locked_tenant_scope(self):
+        db,cur=connection()
+        cur.fetchall.return_value=[(EVENT,)]
+        self.assertEqual(m.reap_exhausted(db,tenant_id=TENANT),[EVENT])
+        sql=" ".join(c.args[0] for c in cur.execute.call_args_list)
+        self.assertIn("FOR UPDATE SKIP LOCKED",sql)
+        self.assertIn("attempts >= %s",sql)
+        self.assertIn("leased_until<now()",sql)
+        db.commit.assert_called_once()
+    def test_reap_exhausted_rejects_invalid_batch(self):
+        db,_=connection()
+        with self.assertRaises(ValueError):
+            m.reap_exhausted(db,tenant_id=TENANT,limit=0)
+    def test_reap_exhausted_rolls_back(self):
+        db,cur=connection()
+        cur.execute.side_effect=RuntimeError("db failure")
+        with self.assertRaises(RuntimeError):
+            m.reap_exhausted(db,tenant_id=TENANT)
+        db.rollback.assert_called_once()
     def test_claim_uses_locked_tenant_scope(self):
         db,cur=connection()
         cur.fetchall.return_value=[(EVENT,"topic",{},1)]
