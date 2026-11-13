@@ -26,6 +26,18 @@ class PolicyTests(unittest.TestCase):
     def test_unapproved_service_rejected(self):
         self.cfg["services"]["unknown"]={}
         self.assertTrue(m.check(self.cfg))
+    def test_extra_hosts_rejected(self):
+        self.cfg["services"]["identity"]["extra_hosts"]=["metadata:169.254.169.254"]
+        self.assertTrue(m.check(self.cfg))
+    def test_custom_network_mode_rejected(self):
+        self.cfg["services"]["redis"]["network_mode"]="bridge"
+        self.assertTrue(m.check(self.cfg))
+    def test_loopback_service_url_rejected(self):
+        self.cfg["services"]["registry"]["environment"]["IDENTITY_URL"]="http://127.0.0.1:8000"
+        self.assertTrue(m.check(self.cfg))
+    def test_explicit_writable_root_rejected(self):
+        self.cfg["services"]["trust"]["read_only"]=False
+        self.assertTrue(m.check(self.cfg))
     def test_docker_socket_mount_rejected(self):
         self.cfg["services"]["identity"]["volumes"]=["/var/run/docker.sock:/var/run/docker.sock"]
         self.assertTrue(m.check(self.cfg))
