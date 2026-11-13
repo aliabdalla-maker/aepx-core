@@ -7,7 +7,7 @@ python -m pip install 'PyYAML>=6,<7'
 python scripts/offline-ci-preflight.py --timeout 120 --json-output artifacts/offline-ci-preflight.json
 ```
 
-This executes the workflow-integrity validator and three policy regression suites using the local Python interpreter. It exits nonzero if any check fails. It does not access OCI, deploy, merge, or run production services.
+This executes the workflow-integrity validator and four policy and preflight regression suites using the local Python interpreter. It exits nonzero if any check fails. It does not access OCI, deploy, merge, or run production services.
 
 **Scope limitation:** These checks are static workflow-policy checks only. They do **not** replace MCP/PostgreSQL, HITL, durable execution, billing, Docker or OCI acceptance tests. They do not certify production readiness.
 
