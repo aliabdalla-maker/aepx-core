@@ -12,6 +12,7 @@ on:
       - 'scripts/aepx-hitl-store.py'
       - 'scripts/aepx-local-outbox.py'
       - 'tests/test_aepx_local_outbox.py'
+      - 'db/migrations/20261113_hitl_staging.sql'
       - 'tests/test_aepx_hitl_store.py'
       - 'tests/test_aepx_agentic_contracts.py'
       - 'docs/AEPX-Agentic-Next-Implementation.md'
