@@ -42,6 +42,15 @@ def next_checkpoint(data, *, outcome, evidence, max_spend_usd, spent_usd):
         raise RunnerDenied("invalid or exhausted spend budget")
     if data["iteration"] >= data["max_iterations"]:
         raise RunnerDenied("iteration limit reached")
+    previous = data.get("spend_usd_recorded", 0)
+    previous_limit = data.get("spend_usd_limit")
+    if (type(previous) not in (float, int) or not math.isfinite(float(previous))
+            or previous < 0 or spent_usd < previous):
+        raise RunnerDenied("recorded spend cannot decrease")
+    if previous_limit is not None and (type(previous_limit) not in (float, int)
+            or not math.isfinite(float(previous_limit)) or previous_limit <= 0
+            or max_spend_usd > previous_limit):
+        raise RunnerDenied("spend cap cannot increase automatically")
     updated = dict(data)
     updated["iteration"] += 1
     updated["status"] = "checkpoint-" + outcome
@@ -55,6 +64,8 @@ def atomic_save(path, data):
     path = Path(path)
     if not path.is_file():
         raise RunnerDenied("existing checkpoint file required")
+    if path.is_symlink():
+        raise RunnerDenied("symlink checkpoint is forbidden")
     fd, temporary = tempfile.mkstemp(prefix=".aepx-checkpoint-", dir=str(path.parent))
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
