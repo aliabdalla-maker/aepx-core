@@ -13,3 +13,7 @@ The pure `bind_approved_mcp_dispatch` helper now requires matching tenant, run a
 ## Offline discovered-tool policy
 
 `mcp_discovery_policy.authorize_discovered_tool` requires the server ID to be trusted, the requested tool to be server-scoped allowlisted, and the discovered tool name to exist exactly once. Duplicate, malformed or excessive discovery records fail closed. **This does not authenticate the server**: an actual MCP client must validate transport identity, OAuth credentials, capability negotiation and tool schemas; obtain trusted policy from tenant-scoped configuration; and combine this gate with the existing consumed-approval and reserved-execution gate before any side effect.
+
+## MCP 2026-07-28 stateless envelope
+
+`mcp_protocol_envelope.build_mcp_tool_call` serializes an already-bound tool call into JSON-RPC `tools/call`, including the `MCP-Protocol-Version`, `Mcp-Method`, and `Mcp-Name` routing headers and client metadata. It revalidates canonical argument integrity before constructing the request. This is **offline serialization only**, not an HTTP client or authentication layer. Real integration must follow the 2026-07-28 stateless specification, authenticate the destination and issuer, enforce TLS/egress policy and validate responses. Never pass user-created `bound_call` as trusted evidence.
