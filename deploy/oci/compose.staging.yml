@@ -34,8 +34,6 @@ services:
       AEPX_SECURE_MODE: "true"
       AEPX_INTERNAL_SERVICE_KEY: ${AEPX_INTERNAL_SERVICE_KEY:?Set AEPX_INTERNAL_SERVICE_KEY}
       IDENTITY_JWT_SECRET: ${AEPX_IDENTITY_JWT_SECRET:?Set AEPX_IDENTITY_JWT_SECRET}
-    mem_limit: 384m
-    pids_limit: 128
     build:
       context: ../../services/identity
     restart: unless-stopped
