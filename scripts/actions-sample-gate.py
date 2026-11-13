@@ -55,14 +55,16 @@ def evaluate_required(report, sha, workflows):
     if not workflows:
         return ["at least one required workflow must be specified"]
     errors = []
+    # Triage emits newest-first API results. Never accept a stale passing run
+    # when a later retry for the same workflow and SHA is queued or failed.
     for workflow in workflows:
         matches = [run for run in report["runs"]
                    if isinstance(run, dict) and run.get("head_sha") == sha
                    and run.get("workflow_path") == workflow]
         if not matches:
             errors.append(f"missing required workflow: {workflow} at {sha}")
-        elif not any(run.get("status") == "completed" and
-                     run.get("conclusion") == "success" for run in matches):
+        elif not (matches[0].get("status") == "completed" and
+                  matches[0].get("conclusion") == "success"):
             errors.append(f"required workflow not successful: {workflow} at {sha}")
     return errors
 
