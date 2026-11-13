@@ -36,6 +36,8 @@ for key in scoped:
 configured = [pairs[k] for k in scoped if pairs.get(k)]
 if len(configured) != len(set(configured)) or any(v in (pairs[k] for k in required) for v in configured):
     sys.exit("ERROR: scoped credentials must be distinct from each other and legacy credentials")
+if env_file.is_symlink():
+    sys.exit("ERROR: .env must not be a symlink")
 if os.name == "posix" and env_file.stat().st_mode & 0o077:
     sys.exit("ERROR: .env must not be group/world accessible; chmod 600 .env")
 print("PASS: OCI secret format and file permissions validated (values hidden)")
