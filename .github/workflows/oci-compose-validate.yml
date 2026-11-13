@@ -62,7 +62,18 @@ jobs:
           )
           PY
           chmod 600 .env
+          python3 -m pip install -q pyyaml
           bash deploy/oci/staging.sh --validate
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          import yaml
+          cfg = yaml.safe_load(Path("deploy/oci/compose.staging.yml").read_text())
+          for service, spec in cfg["services"].items():
+              assert spec.get("mem_limit"), f"{service} missing memory limit"
+              assert spec.get("pids_limit"), f"{service} missing PID limit"
+          print("PASS: staging resource limits")
+          PY
           if AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --start; then
             echo "ERROR: staging started without backup and image approval" >&2
             exit 1
