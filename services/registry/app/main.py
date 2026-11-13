@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel
 import httpx
 import os
 import uuid
+import hmac
 
 app = FastAPI(title="AEP-X Registry Service", version="0.1.0")
 
@@ -68,7 +69,11 @@ def health():
 
 
 @app.post("/agents", response_model=Agent)
-def create_agent(payload: AgentIn):
+def create_agent(payload: AgentIn, x_aepx_service_key: str | None = Header(default=None)):
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+        expected = os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
+            raise HTTPException(403, "Service authentication required")
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and payload.did is not None:
         raise HTTPException(403, "Externally supplied DIDs require verified ownership")
     did = payload.did or _mint_did()
