@@ -60,6 +60,6 @@ class LeaseTests(unittest.TestCase):
     def test_settle_success(self):
         db,cur=connection()
         cur.fetchone.return_value=(EVENT,)
-        self.assertTrue(m.settle(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",delivered=True))
+        self.assertTrue(m.settle(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",delivered=True,attempt_number=1))
         db.commit.assert_called_once()
 if __name__=="__main__":unittest.main()
