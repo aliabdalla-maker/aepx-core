@@ -4,12 +4,20 @@ on:
     paths:
       - 'platform/saas-ide/backend/app/mcp_remote_intent_*.py'
       - 'tests/test_mcp_remote_intent_*.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_tenant_context.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_transition.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
+      - 'tests/check_mcp_pg_ci.py'
       - '.github/workflows/mcp-disposable-postgres.yml'
   push:
     branches: [master]
     paths:
       - 'platform/saas-ide/backend/app/mcp_remote_intent_*.py'
       - 'tests/test_mcp_remote_intent_*.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_tenant_context.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_transition.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
+      - 'tests/check_mcp_pg_ci.py'
       - '.github/workflows/mcp-disposable-postgres.yml'
   workflow_dispatch:
 permissions:
