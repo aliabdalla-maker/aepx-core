@@ -103,7 +103,7 @@ def get_trust(entity_id: str, entity_type: str = "agent"):
 @app.post("/trust/{entity_id}/adjust")
 def adjust_trust(entity_id: str, payload: AdjustIn, x_aepx_service_key: str | None = Header(default=None)):
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
-        expected = os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        expected = os.getenv("AEPX_TRUST_WRITE_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
         if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
             raise HTTPException(403, "Service authentication required")
     # Internal signal endpoint — e.g. the Connector Bus nudges behaviour_score
