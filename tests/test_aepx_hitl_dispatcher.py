@@ -140,6 +140,30 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual(result["failed"], 0)
         self.assertEqual(result["deferred"], 0)
 
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_explicit_adapter_rejection_is_not_acknowledged(self, reap, claim, settle):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        self.deliver.return_value = False
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["failed"], 1)
+        self.assertEqual(result["delivered"], 0)
+        self.assertFalse(settle.call_args.kwargs["delivered"])
+        self.assertEqual(settle.call_args.kwargs["error"], "delivery adapter failed")
+
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_legacy_none_adapter_return_remains_success(self, reap, claim, settle):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        self.deliver.return_value = None
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["delivered"], 1)
+        self.assertTrue(settle.call_args.kwargs["delivered"])
+
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
