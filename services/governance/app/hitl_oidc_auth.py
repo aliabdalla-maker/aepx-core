@@ -50,5 +50,5 @@ def verify_oidc_operator(token,*,issuer,audience,jwks_url,tenant_claim="tenant_i
         return VerifiedOperator(subject=subject,tenant_id=tenant,issuer=issuer,
             audience=audience,permissions=frozenset(permissions),
             authenticated=True,expires_at=exp)
-    except (jwt.PyJWTError,KeyError,TypeError,ValueError,AttributeError) as exc:
+    except Exception as exc:
         raise IdentityVerificationError("OIDC identity verification failed") from exc
