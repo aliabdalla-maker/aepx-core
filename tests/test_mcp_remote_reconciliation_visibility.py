@@ -36,5 +36,19 @@ class VisibilityTests(unittest.TestCase):
                     list_uncertain_intents(cur, tenant_id=tenant, limit=limit)
                 self.assertIsNone(cur.query)
 
+    def test_malformed_or_oversized_results_fail_closed(self):
+        tenant = str(uuid4())
+        valid = (str(uuid4()), "key-00000001", None)
+        cases = (
+            [valid, valid],
+            [("not-a-uuid", "key-00000001", None)],
+            [(str(uuid4()), "short", None)],
+            [(str(uuid4()), "key-00000001")],
+            None,
+        )
+        for rows in cases:
+            with self.subTest(rows=rows), self.assertRaises(ReconciliationVisibilityDenied):
+                list_uncertain_intents(Cursor(rows), tenant_id=tenant, limit=1)
+
 if __name__ == "__main__":
     unittest.main()
