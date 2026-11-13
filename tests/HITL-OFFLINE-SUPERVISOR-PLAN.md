@@ -49,3 +49,7 @@ Inspection must show an explicit `seccomp=builtin` option, not an ambiguous `sec
 ## Container ID fencing across observations
 
 After the initial verified creation observation, the trusted supervisor must retain the full daemon-issued container ID and pass it as `expected_container_id` on every running transition. Missing or substituted IDs fail closed, including at the timeout/kill boundary. The pure state machine does not authenticate observations or prevent stale-daemon responses; those remain responsibilities of the executing supervisor.
+
+## Cleanup transitions after verified stop or timeout
+
+The non-executing lifecycle planner now accepts `stopped` and `timed_out` observations only when their full container ID matches the originally verified ID. A stopped container produces ID-bound removal argv; a timed-out container still running produces ID-bound kill argv; a subsequently stopped timed-out container produces removal argv. The `removed` phase still requires independent daemon absence and process-tree absence evidence. The caller must re-inspect using authenticated daemon data after every action. No commands are executed by this module.
