@@ -50,7 +50,9 @@ class PostgresReservationAcceptance(unittest.TestCase):
 
     def test_two_workers_single_reservation(self):
         results, errors = [], []
-        workers = [threading.Thread(target=self._reserve, args=(self.intent,results,errors))
+        from dataclasses import replace
+        concurrent_intent = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()), idempotency_key="race-00000001")
+        workers = [threading.Thread(target=self._reserve, args=(concurrent_intent,results,errors))
                    for _ in range(2)]
         for worker in workers: worker.start()
         for worker in workers: worker.join(timeout=15)
