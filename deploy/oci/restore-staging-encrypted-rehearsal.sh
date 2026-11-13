@@ -5,11 +5,13 @@ cd "$(dirname "$0")/../.."
 umask 077
 encrypted="${1:-}"
 identity="${AEPX_BACKUP_AGE_IDENTITY:-}"
-[[ -f "$encrypted" && ! -L "$encrypted" && -f "$encrypted.sha256" && -f "$identity" ]] || {
+[[ "$encrypted" = /* && -f "$encrypted" && ! -L "$encrypted" && -f "$encrypted.sha256" && ! -L "$encrypted.sha256" && -f "$identity" && ! -L "$identity" ]] || {
   echo "Usage: AEPX_BACKUP_AGE_IDENTITY=/private/identity.txt $0 /absolute/backup.sql.gz.age" >&2
   exit 2
 }
 command -v age >/dev/null
+[[ ! -L "$encrypted.sha256" ]] || exit 2
+[[ $(( $(stat -c %a "$identity") & 077 )) -eq 0 ]] || { echo "Private age identity must be mode 600 or stricter" >&2; exit 2; }
 expected="$(awk 'NR==1{print $1}' "$encrypted.sha256")"
 [[ "$expected" =~ ^[0-9a-fA-F]{64}$ ]] || exit 2
 actual="$(sha256sum "$encrypted" | awk '{print $1}')"
