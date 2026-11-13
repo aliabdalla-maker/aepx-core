@@ -4,6 +4,7 @@ Use a trusted, pinned HTTPS JWKS endpoint and issuer/audience configuration.
 This module never accepts unsigned tokens, caller-supplied keys or algorithms.
 """
 import time
+from urllib.parse import urlparse
 from uuid import UUID
 import jwt
 from jwt import PyJWKClient
@@ -14,12 +15,21 @@ class IdentityVerificationError(PermissionError):
 
 def verify_oidc_operator(token,*,issuer,audience,jwks_url,tenant_claim="tenant_id",
                          permission_claim="permissions",now_epoch=None,jwk_client=None):
-    if not isinstance(token,str) or not token or len(token)>16384:
+    if (not isinstance(token,str) or not token or len(token)>16384
+        or any(ch.isspace() for ch in token)):
         raise IdentityVerificationError("invalid identity token")
     if (not isinstance(issuer,str) or not issuer.startswith("https://")
         or not isinstance(audience,str) or not audience
         or not isinstance(jwks_url,str) or not jwks_url.startswith("https://")):
         raise IdentityVerificationError("trusted HTTPS OIDC configuration required")
+    issuer_url=urlparse(issuer)
+    jwks_location=urlparse(jwks_url)
+    if (not issuer_url.hostname or not jwks_location.hostname
+        or issuer_url.hostname!=jwks_location.hostname
+        or issuer_url.username or jwks_location.username
+        or issuer_url.password or jwks_location.password
+        or jwks_location.fragment):
+        raise IdentityVerificationError("untrusted JWKS location")
     # Never derive a JWKS URL, issuer, audience or algorithm from JWT headers.
     try:
         client=jwk_client if jwk_client is not None else PyJWKClient(
