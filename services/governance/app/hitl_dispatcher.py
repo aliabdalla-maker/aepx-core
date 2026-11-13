@@ -38,7 +38,8 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
     rows = claim(connection, tenant_id=tenant, worker_id=worker_id,
                  limit=limit, lease_seconds=lease_seconds,
                  max_attempts=max_attempts)
-    delivered = failed = stale = 0
+    delivered = failed = stale = duplicates = 0
+    seen_events = set()
     for event_id, topic, payload, attempt in rows:
         # Never begin another callback once the bounded batch window expires.
         # Unprocessed leased rows recover through lease expiry.
@@ -46,6 +47,12 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
             break
         if not isinstance(attempt, int) or isinstance(attempt, bool) or attempt < 1:
             raise ValueError("invalid lease fencing attempt")
+        # Defend against a faulty claim implementation returning duplicate rows.
+        # Never invoke an external adapter twice for the same event in one batch.
+        if str(event_id) in seen_events:
+            duplicates += 1
+            continue
+        seen_events.add(str(event_id))
         ok = False
         if topic == "hitl.approval.consumed" and isinstance(payload, dict):
             # Database errors propagate: never settle after an uncertain preflight.
@@ -87,5 +94,5 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
             continue
         delivered += int(ok)
         failed += int(not ok)
-    return {"mode": "enabled", "claimed": len(rows), "deferred": len(rows) - delivered - failed - stale, "delivered": delivered,
-            "failed": failed, "stale": stale, "reaped": len(reaped)}
+    return {"mode": "enabled", "claimed": len(rows), "deferred": len(rows) - delivered - failed - stale - duplicates, "delivered": delivered,
+            "failed": failed, "stale": stale, "duplicates": duplicates, "reaped": len(reaped)}
