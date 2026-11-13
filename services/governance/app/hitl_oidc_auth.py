@@ -30,15 +30,10 @@ def verify_oidc_operator(token,*,issuer,audience,jwks_url,tenant_claim="tenant_i
         or jwks_location.username or jwks_location.password
         or jwks_location.fragment or issuer_location.fragment or issuer_location.query):
         raise IdentityVerificationError("untrusted JWKS location")
-    # Never derive a JWKS URL, issuer, audience or algorithm from JWT headers.
     try:
-        client=jwk_client if jwk_client is not None else PyJWKClient(
-            jwks_url,cache_jwk_set=True,lifespan=300,timeout=5)
-        signing_key=client.get_signing_key_from_jwt(token)
-        claims=jwt.decode(token,signing_key.key,algorithms=["RS256"],
-                          audience=audience,issuer=issuer,
-                          options={"require":["exp","iat","nbf","iss","aud","sub"]},
-                          leeway=0)
+        from .hitl_jwt_shared import decode_verified_jwt
+        claims=decode_verified_jwt(token,issuer=issuer,audience=audience,
+            jwks_url=jwks_url,key_client=jwk_client)
         subject=claims["sub"]
         tenant=str(UUID(str(claims[tenant_claim])))
         permissions=claims[permission_claim]
