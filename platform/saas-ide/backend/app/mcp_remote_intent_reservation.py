@@ -6,6 +6,13 @@ the caller owns transaction lifecycle and must commit before remote I/O.
 """
 from dataclasses import dataclass
 from uuid import UUID
+import re
+
+_ACTION = re.compile(r'[0-9a-f]{64}\Z')
+_RESOURCE = re.compile(r'[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}\Z')
+_TOOL = re.compile(r'[A-Za-z0-9][A-Za-z0-9._/-]{0,127}\Z')
+_VERSION = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}\Z')
+_KEY = re.compile(r'[A-Za-z0-9][A-Za-z0-9._:-]{7,127}\Z')
 
 class ReservationDenied(PermissionError):
     pass
@@ -35,13 +42,18 @@ def reserve_intent(cursor, intent):
     for key in ("tenant_id", "request_id", "approval_id"):
         value = getattr(intent, key)
         try:
-            if str(UUID(value)) != value:
+            if type(value) is not str or str(UUID(value)) != value:
                 raise ValueError("noncanonical UUID")
         except (ValueError, TypeError, AttributeError) as exc:
             raise ReservationDenied("invalid UUID: " + key) from exc
     if any(not isinstance(getattr(intent, key), str) or not getattr(intent, key)
            for key in _COLUMNS):
         raise ReservationDenied("missing reservation field")
+    for field, pattern in (("action_hash", _ACTION), ("resource_id", _RESOURCE),
+                           ("tool_name", _TOOL), ("protocol_version", _VERSION),
+                           ("idempotency_key", _KEY)):
+        if pattern.fullmatch(getattr(intent, field)) is None:
+            raise ReservationDenied("invalid reservation field: " + field)
     values = tuple(getattr(intent, key) for key in _COLUMNS)
     cursor.execute(
         """INSERT INTO mcp_remote_execution_intents

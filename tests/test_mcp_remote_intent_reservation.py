@@ -43,6 +43,38 @@ class ReservationTests(unittest.TestCase):
         with self.assertRaises(ReservationDenied):
             reserve_intent(FakeCursor(existing=[]), self.intent)
 
+    def test_schema_invalid_fields_rejected_before_sql(self):
+        cases = (
+            ("action_hash", "G" * 64),
+            ("action_hash", "a" * 63),
+            ("resource_id", "bad resource"),
+            ("resource_id", "a" * 257),
+            ("tool_name", "bad:tool"),
+            ("tool_name", "t" * 129),
+            ("protocol_version", "latest"),
+            ("idempotency_key", "short"),
+            ("idempotency_key", "bad/key-00001"),
+            ("idempotency_key", "a" * 129),
+            ("idempotency_key", "bad\\nkey-00001"),
+        )
+        for field, value in cases:
+            with self.subTest(field=field, value=value):
+                cursor = FakeCursor()
+                with self.assertRaises(ReservationDenied):
+                    reserve_intent(cursor, replace(self.intent, **{field: value}))
+                self.assertFalse(cursor.statements)
+
+    def test_noncanonical_uuid_types_rejected_before_sql(self):
+        from uuid import UUID
+        for field, value in (("tenant_id", UUID(self.intent.tenant_id)),
+                             ("request_id", self.intent.request_id.upper()),
+                             ("approval_id", None)):
+            with self.subTest(field=field):
+                cursor = FakeCursor()
+                with self.assertRaises(ReservationDenied):
+                    reserve_intent(cursor, replace(self.intent, **{field: value}))
+                self.assertFalse(cursor.statements)
+
     def test_invalid_uuid_rejected_before_sql(self):
         cursor = FakeCursor()
         with self.assertRaises(ReservationDenied):
