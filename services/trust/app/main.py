@@ -91,6 +91,8 @@ def get_trust(entity_id: str, entity_type: str = "agent"):
                     row = tuple(defaults)
             return _row_to_dict(entity_id, row)
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             # A query-level error (not just "no connection") must degrade
             # the same way — a bad row must never 500 the Connector Bus's
             # trust check for every agent behind it.
