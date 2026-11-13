@@ -254,6 +254,23 @@ jobs:
           assert trust_auth.status_code==200,trust_auth.text
           print("PASS: authenticated Registry, DID issuance, persistence and Trust writes")
           PY
+      - name: Verify agent survives Registry restart
+        run: |
+          set -euo pipefail
+          compose=(docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml)
+          "${compose[@]}" restart registry
+          for attempt in $(seq 1 30); do
+            if "${compose[@]}" exec -T registry python -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/health",timeout=3)' >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          "${compose[@]}" exec -T registry python - <<'PY'
+          import httpx
+          with httpx.Client(timeout=10) as client:
+              agents=client.get("http://127.0.0.1:8000/agents")
+              assert agents.status_code==200,agents.text
+              assert any(a["name"]=="ci-persistence-check" and a["did"].startswith("did:key:") for a in agents.json()),agents.text
+          print("PASS: agent record survives Registry process restart")
+          PY
       - name: Diagnostics on failure
         if: failure()
         run: |
