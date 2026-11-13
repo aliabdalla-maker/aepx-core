@@ -32,8 +32,12 @@ class LeaseTests(unittest.TestCase):
         db,cur=connection()
         cur.fetchone.return_value=None
         with self.assertRaises(PermissionError):
-            m.settle(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",delivered=True)
+            m.settle(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",delivered=True,attempt_number=1)
         db.rollback.assert_called_once()
+    def test_settle_rejects_missing_fencing_token(self):
+        db,_=connection()
+        with self.assertRaises(ValueError):
+            m.settle(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",delivered=True)
     def test_settle_success(self):
         db,cur=connection()
         cur.fetchone.return_value=(EVENT,)
