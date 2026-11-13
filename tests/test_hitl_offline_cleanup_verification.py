@@ -11,7 +11,9 @@ class TestOfflineCleanupEvidence(unittest.TestCase):
     def test_identity_and_state(self):
         snapshot = {"Name": "/aepx-offline-" + "a"*32, "Id": "b"*64,
                     "Image": "sha256:"+"c"*64, "State": {"Running": False},
-                    "HostConfig": {"NetworkMode": "none", "Privileged": False, "ReadonlyRootfs": True}}
+                    "HostConfig": {"NetworkMode": "none", "Privileged": False, "ReadonlyRootfs": True, "CapDrop": ["ALL"],
+                                   "SecurityOpt": ["no-new-privileges=true", "seccomp=builtin"],
+                                   "PidsLimit": 32, "Memory": 134217728, "MemorySwap": 134217728}}
         result = verify_offline_container_snapshot(
             snapshot, expected_name="aepx-offline-"+"a"*32,
             expected_image_id="sha256:"+"c"*64)
@@ -23,7 +25,11 @@ class TestOfflineCleanupEvidence(unittest.TestCase):
                       dict(snapshot, Image="sha256:"+"d"*64),
                       dict(snapshot, HostConfig={"NetworkMode": "host", "Privileged": False, "ReadonlyRootfs": True}),
                       dict(snapshot, HostConfig={"NetworkMode": "none", "Privileged": True, "ReadonlyRootfs": True}),
-                      dict(snapshot, HostConfig={"NetworkMode": "none", "Privileged": False, "ReadonlyRootfs": False})):
+                      dict(snapshot, HostConfig={"NetworkMode": "none", "Privileged": False, "ReadonlyRootfs": False}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "CapDrop": []}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "SecurityOpt": ["seccomp=unconfined"]}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "PidsLimit": -1}),
+                      dict(snapshot, HostConfig={**snapshot["HostConfig"], "MemorySwap": -1})):
             with self.assertRaises(SandboxPolicyDenied):
                 verify_offline_container_snapshot(
                     wrong, expected_name="aepx-offline-"+"a"*32,
