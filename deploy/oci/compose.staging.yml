@@ -38,6 +38,7 @@ services:
       context: ../../services/trust
     restart: unless-stopped
     environment:
+      AEPX_REQUIRE_DATABASE: "true"
       DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
     depends_on:
       postgres:
@@ -47,6 +48,7 @@ services:
       context: ../../services/registry
     restart: unless-stopped
     environment:
+      AEPX_REQUIRE_DATABASE: "true"
       DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
       IDENTITY_URL: http://identity:8000
     depends_on:
