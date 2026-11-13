@@ -60,6 +60,7 @@ PY
       echo "BLOCKED: target architecture image verification required" >&2
       exit 3
     }
+    python3 deploy/oci/validate-release-evidence.py
     echo "Starting isolated staging Compose project (no host ports)."
     "${COMPOSE[@]}" up -d --build
     "${COMPOSE[@]}" ps
