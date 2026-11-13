@@ -5,6 +5,7 @@ privileged supervisor must implement timeouts, execute commands, verify
 daemon ownership and cleanup. Never call it from live HITL dispatch.
 """
 import re
+import math
 
 from .hitl_offline_container_policy import offline_container_argv, SandboxPolicyDenied
 
@@ -16,7 +17,7 @@ def offline_supervisor_plan(*, execution_id, image_digest, command,
     if not isinstance(execution_id, str) or not _ID.fullmatch(execution_id):
         raise SandboxPolicyDenied("128-bit hexadecimal execution id required")
     if (type(timeout_seconds) not in (int, float) or
-        not 0 < timeout_seconds <= 60):
+        not math.isfinite(timeout_seconds) or not 0 < timeout_seconds <= 60):
         raise SandboxPolicyDenied("bounded supervisor deadline required")
     name = "aepx-offline-" + execution_id
     run = offline_container_argv(
