@@ -36,4 +36,14 @@ jobs:
           print('All published ports are loopback-only')
           PY
           python3 deploy/oci/preflight.py
+          python3 - <<'PY'
+          from pathlib import Path
+          text=Path('deploy/oci/compose.secure.generated.yml').read_text()
+          import re
+          names=re.findall(r'^  ([a-zA-Z0-9_-]+):
+          rm -f .env
+,text.split('volumes:')[0],re.M)
+          assert len(names)==len(set(names)), 'Duplicate YAML service entries'
+          print('PASS: no duplicate service keys')
+          PY
           rm -f .env
