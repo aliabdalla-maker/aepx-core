@@ -101,3 +101,7 @@ The PR workflow now watches POST, version-policy and initialize-gate files (prev
 ## Exact JSON-RPC ID type correlation
 
 The outbound POST and initialize response validators now reject numeric-string ID confusion (`9` versus `"9"`) and Python boolean/integer equivalence (`true` versus `1`) using exact type matching in addition to value matching. Regression tests cover both gates. This is offline validation only.
+
+## Composed offline initialization sequence
+
+`mcp_handshake_policy.validate_mcp_handshake` requires a trusted approved server name and checks a correlated initialization response, supported protocol version, strict server-name binding and a matching `notifications/initialized` message. This is **not** a live handshake or proof of authentication: the caller supplies both messages. It must not be used to enable external execution; authenticated HTTPS/OAuth, egress isolation, incremental SSE and governed-worker dispatch remain release blockers.
