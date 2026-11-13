@@ -3,7 +3,9 @@ on:
   pull_request:
     paths:
       - 'platform/saas-ide/backend/app/mcp_contract_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_dispatch_binding.py'
       - 'tests/test_mcp_contract_gate.py'
+      - 'tests/test_mcp_dispatch_binding.py'
       - '.github/workflows/mcp-offline-contract.yml'
   push:
     branches: [master]
@@ -27,5 +29,6 @@ jobs:
           python-version: '3.12'
       - name: Compile and test offline MCP gate
         run: |
-          python -m py_compile platform/saas-ide/backend/app/mcp_contract_gate.py
+          python -m py_compile platform/saas-ide/backend/app/mcp_contract_gate.py platform/saas-ide/backend/app/mcp_dispatch_binding.py
           python -m unittest discover -s tests -p 'test_mcp_contract_gate.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_dispatch_binding.py' -v
