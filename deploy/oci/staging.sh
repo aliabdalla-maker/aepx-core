@@ -19,13 +19,19 @@ PY
   --status)
     "${COMPOSE[@]}" ps
     ;;
+  --smoke)
+    "${COMPOSE[@]}" ps --status running
+    "${COMPOSE[@]}" exec -T postgres pg_isready -U aepx -d aepx
+    "${COMPOSE[@]}" exec -T redis redis-cli ping
+    echo "PASS: staging PostgreSQL and Redis respond (application tests still required)"
+    ;;
   --start)
     echo "Refusing automatic start: host inventory, backups and image compatibility must be verified."
     echo "After independent approval, run the isolated compose command manually on the staging VM."
     exit 3
     ;;
   *)
-    echo "Usage: $0 [--validate|--status|--start]" >&2
+    echo "Usage: $0 [--validate|--status|--smoke|--start]" >&2
     exit 2
     ;;
 esac
