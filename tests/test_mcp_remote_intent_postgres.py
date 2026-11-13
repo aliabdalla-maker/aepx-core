@@ -69,6 +69,20 @@ class PostgresReservationAcceptance(unittest.TestCase):
                             (concurrent_intent.request_id,))
                 self.assertEqual(cur.fetchone()[0], 1)
 
+    def test_same_key_different_request_is_denied(self):
+        from dataclasses import replace
+        from app.mcp_remote_intent_reservation import ReservationDenied
+        first = replace(self.intent, request_id=str(uuid4()), approval_id=str(uuid4()),
+                        idempotency_key="collision-000001", action_hash="e"*64)
+        second = replace(first, request_id=str(uuid4()), approval_id=str(uuid4()),
+                         action_hash="f"*64)
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                self.assertEqual(reserve_intent(cur, first), "created")
+                with self.assertRaises(ReservationDenied):
+                    reserve_intent(cur, second)
+
     def test_conflicting_request_key_rejected(self):
         from dataclasses import replace
         from app.mcp_remote_intent_reservation import ReservationDenied
