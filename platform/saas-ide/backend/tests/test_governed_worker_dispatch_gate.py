@@ -20,3 +20,16 @@ def test_external_worker_denies_without_authorization_callback(monkeypatch):
     monkeypatch.setenv("IDE_WORKER_TIMEOUT_SECONDS","5")
     with pytest.raises(PermissionError,match="pre-dispatch"):
         execute_next("alpha",inference=MagicMock())
+
+def test_external_worker_rejects_noncallable_authorization(monkeypatch):
+    for key in ("IDE_EXTERNAL_EXECUTION_ENABLED","IDE_GOVERNED_WORKER_ENABLED",
+                "IDE_EGRESS_GATEWAY_VERIFIED","IDE_PROVIDER_USAGE_RECONCILIATION_ENABLED"):
+        monkeypatch.setenv(key,"true")
+    monkeypatch.setenv("IDE_WORKER_MAX_TOKENS","100")
+    monkeypatch.setenv("IDE_WORKER_MAX_MICROUSD","1000")
+    monkeypatch.setenv("IDE_WORKER_TIMEOUT_SECONDS","5")
+    for value in (False, True, "allow", object()):
+        inference = MagicMock()
+        with pytest.raises(PermissionError,match="pre-dispatch"):
+            execute_next("alpha",inference=inference,authorize_dispatch=value)
+        inference.assert_not_called()
