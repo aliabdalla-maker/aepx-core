@@ -9,7 +9,7 @@ on:
       - 'services/workflow/app/main.py'
       - 'docs/AEPX-Agentic-Acceptance.md'
       - 'tests/test_aepx_core_integration.py'
-      - 'scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py'
+      - 'scripts/aepx-compose-exposure.py'
       - 'scripts/aepx-backup-postgres.sh'
       - 'scripts/aepx-release-evidence.sh'
       - 'docs/AEPX-Production-Readiness.md'
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Python syntax
-        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py
       - name: Run core acceptance regression tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
       - name: Run agentic acceptance contract tests
