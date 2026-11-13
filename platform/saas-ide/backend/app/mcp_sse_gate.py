@@ -22,6 +22,8 @@ def validate_mcp_sse_response(*, response_body, expected_request_id):
         raise MCPContractDenied("invalid MCP SSE encoding") from exc
     if "\r" in text or "\x00" in text:
         raise MCPContractDenied("unsafe MCP SSE control characters")
+    if not text.endswith("\n\n"):
+        raise MCPContractDenied("incomplete MCP SSE event framing")
     events = 0
     response = None
     data_lines = []
