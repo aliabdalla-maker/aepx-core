@@ -1,12 +1,7 @@
 name: Deploy AEP-X GUI to OCI
 
+# Production deployments require an explicit manual dispatch and environment approval.
 on:
-  push:
-    branches: [master]
-    paths:
-      - 'platform/ecosystem-tracker/**'
-      - 'deploy/oci/**'
-      - '.github/workflows/deploy-oci.yml'
   workflow_dispatch:
 
 permissions:
