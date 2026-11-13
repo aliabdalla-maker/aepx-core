@@ -36,6 +36,27 @@ def summarize(runs, now):
     return {"sample_size": len(runs), "status_counts": dict(counts), "queued": queued[:20]}
 
 
+def runner_evidence(repo, queued, token, fetch=fetch_json):
+    """Inspect up to five queued runs; do not infer why runners are unassigned."""
+    evidence = []
+    for run in queued[:5]:
+        item = {"run_id": run["id"], "jobs": []}
+        try:
+            url = f"https://api.github.com/repos/{repo}/actions/runs/{run['id']}/jobs?per_page=20"
+            jobs = fetch(url, token).get("jobs", [])
+            for job in jobs[:20]:
+                item["jobs"].append({
+                    "name": job.get("name"),
+                    "status": job.get("status"),
+                    "labels": job.get("labels") or [],
+                    "runner_assigned": job.get("runner_id") is not None,
+                })
+        except (OSError, ValueError, KeyError, urllib.error.URLError) as exc:
+            item["error_type"] = type(exc).__name__
+        evidence.append(item)
+    return evidence
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", required=True, help="owner/repository")
@@ -53,6 +74,7 @@ def main(argv=None):
         report = {"repository": args.repo, "sample_limit": 100,
                   **summarize(data.get("workflow_runs", []),
                               datetime.datetime.now(datetime.timezone.utc))}
+        report["runner_assignment_sample"] = runner_evidence(args.repo, report["queued"], token)
         rendered = json.dumps(report, indent=2) + "\n"
         if args.output:
             from pathlib import Path
