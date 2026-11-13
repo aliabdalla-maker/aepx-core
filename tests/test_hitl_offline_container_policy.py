@@ -12,9 +12,10 @@ class TestOfflineSandboxPolicy(unittest.TestCase):
         argv = offline_container_argv(image_digest=IMAGE, command=("python", "-V"))
         for flag in ("--network=none", "--read-only", "--cap-drop=ALL",
                      "--pull=never", "--security-opt=no-new-privileges=true",
-                     "--security-opt=seccomp=builtin", "--init"):
+                     "--init"):
             self.assertIn(flag, argv)
         self.assertEqual(argv[-3:], [IMAGE, "python", "-V"])
+        self.assertNotIn("--security-opt=seccomp=builtin", argv)
         self.assertNotIn("--privileged", argv)
         self.assertNotIn("-v", argv)
         self.assertNotIn("--volume", argv)
