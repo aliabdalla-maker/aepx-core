@@ -34,3 +34,13 @@ class TestPostRequestGate(unittest.TestCase):
         for case in cases:
             with self.subTest(case=case),self.assertRaises(MCPContractDenied):
                 self.call(**case)
+
+    def test_negotiated_protocol_version_is_pinned(self):
+        headers={**HEADERS,"MCP-Protocol-Version":"2025-11-25"}
+        self.assertEqual(self.call(
+            headers=headers,negotiated_protocol_version="2025-11-25")["request_id"],9)
+        for candidate in (HEADERS,{**HEADERS,"MCP-Protocol-Version":"2025-03-26"},
+                          {**HEADERS,"MCP-Protocol-Version":"2025-11-25",
+                           "mcp-protocol-version":"2025-11-25"}):
+            with self.subTest(headers=candidate),self.assertRaises(MCPContractDenied):
+                self.call(headers=candidate,negotiated_protocol_version="2025-11-25")

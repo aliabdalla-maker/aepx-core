@@ -6,7 +6,8 @@ from .mcp_endpoint_policy import validate_mcp_endpoint
 MAX_BODY = 262144
 
 def validate_mcp_post_request(*, endpoint, approved_endpoints, method,
-                              headers, body, expected_request_id):
+                              headers, body, expected_request_id,
+                              negotiated_protocol_version=None):
     validate_mcp_endpoint(endpoint=endpoint,approved_endpoints=approved_endpoints)
     if method != "POST" or not isinstance(headers,dict):
         raise MCPContractDenied("MCP requires a POST request")
@@ -25,6 +26,11 @@ def validate_mcp_post_request(*, endpoint, approved_endpoints, method,
     accept={part.strip().lower() for part in lowered.get("accept","").split(",")}
     if not {"application/json","text/event-stream"}.issubset(accept):
         raise MCPContractDenied("MCP POST must accept JSON and SSE")
+    if negotiated_protocol_version is not None:
+        if (not isinstance(negotiated_protocol_version,str) or
+            not negotiated_protocol_version or
+            lowered.get("mcp-protocol-version") != negotiated_protocol_version):
+            raise MCPContractDenied("MCP negotiated protocol version mismatch")
     if any(k in lowered for k in ("mcp-session-id","last-event-id")):
         raise MCPContractDenied("legacy MCP transport headers prohibited")
     if not isinstance(body,(bytes,str)):
