@@ -14,6 +14,7 @@ from app.mcp_remote_intent_schema import DDL
 from app.mcp_remote_tenant_context import bind_verified_tenant, UnsafeTenantContext
 from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
 from app.mcp_remote_intent_state import IntentState
+from app.mcp_remote_dispatch_claim import claim_dispatch, DispatchClaimDenied
 from app.mcp_remote_dispatch_commit_gate import verify_committed_intent, DispatchNotCommitted
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
@@ -105,6 +106,34 @@ class PostgresReservationAcceptance(unittest.TestCase):
                     request_id=candidate.request_id,
                     idempotency_key=candidate.idempotency_key)
                 self.assertEqual(verified.request_id, candidate.request_id)
+
+    def test_dispatch_claim_has_single_database_winner(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="7"*64,
+            idempotency_key="claim-pg-000001")
+        with psycopg.connect(RUNTIME_DSN) as writer:
+            with writer.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+            writer.commit()
+        with psycopg.connect(RUNTIME_DSN) as first:
+            with first.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                claim_dispatch(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+            first.commit()
+        with psycopg.connect(RUNTIME_DSN) as second:
+            with second.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                with self.assertRaises(DispatchClaimDenied):
+                    claim_dispatch(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id,
+                        idempotency_key=candidate.idempotency_key)
 
     def test_wrong_runtime_role_fails_closed(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
