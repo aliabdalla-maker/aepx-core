@@ -1,4 +1,5 @@
 import sys
+import time
 import unittest
 from pathlib import Path
 from unittest.mock import Mock
@@ -15,16 +16,17 @@ class OIDCVerificationTests(unittest.TestCase):
         cls.private=rsa.generate_private_key(public_exponent=65537,key_size=2048)
         cls.public=cls.private.public_key()
     def setUp(self):
+        self.now=int(time.time())
         self.tenant=str(uuid4())
         self.issuer="https://identity.example"
         self.audience="aepx-governance"
         self.kw=dict(issuer=self.issuer,audience=self.audience,
                      jwks_url="https://identity.example/.well-known/jwks.json",
-                     now_epoch=1000)
+                     now_epoch=self.now)
         self.client=Mock()
         self.client.get_signing_key_from_jwt.return_value=Mock(key=self.public)
         self.claims=dict(sub="reviewer-123",tenant_id=self.tenant,iss=self.issuer,
-                         aud=self.audience,iat=900,nbf=900,exp=2000,
+                         aud=self.audience,iat=self.now-100,nbf=self.now-100,exp=self.now+1000,
                          permissions=["hitl.remote.reconcile"])
     def token(self,**changes):
         return jwt.encode(self.claims|changes,self.private,algorithm="RS256",
@@ -34,7 +36,7 @@ class OIDCVerificationTests(unittest.TestCase):
     def test_valid_signature_and_scoped_permission(self):
         operator=self.verify(self.token())
         decision=operator_verifier(operator,trusted_issuer=self.issuer,
-                                   trusted_audience=self.audience,now_epoch=1000)
+                                   trusted_audience=self.audience,now_epoch=self.now)
         self.assertTrue(decision(tenant_id=self.tenant,event_id=str(uuid4()),
                      provider="sandbox",reviewer_id="reviewer-123",
                      permission="hitl.remote.reconcile",verified_state="confirmed"))
@@ -63,6 +65,6 @@ class OIDCVerificationTests(unittest.TestCase):
                 jwk_client=self.client)
     def test_expired_token(self):
         with self.assertRaises(IdentityVerificationError):
-            self.verify(self.token(exp=999))
+            self.verify(self.token(exp=self.now-1))
 if __name__=="__main__":
     unittest.main()
