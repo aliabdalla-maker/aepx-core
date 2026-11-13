@@ -137,3 +137,7 @@ The disposable PostgreSQL acceptance workflow now triggers for tenant-context bi
 ## Exact disposable database role separation
 
 The PostgreSQL acceptance runner additionally enforces admin DSN user `postgres`, runtime DSN user `aepx_runtime`, TCP port `5432`, explicit credentials, and no URL query/fragment overrides. These checks close a gap where either DSN could previously use the administrator role while still pointing at the disposable database, bypassing meaningful RLS assertions. CI must still demonstrate passing, non-skipped tests; the guard does not validate production infrastructure.
+
+## Negative safety-gate regression tests
+
+`tests/test_mcp_pg_ci_guard.py` invokes the CI acceptance entrypoint with deliberately unsafe connection strings, checking that opt-in absence, remote hosts, wrong role, database, port, query overrides and missing passwords fail before database test discovery. The disposable PostgreSQL workflow runs these negative cases before creating its restricted runtime role. This adds regression coverage but does not replace a successful live disposable PostgreSQL acceptance run.
