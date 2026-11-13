@@ -141,3 +141,7 @@ The PostgreSQL acceptance runner additionally enforces admin DSN user `postgres`
 ## Negative safety-gate regression tests
 
 `tests/test_mcp_pg_ci_guard.py` invokes the CI acceptance entrypoint with deliberately unsafe connection strings, checking that opt-in absence, remote hosts, wrong role, database, port, query overrides and missing passwords fail before database test discovery. The disposable PostgreSQL workflow runs these negative cases before creating its restricted runtime role. This adds regression coverage but does not replace a successful live disposable PostgreSQL acceptance run.
+
+## PostgreSQL catalog attestation in disposable acceptance
+
+The disposable PostgreSQL suite now checks the actual runtime role in `pg_roles` (no superuser, bypass-RLS, role-creation or database-creation privileges) and verifies `pg_class` has both RLS and FORCE RLS enabled. It also asserts the expected single tenant policy exists in `pg_policies` and both its USING and WITH CHECK expressions reference `app.tenant_id`. These tests require an actual disposable database and are not satisfied by offline unit mocks.
