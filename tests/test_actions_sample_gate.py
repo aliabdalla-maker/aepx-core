@@ -40,12 +40,23 @@ class ActionsSampleGateTests(unittest.TestCase):
         self.assertTrue(gate.evaluate({"sample_size": 1,
                                        "conclusion_counts": {"success": 1}}))
 
+    def test_newest_run_wins_even_if_input_reordered(self):
+        sha, workflow = "a" * 40, ".github/workflows/ci.yml"
+        report = {"runs": [
+            {"id": 1, "created_at": "2026-11-13T10:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
+             "status": "completed", "conclusion": "success"},
+            {"id": 2, "created_at": "2026-11-13T11:00:00Z", "run_attempt": 1,
+             "head_sha": sha, "workflow_path": workflow,
+             "status": "queued", "conclusion": None}]}
+        self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
+
     def test_required_workflows_are_sha_bound(self):
         sha = "a" * 40
         report = {"runs": [
-            {"head_sha": sha, "workflow_path": ".github/workflows/ci.yml",
+            {"id": 1, "created_at": "2026-11-13T10:00:00Z", "run_attempt": 1, "head_sha": sha, "workflow_path": ".github/workflows/ci.yml",
              "status": "completed", "conclusion": "success"},
-            {"head_sha": "b" * 40, "workflow_path": ".github/workflows/security.yml",
+            {"id": 2, "created_at": "2026-11-13T11:00:00Z", "run_attempt": 1, "head_sha": "b" * 40, "workflow_path": ".github/workflows/security.yml",
              "status": "completed", "conclusion": "success"}]}
         self.assertEqual(gate.evaluate_required(report, sha, [".github/workflows/ci.yml"]), [])
         self.assertTrue(gate.evaluate_required(report, sha, [".github/workflows/security.yml"]))
