@@ -56,6 +56,8 @@ def _mint_did() -> str | None:
         resp.raise_for_status()
         return resp.json().get("did")
     except Exception:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise
         return None
 
 
@@ -71,6 +73,8 @@ def health():
 @app.post("/agents", response_model=Agent)
 def create_agent(payload: AgentIn):
     did = payload.did or _mint_did()
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and not did:
+        raise HTTPException(503, "Identity service unavailable; registration blocked")
     conn = _get_conn()
     if conn:
         try:
@@ -114,6 +118,8 @@ def get_agent(agent_id: str):
         except HTTPException:
             raise
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             # e.g. agent_id isn't a valid UUID — no such agent, not a 500.
             raise HTTPException(404, "agent not found")
         finally:
