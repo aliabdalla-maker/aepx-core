@@ -17,6 +17,15 @@ on:
       - 'platform/saas-ide/backend/app/mcp_transport_policy.py'
       - 'tests/test_mcp_contract_gate.py'
       - 'tests/audit_mcp_ci.py'
+      - 'platform/saas-ide/backend/app/mcp_execution214.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_dispatch_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_reservation.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_schema.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
+      - 'tests/test_mcp_remote_dispatch_gate.py'
+      - 'tests/test_mcp_remote_intent_ledger.py'
+      - 'tests/test_mcp_remote_intent_postgres.py'
+      - 'tests/test_mcp_remote_intent_reservation.py'
       - 'tests/test_mcp_dispatch_binding.py'
       - 'tests/test_mcp_discovery_policy.py'
       - 'tests/test_mcp_protocol_envelope.py'
@@ -124,3 +133,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_mcp_initialized_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_handshake_policy.py' -v
           python -m unittest discover -s tests -p 'test_mcp_session_assertions.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_dispatch_gate.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_ledger.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_reservation.py' -v
