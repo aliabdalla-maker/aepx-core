@@ -76,6 +76,28 @@ class DeploymentPolicyTests(unittest.TestCase):
             "name: permissions\non:\n  workflow_dispatch:\npermissions:\n  contents: read\n  contents: write\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
             "duplicate mapping key: contents")
 
+    def test_validator_accepts_complete_manual_only_fixture(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            workflows = root / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            shutil.copy2(ROOT / "scripts" / "check_workflow_integrity.py",
+                         root / "scripts" / "check_workflow_integrity.py")
+            protected = (*NAMES, "actions-queue-diagnostics.yml")
+            for name in protected:
+                (workflows / name).write_text(
+                    "name: protected\\non:\\n  workflow_dispatch:\\njobs:\\n  check:\\n    runs-on: ubuntu-latest\\n",
+                    encoding="utf-8")
+            (workflows / "ordinary-ci.yml").write_text(
+                "name: ci\\non:\\n  push:\\n    branches: [master]\\njobs:\\n  test:\\n    runs-on: ubuntu-latest\\n",
+                encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(root / "scripts" / "check_workflow_integrity.py")],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("errors=0", result.stdout)
+
     def _assert_rejected(self, name, content, expected):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
