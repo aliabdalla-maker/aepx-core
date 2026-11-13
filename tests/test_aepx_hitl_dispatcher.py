@@ -164,6 +164,22 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual(result["delivered"], 1)
         self.assertTrue(settle.call_args.kwargs["delivered"])
 
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_duplicate_claim_row_only_delivers_and_settles_once(self, reap, claim, settle):
+        row = (EVENT, "hitl.approval.consumed", {}, 1)
+        claim.return_value = [row, row]
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["claimed"], 2)
+        self.assertEqual(result["duplicates"], 1)
+        self.assertEqual(result["delivered"], 1)
+        self.assertEqual(result["deferred"], 0)
+        self.deliver.assert_called_once()
+        settle.assert_called_once()
+        self.lease_check.assert_called_once()
+
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
