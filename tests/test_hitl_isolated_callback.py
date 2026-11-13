@@ -31,7 +31,7 @@ class TestIsolatedCallback(unittest.TestCase):
             self.run_adapter("hangs", timeout=0.2)
 
     def test_failure_is_uncertain(self):
-        with self.assertRaises(CallbackIsolationError):
+        with self.assertRaisesRegex(CallbackIsolationError, "^callback failed: outcome uncertain$"):
             self.run_adapter("fails")
 
     def test_abrupt_process_crash_is_uncertain(self):
