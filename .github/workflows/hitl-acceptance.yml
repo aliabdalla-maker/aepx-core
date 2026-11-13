@@ -1,17 +1,8 @@
 name: HITL P0 acceptance
 on:
   push:
-    paths:
-      - 'services/governance/**'
-      - 'db/migrations/20261113_hitl*'
-      - 'tests/test_hitl*'
-      - '.github/workflows/hitl-acceptance.yml'
   pull_request:
-    paths:
-      - 'services/governance/**'
-      - 'db/migrations/20261113_hitl*'
-      - 'tests/test_hitl*'
-      - '.github/workflows/hitl-acceptance.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
