@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""Read-only Actions queue triage that runs locally without GitHub-hosted runners."""
+import argparse
+import collections
+import datetime
+import json
+import subprocess
+import sys
+import urllib.error
+import urllib.request
+
+
+def fetch_json(url, token):
+    request = urllib.request.Request(url, headers={
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "aepx-local-queue-triage",
+    })
+    with urllib.request.urlopen(request, timeout=20) as response:
+        return json.load(response)
+
+
+def summarize(runs, now):
+    counts = collections.Counter(run.get("status", "unknown") for run in runs)
+    queued = []
+    for run in runs:
+        if run.get("status") != "queued":
+            continue
+        created = datetime.datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
+        queued.append({
+            "id": run["id"],
+            "name": run.get("name"),
+            "url": run.get("html_url"),
+            "age_minutes": max(0, int((now - created).total_seconds() // 60)),
+        })
+    return {"sample_size": len(runs), "status_counts": dict(counts), "queued": queued[:20]}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo", required=True, help="owner/repository")
+    parser.add_argument("--output", help="Optional JSON report path")
+    args = parser.parse_args(argv)
+    if len(args.repo.split("/")) != 2 or any(not part for part in args.repo.split("/")):
+        parser.error("--repo must be owner/repository")
+    try:
+        token = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True,
+                               check=True, timeout=15).stdout.strip()
+        if not token:
+            raise RuntimeError("gh auth token returned no token")
+        url = f"https://api.github.com/repos/{args.repo}/actions/runs?per_page=100"
+        data = fetch_json(url, token)
+        report = {"repository": args.repo, "sample_limit": 100,
+                  **summarize(data.get("workflow_runs", []),
+                              datetime.datetime.now(datetime.timezone.utc))}
+        rendered = json.dumps(report, indent=2) + "\n"
+        if args.output:
+            from pathlib import Path
+            Path(args.output).write_text(rendered, encoding="utf-8")
+        print(rendered, end="")
+        return 0
+    except (OSError, subprocess.SubprocessError, urllib.error.URLError,
+            ValueError, RuntimeError) as exc:
+        print(f"ERROR: queue triage unavailable ({type(exc).__name__})", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
