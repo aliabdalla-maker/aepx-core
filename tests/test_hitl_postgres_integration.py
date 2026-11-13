@@ -17,6 +17,7 @@ from app.hitl_lifecycle import create_request,decide_request,DecisionConflict
 from app.hitl_postgres import consume_with_outbox,ApprovalError
 from app.hitl_replay import find_matching_replay
 from app.hitl_outbox import claim, settle, reap_exhausted
+from app.hitl_recovery import requeue_dead_letter,RecoveryDenied
 
 @unittest.skipUnless(os.getenv("HITL_TEST_DATABASE_URL") and os.getenv("HITL_TEST_DISPOSABLE")=="yes",
                      "requires explicit disposable PostgreSQL test DB approval")
@@ -115,6 +116,33 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
+
+    def test_audited_dead_letter_requeue_requires_operator_gate(self):
+        tenant=uuid4()
+        event=self._seed_outbox(tenant)
+        with self.connect() as conn:
+            claimed=claim(conn,tenant_id=tenant,worker_id="worker-fail",max_attempts=1)
+        with self.connect() as conn:
+            settle(conn,tenant_id=tenant,event_id=event,worker_id="worker-fail",
+                   attempt_number=claimed[0][3],delivered=False,max_attempts=1)
+        kwargs=dict(tenant_id=tenant,event_id=event,operator_id="security-operator",
+                    ticket_id="INC-123456",reason="deduplication reviewed before retry")
+        with self.connect() as conn:
+            with self.assertRaises(RecoveryDenied):
+                requeue_dead_letter(conn,**kwargs,approved=False,idempotency_verified=True)
+        with self.connect() as conn:
+            requeue_dead_letter(conn,**kwargs,approved=True,idempotency_verified=True)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("SELECT status,attempts FROM hitl.outbox WHERE id=%s",(event,))
+                self.assertEqual(cur.fetchone(),("pending",0))
+                cur.execute("""SELECT count(*) FROM hitl.outbox_recovery_audit
+                               WHERE tenant_id=%s AND event_id=%s""",(str(tenant),event))
+                self.assertEqual(cur.fetchone()[0],1)
+        with self.connect() as conn:
+            with self.assertRaises(RecoveryDenied):
+                requeue_dead_letter(conn,**kwargs,approved=True,idempotency_verified=True)
 
     def test_failed_delivery_retry_and_dead_letter_idempotence(self):
         tenant=uuid4()
