@@ -69,3 +69,7 @@ The PostgreSQL integration suite now asserts that a previously approved, consume
 ## Offline transport policy composition
 
 `mcp_transport_policy` combines exact approved HTTPS endpoint, DNS answer and server identity checks before selecting the bounded correlated HTTP JSON/SSE response gate. Its inputs are **not independently authenticated**; callers must never use the returned policy as proof of safe network execution. No HTTP requests, TLS, OAuth, DNS lookup, sockets or MCP dispatch occur. Actual gateway destination pinning, token audience, worker integration and concurrent cancellation remain release blockers.
+
+## Transport module syntax repair and peer regression
+
+A merged version of `mcp_transport_policy.py` contained literal escaped newline tokens that prevented Python compilation. The repair restores valid source formatting and adds offline tests for approved versus substituted connected peers. Peer identity is still supplied by a caller and therefore **does not establish socket-level enforcement**. The actual gateway must obtain peer identity from its connected socket and enforce TLS, DNS/IP pinning and egress controls.
