@@ -5,6 +5,8 @@ services:
   postgres:
     image: pgvector/pgvector:pg16
     restart: unless-stopped
+    mem_limit: 512m
+    pids_limit: 128
     environment:
       POSTGRES_DB: aepx
       POSTGRES_USER: aepx
@@ -19,15 +21,21 @@ services:
   redis:
     image: redis:7
     restart: unless-stopped
+    mem_limit: 192m
+    pids_limit: 64
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       retries: 5
   identity:
+    mem_limit: 384m
+    pids_limit: 128
     environment:
       AEPX_SECURE_MODE: "true"
       AEPX_INTERNAL_SERVICE_KEY: ${AEPX_INTERNAL_SERVICE_KEY:?Set AEPX_INTERNAL_SERVICE_KEY}
       IDENTITY_JWT_SECRET: ${AEPX_IDENTITY_JWT_SECRET:?Set AEPX_IDENTITY_JWT_SECRET}
+    mem_limit: 384m
+    pids_limit: 128
     build:
       context: ../../services/identity
     restart: unless-stopped
@@ -35,6 +43,8 @@ services:
       postgres:
         condition: service_healthy
   trust:
+    mem_limit: 384m
+    pids_limit: 128
     build:
       context: ../../services/trust
     restart: unless-stopped
@@ -45,6 +55,8 @@ services:
       postgres:
         condition: service_healthy
   registry:
+    mem_limit: 384m
+    pids_limit: 128
     build:
       context: ../../services/registry
     restart: unless-stopped
