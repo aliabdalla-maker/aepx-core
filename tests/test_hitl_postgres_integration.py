@@ -396,6 +396,23 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("SELECT count(*) FROM hitl.outbox WHERE id=%s",(event,))
                 self.assertEqual(cur.fetchone()[0],1)
 
+    def test_cross_tenant_outbox_update_is_blocked_by_rls(self):
+        tenant = uuid4()
+        other = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(other),))
+                cur.execute("""UPDATE hitl.outbox SET status='dead'
+                               WHERE tenant_id=%s AND id=%s""", (str(tenant), event))
+                self.assertEqual(cur.rowcount, 0)
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)", (str(tenant),))
+                cur.execute("SELECT status FROM hitl.outbox WHERE tenant_id=%s AND id=%s",
+                            (str(tenant), event))
+                self.assertEqual(cur.fetchone()[0], "pending")
+
     def test_multi_worker_claim_and_stale_settlement(self):
         tenant=uuid4()
         event=self._seed_outbox(tenant)
