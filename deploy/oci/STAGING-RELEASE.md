@@ -67,3 +67,12 @@ Staging publishes no host ports. Access is through a trusted administrative sess
 - [ ] Obtain security and functional acceptance before merging or releasing
 
 No script in this repository can independently certify OCI access, TLS, off-host encryption, or a production rollout.
+
+
+## Critical DID key-custody limitation
+
+Secure Identity now omits `private_key_hex` from DID issuance responses to prevent intermediary disclosure. The current generated private key is **not retained or delivered to an authenticated owner**; generated DIDs are therefore not usable for future proof-of-possession signing. This is a temporary staging-only registration flow, **not production-ready decentralized identity**. Before production, implement a verifiable owner-controlled public-key registration or a properly managed signing-key custody solution, including rotation, revocation and recovery. Do not claim DID ownership verification based on this endpoint.
+
+## Write endpoint authorization
+
+In secure staging, Registry `POST /agents` and Trust `POST /trust/{entity_id}/adjust` require the shared `X-AEPX-Service-Key` credential. The CI integration job checks both allowed and rejected writes. This is an interim control: replace it with service-specific credentials and per-operation authorization before exposing the services beyond the isolated staging network.
