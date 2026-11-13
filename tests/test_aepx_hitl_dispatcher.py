@@ -61,6 +61,35 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual(result["failed"], 0)
         self.assertEqual(result["stale"], 1)
         settle.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_preflight_db_failure_aborts_without_settlement(self, reap, claim, settle):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        self.lease_check.side_effect = RuntimeError("db unavailable")
+        with self.assertRaises(RuntimeError):
+            dispatch_batch(**self.kw)
+        self.deliver.assert_not_called()
+        settle.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_second_event_preflight_failure_never_settles_second_event(self, reap, claim, settle):
+        second = "33333333-3333-4333-8333-333333333333"
+        claim.return_value = [
+            (EVENT, "hitl.approval.consumed", {}, 1),
+            (second, "hitl.approval.consumed", {}, 1),
+        ]
+        self.lease_check.side_effect = [True, RuntimeError("db unavailable")]
+        with self.assertRaises(RuntimeError):
+            dispatch_batch(**self.kw)
+        self.deliver.assert_called_once()
+        self.assertEqual(self.deliver.call_args.kwargs["event_id"], EVENT)
+        settle.assert_called_once()
+        self.assertEqual(str(settle.call_args.kwargs["event_id"]), EVENT)
+
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")

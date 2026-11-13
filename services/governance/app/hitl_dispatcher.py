@@ -45,19 +45,24 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
         if not isinstance(attempt, int) or isinstance(attempt, bool) or attempt < 1:
             raise ValueError("invalid lease fencing attempt")
         ok = False
+        if topic == "hitl.approval.consumed" and isinstance(payload, dict):
+            # Database errors propagate: never settle after an uncertain preflight.
+            current = lease_is_current(connection, tenant_id=tenant, event_id=event_id,
+                                       worker_id=worker_id, attempt_number=attempt)
+            if not current:
+                stale += 1
+                continue
         try:
             if topic != "hitl.approval.consumed" or not isinstance(payload, dict):
                 raise PermissionError("unsupported event")
-            if not lease_is_current(connection, tenant_id=tenant, event_id=event_id,
-                                    worker_id=worker_id, attempt_number=attempt):
-                # Never settle a lease that is no longer owned by this worker.
-                stale += 1
-                continue
             deliver(event_id=str(event_id), topic=topic, payload=payload,
                     tenant_id=tenant)
             ok = True
+        except PermissionError:
+            # Unsupported topics may be retried/dead-lettered by policy.
+            pass
         except Exception:
-            # Avoid leaking payloads, credentials or exception strings to DB.
+            # Delivery adapter failure: never expose exception details.
             pass
         try:
             # Deterministic per-event jitter prevents synchronized retry storms.
