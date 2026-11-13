@@ -1,0 +1,26 @@
+name: MCP remote intent transition offline
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_transition.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
+      - 'tests/test_mcp_remote_intent_transition.py'
+      - '.github/workflows/mcp-remote-intent-transition-offline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  transition-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and test offline CAS transitions
+        run: |
+          python -m py_compile platform/saas-ide/backend/app/mcp_remote_intent_transition.py
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_transition.py' -v
