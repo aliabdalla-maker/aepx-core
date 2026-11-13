@@ -53,6 +53,30 @@ class PostgresReservationAcceptance(unittest.TestCase):
         except Exception as exc:
             errors.append(exc)
 
+    def test_tenant_binding_does_not_leak_after_commit(self):
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT current_setting('app.tenant_id', true)")
+                self.assertEqual(cur.fetchone()[0], self.tenant)
+            conn.commit()
+            with conn.cursor() as cur:
+                cur.execute("SELECT current_setting('app.tenant_id', true)")
+                self.assertNotEqual(cur.fetchone()[0], self.tenant)
+
+    def test_tenant_binding_does_not_leak_after_rollback(self):
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT current_setting('app.tenant_id', true)")
+                self.assertEqual(cur.fetchone()[0], self.tenant)
+            conn.rollback()
+            with conn.cursor() as cur:
+                cur.execute("SELECT current_setting('app.tenant_id', true)")
+                self.assertNotEqual(cur.fetchone()[0], self.tenant)
+
     def test_wrong_runtime_role_fails_closed(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
@@ -88,7 +112,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
                          action_hash="f"*64)
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant, expected_runtime_role="aepx_runtime")
                 self.assertEqual(reserve_intent(cur, first), "created")
                 with self.assertRaises(ReservationDenied):
                     reserve_intent(cur, second)
@@ -99,7 +123,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
         conflicting = replace(self.intent, tool_name="tool.delete")
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant, expected_runtime_role="aepx_runtime")
                 reserve_intent(cur, self.intent)
                 with self.assertRaises(ReservationDenied):
                     reserve_intent(cur, conflicting)
@@ -111,7 +135,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
             idempotency_key="transition-000001")
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant, expected_runtime_role="aepx_runtime")
                 self.assertEqual(reserve_intent(cur, candidate), "created")
                 self.assertEqual(transition_intent(cur, tenant_id=self.tenant,
                     request_id=candidate.request_id, current=IntentState.RESERVED,
@@ -122,7 +146,7 @@ class PostgresReservationAcceptance(unittest.TestCase):
                         target=IntentState.DISPATCHED)
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (str(uuid4()),))
+                bind_verified_tenant(cur, verified_tenant_id=str(uuid4()), expected_runtime_role="aepx_runtime")
                 with self.assertRaises(TransitionDenied):
                     transition_intent(cur, tenant_id=self.tenant,
                         request_id=candidate.request_id, current=IntentState.DISPATCHED,
@@ -151,12 +175,12 @@ class PostgresReservationAcceptance(unittest.TestCase):
             "d"*64, "resource-seed", "tool.read", "2025-11-25", "read-seed-00001")
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant, expected_runtime_role="aepx_runtime")
                 reserve_intent(cur, seed)
         other_tenant = str(uuid4())
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SET LOCAL app.tenant_id = %s", (other_tenant,))
+                bind_verified_tenant(cur, verified_tenant_id=other_tenant, expected_runtime_role="aepx_runtime")
                 cur.execute("SELECT count(*) FROM mcp_remote_execution_intents")
                 self.assertEqual(cur.fetchone()[0], 0)
 
