@@ -205,3 +205,52 @@ jobs:
               raise AssertionError("Registry accepted unverified DID claim")
           print("PASS: secure Registry rejects unverified DID ownership")
           PY
+  integration:
+    name: Ephemeral staging integration (CI only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate temporary CI credentials
+        run: |
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          keys = ["AEPX_POSTGRES_PASSWORD", "AEPX_NEO4J_PASSWORD", "AEPX_IDENTITY_JWT_SECRET", "AEPX_INTERNAL_SERVICE_KEY"]
+          Path(".env").write_text("".join(f"{key}={secrets.token_urlsafe(32)}\n" for key in keys))
+          PY
+          chmod 600 .env
+      - name: Build and start isolated containers
+        run: |
+          set -euo pipefail
+          bash deploy/oci/staging.sh --validate
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml up -d --build --wait --wait-timeout 180
+      - name: Verify health and Registry persistence
+        run: |
+          set -euo pipefail
+          bash deploy/oci/staging.sh --smoke
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml exec -T registry python - <<'PY'
+          import httpx
+          payload={"name":"ci-persistence-check"}
+          with httpx.Client(timeout=10) as client:
+              created=client.post("http://127.0.0.1:8000/agents",json=payload)
+              assert created.status_code==200,created.text
+              agent=created.json()
+              assert agent["did"].startswith("did:key:"),agent
+              fetched=client.get(f"http://127.0.0.1:8000/agents/{agent['id']}")
+              assert fetched.status_code==200,fetched.text
+              assert fetched.json()["id"]==agent["id"]
+              rejected=client.post("http://127.0.0.1:8000/agents",json={"name":"unverified","did":"did:key:zUnverified"})
+              assert rejected.status_code==403,rejected.text
+          print("PASS: DID issuance, agent persistence and unverified DID rejection")
+          PY
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml ps || true
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml logs --tail=80 --no-color 2>&1 | sed -E 's/(PASSWORD|SECRET|KEY)=([^ ]+)/\1=[REDACTED]/g' || true
+      - name: Destroy ephemeral CI environment
+        if: always()
+        run: |
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml down -v --remove-orphans || true
+          rm -f .env
