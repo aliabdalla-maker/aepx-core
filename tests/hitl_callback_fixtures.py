@@ -13,3 +13,7 @@ def hangs():
 
 def fails():
     raise RuntimeError("test-only failure")
+
+def crashes():
+    import os
+    os._exit(17)  # disposable offline child only; simulate abrupt process death
