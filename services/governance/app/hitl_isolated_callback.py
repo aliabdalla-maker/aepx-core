@@ -18,9 +18,9 @@ def _child(entrypoint, arguments, output):
         fn = getattr(importlib.import_module(module_name), function_name)
         result = fn(**arguments)
         if result is not None and not isinstance(result, bool):
-            output.send(("error", None))
+            output.send_bytes(b"E")
         else:
-            output.send(("ok", result))
+            output.send_bytes(b"T" if result is True else b"F" if result is False else b"N")
     except BaseException:
         try:
             output.send(("error", None))
@@ -64,20 +64,17 @@ def run_isolated_callback(*, entrypoint, arguments, allowed_entrypoints,
                 raise CallbackIsolationError("callback exited without result: outcome uncertain")
             raise CallbackIsolationError("callback timed out: outcome uncertain")
         try:
-            message = receiver.recv()
+            message = receiver.recv_bytes(maxlength=1)
         except (EOFError, OSError) as exc:
             raise CallbackIsolationError("callback IPC failed: outcome uncertain") from exc
-        if not isinstance(message, tuple) or len(message) != 2:
+        if message not in (b"T", b"F", b"N", b"E"):
             raise CallbackIsolationError("invalid callback IPC message: outcome uncertain")
-        status, result = message
         process.join(max(0, deadline - time.monotonic()))
         if process.is_alive():
             raise CallbackIsolationError("callback failed to exit: outcome uncertain")
-        if (not isinstance(status, str) or status not in ("ok", "error") or
-            result is not None and not isinstance(result, bool)):
-            raise CallbackIsolationError("invalid callback result: outcome uncertain")
-        if process.exitcode != 0 or status != "ok":
+        if process.exitcode != 0 or message == b"E":
             raise CallbackIsolationError("callback failed: outcome uncertain")
+        result = {b"T": True, b"F": False, b"N": None}[message]
         return result
     finally:
         receiver.close()
