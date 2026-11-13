@@ -117,6 +117,23 @@ class ActionsSampleGateTests(unittest.TestCase):
              "status": "completed", "conclusion": "failure"}]}
         self.assertTrue(gate.evaluate_required(report, sha, [workflow]))
 
+    def test_duplicate_run_id_blocks(self):
+        sha, workflow = "a" * 40, ".github/workflows/ci.yml"
+        valid = {"id": 7, "created_at": "2026-11-13T10:00:00Z",
+                 "run_attempt": 1, "head_sha": sha, "workflow_path": workflow,
+                 "status": "completed", "conclusion": "success"}
+        self.assertTrue(gate.evaluate_required({"runs": [valid, dict(valid)]}, sha, [workflow]))
+
+    def test_unknown_status_or_conclusion_blocks(self):
+        sha, workflow = "a" * 40, ".github/workflows/ci.yml"
+        valid = {"id": 7, "created_at": "2026-11-13T10:00:00Z",
+                 "run_attempt": 1, "head_sha": sha, "workflow_path": workflow,
+                 "status": "completed", "conclusion": "success"}
+        for key, value in [("status", "imaginary"), ("conclusion", "imaginary")]:
+            bad = dict(valid)
+            bad[key] = value
+            self.assertTrue(gate.evaluate_required({"runs": [bad]}, sha, [workflow]))
+
     def test_successful_sample_only_passes_sample_health(self):
         self.assertEqual(gate.evaluate({"sample_size": 3, "status_counts": {"completed": 3},
                                        "conclusion_counts": {"success": 3}}), [])

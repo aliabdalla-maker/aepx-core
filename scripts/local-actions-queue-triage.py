@@ -132,6 +132,17 @@ def main(argv=None):
         report["runner_assignment_sample"] = runner_evidence(args.repo, report["queued"], token)
         report["failed_run_job_sample"] = failed_before_jobs_evidence(args.repo, data.get("workflow_runs", []), token)
         report["failed_run_check_sample"] = check_run_evidence(args.repo, report["failed_run_job_sample"], token)
+        report["pre_job_failure_sample_count"] = sum(
+            item.get("no_jobs_returned") is True
+            for item in report["failed_run_job_sample"])
+        report["pre_job_failure_sample_ids"] = [
+            item["run_id"] for item in report["failed_run_job_sample"]
+            if item.get("no_jobs_returned") is True]
+        report["pre_job_failure_warning"] = (
+            "Completed failures with zero jobs detected; investigate workflow "
+            "validation, Actions policy, concurrency, account limits and "
+            "GitHub service health. This is not a root-cause determination."
+            if report["pre_job_failure_sample_count"] else None)
         report["investigation_guidance"] = (
             "If runs are queued, inspect runner eligibility and Actions limits. "
             "If runs fail without jobs, inspect workflow validity and GitHub Actions policies. "

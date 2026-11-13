@@ -87,6 +87,16 @@ def evaluate_required(report, sha, workflows):
             errors.append(f"missing required workflow: {workflow} at {sha}")
         elif not all(valid_run_order(run) for run in matches):
             errors.append(f"missing run ordering evidence: {workflow} at {sha}")
+        elif len({run["id"] for run in matches}) != len(matches):
+            errors.append(f"duplicate run IDs in evidence: {workflow} at {sha}")
+        elif any(run.get("status") not in ("completed", "queued", "pending",
+                                          "in_progress", "waiting", "requested")
+                 or run.get("conclusion") not in (None, "success", "failure",
+                                                   "cancelled", "skipped",
+                                                   "timed_out", "action_required",
+                                                   "neutral", "stale",
+                                                   "startup_failure") for run in matches):
+            errors.append(f"unrecognized run status or conclusion: {workflow} at {sha}")
         else:
             latest = max(matches, key=run_order)
             if latest.get("status") != "completed" or latest.get("conclusion") != "success":
