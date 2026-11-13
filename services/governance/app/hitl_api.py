@@ -6,7 +6,7 @@ executes an external action. An independently authorised worker is required.
 import os
 from uuid import UUID
 from fastapi import APIRouter, Header, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from app.hitl_oidc import verify_bearer, AuthenticationDenied
 from app.hitl_authz import authorize_consume, AuthorizationDenied
 from app.hitl_postgres import consume_with_outbox, ApprovalError
@@ -18,6 +18,13 @@ class ConsumeRequest(BaseModel):
     approval_id: UUID
     action: dict = Field(min_length=1)
     idempotency_key: str = Field(min_length=8,max_length=200)
+
+    @field_validator("idempotency_key")
+    @classmethod
+    def valid_idempotency_key(cls, value: str) -> str:
+        if not value.isascii() or not all(c.isalnum() or c in "-_." for c in value):
+            raise ValueError("idempotency key must use ASCII letters, digits, dash, underscore or dot")
+        return value
 
 @router.post("/consume",status_code=202)
 def consume(request: ConsumeRequest, authorization: str | None=Header(default=None)):
