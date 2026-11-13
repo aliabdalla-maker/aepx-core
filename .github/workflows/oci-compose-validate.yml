@@ -27,6 +27,7 @@ jobs:
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -57,6 +58,7 @@ jobs:
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -76,6 +78,7 @@ jobs:
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -94,6 +97,7 @@ jobs:
               'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
               + 'AEPX_IDENTITY_JWT_SECRET=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_INTERNAL_SERVICE_KEY=' + secrets.token_urlsafe(32) + '\n'
           )
           PY
           chmod 600 .env
@@ -121,8 +125,8 @@ jobs:
           trust=Path("services/trust/app/main.py").read_text()
           compose=Path("deploy/oci/compose.staging.yml").read_text()
           assert 'AEPX_SECURE_MODE' in identity
-          assert 'Unauthenticated token issuance disabled' in identity
-          assert 'Unauthenticated DID issuance disabled' in identity
+          assert 'Service authentication required' in identity
+          assert 'hmac.compare_digest' in identity
           assert 'AEPX_REQUIRE_DATABASE' in registry and 'AEPX_REQUIRE_DATABASE' in trust
           assert compose.count('AEPX_REQUIRE_DATABASE: "true"') == 2
           assert 'AEPX_IDENTITY_JWT_SECRET:?' in compose
