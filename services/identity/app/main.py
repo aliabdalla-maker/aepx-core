@@ -11,6 +11,8 @@ SECRET = os.getenv("IDENTITY_JWT_SECRET", "dev-only-change-me")
 if os.getenv("AEPX_SECURE_MODE") == "true":
     if len(SECRET) < 32 or SECRET == "dev-only-change-me":
         raise RuntimeError("IDENTITY_JWT_SECRET must be a strong secret in secure mode")
+if os.getenv("AEPX_SECURE_MODE") == "true" and len(os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")) < 32:
+    raise RuntimeError("AEPX_INTERNAL_SERVICE_KEY must be configured in secure mode")
 app = FastAPI(title="AEP-X Identity Service", version="0.0.1")
 
 
@@ -20,11 +22,9 @@ def health():
 
 
 @app.post("/token")
-def issue_token(subject: str, x_aepx_service_key: str | None = Header(default=None)):
+def issue_token(subject: str):
     if os.getenv("AEPX_SECURE_MODE") == "true":
-        expected = os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
-        if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
-            raise HTTPException(status_code=403, detail="Service authentication required")
+        raise HTTPException(status_code=403, detail="Token issuance disabled until scoped authorisation is implemented")
     payload = {"sub": subject, "iat": int(time.time()), "jti": str(uuid.uuid4())}
     return {"access_token": jwt.encode(payload, SECRET, algorithm="HS256"), "token_type": "bearer"}
 
