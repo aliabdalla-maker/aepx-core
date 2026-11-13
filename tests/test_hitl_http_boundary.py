@@ -56,6 +56,25 @@ class HitlApiTests(unittest.TestCase):
             response=self.client.post("/hitl/consume",json=self.body)
         self.assertEqual(response.status_code,503)
         self.assertNotIn("secret",response.text)
+    def test_matching_replay_returns_original_event(self):
+        from app.hitl_postgres import ApprovalError
+        from unittest.mock import MagicMock
+        p=VerifiedPrincipal("worker",self.tenant,frozenset({"hitl:execute"}),"issuer")
+        fake=MagicMock()
+        fake.__enter__.return_value=fake
+        with patch("app.hitl_api.verify_bearer",return_value=p),patch.dict(os.environ,{"HITL_DATABASE_URL":"postgresql://test"}),patch("psycopg.connect",return_value=fake),patch("app.hitl_api.consume_with_outbox",side_effect=ApprovalError("already consumed")),patch("app.hitl_api.find_matching_replay",return_value="prior-event"):
+            response=self.client.post("/hitl/consume",json=self.body)
+        self.assertEqual(response.status_code,202)
+        self.assertEqual(response.json()["event_id"],"prior-event")
+    def test_nonmatching_replay_conflicts(self):
+        from app.hitl_postgres import ApprovalError
+        from unittest.mock import MagicMock
+        p=VerifiedPrincipal("worker",self.tenant,frozenset({"hitl:execute"}),"issuer")
+        fake=MagicMock()
+        fake.__enter__.return_value=fake
+        with patch("app.hitl_api.verify_bearer",return_value=p),patch.dict(os.environ,{"HITL_DATABASE_URL":"postgresql://test"}),patch("psycopg.connect",return_value=fake),patch("app.hitl_api.consume_with_outbox",side_effect=ApprovalError("already consumed")),patch("app.hitl_api.find_matching_replay",return_value=None):
+            response=self.client.post("/hitl/consume",json=self.body)
+        self.assertEqual(response.status_code,409)
     def test_empty_action_rejected(self):
         self.body["action"]={}
         self.assertEqual(self.client.post("/hitl/consume",json=self.body).status_code,422)
