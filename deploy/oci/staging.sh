@@ -23,7 +23,10 @@ PY
     "${COMPOSE[@]}" ps --status running
     "${COMPOSE[@]}" exec -T postgres pg_isready -U aepx -d aepx
     "${COMPOSE[@]}" exec -T redis redis-cli ping
-    echo "PASS: staging PostgreSQL and Redis respond (application tests still required)"
+    for service in identity trust registry; do
+      [[ -n "$("${COMPOSE[@]}" ps -q "$service")" ]] || { echo "Missing staging service: $service" >&2; exit 1; }
+    done
+    echo "PASS: staging PostgreSQL and Redis respond; application HTTP acceptance tests still required"
     ;;
   --start)
     echo "Refusing automatic start: host inventory, backups and image compatibility must be verified."
