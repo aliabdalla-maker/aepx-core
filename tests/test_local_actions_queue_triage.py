@@ -56,6 +56,7 @@ class QueueTriageTests(unittest.TestCase):
         self.assertEqual(len(calls), 5)
         self.assertTrue(all(item["no_jobs_returned"] for item in evidence))
         self.assertTrue(all("triage_hint" in item for item in evidence))
+        self.assertTrue(all(item["check_runs_url"] is None for item in evidence))
 
     def test_successful_runs_are_excluded_from_failure_sample(self):
         runs = [{"id": 1, "status": "completed", "conclusion": "success"}]

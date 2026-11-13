@@ -76,6 +76,7 @@ def failed_before_jobs_evidence(repo, runs, token, fetch=fetch_json):
             item["no_jobs_returned"] = not bool(jobs)
             if not jobs:
                 item["triage_hint"] = "Inspect workflow validation errors, Actions policy, billing/limits, and GitHub service status; no root cause inferred."
+                item["check_runs_url"] = f"https://api.github.com/repos/{repo}/commits/{run.get('head_sha', '')}/check-runs" if run.get("head_sha") else None
         except (OSError, ValueError, KeyError, urllib.error.URLError) as exc:
             item["error_type"] = type(exc).__name__
         evidence.append(item)
