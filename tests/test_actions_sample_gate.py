@@ -40,6 +40,25 @@ class ActionsSampleGateTests(unittest.TestCase):
         self.assertTrue(gate.evaluate({"sample_size": 1,
                                        "conclusion_counts": {"success": 1}}))
 
+    def test_required_workflows_are_sha_bound(self):
+        sha = "a" * 40
+        report = {"runs": [
+            {"head_sha": sha, "workflow_path": ".github/workflows/ci.yml",
+             "status": "completed", "conclusion": "success"},
+            {"head_sha": "b" * 40, "workflow_path": ".github/workflows/security.yml",
+             "status": "completed", "conclusion": "success"}]}
+        self.assertEqual(gate.evaluate_required(report, sha, [".github/workflows/ci.yml"]), [])
+        self.assertTrue(gate.evaluate_required(report, sha, [".github/workflows/security.yml"]))
+
+    def test_required_workflow_fails_closed(self):
+        sha = "a" * 40
+        self.assertTrue(gate.evaluate_required({}, sha, [".github/workflows/ci.yml"]))
+        self.assertTrue(gate.evaluate_required({"runs": []}, "bad", [".github/workflows/ci.yml"]))
+        self.assertTrue(gate.evaluate_required({"runs": []}, sha, []))
+        report = {"runs": [{"head_sha": sha, "workflow_path": ".github/workflows/ci.yml",
+                            "status": "queued", "conclusion": None}]}
+        self.assertTrue(gate.evaluate_required(report, sha, [".github/workflows/ci.yml"]))
+
     def test_successful_sample_only_passes_sample_health(self):
         self.assertEqual(gate.evaluate({"sample_size": 3, "status_counts": {"completed": 3},
                                        "conclusion_counts": {"success": 3}}), [])
