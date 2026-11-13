@@ -16,8 +16,7 @@
 name: Tencent Kubernetes Engine
 
 on:
-  push:
-    branches: [ "master" ]
+  workflow_dispatch:
 
 # Environment variables available to all jobs and steps in this workflow
 env:
