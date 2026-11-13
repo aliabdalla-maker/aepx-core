@@ -57,6 +57,29 @@ def offline_supervisor_transition(*, phase, snapshot=None, expected_name=None,
                     "argv": commands["kill_argv"]}
         return {"phase": "running", "action": "poll_by_id",
                 "container_id": commands["container_id"]}
+    if phase in ("stopped", "timed_out"):
+        if (snapshot is None or not expected_name or not expected_image_id or
+            not isinstance(expected_container_id, str)):
+            raise SandboxPolicyDenied("cleanup identity evidence required")
+        commands = verified_container_commands(
+            snapshot, expected_name=expected_name,
+            expected_image_id=expected_image_id,
+        )
+        if commands["container_id"] != expected_container_id:
+            raise SandboxPolicyDenied("cleanup container ID not fenced")
+        if phase == "stopped":
+            if snapshot["State"]["Running"]:
+                raise SandboxPolicyDenied("cannot remove running container as stopped")
+            return {"phase": "removing", "action": "remove_by_id",
+                    "container_id": expected_container_id,
+                    "argv": commands["cleanup_argv"]}
+        if snapshot["State"]["Running"]:
+            return {"phase": "timed_out", "action": "kill_by_id",
+                    "container_id": expected_container_id,
+                    "argv": commands["kill_argv"]}
+        return {"phase": "stopped", "action": "remove_by_id",
+                "container_id": expected_container_id,
+                "argv": commands["cleanup_argv"]}
     if phase == "removed":
         verify_offline_cleanup_absent(
             inspect_not_found,
