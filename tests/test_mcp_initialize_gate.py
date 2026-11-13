@@ -57,3 +57,11 @@ class TestInitializeGate(unittest.TestCase):
         with self.assertRaises(MCPContractDenied):
             validate_mcp_initialize_response(
                 **common,expected_server_name="untrusted")
+
+    def test_id_type_must_match_exactly(self):
+        for received,expected in ((11,"11"),("11",11),(1,True)):
+            value={**RESULT,"id":received}
+            with self.subTest(received=received,expected=expected),self.assertRaises(MCPContractDenied):
+                validate_mcp_initialize_response(
+                    response_body=json.dumps(value),expected_request_id=expected,
+                    client_versions=["2025-11-25"])

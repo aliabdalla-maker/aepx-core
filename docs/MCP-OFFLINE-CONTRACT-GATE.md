@@ -97,3 +97,7 @@ The PR workflow now watches POST, version-policy and initialize-gate files (prev
 ## Initialized notification contract
 
 `mcp_initialized_gate.validate_mcp_initialized_notification` validates the bounded JSON-RPC `notifications/initialized` message, rejects request IDs and unexpected payloads, and binds the supplied version to a trusted expected value. It does not transmit the notification, authenticate the initialization result or establish a live MCP session. CI compiles and tests the gate; the authenticated initialize/initialized handshake and interoperability remain pending.
+
+## Exact JSON-RPC ID type correlation
+
+The outbound POST and initialize response validators now reject numeric-string ID confusion (`9` versus `"9"`) and Python boolean/integer equivalence (`true` versus `1`) using exact type matching in addition to value matching. Regression tests cover both gates. This is offline validation only.

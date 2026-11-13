@@ -7,7 +7,8 @@ MAX_BODY = 262144
 
 def validate_mcp_post_request(*, endpoint, approved_endpoints, method,
                               headers, body, expected_request_id,
-                              negotiated_protocol_version=None,\n                              require_protocol_pin=False):
+                              negotiated_protocol_version=None,
+                              require_protocol_pin=False):
     validate_mcp_endpoint(endpoint=endpoint,approved_endpoints=approved_endpoints)
     if method != "POST" or not isinstance(headers,dict):
         raise MCPContractDenied("MCP requires a POST request")
@@ -26,7 +27,9 @@ def validate_mcp_post_request(*, endpoint, approved_endpoints, method,
     accept={part.strip().lower() for part in lowered.get("accept","").split(",")}
     if not {"application/json","text/event-stream"}.issubset(accept):
         raise MCPContractDenied("MCP POST must accept JSON and SSE")
-    if require_protocol_pin and negotiated_protocol_version is None:\n        raise MCPContractDenied("trusted MCP protocol pin required")\n    if negotiated_protocol_version is not None:
+    if require_protocol_pin and negotiated_protocol_version is None:
+        raise MCPContractDenied("trusted MCP protocol pin required")
+    if negotiated_protocol_version is not None:
         if (not isinstance(negotiated_protocol_version,str) or
             not negotiated_protocol_version or
             lowered.get("mcp-protocol-version") != negotiated_protocol_version):
@@ -54,6 +57,7 @@ def validate_mcp_post_request(*, endpoint, approved_endpoints, method,
         not isinstance(message.get("method"),str) or
         not message["method"] or "result" in message or "error" in message or
         message.get("id")!=expected_request_id or
+        type(message.get("id")) is not type(expected_request_id) or
         isinstance(message.get("id"),bool) or
         not isinstance(message.get("id"),(str,int))):
         raise MCPContractDenied("invalid or uncorrelated MCP JSON-RPC request")
