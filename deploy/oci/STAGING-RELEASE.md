@@ -99,3 +99,8 @@ AEPX_BACKUP_AGE_RECIPIENT='age1...' bash deploy/oci/backup-staging-encrypted.sh 
 ```
 
 The encrypted `.sql.gz.age` and checksum must be transferred off-host to access-controlled storage using an operator-approved mechanism. For recovery rehearsal, supply a private key file via `AEPX_BACKUP_AGE_IDENTITY=/secure/path/identity.txt` and run `bash deploy/oci/restore-staging-encrypted-rehearsal.sh /absolute/backup.sql.gz.age`. The script decrypts into a private temporary directory, validates gzip, and restores to a disposable PostgreSQL container, not staging or production. Do not store the private identity in Git or alongside backups. The temporary decrypted file may be written to disk during the rehearsal: use an encrypted filesystem and secure host. These scripts have been committed but have not yet been executed on OCI.
+
+
+## Encrypted recovery CI acceptance
+
+The OCI validation workflow includes a disposable `age` encryption/decryption and PostgreSQL restore fixture and verifies that a modified ciphertext is rejected by SHA-256 validation. The recovery identity must be an ordinary private file with no group/world permissions; the encrypted backup path must be absolute. A successful fixture does **not** establish that a real OCI backup is complete, that off-host copies are accessible, or that the application can recover within the required RTO/RPO. Run a separately approved real-data restore rehearsal before any release.
