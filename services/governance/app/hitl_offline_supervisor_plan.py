@@ -31,9 +31,11 @@ def offline_supervisor_plan(*, execution_id, image_digest, command,
     return {
         "name": name,
         "run_argv": tuple(run),
-        "kill_argv": ("docker", "kill", name),
+        # Do not emit destructive name-based commands. Bind to a verified
+        # daemon-issued 64-character container ID after inspect instead.
         "inspect_argv": ("docker", "inspect", "--type=container", name),
-        "cleanup_argv": ("docker", "rm", "--force", name),
+        "kill_argv": None,
+        "cleanup_argv": None,
         "timeout_seconds": timeout_seconds,
         "requires_cleanup_verification": True,
         "requires_identity_verification": True,
