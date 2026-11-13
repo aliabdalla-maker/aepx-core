@@ -81,3 +81,10 @@ In secure staging, Registry `POST /agents` and Trust `POST /trust/{entity_id}/ad
 ## CI persistence and sensitive logging
 
 The ephemeral integration workflow now restarts Registry and verifies that its test agent remains readable from PostgreSQL. A passing test proves only that CI's disposable environment persisted this record across an application restart; it does not establish recovery from host loss or an OCI backup. CI failure diagnostics intentionally omit application logs because DID responses and service credentials may be sensitive. Collect and redact logs only through an approved restricted incident process.
+
+
+## Monitoring tuning
+
+`deploy/oci/monitor-staging.sh` requires every container to report Docker health `healthy`; missing or unconfigured health checks fail closed. Optionally set `AEPX_ALERT_WEBHOOK_URL` to a trusted HTTPS endpoint in the monitor's runtime environment. The script sends a generic JSON `text` notification only on failure and never transmits credentials. Confirm the receiver accepts this payload format and test delivery before relying on it. Cron/systemd scheduling, delivery retries, deduplication, paging and escalation remain operator tasks. The webhook URL itself may be sensitive; store it in a restricted environment file, never in Git.
+
+Registry startup now requires Identity's healthy state. This improves initial ordering but does not guarantee continued downstream availability after startup; use the smoke test and monitor for ongoing checks.
