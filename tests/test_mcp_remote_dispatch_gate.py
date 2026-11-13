@@ -20,7 +20,7 @@ class RemoteDispatchGateTests(unittest.TestCase):
         self.ctx = VerifiedGatewayContext(
             tenant_id=self.intent.tenant_id, approval_id=self.intent.approval_id,
             action_hash=self.intent.action_hash, resource_id=self.intent.resource_id,
-            protocol_version=self.intent.protocol_version, tls_peer_verified=True,
+            protocol_version=self.intent.protocol_version, tool_name=self.intent.tool_name, tls_peer_verified=True,
             audience_verified=True, resource_authorized=True, approval_verified=True)
 
     def test_matching_assertions(self):
@@ -34,7 +34,7 @@ class RemoteDispatchGateTests(unittest.TestCase):
 
     def test_cross_tenant_and_approval_rejected(self):
         for field in ("tenant_id", "approval_id", "action_hash",
-                      "resource_id", "protocol_version"):
+                      "resource_id", "protocol_version", "tool_name"):
             with self.subTest(field=field), self.assertRaises(RemoteDispatchDenied):
                 validate_remote_dispatch(self.intent, replace(self.ctx, **{field: "mismatch"}))
 
@@ -49,3 +49,7 @@ class RemoteDispatchGateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_substituted_tool_name_rejected(self):
+        with self.assertRaises(RemoteDispatchDenied):
+            validate_remote_dispatch(replace(self.intent,tool_name="tool.delete"),self.ctx)
