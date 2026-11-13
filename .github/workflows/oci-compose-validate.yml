@@ -4,6 +4,9 @@ on:
     paths:
       - 'deploy/oci/**'
       - 'docker-compose.yml'
+      - 'services/identity/**'
+      - 'services/registry/**'
+      - 'services/trust/**'
       - '.github/workflows/oci-compose-validate.yml'
   workflow_dispatch:
 permissions:
@@ -152,10 +155,12 @@ jobs:
           from app.main import app
           client=TestClient(app)
           assert client.get("/health").status_code == 200
-          for endpoint in ("/token?subject=test-agent", "/did"):
-              assert client.post(endpoint).status_code == 403
-              assert client.post(endpoint, headers={"X-AEPX-Service-Key":"invalid"}).status_code == 403
-              response=client.post(endpoint, headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"})
-              assert response.status_code == 200, (endpoint, response.text)
+          token="/token?subject=test-agent"
+          assert client.post(token).status_code == 403
+          assert client.post(token, headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"}).status_code == 403
+          assert client.post("/did").status_code == 403
+          assert client.post("/did", headers={"X-AEPX-Service-Key":"invalid"}).status_code == 403
+          response=client.post("/did", headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"})
+          assert response.status_code == 200, response.text
           print("PASS: secure identity rejects unauthorized calls and permits internal service calls")
           PY
