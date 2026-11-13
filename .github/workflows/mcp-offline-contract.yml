@@ -37,6 +37,8 @@ on:
       - 'tests/test_mcp_initialize_gate.py'
       - 'platform/saas-ide/backend/app/mcp_initialized_gate.py'
       - 'tests/test_mcp_initialized_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_session_gate.py'
+      - 'tests/test_mcp_session_gate.py'
   push:
     branches: [master]
     paths:
@@ -61,6 +63,8 @@ on:
       - 'tests/test_mcp_initialize_gate.py'
       - 'platform/saas-ide/backend/app/mcp_initialized_gate.py'
       - 'tests/test_mcp_initialized_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_session_gate.py'
+      - 'tests/test_mcp_session_gate.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -79,7 +83,7 @@ jobs:
         run: python -m pip install 'SQLAlchemy>=2.0,<3.0'
       - name: Compile and test offline MCP gate
         run: |
-          python -m py_compile platform/saas-ide/backend/app/mcp_initialized_gate.py platform/saas-ide/backend/app/mcp_initialize_gate.py platform/saas-ide/backend/app/mcp_version_policy.py platform/saas-ide/backend/app/mcp_post_request_gate.py platform/saas-ide/backend/app/mcp_contract_gate.py platform/saas-ide/backend/app/mcp_dispatch_binding.py platform/saas-ide/backend/app/mcp_discovery_policy.py platform/saas-ide/backend/app/mcp_protocol_envelope.py platform/saas-ide/backend/app/mcp_response_gate.py platform/saas-ide/backend/app/mcp_sse_gate.py platform/saas-ide/backend/app/mcp_preflight.py platform/saas-ide/backend/app/mcp_db_preflight.py platform/saas-ide/backend/app/mcp_atomic_claim.py platform/saas-ide/backend/app/mcp_http_response_gate.py platform/saas-ide/backend/app/mcp_endpoint_policy.py platform/saas-ide/backend/app/mcp_dns_policy.py platform/saas-ide/backend/app/mcp_transport_policy.py
+          python -m py_compile platform/saas-ide/backend/app/mcp_session_gate.py platform/saas-ide/backend/app/mcp_initialized_gate.py platform/saas-ide/backend/app/mcp_initialize_gate.py platform/saas-ide/backend/app/mcp_version_policy.py platform/saas-ide/backend/app/mcp_post_request_gate.py platform/saas-ide/backend/app/mcp_contract_gate.py platform/saas-ide/backend/app/mcp_dispatch_binding.py platform/saas-ide/backend/app/mcp_discovery_policy.py platform/saas-ide/backend/app/mcp_protocol_envelope.py platform/saas-ide/backend/app/mcp_response_gate.py platform/saas-ide/backend/app/mcp_sse_gate.py platform/saas-ide/backend/app/mcp_preflight.py platform/saas-ide/backend/app/mcp_db_preflight.py platform/saas-ide/backend/app/mcp_atomic_claim.py platform/saas-ide/backend/app/mcp_http_response_gate.py platform/saas-ide/backend/app/mcp_endpoint_policy.py platform/saas-ide/backend/app/mcp_dns_policy.py platform/saas-ide/backend/app/mcp_transport_policy.py
           python -m unittest discover -s tests -p 'test_mcp_contract_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_dispatch_binding.py' -v
           python -m unittest discover -s tests -p 'test_mcp_discovery_policy.py' -v
@@ -97,3 +101,4 @@ jobs:
           python -m unittest discover -s tests -p 'test_mcp_version_policy.py' -v
           python -m unittest discover -s tests -p 'test_mcp_initialize_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_initialized_gate.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_session_gate.py' -v
