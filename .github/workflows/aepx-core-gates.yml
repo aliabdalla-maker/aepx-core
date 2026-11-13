@@ -30,6 +30,8 @@ on:
       - '.github/workflows/aepx-core-gates.yml'
       - 'deploy/oci-always-free/**'
       - 'scripts/aepx-oci-compose-guard.py'
+      - 'scripts/aepx-oci-staging-smoke.py'
+      - 'tests/test_aepx_oci_staging_smoke.py'
       - 'docs/AEPX-OCI-Always-Free-Staging.md'
   push:
     branches: [master]
@@ -62,6 +64,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_migration_check.py' -v
       - name: Validate OCI Always Free staging guard
         run: python3 scripts/aepx-oci-compose-guard.py
+      - name: Test OCI staging smoke checks offline
+        run: python3 -m unittest discover -s tests -p 'test_aepx_oci_staging_smoke.py' -v
       - name: Validate OCI staging Compose rendering
         env:
           AEPX_POSTGRES_PASSWORD: ci-only-placeholder-not-a-real-secret-123
