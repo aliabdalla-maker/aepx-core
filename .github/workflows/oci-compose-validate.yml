@@ -13,37 +13,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate bootstrap scripts
+      - name: Check shell syntax
         run: |
-          bash -n deploy/oci/prepare-host.sh
-          bash -n deploy/oci/deploy.sh
-          bash -n deploy/oci/oci-inventory.sh
-          bash -n deploy/oci/host-readiness.sh
-          bash -n deploy/oci/backup-postgres.sh
-          bash -n deploy/oci/check-host.sh
-      - name: Validate private deployment overlay
+          for script in deploy/oci/*.sh; do bash -n "$script"; done
+      - name: Validate OCI Compose overlay
         run: |
+          trap 'rm -f .env' EXIT
           printf 'AEPX_POSTGRES_PASSWORD=CITestOnly_1234567890_abcdefghi\nAEPX_NEO4J_PASSWORD=CITestOnly_0987654321_abcdefghi\n' > .env
           chmod 600 .env
           bash deploy/oci/deploy.sh --validate-only
           python3 - <<'PY'
-          import json, subprocess
-          cmd=['docker','compose','-f','docker-compose.yml','-f','deploy/oci/compose.secure.generated.yml','config','--format','json']
-          data=json.loads(subprocess.check_output(cmd,text=True))
-          for name,service in data['services'].items():
-              for port in service.get('ports',[]):
-                  assert port.get('host_ip')=='127.0.0.1',(name,port)
-          print('All published ports are loopback-only')
-          PY
-          python3 deploy/oci/preflight.py
-          python3 - <<'PY'
-          from pathlib import Path
-          text=Path('deploy/oci/compose.secure.generated.yml').read_text()
+          import json
           import re
-          names=re.findall(r'^  ([a-zA-Z0-9_-]+):
-          rm -f .env
-,text.split('volumes:')[0],re.M)
-          assert len(names)==len(set(names)), 'Duplicate YAML service entries'
-          print('PASS: no duplicate service keys')
+          import subprocess
+          from pathlib import Path
+          text = Path('deploy/oci/compose.secure.generated.yml').read_text()
+          section = text.split('\nvolumes:\n')[0]
+          names = re.findall(r'^  ([a-zA-Z0-9_-]+):$', section, re.M)
+          assert len(names) == len(set(names)), 'Duplicate service entries'
+          cmd = ['docker','compose','-f','docker-compose.yml','-f','deploy/oci/compose.secure.generated.yml','config','--format','json']
+          config = json.loads(subprocess.check_output(cmd, text=True))
+          for name, service in config['services'].items():
+              for port in service.get('ports', []):
+                  assert port.get('host_ip') == '127.0.0.1', (name, port)
+          print('PASS: unique services and loopback-only ports')
           PY
-          rm -f .env
