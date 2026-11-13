@@ -24,6 +24,9 @@ services:
       interval: 10s
       retries: 5
   identity:
+    environment:
+      AEPX_SECURE_MODE: "true"
+      IDENTITY_JWT_SECRET: ${AEPX_IDENTITY_JWT_SECRET:?Set AEPX_IDENTITY_JWT_SECRET}
     build:
       context: ../../services/identity
     restart: unless-stopped
