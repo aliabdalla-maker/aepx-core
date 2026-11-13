@@ -54,6 +54,25 @@ class DeploymentPolicyTests(unittest.TestCase):
             "name: ambiguous\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n  check:\n    runs-on: ubuntu-latest\n",
             "duplicate mapping key: check")
 
+
+    def test_validator_rejects_nested_duplicate_step_keys(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: nested\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo safe\n        run: echo unsafe\n",
+            "duplicate mapping key: run")
+
+    def test_validator_rejects_invalid_yaml(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: broken\non: [workflow_dispatch\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
+            "invalid YAML")
+
+    def test_validator_rejects_duplicate_nested_permissions(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: permissions\non:\n  workflow_dispatch:\npermissions:\n  contents: read\n  contents: write\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
+            "duplicate mapping key: contents")
+
     def _assert_rejected(self, name, content, expected):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
