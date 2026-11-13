@@ -16,6 +16,13 @@ class OutboxTests(unittest.TestCase):
         second=m.Outbox(self.path).enqueue("approval.requested",{"id":"x"},"key-1")
         self.assertEqual(first,second)
         self.assertEqual(len(self.store.pending()),1)
+    def test_conflicting_idempotency_key_rejected(self):
+        self.store.enqueue("approval.requested",{"id":"x"},"same-key")
+        with self.assertRaises(ValueError):
+            self.store.enqueue("approval.requested",{"id":"other"},"same-key")
+        with self.assertRaises(ValueError):
+            self.store.enqueue("approval.consumed",{"id":"x"},"same-key")
+        self.assertEqual(len(self.store.pending()),1)
     def test_delivery_state(self):
         event=self.store.enqueue("approval.requested",{"id":"x"},"key-2")
         self.assertTrue(self.store.mark_delivered(event))
