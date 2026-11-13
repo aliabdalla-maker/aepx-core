@@ -1,0 +1,26 @@
+name: AEP-X post-PR56 dispatcher validation
+on:
+  pull_request:
+    paths:
+      - 'services/governance/app/hitl_dispatcher.py'
+      - 'services/governance/app/hitl_outbox.py'
+      - 'tests/test_aepx_hitl_dispatcher.py'
+      - 'tests/test_aepx_hitl_outbox.py'
+      - '.github/workflows/aepx-post-pr56-dispatcher.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile changed modules
+        run: python -m py_compile services/governance/app/hitl_dispatcher.py services/governance/app/hitl_outbox.py
+      - name: Dispatcher and lease unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_aepx_hitl_dispatcher.py' -v
+          python -m unittest discover -s tests -p 'test_aepx_hitl_outbox.py' -v
