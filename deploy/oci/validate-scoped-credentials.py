@@ -1,44 +1,46 @@
 #!/usr/bin/env python3
-"""Fail-closed validation of scoped service credentials for OCI staging start.
-
-Runs before any Docker Compose mutation. Never print secret values.
-"""
-import hmac
+"""Fail-closed scoped credential check before OCI staging startup."""
 import os
+import re
 import sys
 from pathlib import Path
 
-NAMES=(
-    "AEPX_REGISTRY_IDENTITY_KEY",
-    "AEPX_REGISTRY_WRITE_KEY",
-    "AEPX_TRUST_WRITE_KEY",
-)
+SCOPED=("AEPX_REGISTRY_IDENTITY_KEY","AEPX_REGISTRY_WRITE_KEY","AEPX_TRUST_WRITE_KEY")
+LEGACY=("AEPX_POSTGRES_PASSWORD","AEPX_NEO4J_PASSWORD",
+        "AEPX_IDENTITY_JWT_SECRET","AEPX_INTERNAL_SERVICE_KEY")
+PATTERN=re.compile(r"[A-Za-z0-9_-]{32,128}\\Z")
+
 def validate(env):
-    if env.get("AEPX_REQUIRE_SCOPED_KEYS") != "true":
-        raise ValueError("AEPX_REQUIRE_SCOPED_KEYS must be true for staging startup")
-    secrets=[]
-    for name in NAMES:
-        value=env.get(name,"")
-        if len(value)<32 or value.strip()!=value or any(c in value for c in "\r\n"):
-            raise ValueError(f"{name} must be a distinct, nonempty credential of at least 32 characters")
-        secrets.append(value)
-    for i in range(len(secrets)):
-        for j in range(i):
-            if hmac.compare_digest(secrets[i],secrets[j]):
-                raise ValueError("scoped service credentials must be distinct")
+    if env.get("AEPX_REQUIRE_SCOPED_KEYS")!="true":
+        raise ValueError("strict scoped-key mode required for staging")
+    values=[]
+    for key in SCOPED:
+        value=env.get(key,"")
+        if not isinstance(value,str) or not PATTERN.fullmatch(value):
+            raise ValueError(f"{key} requires 32-128 URL-safe characters")
+        values.append(value)
+    if len(set(values))!=len(values):
+        raise ValueError("scoped credentials must be mutually distinct")
+    if any(value==env.get(key) for value in values for key in LEGACY):
+        raise ValueError("scoped credentials must differ from shared and database secrets")
     return True
 
-def effective_env():
+def effective_env(path=Path(".env"),environ=None):
+    """Parse the Compose .env subset without sourcing shell code."""
     values={}
-    path=Path(".env")
     if path.is_file():
         for line in path.read_text().splitlines():
             line=line.strip()
-            if not line or line.startswith("#") or "=" not in line:
+            if not line or line.startswith("#"):
                 continue
+            if "=" not in line:
+                raise ValueError("malformed .env entry")
             key,value=line.split("=",1)
-            values[key.strip()]=value.strip().strip("\\\"").strip("\'")
-    values.update(os.environ)
+            key=key.strip()
+            if key in values:
+                raise ValueError("duplicate .env key")
+            values[key]=value.strip().strip('"').strip("'")
+    values.update(os.environ if environ is None else environ)
     return values
 
 if __name__=="__main__":
@@ -47,4 +49,4 @@ if __name__=="__main__":
     except ValueError as exc:
         print(f"BLOCKED: {exc}",file=sys.stderr)
         raise SystemExit(3)
-    print("PASS: scoped staging credentials configured")
+    print("PASS: distinct scoped credentials validated")
