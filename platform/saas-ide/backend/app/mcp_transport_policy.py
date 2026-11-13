@@ -6,7 +6,7 @@ connection destination, TLS identity, token audience and redirect policy.
 """
 from .mcp_contract_gate import MCPContractDenied
 from .mcp_endpoint_policy import validate_mcp_endpoint
-from .mcp_dns_policy import validate_mcp_dns_answers
+from .mcp_dns_policy import validate_mcp_dns_answers, validate_mcp_connected_peer
 from .mcp_http_response_gate import validate_mcp_http_response
 
 
@@ -24,13 +24,13 @@ def prepare_mcp_transport_policy(*, endpoint, approved_endpoints, dns_answers,
 
 
 def validate_mcp_transport_result(*, policy, endpoint, server_id, status_code,
-                                  content_type, response_body, expected_request_id):
+                                  content_type, response_body, expected_request_id,\n                                  connected_peer=None):
     """Check immutable preflight identity before offline response validation."""
     if (not isinstance(policy,dict) or policy.get("endpoint") != endpoint or
         policy.get("server_id") != server_id or
         not isinstance(policy.get("addresses"),tuple) or
         not policy["addresses"]):
         raise MCPContractDenied("MCP transport policy mismatch")
-    return validate_mcp_http_response(
+    if connected_peer is not None:\n        validate_mcp_connected_peer(\n            endpoint=endpoint, approved_endpoints={policy["endpoint"]},\n            addresses=policy["addresses"], peer_address=connected_peer\n        )\n    return validate_mcp_http_response(
         status_code=status_code,content_type=content_type,
         response_body=response_body,expected_request_id=expected_request_id)
