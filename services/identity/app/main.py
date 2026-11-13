@@ -11,7 +11,7 @@ SECRET = os.getenv("IDENTITY_JWT_SECRET", "dev-only-change-me")
 if os.getenv("AEPX_SECURE_MODE") == "true":
     if len(SECRET) < 32 or SECRET == "dev-only-change-me":
         raise RuntimeError("IDENTITY_JWT_SECRET must be a strong secret in secure mode")
-if os.getenv("AEPX_SECURE_MODE") == "true" and len(os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")) < 32:
+if os.getenv("AEPX_SECURE_MODE") == "true" and os.getenv("AEPX_REQUIRE_SCOPED_KEYS") != "true" and len(os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")) < 32:
     raise RuntimeError("AEPX_INTERNAL_SERVICE_KEY must be configured in secure mode")
 app = FastAPI(title="AEP-X Identity Service", version="0.0.1")
 
@@ -32,7 +32,10 @@ def issue_token(subject: str):
 @app.post("/did")
 def issue_did(x_aepx_service_key: str | None = Header(default=None)):
     if os.getenv("AEPX_SECURE_MODE") == "true":
-        expected = os.getenv("AEPX_REGISTRY_IDENTITY_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        scoped = os.getenv("AEPX_REGISTRY_IDENTITY_KEY", "")
+        if os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(scoped) < 32:
+            raise HTTPException(503, "Scoped service credential not configured")
+        expected = scoped or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
         if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
             raise HTTPException(status_code=403, detail="Service authentication required")
     # RFC-0006 — did:key: self-certifying, no chain or registry needed to
