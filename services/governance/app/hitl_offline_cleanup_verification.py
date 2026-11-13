@@ -20,6 +20,20 @@ def verify_offline_container_snapshot(snapshot, *, expected_name, expected_image
     host = snapshot.get("HostConfig")
     if not isinstance(host, dict) or host.get("NetworkMode") != "none" or host.get("Privileged") is not False or host.get("ReadonlyRootfs") is not True:
         raise SandboxPolicyDenied("offline isolation not verified")
+    if (host.get("CapDrop") != ["ALL"] or
+        host.get("SecurityOpt") is None or
+        not isinstance(host["SecurityOpt"], list) or
+        not any(opt in ("no-new-privileges", "no-new-privileges=true")
+                for opt in host["SecurityOpt"]) or
+        not any(opt in ("seccomp=builtin", "seccomp") for opt in host["SecurityOpt"])):
+        raise SandboxPolicyDenied("security controls not verified")
+    if (host.get("PidsLimit") is None or
+        type(host["PidsLimit"]) is not int or
+        not 8 <= host["PidsLimit"] <= 64 or
+        type(host.get("Memory")) is not int or
+        not 64 * 1024 * 1024 <= host["Memory"] <= 512 * 1024 * 1024 or
+        host.get("MemorySwap") != host["Memory"]):
+        raise SandboxPolicyDenied("resource limits not verified")
     state = snapshot.get("State")
     if not isinstance(state, dict) or type(state.get("Running")) is not bool:
         raise SandboxPolicyDenied("container state not verified")
