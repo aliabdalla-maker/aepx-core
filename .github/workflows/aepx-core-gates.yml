@@ -13,6 +13,8 @@ on:
       - 'scripts/aepx-local-outbox.py'
       - 'tests/test_aepx_local_outbox.py'
       - 'db/migrations/20261113_hitl_staging.sql'
+      - 'scripts/aepx-hitl-migration-check.py'
+      - 'tests/test_aepx_hitl_migration_check.py'
       - 'tests/test_aepx_hitl_store.py'
       - 'tests/test_aepx_agentic_contracts.py'
       - 'docs/AEPX-Agentic-Next-Implementation.md'
@@ -36,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Python syntax
-        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py scripts/aepx-hitl-store.py scripts/aepx-local-outbox.py
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py scripts/aepx-hitl-store.py scripts/aepx-local-outbox.py scripts/aepx-hitl-migration-check.py
       - name: Run core acceptance regression tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
       - name: Run agentic acceptance contract tests
@@ -51,6 +53,10 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_store.py' -v
       - name: Run local outbox tests
         run: python3 -m unittest discover -s tests -p 'test_aepx_local_outbox.py' -v
+      - name: Validate HITL migration security invariants
+        run: python3 scripts/aepx-hitl-migration-check.py
+      - name: Test HITL migration security invariants
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_migration_check.py' -v
       - name: Validate shell syntax
         run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh
       - name: Check static security blockers (informational for development)
