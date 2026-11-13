@@ -3,6 +3,8 @@
 # Never use the root reference docker-compose.yml in production.
 services:
   postgres:
+    mem_limit: 768m
+    cpus: "0.75"
     image: pgvector/pgvector:pg16
     restart: unless-stopped
     environment:
@@ -17,22 +19,30 @@ services:
       interval: 10s
       retries: 8
   redis:
+    mem_limit: 192m
+    cpus: "0.25"
     image: redis:7-alpine
     restart: unless-stopped
     command: ["redis-server","--save","60","1","--appendonly","yes"]
     volumes:
       - redisdata:/data
   identity:
+    mem_limit: 192m
+    cpus: "0.25"
     build: ../../services/identity
     restart: unless-stopped
     depends_on: [postgres]
   trust:
+    mem_limit: 256m
+    cpus: "0.35"
     build: ../../services/trust
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
     depends_on: [postgres]
   registry:
+    mem_limit: 256m
+    cpus: "0.35"
     build: ../../services/registry
     restart: unless-stopped
     environment:
@@ -40,20 +50,28 @@ services:
       IDENTITY_URL: http://identity:8000
     depends_on: [postgres,identity]
   memory:
+    mem_limit: 256m
+    cpus: "0.35"
     build: ../../services/memory
     restart: unless-stopped
     depends_on: [postgres,redis]
   cache:
+    mem_limit: 192m
+    cpus: "0.25"
     build: ../../services/cache
     restart: unless-stopped
     depends_on: [redis]
   governance:
+    mem_limit: 256m
+    cpus: "0.35"
     build: ../../services/governance
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
     depends_on: [postgres]
   gateway:
+    mem_limit: 256m
+    cpus: "0.35"
     build: ../../services/gateway
     restart: unless-stopped
     ports: ["127.0.0.1:8000:8000"]
