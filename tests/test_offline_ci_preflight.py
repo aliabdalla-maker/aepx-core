@@ -50,6 +50,21 @@ class OfflinePreflightEvidenceTests(unittest.TestCase):
             evidence = json.loads(output.read_text(encoding="utf-8"))
             self.assertIsNone(evidence["git_commit"])
 
+    def test_missing_executable_fails_closed_and_writes_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "evidence.json"
+            def run(command, **kwargs):
+                if command[:2] == ["git", "rev-parse"]:
+                    return subprocess.CompletedProcess(command, 0, stdout="test-commit")
+                raise FileNotFoundError("missing executable")
+            with patch.object(module.importlib.util, "find_spec", return_value=object()), \
+                 patch.object(module.subprocess, "run", side_effect=run):
+                self.assertEqual(module.main(["--json-output", str(output)]), 1)
+            evidence = json.loads(output.read_text(encoding="utf-8"))
+            self.assertFalse(evidence["overall_passed"])
+            self.assertTrue(all(c["exit_code"] == 127 and not c["passed"]
+                                for c in evidence["checks"]))
+
     @staticmethod
     def _run_success(command, **kwargs):
         if command[:2] == ["git", "rev-parse"]:

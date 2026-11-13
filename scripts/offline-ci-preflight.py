@@ -50,6 +50,10 @@ def main(argv=None):
         except subprocess.TimeoutExpired:
             exit_code = 124
             timed_out = True
+        except OSError as exc:
+            exit_code = 127
+            timed_out = False
+            print(f"ERROR: check could not start: {type(exc).__name__}: {exc}", file=sys.stderr)
         evidence["checks"].append({
             "command": command[1:],
             "exit_code": exit_code,
