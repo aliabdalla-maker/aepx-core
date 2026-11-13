@@ -47,7 +47,11 @@ def validate_mcp_response(status, headers, *, policy):
         raise MCPResponseDenied("transfer encoding requires separate framed transport")
     if "location" in normalized:
         raise MCPResponseDenied("redirect location not permitted")
-    content_type = normalized.get("content-type", "").split(";", 1)[0].strip().lower()
+    raw_media = normalized.get("content-type", "")
+    parts = raw_media.split(";")
+    content_type = parts[0].strip().lower()
+    if len(parts) > 2 or (len(parts) == 2 and parts[1].strip().lower() != "charset=utf-8"):
+        raise MCPResponseDenied("unsupported or ambiguous content type parameters")
     if content_type not in policy.allowed_media_types:
         raise MCPResponseDenied("unsupported content type")
     length = normalized.get("content-length")
