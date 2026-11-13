@@ -18,7 +18,12 @@ class SnapshotPgAcceptance(unittest.TestCase):
         import psycopg
         cls.psycopg=psycopg
         cls.dsn=os.environ["HITL_IDENTITY_TEST_DSN"]
-        with psycopg.connect(cls.dsn) as conn:
+        # Validate the actual connected database before any DDL or writes.
+        # An opt-in environment flag alone is not a production safety barrier.
+        with psycopg.connect(cls.dsn,connect_timeout=5) as conn:
+            actual_db=conn.execute("SELECT current_database()").fetchone()[0]
+            if actual_db != "identity_test":
+                raise RuntimeError("isolated test database identity_test required")
             conn.execute("CREATE SCHEMA IF NOT EXISTS hitl")
             conn.execute("""CREATE TABLE IF NOT EXISTS hitl.identity_authority_sync (
                 tenant_id uuid NOT NULL, issuer text NOT NULL,
