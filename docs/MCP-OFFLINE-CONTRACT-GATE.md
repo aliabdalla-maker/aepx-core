@@ -121,3 +121,7 @@ The MCP offline workflow now uses the same file filters for pull requests and ma
 ## MCP CI self-audit and remote intent coverage
 
 `tests/audit_mcp_ci.py` now fails the offline workflow if pull-request and master-push filters diverge, MCP source/test files are missing from path filters, or any MCP unit test module is absent from the command list. The workflow includes remote dispatch and intent ledger modules/tests previously omitted. The PostgreSQL intent integration suite is invoked but its tests require explicit disposable PostgreSQL environment variables and may skip in the standard offline job; a skipped suite is **not** PostgreSQL integration evidence. No live MCP execution or deployment is enabled.
+
+## Remote intent PostgreSQL DDL integrity
+
+The intent schema had a corrupted duplicated SQL string with unterminated CHECK patterns, making disposable PostgreSQL integration fail even when tests were enabled. The repair restores one CREATE TABLE, one RLS policy, strict tenant scoping and deduplication constraints. Ledger unit-test syntax is also repaired. This does not run a migration; test against a disposable database with non-bypass-RLS runtime credentials before any deployment. Production schema changes require a separate reviewed migration and rollback plan.
