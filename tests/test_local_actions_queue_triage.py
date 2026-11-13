@@ -44,6 +44,21 @@ class QueueTriageTests(unittest.TestCase):
                                          fetch=failing_fetch)
         self.assertEqual(evidence[0]["error_type"], "OSError")
 
+    def test_completed_failures_without_jobs_are_reported(self):
+        calls = []
+        def fetch(url, token):
+            calls.append(url)
+            return {"jobs": []}
+        runs = [{"id": i, "status": "completed", "conclusion": "failure",
+                 "name": "gate"} for i in range(10)]
+        evidence = triage.failed_before_jobs_evidence("org/repo", runs, "fake", fetch=fetch)
+        self.assertEqual(len(calls), 5)
+        self.assertTrue(all(item["no_jobs_returned"] for item in evidence))
+
+    def test_successful_runs_are_excluded_from_failure_sample(self):
+        runs = [{"id": 1, "status": "completed", "conclusion": "success"}]
+        self.assertEqual(triage.failed_before_jobs_evidence("org/repo", runs, "fake"), [])
+
     def test_queued_sample_is_bounded(self):
         now = datetime.datetime(2026, 11, 13, tzinfo=datetime.timezone.utc)
         runs = [{"id": i, "status": "queued", "created_at": "2026-11-13T00:00:00Z"}
