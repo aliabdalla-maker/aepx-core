@@ -68,6 +68,7 @@ services:
       start_period: 20s
     environment:
       AEPX_REQUIRE_DATABASE: "true"
+      AEPX_INTERNAL_SERVICE_KEY: ${AEPX_INTERNAL_SERVICE_KEY:?Set AEPX_INTERNAL_SERVICE_KEY}
       DATABASE_URL: postgresql://aepx:${AEPX_POSTGRES_PASSWORD:?Set AEPX_POSTGRES_PASSWORD}@postgres:5432/aepx
     depends_on:
       postgres:
