@@ -50,6 +50,7 @@ PY
       exit 3
     }
     python3 deploy/oci/validate-scoped-credentials.py
+    python3 deploy/oci/check-staging-policy.py
     python3 deploy/oci/verify-image-platforms.py
     bash deploy/oci/verify-release-gates.sh
     [[ "${AEPX_BACKUP_RESTORE_VERIFIED:-}" == "yes" ]] || {
