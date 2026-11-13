@@ -81,3 +81,16 @@ jobs:
             exit 1
           fi
           echo "PASS: staging requires explicit operator approval"
+      - name: Build isolated staging application images
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml build identity trust registry
