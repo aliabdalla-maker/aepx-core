@@ -6,6 +6,7 @@ on:
       - 'platform/saas-ide/backend/app/mcp_remote_intent_reservation.py'
       - 'platform/saas-ide/backend/app/mcp_remote_intent_schema.py'
       - 'platform/saas-ide/backend/app/mcp_remote_tenant_context.py'
+      - 'tests/test_mcp_remote_tenant_context.py'
       - '.github/workflows/mcp-reservation-postgres.yml'
   workflow_dispatch:
 permissions:
@@ -51,5 +52,6 @@ jobs:
           AEPX_TEST_PG_DSN: postgresql://aepx_test:disposable-only@localhost:5432/aepx_acceptance
           AEPX_TEST_PG_RUNTIME_DSN: postgresql://aepx_runtime:runtime-only@localhost:5432/aepx_acceptance
         run: |
-          python -m py_compile tests/test_mcp_remote_intent_postgres.py
+          python -m py_compile tests/test_mcp_remote_intent_postgres.py tests/test_mcp_remote_tenant_context.py platform/saas-ide/backend/app/mcp_remote_tenant_context.py
+          python -m unittest discover -s tests -p 'test_mcp_remote_tenant_context.py' -v
           python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
