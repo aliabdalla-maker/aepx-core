@@ -12,6 +12,18 @@ def connection():
     cur=db.cursor.return_value.__enter__.return_value
     return db,cur
 class LeaseTests(unittest.TestCase):
+    def test_lease_preflight_rejects_invalid_attempt(self):
+        db,_=connection()
+        with self.assertRaises(ValueError):
+            m.lease_is_current(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",attempt_number=0)
+    def test_lease_preflight_checks_tenant_and_fence(self):
+        db,cur=connection()
+        cur.fetchone.return_value=(True,)
+        self.assertTrue(m.lease_is_current(db,tenant_id=TENANT,event_id=EVENT,worker_id="w",attempt_number=2))
+        sql=" ".join(x.args[0] for x in cur.execute.call_args_list)
+        self.assertIn("leased_until>now()",sql)
+        self.assertIn("attempts=%s",sql)
+        db.commit.assert_called_once()
     def test_reap_exhausted_uses_locked_tenant_scope(self):
         db,cur=connection()
         cur.fetchall.return_value=[(EVENT,)]
