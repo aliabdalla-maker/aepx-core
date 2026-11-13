@@ -33,6 +33,29 @@ class HitlApiTests(unittest.TestCase):
         p=VerifiedPrincipal("worker",self.tenant,frozenset({"hitl:execute"}),"issuer")
         with patch("app.hitl_api.verify_bearer",return_value=p),patch.dict(os.environ,{"HITL_DATABASE_URL":""}):
             self.assertEqual(self.client.post("/hitl/consume",json=self.body).status_code,503)
+    def test_malformed_idempotency_key_rejected(self):
+        self.body["idempotency_key"]="bad key with spaces"
+        self.assertEqual(self.client.post("/hitl/consume",json=self.body).status_code,422)
+    def test_unicode_idempotency_key_rejected(self):
+        self.body["idempotency_key"]="répétition-1234"
+        self.assertEqual(self.client.post("/hitl/consume",json=self.body).status_code,422)
+    def test_approved_request_enqueues_only(self):
+        from unittest.mock import MagicMock
+        p=VerifiedPrincipal("worker",self.tenant,frozenset({"hitl:execute"}),"issuer")
+        fake=MagicMock()
+        fake.__enter__.return_value=fake
+        with patch("app.hitl_api.verify_bearer",return_value=p),patch.dict(os.environ,{"HITL_DATABASE_URL":"postgresql://test"}),patch("psycopg.connect",return_value=fake),patch("app.hitl_api.consume_with_outbox",return_value="event-123") as enqueue:
+            response=self.client.post("/hitl/consume",json=self.body)
+        self.assertEqual(response.status_code,202)
+        self.assertEqual(response.json(),{"status":"queued","event_id":"event-123"})
+        self.assertEqual(enqueue.call_args.kwargs["actor_id"],"worker")
+        self.assertEqual(str(enqueue.call_args.kwargs["tenant_id"]),str(self.tenant))
+    def test_persistence_error_is_redacted(self):
+        p=VerifiedPrincipal("worker",self.tenant,frozenset({"hitl:execute"}),"issuer")
+        with patch("app.hitl_api.verify_bearer",return_value=p),patch.dict(os.environ,{"HITL_DATABASE_URL":"postgresql://test"}),patch("psycopg.connect",side_effect=RuntimeError("secret database password")):
+            response=self.client.post("/hitl/consume",json=self.body)
+        self.assertEqual(response.status_code,503)
+        self.assertNotIn("secret",response.text)
     def test_empty_action_rejected(self):
         self.body["action"]={}
         self.assertEqual(self.client.post("/hitl/consume",json=self.body).status_code,422)
