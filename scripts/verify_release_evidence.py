@@ -35,7 +35,7 @@ def main():
         p.error("required workflows must be unique and nonempty")
     try:
         raw=subprocess.check_output(
-            ["gh","api",f"repos/{a.repo}/actions/runs","--paginate",
+            ["gh","api","-X","GET",f"repos/{a.repo}/actions/runs","--paginate",
              "-f","per_page=100","-f",f"head_sha={a.sha}"],
             text=True,stderr=subprocess.PIPE,timeout=90)
         # --paginate may return multiple JSON objects; decode each in order.
