@@ -15,7 +15,6 @@ has_memory() {
 }
 has_disk() { [[ "$(df -Pk . | awk 'NR==2 {print $4}')" -ge 10000000 ]]; }
 has_secrets() { python3 deploy/oci/validate-secrets.py; }
-has_private_compose() { bash deploy/oci/deploy.sh --validate-only; }
 has_staging_compose() { bash deploy/oci/staging.sh --validate; }
 has_arch() { case "$(uname -m)" in x86_64|aarch64|arm64|amd64) return 0;; *) return 1;; esac; }
 check is_ubuntu
