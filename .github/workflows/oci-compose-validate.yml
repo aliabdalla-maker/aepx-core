@@ -165,6 +165,7 @@ jobs:
           response=client.post("/did", headers={"X-AEPX-Service-Key":"abcdefghijklmnopqrstuvwxyz0123456789"})
           assert response.status_code == 200, response.text
           assert response.json().get("did", "").startswith("did:key:"), response.text
+          assert "private_key_hex" not in response.json(), "Secure Identity leaked signing key"
           print("PASS: secure identity rejects unauthorized calls and permits internal service calls")
           PY
       - name: Exercise Registry to Identity authentication contract
