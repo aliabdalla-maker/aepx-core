@@ -7,29 +7,24 @@ concurrency:
   group: hitl-sequential-1000
   cancel-in-progress: false
 jobs:
-  batches:
-    strategy:
-      fail-fast: true
-      max-parallel: 1
-      matrix:
-        batch: [1,2,3,4,5,6,7,8,9,10]
+  sequential:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - run: python -m pip install -r services/governance/requirements.txt pytest httpx
-      - name: Run batch of 100 sequential offline acceptance passes
+      - name: Run strict 1-to-1000 serial acceptance
         env:
           AEPX_SEQUENTIAL_ACCEPTANCE_APPROVED: 'yes'
           PYTHONPATH: services/governance
-        run: python scripts/sequential_acceptance_100.py --count 100 --report artifacts/batch-${{ matrix.batch }}.jsonl
-      - name: Upload per-batch evidence
+        run: python scripts/sequential_acceptance_1000.py
+      - name: Upload all per-batch reports and summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: sequential-batch-${{ matrix.batch }}
-          path: artifacts/batch-${{ matrix.batch }}.jsonl
+          name: sequential-1000-evidence
+          path: artifacts/sequential-1000/
           if-no-files-found: warn
