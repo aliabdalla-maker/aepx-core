@@ -5,6 +5,7 @@ An external, separately authorized executor must implement actual engineering.
 """
 import argparse
 import json
+import math
 import os
 import tempfile
 from pathlib import Path
@@ -35,7 +36,9 @@ def next_checkpoint(data, *, outcome, evidence, max_spend_usd, spent_usd):
     if type(evidence) is not str or not evidence.strip() or len(evidence) > 2048:
         raise RunnerDenied("human-readable evidence required")
     if (type(max_spend_usd) not in (float, int) or type(spent_usd) not in (float, int)
-            or not 0 <= spent_usd <= max_spend_usd or max_spend_usd <= 0):
+            or not math.isfinite(float(spent_usd))
+            or not math.isfinite(float(max_spend_usd))
+            or not 0 <= spent_usd < max_spend_usd or max_spend_usd <= 0):
         raise RunnerDenied("invalid or exhausted spend budget")
     if data["iteration"] >= data["max_iterations"]:
         raise RunnerDenied("iteration limit reached")
