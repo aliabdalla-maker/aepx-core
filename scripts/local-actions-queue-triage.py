@@ -125,6 +125,7 @@ def main(argv=None):
             {"id": run.get("id"), "name": run.get("name"),
              "workflow_path": run.get("path"), "head_sha": run.get("head_sha"),
              "status": run.get("status"), "conclusion": run.get("conclusion"),
+             "created_at": run.get("created_at"), "run_attempt": run.get("run_attempt"),
              "url": run.get("html_url")}
             for run in data.get("workflow_runs", [])
         ]
