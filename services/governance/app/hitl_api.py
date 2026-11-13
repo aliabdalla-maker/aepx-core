@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field, field_validator
 from app.hitl_oidc import verify_bearer, AuthenticationDenied
 from app.hitl_authz import authorize_consume, AuthorizationDenied
 from app.hitl_postgres import consume_with_outbox, ApprovalError
+from app.hitl_replay import find_matching_replay
 
 router=APIRouter(prefix="/hitl",tags=["hitl"])
 
@@ -45,7 +46,20 @@ def consume(request: ConsumeRequest, authorization: str | None=Header(default=No
                 approval_id=request.approval_id,action=request.action,
                 idempotency_key=request.idempotency_key,actor_id=actor)
     except ApprovalError as exc:
-        raise HTTPException(status_code=409,detail="Approval not consumable") from exc
+        # Only a previously committed event matching the entire verified
+        # tenant/actor/action/approval tuple can be returned as a replay.
+        try:
+            import psycopg
+            with psycopg.connect(dsn,connect_timeout=3) as connection:
+                prior=find_matching_replay(
+                    connection,tenant_id=request.tenant_id,
+                    approval_id=request.approval_id,action=request.action,
+                    idempotency_key=request.idempotency_key,actor_id=actor)
+        except Exception as db_exc:
+            raise HTTPException(status_code=503,detail="HITL persistence unavailable") from db_exc
+        if prior is None:
+            raise HTTPException(status_code=409,detail="Approval not consumable") from exc
+        return {"status":"queued","event_id":prior}
     except Exception as exc:
         # Do not leak connection strings, SQL, tokens or tenant data.
         raise HTTPException(status_code=503,detail="HITL persistence unavailable") from exc
