@@ -64,3 +64,34 @@ def settle(connection,*,tenant_id,event_id,worker_id,delivered,error=None,
     except Exception:
         connection.rollback()
         raise
+
+def reap_exhausted(connection,*,tenant_id,max_attempts=8,limit=100):
+    """Dead-letter exhausted pending or expired leased rows, without delivery.
+
+    Caller supplies a verified tenant and non-BYPASSRLS connection.
+    This is required because crashed workers may exhaust their attempts
+    without ever reaching settle().
+    """
+    if not isinstance(max_attempts,int) or max_attempts<1 or not isinstance(limit,int) or not 1<=limit<=1000:
+        raise ValueError("invalid exhaustion policy")
+    try:
+        with connection.cursor() as cur:
+            tenant=_scope(cur,tenant_id)
+            cur.execute("""WITH exhausted AS (
+                SELECT id FROM hitl.outbox
+                WHERE tenant_id=%s AND attempts >= %s
+                  AND (status='pending' OR
+                       (status='leased' AND leased_until<now()))
+                ORDER BY created_at,id FOR UPDATE SKIP LOCKED LIMIT %s
+            )
+            UPDATE hitl.outbox AS o SET status='dead',
+                lease_owner=NULL,leased_until=NULL,
+                last_error=COALESCE(o.last_error,'maximum attempts exhausted')
+            FROM exhausted WHERE o.id=exhausted.id
+            RETURNING o.id""",(tenant,max_attempts,limit))
+            rows=cur.fetchall()
+        connection.commit()
+        return [row[0] for row in rows]
+    except Exception:
+        connection.rollback()
+        raise

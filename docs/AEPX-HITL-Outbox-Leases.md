@@ -8,3 +8,6 @@ Apply both HITL migrations in order only in an isolated reviewed staging databas
 
 ## Fenced settlement contract
 A successful claim returns the incremented attempt counter in its fourth field. Pass that counter as `attempt_number` to `settle`. Settlement now requires matching tenant, event ID, worker ID, unexpired lease and exact attempt number. This prevents a stale worker with the same worker ID from settling a newer lease attempt. It does not remove the need for idempotent external consumers or live PostgreSQL concurrency tests.
+
+## Crash exhaustion recovery
+`reap_exhausted(connection, tenant_id=..., max_attempts=8)` atomically dead-letters exhausted pending rows and expired leases using `SKIP LOCKED`. A worker supervisor must invoke it periodically for each **verified** tenant. It does not send messages, restore failed business operations, or automatically requeue dead letters. Operator-led replay must be reviewed for idempotency and authorisation. PostgreSQL integration tests and authenticated worker scheduling remain outstanding.
