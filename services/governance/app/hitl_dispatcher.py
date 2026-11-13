@@ -54,6 +54,10 @@ def dispatch_batch(connection, *, tenant_id, worker_id, deliver=None,
             if not current:
                 stale += 1
                 continue
+            # A slow database preflight must not authorize a callback after
+            # the batch deadline. Leave this lease for normal expiry/recovery.
+            if time.monotonic() >= deadline:
+                break
         try:
             if topic != "hitl.approval.consumed" or not isinstance(payload, dict):
                 raise PermissionError("unsupported event")

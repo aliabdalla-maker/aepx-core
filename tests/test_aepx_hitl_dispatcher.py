@@ -62,6 +62,18 @@ class DispatcherTests(unittest.TestCase):
         reap.assert_called_once()
         claim.assert_called_once()
     @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.time.monotonic", side_effect=[100.0, 101.0, 131.0])
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_slow_preflight_defers_without_adapter_or_settlement(self, reap, claim, settle, clock):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["deferred"], 1)
+        self.lease_check.assert_called_once()
+        self.deliver.assert_not_called()
+        settle.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
     @patch("app.hitl_dispatcher.settle")
     @patch("app.hitl_dispatcher.claim")
     @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
@@ -101,6 +113,32 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual(self.deliver.call_args.kwargs["event_id"], EVENT)
         settle.assert_called_once()
         self.assertEqual(str(settle.call_args.kwargs["event_id"]), EVENT)
+
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_adapter_exception_is_redacted_and_retried(self, reap, claim, settle):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        self.deliver.side_effect = RuntimeError("secret-adapter-token")
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["failed"], 1)
+        self.assertEqual(result["delivered"], 0)
+        self.assertFalse(settle.call_args.kwargs["delivered"])
+        self.assertEqual(settle.call_args.kwargs["error"], "delivery adapter failed")
+        self.assertNotIn("secret-adapter-token", str(settle.call_args))
+
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle", side_effect=PermissionError("lease reassigned"))
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_settlement_fence_rejects_stale_worker(self, reap, claim, settle):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["stale"], 1)
+        self.assertEqual(result["delivered"], 0)
+        self.assertEqual(result["failed"], 0)
+        self.assertEqual(result["deferred"], 0)
 
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
