@@ -17,10 +17,11 @@ For a separately provisioned **disposable** database with the same migrations an
 
 ```bash
 export HITL_TEST_DISPOSABLE=yes
+export HITL_TEST_EXPECTED_DATABASE='<disposable-db>'
 export HITL_TEST_DATABASE_URL='postgresql://<restricted-role>:<password>@<private-host>/<disposable-db>'
 PYTHONPATH=services/governance python -m pytest tests/test_hitl_postgres_integration.py -v
 ```
 
-The test class skips unless both opt-in environment variables are set. The CI workflow sets both and provisions its own disposable database. Tests include cross-tenant isolation, concurrent approval and consumption, local execution receipts, remote reconciliation, outbox recovery and health. A successful run is necessary but **not sufficient** for production qualification.
+The test class skips unless the database URL and disposable opt-in are set. When enabled, it fails closed unless the expected database name matches and the role is restricted, non-owner, and cannot create databases or roles. The CI workflow sets both and provisions its own disposable database. Tests include cross-tenant isolation, concurrent approval and consumption, local execution receipts, remote reconciliation, outbox recovery and health. A successful run is necessary but **not sufficient** for production qualification.
 
 Remaining acceptance work: enforced callback isolation/timeout, process-crash fault injection, external MCP idempotency verification, alert delivery, migration rollback rehearsal, and independent security review. No OCI deployment is performed by this workflow.
