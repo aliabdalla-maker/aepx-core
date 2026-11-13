@@ -25,3 +25,7 @@ production deployment capability.
 ## Verified cleanup prerequisites
 
 Do not use `docker run --rm` in the plan: automatic removal destroys the exited container's inspectable state. A trusted supervisor must inspect the exact daemon-issued container ID, verify its image and stopped state, remove it, and independently establish both Docker absence and absence of matching cgroup/process-tree members. The pure verification functions only check supplied evidence; they do not authenticate the Docker daemon or collect OS process evidence. Never report successful cleanup from a name-only check or a failed inspect command alone.
+
+## Destructive command identity binding
+
+The initial plan deliberately leaves kill and cleanup argv unset. Once a trusted supervisor has authenticated the daemon and inspected the named container, `verified_container_commands` validates its name, full 64-hex-character container ID and expected image ID and returns ID-bound kill/inspect/remove argv. Never kill or remove by name. The caller must guard against stale evidence, daemon substitution and time-of-check/time-of-use races. This is still pure planning code, not a running supervisor.
