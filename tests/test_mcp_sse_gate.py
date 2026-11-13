@@ -16,6 +16,7 @@ class TestMCPSSEGate(unittest.TestCase):
     def test_single_correlated_message(self):
         self.assertTrue(self.call(": ping\n\nevent: message\ndata: " + BODY + "\n\n")["ok"])
         self.assertTrue(self.call("data: " + BODY + "\n\n")["ok"])
+        self.assertTrue(self.call("data: " + BODY + "\r\n\r\n")["ok"])
 
     def test_rejects_ambiguous_or_unsafe_streams(self):
         invalid = [
@@ -24,7 +25,8 @@ class TestMCPSSEGate(unittest.TestCase):
             "data: " + BODY + "\n\ndata: " + BODY + "\n\n",
             "id: 10\ndata: " + BODY + "\n\n",
             "retry: 100\ndata: " + BODY + "\n\n",
-            "data: " + BODY + "\r\n\r\n",
+            "data: " + BODY + "\r\n\r",
+            "data: " + BODY + "\r\n\r\n".replace("\r\n", "\r"),
             "data: " + BODY + "\n\ndata: " + BODY + "\n\n"*40,
             "data: " + "x"*70000 + "\n\n",
             "x-field: bad\ndata: " + BODY + "\n\n",

@@ -29,3 +29,7 @@ The request builder now advertises both `application/json` and `text/event-strea
 ## Bounded offline SSE parsing
 
 `mcp_sse_gate.validate_mcp_sse_response` accepts only a complete, bounded, single-message SSE buffer and delegates JSON-RPC correlation to the existing response validator. It rejects ambiguous multi-response streams, resume IDs, retry instructions, unknown event types and malformed framing. It is **not** a streaming HTTP client, and intentionally rejects several legal SSE patterns (including CRLF and resumable streams); do not describe it as general SSE compliance. Authenticated Streamable HTTP, live incremental parser, deadline enforcement, credential isolation and provider outcome reconciliation remain pending.
+
+## SSE framing and CI follow-up
+
+The offline SSE gate now accepts standard CRLF event framing while rejecting lone carriage returns, incomplete event terminators and excessive line counts. It still deliberately handles only a bounded, complete-buffer, single-response subset: no authenticated HTTP transport, incremental stream reader, reconnect/resume support, OAuth or actual tool dispatch. MCP CI push filters now cover all offline MCP modules and tests, not only the original contract gate. Passing offline CI cannot substitute for end-to-end release gates G2–G6.
