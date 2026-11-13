@@ -45,3 +45,7 @@ Inspection must show an explicit `seccomp=builtin` option, not an ambiguous `sec
 ## Pure lifecycle transitions
 
 `hitl_offline_supervisor_transitions.offline_supervisor_transition` now models verified created→start-by-ID, running→poll/inspect-exit/kill-by-ID based on trusted monotonic elapsed time, and removed→clean only after independent daemon-absence and process-tree absence signals. Unexpected phases and malformed evidence fail closed. No Docker commands execute. A future trusted supervisor must own monotonic timing, authenticated daemon observations, container ID binding, cleanup and SIGKILL recovery; these pure decisions do not satisfy those gates.
+
+## Container ID fencing across observations
+
+After the initial verified creation observation, the trusted supervisor must retain the full daemon-issued container ID and pass it as `expected_container_id` on every running transition. Missing or substituted IDs fail closed, including at the timeout/kill boundary. The pure state machine does not authenticate observations or prevent stale-daemon responses; those remain responsibilities of the executing supervisor.
