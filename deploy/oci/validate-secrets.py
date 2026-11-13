@@ -19,14 +19,14 @@ for line in env_file.read_text().splitlines():
     if key in pairs:
         sys.exit(f"ERROR: duplicate key {key}")
     pairs[key] = value
-required = ["AEPX_POSTGRES_PASSWORD", "AEPX_NEO4J_PASSWORD"]
+required = ["AEPX_POSTGRES_PASSWORD", "AEPX_NEO4J_PASSWORD", "AEPX_IDENTITY_JWT_SECRET"]
 for key in required:
     value = pairs.get(key, "")
     if not re.fullmatch(r"[A-Za-z0-9_-]{24,128}", value):
         sys.exit(f"ERROR: {key} must be 24-128 URL-safe characters")
     if value.lower().startswith(("test", "demo", "password", "change", "aepx_dev", "citestonly")):
         sys.exit(f"ERROR: {key} looks like a placeholder")
-if pairs[required[0]] == pairs[required[1]]:
+if len({pairs[k] for k in required}) != len(required):
     sys.exit("ERROR: PostgreSQL and Neo4j secrets must differ")
 if os.name == "posix" and env_file.stat().st_mode & 0o077:
     sys.exit("ERROR: .env must not be group/world accessible; chmod 600 .env")
