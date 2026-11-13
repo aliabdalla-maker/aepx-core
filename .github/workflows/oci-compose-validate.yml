@@ -20,7 +20,14 @@ jobs:
       - name: Validate OCI Compose overlay
         run: |
           trap 'rm -f .env' EXIT
-          printf 'AEPX_POSTGRES_PASSWORD=CITestOnly_1234567890_abcdefghi\nAEPX_NEO4J_PASSWORD=CITestOnly_0987654321_abcdefghi\n' > .env
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\\n'
+          )
+          PY
           chmod 600 .env
           bash deploy/oci/deploy.sh --validate-only
           python3 - <<'PY'
