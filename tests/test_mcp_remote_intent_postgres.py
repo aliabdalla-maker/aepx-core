@@ -11,6 +11,8 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "platform/saas-ide/backend"))
 from app.mcp_remote_intent_reservation import IntentReservation, reserve_intent
 from app.mcp_remote_intent_schema import DDL
+from app.mcp_remote_intent_transition import transition_intent, TransitionDenied
+from app.mcp_remote_intent_state import IntentState
 
 DSN = os.environ.get("AEPX_TEST_PG_DSN")
 RUNTIME_DSN = os.environ.get("AEPX_TEST_PG_RUNTIME_DSN")
@@ -93,6 +95,30 @@ class PostgresReservationAcceptance(unittest.TestCase):
                 reserve_intent(cur, self.intent)
                 with self.assertRaises(ReservationDenied):
                     reserve_intent(cur, conflicting)
+
+    def test_atomic_transition_rejects_stale_and_cross_tenant(self):
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="9"*64,
+            idempotency_key="transition-000001")
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (self.tenant,))
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+                self.assertEqual(transition_intent(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id, current=IntentState.RESERVED,
+                    target=IntentState.DISPATCHED), IntentState.DISPATCHED)
+                with self.assertRaises(TransitionDenied):
+                    transition_intent(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id, current=IntentState.RESERVED,
+                        target=IntentState.DISPATCHED)
+        with psycopg.connect(RUNTIME_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET LOCAL app.tenant_id = %s", (str(uuid4()),))
+                with self.assertRaises(TransitionDenied):
+                    transition_intent(cur, tenant_id=self.tenant,
+                        request_id=candidate.request_id, current=IntentState.DISPATCHED,
+                        target=IntentState.UNCERTAIN)
 
     def test_cross_tenant_write_rejected(self):
         other_tenant = str(uuid4())
