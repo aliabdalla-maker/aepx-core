@@ -20,7 +20,7 @@ def offline_container_argv(*, image_digest, command, memory_mb=128, cpus=0.5,
         raise SandboxPolicyDenied("nonempty argument vector required")
     if (type(memory_mb) is not int or not 64 <= memory_mb <= 512 or
         type(pids_limit) is not int or not 8 <= pids_limit <= 64 or
-        type(cpus) not in (int, float) or not 0 < cpus <= 1)
+        type(cpus) not in (int, float) or not 0 < cpus <= 1):
         raise SandboxPolicyDenied("sandbox bounds invalid")
     return [
         "docker", "run", "--rm", "--pull=never", "--network=none",
