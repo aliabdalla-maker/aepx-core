@@ -16,6 +16,16 @@ on:
       - 'platform/saas-ide/backend/app/mcp_dns_policy.py'
       - 'platform/saas-ide/backend/app/mcp_transport_policy.py'
       - 'tests/test_mcp_contract_gate.py'
+      - 'tests/audit_mcp_ci.py'
+      - 'platform/saas-ide/backend/app/mcp_execution214.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_dispatch_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_reservation.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_schema.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
+      - 'tests/test_mcp_remote_dispatch_gate.py'
+      - 'tests/test_mcp_remote_intent_ledger.py'
+      - 'tests/test_mcp_remote_intent_postgres.py'
+      - 'tests/test_mcp_remote_intent_reservation.py'
       - 'tests/test_mcp_dispatch_binding.py'
       - 'tests/test_mcp_discovery_policy.py'
       - 'tests/test_mcp_protocol_envelope.py'
@@ -58,6 +68,16 @@ on:
       - 'platform/saas-ide/backend/app/mcp_dns_policy.py'
       - 'platform/saas-ide/backend/app/mcp_transport_policy.py'
       - 'tests/test_mcp_contract_gate.py'
+      - 'tests/audit_mcp_ci.py'
+      - 'platform/saas-ide/backend/app/mcp_execution214.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_dispatch_gate.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_reservation.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_schema.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
+      - 'tests/test_mcp_remote_dispatch_gate.py'
+      - 'tests/test_mcp_remote_intent_ledger.py'
+      - 'tests/test_mcp_remote_intent_postgres.py'
+      - 'tests/test_mcp_remote_intent_reservation.py'
       - 'tests/test_mcp_dispatch_binding.py'
       - 'tests/test_mcp_discovery_policy.py'
       - 'tests/test_mcp_protocol_envelope.py'
@@ -101,6 +121,7 @@ jobs:
         run: python -m pip install 'SQLAlchemy>=2.0,<3.0'
       - name: Compile and test offline MCP gate
         run: |
+          python tests/audit_mcp_ci.py
           python -m compileall -q platform/saas-ide/backend/app
           python -m py_compile platform/saas-ide/backend/app/mcp_handshake_policy.py platform/saas-ide/backend/app/mcp_session_gate.py platform/saas-ide/backend/app/mcp_initialized_gate.py platform/saas-ide/backend/app/mcp_initialize_gate.py platform/saas-ide/backend/app/mcp_version_policy.py platform/saas-ide/backend/app/mcp_post_request_gate.py platform/saas-ide/backend/app/mcp_contract_gate.py platform/saas-ide/backend/app/mcp_dispatch_binding.py platform/saas-ide/backend/app/mcp_discovery_policy.py platform/saas-ide/backend/app/mcp_protocol_envelope.py platform/saas-ide/backend/app/mcp_response_gate.py platform/saas-ide/backend/app/mcp_sse_gate.py platform/saas-ide/backend/app/mcp_preflight.py platform/saas-ide/backend/app/mcp_db_preflight.py platform/saas-ide/backend/app/mcp_atomic_claim.py platform/saas-ide/backend/app/mcp_http_response_gate.py platform/saas-ide/backend/app/mcp_endpoint_policy.py platform/saas-ide/backend/app/mcp_dns_policy.py platform/saas-ide/backend/app/mcp_transport_policy.py
           python -m unittest discover -s tests -p 'test_mcp_contract_gate.py' -v
@@ -122,3 +143,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_mcp_initialized_gate.py' -v
           python -m unittest discover -s tests -p 'test_mcp_handshake_policy.py' -v
           python -m unittest discover -s tests -p 'test_mcp_session_assertions.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_dispatch_gate.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_ledger.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_reservation.py' -v

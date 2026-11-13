@@ -117,3 +117,7 @@ A merged version of `mcp_handshake_policy.py` included literal backslash-n chara
 ## CI master-push parity and syntax coverage
 
 The MCP offline workflow now uses the same file filters for pull requests and master pushes, preventing a merged change to an MCP preflight/transport/atomic-claim module or its test from silently skipping the post-merge job. The job also runs `compileall` over the SaaS IDE backend before individual offline tests, catching malformed Python source outside the explicit MCP file list. This is a fail-closed CI gate only; queued runs or skipped workflows do not count as passing security tests.
+
+## MCP CI self-audit and remote intent coverage
+
+`tests/audit_mcp_ci.py` now fails the offline workflow if pull-request and master-push filters diverge, MCP source/test files are missing from path filters, or any MCP unit test module is absent from the command list. The workflow includes remote dispatch and intent ledger modules/tests previously omitted. The PostgreSQL intent integration suite is invoked but its tests require explicit disposable PostgreSQL environment variables and may skip in the standard offline job; a skipped suite is **not** PostgreSQL integration evidence. No live MCP execution or deployment is enabled.
