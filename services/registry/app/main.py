@@ -69,6 +69,8 @@ def health():
 
 @app.post("/agents", response_model=Agent)
 def create_agent(payload: AgentIn):
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and payload.did is not None:
+        raise HTTPException(403, "Externally supplied DIDs require verified ownership")
     did = payload.did or _mint_did()
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and not did:
         raise HTTPException(503, "Identity service unavailable; registration blocked")
