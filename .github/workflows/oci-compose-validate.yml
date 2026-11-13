@@ -331,16 +331,11 @@ jobs:
               assert trust_unauth.status_code==403,trust_unauth.text
               trust_auth=client.post("http://trust:8000/trust/00000000-0000-0000-0000-000000000001/adjust",json={"component":"behaviour","delta":1},headers=headers)
               assert trust_auth.status_code==200,trust_auth.text
-          import subprocess
-          check=subprocess.run(
-              ["docker","compose","--env-file",".env","-p","aepx-oci-staging","-f","deploy/oci/compose.staging.yml",
-               "exec","-T","postgres","psql","-U","aepx","-d","aepx","-Atc",
-               "SELECT count(*) FROM trust_scores WHERE entity_id='ci-read-only-unknown-entity'"],
-              check=True,capture_output=True,text=True
-          )
-          assert check.stdout.strip()=="0",f"GET /trust unexpectedly persisted a row: {check.stdout}"
           print("PASS: authenticated Registry, DID issuance, persistence and Trust writes")
           PY
+          count="$(docker compose --env-file .env -p aepx-oci-staging -f deploy/oci/compose.staging.yml exec -T postgres psql -U aepx -d aepx -Atc "SELECT count(*) FROM trust_scores WHERE entity_id='ci-read-only-unknown-entity'")"
+          [[ "$count" == 0 ]] || { echo "FAIL: Trust GET persisted an unknown entity" >&2; exit 1; }
+          echo "PASS: Trust GET caused no persistent database write"
       - name: Verify agent survives Registry restart
         run: |
           set -euo pipefail
