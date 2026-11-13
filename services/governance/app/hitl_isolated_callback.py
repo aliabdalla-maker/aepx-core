@@ -23,7 +23,7 @@ def _child(entrypoint, arguments, output):
             output.send_bytes(b"T" if result is True else b"F" if result is False else b"N")
     except BaseException:
         try:
-            output.send(("error", None))
+            output.send_bytes(b"E")
         except (OSError, EOFError, BrokenPipeError):
             pass
     finally:
