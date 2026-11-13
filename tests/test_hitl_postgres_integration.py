@@ -19,6 +19,7 @@ from app.hitl_replay import find_matching_replay
 from app.hitl_outbox import claim, settle, reap_exhausted
 from app.hitl_recovery import requeue_dead_letter,RecoveryDenied
 from app.hitl_execution_receipts import execute_local_once
+from app.hitl_health import outbox_health
 
 @unittest.skipUnless(os.getenv("HITL_TEST_DATABASE_URL") and os.getenv("HITL_TEST_DISPOSABLE")=="yes",
                      "requires explicit disposable PostgreSQL test DB approval")
@@ -117,6 +118,20 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("SELECT set_config('app.tenant_id', %s, true)",(str(tenant),))
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
+
+    def test_outbox_health_is_tenant_isolated(self):
+        tenant=uuid4()
+        other=uuid4()
+        self._seed_outbox(tenant)
+        self._seed_outbox(other)
+        with self.connect() as conn:
+            own=outbox_health(conn,tenant_id=tenant,warning_pending=2)
+        with self.connect() as conn:
+            other_health=outbox_health(conn,tenant_id=other,warning_pending=2)
+        self.assertEqual(own["counts"]["pending"],1)
+        self.assertEqual(other_health["counts"]["pending"],1)
+        self.assertEqual(own["alerts"],[])
+        self.assertEqual(other_health["alerts"],[])
 
     def test_concurrent_local_receipt_applies_once(self):
         tenant=uuid4()
