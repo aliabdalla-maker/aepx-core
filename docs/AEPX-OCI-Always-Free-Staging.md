@@ -29,3 +29,6 @@ docker compose -f deploy/oci-always-free/compose.yml ps
 - No PostgreSQL HITL API or real MCP/CrewAI/RAG end-to-end integration.
 - OCI Compute shape and actual free resource availability are unverified.
 - Full deployment requires CI checks, dependency health probes, security review, secrets handling, backup/restore evidence and release approval.
+
+## Read-only smoke test after manual staging start
+Run `python3 scripts/aepx-oci-staging-smoke.py` on the VM. This probes only the loopback gateway `/health` and fails on unavailable or non-2xx responses. A passing health check does **not** establish application readiness, external TLS security, HITL/MCP/RAG integration or Always Free cost eligibility. CI now also renders the Compose configuration with a disposable test-only placeholder password; this is syntax validation, not an OCI deployment.
