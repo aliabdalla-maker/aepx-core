@@ -9,6 +9,8 @@ on:
       - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
       - 'platform/saas-ide/backend/app/mcp_remote_dispatch_*.py'
       - 'tests/test_mcp_remote_dispatch_*.py'
+      - 'platform/saas-ide/backend/app/mcp_http_preflight.py'
+      - 'tests/test_mcp_http_preflight.py'
       - 'tests/check_mcp_pg_ci.py'
       - 'tests/test_mcp_pg_ci_guard.py'
       - '.github/workflows/mcp-disposable-postgres.yml'
@@ -22,6 +24,8 @@ on:
       - 'platform/saas-ide/backend/app/mcp_remote_intent_state.py'
       - 'platform/saas-ide/backend/app/mcp_remote_dispatch_*.py'
       - 'tests/test_mcp_remote_dispatch_*.py'
+      - 'platform/saas-ide/backend/app/mcp_http_preflight.py'
+      - 'tests/test_mcp_http_preflight.py'
       - 'tests/check_mcp_pg_ci.py'
       - 'tests/test_mcp_pg_ci_guard.py'
       - '.github/workflows/mcp-disposable-postgres.yml'
@@ -60,6 +64,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_mcp_pg_ci_guard.py' -v
       - name: Verify offline dispatch safety contracts
         run: python -m unittest discover -s tests -p 'test_mcp_remote_dispatch_*.py' -v
+      - name: Verify offline HTTPS preflight security
+        run: python -m unittest discover -s tests -p 'test_mcp_http_preflight.py' -v
       - name: Create least-privilege runtime role
         env:
           PGPASSWORD: disposable-only
