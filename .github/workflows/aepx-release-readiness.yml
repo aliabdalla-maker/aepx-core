@@ -11,6 +11,9 @@ on:
       - '.github/workflows/aepx-release-readiness.yml'
   push:
     branches: [master]
+concurrency:
+  group: aepx-release-audit-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -24,7 +27,7 @@ jobs:
           python3 -m json.tool docs/AEPX-Milestones.json >/dev/null
           python3 scripts/aepx-progress.py --validate
       - name: Prepare shared Docker network
-        run: docker network create aepx-dev-shared
+        run: docker network inspect aepx-dev-shared >/dev/null 2>&1 || docker network create aepx-dev-shared
       - name: Build and start console
         run: docker compose -f compose.codespaces.yml up -d --build
       - name: Run release audit
