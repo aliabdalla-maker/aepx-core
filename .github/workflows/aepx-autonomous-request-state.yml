@@ -1,0 +1,23 @@
+name: AEP-X durable request state
+on:
+  pull_request:
+    paths:
+      - 'scripts/aepx_autonomous_request_state.py'
+      - 'tests/test_aepx_autonomous_request_state.py'
+      - '.github/workflows/aepx-autonomous-request-state.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify request lifecycle and recovery
+        run: python -m unittest discover -s tests -p 'test_aepx_autonomous_request_state.py' -v
