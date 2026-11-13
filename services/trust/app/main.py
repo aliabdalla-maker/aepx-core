@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 import os
+import hmac
 
 app = FastAPI(title="AEP-X Trust Service", version="0.1.0")
 
@@ -106,7 +107,11 @@ def get_trust(entity_id: str, entity_type: str = "agent"):
 
 
 @app.post("/trust/{entity_id}/adjust")
-def adjust_trust(entity_id: str, payload: AdjustIn):
+def adjust_trust(entity_id: str, payload: AdjustIn, x_aepx_service_key: str | None = Header(default=None)):
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+        expected = os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
+            raise HTTPException(403, "Service authentication required")
     # Internal signal endpoint — e.g. the Connector Bus nudges behaviour_score
     # up on a successful invocation, so trust reflects real usage over time
     # instead of sitting at a flat default forever.
