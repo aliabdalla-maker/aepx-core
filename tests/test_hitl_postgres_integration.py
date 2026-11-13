@@ -262,6 +262,25 @@ class HitlPostgresIntegration(unittest.TestCase):
         self.assertEqual(other_health["oldest_uncertain_remote_seconds"], 0)
         self.assertNotIn("oldest_uncertain_remote_age", other_health["alerts"])
 
+    def test_uncertain_remote_age_threshold_is_configurable(self):
+        tenant = uuid4()
+        event = self._seed_outbox(tenant)
+        with self.connect() as conn:
+            reserve_remote(conn, tenant_id=tenant, event_id=event,
+                           provider="sandbox-mcp",
+                           idempotency_key="threshold-" + str(uuid4()))
+        with self.connect() as conn:
+            health = outbox_health(conn, tenant_id=tenant,
+                                   warning_uncertain_remote=2,
+                                   warning_uncertain_age_seconds=86400)
+        self.assertEqual(health["uncertain_remote_deliveries"], 1)
+        self.assertNotIn("uncertain_remote_delivery", health["alerts"])
+        self.assertNotIn("oldest_uncertain_remote_age", health["alerts"])
+        with self.connect() as conn:
+            with self.assertRaises(ValueError):
+                outbox_health(conn, tenant_id=tenant,
+                              warning_uncertain_age_seconds=True)
+
     def test_outbox_health_is_tenant_isolated(self):
         tenant=uuid4()
         other=uuid4()
