@@ -16,7 +16,7 @@ class StagingDatabaseSmokeTests(unittest.TestCase):
         text=SCRIPT.read_text()
         self.assertIn("-p aepx-oci-staging",text)
         self.assertIn("com.docker.compose.project",text)
-        self.assertIn('project\" == \"aepx-oci-staging',text)
+        self.assertIn('[[ "$project" == "aepx-oci-staging" && "$service" == "postgres" ]]',text)
     def test_transaction_rolls_back(self):
         text=SCRIPT.read_text()
         self.assertIn("BEGIN;",text)
