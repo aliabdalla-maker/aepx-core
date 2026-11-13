@@ -7,7 +7,11 @@ backup="${1:-}"
 [[ -f "$backup" && ! -L "$backup" ]] || { echo "Usage: $0 /absolute/path/to/staging-backup.sql.gz" >&2; exit 2; }
 backup="$(realpath "$backup")"
 [[ "$backup" == /* && -f "$backup.sha256" ]] || { echo "Missing backup or checksum" >&2; exit 2; }
-(cd "$(dirname "$backup")" && sha256sum -c "$(basename "$backup").sha256")
+# Verify digest independently of the stored filename (supports absolute and relative manifests).
+expected="$(awk 'NR==1 {print $1}' "$backup.sha256")"
+[[ "$expected" =~ ^[0-9a-fA-F]{64}$ ]] || { echo "Invalid SHA256 manifest" >&2; exit 2; }
+actual="$(sha256sum "$backup" | awk '{print $1}')"
+[[ "${actual,,}" == "${expected,,}" ]] || { echo "Backup checksum mismatch" >&2; exit 2; }
 gzip -t "$backup"
 command -v docker >/dev/null
 # Random, single-use name and credentials; no published ports or shared volumes.
