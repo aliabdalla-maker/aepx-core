@@ -62,6 +62,18 @@ class DispatcherTests(unittest.TestCase):
         reap.assert_called_once()
         claim.assert_called_once()
     @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.time.monotonic", side_effect=[100.0, 101.0, 131.0])
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_slow_preflight_defers_without_adapter_or_settlement(self, reap, claim, settle, clock):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        result = dispatch_batch(**self.kw)
+        self.assertEqual(result["deferred"], 1)
+        self.lease_check.assert_called_once()
+        self.deliver.assert_not_called()
+        settle.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
     @patch("app.hitl_dispatcher.settle")
     @patch("app.hitl_dispatcher.claim")
     @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
