@@ -25,3 +25,7 @@ The stateless request now mirrors `MCP-Protocol-Version` into `_meta.io.modelcon
 ## Offline response gate and Streamable HTTP Accept
 
 The request builder now advertises both `application/json` and `text/event-stream` via `Accept`. `mcp_response_gate.validate_mcp_json_response` checks bounded JSON-RPC response bodies, duplicate keys, exact request-ID correlation, protocol errors and tool-level `isError`. It **does not** process SSE frames or implement an HTTP transport. Real transport must authenticate TLS/OAuth, handle SSE safely, validate response content schemas, manage deadlines, and quarantine uncertain side effects rather than retrying them.
+
+## Bounded offline SSE parsing
+
+`mcp_sse_gate.validate_mcp_sse_response` accepts only a complete, bounded, single-message SSE buffer and delegates JSON-RPC correlation to the existing response validator. It rejects ambiguous multi-response streams, resume IDs, retry instructions, unknown event types and malformed framing. It is **not** a streaming HTTP client, and intentionally rejects several legal SSE patterns (including CRLF and resumable streams); do not describe it as general SSE compliance. Authenticated Streamable HTTP, live incremental parser, deadline enforcement, credential isolation and provider outcome reconciliation remain pending.
