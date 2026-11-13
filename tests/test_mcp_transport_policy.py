@@ -56,3 +56,13 @@ class TestTransportPolicy(unittest.TestCase):
                     policy=policy,endpoint=URL,server_id="crm",status_code=200,
                     content_type="application/json",response_body=BODY,
                     expected_request_id=7,connected_peer=peer)
+
+    def test_strict_transport_requires_peer_evidence(self):
+        policy=self.policy()
+        common=dict(policy=policy,endpoint=URL,server_id="crm",status_code=200,
+                    content_type="application/json",response_body=BODY,
+                    expected_request_id=7,require_connected_peer=True)
+        with self.assertRaises(MCPContractDenied):
+            validate_mcp_transport_result(**common)
+        self.assertTrue(validate_mcp_transport_result(
+            **common,connected_peer="1.1.1.1")["ok"])
