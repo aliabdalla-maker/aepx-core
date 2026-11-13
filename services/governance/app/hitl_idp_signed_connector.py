@@ -6,6 +6,7 @@ The configured secret must be provisioned outside source control.
 import hashlib
 import hmac
 from urllib.parse import urlsplit
+import ipaddress
 from uuid import UUID
 from .hitl_identity_payload import MAX_SNAPSHOT_BYTES,parse_snapshot_payload
 from .hitl_identity_snapshot import SnapshotRejected,publish_identity_snapshot
@@ -36,10 +37,21 @@ def validate_pinned_snapshot_url(url, *, expected_host):
     """Validate configured origin; caller MUST separately enforce DNS/egress."""
     try:
         parsed=urlsplit(url)
-        if (not isinstance(url,str) or parsed.scheme!="https"
+        if (not isinstance(url,str) or not isinstance(expected_host,str)
+            or not expected_host or expected_host!=expected_host.lower()
+            or any(ch.isspace() for ch in expected_host)
+            or parsed.scheme!="https"
             or parsed.hostname!=expected_host or parsed.port not in (None,443)
             or parsed.username is not None or parsed.password is not None
-            or parsed.fragment or any(ch.isspace() for ch in url)):
+            or parsed.fragment or parsed.query
+            or parsed.hostname in ("localhost",)
+            or any(ch.isspace() for ch in url)):
+            raise ValueError("invalid pinned snapshot origin")
+        try:
+            address=ipaddress.ip_address(parsed.hostname)
+        except ValueError:
+            address=None
+        if address is not None and not address.is_global:
             raise ValueError("invalid pinned snapshot origin")
         return url
     except Exception as exc:

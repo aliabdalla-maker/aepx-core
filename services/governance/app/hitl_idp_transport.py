@@ -4,6 +4,7 @@ Only accepts an injected, audited transport with verified TLS and egress policy.
 No default HTTP client, DNS resolution or external network access is provided.
 """
 from dataclasses import dataclass
+from math import isfinite
 from .hitl_idp_signed_connector import (
     validate_pinned_snapshot_url,publish_signed_idp_snapshot)
 from .hitl_identity_payload import MAX_SNAPSHOT_BYTES
@@ -31,6 +32,7 @@ def ingest_trusted_idp_snapshot(connection, *, fetch, url, expected_host,
             or not 0<max_bytes<=MAX_SNAPSHOT_BYTES
             or type(connect_timeout) not in (int,float)
             or type(total_timeout) not in (int,float)
+            or not isfinite(connect_timeout) or not isfinite(total_timeout)
             or not 0<connect_timeout<=3 or not connect_timeout<=total_timeout<=10):
             raise ValueError("invalid trusted transport configuration")
         validated=validate_pinned_snapshot_url(url,expected_host=expected_host)
