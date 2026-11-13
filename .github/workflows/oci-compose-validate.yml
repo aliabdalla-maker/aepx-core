@@ -64,3 +64,20 @@ jobs:
             exit 1
           fi
           echo "PASS: unapproved staging startup rejected"
+      - name: Verify staging deployment cannot start without operator approval
+        run: |
+          trap 'rm -f .env' EXIT
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text(
+              'AEPX_POSTGRES_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+              + 'AEPX_NEO4J_PASSWORD=' + secrets.token_urlsafe(32) + '\n'
+          )
+          PY
+          chmod 600 .env
+          if bash deploy/oci/staging.sh --start; then
+            echo "FAIL: unapproved staging deployment was permitted" >&2
+            exit 1
+          fi
+          echo "PASS: staging requires explicit operator approval"
