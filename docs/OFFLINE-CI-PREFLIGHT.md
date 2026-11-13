@@ -18,3 +18,5 @@ For the tracked remediation work, see issue #230.
 The optional JSON evidence records the local Git commit, UTC timestamp, scope and per-check exit codes. Review and retain it as *partial* evidence only; it is not a GitHub required status check or a production release authorization.
 
 Each check has a configurable timeout (default 120 seconds). Timed-out checks are marked failed with exit code 124 and `timed_out: true` in JSON evidence. A timed-out check must never be treated as a pass.
+
+The first check compiles Python files in `scripts/` and `tests/` to detect syntax errors before executing policy tests. Compilation is a syntax check, not runtime acceptance.
