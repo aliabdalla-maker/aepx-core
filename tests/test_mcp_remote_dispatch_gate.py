@@ -59,6 +59,8 @@ class RemoteDispatchGateTests(unittest.TestCase):
             ("tool_name", "tool\\nexecute"),
             ("protocol_version", "2025-11-25\\n"),
             ("protocol_version", "latest"),
+            ("protocol_version", "2025-13-25"),
+            ("protocol_version", "2025-02-30"),
         )
         for field, value in cases:
             with self.subTest(field=field, value=value), self.assertRaises(RemoteDispatchDenied):
