@@ -1,0 +1,18 @@
+name: HITL identity security regression
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  identity-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r services/governance/requirements.txt pytest
+      - name: Verify signed OIDC identity and RBAC policies
+        env:
+          PYTHONPATH: services/governance
+        run: python -m pytest -q tests/test_hitl_oidc_auth.py tests/test_hitl_operator_identity.py
