@@ -12,6 +12,7 @@ ALLOW = frozenset({
     "hitl_callback_fixtures:hangs",
     "hitl_callback_fixtures:fails",
     "hitl_callback_fixtures:crashes",
+    "hitl_callback_fixtures:invalid_result",
 })
 
 class TestIsolatedCallback(unittest.TestCase):
@@ -51,6 +52,10 @@ class TestIsolatedCallback(unittest.TestCase):
         with self.assertRaises(CallbackIsolationError):
             self.run_adapter("hangs", timeout=0.2)
         self.assertLess(time.monotonic() - started, 4)
+
+    def test_invalid_adapter_result_is_not_success(self):
+        with self.assertRaisesRegex(CallbackIsolationError, "outcome uncertain"):
+            self.run_adapter("invalid_result")
 
     def test_non_allowlisted_adapter_rejected(self):
         with self.assertRaises(CallbackIsolationError):
