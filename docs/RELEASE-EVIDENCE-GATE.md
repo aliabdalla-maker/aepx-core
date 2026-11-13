@@ -27,3 +27,12 @@ starts workflows, merges changes, handles secrets or deploys infrastructure.
 7. Complete authenticated MCP provider sandbox, CrewAI/RAG and OCI recovery gates.
 
 This check does not replace provider verification or deployment approval.
+
+## Exact-SHA workflow trigger invariant
+
+The HITL acceptance workflow must run on every push, including documentation,
+release tooling and workflow-only commits. Path filtering can cause a missing
+HITL run and make the mandatory exact-SHA release gate unsatisfiable. The
+workflow also accepts pull requests and manual dispatch for diagnostics, but
+**only successful push runs** count as release evidence. A queued run remains
+a blocker; this change does not provision or fix GitHub runners.
