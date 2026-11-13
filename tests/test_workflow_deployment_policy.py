@@ -23,6 +23,18 @@ class DeploymentPolicyTests(unittest.TestCase):
     def test_validator_rejects_merge_conflict(self):
         self._assert_rejected("example.yml", "name: example\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n<<<<<<< HEAD\n", "unresolved merge conflict")
 
+    def test_validator_rejects_missing_jobs_even_when_trigger_is_valid(self):
+        self._assert_rejected(
+            "deploy-oci.yml",
+            "name: invalid\non:\n  workflow_dispatch:\n",
+            "missing jobs mapping")
+
+    def test_validator_rejects_missing_trigger_and_jobs(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: invalid\n",
+            "missing jobs mapping")
+
     def test_validator_rejects_missing_protected_deployments(self):
         self._assert_rejected(
             "example.yml",
