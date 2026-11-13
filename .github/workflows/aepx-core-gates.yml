@@ -28,6 +28,9 @@ on:
       - 'scripts/aepx-static-security.py'
       - 'docs/AEPX-Core-Integration-Runbook.md'
       - '.github/workflows/aepx-core-gates.yml'
+      - 'deploy/oci-always-free/**'
+      - 'scripts/aepx-oci-compose-guard.py'
+      - 'docs/AEPX-OCI-Always-Free-Staging.md'
   push:
     branches: [master]
 permissions:
@@ -57,8 +60,10 @@ jobs:
         run: python3 scripts/aepx-hitl-migration-check.py
       - name: Test HITL migration security invariants
         run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_migration_check.py' -v
+      - name: Validate OCI Always Free staging guard
+        run: python3 scripts/aepx-oci-compose-guard.py
       - name: Validate shell syntax
-        run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh
+        run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh deploy/oci-always-free/preflight.sh
       - name: Check static security blockers (informational for development)
         run: python3 scripts/aepx-static-security.py
       - name: Validate milestone tracking
