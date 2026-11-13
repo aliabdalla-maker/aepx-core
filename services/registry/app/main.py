@@ -71,7 +71,10 @@ def health():
 @app.post("/agents", response_model=Agent)
 def create_agent(payload: AgentIn, x_aepx_service_key: str | None = Header(default=None)):
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
-        expected = os.getenv("AEPX_REGISTRY_WRITE_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        scoped = os.getenv("AEPX_REGISTRY_WRITE_KEY", "")
+        if os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(scoped) < 32:
+            raise HTTPException(503, "Scoped service credential not configured")
+        expected = scoped or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
         if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
             raise HTTPException(403, "Service authentication required")
     if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and payload.did is not None:
