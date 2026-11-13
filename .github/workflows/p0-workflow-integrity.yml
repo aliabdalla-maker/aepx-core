@@ -6,6 +6,7 @@ on:
       - 'scripts/check_workflow_integrity.py'
       - 'tests/test_workflow_deployment_policy.py'
       - 'tests/test_release_audit_workflow_policy.py'
+      - 'tests/test_actions_queue_diagnostics_policy.py'
   push:
     branches: [master]
     paths:
@@ -13,6 +14,7 @@ on:
       - 'scripts/check_workflow_integrity.py'
       - 'tests/test_workflow_deployment_policy.py'
       - 'tests/test_release_audit_workflow_policy.py'
+      - 'tests/test_actions_queue_diagnostics_policy.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -35,3 +37,5 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_workflow_deployment_policy.py' -v
       - name: Verify release audit safety policy
         run: python -m unittest discover -s tests -p 'test_release_audit_workflow_policy.py' -v
+      - name: Verify Actions diagnostics safety policy
+        run: python -m unittest discover -s tests -p 'test_actions_queue_diagnostics_policy.py' -v
