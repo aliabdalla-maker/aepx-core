@@ -15,6 +15,23 @@ class DispatcherTests(unittest.TestCase):
         self.deliver = MagicMock()
         self.kw = dict(connection=self.db, tenant_id=TENANT,
                        worker_id="worker-1", deliver=self.deliver, enabled=True)
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    def test_invalid_retry_and_batch_fail_before_claim(self):
+        for key, value in (("retry_seconds", 0), ("retry_seconds", 86401),
+                           ("limit", 0), ("limit", True),
+                           ("lease_seconds", 0), ("max_attempts", 0)):
+            with self.subTest(key=key, value=value):
+                with self.assertRaises(ValueError):
+                    dispatch_batch(**dict(self.kw, **{key: value}))
+        self.deliver.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_invalid_fencing_token_never_delivers(self, reap, claim):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 0)]
+        with self.assertRaises(ValueError):
+            dispatch_batch(**self.kw)
+        self.deliver.assert_not_called()
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
