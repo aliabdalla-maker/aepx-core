@@ -12,7 +12,8 @@ on:
       - 'platform/saas-ide/backend/app/mcp_http_preflight.py'
       - 'tests/test_mcp_http_preflight.py'
       - 'platform/saas-ide/backend/app/mcp_http_response_guard.py'
-      - 'tests/test_mcp_http_response*.py'
+      - 'tests/test_mcp_http_response_guard.py'
+      - 'tests/test_mcp_http_response_policy_hardening.py'
       - 'tests/check_mcp_pg_ci.py'
       - 'tests/test_mcp_pg_ci_guard.py'
       - '.github/workflows/mcp-disposable-postgres.yml'
@@ -29,7 +30,8 @@ on:
       - 'platform/saas-ide/backend/app/mcp_http_preflight.py'
       - 'tests/test_mcp_http_preflight.py'
       - 'platform/saas-ide/backend/app/mcp_http_response_guard.py'
-      - 'tests/test_mcp_http_response*.py'
+      - 'tests/test_mcp_http_response_guard.py'
+      - 'tests/test_mcp_http_response_policy_hardening.py'
       - 'tests/check_mcp_pg_ci.py'
       - 'tests/test_mcp_pg_ci_guard.py'
       - '.github/workflows/mcp-disposable-postgres.yml'
@@ -70,8 +72,12 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_mcp_remote_dispatch_*.py' -v
       - name: Verify offline HTTPS preflight security
         run: python -m unittest discover -s tests -p 'test_mcp_http_preflight.py' -v
+      - name: Verify offline MCP response admission and byte limits
+        run: python -m unittest discover -s tests -p 'test_mcp_http_response_guard.py' -v
       - name: Verify offline MCP response policy and byte limits
-        run: python -m unittest discover -s tests -p 'test_mcp_http_response*.py' -v
+        run: |
+          python -m unittest discover -s tests -p 'test_mcp_http_response_guard.py' -v
+          python -m unittest discover -s tests -p 'test_mcp_http_response_policy_hardening.py' -v
       - name: Create least-privilege runtime role
         env:
           PGPASSWORD: disposable-only
