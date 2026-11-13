@@ -61,3 +61,7 @@ The PostgreSQL integration suite now asserts that a previously approved, consume
 ## Exact HTTPS endpoint policy (offline)
 
 `mcp_endpoint_policy.validate_mcp_endpoint` rejects unapproved URLs, HTTP, credentials in URLs, fragments, queries, encoded paths, noncanonical DNS names, IP literals and non-443 ports. It does not perform DNS resolution, TLS, OAuth or HTTP requests. The network worker **must** enforce DNS/IP pinning and private/metadata address blocking at connection time, disable redirects, validate certificate identity, restrict OAuth token audience, and route through the independently verified egress gateway. URL validation alone is not SSRF protection; keep external execution disabled.
+
+## DNS answer policy (offline)
+
+`mcp_dns_policy.validate_mcp_dns_answers` rejects empty, oversized, duplicate, malformed, private, loopback, link-local, metadata and mixed public/private address sets, including IPv4-mapped IPv6. The function does **not** resolve DNS or enforce where a socket connects. The gateway must independently resolve, pin, and revalidate the actual destination at connect time, deny redirects and bypass routes, and verify TLS hostname/certificate. DNS rebinding remains a production blocker until tested at the enforced gateway. No live MCP execution is enabled.
