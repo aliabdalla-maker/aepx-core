@@ -9,3 +9,6 @@ This change does not establish a production-ready deployment. Before lifting dra
 
 ## Test fixture correction
 Newline and duplicate-key regression fixtures now contain real line breaks rather than literal backslash-n sequences. These tests still require CI execution before acceptance.
+
+## Operator evidence gate
+Before `staging.sh --start`, the operator must export `AEPX_BACKUP_RESTORE_VERIFIED=yes` and `AEPX_IMAGE_PLATFORMS_VERIFIED=yes` **and** point `AEPX_BACKUP_RESTORE_EVIDENCE` and `AEPX_IMAGE_PLATFORM_EVIDENCE` to two regular, non-symlink, nonempty local evidence files created within the last seven days. A small metadata guard validates existence, age and size. Keep evidence files private and outside the repository. **Important:** this is an administrative evidence-presence gate, not cryptographic proof of the test result. Independently review actual restore output, checksum, test data, OCI shape, built-image compatibility and resource quota before approval. Never deploy on an existing production host.
