@@ -44,7 +44,7 @@ class OfflinePreflightEvidenceTests(unittest.TestCase):
                 if command[:2] == ["git", "rev-parse"]:
                     raise subprocess.TimeoutExpired(command, 1)
                 return subprocess.CompletedProcess(command, 0)
-            with patch.object(module.importlib.util, "find_spec", return_value=object()), \\
+            with patch.object(module.importlib.util, "find_spec", return_value=object()), \
                  patch.object(module.subprocess, "run", side_effect=run):
                 self.assertEqual(module.main(["--timeout", "1", "--json-output", str(output)]), 0)
             evidence = json.loads(output.read_text(encoding="utf-8"))
@@ -53,13 +53,13 @@ class OfflinePreflightEvidenceTests(unittest.TestCase):
     @staticmethod
     def _run_success(command, **kwargs):
         if command[:2] == ["git", "rev-parse"]:
-            return subprocess.CompletedProcess(command, 0, stdout="test-commit\\n")
+            return subprocess.CompletedProcess(command, 0, stdout="test-commit\n")
         return subprocess.CompletedProcess(command, 0)
 
     @staticmethod
     def _run_timeout(command, **kwargs):
         if command[:2] == ["git", "rev-parse"]:
-            return subprocess.CompletedProcess(command, 0, stdout="test-commit\\n")
+            return subprocess.CompletedProcess(command, 0, stdout="test-commit\n")
         raise subprocess.TimeoutExpired(command, 1)
 
 
