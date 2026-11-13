@@ -11,6 +11,9 @@ EVENT = "22222222-2222-4222-8222-222222222222"
 
 class DispatcherTests(unittest.TestCase):
     def setUp(self):
+        self.lease_patch = patch("app.hitl_dispatcher.lease_is_current", return_value=True)
+        self.lease_check = self.lease_patch.start()
+        self.addCleanup(self.lease_patch.stop)
         self.db = MagicMock()
         self.deliver = MagicMock()
         self.kw = dict(connection=self.db, tenant_id=TENANT,
@@ -46,6 +49,17 @@ class DispatcherTests(unittest.TestCase):
         result = dispatch_batch(**self.kw)
         self.assertEqual(result["deferred"], 1)
         self.deliver.assert_not_called()
+    @patch.dict(os.environ, {"HITL_DISPATCH_ENABLED": "yes"})
+    @patch("app.hitl_dispatcher.settle")
+    @patch("app.hitl_dispatcher.claim")
+    @patch("app.hitl_dispatcher.reap_exhausted", return_value=[])
+    def test_expired_lease_never_invokes_adapter(self, reap, claim, settle):
+        claim.return_value = [(EVENT, "hitl.approval.consumed", {}, 1)]
+        self.lease_check.return_value = False
+        result = dispatch_batch(**self.kw)
+        self.deliver.assert_not_called()
+        self.assertEqual(result["failed"], 1)
+        self.assertFalse(settle.call_args.kwargs["delivered"])
     def test_default_dry_run(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(dispatch_batch(**self.kw)["mode"], "dry-run")
