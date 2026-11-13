@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKS = [
+    [sys.executable, "-m", "compileall", "-q", "scripts", "tests"],
     [sys.executable, "scripts/check_workflow_integrity.py"],
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_workflow_deployment_policy.py", "-v"],
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_release_audit_workflow_policy.py", "-v"],
