@@ -62,6 +62,20 @@ class QueueTriageTests(unittest.TestCase):
         runs = [{"id": 1, "status": "completed", "conclusion": "success"}]
         self.assertEqual(triage.failed_before_jobs_evidence("org/repo", runs, "fake"), [])
 
+    def test_check_run_evidence_is_bounded(self):
+        calls = []
+        def fetch(url, token):
+            calls.append(url)
+            return {"total_count": 0, "check_runs": []}
+        failed = [{"run_id": i, "head_sha": "abc123"} for i in range(10)]
+        evidence = triage.check_run_evidence("org/repo", failed, "fake", fetch=fetch)
+        self.assertEqual(len(calls), 3)
+        self.assertTrue(all(item["no_check_runs_returned"] for item in evidence))
+
+    def test_check_run_evidence_missing_sha_is_safe(self):
+        evidence = triage.check_run_evidence("org/repo", [{"run_id": 5}], "fake")
+        self.assertEqual(evidence[0]["error_type"], "MissingHeadSHA")
+
     def test_queued_sample_is_bounded(self):
         now = datetime.datetime(2026, 11, 13, tzinfo=datetime.timezone.utc)
         runs = [{"id": i, "status": "queued", "created_at": "2026-11-13T00:00:00Z"}
