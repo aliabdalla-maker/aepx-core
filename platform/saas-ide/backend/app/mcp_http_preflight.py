@@ -45,6 +45,11 @@ def validate_mcp_https_endpoint(endpoint, *, allowed_hosts, timeout_seconds=10,
             or parsed.netloc.endswith(".") or "%" in parsed.netloc
             or "\\" in endpoint):
         raise MCPPreflightDenied("HTTPS endpoint violates strict transport policy")
+    # Reject noncanonical authority forms (empty port, leading-zero port,
+    # uppercase hostname and implicit parser normalization). This prevents
+    # distinct URL spellings from bypassing an exact-host policy.
+    if parsed.netloc not in (host, host + ":443"):
+        raise MCPPreflightDenied("noncanonical HTTPS authority")
     if host not in allowed_hosts:
         raise MCPPreflightDenied("hostname not allowlisted")
     if any(type(item) is not str or item != item.lower() for item in allowed_hosts):
