@@ -17,16 +17,16 @@ class PostgresIdentityTests(unittest.TestCase):
             tenant_id=str(uuid4()),token_id="jwt-token-123",
             issuer="https://identity.example")
     def test_active_member_and_not_revoked(self):
-        self.cur.fetchone.side_effect=[(True,),(False,)]
+        self.cur.fetchone.side_effect=[(True,),(True,),(True,),(False,)]
         self.assertTrue(enforce_postgres_identity(**self.args))
-        self.assertEqual(self.cur.execute.call_count,2)
+        self.assertEqual(self.cur.execute.call_count,4)
     def test_inactive_membership_denied(self):
-        self.cur.fetchone.return_value=(False,)
+        self.cur.fetchone.side_effect=[(True,),(False,)]
         with self.assertRaises(IdentityPolicyDenied):
             enforce_postgres_identity(**self.args)
-        self.assertEqual(self.cur.execute.call_count,1)
+        self.assertEqual(self.cur.execute.call_count,2)
     def test_revoked_token_denied(self):
-        self.cur.fetchone.side_effect=[(True,),(True,)]
+        self.cur.fetchone.side_effect=[(True,),(True,),(True,),(True,)]
         with self.assertRaises(IdentityPolicyDenied):
             enforce_postgres_identity(**self.args)
     def test_database_outage_denied(self):
@@ -35,6 +35,15 @@ class PostgresIdentityTests(unittest.TestCase):
             enforce_postgres_identity(**self.args)
     def test_ambiguous_db_decision_denied(self):
         self.cur.fetchone.return_value=(1,)
+        with self.assertRaises(IdentityPolicyDenied):
+            enforce_postgres_identity(**self.args)
+    def test_stale_sync_denied(self):
+        self.cur.fetchone.return_value=(False,)
+        with self.assertRaises(IdentityPolicyDenied):
+            enforce_postgres_identity(**self.args)
+        self.assertEqual(self.cur.execute.call_count,1)
+    def test_sync_healthy_but_unknown_revocation_denied_on_ambiguous_result(self):
+        self.cur.fetchone.side_effect=[(True,),(True,),(True,),(None,)]
         with self.assertRaises(IdentityPolicyDenied):
             enforce_postgres_identity(**self.args)
     def test_missing_factory_denied(self):
