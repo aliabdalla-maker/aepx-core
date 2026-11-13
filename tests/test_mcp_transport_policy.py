@@ -42,3 +42,17 @@ class TestTransportPolicy(unittest.TestCase):
                         policy=policy,endpoint=endpoint,server_id=server,
                         status_code=200,content_type="application/json",
                         response_body=BODY,expected_request_id=request_id)
+
+    def test_connected_peer_must_match_pinned_answers(self):
+        policy=self.policy()
+        ok=validate_mcp_transport_result(
+            policy=policy,endpoint=URL,server_id="crm",status_code=200,
+            content_type="application/json",response_body=BODY,
+            expected_request_id=7,connected_peer="1.1.1.1")
+        self.assertTrue(ok["ok"])
+        for peer in ("8.8.8.8","127.0.0.1","169.254.169.254"):
+            with self.subTest(peer=peer),self.assertRaises(MCPContractDenied):
+                validate_mcp_transport_result(
+                    policy=policy,endpoint=URL,server_id="crm",status_code=200,
+                    content_type="application/json",response_body=BODY,
+                    expected_request_id=7,connected_peer=peer)
