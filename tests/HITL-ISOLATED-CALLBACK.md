@@ -1,0 +1,25 @@
+# Isolated HITL callback prototype
+
+The opt-in `app.hitl_isolated_callback.run_isolated_callback` runner uses a
+spawned Python child process and an explicit entrypoint allowlist. Offline
+tests are in `tests/test_hitl_isolated_callback.py`.
+
+This module is **not connected to dispatch_batch** and does not enable remote
+execution. A timeout or child crash is an **uncertain remote outcome**, not
+proof that an external action did not occur. Do not blindly replay it.
+
+## Production blockers
+
+- Terminating a Python child does not guarantee termination of grandchildren
+  or already-issued provider requests. Use an OS/container supervisor with
+  cgroup/process-tree termination, resource limits and restricted egress.
+- Reserve and commit a remote receipt before the provider request, then use
+  provider idempotency and independently verified reconciliation.
+- Require a signed, trusted adapter registry rather than caller-supplied
+  import paths. Authenticate tenant, worker and approved action identity.
+- Test crash at reservation, dispatch, provider acknowledgment and settlement.
+- Verify timeout handling, duplicate billing prevention, audit integrity and
+  fail-closed network policy in disposable staging before wiring the runner
+  into live dispatch.
+
+No OCI resources, external providers or production workloads are touched.
