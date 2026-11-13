@@ -17,6 +17,7 @@ CHECKS = [
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_actions_queue_diagnostics_policy.py", "-v"],
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_offline_ci_preflight.py", "-v"],
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_local_actions_queue_triage.py", "-v"],
+    [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_actions_sample_gate.py", "-v"],
 ]
 
 def main(argv=None):
