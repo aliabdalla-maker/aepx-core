@@ -68,7 +68,8 @@ def reserve_remote(connection,*,tenant_id,event_id,provider,idempotency_key):
         raise
 
 def reconcile_remote(connection,*,tenant_id,event_id,provider,idempotency_key,
-                     verified_state,evidence_reference,reviewer_id,authorized=False):
+                     verified_state,evidence_reference,reviewer_id,authorized=False,
+                     verify_evidence=None):
     if not authorized:
         raise ReconciliationRequired("verified operator authorization required")
     if verified_state not in ("confirmed","failed_safe"):
@@ -76,6 +77,16 @@ def reconcile_remote(connection,*,tenant_id,event_id,provider,idempotency_key,
     if (not isinstance(evidence_reference,str) or len(evidence_reference.strip())<8
         or not isinstance(reviewer_id,str) or len(reviewer_id.strip())<8):
         raise ValueError("reconciliation evidence and reviewer required")
+    # A caller's authorization flag cannot establish a remote outcome.
+    # The injected trusted verifier must validate provider evidence and
+    # reviewer authority; exceptions propagate before any DB mutation.
+    if not callable(verify_evidence) or verify_evidence(
+        tenant_id=str(UUID(str(tenant_id))),event_id=str(UUID(str(event_id))),
+        provider=provider,idempotency_key=idempotency_key,
+        verified_state=verified_state,evidence_reference=evidence_reference.strip(),
+        reviewer_id=reviewer_id.strip()
+    ) is not True:
+        raise ReconciliationRequired("independent evidence verification required")
     tenant,event,provider,key=_identifiers(tenant_id,event_id,provider,idempotency_key)
     try:
         with connection.cursor() as cur:
