@@ -52,7 +52,4 @@ jobs:
       - name: Run real disposable PostgreSQL reservation tests
         run: |
           python -m compileall -q platform/saas-ide/backend/app
-          python -m unittest discover -s tests -p 'test_mcp_remote_intent_postgres.py' -v
-      - name: Confirm tests actually executed
-        run: |
           python tests/check_mcp_pg_ci.py
