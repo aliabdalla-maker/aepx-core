@@ -12,7 +12,7 @@ from .timeout23 import hard_deadline
 from .providers import generate
 
 def execute_next(tenant_id: str, *, owner: str | None = None,
-                 inference=generate) -> str:
+                 inference=generate, authorize_dispatch=None) -> str:
     # Check all gates before claiming a job. No credentials or outbound calls by default.
     if os.getenv("IDE_EXTERNAL_EXECUTION_ENABLED")!="true" or os.getenv("IDE_GOVERNED_WORKER_ENABLED")!="true":
         raise PermissionError("Governed worker disabled")
@@ -20,6 +20,10 @@ def execute_next(tenant_id: str, *, owner: str | None = None,
         raise PermissionError("Reviewed network egress gateway required")
     if inference is generate and os.getenv("IDE_PROVIDER_USAGE_RECONCILIATION_ENABLED")!="true":
         raise PermissionError("Provider spend reconciliation required")
+    # A verified gateway alone is not authorization to execute external effects.
+    # A trusted caller must provide a fresh, scoped, fail-closed HITL decision.
+    if not callable(authorize_dispatch):
+        raise PermissionError("Trusted pre-dispatch authorization required")
     if not tenant_id or len(tenant_id)>128:
         raise ValueError("Invalid tenant")
     # No implicit price fallback. Ceiling covers a bounded input+output envelope.
@@ -49,6 +53,13 @@ def execute_next(tenant_id: str, *, owner: str | None = None,
             db.rollback()
         if row is None or row.model_route=="unconfigured":
             raise PermissionError("Job no longer authorised or provider unconfigured")
+        # Recheck after fenced claim and before any provider call. The callback
+        # must validate current identity, task, approval and lease against
+        # authoritative stores; a truthy non-bool result is not sufficient.
+        if authorize_dispatch(tenant_id=tenant_id,job_id=str(job_id),
+                              run_id=str(run_id),owner=owner,
+                              fencing_token=fence) is not True:
+            raise PermissionError("Pre-dispatch authorization denied")
         output=hard_deadline(inference,row.model_route,row.request,max_tokens=tokens,seconds=seconds)
         if not isinstance(output,str):
             raise ValueError("Provider output must be text")
