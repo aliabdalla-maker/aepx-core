@@ -4,8 +4,8 @@ set -Eeuo pipefail
 cd "$(dirname "$0")/../.."
 umask 077
 backup="${1:-}"
-[[ -f "$backup" && ! -L "$backup" ]] || { echo "Usage: $0 /absolute/path/to/staging-backup.sql.gz" >&2; exit 2; }
-backup="$(realpath "$backup")"
+[[ "$backup" = /* && -f "$backup" && ! -L "$backup" && ! -L "$backup.sha256" ]] || { echo "Usage: $0 /absolute/path/to/staging-backup.sql.gz" >&2; exit 2; }
+[[ ! -L "$(dirname "$backup")" ]] || { echo "Symlinked backup directory rejected" >&2; exit 2; }
 [[ "$backup" == /* && -f "$backup.sha256" ]] || { echo "Missing backup or checksum" >&2; exit 2; }
 # Verify digest independently of the stored filename (supports absolute and relative manifests).
 expected="$(awk 'NR==1 {print $1}' "$backup.sha256")"
