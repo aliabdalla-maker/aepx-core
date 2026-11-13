@@ -116,6 +116,39 @@ class HitlPostgresIntegration(unittest.TestCase):
                 cur.execute("""UPDATE hitl.outbox SET leased_until=now()-interval '1 second'
                                WHERE tenant_id=%s AND id=%s""",(str(tenant),event))
 
+    def test_failed_delivery_retry_and_dead_letter_idempotence(self):
+        tenant=uuid4()
+        event=self._seed_outbox(tenant)
+        with self.connect() as conn:
+            first=claim(conn,tenant_id=tenant,worker_id="worker-1",max_attempts=2)
+        self.assertEqual(len(first),1)
+        with self.connect() as conn:
+            settle(conn,tenant_id=tenant,event_id=event,worker_id="worker-1",
+                   attempt_number=first[0][3],delivered=False,
+                   error="redacted delivery failure",retry_seconds=30,max_attempts=2)
+        # Move only this disposable test event's retry clock.
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("""UPDATE hitl.outbox SET next_attempt_at=now()-interval '1 second'
+                               WHERE id=%s AND tenant_id=%s""",(event,str(tenant)))
+        with self.connect() as conn:
+            second=claim(conn,tenant_id=tenant,worker_id="worker-2",max_attempts=2)
+        self.assertEqual(len(second),1)
+        with self.connect() as conn:
+            settle(conn,tenant_id=tenant,event_id=event,worker_id="worker-2",
+                   attempt_number=second[0][3],delivered=False,
+                   error="redacted delivery failure",max_attempts=2)
+        with self.connect() as conn:
+            self.assertEqual(reap_exhausted(conn,tenant_id=tenant,max_attempts=2),[])
+            self.assertEqual(claim(conn,tenant_id=tenant,worker_id="worker-3",
+                                   max_attempts=2),[])
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT set_config('app.tenant_id',%s,true)",(str(tenant),))
+                cur.execute("SELECT status,attempts FROM hitl.outbox WHERE id=%s",(event,))
+                self.assertEqual(cur.fetchone(),("dead",2))
+
     def test_rls_requires_tenant_context_and_restricted_role(self):
         tenant=uuid4()
         event=self._seed_outbox(tenant)
