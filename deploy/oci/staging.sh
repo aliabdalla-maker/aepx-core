@@ -19,6 +19,13 @@ PY
   --status)
     "${COMPOSE[@]}" ps
     ;;
+  --logs)
+    "${COMPOSE[@]}" logs --tail=100 --no-color
+    ;;
+  --stop)
+    [[ "${AEPX_STAGING_APPROVED:-}" == "yes" ]] || { echo "BLOCKED: explicit staging operator approval required" >&2; exit 3; }
+    "${COMPOSE[@]}" stop
+    ;;
   --smoke)
     "${COMPOSE[@]}" ps --status running
     "${COMPOSE[@]}" exec -T postgres pg_isready -U aepx -d aepx
@@ -51,7 +58,7 @@ PY
     "${COMPOSE[@]}" ps
     ;;
   *)
-    echo "Usage: $0 [--validate|--status|--smoke|--start]" >&2
+    echo "Usage: $0 [--validate|--status|--logs|--smoke|--start|--stop]" >&2
     exit 2
     ;;
 esac
