@@ -57,3 +57,7 @@ The PostgreSQL integration suite now asserts that a previously approved, consume
 ## HTTP response media and status gate
 
 `mcp_http_response_gate.validate_mcp_http_response` rejects non-200 statuses, missing/unsupported media types, oversized bodies, malformed JSON and uncorrelated SSE or JSON responses. It selects the existing bounded offline JSON or SSE validator. This matches the 2026-07-28 Streamable HTTP request-response media types but **does not** implement HTTP connections, OAuth/TLS, SSE incremental notifications, subscriptions, request cancellation, redirects or egress isolation. In 2026-07-28, legacy GET streams, protocol-level sessions and Last-Event-ID resume are removed; do not implement those as required current-version features. Keep external execution disabled.
+
+## Exact HTTPS endpoint policy (offline)
+
+`mcp_endpoint_policy.validate_mcp_endpoint` rejects unapproved URLs, HTTP, credentials in URLs, fragments, queries, encoded paths, noncanonical DNS names, IP literals and non-443 ports. It does not perform DNS resolution, TLS, OAuth or HTTP requests. The network worker **must** enforce DNS/IP pinning and private/metadata address blocking at connection time, disable redirects, validate certificate identity, restrict OAuth token audience, and route through the independently verified egress gateway. URL validation alone is not SSRF protection; keep external execution disabled.
