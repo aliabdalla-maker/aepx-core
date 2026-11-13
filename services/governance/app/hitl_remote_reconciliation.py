@@ -70,7 +70,7 @@ def reserve_remote(connection,*,tenant_id,event_id,provider,idempotency_key):
 
 def reconcile_remote(connection,*,tenant_id,event_id,provider,idempotency_key,
                      verified_state,evidence_reference,reviewer_id,authorized=False,
-                     verify_evidence=None):
+                     verify_evidence=None,verify_operator=None):
     if not authorized:
         raise ReconciliationRequired("verified operator authorization required")
     if verified_state not in ("confirmed","failed_safe"):
@@ -82,6 +82,15 @@ def reconcile_remote(connection,*,tenant_id,event_id,provider,idempotency_key,
     if (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{7,127}",evidence_reference.strip())
         or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{7,127}",reviewer_id.strip())):
         raise ValueError("opaque evidence and reviewer identifiers required")
+    # Authorization is derived from trusted identity/RBAC, not the caller flag.
+    # The injected operator verifier must validate the authenticated principal,
+    # tenant scope, reviewer identity and permission for this outcome.
+    if not callable(verify_operator) or verify_operator(
+        tenant_id=str(UUID(str(tenant_id))),event_id=str(UUID(str(event_id))),
+        provider=provider,reviewer_id=reviewer_id.strip(),
+        permission="hitl.remote.reconcile",verified_state=verified_state
+    ) is not True:
+        raise ReconciliationRequired("independent operator authorization required")
     # A caller's authorization flag cannot establish a remote outcome.
     # The injected trusted verifier must validate provider evidence and
     # reviewer authority; exceptions propagate before any DB mutation.
