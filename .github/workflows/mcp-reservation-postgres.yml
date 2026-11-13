@@ -6,6 +6,7 @@ on:
       - 'platform/saas-ide/backend/app/mcp_remote_intent_reservation.py'
       - 'platform/saas-ide/backend/app/mcp_remote_intent_schema.py'
       - 'platform/saas-ide/backend/app/mcp_remote_tenant_context.py'
+      - 'platform/saas-ide/backend/app/mcp_remote_dispatch_commit_gate.py'
       - 'tests/test_mcp_remote_tenant_context.py'
       - '.github/workflows/mcp-reservation-postgres.yml'
   workflow_dispatch:
