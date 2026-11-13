@@ -251,6 +251,40 @@ class PostgresReservationAcceptance(unittest.TestCase):
                         request_id=candidate.request_id,
                         idempotency_key=candidate.idempotency_key)
 
+    def test_abrupt_connection_close_discards_uncommitted_claim(self):
+        """Simulate worker disappearance without commit or explicit rollback."""
+        from dataclasses import replace
+        candidate = replace(self.intent, request_id=str(uuid4()),
+            approval_id=str(uuid4()), action_hash="3"*64,
+            idempotency_key="claim-disconnect-01")
+        with psycopg.connect(RUNTIME_DSN) as writer:
+            with writer.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                self.assertEqual(reserve_intent(cur, candidate), "created")
+            writer.commit()
+        abandoned = psycopg.connect(RUNTIME_DSN)
+        try:
+            with abandoned.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                claim_dispatch(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+        finally:
+            abandoned.close()
+        with psycopg.connect(RUNTIME_DSN) as recovery:
+            with recovery.cursor() as cur:
+                bind_verified_tenant(cur, verified_tenant_id=self.tenant,
+                                     expected_runtime_role="aepx_runtime")
+                cur.execute("SELECT state FROM mcp_remote_execution_intents WHERE request_id = %s",
+                            (candidate.request_id,))
+                self.assertEqual(cur.fetchone()[0], "reserved")
+                claim_dispatch(cur, tenant_id=self.tenant,
+                    request_id=candidate.request_id,
+                    idempotency_key=candidate.idempotency_key)
+            recovery.commit()
+
     def test_wrong_runtime_role_fails_closed(self):
         with psycopg.connect(RUNTIME_DSN) as conn:
             with conn.cursor() as cur:
