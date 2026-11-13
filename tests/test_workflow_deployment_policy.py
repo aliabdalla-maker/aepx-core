@@ -41,6 +41,19 @@ class DeploymentPolicyTests(unittest.TestCase):
             "name: example\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
             "protected deployment workflow missing")
 
+
+    def test_validator_rejects_duplicate_event_keys(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: ambiguous\non:\n  workflow_dispatch:\non:\n  push:\njobs:\n  check:\n    runs-on: ubuntu-latest\n",
+            "duplicate mapping key: on")
+
+    def test_validator_rejects_duplicate_job_keys(self):
+        self._assert_rejected(
+            "example.yml",
+            "name: ambiguous\non:\n  workflow_dispatch:\njobs:\n  check:\n    runs-on: ubuntu-latest\n  check:\n    runs-on: ubuntu-latest\n",
+            "duplicate mapping key: check")
+
     def _assert_rejected(self, name, content, expected):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
