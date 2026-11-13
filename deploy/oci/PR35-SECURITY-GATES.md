@@ -15,3 +15,6 @@ Before `staging.sh --start`, the operator must export `AEPX_BACKUP_RESTORE_VERIF
 
 ## Staging resource and security policy gate
 `check-staging-policy.py` validates the approved five-service isolated staging inventory, 2 GiB aggregate container memory ceiling, PID limits, `no-new-privileges`, restart policies, no published ports, no privileged/host-network containers and the PostgreSQL named volume. It runs before staging startup and is regression-tested in CI. It requires Python 3 and PyYAML (`python3 -m pip install pyyaml` in an approved isolated environment). This does not prove actual OCI RAM availability or container runtime performance; the selected Ubuntu host must still pass preflight and live smoke tests.
+
+## PostgreSQL staging smoke (operator-only)
+After explicitly approving and starting the **isolated** staging project, run `AEPX_STAGING_APPROVED=yes bash deploy/oci/staging.sh --db-smoke`. The command checks the Compose project and service labels, opens a temporary SQL table, inserts and reads a probe row, then rolls back. This is a real PostgreSQL read/write availability probe, not a full durability, restart, migration, RLS, or cross-tenant test. It does not run in CI against a live OCI host. Do not run it on production or set approval flags without verifying the target host.
