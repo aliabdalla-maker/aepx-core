@@ -18,7 +18,19 @@ expected="$(awk 'NR==1{print $1}' "$encrypted.sha256")"
 actual="$(sha256sum "$encrypted" | awk '{print $1}')"
 [[ "${actual,,}" == "${expected,,}" ]] || { echo "Encrypted backup checksum mismatch" >&2; exit 2; }
 [[ ! -L "$(dirname "$encrypted")" ]] || { echo "Symlinked backup parent rejected" >&2; exit 2; }
-tmpdir="$(mktemp -d)"
+# Refuse to place decrypted backup bytes on persistent host storage.
+# Linux /dev/shm is tmpfs; size must accommodate the entire compressed backup.
+[[ -d /dev/shm && "$(stat -f -c %T /dev/shm)" == "tmpfs" ]] || {
+  echo "A tmpfs-mounted /dev/shm is required for plaintext recovery rehearsal" >&2
+  exit 2
+}
+encrypted_bytes="$(stat -c %s "$encrypted")"
+available_bytes="$(df -PB1 /dev/shm | awk 'NR==2 {print $4}')"
+[[ "$available_bytes" =~ ^[0-9]+$ && "$available_bytes" -ge "$((encrypted_bytes * 2 + 16777216))" ]] || {
+  echo "Insufficient tmpfs capacity for private restore; enlarge /dev/shm on the isolated host" >&2
+  exit 2
+}
+tmpdir="$(mktemp -d /dev/shm/aepx-restore.XXXXXXXX)"
 chmod 700 "$tmpdir"
 trap 'rm -rf -- "$tmpdir"' EXIT
 age -d -i "$identity" -o "$tmpdir/restore.sql.gz" "$encrypted"
