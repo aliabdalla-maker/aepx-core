@@ -63,6 +63,8 @@ def main(argv=None):
         command = ["gh", "run", "list", "--repo", args.repo, "--limit",
                    str(args.limit), "--json",
                    "databaseId,name,status,conclusion,headSha,createdAt"]
+        if args.head_sha:
+            command.extend(["--commit", args.head_sha])
         try:
             result = subprocess.run(command, check=True, capture_output=True,
                                     text=True, timeout=30)
