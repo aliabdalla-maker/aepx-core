@@ -82,6 +82,7 @@ def main(argv=None):
         except json.JSONDecodeError:
             print("GitHub CLI returned invalid JSON", file=sys.stderr)
             return 2
+    snapshot_count = len(runs) if isinstance(runs, list) else 0
     if args.head_sha:
         if not isinstance(runs, list) or any(not isinstance(run, dict) for run in runs):
             print("Invalid GitHub Actions data: expected run records", file=sys.stderr)
@@ -93,7 +94,7 @@ def main(argv=None):
         print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
         return 2
     required = sorted(set(args.require_workflow))
-    if args.require_success and report["total"] >= args.limit:
+    if args.require_success and snapshot_count >= args.limit:
         print("Strict acceptance snapshot reached --limit; increase the limit to establish coverage", file=sys.stderr)
         return 6
     observed = {run.get("name") for run in runs}
