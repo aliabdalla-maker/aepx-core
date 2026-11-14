@@ -1,0 +1,403 @@
+name: AEP-X acceptance evidence integrity
+on:
+  push:
+    branches:
+      - 'fix/acceptance-evidence-gates-20261114'
+    paths:
+      - 'tools/verify_acceptance_evidence.py'
+      - 'tests/test_acceptance_evidence_integrity.py'
+      - '.github/workflows/acceptance-evidence-integrity.yml'
+      - 'docs/acceptance-evidence-gate.md'
+  pull_request:
+    paths:
+      - 'tools/verify_acceptance_evidence.py'
+      - 'tests/test_acceptance_evidence_integrity.py'
+      - '.github/workflows/acceptance-evidence-integrity.yml'
+      - 'docs/acceptance-evidence-gate.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: acceptance-evidence-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  offline-evidence-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preflight Python syntax and test discovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/verify_acceptance_evidence.py tests/test_acceptance_evidence_integrity.py
+          python - <<'PY'
+          import unittest
+          suite = unittest.defaultTestLoader.discover(
+              start_dir='tests', pattern='test_acceptance_evidence_integrity.py')
+          count = suite.countTestCases()
+          print(f'Discovered {count} acceptance integrity tests')
+          if count < 42:
+              raise SystemExit(f'Expected at least 42 tests, discovered {count}')
+          PY
+      - name: Run offline fail-closed evidence regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v 2>&1 | tee /tmp/aepx-unittest.log
+          python - <<'PY'
+          import pathlib, re
+          log = pathlib.Path('/tmp/aepx-unittest.log').read_text()
+          match = re.search(r'^Ran (\d+) tests? in ', log, re.MULTILINE)
+          if not match or int(match.group(1)) < 42 or not re.search(r'^OK(?:\s|$)', log, re.MULTILINE):
+              raise SystemExit('Acceptance suite missing a passing completion marker for at least 42 tests')
+          PY
+      - name: Verify CLI rejects absent manifest
+        shell: bash
+        run: |
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-missing-manifest.json > /tmp/aepx-gate.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q "acceptance evidence rejected" /tmp/aepx-gate.out
+      - name: Reject empty milestone manifest at CLI boundary
+        shell: bash
+        run: |
+          printf '{"milestones":[]}' > /tmp/aepx-empty-manifest.json
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-empty-manifest.json > /tmp/aepx-gate.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q "acceptance evidence rejected" /tmp/aepx-gate.out
+      - name: Verify incomplete evidence returns exit code one
+        shell: bash
+        run: |
+          printf '{"milestones":[{"id":"rls","weight":100,"evidence":[{"path":"absent.txt","sha256":"%064d","result":"pass"}]}]}' 0 > /tmp/aepx-incomplete-manifest.json
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-incomplete-manifest.json > /tmp/aepx-incomplete.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          grep -q '"evidence_integrity_percent": 0' /tmp/aepx-incomplete.out
+      - name: Verify valid local digest does not claim independent acceptance
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('/tmp/aepx-gate-positive')
+          root.mkdir(exist_ok=True)
+          payload = b'local-integrity-only'
+          (root / 'proof.txt').write_bytes(payload)
+          manifest = {'milestones': [{'id': 'offline', 'weight': 100, 'evidence': [
+              {'path': 'proof.txt', 'sha256': hashlib.sha256(payload).hexdigest(), 'result': 'pass'}
+          ]}]}
+          (root / 'manifest.json').write_text(json.dumps(manifest))
+          PY
+          python tools/verify_acceptance_evidence.py /tmp/aepx-gate-positive/manifest.json > /tmp/aepx-gate-positive.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/aepx-gate-positive.json').read_text())
+          assert result['evidence_integrity_percent'] == 100
+          assert result['independently_verified_percent'] == 0
+          assert result['independent_verification_available'] is False
+          PY
+      - name: Verify invalid UTF-8 manifest returns exit code two
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          Path('/tmp/aepx-invalid-utf8.json').write_bytes(bytes([255, 254]))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-invalid-utf8.json > /tmp/aepx-invalid-utf8.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'acceptance evidence rejected' /tmp/aepx-invalid-utf8.out
+      - name: Reject cross-milestone evidence reuse at CLI boundary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-reused-evidence')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          entry = {'path': 'proof.txt', 'sha256': hashlib.sha256(b'proof').hexdigest(),
+                   'result': 'pass'}
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [
+              {'id': 'rls', 'weight': 50, 'evidence': [entry]},
+              {'id': 'oidc', 'weight': 50, 'evidence': [entry]}
+          ]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-reused-evidence/manifest.json > /tmp/aepx-reuse.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'duplicate evidence path rejected' /tmp/aepx-reuse.out
+      - name: Reject forged acceptance schema fields at CLI boundary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-unknown-schema')
+          root.mkdir(exist_ok=True)
+          (root / 'manifest.json').write_text(json.dumps({
+              'milestones': [{'id': 'rls', 'weight': 100, 'evidence': []}],
+              'independently_verified_percent': 100
+          }))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-unknown-schema/manifest.json > /tmp/aepx-schema.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'unexpected manifest fields' /tmp/aepx-schema.out
+      - name: Reject hard-linked evidence at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          root = Path('/tmp/aepx-hardlink-evidence')
+          root.mkdir(exist_ok=True)
+          (root / 'source.txt').write_bytes(b'proof')
+          os.link(root / 'source.txt', root / 'proof.txt')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': 'proof.txt',
+                  'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'pass'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-hardlink-evidence/manifest.json > /tmp/aepx-hardlink.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          output = json.loads(Path('/tmp/aepx-hardlink.out').read_text())
+          assert output['evidence_integrity_percent'] == 0
+          assert output['independently_verified_percent'] == 0
+          PY
+      - name: Reject hard-linked manifest at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          root = Path('/tmp/aepx-hardlink-manifest')
+          root.mkdir(exist_ok=True)
+          manifest = root / 'manifest.json'
+          manifest.write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': []
+          }]}))
+          os.link(manifest, root / 'manifest-alias.json')
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-hardlink-manifest/manifest.json > /tmp/aepx-hardlink-manifest.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'acceptance evidence rejected' /tmp/aepx-hardlink-manifest.out
+      - name: Reject traversal even when digest is malformed
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-malformed-digest-traversal')
+          root.mkdir(exist_ok=True)
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': '../outside.txt', 'sha256': 'bad', 'result': 'pass'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-malformed-digest-traversal/manifest.json > /tmp/aepx-traversal.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'invalid evidence path components' /tmp/aepx-traversal.out
+      - name: Explicit failed evidence must never pass acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-explicit-fail')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': 'proof.txt',
+                  'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'fail'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-explicit-fail/manifest.json > /tmp/aepx-explicit-fail.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/aepx-explicit-fail.out').read_text())
+          assert result['evidence_integrity_percent'] == 0
+          assert result['independently_verified_percent'] == 0
+          PY
+      - name: Reject unknown evidence result at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-unknown-result')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': 'proof.txt',
+                  'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'pending'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-unknown-result/manifest.json > /tmp/aepx-unknown-result.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'evidence result must be pass or fail' /tmp/aepx-unknown-result.out
+      - name: Reject forged late evidence entry at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('/tmp/aepx-forged-late-evidence')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [
+              {'id': 'rls', 'weight': 50, 'evidence': [{
+                  'path': 'proof.txt', 'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'pass'}]},
+              {'id': 'oidc', 'weight': 50, 'evidence': [{
+                  'path': 'other.txt', 'sha256': '0' * 64,
+                  'result': 'pass', 'independently_verified': True}]}
+          ]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-forged-late-evidence/manifest.json > /tmp/aepx-forged-late.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'invalid evidence entry schema' /tmp/aepx-forged-late.out
+      - name: Reject malformed late milestone ID at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('/tmp/aepx-late-duplicate-id')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [
+              {'id': 'rls', 'weight': 50, 'evidence': [{
+                  'path': 'proof.txt', 'sha256': hashlib.sha256(b'proof').hexdigest(), 'result': 'pass'}]},
+              {'id': 'rls', 'weight': 50, 'evidence': []}
+          ]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-late-duplicate-id/manifest.json > /tmp/aepx-late-duplicate-id.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'invalid or duplicate milestone id' /tmp/aepx-late-duplicate-id.out
+      - name: Verify all 14 CLI smoke checks reached and passed
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "All 13 preceding CLI smoke-check steps completed successfully" > /tmp/aepx-cli-complete.txt
+      - name: Publish clearly scoped CI summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## AEP-X offline evidence gate'
+            echo
+            echo "- Repository: ${GITHUB_REPOSITORY}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Job outcome: ${{ job.status }}"
+            if [[ -f /tmp/aepx-unittest.log ]]; then
+              echo "- Python unittest result:"
+              if grep -Eq '^Ran [0-9]+ tests? in ' /tmp/aepx-unittest.log && grep -Eq '^(OK|FAILED)' /tmp/aepx-unittest.log; then
+                grep -E '^Ran [0-9]+ tests? in |^(OK|FAILED)' /tmp/aepx-unittest.log | tail -n 2 | sed 's/^/  - /'
+              else
+                echo '  - Missing unittest completion marker; treat as unverified'
+              fi
+            else
+              echo "- Python unittest result: **NOT EXECUTED OR LOG UNAVAILABLE**"
+            fi
+            if [[ -f /tmp/aepx-cli-complete.txt ]]; then
+              echo "- CLI smoke checks: 14 completed successfully"
+            else
+              echo "- CLI smoke checks: **NOT ALL CONFIRMED PASSING**"
+            fi
+            echo "- Scope: offline verifier regressions and CLI contract only"
+            echo "- Independent acceptance: **NOT ESTABLISHED**"
+            echo "- Production deployment authorized: **NO**"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload offline diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aepx-offline-evidence-diagnostics
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            /tmp/aepx-unittest.log
+            /tmp/aepx-gate.out
+            /tmp/aepx-incomplete.out
+            /tmp/aepx-gate-positive.json
+            /tmp/aepx-invalid-utf8.out
+            /tmp/aepx-reuse.out
+            /tmp/aepx-schema.out
+            /tmp/aepx-hardlink.out
+            /tmp/aepx-hardlink-manifest.out
+            /tmp/aepx-traversal.out
+            /tmp/aepx-explicit-fail.out
+            /tmp/aepx-unknown-result.out
+            /tmp/aepx-forged-late.out
+            /tmp/aepx-cli-complete.txt
+            /tmp/aepx-late-duplicate-id.out

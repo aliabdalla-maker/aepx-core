@@ -1,0 +1,185 @@
+"""Offline unit tests for the bounded 100-cycle runner itself."""
+import importlib.util
+import json
+import signal
+import pathlib
+import subprocess
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location("acceptance_runner", ROOT / "tools" / "run_acceptance_100_iterations.py")
+runner = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(runner)
+
+
+class RunnerTests(unittest.TestCase):
+    def invoke(self, iterations, side_effect):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = pathlib.Path(tmp) / "report.json"
+            argv = ["runner", "--iterations", str(iterations), "--output", str(target)]
+            with patch.object(sys, "argv", argv), patch.object(runner.subprocess, "run", side_effect=side_effect):
+                status = runner.main()
+            return status, json.loads(target.read_text())
+
+    def test_successful_cycles_are_recorded(self):
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
+        status, report = self.invoke(3, [result, result, result])
+        self.assertEqual(status, 0)
+        self.assertEqual(report["executed"], 3)
+        self.assertTrue(report["all_passed"])
+        self.assertFalse(report["independent_acceptance_established"])
+
+    def test_report_includes_ci_provenance(self):
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
+        with patch.dict("os.environ", {"GITHUB_SHA": "a" * 40, "GITHUB_RUN_ID": "12345"}):
+            status, report = self.invoke(1, [result])
+        self.assertEqual(status, 0)
+        self.assertEqual(report["source_commit"], "a" * 40)
+        self.assertEqual(report["workflow_run_id"], "12345")
+
+    def test_creates_nested_report_directory_atomically(self):
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = pathlib.Path(tmp) / "nested" / "evidence" / "report.json"
+            argv = ["runner", "--iterations", "1", "--output", str(target)]
+            with patch.object(sys, "argv", argv), patch.object(
+                runner.subprocess, "run", return_value=result
+            ):
+                status = runner.main()
+            self.assertEqual(status, 0)
+            self.assertTrue(target.exists())
+            self.assertTrue(json.loads(target.read_text())["all_passed"])
+            self.assertEqual(list(target.parent.glob("*.tmp")), [])
+
+    def test_rejects_symlink_report_destination(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            original = root / "original.json"
+            original.write_text("unchanged")
+            link = root / "report.json"
+            link.symlink_to(original)
+            argv = ["runner", "--iterations", "1", "--output", str(link)]
+            with patch.object(sys, "argv", argv):
+                with self.assertRaisesRegex(OSError, "symlink report destination"):
+                    runner.main()
+            self.assertEqual(original.read_text(), "unchanged")
+
+    def test_rejects_symlink_report_parent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            real_dir = root / "real"
+            real_dir.mkdir()
+            linked_dir = root / "linked"
+            linked_dir.symlink_to(real_dir, target_is_directory=True)
+            argv = ["runner", "--iterations", "1",
+                    "--output", str(linked_dir / "report.json")]
+            with patch.object(sys, "argv", argv):
+                with self.assertRaisesRegex(OSError, "symlinked report parent"):
+                    runner.main()
+            self.assertFalse((real_dir / "report.json").exists())
+
+    def test_rejects_directory_as_report_destination(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            argv = ["runner", "--iterations", "1", "--output", tmp]
+            with patch.object(sys, "argv", argv):
+                with self.assertRaisesRegex(OSError, "non-file report destination"):
+                    runner.main()
+
+    def test_stops_on_first_failed_cycle(self):
+        good = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
+        bad = subprocess.CompletedProcess([], 1, "", "Ran 42 tests in 0.1s\n\nFAILED (failures=1)\n")
+        status, report = self.invoke(100, [good, bad])
+        self.assertEqual(status, 1)
+        self.assertEqual(report["executed"], 2)
+        self.assertFalse(report["all_passed"])
+
+    def test_rejects_false_ok_without_test_count(self):
+        forged = subprocess.CompletedProcess([], 0, "", "OK\n")
+        status, report = self.invoke(1, [forged])
+        self.assertEqual(status, 1)
+        self.assertIsNone(report["runs"][0]["tests_executed"])
+
+    def test_rejects_early_ok_followed_by_failure(self):
+        forged = subprocess.CompletedProcess(
+            [], 0, "", "Ran 42 tests in 0.1s\n\nOK\nFAILED (failures=1)\n"
+        )
+        status, report = self.invoke(1, [forged])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["all_passed"])
+
+    def test_rejects_stdout_only_forged_summary(self):
+        forged = subprocess.CompletedProcess(
+            [], 0, "Ran 42 tests in 0.1s\n\nOK\n", ""
+        )
+        status, report = self.invoke(1, [forged])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
+    def test_rejects_truncated_unittest_summary(self):
+        truncated = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n")
+        status, report = self.invoke(1, [truncated])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
+    def test_rejects_skipped_tests_even_with_zero_exit(self):
+        result = subprocess.CompletedProcess(
+            [], 0, "", "Ran 42 tests in 0.1s\n\nOK (skipped=42)\n"
+        )
+        status, report = self.invoke(1, [result])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
+    def test_rejects_expected_failures_even_with_zero_exit(self):
+        result = subprocess.CompletedProcess(
+            [], 0, "", "Ran 42 tests in 0.1s\n\nOK (expected failures=42)\n"
+        )
+        status, report = self.invoke(1, [result])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
+    def test_timeout_preserves_failure_report(self):
+        status, report = self.invoke(100, subprocess.TimeoutExpired(["python"], 90))
+        self.assertEqual(status, 1)
+        self.assertEqual(report["executed"], 1)
+        self.assertIn("timeout", report["runs"][0]["error"])
+
+    def test_subprocess_launch_error_persists_report(self):
+        status, report = self.invoke(100, OSError("executable unavailable"))
+        self.assertEqual(status, 1)
+        self.assertEqual(report["executed"], 1)
+        self.assertFalse(report["runs"][0]["passed"])
+        self.assertIn("OSError", report["runs"][0]["error"])
+
+    def test_restores_handler_on_unexpected_exception(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        status, report = self.invoke(1, RuntimeError("simulated crash"))
+        self.assertEqual(status, 1)
+        self.assertEqual(report["executed"], 1)
+        self.assertIn("RuntimeError", report["runs"][0]["error"])
+        self.assertIs(signal.getsignal(signal.SIGTERM), previous)
+
+    def test_restores_sigterm_handler_after_success(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
+        status, _ = self.invoke(1, [result])
+        self.assertEqual(status, 0)
+        self.assertIs(signal.getsignal(signal.SIGTERM), previous)
+
+    def test_restores_sigterm_handler_after_interrupt(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        status, _ = self.invoke(1, KeyboardInterrupt())
+        self.assertEqual(status, 130)
+        self.assertIs(signal.getsignal(signal.SIGTERM), previous)
+
+    def test_interrupt_preserves_failure_report(self):
+        status, report = self.invoke(100, KeyboardInterrupt())
+        self.assertEqual(status, 130)
+        self.assertEqual(report["executed"], 1)
+        self.assertIn("interrupted", report["runs"][0]["error"])
+
+
+if __name__ == "__main__":
+    unittest.main()

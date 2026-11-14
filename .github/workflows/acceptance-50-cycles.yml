@@ -1,0 +1,154 @@
+name: AEP-X two independent 50-cycle offline batches
+on:
+  push:
+    branches: ['fix/acceptance-evidence-gates-20261114']
+    paths:
+      - 'tools/run_acceptance_100_iterations.py'
+      - 'tools/verify_acceptance_cycle_report.py'
+      - 'tools/verify_acceptance_evidence.py'
+      - 'tests/test_acceptance_evidence_integrity.py'
+      - 'tests/test_acceptance_100_runner.py'
+      - 'tests/test_acceptance_cycle_report.py'
+      - 'tests/test_acceptance_cycle_mutations.py'
+      - '.github/workflows/acceptance-50-cycles.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: aepx-50-cycle-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  offline-50:
+    strategy:
+      fail-fast: false
+      matrix:
+        batch: [1, 2]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate Python and regression suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/run_acceptance_100_iterations.py tools/verify_acceptance_cycle_report.py tools/verify_acceptance_evidence.py tests/test_acceptance_evidence_integrity.py tests/test_acceptance_100_runner.py tests/test_acceptance_cycle_report.py tests/test_acceptance_cycle_mutations.py
+          python - <<'PY'
+          import unittest
+          requirements = [
+              ("test_acceptance_100_runner.py", 19),
+              ("test_acceptance_cycle_report.py", 18),
+              ("test_acceptance_cycle_mutations.py", 3),
+              ("test_acceptance_evidence_integrity.py", 42),
+          ]
+          for pattern, minimum in requirements:
+              suite = unittest.defaultTestLoader.discover("tests", pattern=pattern)
+              count = suite.countTestCases()
+              print(f"{pattern}: {count} discovered")
+              if count < minimum:
+                  raise SystemExit(f"Insufficient tests in {pattern}: {count} < {minimum}")
+          PY
+          python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
+          python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
+          python -m unittest discover -s tests -p 'test_acceptance_cycle_mutations.py' -v
+      - name: Run 50 sequential offline acceptance cycles
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/run_acceptance_100_iterations.py --iterations 50 --output acceptance-50-batch-${{ matrix.batch }}.json
+      - name: Verify 50-cycle report and provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/verify_acceptance_cycle_report.py acceptance-50-batch-${{ matrix.batch }}.json --expected 50 --commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
+      - name: Record verified batch outcome
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Batch ${{ matrix.batch }}: 50/50 offline cycles passed report verification" >> "$GITHUB_STEP_SUMMARY"
+          echo "Evidence provenance: $GITHUB_SHA / $GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish bounded result
+        if: always()
+        shell: bash
+        run: |
+          echo '## AEP-X offline 50-cycle acceptance, batch ${{ matrix.batch }}' >> "$GITHUB_STEP_SUMMARY"
+          echo "Source commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Workflow run ID: $GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Independent acceptance: NOT ESTABLISHED' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Merge or production deployment: NOT AUTHORIZED' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aepx-50-cycle-batch-${{ matrix.batch }}-report
+          retention-days: 7
+          if-no-files-found: warn
+          path: acceptance-50-batch-${{ matrix.batch }}.json
+
+  aggregate-evidence:
+    needs: [offline-50]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Retrieve both independent batch reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: aepx-50-cycle-batch-*-report
+          path: batch-evidence
+          merge-multiple: true
+      - name: Verify both reports and aggregate 100-cycle evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          from tools.verify_acceptance_cycle_report import verify
+
+          expected = [Path(f"batch-evidence/acceptance-50-batch-{i}.json") for i in (1, 2)]
+          if any(not path.is_file() for path in expected):
+              raise SystemExit("Both 50-cycle evidence artifacts are required")
+          observed = set(Path("batch-evidence").glob("*.json"))
+          if observed != set(expected):
+              raise SystemExit("Unexpected or duplicate-named evidence artifacts detected")
+          for path in expected:
+              verify(path, os.environ["GITHUB_SHA"], os.environ["GITHUB_RUN_ID"], expected=50)
+          result = {
+              "source_commit": os.environ["GITHUB_SHA"],
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "verified_batches": 2,
+              "verified_offline_cycles": 100,
+              "batch_sha256": {
+                  path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                  for path in expected
+              },
+              "independent_acceptance_established": False,
+              "production_deployment_authorized": False,
+          }
+          Path("acceptance-50x2-aggregate.json").write_text(
+              json.dumps(result, indent=2) + "\n", encoding="utf-8"
+          )
+          print("Two independently verified 50-cycle reports; release still blocked")
+          PY
+          echo 'Two 50-cycle reports verified (100 offline cycles total).' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Independent acceptance: NOT ESTABLISHED' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: aepx-50x2-verified-aggregate
+          retention-days: 7
+          if-no-files-found: error
+          path: acceptance-50x2-aggregate.json
