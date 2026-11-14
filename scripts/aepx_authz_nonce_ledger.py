@@ -4,7 +4,7 @@ Local single-host testing only. NOT a distributed PostgreSQL authorization
 boundary, and does not prove the caller is authenticated. No external calls.
 """
 import hashlib
-import json
+from contextlib import closing
 import os
 import sqlite3
 import time
@@ -28,6 +28,8 @@ def consume_once(database,claims,signature,key,tenant_id,principal_id,action,now
     ledger; DB-side authorization must be atomic with the protected action.
     """
     clock=int(time.time()) if now is None else now
+    if type(clock) is not int:
+        raise AuthorizationDenied('invalid clock')
     verify_context(claims,signature,key,tenant_id,principal_id,action,now=clock)
     if not isinstance(database,(str,os.PathLike)) or not str(database):
         raise AuthorizationDenied("database path required")
@@ -38,17 +40,19 @@ def consume_once(database,claims,signature,key,tenant_id,principal_id,action,now
         raise AuthorizationDenied("unsafe ledger directory")
     fingerprint=hashlib.sha256(_canonical(claims)+bytes.fromhex(signature)).hexdigest()
     try:
-        with sqlite3.connect(str(path),timeout=5,isolation_level=None) as db:
+        with closing(sqlite3.connect(str(path),timeout=5,isolation_level=None)) as db:
             db.execute("PRAGMA busy_timeout=5000")
             db.execute("BEGIN IMMEDIATE")
-            db.execute(SCHEMA)
             try:
+                db.execute(SCHEMA)
                 db.execute("INSERT INTO consumed_context VALUES(?,?,?,?,?,?)",
                            (fingerprint,tenant_id,principal_id,action,claims["expires_at"],clock))
-            except sqlite3.IntegrityError as exc:
+                db.execute("COMMIT")
+            except BaseException:
                 db.execute("ROLLBACK")
-                raise AuthorizationDenied("authorization replay") from exc
-            db.execute("COMMIT")
+                raise
+    except sqlite3.IntegrityError as exc:
+        raise AuthorizationDenied("authorization replay or invalid ledger schema") from exc
     except sqlite3.Error as exc:
         raise AuthorizationDenied("authorization ledger unavailable") from exc
     return True
