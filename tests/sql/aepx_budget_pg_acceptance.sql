@@ -57,6 +57,8 @@ BEGIN
  IF result <> 'settled' THEN RAISE EXCEPTION 'settlement failed'; END IF;
  result := aepx_budget.settle(tenant,'acceptance-1',25,'2.500000');
  IF result <> 'already_settled' THEN RAISE EXCEPTION 'settlement replay failed'; END IF;
+ result := aepx_budget.reserve(tenant,'acceptance-1',40,'4.000000');
+ IF result <> 'already_settled' THEN RAISE EXCEPTION 'settled reservation replay was not blocked'; END IF;
  SELECT token_committed,cost_committed INTO tokens,cost
  FROM aepx_budget.tenant_budget WHERE tenant_id=tenant;
  IF tokens <> 25 OR cost <> 2.5 THEN
