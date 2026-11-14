@@ -210,3 +210,12 @@ from the offline evidence integrity workflow that contains the 14 CLI smoke
 checks. Both results must be reviewed; neither establishes independent
 security acceptance, and neither authorizes merge or deployment. A missing
 workflow run or artifact is an unverified result, not a pass.
+
+### Ordered cycle validation and stdout-spoof regression
+
+The 100-cycle CI report gate now checks consecutive iteration IDs 1..100,
+boolean passing status, integer test counts of at least 42, and zero return
+codes. The runner validates unittest's terminal summary from stderr only,
+rejecting a stdout-only forged success marker. Thirteen runner self-tests
+are authored, including the stdout spoof regression. These source controls
+still require a confirmed passing GitHub Actions run and independent review.
