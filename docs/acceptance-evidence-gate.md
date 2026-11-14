@@ -461,3 +461,13 @@ and run ID provenance. It uploads a seven-day scoped report. This gives
 shorter diagnostic feedback when 50x2 and 100-cycle jobs are queued or
 expensive, but one smoke cycle never establishes full acceptance or permits
 production deployment.
+
+### Fast gate coverage and nonblocking evidence reads
+
+The smoke workflow now checks regression test-count floors and runs the
+integrity suite before its one-cycle runner invocation. The report verifier
+opens evidence with O_NONBLOCK when available, then rejects non-regular
+opened descriptors; an adversarial FIFO-swap test checks that a substituted
+pipe cannot hang the verifier on supported POSIX platforms. All three
+acceptance workflows now require at least 26 report-verifier tests.
+These gates are offline diagnostics and do not authorize a release.
