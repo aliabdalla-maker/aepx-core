@@ -63,3 +63,8 @@ class CycleReportTests(unittest.TestCase):
         self.report["runs"][0]["elapsed_seconds"] = float("nan")
         with self.assertRaisesRegex(ValueError, "invalid JSON constant"):
             self.check()
+
+    def test_rejects_duplicate_json_keys(self):
+        self.path.write_text('{"source_commit":"a","source_commit":"b"}', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "duplicate JSON key"):
+            mod.verify(self.path, "a" * 40, "123", expected=2)
