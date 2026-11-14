@@ -41,5 +41,32 @@ class EvidenceGateTests(unittest.TestCase):
                 verify(manifest)
 
 
+    def test_duplicate_milestone_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": 50, "evidence": []},
+                {"id": "rls", "weight": 50, "evidence": []}]}))
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
+    def test_boolean_weight_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": True, "evidence": []}]}))
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
+    def test_digest_tampering_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_text("changed", encoding="utf-8")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
+                "evidence": [{"path": "proof.txt", "sha256": hashlib.sha256(b"original").hexdigest(),
+                              "result": "pass"}]}]}))
+            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
