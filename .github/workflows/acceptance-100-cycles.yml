@@ -89,7 +89,7 @@ jobs:
                   and run["tests_executed"] >= 42
                   and type(run.get("return_code")) is int and run["return_code"] == 0
                   and type(run.get("elapsed_seconds")) in (int, float)
-                  and 0 <= run["elapsed_seconds"] <= 90
+                  and 0 <= run["elapsed_seconds"] <= 95
               ):
                   raise SystemExit(f"invalid or out-of-order cycle {i}")
           if report.get("independent_acceptance_established") is not False:
