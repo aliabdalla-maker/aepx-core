@@ -18,7 +18,6 @@ def main():
     if not 1 <= args.iterations <= 100:
         parser.error("iterations must be between 1 and 100")
     records = []
-    interrupted = False
     def persist():
         report = {"requested": args.iterations, "executed": len(records),
                   "all_passed": len(records) == args.iterations and all(x["passed"] for x in records),
@@ -31,8 +30,6 @@ def main():
         return report
 
     def stop(signum, frame):
-        nonlocal interrupted
-        interrupted = True
         raise KeyboardInterrupt
 
     signal.signal(signal.SIGTERM, stop)
@@ -45,6 +42,7 @@ def main():
         if remaining < 5:
             records.append({"iteration": iteration, "passed": False,
                             "error": "global 55-minute safety budget exhausted"})
+            persist()
             break
         try:
             run = subprocess.run(command, capture_output=True, text=True,
@@ -71,7 +69,7 @@ def main():
         if not record["passed"]:
             break
     report = persist()
-    return 0 if report["all_passed"] and not interrupted else 1
+    return 0 if report["all_passed"] else 1
 
 if __name__ == "__main__":
     raise SystemExit(main())
