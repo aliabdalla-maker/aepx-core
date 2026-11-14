@@ -39,12 +39,18 @@ BEGIN
    IF SQLERRM <> 'stale or expired iteration lease' THEN RAISE; END IF;
  END;
  BEGIN
-   PERFORM aepx_iteration.advance(t,1,'worker-one',f,'design','sha256:bad');
+   PERFORM aepx_iteration.advance(t,1,'worker-one',f,'design','sha256:1111111111111111111111111111111111111111111111111111111111111111');
    RAISE EXCEPTION 'out-of-order transition accepted';
  EXCEPTION WHEN raise_exception THEN
    IF SQLERRM <> 'out-of-order iteration transition' THEN RAISE; END IF;
  END;
- result:=aepx_iteration.advance(t,1,'worker-one',f,'requirements','sha256:requirements');
+ BEGIN
+   PERFORM aepx_iteration.advance(t,1,'worker-one',f,'requirements','sha256:malformed');
+   RAISE EXCEPTION 'malformed evidence unexpectedly accepted';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM <> 'invalid stage evidence digest' THEN RAISE; END IF;
+ END;
+ result:=aepx_iteration.advance(t,1,'worker-one',f,'requirements','sha256:2222222222222222222222222222222222222222222222222222222222222222');
  IF result<>'requirements' THEN RAISE EXCEPTION 'requirements failed'; END IF;
  UPDATE aepx_iteration.work_item
  SET lease_expires_at=clock_timestamp()-interval '1 second'
@@ -58,18 +64,18 @@ BEGIN
  f:=aepx_iteration.claim(t,1,'worker-two',60);
  IF f<>2 THEN RAISE EXCEPTION 'reclaim did not increment fence'; END IF;
  BEGIN
-   PERFORM aepx_iteration.advance(t,1,'worker-one',1,'design','sha256:stale');
+   PERFORM aepx_iteration.advance(t,1,'worker-one',1,'design','sha256:3333333333333333333333333333333333333333333333333333333333333333');
    RAISE EXCEPTION 'stale fence transition accepted';
  EXCEPTION WHEN raise_exception THEN
    IF SQLERRM <> 'stale or absent iteration lease' THEN RAISE; END IF;
  END;
- result:=aepx_iteration.advance(t,1,'worker-two',f,'design','sha256:design');
+ result:=aepx_iteration.advance(t,1,'worker-two',f,'design','sha256:4444444444444444444444444444444444444444444444444444444444444444');
  IF result<>'design' THEN RAISE EXCEPTION 'reclaimed worker transition failed'; END IF;
- PERFORM aepx_iteration.advance(t,1,'worker-two',f,'patch_proposed','sha256:patch');
- PERFORM aepx_iteration.advance(t,1,'worker-two',f,'tests_recorded','sha256:tests');
- PERFORM aepx_iteration.advance(t,1,'worker-two',f,'reviewed','sha256:review');
+ PERFORM aepx_iteration.advance(t,1,'worker-two',f,'patch_proposed','sha256:5555555555555555555555555555555555555555555555555555555555555555');
+ PERFORM aepx_iteration.advance(t,1,'worker-two',f,'tests_recorded','sha256:6666666666666666666666666666666666666666666666666666666666666666');
+ PERFORM aepx_iteration.advance(t,1,'worker-two',f,'reviewed','sha256:7777777777777777777777777777777777777777777777777777777777777777');
  BEGIN
-   PERFORM aepx_iteration.advance(t,1,'worker-two',f,'completed','sha256:unverified');
+   PERFORM aepx_iteration.advance(t,1,'worker-two',f,'completed','sha256:8888888888888888888888888888888888888888888888888888888888888888');
    RAISE EXCEPTION 'unverified completion unexpectedly accepted';
  EXCEPTION WHEN raise_exception THEN
    IF SQLERRM <> 'iteration completion requires trusted evidence and approval gate' THEN RAISE; END IF;

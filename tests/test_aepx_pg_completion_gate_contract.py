@@ -15,7 +15,7 @@ class CompletionGateTests(unittest.TestCase):
         self.assertLess(advance.index("IF p_stage = 'completed' THEN"),
                         advance.index("UPDATE aepx_iteration.work_item"))
     def test_runtime_acceptance_rejects_unverified_completion(self):
-        self.assertIn("'completed','sha256:unverified'",ACCEPTANCE)
+        self.assertIn("'completed','sha256:8888888888888888888888888888888888888888888888888888888888888888'",ACCEPTANCE)
         self.assertIn("unverified completion unexpectedly accepted",ACCEPTANCE)
         self.assertIn("denied completion mutated stage",ACCEPTANCE)
 if __name__=="__main__": unittest.main()

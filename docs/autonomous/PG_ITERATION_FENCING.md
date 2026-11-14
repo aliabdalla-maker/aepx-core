@@ -27,3 +27,9 @@ The fixture tests first claim, live-lease takeover rejection, renewal, wrong own
 `aepx_iteration.advance(..., 'completed', ...)` now raises `iteration completion requires trusted evidence and approval gate` even for a valid current worker lease. The reviewed stage remains reachable. This blocks the unsafe previous behavior where arbitrary evidence text could mark an iteration completed.
 
 Before introducing a trusted completion function, require authenticated reviewer identity, digest-verified immutable evidence for every stage, passing test evidence, current fencing token, one-time approval consumption and an atomic PostgreSQL transition. Test tampering, replay, concurrent workers, stale leases and crash recovery against a disposable database. Until then **no PostgreSQL iteration can be marked completed through this function**; this is an intentional safety constraint, not a completed orchestration feature.
+
+## Canonical stage evidence digests
+
+All non-terminal stage transitions now require exactly `sha256:` followed by 64 lowercase hexadecimal characters. Malformed references are rejected before any state update. The rollback-only acceptance fixture checks a malformed digest and uses syntactically valid digests for positive stage transitions.
+
+**Security boundary:** A SHA-256-shaped string is not proof of artifact existence, immutable storage, correct content, successful tests or reviewer authorization. A trusted service must open and hash the actual artifact, bind it to the tenant/iteration/stage/fence, record provenance and consume approval atomically. Terminal completion remains blocked. The acceptance SQL and static tests have not been executed against a database in this PR.
