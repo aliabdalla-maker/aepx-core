@@ -634,3 +634,5 @@ Exit 5 means at least one required workflow name is absent from the queried
 snapshot; output lists `missing_workflows`. This check is limited to the
 returned `--limit` runs and does not validate job-level evidence or artifacts.
 Add all required workflows explicitly for the relevant release gate.
+
+**Strict success guard:** `--require-success` now requires both `--head-sha` and at least one `--require-workflow`; otherwise the command exits with argument error 2. This prevents accidentally interpreting an unscoped, partially successful Actions snapshot as release evidence. This remains read-only monitoring, not a substitute for verified workflow artifacts and independent acceptance.
