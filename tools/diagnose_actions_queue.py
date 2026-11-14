@@ -41,6 +41,8 @@ def main(argv=None):
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--input-json", help="Offline fixture; skip gh CLI")
     parser.add_argument("--head-sha", help="Restrict snapshot to one exact commit SHA")
+    parser.add_argument("--require-workflow", action="append", default=[],
+                        help="Require an exact workflow name in the queried snapshot; repeatable")
     parser.add_argument("--require-success", action="store_true",
                         help="Exit 4 unless every queried run completed successfully")
     parser.add_argument("--fail-on-queued", action="store_true",
@@ -84,7 +86,14 @@ def main(argv=None):
     except ValueError as exc:
         print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
         return 2
+    required = sorted(set(args.require_workflow))
+    observed = {run.get("name") for run in runs}
+    missing = [name for name in required if name not in observed]
+    report["required_workflows"] = required
+    report["missing_workflows"] = missing
     print(json.dumps(report, indent=2))
+    if missing:
+        return 5
     if args.require_success and (report["total"] == 0 or
                                  report["statuses"].get("completed", 0) != report["total"] or
                                  report["unsuccessful"]):
