@@ -59,3 +59,17 @@ Evidence hashing requires POSIX descriptor-based no-follow traversal and
 checks file identity/size metadata before and after bounded hashing.
 These checks reduce local input risks but do not authenticate who created
 the evidence, establish a trusted CI run, or prove production readiness.
+
+
+## CI verification handoff (mandatory before release)
+
+1. Open the `AEP-X acceptance evidence integrity` workflow on the draft PR branch.
+2. Confirm that the most recent **non-cancelled** run belongs to the intended commit SHA.
+3. Require the Python preflight, all 35 discovered tests and all 12 CLI checks to pass.
+4. Download the `aepx-offline-evidence-diagnostics` artifact if any step fails.
+5. Record the run URL, commit SHA, workflow conclusion and reviewer identity in the release checklist.
+6. Keep independent acceptance **NOT ESTABLISHED** until trusted provenance and independent review are available.
+
+A passing offline gate is necessary for this verifier's contract but is not proof of
+end-to-end AEP-X safety, PostgreSQL acceptance, HITL correctness or deployment readiness.
+No merge, external provider execution, gateway forwarding or OCI provisioning is authorized by this workflow.
