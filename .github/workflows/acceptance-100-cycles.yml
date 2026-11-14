@@ -8,6 +8,8 @@ on:
       - 'tests/test_acceptance_100_runner.py'
       - 'tests/test_acceptance_evidence_integrity.py'
       - 'tools/verify_acceptance_evidence.py'
+      - 'tools/verify_acceptance_cycle_report.py'
+      - 'tests/test_acceptance_cycle_report.py'
       - '.github/workflows/acceptance-100-cycles.yml'
   pull_request:
     paths:
@@ -15,6 +17,8 @@ on:
       - 'tests/test_acceptance_100_runner.py'
       - 'tests/test_acceptance_evidence_integrity.py'
       - 'tools/verify_acceptance_evidence.py'
+      - 'tools/verify_acceptance_cycle_report.py'
+      - 'tests/test_acceptance_cycle_report.py'
       - '.github/workflows/acceptance-100-cycles.yml'
   workflow_dispatch:
 permissions:
