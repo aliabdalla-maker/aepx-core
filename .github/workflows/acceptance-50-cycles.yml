@@ -134,6 +134,8 @@ jobs:
               raise SystemExit("Unexpected or unsafe evidence artifact detected")
           for path in expected:
               verify(path, os.environ["GITHUB_SHA"], os.environ["GITHUB_RUN_ID"], expected=50)
+              if path.stat().st_size > 2_000_000:
+                  raise SystemExit("Evidence report exceeds size limit")
           result = {
               "source_commit": os.environ["GITHUB_SHA"],
               "workflow_run_id": os.environ["GITHUB_RUN_ID"],
