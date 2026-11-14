@@ -112,6 +112,7 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
+          import hashlib
           import json
           import os
           from pathlib import Path
@@ -130,6 +131,10 @@ jobs:
               "workflow_run_id": os.environ["GITHUB_RUN_ID"],
               "verified_batches": 2,
               "verified_offline_cycles": 100,
+              "batch_sha256": {
+                  path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                  for path in expected
+              },
               "independent_acceptance_established": False,
               "production_deployment_authorized": False,
           }
