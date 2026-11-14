@@ -72,11 +72,20 @@ def main():
         print(json.dumps({"status":"dry-run","command":command_for(args.repo,args.pattern),
                           "warning":"Run tests only inside a disposable sandbox."}, indent=2))
         return
-    result = execute(args.repo,args.pattern,timeout=args.timeout,enabled=True)
     if args.checkpoint:
-        from aepx_pilot_checkpoint import append
-        ledger = append(args.checkpoint, result)
-        result["recorded_attempt"] = len(ledger["attempts"])
+        from aepx_pilot_checkpoint import MAX_ITERATIONS, append, load, exclusive_checkpoint_lock
+        checkpoint = Path(args.checkpoint)
+        if not checkpoint.is_absolute():
+            parser.error("checkpoint must be an absolute path")
+        batch_lock = checkpoint.with_name(checkpoint.name + ".batch")
+        with exclusive_checkpoint_lock(batch_lock):
+            if len(load(checkpoint)["attempts"]) >= MAX_ITERATIONS:
+                raise ValueError("iteration cap reached before execution")
+            result = execute(args.repo,args.pattern,timeout=args.timeout,enabled=True)
+            ledger = append(checkpoint, result)
+            result["recorded_attempt"] = len(ledger["attempts"])
+    else:
+        result = execute(args.repo,args.pattern,timeout=args.timeout,enabled=True)
     print(json.dumps(result, indent=2))
     if result["status"] != "passed":
         raise SystemExit(1)
