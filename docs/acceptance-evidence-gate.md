@@ -426,3 +426,11 @@ An adversarial regression simulates a symlink swap between preflight and
 open. Both offline acceptance workflows require at least 20 report-verifier
 tests. On platforms without O_NOFOLLOW, the explicit symlink-swap test is
 skipped; do not treat this as cross-platform race elimination.
+
+### Fail-closed no-follow capability
+
+The cycle-report verifier now refuses to parse evidence if the runtime does
+not expose an integer O_NOFOLLOW flag. This prevents silent fallback to a
+symlink-following open. The regression suite contains at least 21 tests,
+including the unavailable-capability case. On unsupported platforms this
+means verification fails rather than claiming acceptance.
