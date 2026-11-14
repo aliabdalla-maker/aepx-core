@@ -12,12 +12,23 @@ def summarize(runs):
     queued = []
     conclusions = {}
     unsuccessful = []
+    seen_ids = set()
+    valid_statuses = {"queued", "waiting", "pending", "requested",
+                      "in_progress", "completed", "action_required"}
     for run in runs:
         if not isinstance(run, dict):
             raise ValueError("Malformed workflow run")
         status = run.get("status")
-        if not isinstance(status, str):
-            raise ValueError("Missing workflow run status")
+        if not isinstance(status, str) or status not in valid_statuses:
+            raise ValueError("Missing or unknown workflow run status")
+        run_id = run.get("databaseId")
+        if run_id is not None:
+            if type(run_id) is not int or run_id <= 0 or run_id in seen_ids:
+                raise ValueError("Invalid or duplicate workflow run ID")
+            seen_ids.add(run_id)
+        name = run.get("name")
+        if name is not None and (not isinstance(name, str) or not name.strip()):
+            raise ValueError("Malformed workflow name")
         counts[status] = counts.get(status, 0) + 1
         if status == "completed":
             conclusion = run.get("conclusion")
@@ -69,7 +80,7 @@ def main(argv=None):
                    str(args.limit), "--json",
                    "databaseId,name,status,conclusion,headSha,createdAt"]
         if args.head_sha:
-            command.extend(["--commit", args.head_sha])
+            command.extend(["--commit", args.head_sha.lower()])
         try:
             result = subprocess.run(command, check=True, capture_output=True,
                                     text=True, timeout=30)
@@ -100,6 +111,10 @@ def main(argv=None):
         print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
         return 2
     required = sorted(set(args.require_workflow))
+    if required and any(not isinstance(run.get("name"), str) or
+                        not run["name"].strip() for run in runs):
+        print("Invalid GitHub Actions data: missing workflow name", file=sys.stderr)
+        return 2
     if args.require_success and snapshot_count >= args.limit:
         print("Strict acceptance snapshot reached --limit; increase the limit to establish coverage", file=sys.stderr)
         return 6
