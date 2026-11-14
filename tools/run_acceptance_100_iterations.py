@@ -29,7 +29,11 @@ def main():
         os.replace(temporary, target)
         return report
 
+    interrupted = False
+
     def stop(signum, frame):
+        nonlocal interrupted
+        interrupted = True
         raise KeyboardInterrupt
 
     signal.signal(signal.SIGTERM, stop)
@@ -59,9 +63,16 @@ def main():
                       "elapsed_seconds": round(time.monotonic() - start, 3)}
             if not passed:
                 record["diagnostic_tail"] = output[-12000:]
-        except subprocess.TimeoutExpired as exc:
+        except subprocess.TimeoutExpired:
             record = {"iteration": iteration, "passed": False,
-                      "error": "90-second per-iteration timeout"}
+                      "error": "per-iteration execution timeout"}
+        except KeyboardInterrupt:
+            record = {"iteration": iteration, "passed": False,
+                      "error": "runner interrupted before cycle completed"}
+            records.append(record)
+            persist()
+            print(f"Iteration {iteration}/{args.iterations}: INTERRUPTED", flush=True)
+            return 130
         records.append(record)
         persist()
         print(f"Iteration {iteration}/{args.iterations}: {'PASS' if record['passed'] else 'FAIL'}", flush=True)
@@ -69,7 +80,7 @@ def main():
         if not record["passed"]:
             break
     report = persist()
-    return 0 if report["all_passed"] else 1
+    return 0 if report["all_passed"] and not interrupted else 1
 
 if __name__ == "__main__":
     raise SystemExit(main())
