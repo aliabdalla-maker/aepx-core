@@ -120,6 +120,9 @@ jobs:
           expected = [Path(f"batch-evidence/acceptance-50-batch-{i}.json") for i in (1, 2)]
           if any(not path.is_file() for path in expected):
               raise SystemExit("Both 50-cycle evidence artifacts are required")
+          observed = set(Path("batch-evidence").glob("*.json"))
+          if observed != set(expected):
+              raise SystemExit("Unexpected or duplicate-named evidence artifacts detected")
           for path in expected:
               verify(path, os.environ["GITHUB_SHA"], os.environ["GITHUB_RUN_ID"], expected=50)
           result = {
