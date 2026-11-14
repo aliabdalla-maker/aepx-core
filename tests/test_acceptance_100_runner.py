@@ -64,7 +64,7 @@ class RunnerTests(unittest.TestCase):
 
     def test_rejects_stdout_only_forged_summary(self):
         forged = subprocess.CompletedProcess(
-            [], 0, "Ran 42 tests in 0.1s\\n\\nOK\\n", ""
+            [], 0, "Ran 42 tests in 0.1s\n\nOK\n", ""
         )
         status, report = self.invoke(1, [forged])
         self.assertEqual(status, 1)
