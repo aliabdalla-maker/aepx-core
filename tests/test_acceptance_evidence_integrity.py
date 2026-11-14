@@ -181,5 +181,21 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(manifest)
 
+    def test_excessive_evidence_path_depth_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
+                "evidence": [{"path": "/".join(["a"] * 65), "sha256": "0" * 64,
+                              "result": "pass"}]}]}))
+            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
+    def test_excessive_evidence_path_component_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
+                "evidence": [{"path": "x" * 256, "sha256": "0" * 64,
+                              "result": "pass"}]}]}))
+            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
