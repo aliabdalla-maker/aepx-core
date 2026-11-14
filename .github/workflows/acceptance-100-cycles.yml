@@ -10,6 +10,7 @@ on:
       - 'tools/verify_acceptance_evidence.py'
       - 'tools/verify_acceptance_cycle_report.py'
       - 'tests/test_acceptance_cycle_report.py'
+      - 'tests/test_acceptance_cycle_mutations.py'
       - '.github/workflows/acceptance-100-cycles.yml'
   pull_request:
     paths:
@@ -19,6 +20,7 @@ on:
       - 'tools/verify_acceptance_evidence.py'
       - 'tools/verify_acceptance_cycle_report.py'
       - 'tests/test_acceptance_cycle_report.py'
+      - 'tests/test_acceptance_cycle_mutations.py'
       - '.github/workflows/acceptance-100-cycles.yml'
   workflow_dispatch:
 permissions:
@@ -59,6 +61,8 @@ jobs:
               raise SystemExit("Acceptance report verifier coverage below 18 tests")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
+          python -m py_compile tests/test_acceptance_cycle_mutations.py
+          python -m unittest discover -s tests -p 'test_acceptance_cycle_mutations.py' -v
           python - <<'PY'
           import unittest
           suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_evidence_integrity.py")
