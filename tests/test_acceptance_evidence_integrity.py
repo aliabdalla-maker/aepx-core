@@ -3,6 +3,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
+import os
 from tools.verify_acceptance_evidence import verify
 
 
@@ -250,6 +252,28 @@ class EvidenceGateTests(unittest.TestCase):
                 {"id": "oidc", "weight": 50, "evidence": [entry]}]}))
             with self.assertRaises(ValueError):
                 verify(manifest)
+
+    def test_manifest_mutation_during_read_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": 100, "evidence": []}]}))
+            original_read = os.read
+            modified = False
+
+            def mutating_read(fd, size):
+                nonlocal modified
+                chunk = original_read(fd, size)
+                if chunk and not modified:
+                    modified = True
+                    with manifest.open("ab") as output:
+                        output.write(b" ")
+                return chunk
+
+            with patch("tools.verify_acceptance_evidence.os.read", side_effect=mutating_read):
+                with self.assertRaises(ValueError):
+                    verify(manifest)
 
 if __name__ == "__main__":
     unittest.main()
