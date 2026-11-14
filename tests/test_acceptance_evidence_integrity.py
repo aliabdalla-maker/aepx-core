@@ -165,5 +165,21 @@ class EvidenceGateTests(unittest.TestCase):
                                   "result": "pass"}]}]}))
                 self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_duplicate_json_keys_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text('{"milestones":[],"milestones":[{"id":"rls","weight":100,"evidence":[]}]}')
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
+    def test_nonfinite_json_constants_rejected(self):
+        for constant in ["NaN", "Infinity", "-Infinity"]:
+            with self.subTest(constant=constant), tempfile.TemporaryDirectory() as tmp:
+                manifest = Path(tmp) / "manifest.json"
+                manifest.write_text('{"milestones":[{"id":"rls","weight":100,"evidence":[],"extra":'
+                                    + constant + '}]}')
+                with self.assertRaises(ValueError):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
