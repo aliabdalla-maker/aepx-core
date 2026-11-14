@@ -302,7 +302,9 @@ jobs:
             echo "- Job outcome: ${{ job.status }}"
             if [[ -f /tmp/aepx-unittest.log ]]; then
               echo "- Python unittest result:"
-              grep -E '^Ran [0-9]+ tests? in |^(OK|FAILED)' /tmp/aepx-unittest.log | tail -n 2 | sed 's/^/  - /' || true
+              if ! grep -E '^Ran [0-9]+ tests? in |^(OK|FAILED)' /tmp/aepx-unittest.log | tail -n 2 | sed 's/^/  - /'; then
+                echo '  - No unittest completion marker found; treat as unverified'
+              fi
             else
               echo "- Python unittest result: **NOT EXECUTED OR LOG UNAVAILABLE**"
             fi
