@@ -371,5 +371,11 @@ class EvidenceGateTests(unittest.TestCase):
                     verify(manifest)
             self.assertTrue(linked)
 
+    def test_manifest_path_with_nul_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            invalid = Path(tmp) / ("manifest" + chr(0) + ".json")
+            with self.assertRaises(ValueError):
+                verify(invalid)
+
 if __name__ == "__main__":
     unittest.main()
