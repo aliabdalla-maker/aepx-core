@@ -131,6 +131,21 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_cli_filters_commit_before_result_limit(self):
+        sha = "a" * 40
+        with patch("tools.diagnose_actions_queue.subprocess.run") as run:
+            run.return_value.stdout = (
+                '[{"name":"CI","headSha":"' + sha +
+                '","status":"completed","conclusion":"success"}]'
+            )
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--head-sha", sha, "--limit", "1",
+                                       "--require-workflow", "CI",
+                                       "--require-success"]), 0)
+            command = run.call_args.args[0]
+            self.assertEqual(command[-2:], ["--commit", sha])
+            self.assertIn("--limit", command)
+
     def test_strict_mode_requires_explicit_scope(self):
         with contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as missing_scope:

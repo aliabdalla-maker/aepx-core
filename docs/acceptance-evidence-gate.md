@@ -636,3 +636,5 @@ returned `--limit` runs and does not validate job-level evidence or artifacts.
 Add all required workflows explicitly for the relevant release gate.
 
 **Strict success guard:** `--require-success` now requires both `--head-sha` and at least one `--require-workflow`; otherwise the command exits with argument error 2. This prevents accidentally interpreting an unscoped, partially successful Actions snapshot as release evidence. This remains read-only monitoring, not a substitute for verified workflow artifacts and independent acceptance.
+
+**Commit-first pagination safeguard:** live `gh run list` queries now pass `--commit` when `--head-sha` is specified, so the bounded `--limit` is applied after GitHub filters by commit. The tool also retains local exact-SHA validation. The limit still means a snapshot may omit some runs for that same commit; configure sufficient coverage and verify required artifacts before release.
