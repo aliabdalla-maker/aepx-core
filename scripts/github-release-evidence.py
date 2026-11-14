@@ -68,7 +68,7 @@ def valid_metadata(run):
         return False
     return parsed.tzinfo is not None and parsed.utcoffset() is not None
 
-def evaluate(runs, sha, required=REQUIRED):
+def evaluate(runs, sha, required=REQUIRED, repository="aliabdalla-maker/aepx-core", branch="master"):
     if not isinstance(runs, list) or any(not isinstance(item, dict) for item in runs):
         return ["INVALID_EVIDENCE_COLLECTION"]
     errors = []
@@ -77,6 +77,13 @@ def evaluate(runs, sha, required=REQUIRED):
                     and r.get("path") == workflow]
         if not matching:
             errors.append(f"MISSING {workflow}")
+            continue
+        if any(r.get("event") not in ("push", "workflow_dispatch")
+               or r.get("head_branch") != branch
+               or not isinstance(r.get("head_repository"), dict)
+               or r["head_repository"].get("full_name") != repository
+               for r in matching):
+            errors.append(f"INVALID_PROVENANCE {workflow}")
             continue
         if any(not valid_metadata(r) for r in matching):
             errors.append(f"INVALID_METADATA {workflow}")
@@ -107,7 +114,7 @@ def main(argv=None):
         return 2
     try:
         runs = fetch_runs(args.repo, args.sha, token)
-        errors = evaluate(runs, args.sha)
+        errors = evaluate(runs, args.sha, repository=args.repo)
         result = {"repository": args.repo, "sha": args.sha, "required": list(REQUIRED),
                   "sample_size": len(runs), "blockers": errors,
                   "release_approved": False}
