@@ -136,6 +136,29 @@ def verify(manifest_path: Path):
         allocation += weight
     if allocation != 100:
         raise ValueError("milestone weights must sum to 100")
+    # Preflight the complete manifest before any evidence file is opened.
+    # An invalid entry in a later milestone must not cause earlier file reads.
+    preflight_paths = set()
+    for milestone in milestones:
+        entries = milestone["evidence"]
+        if not isinstance(entries, list) or len(entries) > 100:
+            raise ValueError("evidence must be a list of at most 100 entries")
+        for item in entries:
+            if not isinstance(item, dict) or set(item) != {"path", "sha256", "result"}:
+                raise ValueError("invalid evidence entry schema")
+            if type(item["result"]) is not str or item["result"] not in ("pass", "fail"):
+                raise ValueError("evidence result must be pass or fail")
+            relative = item["path"]
+            if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+                raise ValueError("evidence path must be relative")
+            if len(relative) > 4096 or chr(0) in relative or chr(92) in relative or relative.startswith("/"):
+                raise ValueError("invalid evidence path syntax")
+            components = relative.split("/")
+            if len(components) > 64 or any(p in ("", ".", "..") or len(p) > 255 for p in components):
+                raise ValueError("invalid evidence path components")
+            if relative in preflight_paths:
+                raise ValueError("duplicate evidence path rejected across milestones")
+            preflight_paths.add(relative)
     ids = set()
     all_evidence_paths = set()
     total_weight = 0
