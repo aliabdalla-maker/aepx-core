@@ -61,31 +61,31 @@ class QueueDiagnosticTests(unittest.TestCase):
     def test_optional_monitoring_exit_on_completed(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "completed.json"
-            path.write_text('[{"status":"completed","conclusion":"failure"}]', encoding="utf-8")
+            path.write_text('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"completed","conclusion":"failure"}]', encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(main(["--input-json", str(path), "--fail-on-queued"]), 0)
 
     def test_require_success_rejects_failed_completed_runs(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "failed.json"
-            path.write_text('[{"status":"completed","conclusion":"failure"}]', encoding="utf-8")
+            path.write_text('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"completed","conclusion":"failure"}]', encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
-                self.assertEqual(main(["--input-json", str(path), "--require-success"]), 4)
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-workflow", "CI", "--require-success"]), 4)
 
     def test_require_success_rejects_queued_and_empty(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "runs.json"
-            for payload in ('[{"status":"queued"}]', "[]"):
+            for payload in ('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"queued"}]', "[]"):
                 path.write_text(payload, encoding="utf-8")
                 with contextlib.redirect_stdout(io.StringIO()):
-                    self.assertEqual(main(["--input-json", str(path), "--require-success"]), 4)
+                    self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-workflow", "CI", "--require-success"]), 4)
 
     def test_require_success_accepts_completed_success(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "passed.json"
-            path.write_text('[{"status":"completed","conclusion":"success"}]', encoding="utf-8")
+            path.write_text('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"completed","conclusion":"success"}]', encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
-                self.assertEqual(main(["--input-json", str(path), "--require-success"]), 0)
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-workflow", "CI", "--require-success"]), 0)
 
     def test_completed_run_requires_conclusion(self):
         with self.assertRaisesRegex(ValueError, "lacks a conclusion"):
@@ -95,14 +95,14 @@ class QueueDiagnosticTests(unittest.TestCase):
         sha = "a" * 40
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "runs.json"
-            path.write_text('[{"status":"completed","conclusion":"success","headSha":"' +
+            path.write_text('[{"name":"CI","status":"completed","conclusion":"success","headSha":"' +
                             sha + '"},{"status":"queued","headSha":"' + "b" * 40 + '"}]',
                             encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", sha,
-                                       "--require-success"]), 0)
+                                       "--require-workflow", "CI", "--require-success"]), 0)
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "c" * 40,
-                                       "--require-success"]), 4)
+                                       "--require-workflow", "CI", "--require-success"]), 4)
 
     def test_head_sha_scope_rejects_malformed_records(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -115,20 +115,20 @@ class QueueDiagnosticTests(unittest.TestCase):
     def test_required_workflow_coverage_rejects_missing(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "runs.json"
-            path.write_text('[{"name":"CI","status":"completed","conclusion":"success"}]',
+            path.write_text('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"completed","conclusion":"success"}]',
                             encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
-                self.assertEqual(main(["--input-json", str(path), "--require-success",
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI",
                                        "--require-workflow", "AEP-X fast offline acceptance smoke"]), 5)
 
     def test_required_workflow_coverage_accepts_present(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "runs.json"
-            path.write_text('[{"name":"CI","status":"completed","conclusion":"success"}]',
+            path.write_text('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"completed","conclusion":"success"}]',
                             encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
-                self.assertEqual(main(["--input-json", str(path), "--require-success",
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
     def test_does_not_infer_root_cause(self):
