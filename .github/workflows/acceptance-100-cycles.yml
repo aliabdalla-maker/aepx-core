@@ -45,6 +45,25 @@ jobs:
         run: |
           set -euo pipefail
           python tools/run_acceptance_100_iterations.py --iterations 100 --output acceptance-100-iterations.json
+      - name: Validate report provenance and completion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          report = json.loads(Path("acceptance-100-iterations.json").read_text())
+          assert report["source_commit"] == os.environ["GITHUB_SHA"], "commit mismatch"
+          assert report["workflow_run_id"] == os.environ["GITHUB_RUN_ID"], "run mismatch"
+          assert report["requested"] == report["executed"] == 100, "incomplete cycles"
+          assert report["all_passed"] is True, "failed cycles"
+          assert len(report["runs"]) == 100, "missing run records"
+          assert all(run["passed"] and run["tests_executed"] >= 42 for run in report["runs"]), "invalid cycle"
+          assert report["independent_acceptance_established"] is False, "invalid acceptance claim"
+          assert report["production_deployment_authorized"] is False, "invalid deployment claim"
+          print("Offline 100-cycle report integrity checks passed; independent acceptance remains blocked.")
+          PY
       - name: Publish scoped result
         if: always()
         shell: bash
