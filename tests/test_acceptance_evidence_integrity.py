@@ -393,5 +393,36 @@ class EvidenceGateTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 verify(manifest)
 
+    def test_unknown_evidence_result_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_bytes(b"proof")
+            for invalid in ("skipped", "pending", "", None, True, 1):
+                with self.subTest(result=invalid):
+                    manifest = root / "manifest.json"
+                    manifest.write_text(json.dumps({"milestones": [{
+                        "id": "rls", "weight": 100, "evidence": [{
+                            "path": "proof.txt",
+                            "sha256": hashlib.sha256(b"proof").hexdigest(),
+                            "result": invalid
+                        }]
+                    }]}))
+                    with self.assertRaises(ValueError):
+                        verify(manifest)
+
+    def test_explicit_failed_evidence_does_not_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_bytes(b"proof")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": [{
+                    "path": "proof.txt",
+                    "sha256": hashlib.sha256(b"proof").hexdigest(),
+                    "result": "fail"
+                }]
+            }]}))
+            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
