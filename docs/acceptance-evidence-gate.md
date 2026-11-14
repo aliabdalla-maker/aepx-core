@@ -237,3 +237,11 @@ the destination. Temporary files are cleaned up on failure. A new self-test
 covers nested output directories and cleanup (sixteen runner tests authored).
 This is a source-level safeguard, not evidence of a completed GitHub Actions
 run or independent security acceptance.
+
+### Preflight discovery and first-failure diagnostics
+
+Before the bounded 100-cycle loop, CI now checks discovery of at least 16
+runner self-tests and 42 integrity tests, and runs the runner self-tests.
+The always-run job summary records the first failing cycle and a bounded
+failure diagnostic when a JSON report is available. These checks do not
+replace a completed workflow run or independent acceptance evidence.
