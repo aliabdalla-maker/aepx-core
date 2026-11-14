@@ -1,6 +1,7 @@
 """Offline unit tests for the bounded 100-cycle runner itself."""
 import importlib.util
 import json
+import signal
 import pathlib
 import subprocess
 import sys
@@ -50,6 +51,19 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertEqual(report["executed"], 1)
         self.assertIn("timeout", report["runs"][0]["error"])
+
+    def test_restores_sigterm_handler_after_success(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\\n\\nOK\\n")
+        status, _ = self.invoke(1, [result])
+        self.assertEqual(status, 0)
+        self.assertIs(signal.getsignal(signal.SIGTERM), previous)
+
+    def test_restores_sigterm_handler_after_interrupt(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        status, _ = self.invoke(1, KeyboardInterrupt())
+        self.assertEqual(status, 130)
+        self.assertIs(signal.getsignal(signal.SIGTERM), previous)
 
     def test_interrupt_preserves_failure_report(self):
         status, report = self.invoke(100, KeyboardInterrupt())
