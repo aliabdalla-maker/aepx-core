@@ -28,6 +28,7 @@ on:
       - 'tests/sql/aepx_iteration_pg_acceptance.sql'
       - 'scripts/test_aepx_pg_iteration_acceptance.sh'
       - 'tests/test_aepx_pg_iteration_acceptance_contract.py'
+      - 'tests/test_aepx_pg_completion_gate_contract.py'
       - 'tests/test_aepx_engineering_iteration_lock.py'
       - 'tests/test_aepx_engineering_evidence.py'
       - 'tests/test_aepx_engineering_evidence_mutation.py'
@@ -107,6 +108,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_engineering_evidence_mutation.py' -v
       - name: Test offline engineering evidence verification
         run: python -m unittest discover -s tests -p 'test_aepx_engineering_evidence.py' -v
+      - name: Test fail-closed PostgreSQL iteration completion gate
+        run: python -m unittest discover -s tests -p 'test_aepx_pg_completion_gate_contract.py' -v
       - name: Test PostgreSQL iteration acceptance guardrails (offline)
         run: python -m unittest discover -s tests -p 'test_aepx_pg_iteration_acceptance_contract.py' -v
       - name: Test PostgreSQL lease renewal static contract
