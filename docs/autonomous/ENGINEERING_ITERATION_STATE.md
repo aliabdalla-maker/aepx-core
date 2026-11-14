@@ -9,3 +9,9 @@ Stages are strictly ordered: `requirements → design → patch_proposed → tes
 Run offline tests with `python -m unittest discover -s tests -p 'test_aepx_engineering_iteration_state.py' -v`. These tests have been committed but CI has not yet been verified.
 
 This lock is not a distributed lease and does not protect against remote hosts or hostile filesystem races. PostgreSQL fenced state transitions remain mandatory before multi-worker use.
+
+## Offline artifact digest verification
+
+`scripts/aepx_engineering_evidence.py` adds `digest_artifact(root, relative_path)` and `verify_iteration_artifacts(state, number, root, manifest)`. The verifier requires a completed iteration, exactly six stage paths, and matching lowercase SHA-256 digests of regular files within a trusted root. Symlink paths, parent traversal, missing files and files over 2 MiB fail closed.
+
+**Crucial limitation:** existing lifecycle transitions still accept arbitrary evidence references for backward compatibility. Only iterations separately checked by `verify_iteration_artifacts` have digest-verified bytes. A digest does not prove that tests ran, a reviewer approved, or the artifact is trustworthy. Do not count an iteration as verified or authorize deployment based solely on this helper. A signed provenance and approval service with immutable artifact storage is still required. TOCTOU protection on hostile mutable filesystems is also pending.
