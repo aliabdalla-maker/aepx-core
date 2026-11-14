@@ -64,8 +64,8 @@ def safe_digest(root: Path, relative: str):
         after = os.fstat(leaf)
         if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (
             after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns
-        ) or count != after.st_size:
-            raise ValueError("evidence changed during hashing")
+        ) or count != after.st_size or after.st_nlink != 1:
+            raise ValueError("evidence changed during hashing or acquired a hard link")
         return state.hexdigest()
     finally:
         for descriptor in reversed(opened):
