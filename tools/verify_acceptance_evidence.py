@@ -114,6 +114,7 @@ def verify(manifest_path: Path):
     if not isinstance(milestones, list) or not milestones or len(milestones) > 100:
         raise ValueError("milestones must be a nonempty list")
     ids = set()
+    all_evidence_paths = set()
     total_weight = 0
     verified_weight = 0
     results = []
@@ -140,9 +141,10 @@ def verify(manifest_path: Path):
             digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
-            if relative in evidence_paths:
-                raise ValueError("duplicate evidence path rejected")
+            if relative in all_evidence_paths:
+                raise ValueError("duplicate evidence path rejected across milestones")
             evidence_paths.add(relative)
+            all_evidence_paths.add(relative)
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
                 passed = False
                 continue
