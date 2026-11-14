@@ -5,6 +5,7 @@ on:
       - 'tools/verify_acceptance_evidence.py'
       - 'tests/test_acceptance_evidence_integrity.py'
       - '.github/workflows/acceptance-evidence-integrity.yml'
+      - 'docs/acceptance-evidence-gate.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -74,3 +75,17 @@ jobs:
           assert result['independently_verified_percent'] == 0
           assert result['independent_verification_available'] is False
           PY
+      - name: Publish clearly scoped CI summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## AEP-X offline evidence gate'
+            echo
+            echo "- Repository: ${GITHUB_REPOSITORY}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Job outcome: ${{ job.status }}"
+            echo "- Scope: offline verifier regressions and CLI contract only"
+            echo "- Independent acceptance: **NOT ESTABLISHED**"
+            echo "- Production deployment authorized: **NO**"
+          } >> "$GITHUB_STEP_SUMMARY"
