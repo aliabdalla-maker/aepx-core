@@ -424,5 +424,19 @@ class EvidenceGateTests(unittest.TestCase):
             }]}))
             self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_explicit_failed_evidence_does_not_access_filesystem(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": [{
+                    "path": "missing.txt", "sha256": "0" * 64, "result": "fail"
+                }]
+            }]}))
+            with patch("tools.verify_acceptance_evidence.safe_digest",
+                       side_effect=AssertionError("failed evidence must not be opened")):
+                result = verify(manifest)
+            self.assertEqual(result["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
