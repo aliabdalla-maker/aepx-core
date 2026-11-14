@@ -40,6 +40,7 @@ def main(argv=None):
     parser.add_argument("--repo", default="aliabdalla-maker/aepx-core")
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--input-json", help="Offline fixture; skip gh CLI")
+    parser.add_argument("--head-sha", help="Restrict snapshot to one exact commit SHA")
     parser.add_argument("--require-success", action="store_true",
                         help="Exit 4 unless every queried run completed successfully")
     parser.add_argument("--fail-on-queued", action="store_true",
@@ -70,6 +71,12 @@ def main(argv=None):
         except json.JSONDecodeError:
             print("GitHub CLI returned invalid JSON", file=sys.stderr)
             return 2
+    if args.head_sha:
+        if (len(args.head_sha) != 40 or
+                any(ch not in "0123456789abcdefABCDEF" for ch in args.head_sha)):
+            parser.error("--head-sha must be a 40-character hexadecimal commit SHA")
+        runs = [run for run in runs
+                if isinstance(run, dict) and run.get("headSha") == args.head_sha]
     try:
         report = summarize(runs)
     except ValueError as exc:
