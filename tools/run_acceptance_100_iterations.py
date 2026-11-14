@@ -27,6 +27,9 @@ def main():
                   "workflow_run_id": os.environ.get("GITHUB_RUN_ID"),
                   "runs": records}
         target = pathlib.Path(args.output)
+        # Do not follow symlinked output directories when persisting CI evidence.
+        if any(parent.is_symlink() for parent in target.parents):
+            raise OSError("refusing symlinked report parent directory")
         if target.is_symlink():
             raise OSError("refusing symlink report destination")
         target.parent.mkdir(parents=True, exist_ok=True)
