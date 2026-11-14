@@ -201,3 +201,12 @@ runner finishes. It requires exactly 100 completed passing cycles, at least
 values for independent acceptance and deployment authorization. A mismatch
 fails the workflow before the always-run summary/artifact steps. CI evidence
 has not yet been independently observed in this conversation.
+
+### Pull-request visibility and release checks
+
+The 100-cycle offline acceptance workflow now runs as a pull-request check
+when the runner, verifier, tests, or workflow changes. Its result is separate
+from the offline evidence integrity workflow that contains the 14 CLI smoke
+checks. Both results must be reviewed; neither establishes independent
+security acceptance, and neither authorizes merge or deployment. A missing
+workflow run or artifact is an unverified result, not a pass.
