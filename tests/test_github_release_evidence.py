@@ -57,9 +57,38 @@ class ReleaseEvidenceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 module.fetch_runs("owner/repo", SHA, "token", fetch=lambda url: payload)
 
+    def test_missing_total_count_blocks(self):
+        with self.assertRaises(ValueError):
+            module.fetch_runs("owner/repo", SHA, "token",
+                              fetch=lambda url: {"workflow_runs": []})
+
+    def test_incomplete_page_blocks(self):
+        with self.assertRaises(ValueError):
+            module.fetch_runs("owner/repo", SHA, "token",
+                              fetch=lambda url: {"total_count": 2, "workflow_runs": [run(module.REQUIRED[0])]})
+
+    def test_complete_two_pages(self):
+        calls = []
+        def fake(url):
+            calls.append(url)
+            if len(calls) == 1:
+                return {"total_count": 101, "workflow_runs": [run(module.REQUIRED[0], i + 1) for i in range(100)]}
+            return {"total_count": 101, "workflow_runs": [run(module.REQUIRED[0], 101)]}
+        self.assertEqual(len(module.fetch_runs("owner/repo", SHA, "token", fetch=fake)), 101)
+
+    def test_total_changes_blocks(self):
+        calls = []
+        def fake(url):
+            calls.append(url)
+            if len(calls) == 1:
+                return {"total_count": 101, "workflow_runs": [run(module.REQUIRED[0], i + 1) for i in range(100)]}
+            return {"total_count": 102, "workflow_runs": [run(module.REQUIRED[0], 101)]}
+        with self.assertRaises(ValueError):
+            module.fetch_runs("owner/repo", SHA, "token", fetch=fake)
+
     def test_pagination_fail_closed(self):
         def fake(url):
-            return {"workflow_runs": [run(module.REQUIRED[0])] * 100}
+            return {"total_count": 1000, "workflow_runs": [run(module.REQUIRED[0])] * 100}
         with self.assertRaises(ValueError):
             module.fetch_runs("owner/repo", SHA, "token", fetch=fake)
 
