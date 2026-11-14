@@ -325,3 +325,14 @@ subprocess output, reducing the chance of accidental sensitive-data exposure
 through GitHub job summaries. The report artifact itself may still contain
 diagnostic output and must be handled with restricted access. No completed
 CI run or independent acceptance is implied.
+
+### Dedicated 50-cycle execution workflow
+
+The branch includes `.github/workflows/acceptance-50-cycles.yml`.
+It executes runner/verifier/mutation unit suites, requests exactly 50
+sequential offline integrity cycles, verifies the resulting report with
+`--expected 50` and GitHub SHA/run ID, and uploads the bounded evidence
+artifact for seven days. A push to the branch affecting the configured
+paths or an authorized manual dispatch can start it. CI completion is not
+confirmed by creating the workflow; independent acceptance and deployment
+remain blocked.
