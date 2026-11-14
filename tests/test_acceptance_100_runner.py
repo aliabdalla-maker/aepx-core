@@ -52,6 +52,12 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(report["executed"], 1)
         self.assertIn("timeout", report["runs"][0]["error"])
 
+    def test_restores_handler_on_unexpected_exception(self):
+        previous = signal.getsignal(signal.SIGTERM)
+        with self.assertRaisesRegex(RuntimeError, "simulated crash"):
+            self.invoke(1, RuntimeError("simulated crash"))
+        self.assertIs(signal.getsignal(signal.SIGTERM), previous)
+
     def test_restores_sigterm_handler_after_success(self):
         previous = signal.getsignal(signal.SIGTERM)
         result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\\n\\nOK\\n")
