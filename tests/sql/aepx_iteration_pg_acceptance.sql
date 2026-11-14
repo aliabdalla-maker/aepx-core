@@ -65,8 +65,19 @@ BEGIN
  END;
  result:=aepx_iteration.advance(t,1,'worker-two',f,'design','sha256:design');
  IF result<>'design' THEN RAISE EXCEPTION 'reclaimed worker transition failed'; END IF;
- SELECT count(*) INTO n FROM aepx_iteration.work_item WHERE tenant_id=t AND stage='design';
- IF n<>1 THEN RAISE EXCEPTION 'stage not persisted'; END IF;
+ PERFORM aepx_iteration.advance(t,1,'worker-two',f,'patch_proposed','sha256:patch');
+ PERFORM aepx_iteration.advance(t,1,'worker-two',f,'tests_recorded','sha256:tests');
+ PERFORM aepx_iteration.advance(t,1,'worker-two',f,'reviewed','sha256:review');
+ BEGIN
+   PERFORM aepx_iteration.advance(t,1,'worker-two',f,'completed','sha256:unverified');
+   RAISE EXCEPTION 'unverified completion unexpectedly accepted';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM <> 'iteration completion requires trusted evidence and approval gate' THEN RAISE; END IF;
+ END;
+ SELECT count(*) INTO n FROM aepx_iteration.work_item WHERE tenant_id=t AND stage='reviewed';
+ IF n<>1 THEN RAISE EXCEPTION 'denied completion mutated stage'; END IF;
+ SELECT count(*) INTO n FROM aepx_iteration.work_item WHERE tenant_id=t AND stage='reviewed';
+ IF n<>1 THEN RAISE EXCEPTION 'review stage not persisted'; END IF;
 END
 $tests$;
 SET LOCAL app.tenant_id='22222222-2222-4222-8222-222222222222';
