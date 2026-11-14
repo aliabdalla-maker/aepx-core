@@ -51,7 +51,7 @@ BEGIN
     ) THEN
       RAISE EXCEPTION 'DENY: PUBLIC can execute sensitive function %.%',fn.nspname,fn.proname;
     END IF;
-    IF pg_has_role(current_user,fn.proowner,'MEMBER') THEN
+    IF pg_has_role((SELECT oid FROM pg_roles WHERE rolname=current_user),fn.proowner,'MEMBER') THEN
       RAISE EXCEPTION 'DENY: runtime role belongs to sensitive function owner';
     END IF;
     function_count:=function_count+1;
