@@ -62,7 +62,7 @@ def main():
                 summary_output = run.stderr
                 # Require a terminal unittest summary, not an arbitrary embedded OK.
                 summary = re.search(
-                    r"(?m)^Ran (\d+) tests? in [^\r\n]+\r?\n\s*OK\s*\Z",
+                    r"(?m)^Ran (\d+) tests? in [^\r\n]+\r?\n[ \t]*\r?\nOK\r?\n?\Z",
                     summary_output,
                 )
                 count = summary
