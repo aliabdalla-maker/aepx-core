@@ -13,3 +13,9 @@ print(admit(
 ```
 
 This is a precondition, not a complete budget-enforcement system. A future runner must persist atomic reservations, use trusted provider usage/cost reports, settle or release reservations after failure, prevent concurrent overspend, enforce wall-clock deadlines externally and stop when usage data is unavailable. It must never enable provider calls, deployment, auto-merge or external MCP execution merely because admission succeeds.
+
+## Offline reservation prototype
+
+`scripts/aepx_budget_ledger.py` provides `reserve(path, request_id, limits, planned)` and `settle(path, request_id, actual)`. A stable request ID prevents duplicate reservations; a held reservation counts at its maximum until settled. A settlement cannot exceed its reservation. Ledger writes use a cooperative exclusive directory lock and atomic replacement.
+
+**Important limitations:** This is single-host, trusted-directory, cooperative-writer prototype code, not a database transaction or an authorization mechanism. It has no trusted provider usage source, identity binding, reconciliation service, crash recovery protocol, distributed lock, tamper-evident audit, or reliable cross-host concurrency. Do not use it for actual paid API spend or multi-worker production traffic. Never automatically release in-flight reservations following an unknown crash. Real provider execution remains disabled.
