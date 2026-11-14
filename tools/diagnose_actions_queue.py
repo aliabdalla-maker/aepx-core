@@ -10,6 +10,7 @@ def summarize(runs):
         raise ValueError("GitHub Actions response must be a list")
     counts = {}
     queued = []
+    running = []
     conclusions = {}
     unsuccessful = []
     seen_ids = set()
@@ -43,12 +44,15 @@ def summarize(runs):
             if conclusion != "success":
                 unsuccessful.append({"id": run.get("databaseId"),
                                      "name": run.get("name"), "conclusion": conclusion})
-        if status in ("queued", "waiting", "pending", "requested"):
+        if status == "in_progress":
+            running.append({"id": run.get("databaseId"), "name": run.get("name")})
+        if status in ("queued", "waiting", "pending", "requested", "action_required"):
             queued.append({"id": run.get("databaseId"), "name": run.get("name"),
                            "created_at": run.get("createdAt"), "status": status})
     return {"total": len(runs), "statuses": counts,
             "conclusions": conclusions, "unsuccessful": unsuccessful,
             "not_started": queued,
+            "in_progress": running,
             "diagnosis": "Queue cause cannot be determined from run status alone"}
 
 def main(argv=None):
