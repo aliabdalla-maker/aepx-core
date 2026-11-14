@@ -59,14 +59,13 @@ def _read(path):
     return state
 
 def _write(path, state):
-    payload = json.dumps(state,sort_keys=True,indent=2) + "\\n"
+    payload = json.dumps(state,sort_keys=True,indent=2) + chr(10)
     if len(payload.encode("utf-8")) > MAX_LEDGER_BYTES:
         raise BudgetDenied("ledger exceeds size limit")
     fd, temp = tempfile.mkstemp(prefix=".aepx-budget-",dir=str(path.parent))
     try:
         with os.fdopen(fd,"w",encoding="utf-8") as stream:
-            json.dump(state,stream,sort_keys=True,indent=2)
-            stream.write("\n")
+            stream.write(payload)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temp,path)
@@ -100,8 +99,6 @@ def reserve(path, request_id, limits, planned):
             raise BudgetDenied("reservation count limit exceeded")
         admit(limits,_total(state),planned)
         state["reservations"][request_id] = {"reserved":planned,"settled":None}
-        if len(json.dumps(state).encode("utf-8")) > MAX_LEDGER_BYTES:
-            raise BudgetDenied("ledger exceeds size limit")
         _write(path,state)
         return {"request_id":request_id,"status":"reserved","external_execution_authorized":False}
 
