@@ -33,6 +33,8 @@ def main():
         if target.is_symlink():
             raise OSError("refusing symlink report destination")
         target.parent.mkdir(parents=True, exist_ok=True)
+        if any(parent.is_symlink() for parent in target.parents):
+            raise OSError("refusing symlinked report parent directory")
         if target.is_symlink():
             raise OSError("refusing symlink report destination")
         # Use a unique temporary file to prevent stale or concurrent .tmp collisions.
