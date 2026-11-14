@@ -1,6 +1,6 @@
 """Offline, evidence-gated AEP-X milestone progress calculator.
 
-Input is an explicit reviewed JSON manifest. This does NOT query GitHub,
+Input is an explicit JSON manifest containing unverified claims. This does NOT query GitHub,
 verify signatures, or assert that referenced tests really ran.
 """
 import argparse
@@ -50,8 +50,13 @@ def calculate(manifest):
   total+=score
   details.append({"milestone":name,"weight":weight,"status":status,
                   "weighted_points":score,"evidence":evidence})
- return {"progress_percent":round(total,2),"max_percent":100,
-         "verification":"unverified_manifest_claims","milestones":details}
+ return {"progress_percent":round(total,2),
+         "claimed_progress_percent":round(total,2),
+         "independently_verified_percent":0,
+         "max_percent":100,
+         "verification":"unverified_manifest_claims",
+         "warning":"Claimed progress is NOT verified; evidence strings are not checked",
+         "milestones":details}
 
 def main():
  parser=argparse.ArgumentParser()
