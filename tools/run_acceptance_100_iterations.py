@@ -36,7 +36,7 @@ def main():
         interrupted = True
         raise KeyboardInterrupt
 
-    signal.signal(signal.SIGTERM, stop)
+    previous_sigterm = signal.signal(signal.SIGTERM, stop)
     deadline = time.monotonic() + 3300  # Leave time for CI summary/artifact upload.
     command = [sys.executable, "-m", "unittest", "discover", "-s", "tests",
                "-p", "test_acceptance_evidence_integrity.py", "-v"]
@@ -72,6 +72,7 @@ def main():
             records.append(record)
             persist()
             print(f"Iteration {iteration}/{args.iterations}: INTERRUPTED", flush=True)
+            signal.signal(signal.SIGTERM, previous_sigterm)
             return 130
         records.append(record)
         persist()
@@ -80,6 +81,7 @@ def main():
         if not record["passed"]:
             break
     report = persist()
+    signal.signal(signal.SIGTERM, previous_sigterm)
     return 0 if report["all_passed"] and not interrupted else 1
 
 if __name__ == "__main__":
