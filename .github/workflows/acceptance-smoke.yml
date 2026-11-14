@@ -1,0 +1,45 @@
+name: AEP-X fast offline acceptance smoke
+on:
+  pull_request:
+    paths:
+      - 'tools/run_acceptance_100_iterations.py'
+      - 'tools/verify_acceptance_cycle_report.py'
+      - 'tools/verify_acceptance_evidence.py'
+      - 'tests/test_acceptance_*.py'
+      - '.github/workflows/acceptance-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run verifier and runner self-tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -q
+          python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -q
+          python -m unittest discover -s tests -p 'test_acceptance_cycle_mutations.py' -q
+      - name: Run one bounded offline acceptance cycle
+        run: |
+          set -euo pipefail
+          python tools/run_acceptance_100_iterations.py --iterations 1 --output acceptance-smoke.json
+      - name: Verify exact provenance and outcome
+        run: |
+          set -euo pipefail
+          python tools/verify_acceptance_cycle_report.py acceptance-smoke.json --expected 1 --commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
+          echo 'One offline smoke cycle verified. Full acceptance NOT ESTABLISHED.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aepx-offline-smoke-report
+          retention-days: 7
+          if-no-files-found: warn
+          path: acceptance-smoke.json

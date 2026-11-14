@@ -452,3 +452,12 @@ rejecting absent, zero and boolean values. Two additional regression tests
 cover zero and boolean values; both offline acceptance CI workflows require
 at least 25 report-verifier tests. This does not replace the need for actual
 CI logs and independent tenant/worker security acceptance.
+
+### Fast smoke gate before long-running acceptance
+
+The acceptance-smoke.yml workflow runs runner/report/mutation self-tests,
+executes one bounded offline integrity cycle, and validates exact CI commit
+and run ID provenance. It uploads a seven-day scoped report. This gives
+shorter diagnostic feedback when 50x2 and 100-cycle jobs are queued or
+expensive, but one smoke cycle never establishes full acceptance or permits
+production deployment.
