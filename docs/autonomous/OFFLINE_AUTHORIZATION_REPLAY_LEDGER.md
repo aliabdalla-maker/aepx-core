@@ -13,3 +13,7 @@ The SQLite connection is now explicitly closed on successful consumption and on 
 ## Scoped nonce uniqueness
 
 The offline schema now enforces `UNIQUE(tenant_id,principal_id,action,nonce)` in addition to the signed-payload fingerprint. A valid re-signing under another key, or a changed expiry, cannot reuse the same nonce within that scope. This is a **schema change for disposable test ledgers**; existing SQLite files are not automatically migrated and should not be treated as upgraded. Use a fresh disposable test database. This does not establish distributed or transactionally coupled production replay protection.
+
+## Legacy-schema preflight
+
+Before recording any authorization, the ledger checks the exact expected column order and confirms the scoped nonce uniqueness index exists. A legacy or weakened SQLite table is rejected, not silently upgraded. Use a fresh disposable ledger for tests; do not delete any user data or attempt automatic migrations. This is a schema guard only, not a secure file-identity or production authorization boundary.
