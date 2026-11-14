@@ -8,6 +8,7 @@ import pathlib
 import subprocess
 import sys
 import time
+import signal
 
 def main():
     parser = argparse.ArgumentParser()
@@ -17,6 +18,24 @@ def main():
     if not 1 <= args.iterations <= 100:
         parser.error("iterations must be between 1 and 100")
     records = []
+    interrupted = False
+    def persist():
+        report = {"requested": args.iterations, "executed": len(records),
+                  "all_passed": len(records) == args.iterations and all(x["passed"] for x in records),
+                  "independent_acceptance_established": False,
+                  "production_deployment_authorized": False, "runs": records}
+        target = pathlib.Path(args.output)
+        temporary = target.with_name(target.name + ".tmp")
+        temporary.write_text(json.dumps(report, indent=2) + "\n")
+        os.replace(temporary, target)
+        return report
+
+    def stop(signum, frame):
+        nonlocal interrupted
+        interrupted = True
+        raise KeyboardInterrupt
+
+    signal.signal(signal.SIGTERM, stop)
     deadline = time.monotonic() + 3300  # Leave time for CI summary/artifact upload.
     command = [sys.executable, "-m", "unittest", "discover", "-s", "tests",
                "-p", "test_acceptance_evidence_integrity.py", "-v"]
@@ -46,16 +65,13 @@ def main():
             record = {"iteration": iteration, "passed": False,
                       "error": "90-second per-iteration timeout"}
         records.append(record)
+        persist()
         print(f"Iteration {iteration}/{args.iterations}: {'PASS' if record['passed'] else 'FAIL'}", flush=True)
         # Fail closed: do not repeat known failures 100 times without remediation.
         if not record["passed"]:
             break
-    report = {"requested": args.iterations, "executed": len(records),
-              "all_passed": len(records) == args.iterations and all(x["passed"] for x in records),
-              "independent_acceptance_established": False,
-              "production_deployment_authorized": False, "runs": records}
-    pathlib.Path(args.output).write_text(json.dumps(report, indent=2) + "\n")
-    return 0 if report["all_passed"] else 1
+    report = persist()
+    return 0 if report["all_passed"] and not interrupted else 1
 
 if __name__ == "__main__":
     raise SystemExit(main())
