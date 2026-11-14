@@ -92,7 +92,7 @@ def verify(manifest_path: Path):
         os.close(root_fd)
     try:
         metadata = os.fstat(descriptor)
-        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 1024 * 1024:
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 1024 * 1024 or metadata.st_nlink != 1:
             raise ValueError("manifest must be a regular file no larger than 1 MiB")
         raw = bytearray()
         while len(raw) <= 1024 * 1024:
@@ -105,7 +105,7 @@ def verify(manifest_path: Path):
         after = os.fstat(descriptor)
         if (metadata.st_dev, metadata.st_ino, metadata.st_size, metadata.st_mtime_ns,
             metadata.st_ctime_ns) != (after.st_dev, after.st_ino, after.st_size,
-            after.st_mtime_ns, after.st_ctime_ns) or len(raw) != after.st_size:
+            after.st_mtime_ns, after.st_ctime_ns) or len(raw) != after.st_size or after.st_nlink != 1:
             raise ValueError("manifest changed during reading")
     finally:
         os.close(descriptor)
