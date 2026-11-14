@@ -46,6 +46,9 @@ on:
       - 'tests/sql/aepx_runtime_role_privilege_audit.sql'
       - 'scripts/test_aepx_pg_runtime_privileges.sh'
       - 'tests/test_aepx_pg_runtime_privilege_audit_contract.py'
+      - 'tests/sql/aepx_runtime_function_grant_audit.sql'
+      - 'scripts/test_aepx_pg_function_grants.sh'
+      - 'tests/test_aepx_pg_function_grants_contract.py'
       - 'tests/test_aepx_engineering_evidence_mutation.py'
       - 'scripts/aepx_engineering_evidence.py'
       - 'scripts/aepx_engineering_iteration_state.py'
@@ -121,6 +124,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_budget_pg_sql_contract.py' -v
       - name: Test concurrent evidence mutation detection
         run: python -m unittest discover -s tests -p 'test_aepx_engineering_evidence_mutation.py' -v
+      - name: Test PostgreSQL schema and function grant audit guardrails (offline)
+        run: python -m unittest discover -s tests -p 'test_aepx_pg_function_grants_contract.py' -v
       - name: Test PostgreSQL runtime privilege audit guardrails (offline)
         run: python -m unittest discover -s tests -p 'test_aepx_pg_runtime_privilege_audit_contract.py' -v
       - name: Test bounded approval race harness (offline)
