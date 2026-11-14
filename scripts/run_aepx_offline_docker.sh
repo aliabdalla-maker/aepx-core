@@ -21,7 +21,7 @@ if (( 10#$count < 1 || 10#$count > 100 )); then
   echo "Count must be 1..100" >&2; exit 2
 fi
 case "$pattern" in
-  test_aepx_autonomous_checkpoint.py|test_aepx_pilot_checkpoint.py|test_aepx_supervised_batch.py|test_aepx_budget_admission.py|test_aepx_budget_ledger.py) ;;
+  test_aepx_autonomous_checkpoint.py|test_mcp_egress_dns_policy.py|test_mcp_egress_connection_admission.py|test_mcp_http_preflight.py|test_mcp_http_response_guard.py) ;;
   *) echo "Pattern not approved by launcher" >&2; exit 2 ;;
 esac
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
