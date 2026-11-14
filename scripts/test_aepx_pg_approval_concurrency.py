@@ -59,7 +59,7 @@ VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+inte
         # Session 1 holds row locks after consuming; session 2 blocks until commit.
         first=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,text=True,env=env,bufsize=1)
-        first.stdin.write(scope+"BEGIN;"+consume+"\\echo FIRST_CONSUMED\n")
+        first.stdin.write(scope+"BEGIN;"+consume+"\n\\echo FIRST_CONSUMED\n")
         first.stdin.flush()
         while True:
             line=first.stdout.readline()
