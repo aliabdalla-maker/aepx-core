@@ -304,3 +304,14 @@ adversarial tests cover boolean iteration/return-code fields, negative cycle
 duration and forged independent-acceptance flags. The standalone report
 verifier suite now has 18 authored tests, and CI requires discovery of all
 18 before running 100 cycles. Passing workflow evidence remains outstanding.
+
+### 60-case adversarial evidence mutation matrix
+
+The new `tests/test_acceptance_cycle_mutations.py` runs 60 independently
+named mutation scenarios (via unittest subtests) plus a valid baseline.
+Each mutation must be rejected by the standalone verifier. Cases cover
+unexpected root/cycle fields, wrong commit/run provenance, invalid executed
+counts and invalid elapsed times. CI runs this matrix before the 100-cycle
+runner. These 60 cases are authored test scenarios, not 60 successful CI
+iterations, and are not independent security acceptance. The always-run
+summary also handles missing count keys without raising KeyError.
