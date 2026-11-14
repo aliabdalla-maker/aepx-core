@@ -33,7 +33,7 @@ fi
 if [[ ! -w "$checkpoint_dir" ]]; then
   echo "Checkpoint directory must be writable" >&2; exit 2
 fi
-docker run --rm \
+docker run --rm --pull never \
   --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
   --pids-limit 128 --memory 512m --cpus 1 \
   --user 10001:10001 --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m,uid=10001,gid=10001 \
