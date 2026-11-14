@@ -67,6 +67,20 @@ class RunnerTests(unittest.TestCase):
                     runner.main()
             self.assertEqual(original.read_text(), "unchanged")
 
+    def test_rejects_symlink_report_parent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            real_dir = root / "real"
+            real_dir.mkdir()
+            linked_dir = root / "linked"
+            linked_dir.symlink_to(real_dir, target_is_directory=True)
+            argv = ["runner", "--iterations", "1",
+                    "--output", str(linked_dir / "report.json")]
+            with patch.object(sys, "argv", argv):
+                with self.assertRaisesRegex(OSError, "symlinked report parent"):
+                    runner.main()
+            self.assertFalse((real_dir / "report.json").exists())
+
     def test_stops_on_first_failed_cycle(self):
         good = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         bad = subprocess.CompletedProcess([], 1, "", "Ran 42 tests in 0.1s\n\nFAILED (failures=1)\n")
