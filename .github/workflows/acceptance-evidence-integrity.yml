@@ -50,3 +50,27 @@ jobs:
           set -e
           test "$status" -eq 1
           grep -q '"evidence_integrity_percent": 0' /tmp/aepx-incomplete.out
+      - name: Verify valid local digest does not claim independent acceptance
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('/tmp/aepx-gate-positive')
+          root.mkdir(exist_ok=True)
+          payload = b'local-integrity-only'
+          (root / 'proof.txt').write_bytes(payload)
+          manifest = {'milestones': [{'id': 'offline', 'weight': 100, 'evidence': [
+              {'path': 'proof.txt', 'sha256': hashlib.sha256(payload).hexdigest(), 'result': 'pass'}
+          ]}]}
+          (root / 'manifest.json').write_text(json.dumps(manifest))
+          PY
+          python tools/verify_acceptance_evidence.py /tmp/aepx-gate-positive/manifest.json > /tmp/aepx-gate-positive.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/aepx-gate-positive.json').read_text())
+          assert result['evidence_integrity_percent'] == 100
+          assert result['independently_verified_percent'] == 0
+          assert result['independent_verification_available'] is False
+          PY
