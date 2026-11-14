@@ -266,3 +266,12 @@ authored runner self-tests to 19; CI requires at least 19 discovered tests.
 These changes do not establish passing CI, independent security acceptance,
 or permission to merge or deploy. Review GitHub Actions results before
 claiming progress beyond source hardening.
+
+### Third five-pass CI evidence validation cycle
+
+The 100-cycle workflow now uses explicit SystemExit-based validation rather
+than Python assertions; rejects duplicate JSON keys and nonfinite JSON
+constants; verifies typed sequential cycle records, bounded durations and
+non-authorization flags; and attempts to preserve a useful job summary if
+the report cannot be parsed. No workflow execution or independent acceptance
+has been confirmed. The changes remain on a draft, non-deployed branch.
