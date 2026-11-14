@@ -70,6 +70,9 @@ def main():
             except (OSError, subprocess.SubprocessError) as exc:
                 record = {"iteration": iteration, "passed": False,
                           "error": f"test process failed to start or execute: {type(exc).__name__}"}
+            except Exception as exc:
+                record = {"iteration": iteration, "passed": False,
+                          "error": f"unexpected runner exception: {type(exc).__name__}"}
             except KeyboardInterrupt:
                 record = {"iteration": iteration, "passed": False,
                           "error": "runner interrupted before cycle completed"}
