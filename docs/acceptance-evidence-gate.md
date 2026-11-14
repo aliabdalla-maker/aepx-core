@@ -536,3 +536,34 @@ close-on-exec protection to prevent inheritance across subprocess exec.
 The regression suite rejects absent, zero and boolean O_CLOEXEC values;
 all three offline acceptance workflows require 30 verifier tests.
 This change does not establish independent acceptance or authorize deployment.
+
+### P0: GitHub Actions queue incident runbook (2026-11-14)
+
+Observed: commit `3550ccdf6dc354159bcf4f34aeaabf9c842c69d4` had 34
+workflow runs in queued state; main CI run `43618627358` had 30 queued jobs,
+without started steps or job logs. This is a scheduling/runner diagnostic,
+not evidence of failing tests or passing tests. Do not guess the cause.
+
+1. Inspect repository Settings > Actions > General for whether actions are
+   enabled, allowed actions and runner policies. Inspect organization Actions
+   policies if applicable.
+2. Inspect repository/organization Settings > Actions > Runners for online,
+   idle and label-compatible runners. The affected jobs request
+   `ubuntu-latest` (GitHub-hosted); confirm hosted runner entitlement.
+3. Check GitHub Actions billing/usage and spending limits, payment restrictions,
+   concurrent-job quotas, and any organization-level enforcement. Avoid
+   enabling paid services without explicit authorization.
+4. Inspect the GitHub Actions service-status page for a current incident.
+5. Inspect one queued job and its event/concurrency group; confirm it is not
+   blocked by an older in-progress run or approval gate. Record the run ID,
+   queued timestamp and the GitHub UI's displayed reason.
+6. Once the external queue condition is resolved, re-run only the scoped
+   smoke diagnostic first. Then execute the 50x2 and 100-cycle evidence
+   workflows, review all test logs and verify report provenance. Do not
+   cancel historical full-cycle evidence runs solely to free capacity.
+7. If the queue persists, escalate to the repository/organization Actions
+   administrator or GitHub Support with run `43618627358` and queued job IDs.
+
+Release gate: queued, skipped, cancelled or unexecuted jobs are never a pass.
+Independent security acceptance and explicit release authorization remain
+required even after all offline repetitions pass.
