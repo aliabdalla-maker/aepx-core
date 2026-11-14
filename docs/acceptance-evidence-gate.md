@@ -594,3 +594,12 @@ when the offline fixture is missing, unreadable or malformed, when GitHub CLI
 returns invalid JSON, or when workflow run records have an invalid shape.
 It does not print arbitrary CLI stderr or treat missing data as zero queued
 jobs. Offline regression tests cover these failure paths.
+
+### Optional queue monitoring exit status
+
+Use `python tools/diagnose_actions_queue.py --fail-on-queued` in an
+operator-run, read-only monitor. Exit 0 means the queried snapshot contains
+no not-started runs, exit 3 means at least one run is queued/waiting/pending/
+requested, and exit 2 means the query or input failed. Exit 0 does **not**
+mean completed workflows passed; inspect their conclusions separately.
+This flag does not schedule, cancel or rerun any GitHub Actions job.

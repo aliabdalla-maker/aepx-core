@@ -50,6 +50,21 @@ class QueueDiagnosticTests(unittest.TestCase):
             with contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(main([]), 2)
 
+    def test_optional_monitoring_exit_on_queued(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "queued.json"
+            path.write_text('[{"status":"queued","databaseId":17}]', encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path)]), 0)
+                self.assertEqual(main(["--input-json", str(path), "--fail-on-queued"]), 3)
+
+    def test_optional_monitoring_exit_on_completed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "completed.json"
+            path.write_text('[{"status":"completed","conclusion":"failure"}]', encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--fail-on-queued"]), 0)
+
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])
         self.assertIn("cannot be determined", result["diagnosis"])
