@@ -10,6 +10,8 @@ def summarize(runs):
         raise ValueError("GitHub Actions response must be a list")
     counts = {}
     queued = []
+    conclusions = {}
+    unsuccessful = []
     for run in runs:
         if not isinstance(run, dict):
             raise ValueError("Malformed workflow run")
@@ -17,10 +19,20 @@ def summarize(runs):
         if not isinstance(status, str):
             raise ValueError("Missing workflow run status")
         counts[status] = counts.get(status, 0) + 1
+        if status == "completed":
+            conclusion = run.get("conclusion")
+            if not isinstance(conclusion, str) or not conclusion:
+                raise ValueError("Completed workflow run lacks a conclusion")
+            conclusions[conclusion] = conclusions.get(conclusion, 0) + 1
+            if conclusion != "success":
+                unsuccessful.append({"id": run.get("databaseId"),
+                                     "name": run.get("name"), "conclusion": conclusion})
         if status in ("queued", "waiting", "pending", "requested"):
             queued.append({"id": run.get("databaseId"), "name": run.get("name"),
                            "created_at": run.get("createdAt"), "status": status})
-    return {"total": len(runs), "statuses": counts, "not_started": queued,
+    return {"total": len(runs), "statuses": counts,
+            "conclusions": conclusions, "unsuccessful": unsuccessful,
+            "not_started": queued,
             "diagnosis": "Queue cause cannot be determined from run status alone"}
 
 def main(argv=None):
@@ -28,6 +40,8 @@ def main(argv=None):
     parser.add_argument("--repo", default="aliabdalla-maker/aepx-core")
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--input-json", help="Offline fixture; skip gh CLI")
+    parser.add_argument("--require-success", action="store_true",
+                        help="Exit 4 unless every queried run completed successfully")
     parser.add_argument("--fail-on-queued", action="store_true",
                         help="Exit 3 if any run is not started (for external monitoring)")
     args = parser.parse_args(argv)
@@ -62,6 +76,10 @@ def main(argv=None):
         print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
         return 2
     print(json.dumps(report, indent=2))
+    if args.require_success and (report["total"] == 0 or
+                                 report["statuses"].get("completed", 0) != report["total"] or
+                                 report["unsuccessful"]):
+        return 4
     return 3 if args.fail_on_queued and report["not_started"] else 0
 
 if __name__ == "__main__":
