@@ -89,3 +89,16 @@ jobs:
             echo "- Independent acceptance: **NOT ESTABLISHED**"
             echo "- Production deployment authorized: **NO**"
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify invalid UTF-8 manifest returns exit code two
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          Path('/tmp/aepx-invalid-utf8.json').write_bytes(b'\\xff\\xfe')
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-invalid-utf8.json > /tmp/aepx-invalid-utf8.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'acceptance evidence rejected' /tmp/aepx-invalid-utf8.out
