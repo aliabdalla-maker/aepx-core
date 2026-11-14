@@ -47,6 +47,14 @@ jobs:
               raise SystemExit("Runner self-test coverage below required minimum of 16")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
+          python - <<'PY'
+          import unittest
+          suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_evidence_integrity.py")
+          count = suite.countTestCases()
+          print(f"Integrity tests discovered: {count}")
+          if count < 42:
+              raise SystemExit("Integrity test coverage below required minimum of 42")
+          PY
       - name: Run up to 100 sequential acceptance cycles (stop on failure)
         shell: bash
         run: |
