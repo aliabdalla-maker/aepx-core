@@ -106,3 +106,15 @@ independent attestation or authorization to merge, deploy, or spend on OCI.
 All changes are authored source and workflow updates, not proof of a GitHub
 runner execution. Preserve draft status, prohibit merge/deploy and keep
 independent acceptance unestablished until trustworthy run evidence is reviewed.
+
+## Manual 100-cycle offline verification
+
+The `AEP-X 100-cycle offline acceptance` workflow is **manual-only** and
+runs `tools/run_acceptance_100_iterations.py --iterations 100`. It executes
+the 42-test offline integrity suite sequentially, with a 90-second timeout
+per cycle, a 60-minute workflow limit, and immediate termination on the
+first failure. It writes a JSON report and uploads it as a seven-day artifact.
+The workflow does **not** modify code, retry known failures, execute providers,
+merge pull requests, provision OCI, or deploy. A completed 100/100 result
+would show repeatability of this narrow offline test suite only; it would
+not establish independent security acceptance or production readiness.
