@@ -36,6 +36,21 @@ class QueueDiagnosticTests(unittest.TestCase):
                         main(["--repo", repo])
                 self.assertEqual(result.exception.code, 2)
 
+    def test_action_required_is_blocked_for_monitoring(self):
+        report = summarize([{"databaseId": 42, "status": "action_required"}])
+        self.assertEqual(report["not_started"][0]["id"], 42)
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "approval.json"
+            path.write_text('[{"databaseId":42,"status":"action_required"}]',
+                            encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--fail-on-queued"]), 3)
+
+    def test_in_progress_is_reported_separately(self):
+        report = summarize([{"databaseId": 43, "status": "in_progress"}])
+        self.assertEqual(report["in_progress"], [{"id": 43, "name": None}])
+        self.assertEqual(report["not_started"], [])
+
     def test_counts_queued_and_completed(self):
         result = summarize([
             {"databaseId": 12, "name": "CI", "status": "queued", "createdAt": "2026-11-14"},
