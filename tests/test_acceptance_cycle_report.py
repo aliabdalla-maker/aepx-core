@@ -98,6 +98,14 @@ class CycleReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "symlinked evidence"):
             mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_rejects_hardlinked_report_input(self):
+        original = pathlib.Path(self.tmp.name) / "original.json"
+        original.write_text(json.dumps(self.report), encoding="utf-8")
+        import os
+        os.link(original, self.path)
+        with self.assertRaisesRegex(ValueError, "hardlinked evidence"):
+            mod.verify(self.path, "a" * 40, "123", expected=2)
+
     def test_rejects_oversized_report(self):
         self.path.write_text(" " * 2_000_001, encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "oversized"):
