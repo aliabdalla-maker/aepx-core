@@ -275,5 +275,22 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(manifest)
 
+    def test_unknown_schema_fields_rejected(self):
+        valid = {"milestones": [{"id": "rls", "weight": 100, "evidence": []}]}
+        variants = [
+            {**valid, "independently_verified_percent": 100},
+            {"milestones": [{"id": "rls", "weight": 100, "evidence": [],
+                              "independently_verified": True}]},
+            {"milestones": [{"id": "rls", "weight": 100, "evidence": [
+                {"path": "proof.txt", "sha256": "0" * 64, "result": "pass",
+                 "trusted": True}]}]},
+        ]
+        for payload in variants:
+            with self.subTest(payload=payload), tempfile.TemporaryDirectory() as tmp:
+                manifest = Path(tmp) / "manifest.json"
+                manifest.write_text(json.dumps(payload))
+                with self.assertRaises(ValueError):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
