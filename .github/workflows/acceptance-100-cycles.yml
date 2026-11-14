@@ -1,0 +1,46 @@
+name: AEP-X 100-cycle offline acceptance
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acceptance-100-cycles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run up to 100 sequential acceptance cycles (stop on failure)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/run_acceptance_100_iterations.py --iterations 100 --output acceptance-100-iterations.json
+      - name: Publish scoped result
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f acceptance-100-iterations.json ]]; then
+            python - <<'PY'
+          import json, os
+          data = json.load(open('acceptance-100-iterations.json'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('## Offline acceptance repetition\n')
+              out.write(f"- Cycles executed: {data['executed']} / {data['requested']}\n")
+              out.write(f"- All passed: {data['all_passed']}\n")
+              out.write('- Independent acceptance: NOT ESTABLISHED\n')
+              out.write('- Merge or deployment authorized: NO\n')
+          PY
+          else
+            echo 'No completion report generated; treat execution as unverified' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aepx-100-cycle-offline-report
+          retention-days: 7
+          if-no-files-found: warn
+          path: acceptance-100-iterations.json
