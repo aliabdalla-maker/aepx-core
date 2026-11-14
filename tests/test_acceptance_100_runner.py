@@ -76,6 +76,22 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertFalse(report["runs"][0]["passed"])
 
+    def test_rejects_skipped_tests_even_with_zero_exit(self):
+        result = subprocess.CompletedProcess(
+            [], 0, "", "Ran 42 tests in 0.1s\n\nOK (skipped=42)\n"
+        )
+        status, report = self.invoke(1, [result])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
+    def test_rejects_expected_failures_even_with_zero_exit(self):
+        result = subprocess.CompletedProcess(
+            [], 0, "", "Ran 42 tests in 0.1s\n\nOK (expected failures=42)\n"
+        )
+        status, report = self.invoke(1, [result])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
     def test_timeout_preserves_failure_report(self):
         status, report = self.invoke(100, subprocess.TimeoutExpired(["python"], 90))
         self.assertEqual(status, 1)
