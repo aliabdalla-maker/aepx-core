@@ -401,3 +401,10 @@ uses trusted GitHub environment values for commit/run provenance, and labels
 report-supplied all_passed as an unverified claim. A separate success-only
 step publishes the 100/100 verified offline-cycle outcome after the strict
 report verifier succeeds. Independent acceptance and deployment remain blocked.
+
+### Aggregate artifact filesystem hardening
+
+After PR #346 merged, the next patch rejects symlinked and non-regular
+50-cycle batch report inputs, rejects unexpected artifact directory entries,
+and rechecks a 2 MB upper bound before hashing. This reduces the risk of
+unsafe evidence ingestion; it is not an independent execution attestation.
