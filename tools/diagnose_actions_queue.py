@@ -65,6 +65,8 @@ def main(argv=None):
                         help="Require an exact workflow name in the queried snapshot; repeatable")
     parser.add_argument("--require-success", action="store_true",
                         help="Exit 4 unless every queried run completed successfully")
+    parser.add_argument("--fail-on-incomplete", action="store_true",
+                        help="Exit 7 if any run has not completed, including running jobs")
     parser.add_argument("--fail-on-queued", action="store_true",
                         help="Exit 3 if any run is not started (for external monitoring)")
     args = parser.parse_args(argv)
@@ -144,6 +146,8 @@ def main(argv=None):
                                  report["statuses"].get("completed", 0) != report["total"] or
                                  report["unsuccessful"]):
         return 4
+    if args.fail_on_incomplete and report["total"] != report["statuses"].get("completed", 0):
+        return 7
     return 3 if args.fail_on_queued and report["not_started"] else 0
 
 if __name__ == "__main__":
