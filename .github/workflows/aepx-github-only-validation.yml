@@ -16,6 +16,7 @@ on:
       - 'docker/offline-pilot/Dockerfile'
       - 'scripts/run_aepx_offline_docker.sh'
       - 'tests/test_aepx_docker_pilot_static.py'
+      - 'tests/test_aepx_docker_launcher_counts.py'
       - 'scripts/aepx_budget_ledger.py'
       - 'tests/test_aepx_budget_ledger.py'
       - 'tests/test_aepx_pilot_standalone_lock.py'
@@ -62,6 +63,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_pilot_standalone_lock.py' -v
       - name: Test offline persistent budget reservations
         run: python -m unittest discover -s tests -p 'test_aepx_budget_ledger.py' -v
+      - name: Test Docker launcher count admission (no Docker invocation)
+        run: python -m unittest discover -s tests -p 'test_aepx_docker_launcher_counts.py' -v
       - name: Test Docker offline pilot static guardrails
         run: python -m unittest discover -s tests -p 'test_aepx_docker_pilot_static.py' -v
       - name: Test offline autonomous budget admission
