@@ -40,3 +40,13 @@ jobs:
           set -e
           test "$status" -eq 2
           grep -q "acceptance evidence rejected" /tmp/aepx-gate.out
+      - name: Verify incomplete evidence returns exit code one
+        shell: bash
+        run: |
+          printf '{"milestones":[{"id":"rls","weight":100,"evidence":[{"path":"absent.txt","sha256":"%064d","result":"pass"}]}]}' 0 > /tmp/aepx-incomplete-manifest.json
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-incomplete-manifest.json > /tmp/aepx-incomplete.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          grep -q '"evidence_integrity_percent": 0' /tmp/aepx-incomplete.out
