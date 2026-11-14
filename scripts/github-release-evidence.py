@@ -16,6 +16,23 @@ REQUIRED = (
     ".github/workflows/aepx-release-readiness.yml",
 )
 
+def fetch_branch_sha(repo, token, fetch=None):
+    if fetch is None:
+        def fetch(url):
+            request = urllib.request.Request(url, headers={
+                "Authorization": "Bearer " + token,
+                "Accept": "application/vnd.github+json",
+                "User-Agent": "aepx-release-evidence-gate"})
+            with urllib.request.urlopen(request, timeout=20) as response:
+                return json.load(response)
+    data = fetch(f"https://api.github.com/repos/{repo}/branches/master")
+    if not isinstance(data, dict) or not isinstance(data.get("commit"), dict):
+        raise ValueError("invalid master branch response")
+    sha = data["commit"].get("sha")
+    if not isinstance(sha, str) or len(sha) != 40 or any(c not in "0123456789abcdefABCDEF" for c in sha):
+        raise ValueError("invalid master branch SHA")
+    return sha.lower()
+
 def fetch_runs(repo, sha, token, fetch=None):
     if fetch is None:
         def fetch(url):
@@ -113,7 +130,13 @@ def main(argv=None):
         print("BLOCKED: GH_TOKEN unavailable", file=sys.stderr)
         return 2
     try:
+        before = fetch_branch_sha(args.repo, token)
+        if before != args.sha.lower():
+            raise ValueError("target SHA is not current master")
         runs = fetch_runs(args.repo, args.sha, token)
+        after = fetch_branch_sha(args.repo, token)
+        if after != before:
+            raise ValueError("master changed while gathering evidence")
         errors = evaluate(runs, args.sha, repository=args.repo)
         result = {"repository": args.repo, "sha": args.sha, "required": list(REQUIRED),
                   "sample_size": len(runs), "blockers": errors,

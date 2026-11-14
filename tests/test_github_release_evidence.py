@@ -39,6 +39,26 @@ class ReleaseEvidenceTests(unittest.TestCase):
         del runs[0]["head_repository"]
         self.assertTrue(module.evaluate(runs, SHA))
 
+    def test_current_master_sha_valid(self):
+        self.assertEqual(module.fetch_branch_sha("owner/repo", "token",
+            fetch=lambda url: {"commit": {"sha": SHA}}), SHA)
+
+    def test_invalid_master_response_fails_closed(self):
+        for response in [None, {}, {"commit": {}},
+                         {"commit": {"sha": "bad"}},
+                         {"commit": {"sha": True}}]:
+            with self.assertRaises(ValueError):
+                module.fetch_branch_sha("owner/repo", "token",
+                    fetch=lambda url: response)
+
+    def test_master_endpoint_is_explicit(self):
+        endpoints = []
+        def fake(url):
+            endpoints.append(url)
+            return {"commit": {"sha": SHA}}
+        module.fetch_branch_sha("owner/repo", "token", fetch=fake)
+        self.assertEqual(endpoints, ["https://api.github.com/repos/owner/repo/branches/master"])
+
     def test_missing_required_check_blocks(self):
         self.assertEqual(len(module.evaluate([], SHA)), len(module.REQUIRED))
 
