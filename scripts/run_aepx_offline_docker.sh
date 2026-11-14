@@ -17,7 +17,7 @@ if [[ ! -d "$checkpoint_dir" || -L "$checkpoint_dir" ]]; then
   echo "Checkpoint directory must exist and not be a symlink" >&2; exit 2
 fi
 case "$count" in ''|*[!0-9]*) echo "Count must be an integer" >&2; exit 2;; esac
-if (( 10#$count < 1 || 10#$count > 100 )); then
+if [[ ${#count} -gt 3 ]] || (( 10#$count < 1 || 10#$count > 100 )); then
   echo "Count must be 1..100" >&2; exit 2
 fi
 case "$pattern" in
