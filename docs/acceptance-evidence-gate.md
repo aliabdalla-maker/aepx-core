@@ -336,3 +336,12 @@ artifact for seven days. A push to the branch affecting the configured
 paths or an authorized manual dispatch can start it. CI completion is not
 confirmed by creating the workflow; independent acceptance and deployment
 remain blocked.
+
+### Repeat 50-cycle execution: independent batches
+
+The dedicated 50-cycle workflow now uses a two-entry matrix, each entry
+running its own prerequisite tests, 50 sequential offline integrity cycles,
+provenance verification and separately named evidence artifact. This is a
+configured total of 100 cycle executions (50 + 50), not evidence of completed
+runs. Both batches must pass before treating the matrix as green; it does not
+replace independent acceptance or authorize deployment.
