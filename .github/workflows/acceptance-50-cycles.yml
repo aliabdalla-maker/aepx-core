@@ -11,6 +11,11 @@ on:
       - 'tests/test_acceptance_cycle_report.py'
       - 'tests/test_acceptance_cycle_mutations.py'
       - '.github/workflows/acceptance-50-cycles.yml'
+  pull_request:
+    paths:
+      - 'tools/**'
+      - 'tests/test_acceptance_*.py'
+      - '.github/workflows/acceptance-50-cycles.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -91,7 +96,7 @@ jobs:
 
   aggregate-evidence:
     needs: [offline-50]
-    if: ${{ always() }}
+    if: ${{ always() && needs.offline-50.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
