@@ -40,3 +40,7 @@ bash scripts/test_aepx_docker_checkpoint_runtime.sh --execute /tmp/aepx-pilot-ch
 ```
 
 The probe writes a temporary checkpoint file as UID 10001, flushes and fsyncs it, reads it back and removes it. It never runs the supervised test batch or makes provider calls. Failure indicates an unusable checkpoint mount; do not bypass it by running the application as root or granting broad filesystem permissions. The probe is opt-in and not automatically invoked by CI.
+
+## Isolated Python runner import fix
+
+The image uses `python -I -c` and explicitly inserts `/workspace/scripts` into `sys.path` before importing `aepx_supervised_batch.main()`. This avoids the sibling-module import failure caused by directly executing `/workspace/scripts/aepx_supervised_batch.py` with `-I`, which omits its script directory from Python's import path. The added offline regression test exercises the import pattern with `--help`; the real Docker image still needs a runtime acceptance check. Only the mounted repository scripts are added to the import path, so this is not a substitute for reviewing untrusted repository code.
