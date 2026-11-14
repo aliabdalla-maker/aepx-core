@@ -54,10 +54,14 @@ def main():
                                      timeout=min(90, remaining), check=False,
                                      env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
                 output = run.stdout + run.stderr
-                count = re.search(r"^Ran (\d+) tests? in ", output, re.MULTILINE)
-                passed = (run.returncode == 0 and count is not None
-                          and int(count.group(1)) >= 42
-                          and re.search(r"^OK(?:\s|$)", output, re.MULTILINE) is not None)
+                # Require a terminal unittest summary, not an arbitrary embedded OK.
+                summary = re.search(
+                    r"(?m)^Ran (\d+) tests? in [^\r\n]+\r?\n\s*OK\s*\Z",
+                    output,
+                )
+                count = summary
+                passed = (run.returncode == 0 and summary is not None
+                          and int(summary.group(1)) >= 42)
                 record = {"iteration": iteration, "passed": passed,
                           "tests_executed": int(count.group(1)) if count else None,
                           "return_code": run.returncode,
