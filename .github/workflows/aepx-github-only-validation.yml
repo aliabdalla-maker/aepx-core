@@ -18,6 +18,8 @@ on:
       - 'tests/test_aepx_docker_pilot_static.py'
       - 'tests/test_aepx_docker_launcher_counts.py'
       - 'tests/test_aepx_docker_launcher_contract.py'
+      - 'tests/test_aepx_budget_pg_sql_contract.py'
+      - 'platform/saas-ide/backend/sql/aepx_budget_transactional.sql'
       - 'scripts/aepx_budget_ledger.py'
       - 'tests/test_aepx_budget_ledger.py'
       - 'tests/test_aepx_pilot_standalone_lock.py'
@@ -64,6 +66,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_pilot_standalone_lock.py' -v
       - name: Test offline persistent budget reservations
         run: python -m unittest discover -s tests -p 'test_aepx_budget_ledger.py' -v
+      - name: Test PostgreSQL budget SQL static contract
+        run: python -m unittest discover -s tests -p 'test_aepx_budget_pg_sql_contract.py' -v
       - name: Test Docker launcher command contract (fake Docker)
         run: python -m unittest discover -s tests -p 'test_aepx_docker_launcher_contract.py' -v
       - name: Test Docker launcher count admission (no Docker invocation)
