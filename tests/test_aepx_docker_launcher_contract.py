@@ -43,7 +43,7 @@ class DockerLauncherContractTests(unittest.TestCase):
         result = self.run_launcher("--execute", str(self.checkpoint), PATTERN, "2")
         self.assertEqual(result.returncode, 0, result.stderr)
         args = json.loads(self.capture.read_text())
-        for item in ("run", "--rm", "--network", "none", "--read-only",
+        for item in ("run", "--rm", "--pull", "never", "--network", "none", "--read-only",
                      "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
                      "--pids-limit", "128", "--memory", "512m", "--cpus", "1",
                      "--user", "10001:10001", "--execute", "--count", "2"):
