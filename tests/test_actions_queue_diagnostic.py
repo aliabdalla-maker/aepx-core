@@ -78,7 +78,7 @@ class QueueDiagnosticTests(unittest.TestCase):
             for payload in ('[{"name":"CI","headSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"queued"}]', "[]"):
                 path.write_text(payload, encoding="utf-8")
                 with contextlib.redirect_stdout(io.StringIO()):
-                    self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-workflow", "CI", "--require-success"]), 4)
+                    self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-workflow", "CI", "--require-success"]), 4 if payload != "[]" else 5)
 
     def test_require_success_accepts_completed_success(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -102,7 +102,7 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", sha,
                                        "--require-workflow", "CI", "--require-success"]), 0)
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "c" * 40,
-                                       "--require-workflow", "CI", "--require-success"]), 4)
+                                       "--require-workflow", "CI", "--require-success"]), 5)
 
     def test_head_sha_scope_rejects_malformed_records(self):
         with tempfile.TemporaryDirectory() as directory:
