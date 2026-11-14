@@ -48,6 +48,8 @@ def main(argv=None):
     parser.add_argument("--fail-on-queued", action="store_true",
                         help="Exit 3 if any run is not started (for external monitoring)")
     args = parser.parse_args(argv)
+    if args.require_success and (not args.head_sha or not args.require_workflow):
+        parser.error("--require-success requires --head-sha and at least one --require-workflow")
     if not 1 <= args.limit <= 1000:
         parser.error("--limit must be between 1 and 1000")
     if args.input_json:
