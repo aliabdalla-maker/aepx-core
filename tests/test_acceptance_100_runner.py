@@ -96,6 +96,26 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(report["executed"], 2)
         self.assertFalse(report["all_passed"])
 
+    def test_failed_cycle_does_not_persist_sensitive_subprocess_output(self):
+        secret = "CANARY_PRIVATE_TEST_TOKEN_987654321"
+        failed = subprocess.CompletedProcess(
+            [], 1, f"stdout {secret}", f"stderr {secret}\nFAILED"
+        )
+        status, report = self.invoke(1, [failed])
+        self.assertEqual(status, 1)
+        self.assertNotIn(secret, json.dumps(report))
+        self.assertNotIn("diagnostic_tail", report["runs"][0])
+        self.assertEqual(report["runs"][0]["error"],
+                         "test suite failed or completion summary missing")
+
+    def test_zero_exit_without_valid_summary_does_not_persist_output(self):
+        secret = "CANARY_FORGED_SUCCESS_987654321"
+        forged = subprocess.CompletedProcess([], 0, secret, secret)
+        status, report = self.invoke(1, [forged])
+        self.assertEqual(status, 1)
+        self.assertNotIn(secret, json.dumps(report))
+        self.assertFalse(report["runs"][0]["passed"])
+
     def test_rejects_false_ok_without_test_count(self):
         forged = subprocess.CompletedProcess([], 0, "", "OK\n")
         status, report = self.invoke(1, [forged])
