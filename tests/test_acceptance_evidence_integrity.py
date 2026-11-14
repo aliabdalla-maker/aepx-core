@@ -33,7 +33,8 @@ class EvidenceGateTests(unittest.TestCase):
             manifest = Path(tmp) / "manifest.json"
             manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
                 "evidence": [{"path": "../outside", "sha256": "0" * 64, "result": "pass"}]}]}))
-            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+            with self.assertRaises(ValueError):
+                verify(manifest)
 
     def test_weight_inflation_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -165,7 +166,8 @@ class EvidenceGateTests(unittest.TestCase):
                 manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
                     "evidence": [{"path": bad_path, "sha256": hashlib.sha256(b"proof").hexdigest(),
                                   "result": "pass"}]}]}))
-                self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+                with self.assertRaises(ValueError):
+                    verify(manifest)
 
     def test_duplicate_json_keys_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -189,7 +191,8 @@ class EvidenceGateTests(unittest.TestCase):
             manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
                 "evidence": [{"path": "/".join(["a"] * 65), "sha256": "0" * 64,
                               "result": "pass"}]}]}))
-            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+            with self.assertRaises(ValueError):
+                verify(manifest)
 
     def test_excessive_evidence_path_component_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -197,7 +200,8 @@ class EvidenceGateTests(unittest.TestCase):
             manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
                 "evidence": [{"path": "x" * 256, "sha256": "0" * 64,
                               "result": "pass"}]}]}))
-            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+            with self.assertRaises(ValueError):
+                verify(manifest)
 
     def test_symlink_manifest_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -226,7 +230,8 @@ class EvidenceGateTests(unittest.TestCase):
                 manifest = root / "manifest.json"
                 manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
                     "evidence": [{"path": path, "sha256": "0" * 64, "result": "pass"}]}]}))
-                self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+                with self.assertRaises(ValueError):
+                    verify(manifest)
 
     def test_duplicate_evidence_path_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
