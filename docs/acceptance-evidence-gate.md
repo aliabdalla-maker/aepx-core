@@ -173,3 +173,12 @@ unittest result instead of newline escapes. The fixture is corrected. The
 runner also records unexpected exceptions as failed iterations, preserving
 failure evidence and restoring the previous SIGTERM handler. This is a source
 fix only; GitHub Actions execution remains to be independently confirmed.
+
+### Terminal unittest summary enforcement
+
+The repeated acceptance runner now requires a successful subprocess exit, at
+least 42 tests, and a terminal unittest `Ran N tests ... OK` summary. An
+embedded early OK followed by failure text, or a truncated summary, is rejected.
+Two adversarial runner tests cover these cases (eleven runner self-tests
+currently authored). A passing local repetition still does not establish
+independent security acceptance.
