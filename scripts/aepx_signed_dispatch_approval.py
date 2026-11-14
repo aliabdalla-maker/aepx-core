@@ -49,3 +49,22 @@ def verify_approval(*, envelope, signature, verification_key, tenant_id,
     if not hmac.compare_digest(signature,expected):
         raise ApprovalDenied("approval signature mismatch")
     return True
+
+def evaluate_signed_dispatch(*, envelope, signature, verification_key,
+                             reservation_status, budget_committed,
+                             worker_isolated, tenant_id, request_id,
+                             lease_fence, idempotency_key, now=None):
+    """Compose signature verification and offline first-dispatch admission.
+
+    Still not a transactional claim or provider dispatch authorization.
+    """
+    from scripts.aepx_provider_dispatch_admission import authorize_first_dispatch
+    verified=verify_approval(
+        envelope=envelope, signature=signature, verification_key=verification_key,
+        tenant_id=tenant_id, request_id=request_id, lease_fence=lease_fence,
+        idempotency_key=idempotency_key, now=now)
+    return authorize_first_dispatch(
+        reservation_status=reservation_status, approval_verified=verified,
+        lease_fence=lease_fence, idempotency_key=idempotency_key,
+        tenant_id=tenant_id, request_id=request_id,
+        budget_committed=budget_committed, worker_isolated=worker_isolated)
