@@ -393,3 +393,11 @@ subprocess stdout/stderr and assert that persisted JSON contains neither
 canary nor raw diagnostic tail. Both the 50x2 and 100-cycle workflows
 require at least 21 runner self-tests before execution. Authored tests
 are not evidence of a successful CI run until workflow logs confirm it.
+
+### 100-cycle CI summary hardening
+
+The always-run summary bounds report-supplied counters and cycle numbers,
+uses trusted GitHub environment values for commit/run provenance, and labels
+report-supplied all_passed as an unverified claim. A separate success-only
+step publishes the 100/100 verified offline-cycle outcome after the strict
+report verifier succeeds. Independent acceptance and deployment remain blocked.
