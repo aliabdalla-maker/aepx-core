@@ -1,5 +1,29 @@
 -- Run only on an isolated disposable PostgreSQL database after migration review.
 -- All fixture changes roll back. The migration itself is NOT applied by this file.
+-- Fail closed if this session can bypass tenant RLS or if RLS is disabled.
+-- This guard is deliberately before BEGIN and before any fixture writes.
+DO $aepx_preflight$
+DECLARE role_bypass boolean;
+        rls_budget boolean;
+        rls_reservation boolean;
+        force_budget boolean;
+        force_reservation boolean;
+BEGIN
+ SELECT rolsuper OR rolbypassrls INTO role_bypass
+ FROM pg_roles WHERE rolname = current_user;
+ IF role_bypass IS DISTINCT FROM false THEN
+   RAISE EXCEPTION 'acceptance requires a non-superuser, non-BYPASSRLS role';
+ END IF;
+ SELECT c.relrowsecurity,c.relforcerowsecurity INTO rls_budget,force_budget
+ FROM pg_class c WHERE c.oid = 'aepx_budget.tenant_budget'::regclass;
+ SELECT c.relrowsecurity,c.relforcerowsecurity INTO rls_reservation,force_reservation
+ FROM pg_class c WHERE c.oid = 'aepx_budget.reservation'::regclass;
+ IF rls_budget IS DISTINCT FROM true OR rls_reservation IS DISTINCT FROM true
+    OR force_budget IS DISTINCT FROM true OR force_reservation IS DISTINCT FROM true THEN
+   RAISE EXCEPTION 'acceptance requires enabled and FORCE RLS on both tables';
+ END IF;
+END
+$aepx_preflight$;
 BEGIN;
 SET LOCAL app.tenant_id = '11111111-1111-4111-8111-111111111111';
 INSERT INTO aepx_budget.tenant_budget(tenant_id,token_cap,cost_cap)
