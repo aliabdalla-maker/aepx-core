@@ -153,5 +153,17 @@ class EvidenceGateTests(unittest.TestCase):
                               "result": "pass"}]}]}))
             self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_ambiguous_evidence_path_syntax_fails_closed(self):
+        for bad_path in ["../proof.txt", "./proof.txt", "dir//proof.txt",
+                         "dir/../proof.txt", "dir\\\\proof.txt", "proof.txt\\u0000junk"]:
+            with self.subTest(path=bad_path), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root / "proof.txt").write_bytes(b"proof")
+                manifest = root / "manifest.json"
+                manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
+                    "evidence": [{"path": bad_path, "sha256": hashlib.sha256(b"proof").hexdigest(),
+                                  "result": "pass"}]}]}))
+                self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
