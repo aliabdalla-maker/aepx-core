@@ -36,8 +36,8 @@ jobs:
           suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_100_runner.py")
           count = suite.countTestCases()
           print(f"Runner self-tests discovered: {count}")
-          if count < 11:
-              raise SystemExit("Runner self-test coverage below required minimum of 11")
+          if count < 12:
+              raise SystemExit("Runner self-test coverage below required minimum of 12")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
       - name: Run up to 100 sequential acceptance cycles (stop on failure)
@@ -57,6 +57,8 @@ jobs:
               out.write('## Offline acceptance repetition\n')
               out.write(f"- Cycles executed: {data['executed']} / {data['requested']}\n")
               out.write(f"- All passed: {data['all_passed']}\n")
+              out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\\n")
+              out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\\n")
               out.write('- Independent acceptance: NOT ESTABLISHED\n')
               out.write('- Merge or deployment authorized: NO\n')
           PY
