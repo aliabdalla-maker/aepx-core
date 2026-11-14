@@ -256,3 +256,13 @@ changes only; no CI result, independent acceptance, merge, or deployment is
 implied. Remaining priorities: verify CI execution, collect 100-cycle report,
 then independently test OIDC/RLS, HITL replay, budget settlement, MCP egress,
 worker fencing and OCI staging before any release decision.
+
+### Second five-pass output safety cycle
+
+Report persistence now rechecks symlinked parent paths after creating
+missing directories, and rejects an existing non-file destination such as a
+directory. A new regression test covers the non-file target, bringing the
+authored runner self-tests to 19; CI requires at least 19 discovered tests.
+These changes do not establish passing CI, independent security acceptance,
+or permission to merge or deploy. Review GitHub Actions results before
+claiming progress beyond source hardening.
