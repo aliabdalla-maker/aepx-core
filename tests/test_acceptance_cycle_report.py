@@ -33,3 +33,8 @@ class CycleReportTests(unittest.TestCase):
 
     def test_valid_report(self):
         self.assertEqual(self.check()["executed"], 2)
+
+    def test_rejects_wrong_provenance(self):
+        self.report["source_commit"] = "b" * 40
+        with self.assertRaisesRegex(ValueError, "provenance"):
+            self.check()
