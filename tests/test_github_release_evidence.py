@@ -57,6 +57,24 @@ class ReleaseEvidenceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 module.fetch_runs("owner/repo", SHA, "token", fetch=lambda url: payload)
 
+    def test_latest_rerun_attempt_must_pass(self):
+        runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+        runs[0]["run_attempt"] = 2
+        runs[0]["status"] = "queued"
+        runs[0]["conclusion"] = None
+        self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_failed_latest_run_blocks_even_if_older_passed(self):
+        runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+        runs.append(run(module.REQUIRED[0], 100, "completed", "failure"))
+        self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_zero_results_with_zero_total_is_valid_fetch_but_blocks_release(self):
+        evidence = module.fetch_runs("owner/repo", SHA, "token",
+            fetch=lambda url: {"total_count": 0, "workflow_runs": []})
+        self.assertEqual(evidence, [])
+        self.assertTrue(module.evaluate(evidence, SHA))
+
     def test_missing_total_count_blocks(self):
         with self.assertRaises(ValueError):
             module.fetch_runs("owner/repo", SHA, "token",
