@@ -374,3 +374,14 @@ The 50x2 aggregate manifest records SHA-256 hashes of both individually
 verified report files, enabling later tamper checks. A digest is not a
 signature, and does not substitute for independent attestation or CI success.
 Do not merge PR #345 until its checks and review are complete.
+
+### CI trigger and diagnostic privacy hardening
+
+The 50x2 workflow now triggers for relevant pull-request changes as well
+as scoped branch pushes/manual dispatch. Aggregation runs only when both
+batch jobs succeeded; failed jobs do not generate a verified aggregate.
+The runner no longer persists subprocess stdout/stderr in failed-cycle
+JSON evidence; it emits a bounded failure category instead. Detailed
+failure diagnosis should use access-controlled GitHub Actions logs and
+reproducible local tests. Neither improvement changes independent
+acceptance status or authorizes production deployment.
