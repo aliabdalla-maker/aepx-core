@@ -53,3 +53,8 @@ class CycleReportTests(unittest.TestCase):
         self.report["runs"][0]["tests_executed"] = 41
         with self.assertRaisesRegex(ValueError, "invalid cycle"):
             self.check()
+
+    def test_rejects_forged_deployment_authorization(self):
+        self.report["production_deployment_authorized"] = True
+        with self.assertRaisesRegex(ValueError, "unauthorized"):
+            self.check()
