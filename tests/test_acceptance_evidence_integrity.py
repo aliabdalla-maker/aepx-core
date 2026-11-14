@@ -438,5 +438,23 @@ class EvidenceGateTests(unittest.TestCase):
                 result = verify(manifest)
             self.assertEqual(result["evidence_integrity_percent"], 0)
 
+    def test_invalid_weight_allocation_does_not_read_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_bytes(b"proof")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": 50, "evidence": [{
+                    "path": "proof.txt",
+                    "sha256": hashlib.sha256(b"proof").hexdigest(),
+                    "result": "pass"
+                }]},
+                {"id": "oidc", "weight": 49, "evidence": []}
+            ]}))
+            with patch("tools.verify_acceptance_evidence.safe_digest",
+                       side_effect=AssertionError("invalid allocation must not read evidence")):
+                with self.assertRaisesRegex(ValueError, "weights must sum to 100"):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
