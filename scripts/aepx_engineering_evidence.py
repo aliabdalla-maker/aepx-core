@@ -43,6 +43,7 @@ def digest_artifact(root, relative_path):
                 raise EvidenceDenied("not a bounded regular artifact")
             digest = hashlib.sha256()
             read_total = 0
+            initial_identity = (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
             while True:
                 chunk = os.read(file_fd, min(65536, MAX_ARTIFACT_BYTES + 1 - read_total))
                 if not chunk:
@@ -51,6 +52,10 @@ def digest_artifact(root, relative_path):
                 if read_total > MAX_ARTIFACT_BYTES:
                     raise EvidenceDenied("artifact too large")
                 digest.update(chunk)
+            final = os.fstat(file_fd)
+            final_identity = (final.st_dev, final.st_ino, final.st_size, final.st_mtime_ns, final.st_ctime_ns)
+            if initial_identity != final_identity or read_total != info.st_size:
+                raise EvidenceDenied("artifact changed during hashing")
             return "sha256:" + digest.hexdigest()
         finally:
             os.close(file_fd)
