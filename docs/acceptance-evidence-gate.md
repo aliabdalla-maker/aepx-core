@@ -416,3 +416,13 @@ hardlinks (st_nlink != 1). A new regression test exercises this case, and
 both 50x2 and standalone 100-cycle CI preflight gates now require at least
 19 report-verifier tests. This is defense in depth; CI execution and
 independent acceptance still require separate evidence.
+
+### Open-descriptor report validation
+
+After PR #348 merged, report parsing now opens with O_NOFOLLOW where
+available, validates the opened descriptor with fstat (regular file,
+single hardlink, size <= 2 MB), and parses JSON from that descriptor.
+An adversarial regression simulates a symlink swap between preflight and
+open. Both offline acceptance workflows require at least 20 report-verifier
+tests. On platforms without O_NOFOLLOW, the explicit symlink-swap test is
+skipped; do not treat this as cross-platform race elimination.
