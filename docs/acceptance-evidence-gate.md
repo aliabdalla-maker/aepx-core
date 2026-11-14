@@ -50,3 +50,12 @@ production migration is authorized by this documentation.
   lease fencing, and budget settlement with recorded failure evidence.
 - Release remains blocked until trusted CI provenance, independent security
   review and explicit approval exist. Never merge/deploy automatically.
+
+## Manifest parser safety
+
+The parser rejects duplicate JSON keys and non-finite numeric constants, as
+well as invalid milestone/evidence cardinality and ambiguous file paths.
+Evidence hashing requires POSIX descriptor-based no-follow traversal and
+checks file identity/size metadata before and after bounded hashing.
+These checks reduce local input risks but do not authenticate who created
+the evidence, establish a trusted CI run, or prove production readiness.
