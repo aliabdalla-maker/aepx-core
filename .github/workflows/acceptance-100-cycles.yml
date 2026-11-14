@@ -92,7 +92,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python tools/verify_acceptance_cycle_report.py acceptance-100-iterations.json
+          python tools/verify_acceptance_cycle_report.py acceptance-100-iterations.json --expected 100 --commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
       - name: Record verified 100-cycle evidence
         if: success()
         shell: bash
