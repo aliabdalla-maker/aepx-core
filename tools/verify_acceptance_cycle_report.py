@@ -24,6 +24,10 @@ def _invalid_constant(value):
 
 
 def verify(path, commit, run_id, expected=100, minimum_tests=42, digest_out=None):
+    if type(expected) is not int or not 1 <= expected <= 100:
+        raise ValueError("expected cycle count must be an integer between 1 and 100")
+    if type(minimum_tests) is not int or minimum_tests < 42:
+        raise ValueError("minimum tests must be an integer of at least 42")
     source = Path(path)
     if source.is_symlink() or any(parent.is_symlink() for parent in source.parents):
         raise ValueError("symlinked evidence path is not permitted")
