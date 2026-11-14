@@ -613,3 +613,13 @@ strict success was not established; exit 2 means a diagnostic/input error.
 The output includes per-conclusion counts and unsuccessful run IDs. This is
 **not** a substitute for checking the correct commit, workflow coverage,
 required security tests, report provenance or independent release approval.
+
+### Exact commit scope for read-only monitoring
+
+Use `python tools/diagnose_actions_queue.py --head-sha <FULL_40_CHARACTER_SHA> --require-success`
+to avoid conflating workflow runs from unrelated commits. The SHA is checked
+for exactly 40 hexadecimal characters; only exact matching `headSha` records
+are evaluated. An empty match fails strict success with exit 4. The CLI
+`--limit` still bounds the fetched snapshot, so a successful result covers
+only returned runs for that commit, not proof that all required workflows ran.
+Do not treat this snapshot as a release authorization.
