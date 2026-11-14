@@ -65,7 +65,7 @@ the evidence, establish a trusted CI run, or prove production readiness.
 
 1. Open the `AEP-X acceptance evidence integrity` workflow on the draft PR branch.
 2. Confirm that the most recent **non-cancelled** run belongs to the intended commit SHA.
-3. Require the Python preflight, all 41 discovered tests and all 12 CLI checks to pass.
+3. Require the Python preflight, all 42 discovered tests and all 13 CLI checks to pass.
 4. Download the `aepx-offline-evidence-diagnostics` artifact if any step fails.
 5. Record the run URL, commit SHA, workflow conclusion and reviewer identity in the release checklist.
 6. Keep independent acceptance **NOT ESTABLISHED** until trusted provenance and independent review are available.
@@ -76,9 +76,21 @@ No merge, external provider execution, gateway forwarding or OCI provisioning is
 
 ## Current verification boundary
 
-The workflow's discovery floor is 41 Python tests and the workflow defines 12
+The workflow's discovery floor is 42 Python tests and the workflow defines 13
 CLI smoke checks. These are authored checks, not confirmed executions. A
 missing or inconclusive GitHub Actions run must be reported as **unverified**,
 never as passing. Do not increase maturity percentages on the basis of test
 counts, local digest matches, or commits alone. Reconcile this count against
 the workflow whenever tests are added or removed.
+
+## Five-pass hardening record (2026-11-14)
+
+1. CI summary reports missing unittest completion markers explicitly.
+2. A regression rejects forged fields in later evidence entries before any hashing.
+3. CI discovery minimum increased to 42 authored Python tests.
+4. A thirteenth CLI smoke check rejects a forged late evidence field (exit 2).
+5. This runbook and its release checklist now reflect the same counts.
+
+These are source-level changes only. The 42 tests and 13 smoke checks must
+actually execute on the PR head and their logs be reviewed. This record is not
+independent attestation or authorization to merge, deploy, or spend on OCI.
