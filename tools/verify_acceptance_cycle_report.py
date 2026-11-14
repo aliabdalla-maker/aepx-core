@@ -34,7 +34,7 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
     if metadata.st_size > 2_000_000:
         raise ValueError("oversized evidence report")
     # Read through a no-follow descriptor to reject final-component symlink swaps.
-    if not hasattr(os, "O_NOFOLLOW"):
+    if not isinstance(getattr(os, "O_NOFOLLOW", None), int):
         raise ValueError("platform lacks required no-follow evidence protection")
     flags = os.O_RDONLY | os.O_NOFOLLOW
     descriptor = os.open(source, flags)
