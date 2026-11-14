@@ -7,6 +7,7 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
+from datetime import datetime
 
 REQUIRED = (
     ".github/workflows/ci.yml",
@@ -29,15 +30,35 @@ def fetch_runs(repo, sha, token, fetch=None):
         url = (f"https://api.github.com/repos/{repo}/actions/runs"
                f"?head_sha={sha}&per_page=100&page={page}")
         data = fetch(url)
+        if not isinstance(data, dict):
+            raise ValueError("malformed API page")
         batch = data.get("workflow_runs")
         if not isinstance(batch, list):
             raise ValueError("missing workflow_runs")
+        if any(not isinstance(item, dict) for item in batch):
+            raise ValueError("malformed run record")
         runs.extend(batch)
         if len(batch) < 100:
             return runs
     raise ValueError("workflow evidence pagination limit reached; fail closed")
 
+def valid_metadata(run):
+    if type(run.get("id")) is not int or run["id"] <= 0:
+        return False
+    if type(run.get("run_attempt")) is not int or run["run_attempt"] <= 0:
+        return False
+    stamp = run.get("created_at")
+    if not isinstance(stamp, str):
+        return False
+    try:
+        parsed = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None and parsed.utcoffset() is not None
+
 def evaluate(runs, sha, required=REQUIRED):
+    if not isinstance(runs, list) or any(not isinstance(item, dict) for item in runs):
+        return ["INVALID_EVIDENCE_COLLECTION"]
     errors = []
     for workflow in required:
         matching = [r for r in runs if r.get("head_sha") == sha
@@ -45,8 +66,7 @@ def evaluate(runs, sha, required=REQUIRED):
         if not matching:
             errors.append(f"MISSING {workflow}")
             continue
-        if any(type(r.get("id")) is not int or type(r.get("run_attempt")) is not int
-               or not isinstance(r.get("created_at"), str) for r in matching):
+        if any(not valid_metadata(r) for r in matching):
             errors.append(f"INVALID_METADATA {workflow}")
             continue
         ids = [r["id"] for r in matching]
