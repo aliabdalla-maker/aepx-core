@@ -295,3 +295,12 @@ It refuses symlinked evidence input paths and files larger than 2 MB. Six
 new adversarial tests bring the authored report-verifier suite to 14 tests;
 CI checks their discovery before execution. This is not a claim of passing
 CI or independent release acceptance.
+
+### Malformed-cycle triage and verifier coverage
+
+The always-run CI summary now handles non-list and non-object cycle records
+without crashing while reporting the first invalid entry. Four additional
+adversarial tests cover boolean iteration/return-code fields, negative cycle
+duration and forged independent-acceptance flags. The standalone report
+verifier suite now has 18 authored tests, and CI requires discovery of all
+18 before running 100 cycles. Passing workflow evidence remains outstanding.
