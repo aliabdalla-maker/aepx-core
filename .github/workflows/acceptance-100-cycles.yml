@@ -69,11 +69,17 @@ jobs:
           import os
           from pathlib import Path
           report = json.loads(Path("acceptance-100-iterations.json").read_text())
-          assert report["source_commit"] == os.environ["GITHUB_SHA"], "commit mismatch"
-          assert report["workflow_run_id"] == os.environ["GITHUB_RUN_ID"], "run mismatch"
-          assert report["requested"] == report["executed"] == 100, "incomplete cycles"
-          assert report["all_passed"] is True, "failed cycles"
-          assert len(report["runs"]) == 100, "missing run records"
+          checks = (
+              (report.get("source_commit") == os.environ["GITHUB_SHA"], "commit mismatch"),
+              (report.get("workflow_run_id") == os.environ["GITHUB_RUN_ID"], "run mismatch"),
+              (type(report.get("requested")) is int and report["requested"] == 100, "requested count mismatch"),
+              (type(report.get("executed")) is int and report["executed"] == 100, "incomplete cycles"),
+              (report.get("all_passed") is True, "failed cycles"),
+              (isinstance(report.get("runs"), list) and len(report["runs"]) == 100, "missing run records"),
+          )
+          for condition, message in checks:
+              if not condition:
+                  raise SystemExit(message)
           assert all(
               isinstance(run, dict)
               and run.get("iteration") == i
