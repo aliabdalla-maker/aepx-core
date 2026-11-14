@@ -48,6 +48,20 @@ class CycleReportTests(unittest.TestCase):
             mod.verify(self.path, "a" * 40, "123", expected=2, digest_out=digests)
         self.assertEqual(digests, [])
 
+    def test_rejects_invalid_expected_cycle_parameters(self):
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        for invalid in (0, -1, 101, True, 2.0, "2"):
+            with self.subTest(expected=invalid):
+                with self.assertRaisesRegex(ValueError, "expected cycle count"):
+                    mod.verify(self.path, "a" * 40, "123", expected=invalid)
+
+    def test_rejects_unsafe_minimum_test_threshold(self):
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        for invalid in (0, 41, True, 42.0, "42"):
+            with self.subTest(minimum_tests=invalid):
+                with self.assertRaisesRegex(ValueError, "minimum tests"):
+                    mod.verify(self.path, "a" * 40, "123", expected=2, minimum_tests=invalid)
+
     def test_valid_report(self):
         self.assertEqual(self.check()["executed"], 2)
 

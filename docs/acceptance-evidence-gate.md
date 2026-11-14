@@ -484,3 +484,12 @@ and workflow permissions. Queued is not a passing test and must not be counted
 as executed acceptance. Once runners start, review smoke results first, then
 the two 50-cycle artifacts and standalone 100-cycle provenance. Keep release
 blocked until independent tenant isolation, HITL, budget and egress tests pass.
+
+### Strict verifier acceptance thresholds
+
+The report verifier rejects expected cycle counts outside 1..100, including
+boolean and noninteger inputs, and refuses a minimum per-cycle test count
+below 42 or with a noninteger type. The smoke, two 50-cycle and standalone
+100-cycle workflows require at least 29 verifier regression tests. These
+checks prevent zero-cycle and weakened-coverage configurations from being
+accepted as evidence; CI execution and independent acceptance remain required.
