@@ -50,6 +50,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.require_success and (not args.head_sha or not args.require_workflow):
         parser.error("--require-success requires --head-sha and at least one --require-workflow")
+    if args.head_sha and (len(args.head_sha) != 40 or
+                          any(ch not in "0123456789abcdefABCDEF" for ch in args.head_sha)):
+        parser.error("--head-sha must be a 40-character hexadecimal commit SHA")
     if not 1 <= args.limit <= 1000:
         parser.error("--limit must be between 1 and 1000")
     if args.input_json:
@@ -78,9 +81,6 @@ def main(argv=None):
             print("GitHub CLI returned invalid JSON", file=sys.stderr)
             return 2
     if args.head_sha:
-        if (len(args.head_sha) != 40 or
-                any(ch not in "0123456789abcdefABCDEF" for ch in args.head_sha)):
-            parser.error("--head-sha must be a 40-character hexadecimal commit SHA")
         if not isinstance(runs, list) or any(not isinstance(run, dict) for run in runs):
             print("Invalid GitHub Actions data: expected run records", file=sys.stderr)
             return 2
