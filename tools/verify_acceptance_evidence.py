@@ -123,6 +123,7 @@ def verify(manifest_path: Path):
         passed = isinstance(evidence, list) and len(evidence) > 0
         if not isinstance(evidence, list) or len(evidence) > 100:
             raise ValueError("evidence must be a list of at most 100 entries")
+        evidence_paths = set()
         for item in evidence:
             if not isinstance(item, dict):
                 raise ValueError("evidence entry must be an object")
@@ -130,6 +131,9 @@ def verify(manifest_path: Path):
             digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
+            if relative in evidence_paths:
+                raise ValueError("duplicate evidence path rejected")
+            evidence_paths.add(relative)
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
                 passed = False
                 continue
