@@ -59,7 +59,10 @@ BEGIN
       fn.nspname,fn.proname,fn.prosecdef,
       has_function_privilege(current_user,fn.oid,'EXECUTE');
   END LOOP;
-  IF function_count < 4 THEN
+  IF (SELECT count(DISTINCT p.proname) FROM pg_proc p
+      JOIN pg_namespace n ON n.oid=p.pronamespace
+      WHERE n.nspname='aepx_iteration'
+        AND p.proname IN ('claim','advance','renew','consume_approval')) <> 4 THEN
     RAISE EXCEPTION 'DENY: required iteration authorization functions missing';
   END IF;
   RAISE NOTICE 'Audit passed limited grant checks; tenant GUC spoofing and reviewer authentication NOT solved';
