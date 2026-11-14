@@ -21,3 +21,9 @@ bash scripts/test_aepx_pg_iteration_acceptance.sh --execute aepx_test_iteration
 ```
 
 The fixture tests first claim, live-lease takeover rejection, renewal, wrong owner, stage ordering, forced expiry, stale fence rejection, reclaimed lease and tenant isolation, then rolls back its fixture data. The launcher never applies migrations. The CI job checks only static fixture safety and does not execute PostgreSQL. **Not covered yet:** true two-connection races, SIGKILL recovery, trusted tenant identity, approval/evidence verification, or provider billing.
+
+## Terminal completion is intentionally disabled
+
+`aepx_iteration.advance(..., 'completed', ...)` now raises `iteration completion requires trusted evidence and approval gate` even for a valid current worker lease. The reviewed stage remains reachable. This blocks the unsafe previous behavior where arbitrary evidence text could mark an iteration completed.
+
+Before introducing a trusted completion function, require authenticated reviewer identity, digest-verified immutable evidence for every stage, passing test evidence, current fencing token, one-time approval consumption and an atomic PostgreSQL transition. Test tampering, replay, concurrent workers, stale leases and crash recovery against a disposable database. Until then **no PostgreSQL iteration can be marked completed through this function**; this is an intentional safety constraint, not a completed orchestration feature.
