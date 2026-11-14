@@ -1,6 +1,11 @@
 """Offline regression tests for the read-only Actions queue diagnostic."""
 import unittest
-from tools.diagnose_actions_queue import summarize
+import tempfile
+import pathlib
+import io
+import contextlib
+from unittest.mock import patch
+from tools.diagnose_actions_queue import summarize, main
 
 class QueueDiagnosticTests(unittest.TestCase):
     def test_counts_queued_and_completed(self):
@@ -21,6 +26,29 @@ class QueueDiagnosticTests(unittest.TestCase):
             with self.subTest(invalid=invalid):
                 with self.assertRaises(ValueError):
                     summarize(invalid)
+
+    def test_missing_fixture_returns_error(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(main(["--input-json", "/nonexistent/aepx-queue.json"]), 2)
+
+    def test_malformed_fixture_returns_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "invalid.json"
+            path.write_text("{not json", encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path)]), 2)
+
+    def test_cli_invalid_json_returns_error(self):
+        with patch("tools.diagnose_actions_queue.subprocess.run") as run:
+            run.return_value.stdout = "not json"
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main([]), 2)
+
+    def test_cli_malformed_data_returns_error(self):
+        with patch("tools.diagnose_actions_queue.subprocess.run") as run:
+            run.return_value.stdout = '{"not":"a list"}'
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main([]), 2)
 
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])

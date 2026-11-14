@@ -586,3 +586,11 @@ utility and its regression test file in pull-request path triggers. It compiles
 both and executes the offline diagnostic test suite before acceptance cycles.
 This prevents changes to queue diagnostics from bypassing CI, but does not
 establish CI success while GitHub-hosted jobs remain queued.
+
+### Diagnostic failure handling
+
+The read-only queue utility returns exit code 2 with a bounded diagnostic
+when the offline fixture is missing, unreadable or malformed, when GitHub CLI
+returns invalid JSON, or when workflow run records have an invalid shape.
+It does not print arbitrary CLI stderr or treat missing data as zero queued
+jobs. Offline regression tests cover these failure paths.

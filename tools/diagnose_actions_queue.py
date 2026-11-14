@@ -32,8 +32,12 @@ def main(argv=None):
     if not 1 <= args.limit <= 1000:
         parser.error("--limit must be between 1 and 1000")
     if args.input_json:
-        with open(args.input_json, encoding="utf-8") as handle:
-            runs = json.load(handle)
+        try:
+            with open(args.input_json, encoding="utf-8") as handle:
+                runs = json.load(handle)
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            print(f"Unable to read offline fixture: {type(exc).__name__}", file=sys.stderr)
+            return 2
     else:
         command = ["gh", "run", "list", "--repo", args.repo, "--limit",
                    str(args.limit), "--json",
@@ -45,8 +49,17 @@ def main(argv=None):
                 subprocess.TimeoutExpired) as exc:
             print(f"Unable to query GitHub Actions: {type(exc).__name__}", file=sys.stderr)
             return 2
-        runs = json.loads(result.stdout)
-    print(json.dumps(summarize(runs), indent=2))
+        try:
+            runs = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            print("GitHub CLI returned invalid JSON", file=sys.stderr)
+            return 2
+    try:
+        report = summarize(runs)
+    except ValueError as exc:
+        print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
+        return 2
+    print(json.dumps(report, indent=2))
     return 0
 
 if __name__ == "__main__":
