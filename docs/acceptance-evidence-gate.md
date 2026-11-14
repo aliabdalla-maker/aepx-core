@@ -228,3 +228,12 @@ or expected failures; these qualified outcomes are no longer counted as
 acceptance passes. Two new adversarial tests cover these cases (fifteen
 runner self-tests authored). This gate is still offline and does not replace
 independent tenant, billing, MCP, worker, or OCI security verification.
+
+### Durable atomic report persistence
+
+The runner creates missing parent directories, writes JSON through a unique
+same-directory temporary file, flushes and fsyncs it, then atomically replaces
+the destination. Temporary files are cleaned up on failure. A new self-test
+covers nested output directories and cleanup (sixteen runner tests authored).
+This is a source-level safeguard, not evidence of a completed GitHub Actions
+run or independent security acceptance.
