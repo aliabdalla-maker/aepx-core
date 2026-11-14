@@ -49,6 +49,8 @@ def safe_digest(root: Path, relative: str):
         before = os.fstat(leaf)
         if not stat.S_ISREG(before.st_mode) or before.st_size > MAX_EVIDENCE_BYTES:
             raise ValueError("evidence is not a bounded regular file")
+        if before.st_nlink != 1:
+            raise ValueError("hard-linked evidence rejected")
         state = hashlib.sha256()
         count = 0
         while True:
