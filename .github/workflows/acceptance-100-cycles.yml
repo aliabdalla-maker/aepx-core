@@ -62,6 +62,17 @@ jobs:
           PY
           python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
           python -m py_compile tests/test_acceptance_cycle_mutations.py
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location(
+              "mutation_matrix", Path("tests/test_acceptance_cycle_mutations.py"))
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          cases = module.mutations()
+          if len(cases) != 60 or len({name for name, _ in cases}) != 60:
+              raise SystemExit("Mutation matrix must contain exactly 60 distinct cases")
+          PY
           python -m unittest discover -s tests -p 'test_acceptance_cycle_mutations.py' -v
           python - <<'PY'
           import unittest
