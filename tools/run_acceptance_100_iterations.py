@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import re
 import pathlib
 import subprocess
 import sys
@@ -16,16 +17,21 @@ def main():
     if not 1 <= args.iterations <= 100:
         parser.error("iterations must be between 1 and 100")
     records = []
+    deadline = time.monotonic() + 3300  # Leave time for CI summary/artifact upload.
     command = [sys.executable, "-m", "unittest", "discover", "-s", "tests",
                "-p", "test_acceptance_evidence_integrity.py", "-v"]
     for iteration in range(1, args.iterations + 1):
         start = time.monotonic()
+        remaining = deadline - start
+        if remaining < 5:
+            records.append({"iteration": iteration, "passed": False,
+                            "error": "global 55-minute safety budget exhausted"})
+            break
         try:
             run = subprocess.run(command, capture_output=True, text=True,
-                                 timeout=90, check=False,
+                                 timeout=min(90, remaining), check=False,
                                  env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
             output = run.stdout + run.stderr
-            import re
             count = re.search(r"^Ran (\d+) tests? in ", output, re.MULTILINE)
             passed = (run.returncode == 0 and count is not None
                       and int(count.group(1)) >= 42
