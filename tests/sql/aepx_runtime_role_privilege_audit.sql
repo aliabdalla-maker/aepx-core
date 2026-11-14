@@ -19,6 +19,7 @@ BEGIN
   FOREACH relation_name IN ARRAY ARRAY[
     'aepx_iteration.work_item',
     'aepx_iteration.approval_nonce',
+    'aepx_budget.tenant_budget',
     'aepx_budget.reservation'
   ] LOOP
     target := to_regclass(relation_name);
