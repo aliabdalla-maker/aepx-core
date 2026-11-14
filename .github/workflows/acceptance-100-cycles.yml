@@ -1,8 +1,17 @@
 name: AEP-X 100-cycle offline acceptance
 on:
+  push:
+    branches:
+      - 'fix/acceptance-evidence-gates-20261114'
+    paths:
+      - 'tools/run_acceptance_100_iterations.py'
+      - '.github/workflows/acceptance-100-cycles.yml'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: aepx-100-cycle-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   acceptance-100-cycles:
     runs-on: ubuntu-latest
