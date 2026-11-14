@@ -52,6 +52,13 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(report["executed"], 1)
         self.assertIn("timeout", report["runs"][0]["error"])
 
+    def test_subprocess_launch_error_persists_report(self):
+        status, report = self.invoke(100, OSError("executable unavailable"))
+        self.assertEqual(status, 1)
+        self.assertEqual(report["executed"], 1)
+        self.assertFalse(report["runs"][0]["passed"])
+        self.assertIn("OSError", report["runs"][0]["error"])
+
     def test_restores_handler_on_unexpected_exception(self):
         previous = signal.getsignal(signal.SIGTERM)
         with self.assertRaisesRegex(RuntimeError, "simulated crash"):
