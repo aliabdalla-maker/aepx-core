@@ -45,7 +45,7 @@ jobs:
           python - <<'PY'
           import unittest
           requirements = [
-              ("test_acceptance_100_runner.py", 19),
+              ("test_acceptance_100_runner.py", 21),
               ("test_acceptance_cycle_report.py", 18),
               ("test_acceptance_cycle_mutations.py", 3),
               ("test_acceptance_evidence_integrity.py", 42),
