@@ -340,6 +340,19 @@ def request_agent_tool(run_id: str, body: ToolRequest, p: Principal = Depends(pr
         raise HTTPException(400,str(exc))
     return {"id":item.id,"state":item.state,"args_sha256":item.args_sha256}
 
+@app.get("/api/v1/agent-runs/{run_id}/tool-approvals")
+def list_tool_approvals(run_id: str, p: Principal = Depends(principal),
+                        db: Session = Depends(db_session)):
+    """Tenant-scoped approval queue for one run; arguments are exposed only as a digest."""
+    if get_run(db, p, run_id) is None:
+        raise HTTPException(404, "Run not found")
+    rows = db.scalars(select(ToolApproval).where(
+        ToolApproval.tenant_id == p.tenant_id, ToolApproval.run_id == run_id
+    ).order_by(ToolApproval.id).limit(100)).all()
+    return [{"id": a.id, "server": a.server_name, "tool": a.tool_name,
+             "args_sha256": a.args_sha256, "state": a.state,
+             "requested_by": a.requested_by, "decided_by": a.decided_by} for a in rows]
+
 @app.post("/api/v1/tool-approvals/{approval_id}/decision")
 def decide_agent_tool(approval_id: str, approved: bool, p: Principal = Depends(principal),
                       db: Session = Depends(db_session)):

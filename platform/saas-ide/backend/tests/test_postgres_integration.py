@@ -180,6 +180,32 @@ def test_phase22_durable_queue_tool_approval_and_rls(prepared_db, tokens, monkey
         assert db.execute(text("SELECT count(*) FROM ide_tool_approvals")).scalar()>=1
 
 
+def test_tool_approval_queue_listing_is_tenant_scoped_and_digest_only(prepared_db, tokens, monkeypatch):
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    other_tenant=headers(tokens(),"beta")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"approval-queue"}).json()
+    run_id=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"List pending tool approvals"}).json()["id"]
+    assert client.get(f"/api/v1/agent-runs/{run_id}/tool-approvals",headers=owner).json()==[]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",headers=owner).status_code==200
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL","https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS","search")
+    secret_arg={"query":"queue-listing-secret-argument"}
+    made=client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",headers=owner,
+                     json={"server":"knowledge","tool":"search","arguments":secret_arg})
+    assert made.status_code==201,made.text
+    listed=client.get(f"/api/v1/agent-runs/{run_id}/tool-approvals",headers=owner)
+    assert listed.status_code==200,listed.text
+    rows=listed.json()
+    assert [r["id"] for r in rows]==[made.json()["id"]]
+    assert rows[0]["state"]=="pending" and rows[0]["server"]=="knowledge" and rows[0]["tool"]=="search"
+    assert rows[0]["args_sha256"]==made.json()["args_sha256"]
+    assert "queue-listing-secret-argument" not in listed.text
+    assert client.get(f"/api/v1/agent-runs/{run_id}/tool-approvals",headers=other_tenant).status_code==404
+    assert client.get("/api/v1/agent-runs/does-not-exist/tool-approvals",headers=owner).status_code==404
+
+
 def test_phase23_fencing_budget_and_rls(prepared_db, tokens):
     from app.phase23 import fenced_claim, heartbeat, fenced_finish, reserve_budget, settle_budget
     client=TestClient(main.app)

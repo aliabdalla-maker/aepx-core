@@ -1,21 +1,28 @@
 {
+  "schemaVersion": 2,
   "publisherId": "pub-2980680946304710",
   "adsense": {
     "client": "ca-pub-2980680946304710",
     "enabled": false,
-    "reason": "Website approval and web AdSense ad slot IDs must be verified separately"
+    "slots": {
+      "sidebar": null,
+      "projectHome": null
+    },
+    "reason": "Web AdSense slot IDs (10 digits) are created in AdSense, not AdMob. Enable only after site approval and consent (CMP) setup."
   },
   "admob": {
     "appId": "ca-app-pub-2980680946304710~2617421798",
-    "adUnits": [
-      "ca-app-pub-2980680946304710/1032845563",
-      "ca-app-pub-2980680946304710/2172884450",
-      "ca-app-pub-2980680946304710/3668921616",
-      "ca-app-pub-2980680946304710/5953999752",
-      "ca-app-pub-2980680946304710/6184281650",
-      "ca-app-pub-2980680946304710/6514576804"
-    ],
     "enabled": false,
-    "reason": "Ad format and app association must be verified in AdMob before production use"
+    "adUnits": [
+      { "id": "ca-app-pub-2980680946304710/1032845563", "format": null, "placement": null },
+      { "id": "ca-app-pub-2980680946304710/2172884450", "format": null, "placement": null },
+      { "id": "ca-app-pub-2980680946304710/3668921616", "format": null, "placement": null },
+      { "id": "ca-app-pub-2980680946304710/5953999752", "format": null, "placement": null },
+      { "id": "ca-app-pub-2980680946304710/6184281650", "format": null, "placement": null },
+      { "id": "ca-app-pub-2980680946304710/6514576804", "format": null, "placement": null }
+    ],
+    "allowedFormats": ["banner", "interstitial", "rewarded", "rewarded_interstitial", "native", "app_open"],
+    "allowedPlacements": ["runs_list_banner", "project_list_banner", "run_completed_interstitial", "app_open", "native_feed"],
+    "reason": "Set each unit's format exactly as shown in the AdMob console, then a placement. Units with a null format are never requested. Debug builds always use Google test unit IDs."
   }
 }
