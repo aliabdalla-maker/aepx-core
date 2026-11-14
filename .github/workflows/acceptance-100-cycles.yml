@@ -114,9 +114,17 @@ jobs:
                       out.write('- First failed cycle: malformed record\n')
                   else:
                       out.write(f"- First failed cycle: {failed.get('iteration', 'unknown')}\n")
-                      reason = failed.get('error') or failed.get('diagnostic_tail') or 'no diagnostic supplied'
-                      detail = str(reason).replace(chr(10), ' ').replace(chr(13), ' ')[:1500]
-                      out.write(f"- Failure detail (truncated): `{detail}`\n")
+                      # Avoid publishing untrusted subprocess output or secrets to job summaries.
+                      error = failed.get('error')
+                      safe_errors = {
+                          'global 55-minute safety budget exhausted',
+                          'per-iteration execution timeout',
+                          'runner interrupted before cycle completed',
+                      }
+                      if isinstance(error, str) and error in safe_errors:
+                          out.write(f"- Failure category: {error}\n")
+                      else:
+                          out.write('- Failure category: test execution failed; inspect restricted artifact\n')
 
               out.write('- Independent acceptance: NOT ESTABLISHED\n')
               out.write('- Merge or deployment authorized: NO\n')
