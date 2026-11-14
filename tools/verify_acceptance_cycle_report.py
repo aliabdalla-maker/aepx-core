@@ -4,6 +4,7 @@ import argparse
 import json
 import math
 import os
+import re
 from pathlib import Path
 
 
@@ -25,8 +26,14 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
                         object_pairs_hook=_unique, parse_constant=_invalid_constant)
     if not isinstance(report, dict):
         raise ValueError("report must be an object")
-    if not isinstance(commit, str) or not commit or not isinstance(run_id, str) or not run_id:
-        raise ValueError("commit and run ID are required")
+    if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("valid 40-character commit SHA required")
+    if not isinstance(run_id, str) or not re.fullmatch(r"[1-9][0-9]*", run_id):
+        raise ValueError("valid numeric workflow run ID required")
+    required = {"source_commit", "workflow_run_id", "requested", "executed", "all_passed",
+                "independent_acceptance_established", "production_deployment_authorized", "runs"}
+    if set(report) != required:
+        raise ValueError("unexpected or missing report fields")
     if report.get("source_commit") != commit or report.get("workflow_run_id") != run_id:
         raise ValueError("report provenance mismatch")
     if (type(report.get("requested")) is not int or report["requested"] != expected
@@ -44,6 +51,8 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
     for number, cycle in enumerate(runs, 1):
         if not isinstance(cycle, dict):
             raise ValueError(f"cycle {number} is not an object")
+        if set(cycle) != {"iteration", "passed", "tests_executed", "return_code", "elapsed_seconds"}:
+            raise ValueError(f"unexpected or missing cycle {number} fields")
         elapsed = cycle.get("elapsed_seconds")
         if (type(cycle.get("iteration")) is not int or cycle["iteration"] != number
                 or cycle.get("passed") is not True
