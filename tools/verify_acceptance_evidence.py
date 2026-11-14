@@ -162,7 +162,7 @@ def main():
         output = verify(Path(sys.argv[1]))
         print(json.dumps(output, indent=2, sort_keys=True))
         return 0 if output["evidence_integrity_percent"] == 100 else 1
-    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError, KeyError, TypeError, UnicodeError, json.JSONDecodeError) as exc:
         print(f"acceptance evidence rejected: {exc}", file=sys.stderr)
         return 2
 
