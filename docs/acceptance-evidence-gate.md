@@ -345,3 +345,13 @@ provenance verification and separately named evidence artifact. This is a
 configured total of 100 cycle executions (50 + 50), not evidence of completed
 runs. Both batches must pass before treating the matrix as green; it does not
 replace independent acceptance or authorize deployment.
+
+### Batch preflight and success reporting
+
+Both 50-cycle matrix jobs now fail before execution if discovery falls below
+19 runner tests, 18 report-verifier tests, 3 mutation-matrix test methods or
+42 integrity tests. The matrix contains 60 mutation subtests inside its test
+methods. A 50/50 success summary is written only after the report verifier
+returns successfully. Neither configured execution nor an authored summary
+is proof of a completed GitHub Actions run. Preserve the release block until
+actual CI artifacts and independent security acceptance have been reviewed.
