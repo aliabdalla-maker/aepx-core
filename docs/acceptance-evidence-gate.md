@@ -517,3 +517,13 @@ long-running acceptance workflow (50-cycle matrix or standalone 100-cycle),
 in addition to runner, verifier and regression test changes. A queued smoke
 job is not a pass. Before authorizing release, inspect actual job logs and
 provenance-validated reports; smoke is not a replacement for full acceptance.
+
+### Runner queue pressure: superseded smoke cancellation
+
+The fast smoke workflow uses a dedicated per-PR/ref concurrency group with
+cancel-in-progress enabled. A newer smoke run supersedes its older run for
+the same PR/ref, reducing redundant queued jobs and runner usage. This does
+not cancel or weaken the full 50x2 or standalone 100-cycle evidence workflows,
+which retain separate concurrency groups and no automatic cancellation.
+This is queue hygiene, not a fix for disabled runners, account limits or
+GitHub-hosted runner outages; inspect Actions administration if jobs stay queued.

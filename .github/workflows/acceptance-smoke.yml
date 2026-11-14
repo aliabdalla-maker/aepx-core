@@ -12,6 +12,11 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+# Superseded smoke runs should not consume scarce runner capacity.
+# Separate this group from the full 50x2/100-cycle evidence workflows.
+concurrency:
+  group: aepx-smoke-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   offline-smoke:
     runs-on: ubuntu-latest
