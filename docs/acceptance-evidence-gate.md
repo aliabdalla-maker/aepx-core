@@ -127,3 +127,14 @@ the manual button available. The restricted push trigger allows testing the
 workflow on the draft branch without changing the default branch. Confirm a
 real runner execution and inspect the uploaded report before claiming any
 cycle passed.
+
+### Incremental diagnostics and failure handling
+
+The 100-cycle runner now atomically updates its JSON report after each
+completed iteration and on global-budget exhaustion. This preserves earlier
+completed cycles when a later one fails or execution is interrupted. A hard
+runner termination during the currently executing subprocess can still leave
+that in-flight iteration unrecorded; do not interpret the recorded count as
+proof of a complete run. The workflow performs Python syntax preflight and
+reports the first failed cycle in its job summary. Confirm the run and artifact
+in GitHub Actions before increasing any maturity or acceptance estimates.
