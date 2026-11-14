@@ -337,5 +337,39 @@ class EvidenceGateTests(unittest.TestCase):
                 self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
             self.assertTrue(linked)
 
+    def test_hard_linked_manifest_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": []
+            }]}))
+            os.link(manifest, root / "manifest-alias.json")
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
+    def test_manifest_hard_link_created_during_read_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": []
+            }]}))
+            original_read = os.read
+            linked = False
+
+            def linking_read(fd, size):
+                nonlocal linked
+                chunk = original_read(fd, size)
+                if chunk and not linked:
+                    linked = True
+                    os.link(manifest, root / "manifest-alias.json")
+                return chunk
+
+            with patch("tools.verify_acceptance_evidence.os.read", side_effect=linking_read):
+                with self.assertRaises(ValueError):
+                    verify(manifest)
+            self.assertTrue(linked)
+
 if __name__ == "__main__":
     unittest.main()
