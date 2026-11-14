@@ -9,6 +9,8 @@ Only locally supplied immutable digests are checked. This does NOT authenticate
 test runners or prove that tests actually ran; independent provenance is required.
 """
 import hashlib
+import os
+import stat
 import json
 import re
 import sys
@@ -16,6 +18,54 @@ from pathlib import Path
 
 SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 IDENT = re.compile(r"[a-z0-9][a-z0-9_-]*\Z")
+
+
+MAX_EVIDENCE_BYTES = 16 * 1024 * 1024
+
+
+def safe_digest(root: Path, relative: str):
+    """Hash beneath root using no-follow descriptors, or fail closed.
+
+    Requires POSIX dir_fd/O_NOFOLLOW; never falls back to check-then-open.
+    """
+    if os.name != "posix" or not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "O_DIRECTORY"):
+        raise ValueError("secure evidence hashing requires POSIX no-follow support")
+    parts = Path(relative).parts
+    if not parts or any(p in ("", ".", "..") for p in parts):
+        raise ValueError("invalid evidence path components")
+    flags_dir = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    flags_file = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0)
+    opened = []
+    try:
+        fd = os.open(root, flags_dir)
+        opened.append(fd)
+        for part in parts[:-1]:
+            fd = os.open(part, flags_dir, dir_fd=fd)
+            opened.append(fd)
+        leaf = os.open(parts[-1], flags_file, dir_fd=fd)
+        opened.append(leaf)
+        before = os.fstat(leaf)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > MAX_EVIDENCE_BYTES:
+            raise ValueError("evidence is not a bounded regular file")
+        state = hashlib.sha256()
+        count = 0
+        while True:
+            chunk = os.read(leaf, min(1024 * 1024, MAX_EVIDENCE_BYTES + 1 - count))
+            if not chunk:
+                break
+            count += len(chunk)
+            if count > MAX_EVIDENCE_BYTES:
+                raise ValueError("evidence exceeds 16 MiB")
+            state.update(chunk)
+        after = os.fstat(leaf)
+        if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (
+            after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns
+        ) or count != after.st_size:
+            raise ValueError("evidence changed during hashing")
+        return state.hexdigest()
+    finally:
+        for descriptor in reversed(opened):
+            os.close(descriptor)
 
 
 def verify(manifest_path: Path):
@@ -54,25 +104,14 @@ def verify(manifest_path: Path):
             digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
-            candidate = root / relative
-            if any(part.is_symlink() for part in [candidate, *candidate.parents] if part != root and root in part.parents):
-                passed = False
-                continue
-            path = candidate.resolve()
-            if not path.is_relative_to(root) or not path.is_file():
-                passed = False
-                continue
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
                 passed = False
                 continue
-            if path.stat().st_size > 16 * 1024 * 1024:
+            try:
+                actual = safe_digest(root, relative)
+            except (OSError, ValueError):
                 passed = False
                 continue
-            digest_state = hashlib.sha256()
-            with path.open("rb") as source:
-                for chunk in iter(lambda: source.read(1024 * 1024), b""):
-                    digest_state.update(chunk)
-            actual = digest_state.hexdigest()
             if actual != digest or item.get("result") != "pass":
                 passed = False
         if passed:
