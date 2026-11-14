@@ -70,11 +70,20 @@ def safe_digest(root: Path, relative: str):
             os.close(descriptor)
 
 
+def reject_duplicate_json_keys(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key rejected")
+        result[key] = value
+    return result
+
+
 def verify(manifest_path: Path):
     root = manifest_path.resolve().parent
     if manifest_path.stat().st_size > 1024 * 1024:
         raise ValueError("manifest exceeds 1 MiB")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_json_keys, parse_constant=lambda _: (_ for _ in ()).throw(ValueError("non-finite JSON number rejected")))
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
     milestones = manifest["milestones"]
