@@ -13,6 +13,9 @@ def summarize(runs):
     conclusions = {}
     unsuccessful = []
     seen_ids = set()
+    valid_conclusions = {"success", "failure", "cancelled", "skipped",
+                         "timed_out", "action_required", "neutral",
+                         "stale", "startup_failure"}
     valid_statuses = {"queued", "waiting", "pending", "requested",
                       "in_progress", "completed", "action_required"}
     for run in runs:
@@ -29,11 +32,13 @@ def summarize(runs):
         name = run.get("name")
         if name is not None and (not isinstance(name, str) or not name.strip()):
             raise ValueError("Malformed workflow name")
+        if status != "completed" and run.get("conclusion") not in (None, ""):
+            raise ValueError("Noncompleted workflow run has a conclusion")
         counts[status] = counts.get(status, 0) + 1
         if status == "completed":
             conclusion = run.get("conclusion")
-            if not isinstance(conclusion, str) or not conclusion:
-                raise ValueError("Completed workflow run lacks a conclusion")
+            if not isinstance(conclusion, str) or conclusion not in valid_conclusions:
+                raise ValueError("Completed workflow run has missing or unknown conclusion")
             conclusions[conclusion] = conclusions.get(conclusion, 0) + 1
             if conclusion != "success":
                 unsuccessful.append({"id": run.get("databaseId"),
@@ -59,13 +64,19 @@ def main(argv=None):
     parser.add_argument("--fail-on-queued", action="store_true",
                         help="Exit 3 if any run is not started (for external monitoring)")
     args = parser.parse_args(argv)
-    if any(not name.strip() for name in args.require_workflow):
+    if any(not name.strip() or name != name.strip() for name in args.require_workflow):
         parser.error("--require-workflow must be a nonempty workflow name")
+    if len(args.require_workflow) != len(set(args.require_workflow)):
+        parser.error("--require-workflow names must be unique")
     if args.require_success and (not args.head_sha or not args.require_workflow):
         parser.error("--require-success requires --head-sha and at least one --require-workflow")
     if args.head_sha and (len(args.head_sha) != 40 or
                           any(ch not in "0123456789abcdefABCDEF" for ch in args.head_sha)):
         parser.error("--head-sha must be a 40-character hexadecimal commit SHA")
+    if (not args.repo or args.repo.strip() != args.repo or
+            args.repo.count("/") != 1 or
+            any(not part for part in args.repo.split("/"))):
+        parser.error("--repo must be a nonempty owner/repository identifier")
     if not 1 <= args.limit <= 1000:
         parser.error("--limit must be between 1 and 1000")
     if args.input_json:
