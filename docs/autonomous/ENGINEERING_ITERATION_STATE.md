@@ -23,3 +23,9 @@ Evidence hashing now uses POSIX `openat`-style `dir_fd` traversal with `O_NOFOLL
 ## Concurrent evidence modification detection
 
 The digest reader now compares device, inode, size, nanosecond modification/change times and bytes read before and after hashing. A detected change fails closed. This is **best-effort detection, not an immutable snapshot**: metadata-preserving writes, unusual filesystems, malicious writers and hash-time races remain possible. Do not use this check as an authorization signal for merge, deployment or billing; use immutable, access-controlled artifacts and authenticated reviewer provenance for that.
+
+## 10,000-iteration ledger capacity
+
+The engineering iteration JSON ledger has an 80 MiB maximum (previously 4 MiB) to accommodate 10,000 completed iterations with six evidence strings each, including worst-case four-byte UTF-8 characters up to the existing 256-character field limit. A regression test builds all 10,000 records, persists and reloads canonical SHA-256 references, and checks worst-case Unicode serialization fits. The 10,000-iteration cap remains enforced.
+
+**Operational warning:** this is a single-host atomic JSON ledger. At high counts every transition serializes the full ledger, which is inefficient and unsuitable for concurrent multi-worker execution. The larger read/write size increases resource usage; use bounded memory and disk capacity, and migrate to PostgreSQL transactional state before autonomous scale-out. This is capacity validation only, not proof of 10,000 executed engineering iterations.
