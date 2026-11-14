@@ -90,3 +90,15 @@ class CycleReportTests(unittest.TestCase):
         self.path.write_text(json.dumps(self.report), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "run ID"):
             mod.verify(self.path, "a" * 40, "not-a-run", expected=2)
+
+    def test_rejects_symlinked_report_input(self):
+        original = pathlib.Path(self.tmp.name) / "original.json"
+        original.write_text(json.dumps(self.report), encoding="utf-8")
+        self.path.symlink_to(original)
+        with self.assertRaisesRegex(ValueError, "symlinked evidence"):
+            mod.verify(self.path, "a" * 40, "123", expected=2)
+
+    def test_rejects_oversized_report(self):
+        self.path.write_text(" " * 2_000_001, encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "oversized"):
+            mod.verify(self.path, "a" * 40, "123", expected=2)
