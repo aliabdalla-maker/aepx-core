@@ -42,12 +42,13 @@ BEGIN
  FROM pg_class WHERE oid='aepx_iteration.work_item'::regclass;
  IF a IS DISTINCT FROM true OR c IS DISTINCT FROM true THEN RAISE EXCEPTION 'work item RLS required'; END IF;
 END $x$;"""
-    setup=(scope+preflight+f"""
+    setup=(scope+preflight+"BEGIN;"+f"""
 INSERT INTO aepx_iteration.work_item(tenant_id,iteration_number,stage,fence,lease_owner,lease_expires_at)
 VALUES ('{TENANT}',{iteration},'reviewed',7,'worker-one',clock_timestamp()+interval '90 seconds');
 INSERT INTO aepx_iteration.approval_nonce(tenant_id,iteration_number,nonce,lease_fence,reviewer_id,expires_at)
 VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+interval '90 seconds');
 """)
+    setup += "COMMIT;"
     cleanup=(scope+f"DELETE FROM aepx_iteration.approval_nonce WHERE tenant_id='{TENANT}' AND nonce='{nonce}';"
              +f"DELETE FROM aepx_iteration.work_item WHERE tenant_id='{TENANT}' AND iteration_number={iteration};")
     first=None
