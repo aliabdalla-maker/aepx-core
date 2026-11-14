@@ -18,7 +18,7 @@ def fixture(url, token):
             {"id": 43, "name": "CI", "status": "completed",
              "created_at": "2026-11-14T11:00:00Z"}]}
     if url.endswith("/42/jobs?per_page=100"):
-        return {"jobs": [{"name": "postgres", "status": "queued",
+        return {"jobs": [{"id": 420, "name": "postgres", "status": "queued",
                           "labels": ["ubuntu-latest"], "runner_id": None}]}
     raise AssertionError(url)
 
@@ -30,6 +30,26 @@ class QueueInspectorTests(unittest.TestCase):
         self.assertEqual(report["status_counts"], {"queued": 1, "completed": 1})
         self.assertEqual(report["diagnosis"], "UNDETERMINED")
         self.assertFalse(report["release_approved"])
+        self.assertFalse(report["sample_truncated"])
+        self.assertEqual(report["queued"][0]["jobs"][0]["id"], 420)
+
+    def test_invalid_job_id_blocks(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/jobs?" in url:
+                result["jobs"][0]["id"] = True
+            return result
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fake, now=NOW)
+
+    def test_invalid_runner_labels_block(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/jobs?" in url:
+                result["jobs"][0]["labels"] = "ubuntu-latest"
+            return result
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fake, now=NOW)
 
     def test_invalid_run_payload_fails(self):
         with self.assertRaises(ValueError):
