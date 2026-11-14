@@ -60,6 +60,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
           python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
           python -m unittest discover -s tests -p 'test_acceptance_cycle_mutations.py' -v
+          python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v
       - name: Run 50 sequential offline acceptance cycles
         shell: bash
         run: |
