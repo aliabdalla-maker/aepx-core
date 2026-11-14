@@ -644,3 +644,5 @@ Add all required workflows explicitly for the relevant release gate.
 **Five evidence integrity checks:** diagnostics reject unknown run statuses, duplicate/invalid run IDs, malformed workflow names, missing names when required-workflow coverage is asserted, and normalize uppercase SHA selectors before live GitHub queries. Offline tests cover these cases; passing them is not equivalent to an executed GitHub Actions acceptance run.
 
 **Additional fail-closed checks:** completed runs must have recognized conclusions; noncompleted runs must not report a final conclusion; duplicate required-workflow selectors and whitespace-padded selectors are rejected; repository selector must have `owner/repo` shape. These checks validate evidence input only, not GitHub runner availability or production readiness.
+
+**Blocked vs running:** `action_required` is included in `not_started` and causes `--fail-on-queued` to exit 3, because a human approval or other action may be required before execution. `in_progress` runs are listed separately in `in_progress`; they are not classified as queued. Strict success mode still rejects both until completed successfully.
