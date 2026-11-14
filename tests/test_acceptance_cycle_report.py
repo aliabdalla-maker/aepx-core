@@ -98,6 +98,25 @@ class CycleReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "symlinked evidence"):
             mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_rejects_symlink_swap_during_file_open(self):
+        from unittest.mock import patch
+        import os
+        original = pathlib.Path(self.tmp.name) / "original.json"
+        original.write_text(json.dumps(self.report), encoding="utf-8")
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        real_open = os.open
+
+        def swapped_open(path, flags, *args, **kwargs):
+            self.path.unlink()
+            self.path.symlink_to(original)
+            return real_open(path, flags, *args, **kwargs)
+
+        if not hasattr(os, "O_NOFOLLOW"):
+            self.skipTest("platform does not support O_NOFOLLOW")
+        with patch.object(mod.os, "open", side_effect=swapped_open):
+            with self.assertRaises(OSError):
+                mod.verify(self.path, "a" * 40, "123", expected=2)
+
     def test_rejects_hardlinked_report_input(self):
         original = pathlib.Path(self.tmp.name) / "original.json"
         original.write_text(json.dumps(self.report), encoding="utf-8")
