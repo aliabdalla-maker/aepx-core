@@ -3,7 +3,8 @@ import hashlib
 import hmac
 import json
 import unittest
-from scripts.aepx_signed_dispatch_approval import verify_approval,ApprovalDenied
+from scripts.aepx_signed_dispatch_approval import verify_approval,ApprovalDenied,evaluate_signed_dispatch
+from scripts.aepx_provider_dispatch_admission import DispatchDenied
 
 KEY=b"test-only-secret-key-with-32-bytes-minimum"
 ENVELOPE={"tenant_id":"tenant-1","request_id":"req-1","lease_fence":4,
@@ -25,6 +26,14 @@ def check(envelope=None,signature=None,**kwargs):
                            now=kwargs.pop("now",1999))
 
 class SignedApprovalTests(unittest.TestCase):
+    def test_composed_admission_only_with_new_reservation(self):
+        args=dict(envelope=ENVELOPE,signature=sign(ENVELOPE),verification_key=KEY,
+                  reservation_status='reserved',budget_committed=True,worker_isolated=True,
+                  tenant_id='tenant-1',request_id='req-1',lease_fence=4,
+                  idempotency_key='provider_request_0001',now=1999)
+        self.assertEqual(evaluate_signed_dispatch(**args)['decision'],'eligible_for_fenced_dispatch')
+        with self.assertRaises(DispatchDenied):
+            evaluate_signed_dispatch(**{**args,'reservation_status':'already_settled'})
     def test_valid_scoped_envelope(self):
         self.assertTrue(check())
     def test_expired(self):
