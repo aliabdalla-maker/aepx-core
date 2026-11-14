@@ -471,3 +471,16 @@ opened descriptors; an adversarial FIFO-swap test checks that a substituted
 pipe cannot hang the verifier on supported POSIX platforms. All three
 acceptance workflows now require at least 26 report-verifier tests.
 These gates are offline diagnostics and do not authorize a release.
+
+### Fail-closed nonblocking capability and CI queue triage
+
+Evidence opening now requires a positive integer O_NONBLOCK flag in addition
+to O_NOFOLLOW; otherwise the verifier refuses to parse. The 27-test verifier
+suite includes absent, zero and boolean nonblocking-capability cases.
+
+When Actions jobs remain queued, inspect repository Actions settings,
+runner availability, concurrency groups, organization billing/minute limits,
+and workflow permissions. Queued is not a passing test and must not be counted
+as executed acceptance. Once runners start, review smoke results first, then
+the two 50-cycle artifacts and standalone 100-cycle provenance. Keep release
+blocked until independent tenant isolation, HITL, budget and egress tests pass.
