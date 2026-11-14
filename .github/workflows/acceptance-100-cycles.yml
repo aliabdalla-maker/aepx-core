@@ -43,8 +43,8 @@ jobs:
           suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_100_runner.py")
           count = suite.countTestCases()
           print(f"Runner self-tests discovered: {count}")
-          if count < 16:
-              raise SystemExit("Runner self-test coverage below required minimum of 16")
+          if count < 18:
+              raise SystemExit("Runner self-test coverage below required minimum of 18")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
           python - <<'PY'
