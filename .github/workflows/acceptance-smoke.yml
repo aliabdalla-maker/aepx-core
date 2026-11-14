@@ -1,5 +1,17 @@
 name: AEP-X fast offline acceptance smoke
 on:
+  push:
+    branches: ['master']
+    paths:
+      - 'tools/run_acceptance_100_iterations.py'
+      - 'tools/verify_acceptance_cycle_report.py'
+      - 'tools/verify_acceptance_evidence.py'
+      - 'tools/diagnose_actions_queue.py'
+      - 'tests/test_actions_queue_diagnostic.py'
+      - 'tests/test_acceptance_*.py'
+      - '.github/workflows/acceptance-smoke.yml'
+      - '.github/workflows/acceptance-50-cycles.yml'
+      - '.github/workflows/acceptance-100-cycles.yml'
   pull_request:
     paths:
       - 'tools/run_acceptance_100_iterations.py'
