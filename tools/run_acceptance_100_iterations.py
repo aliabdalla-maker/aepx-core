@@ -57,10 +57,13 @@ def main():
                                      timeout=min(90, remaining), check=False,
                                      env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
                 output = run.stdout + run.stderr
+                # unittest writes its completion summary to stderr by default.
+                # Check that stream alone to avoid forged success text on stdout.
+                summary_output = run.stderr
                 # Require a terminal unittest summary, not an arbitrary embedded OK.
                 summary = re.search(
                     r"(?m)^Ran (\d+) tests? in [^\r\n]+\r?\n\s*OK\s*\Z",
-                    output,
+                    summary_output,
                 )
                 count = summary
                 passed = (run.returncode == 0 and summary is not None
