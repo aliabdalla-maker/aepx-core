@@ -110,6 +110,8 @@ def verify(manifest_path: Path):
     manifest = json.loads(raw.decode("utf-8"), object_pairs_hook=reject_duplicate_json_keys, parse_constant=lambda _: (_ for _ in ()).throw(ValueError("non-finite JSON number rejected")))
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
+    if set(manifest) != {"milestones"}:
+        raise ValueError("unexpected manifest fields")
     milestones = manifest["milestones"]
     if not isinstance(milestones, list) or not milestones or len(milestones) > 100:
         raise ValueError("milestones must be a nonempty list")
@@ -121,6 +123,8 @@ def verify(manifest_path: Path):
     for milestone in milestones:
         if not isinstance(milestone, dict):
             raise ValueError("milestone must be an object")
+        if set(milestone) != {"id", "weight", "evidence"}:
+            raise ValueError("unexpected milestone fields")
         identifier = milestone["id"]
         weight = milestone["weight"]
         if not isinstance(identifier, str) or not IDENT.fullmatch(identifier) or identifier in ids:
@@ -137,6 +141,8 @@ def verify(manifest_path: Path):
         for item in evidence:
             if not isinstance(item, dict):
                 raise ValueError("evidence entry must be an object")
+            if set(item) != {"path", "sha256", "result"}:
+                raise ValueError("unexpected evidence fields")
             relative = item.get("path")
             digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
