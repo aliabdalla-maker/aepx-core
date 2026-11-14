@@ -315,3 +315,13 @@ counts and invalid elapsed times. CI runs this matrix before the 100-cycle
 runner. These 60 cases are authored test scenarios, not 60 successful CI
 iterations, and are not independent security acceptance. The always-run
 summary also handles missing count keys without raising KeyError.
+
+### Mutation matrix completeness and CI summary confidentiality
+
+CI now checks that the adversarial matrix contains exactly 60 unique case
+names before executing it. A new test verifies that every mutation changes
+the valid baseline. The always-run summary no longer republishes raw test
+subprocess output, reducing the chance of accidental sensitive-data exposure
+through GitHub job summaries. The report artifact itself may still contain
+diagnostic output and must be handled with restricted access. No completed
+CI run or independent acceptance is implied.
