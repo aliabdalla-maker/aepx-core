@@ -28,10 +28,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Preflight Python syntax and test discovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/verify_acceptance_evidence.py tests/test_acceptance_evidence_integrity.py
+          python - <<'PY'
+          import unittest
+          suite = unittest.defaultTestLoader.discover(
+              start_dir='tests', pattern='test_acceptance_evidence_integrity.py')
+          count = suite.countTestCases()
+          print(f'Discovered {count} acceptance integrity tests')
+          if count < 27:
+              raise SystemExit(f'Expected at least 27 tests, discovered {count}')
+          PY
       - name: Run offline fail-closed evidence regressions
         shell: bash
         run: |
-          set -o pipefail
+          set -euo pipefail
           python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v 2>&1 | tee /tmp/aepx-unittest.log
       - name: Verify CLI rejects absent manifest
         shell: bash
