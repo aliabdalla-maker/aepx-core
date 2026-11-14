@@ -54,6 +54,19 @@ class RunnerTests(unittest.TestCase):
             self.assertTrue(json.loads(target.read_text())["all_passed"])
             self.assertEqual(list(target.parent.glob("*.tmp")), [])
 
+    def test_rejects_symlink_report_destination(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            original = root / "original.json"
+            original.write_text("unchanged")
+            link = root / "report.json"
+            link.symlink_to(original)
+            argv = ["runner", "--iterations", "1", "--output", str(link)]
+            with patch.object(sys, "argv", argv):
+                with self.assertRaisesRegex(OSError, "symlink report destination"):
+                    runner.main()
+            self.assertEqual(original.read_text(), "unchanged")
+
     def test_stops_on_first_failed_cycle(self):
         good = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         bad = subprocess.CompletedProcess([], 1, "", "Ran 42 tests in 0.1s\n\nFAILED (failures=1)\n")
