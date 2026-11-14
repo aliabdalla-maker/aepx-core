@@ -11,7 +11,7 @@ from pathlib import Path
 MAX_ITERATIONS = 10000
 STAGES = ("requirements", "design", "patch_proposed", "tests_recorded", "reviewed", "completed")
 NEXT = {a: b for a, b in zip(STAGES, STAGES[1:])}
-MAX_BYTES = 4 * 1024 * 1024
+# 10,000 completed iterations * 6 stages * up to 256 UTF-8 codepoints\n# (up to four bytes each) plus JSON structure must fit.\nMAX_BYTES = 80 * 1024 * 1024
 
 class TransitionDenied(ValueError):
     pass
