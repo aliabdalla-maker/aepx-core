@@ -12,13 +12,13 @@ NOW = datetime.datetime(2026, 11, 14, 12, tzinfo=datetime.timezone.utc)
 
 def fixture(url, token):
     if url.endswith("/actions/runs?per_page=100"):
-        return {"workflow_runs": [
+        return {"total_count": 2, "workflow_runs": [
             {"id": 42, "name": "HITL", "status": "queued",
              "created_at": "2026-11-14T11:30:00Z"},
             {"id": 43, "name": "CI", "status": "completed",
              "created_at": "2026-11-14T11:00:00Z"}]}
     if url.endswith("/42/jobs?per_page=100"):
-        return {"jobs": [{"id": 420, "name": "postgres", "status": "queued",
+        return {"total_count": 1, "jobs": [{"id": 420, "name": "postgres", "status": "queued",
                           "labels": ["ubuntu-latest"], "runner_id": None}]}
     raise AssertionError(url)
 
@@ -31,6 +31,7 @@ class QueueInspectorTests(unittest.TestCase):
         self.assertEqual(report["diagnosis"], "UNDETERMINED")
         self.assertFalse(report["release_approved"])
         self.assertFalse(report["sample_truncated"])
+        self.assertEqual(report["total_count"], 2)
         self.assertEqual(report["queued"][0]["jobs"][0]["id"], 420)
 
     def test_invalid_job_id_blocks(self):
@@ -47,6 +48,33 @@ class QueueInspectorTests(unittest.TestCase):
             result = fixture(url, token)
             if "/jobs?" in url:
                 result["jobs"][0]["labels"] = "ubuntu-latest"
+            return result
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fake, now=NOW)
+
+    def test_truncated_run_sample_reported(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/runs?" in url:
+                result["total_count"] = 200
+            return result
+        report = module.inspect("owner/repo", "token", get=fake, now=NOW)
+        self.assertTrue(report["sample_truncated"])
+
+    def test_truncated_job_evidence_blocks(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/jobs?" in url:
+                result["total_count"] = 2
+            return result
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fake, now=NOW)
+
+    def test_missing_total_count_blocks(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/runs?" in url:
+                del result["total_count"]
             return result
         with self.assertRaises(ValueError):
             module.inspect("owner/repo", "token", get=fake, now=NOW)
