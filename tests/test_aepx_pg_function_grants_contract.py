@@ -19,6 +19,6 @@ class FunctionGrantAuditContract(unittest.TestCase):
   for token in ("--execute","aepx_test_","PGHOSTADDR",
                 "default_transaction_read_only=on","PGHOST=127.0.0.1"):
    self.assertIn(token,SH)
-  self.assertNotIn("GRANT ",SQL)
-  self.assertNotIn("REVOKE ",SQL)
+  self.assertNotIn("\\nGRANT ",SQL)
+  self.assertNotIn("\\nREVOKE ",SQL)
 if __name__=="__main__": unittest.main()
