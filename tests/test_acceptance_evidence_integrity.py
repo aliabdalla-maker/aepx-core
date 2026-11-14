@@ -112,5 +112,28 @@ class EvidenceGateTests(unittest.TestCase):
                               "result": "pass"}]}]}))
             self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_manifest_size_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(" " * (1024 * 1024 + 1))
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
+    def test_evidence_cardinality_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
+                "evidence": [{}] * 101}]}))
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
+    def test_milestone_cardinality_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": f"m{i}", "weight": 1, "evidence": []} for i in range(101)]}))
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
