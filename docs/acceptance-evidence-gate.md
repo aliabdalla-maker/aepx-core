@@ -493,3 +493,11 @@ below 42 or with a noninteger type. The smoke, two 50-cycle and standalone
 100-cycle workflows require at least 29 verifier regression tests. These
 checks prevent zero-cycle and weakened-coverage configurations from being
 accepted as evidence; CI execution and independent acceptance remain required.
+
+### 100-cycle preflight integrity execution
+
+The standalone 100-cycle workflow now executes the evidence-integrity
+regression suite before the repeated acceptance runner, rather than merely
+counting discovered tests. This prevents a failing integrity suite from being
+silently skipped during the preflight phase. Queued CI jobs still need actual
+runner execution and review before acceptance claims can be made.
