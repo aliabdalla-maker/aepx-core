@@ -653,3 +653,30 @@ Add all required workflows explicitly for the relevant release gate.
 
 ### Queued 50×2 workflow triage
 The 50×2 workflow now uses a per-run concurrency group (`github.run_id`) so older queued workflow runs cannot serialize newly dispatched runs behind the same branch group. This only removes one possible repository-level scheduling obstruction; it does **not** provision runners or override Actions billing, organization policy, account usage limits or approval gates. Check the **new** run's job annotations, Actions settings and runner availability. Confirm both matrix batches and aggregate-evidence succeed, and verify the two report artifacts for the same commit/run ID. Do not treat a queued or skipped run as successful acceptance evidence.
+
+### Issue #370 root cause: unbounded workflow fan-out (2026-11-14, 22:30 UTC)
+Evidence, not a guess: GitHub-hosted `ubuntu-latest` runners were executing
+jobs (runner names `GitHub Actions 10001542xx`, jobs started 22:22 UTC) while
+more than 3,700 runs sat queued (`status=queued` total_count capped at 2,500
+for `fix/acceptance-evidence-gates-20261114`, 1,278 on `master`). Jobs created
+at 15:12 UTC were only starting at 22:22 UTC: a FIFO backlog, not a missing
+runner, billing block or disabled workflow. Each commit fanned out to ~76 jobs
+on `push` and ~100 on `pull_request`, and 61 of 71 workflows had no
+concurrency group, so superseded commits were never dropped.
+
+Remediation:
+1. With owner approval, queued/pending runs on the merged branch and on
+   superseded `master` commits were cancelled (queued runs had produced no
+   evidence; any of them can be re-run). Head `2dc80d63` runs and 50×2 run
+   `43623791633` were kept.
+2. Every push/PR workflow without a concurrency group now uses
+   `${{ github.workflow }}-${{ github.event_name }}-${{ PR number || ref }}`
+   with `cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}`:
+   superseded branch/PR runs are cancelled; on `master` a running job is never
+   cancelled and GitHub keeps at most one pending run per workflow, so the head
+   commit is always evaluated. Push triggers on every branch are unchanged, so
+   exact-SHA push evidence for the release gate is preserved.
+3. `tests/test_workflow_concurrency_policy.py` (run by the P0 workflow
+   integrity gate) fails if a push/PR workflow lacks a ref-scoped group.
+
+A self-hosted runner (Windows or otherwise) is not needed for this incident.
