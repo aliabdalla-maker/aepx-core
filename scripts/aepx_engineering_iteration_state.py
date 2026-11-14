@@ -96,7 +96,10 @@ def advance_locked(path, *, number, stage, evidence):
 
     Not a distributed lease or multi-worker fencing mechanism.
     """
-    from aepx_pilot_checkpoint import exclusive_checkpoint_lock
+    try:
+        from scripts.aepx_pilot_checkpoint import exclusive_checkpoint_lock
+    except ModuleNotFoundError:
+        from aepx_pilot_checkpoint import exclusive_checkpoint_lock
     path = Path(path)
     if not path.is_absolute() or path.parent.is_symlink() or not path.parent.is_dir() or path.is_symlink():
         raise TransitionDenied("unsafe ledger destination")
