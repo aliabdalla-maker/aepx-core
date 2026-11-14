@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from aepx_pilot_checkpoint import append, initial, load, validate
+from aepx_pilot_checkpoint import append, initial, load, validate, exclusive_checkpoint_lock
 
 class CheckpointTests(unittest.TestCase):
     def test_atomic_resume(self):
@@ -45,6 +45,27 @@ class CheckpointTests(unittest.TestCase):
             link.symlink_to(target)
             with self.assertRaises(ValueError):
                 append(link, {"pattern": "test.py", "status": "passed"})
+
+    def test_rejects_concurrent_writer_without_lost_update(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "pilot.json"
+            with exclusive_checkpoint_lock(path):
+                with self.assertRaises(ValueError):
+                    append(path, {"pattern": "test.py", "status": "passed"})
+            self.assertEqual(len(load(path)["attempts"]), 0)
+            self.assertFalse(path.with_name(path.name + ".lock").exists())
+            self.assertEqual(len(append(path, {"pattern": "test.py", "status": "passed"})["attempts"]), 1)
+
+    def test_rejects_abandoned_lock_until_operator_recovers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "pilot.json"
+            lock = path.with_name(path.name + ".lock")
+            lock.mkdir()
+            with self.assertRaises(ValueError):
+                append(path, {"pattern": "test.py", "status": "passed"})
+            self.assertTrue(lock.exists())
+            lock.rmdir()
+            self.assertEqual(len(append(path, {"pattern": "test.py", "status": "passed"})["attempts"]), 1)
 
 if __name__ == "__main__":
     unittest.main()
