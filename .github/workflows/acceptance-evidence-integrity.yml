@@ -300,6 +300,13 @@ jobs:
             echo "- Repository: ${GITHUB_REPOSITORY}"
             echo "- Commit: ${GITHUB_SHA}"
             echo "- Job outcome: ${{ job.status }}"
+            if [[ -f /tmp/aepx-unittest.log ]]; then
+              echo "- Python unittest result:"
+              grep -E '^Ran [0-9]+ tests? in |^(OK|FAILED)' /tmp/aepx-unittest.log | tail -n 2 | sed 's/^/  - /' || true
+            else
+              echo "- Python unittest result: **NOT EXECUTED OR LOG UNAVAILABLE**"
+            fi
+            echo "- CLI smoke checks: 12 defined; inspect individual step outcomes"
             echo "- Scope: offline verifier regressions and CLI contract only"
             echo "- Independent acceptance: **NOT ESTABLISHED**"
             echo "- Production deployment authorized: **NO**"
