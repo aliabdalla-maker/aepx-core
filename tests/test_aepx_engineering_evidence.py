@@ -31,6 +31,25 @@ class EvidenceTests(unittest.TestCase):
                 with self.subTest(path=path), self.assertRaises(EvidenceDenied):
                     digest_artifact(root,path)
 
+    def test_symlinked_parent_denied(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp).resolve()
+            (root/"real").mkdir()
+            (root/"real"/"artifact.txt").write_text("artifact")
+            (root/"alias").symlink_to(root/"real",target_is_directory=True)
+            with self.assertRaises(EvidenceDenied):
+                digest_artifact(root,"alias/artifact.txt")
+
+    def test_fifo_is_not_read(self):
+        import os
+        if not hasattr(os,"mkfifo"):
+            self.skipTest("POSIX FIFO unavailable")
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp).resolve()
+            os.mkfifo(root/"pipe")
+            with self.assertRaises(EvidenceDenied):
+                digest_artifact(root,"pipe")
+
     def test_unverified_string_cannot_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp).resolve()
