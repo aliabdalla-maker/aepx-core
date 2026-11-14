@@ -33,3 +33,21 @@ python -m unittest discover -s tests -p 'test_aepx_pilot_checkpoint.py' -v
 ```
 
 Remaining requirements: OS-level isolation, authenticated LLM orchestration, measured API spend and token budgets, concurrency-safe checkpoint locking, supervised 100-attempt pilot, CI acceptance and a release gate.
+
+## Bounded supervised batch (opt-in)
+
+A separate offline batch controller can repeat an allowlisted test **up to 100 times per invocation**, with a 1–3600-second wall-clock limit, a 1–120-second per-test timeout, persistent checkpoint recording and immediate stop on failure. This is **not** an LLM-driven code repair loop, and does not make 100 tests equivalent to 100 autonomous development iterations.
+
+Dry-run:
+
+```bash
+python scripts/aepx_supervised_batch.py --pattern test_aepx_autonomous_checkpoint.py --checkpoint /tmp/aepx-pilot.json --count 10
+```
+
+Run only in an approved disposable OS-isolated sandbox:
+
+```bash
+python scripts/aepx_supervised_batch.py --pattern test_aepx_autonomous_checkpoint.py --checkpoint /tmp/aepx-pilot.json --count 10 --max-seconds 600 --execute
+```
+
+The checkpoint must be an absolute path. Never execute repository tests on production infrastructure. This pilot does not provide OS isolation itself. Do not enable LLM actions, auto-merge, external MCP forwarding, or deployment based on this batch report.
