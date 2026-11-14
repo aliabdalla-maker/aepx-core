@@ -58,3 +58,8 @@ class CycleReportTests(unittest.TestCase):
         self.report["production_deployment_authorized"] = True
         with self.assertRaisesRegex(ValueError, "unauthorized"):
             self.check()
+
+    def test_rejects_nonfinite_duration(self):
+        self.report["runs"][0]["elapsed_seconds"] = float("nan")
+        with self.assertRaisesRegex(ValueError, "invalid JSON constant"):
+            self.check()
