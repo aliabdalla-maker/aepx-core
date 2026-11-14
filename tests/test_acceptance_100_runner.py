@@ -40,6 +40,20 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(report["source_commit"], "a" * 40)
         self.assertEqual(report["workflow_run_id"], "12345")
 
+    def test_creates_nested_report_directory_atomically(self):
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = pathlib.Path(tmp) / "nested" / "evidence" / "report.json"
+            argv = ["runner", "--iterations", "1", "--output", str(target)]
+            with patch.object(sys, "argv", argv), patch.object(
+                runner.subprocess, "run", return_value=result
+            ):
+                status = runner.main()
+            self.assertEqual(status, 0)
+            self.assertTrue(target.exists())
+            self.assertTrue(json.loads(target.read_text())["all_passed"])
+            self.assertEqual(list(target.parent.glob("*.tmp")), [])
+
     def test_stops_on_first_failed_cycle(self):
         good = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         bad = subprocess.CompletedProcess([], 1, "", "Ran 42 tests in 0.1s\n\nFAILED (failures=1)\n")
