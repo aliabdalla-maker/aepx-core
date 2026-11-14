@@ -21,3 +21,22 @@ jobs:
           python-version: '3.11'
       - name: Run offline fail-closed evidence regressions
         run: python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v
+      - name: Verify CLI rejects absent manifest
+        shell: bash
+        run: |
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-missing-manifest.json > /tmp/aepx-gate.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q "acceptance evidence rejected" /tmp/aepx-gate.out
+      - name: Reject empty milestone manifest at CLI boundary
+        shell: bash
+        run: |
+          printf '{"milestones":[]}' > /tmp/aepx-empty-manifest.json
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-empty-manifest.json > /tmp/aepx-gate.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q "acceptance evidence rejected" /tmp/aepx-gate.out
