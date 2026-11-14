@@ -79,6 +79,35 @@ class QueueInspectorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             module.inspect("owner/repo", "token", get=fake, now=NOW)
 
+    def test_rejects_malformed_repo_identifier(self):
+        for repo in ["owner/repo/extra", "owner/repo?x=1", "../repo",
+                     "owner//repo", "owner/repo#fragment"]:
+            with self.subTest(repo=repo), self.assertRaises(ValueError):
+                module.inspect(repo, "token", get=fixture, now=NOW)
+
+    def test_rejects_naive_clock(self):
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fixture,
+                           now=datetime.datetime(2026, 11, 14, 12))
+
+    def test_rejects_unknown_run_status(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/runs?" in url:
+                result["workflow_runs"][0]["status"] = "not-a-status"
+            return result
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fake, now=NOW)
+
+    def test_rejects_unknown_job_status(self):
+        def fake(url, token):
+            result = fixture(url, token)
+            if "/jobs?" in url:
+                result["jobs"][0]["status"] = "not-a-status"
+            return result
+        with self.assertRaises(ValueError):
+            module.inspect("owner/repo", "token", get=fake, now=NOW)
+
     def test_invalid_run_payload_fails(self):
         with self.assertRaises(ValueError):
             module.inspect("owner/repo", "token", get=lambda url, token: {"workflow_runs": [None]}, now=NOW)

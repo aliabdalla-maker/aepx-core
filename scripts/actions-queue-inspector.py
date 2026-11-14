@@ -4,6 +4,7 @@ import argparse
 import datetime
 import json
 import os
+import re
 import urllib.request
 
 API = "https://api.github.com/repos"
@@ -17,6 +18,10 @@ def get_json(url, token):
         return json.load(response)
 
 def inspect(repo, token, get=get_json, now=None):
+    if not isinstance(repo, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo):
+        raise ValueError("invalid owner/repository identifier")
+    if now is not None and (now.tzinfo is None or now.utcoffset() is None):
+        raise ValueError("diagnostic clock requires timezone")
     if now is None:
         now = datetime.datetime.now(datetime.timezone.utc)
     data = get(f"{API}/{repo}/actions/runs?per_page=100", token)
@@ -37,6 +42,9 @@ def inspect(repo, token, get=get_json, now=None):
               "total_count": total}
     for run in runs:
         status = run.get("status", "unknown")
+        if not isinstance(status, str) or status not in (
+                "queued", "in_progress", "completed", "waiting", "pending", "requested"):
+            raise ValueError("invalid workflow run status")
         result["status_counts"][status] = result["status_counts"].get(status, 0) + 1
         if status != "queued" or len(result["queued"]) >= 10:
             continue
@@ -45,7 +53,7 @@ def inspect(repo, token, get=get_json, now=None):
         if type(run_id) is not int or run_id <= 0 or not isinstance(stamp, str):
             raise ValueError("invalid queued run metadata")
         created = datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
-        if created.tzinfo is None:
+        if created.tzinfo is None or created.utcoffset() is None:
             raise ValueError("queued run timestamp lacks timezone")
         jobs_data = get(f"{API}/{repo}/actions/runs/{run_id}/jobs?per_page=100", token)
         if not isinstance(jobs_data, dict) or not isinstance(jobs_data.get("jobs"), list):
@@ -59,6 +67,9 @@ def inspect(repo, token, get=get_json, now=None):
         if any(not isinstance(job, dict) for job in jobs):
             raise ValueError("invalid Actions job record")
         for job in jobs:
+            if job.get("status") not in (
+                    "queued", "in_progress", "completed", "waiting", "pending", "requested"):
+                raise ValueError("invalid job status")
             if type(job.get("id")) is not int or job["id"] <= 0:
                 raise ValueError("invalid job id")
             if not isinstance(job.get("labels"), list) or any(
