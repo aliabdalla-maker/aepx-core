@@ -37,6 +37,8 @@ def main():
             raise OSError("refusing symlinked report parent directory")
         if target.is_symlink():
             raise OSError("refusing symlink report destination")
+        if target.exists() and not target.is_file():
+            raise OSError("refusing non-file report destination")
         # Use a unique temporary file to prevent stale or concurrent .tmp collisions.
         import tempfile
         temp_path = None
