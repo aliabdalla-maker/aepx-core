@@ -68,3 +68,25 @@ class CycleReportTests(unittest.TestCase):
         self.path.write_text('{"source_commit":"a","source_commit":"b"}', encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "duplicate JSON key"):
             mod.verify(self.path, "a" * 40, "123", expected=2)
+
+    def test_rejects_unexpected_root_fields(self):
+        self.report["production_ready"] = True
+        with self.assertRaisesRegex(ValueError, "report fields"):
+            self.check()
+
+    def test_rejects_unexpected_cycle_fields(self):
+        self.report["runs"][0]["diagnostic_tail"] = "forged"
+        with self.assertRaisesRegex(ValueError, "cycle 1 fields"):
+            self.check()
+
+    def test_rejects_malformed_commit_sha(self):
+        self.report["source_commit"] = "not-a-sha"
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "commit SHA"):
+            mod.verify(self.path, "not-a-sha", "123", expected=2)
+
+    def test_rejects_malformed_workflow_run_id(self):
+        self.report["workflow_run_id"] = "not-a-run"
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "run ID"):
+            mod.verify(self.path, "a" * 40, "not-a-run", expected=2)
