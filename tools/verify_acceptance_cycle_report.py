@@ -37,7 +37,7 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42, digest_out=None
     # Read through a no-follow descriptor to reject final-component symlink swaps.
     if type(getattr(os, "O_NOFOLLOW", None)) is not int or os.O_NOFOLLOW <= 0:
         raise ValueError("platform lacks required no-follow evidence protection")
-    flags = os.O_RDONLY | os.O_NOFOLLOW
+    flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, 'O_NONBLOCK', 0)
     descriptor = os.open(source, flags)
     try:
         opened = os.fstat(descriptor)
