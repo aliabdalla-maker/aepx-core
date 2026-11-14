@@ -23,3 +23,7 @@ python scripts/test_aepx_pg_approval_concurrency.py --execute aepx_test_approval
 ```
 
 The harness creates a transactionally committed, random nonce/iteration fixture, starts two independent `psql` connections, holds the first consumption transaction open, verifies the second blocks until the first commits, then checks that the second fails as a replay and only one nonce is consumed. Cleanup is attempted in `finally`. The test has not been run against PostgreSQL; CI only checks the offline harness contract. Run only in a dedicated disposable database: the harness creates and deletes rows and does not provision or migrate databases. This does not fix direct-DML privileges, untrusted tenant GUCs, authenticated approvals or atomic completion.
+
+## Bounded concurrency harness
+
+The two-session race harness now waits at most ten seconds for the first session's deterministic readiness marker, uses a PL/pgSQL DO block to suppress result rows, and kills either subprocess if it remains active during cleanup. This prevents indefinite blocking on the first session's stdout and reduces leaked local test connections. These are offline code changes; actual PostgreSQL race execution is still pending.

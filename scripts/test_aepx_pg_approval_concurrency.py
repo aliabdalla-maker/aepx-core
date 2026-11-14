@@ -5,6 +5,7 @@ No migration, provider, Docker, cloud, or external service actions.
 import argparse
 import os
 import re
+import selectors
 import subprocess
 import sys
 import uuid
@@ -52,22 +53,25 @@ VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+inte
     cleanup=(scope+f"DELETE FROM aepx_iteration.approval_nonce WHERE tenant_id='{TENANT}' AND nonce='{nonce}';"
              +f"DELETE FROM aepx_iteration.work_item WHERE tenant_id='{TENANT}' AND iteration_number={iteration};")
     first=None
+    second=None
     created=False
     try:
         run(setup)
         created=True
-        consume=f"SELECT aepx_iteration.consume_approval('{TENANT}',{iteration},'{nonce}',7,'reviewer-one');"
+        consume=f"DO $consume$ BEGIN PERFORM aepx_iteration.consume_approval('{TENANT}',{iteration},'{nonce}',7,'reviewer-one'); END $consume$;"
         # Session 1 holds row locks after consuming; session 2 blocks until commit.
         first=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,text=True,env=env,bufsize=1)
         first.stdin.write(scope+"BEGIN;"+consume+"\n\\echo FIRST_CONSUMED\n")
         first.stdin.flush()
-        while True:
-            line=first.stdout.readline()
-            if not line:
-                raise RuntimeError("first session exited before consuming approval")
-            if "FIRST_CONSUMED" in line:
-                break
+        # Bound the first-session readiness wait: a stalled psql must not hang CI.
+        with selectors.DefaultSelector() as ready:
+            ready.register(first.stdout,selectors.EVENT_READ)
+            if not ready.select(timeout=10):
+                raise RuntimeError("first session readiness timed out")
+        line=first.stdout.readline()
+        if "FIRST_CONSUMED" not in line:
+            raise RuntimeError("first session did not confirm consumption")
         second=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,text=True,env=env)
         try:
@@ -90,9 +94,10 @@ VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+inte
             raise AssertionError("expected exactly one consumed nonce, got "+count)
         print("PASS: one transaction consumed approval; concurrent replay denied")
     finally:
-        if first is not None and first.poll() is None:
-            first.kill()
-            first.wait(timeout=5)
+        for process in (second,first):
+            if process is not None and process.poll() is None:
+                process.kill()
+                process.wait(timeout=5)
         if created:
             run(cleanup)
 
