@@ -27,7 +27,11 @@ def main():
                   "workflow_run_id": os.environ.get("GITHUB_RUN_ID"),
                   "runs": records}
         target = pathlib.Path(args.output)
+        if target.is_symlink():
+            raise OSError("refusing symlink report destination")
         target.parent.mkdir(parents=True, exist_ok=True)
+        if target.is_symlink():
+            raise OSError("refusing symlink report destination")
         # Use a unique temporary file to prevent stale or concurrent .tmp collisions.
         import tempfile
         temp_path = None
