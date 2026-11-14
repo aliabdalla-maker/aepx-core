@@ -80,17 +80,22 @@ jobs:
           for condition, message in checks:
               if not condition:
                   raise SystemExit(message)
-          assert all(
-              isinstance(run, dict)
-              and run.get("iteration") == i
-              and run.get("passed") is True
-              and type(run.get("tests_executed")) is int
-              and run["tests_executed"] >= 42
-              and run.get("return_code") == 0
-              for i, run in enumerate(report["runs"], 1)
-          ), "invalid, duplicate, or out-of-order cycle"
-          assert report["independent_acceptance_established"] is False, "invalid acceptance claim"
-          assert report["production_deployment_authorized"] is False, "invalid deployment claim"
+          for i, run in enumerate(report["runs"], 1):
+              if not (
+                  isinstance(run, dict)
+                  and type(run.get("iteration")) is int and run["iteration"] == i
+                  and run.get("passed") is True
+                  and type(run.get("tests_executed")) is int
+                  and run["tests_executed"] >= 42
+                  and type(run.get("return_code")) is int and run["return_code"] == 0
+                  and type(run.get("elapsed_seconds")) in (int, float)
+                  and 0 <= run["elapsed_seconds"] <= 90
+              ):
+                  raise SystemExit(f"invalid or out-of-order cycle {i}")
+          if report.get("independent_acceptance_established") is not False:
+              raise SystemExit("invalid independent acceptance claim")
+          if report.get("production_deployment_authorized") is not False:
+              raise SystemExit("invalid deployment claim")
           print("Offline 100-cycle report integrity checks passed; independent acceptance remains blocked.")
           PY
       - name: Publish scoped result
