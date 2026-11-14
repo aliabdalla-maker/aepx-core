@@ -46,6 +46,20 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertIsNone(report["runs"][0]["tests_executed"])
 
+    def test_rejects_early_ok_followed_by_failure(self):
+        forged = subprocess.CompletedProcess(
+            [], 0, "", "Ran 42 tests in 0.1s\\n\\nOK\\nFAILED (failures=1)\\n"
+        )
+        status, report = self.invoke(1, [forged])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["all_passed"])
+
+    def test_rejects_truncated_unittest_summary(self):
+        truncated = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\\n")
+        status, report = self.invoke(1, [truncated])
+        self.assertEqual(status, 1)
+        self.assertFalse(report["runs"][0]["passed"])
+
     def test_timeout_preserves_failure_report(self):
         status, report = self.invoke(100, subprocess.TimeoutExpired(["python"], 90))
         self.assertEqual(status, 1)
