@@ -286,3 +286,12 @@ unauthorized deployment flags, and unestablished acceptance claims. CI now
 runs the new test module and calls the verifier on the generated report.
 The workflow triggers on changes to both files. Run evidence remains required;
 these authored checks do not constitute independent acceptance.
+
+### Strict report schema and bounded input checks
+
+The standalone report verifier now enforces exact root and per-cycle field
+sets, 40-character lowercase Git commit SHA and numeric workflow run ID.
+It refuses symlinked evidence input paths and files larger than 2 MB. Six
+new adversarial tests bring the authored report-verifier suite to 14 tests;
+CI checks their discovery before execution. This is not a claim of passing
+CI or independent release acceptance.
