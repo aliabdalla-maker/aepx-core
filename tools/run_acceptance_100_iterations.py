@@ -27,9 +27,24 @@ def main():
                   "workflow_run_id": os.environ.get("GITHUB_RUN_ID"),
                   "runs": records}
         target = pathlib.Path(args.output)
-        temporary = target.with_name(target.name + ".tmp")
-        temporary.write_text(json.dumps(report, indent=2) + "\n")
-        os.replace(temporary, target)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        # Use a unique temporary file to prevent stale or concurrent .tmp collisions.
+        import tempfile
+        temp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", dir=target.parent,
+                prefix=f".{target.name}.", suffix=".tmp", delete=False
+            ) as handle:
+                temp_path = pathlib.Path(handle.name)
+                json.dump(report, handle, indent=2)
+                handle.write("\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temp_path, target)
+        finally:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
         return report
 
     interrupted = False
