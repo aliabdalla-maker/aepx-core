@@ -29,7 +29,7 @@ def main():
     def run(sql,check=True):
         return subprocess.run(cmd,input=sql,text=True,capture_output=True,env=env,check=check,timeout=30)
     nonce=str(uuid.uuid4())
-    iteration=1
+    iteration=(uuid.uuid4().int % 10000)+1
     scope=f"SET app.tenant_id='{TENANT}';"
     preflight="""DO $x$ DECLARE b boolean; a boolean; c boolean;
 BEGIN
@@ -55,7 +55,7 @@ VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+inte
     try:
         run(setup)
         created=True
-        consume=f"SELECT aepx_iteration.consume_approval('{TENANT}',1,'{nonce}',7,'reviewer-one');"
+        consume=f"SELECT aepx_iteration.consume_approval('{TENANT}',{iteration},'{nonce}',7,'reviewer-one');"
         # Session 1 holds row locks after consuming; session 2 blocks until commit.
         first=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,text=True,env=env,bufsize=1)
