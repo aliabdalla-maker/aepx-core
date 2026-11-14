@@ -355,3 +355,13 @@ methods. A 50/50 success summary is written only after the report verifier
 returns successfully. Neither configured execution nor an authored summary
 is proof of a completed GitHub Actions run. Preserve the release block until
 actual CI artifacts and independent security acceptance have been reviewed.
+
+### Two-batch aggregate evidence gate
+
+A dedicated `aggregate-evidence` job depends on both 50-cycle matrix jobs.
+It downloads both uniquely named artifacts, rejects missing/extra JSON files,
+revalidates each report against the workflow SHA and run ID, and emits a
+combined 100-cycle summary artifact only if both validations succeed.
+This proves only the configured offline test scope; it does not prove
+production security, independent acceptance or deployment authorization.
+Inspect the actual Actions job status and artifacts before crediting cycles.
