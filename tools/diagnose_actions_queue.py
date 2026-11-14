@@ -48,6 +48,8 @@ def main(argv=None):
     parser.add_argument("--fail-on-queued", action="store_true",
                         help="Exit 3 if any run is not started (for external monitoring)")
     args = parser.parse_args(argv)
+    if any(not name.strip() for name in args.require_workflow):
+        parser.error("--require-workflow must be a nonempty workflow name")
     if args.require_success and (not args.head_sha or not args.require_workflow):
         parser.error("--require-success requires --head-sha and at least one --require-workflow")
     if args.head_sha and (len(args.head_sha) != 40 or
