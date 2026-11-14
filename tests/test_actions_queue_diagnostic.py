@@ -229,6 +229,44 @@ class QueueDiagnosticTests(unittest.TestCase):
                 main(["--require-success", "--head-sha", "a" * 40])
             self.assertEqual(missing_workflow.exception.code, 2)
 
+    def test_rejects_unknown_status(self):
+        with self.assertRaisesRegex(ValueError, "unknown workflow run status"):
+            summarize([{"status": "mystery"}])
+
+    def test_rejects_duplicate_run_ids(self):
+        with self.assertRaisesRegex(ValueError, "duplicate workflow run ID"):
+            summarize([{"databaseId": 10, "status": "queued"},
+                       {"databaseId": 10, "status": "completed", "conclusion": "success"}])
+
+    def test_rejects_invalid_run_id_and_name(self):
+        for run in ({"databaseId": True, "status": "queued"},
+                    {"databaseId": -1, "status": "queued"},
+                    {"name": " ", "status": "queued"}):
+            with self.subTest(run=run):
+                with self.assertRaises(ValueError):
+                    summarize([run])
+
+    def test_strict_workflow_coverage_rejects_unnamed_run(self):
+        sha = "a" * 40
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "unnamed.json"
+            path.write_text('[{"headSha":"' + sha +
+                            '","status":"completed","conclusion":"success"}]',
+                            encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    self.assertEqual(main(["--input-json", str(path),
+                                           "--head-sha", sha, "--require-workflow", "CI",
+                                           "--require-success"]), 2)
+
+    def test_cli_normalizes_uppercase_sha_before_query(self):
+        sha = "abcdef" * 6 + "abcd"
+        with patch("tools.diagnose_actions_queue.subprocess.run") as run:
+            run.return_value.stdout = "[]"
+            with contextlib.redirect_stdout(io.StringIO()):
+                main(["--head-sha", sha.upper()])
+            self.assertEqual(run.call_args.args[0][-2:], ["--commit", sha])
+
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])
         self.assertIn("cannot be determined", result["diagnosis"])
