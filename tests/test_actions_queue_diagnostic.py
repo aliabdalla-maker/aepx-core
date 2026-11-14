@@ -131,6 +131,22 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_truncation_checked_before_sha_filter(self):
+        sha = "a" * 40
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "mixed.json"
+            path.write_text(
+                '[{"name":"CI","headSha":"' + sha +
+                '","status":"completed","conclusion":"success"},'
+                '{"name":"CI","headSha":"' + "b" * 40 +
+                '","status":"completed","conclusion":"success"}]',
+                encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    self.assertEqual(main(["--input-json", str(path), "--limit", "2",
+                                           "--head-sha", sha, "--require-workflow", "CI",
+                                           "--require-success"]), 6)
+
     def test_strict_snapshot_limit_is_not_accepted_as_complete(self):
         sha = "a" * 40
         with patch("tools.diagnose_actions_queue.subprocess.run") as run:
