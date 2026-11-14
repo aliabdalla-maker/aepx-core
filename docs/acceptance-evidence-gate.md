@@ -434,3 +434,13 @@ not expose an integer O_NOFOLLOW flag. This prevents silent fallback to a
 symlink-following open. The regression suite contains at least 21 tests,
 including the unavailable-capability case. On unsupported platforms this
 means verification fails rather than claiming acceptance.
+
+### Hash the exact validated report bytes
+
+The report verifier optionally returns a SHA-256 digest of the exact bytes
+read through its no-follow descriptor, only after strict schema/provenance
+validation succeeds. The 50x2 aggregate uses this digest rather than
+reopening report paths after verification. Two regression tests cover exact
+byte identity and absence of a digest on rejected evidence; both workflows
+require at least 23 report-verifier tests. The digest is not an independently
+signed attestation.
