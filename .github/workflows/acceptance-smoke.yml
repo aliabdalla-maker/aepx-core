@@ -5,6 +5,8 @@ on:
       - 'tools/run_acceptance_100_iterations.py'
       - 'tools/verify_acceptance_cycle_report.py'
       - 'tools/verify_acceptance_evidence.py'
+      - 'tools/diagnose_actions_queue.py'
+      - 'tests/test_actions_queue_diagnostic.py'
       - 'tests/test_acceptance_*.py'
       - '.github/workflows/acceptance-smoke.yml'
       - '.github/workflows/acceptance-50-cycles.yml'
@@ -31,7 +33,8 @@ jobs:
       - name: Run verifier and runner self-tests
         run: |
           set -euo pipefail
-          python -m py_compile tools/run_acceptance_100_iterations.py tools/verify_acceptance_cycle_report.py tools/verify_acceptance_evidence.py
+          python -m py_compile tools/run_acceptance_100_iterations.py tools/verify_acceptance_cycle_report.py tools/verify_acceptance_evidence.py tools/diagnose_actions_queue.py tests/test_actions_queue_diagnostic.py
+          python -m unittest discover -s tests -p 'test_actions_queue_diagnostic.py' -v
           python - <<'PY'
           import unittest
           minimums = {
