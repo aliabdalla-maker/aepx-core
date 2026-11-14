@@ -1,11 +1,16 @@
 -- Staging-only read-only audit of SECURITY DEFINER functions in AEP-X schemas.
 -- A fixed safe search_path is mandatory; never silently trust caller schemas.
 DO $audit$
-DECLARE f record; configured_path text;
+DECLARE f record; configured_path text; inspected integer := 0; schema_count integer;
 BEGIN
  IF (SELECT rolsuper OR rolbypassrls FROM pg_roles WHERE rolname=current_user)
     IS DISTINCT FROM false THEN
    RAISE EXCEPTION 'DENY: audit role bypasses RLS';
+ END IF;
+ SELECT count(*) INTO schema_count FROM pg_namespace
+ WHERE nspname IN ('aepx_iteration','aepx_budget');
+ IF schema_count <> 2 THEN
+   RAISE EXCEPTION 'DENY: required AEP-X schemas missing';
  END IF;
  FOR f IN
    SELECT p.oid,p.proname,p.prosecdef,p.proconfig,p.proowner,p.proacl,
@@ -35,9 +40,14 @@ BEGIN
    IF pg_has_role(current_user,f.proowner,'MEMBER') THEN
      RAISE EXCEPTION 'DENY: runtime role is member of SECURITY DEFINER owner';
    END IF;
+   inspected := inspected + 1;
    RAISE NOTICE 'PASS: SECURITY DEFINER %.% has fixed path and no PUBLIC EXECUTE',
       f.nspname,f.proname;
  END LOOP;
- RAISE NOTICE 'Definer audit complete; no SECURITY DEFINER functions may exist yet';
+ IF inspected=0 THEN
+   RAISE NOTICE 'NOT ASSESSED: zero SECURITY DEFINER functions found; no privileged-function security claim';
+ ELSE
+   RAISE NOTICE 'PASS: inspected % SECURITY DEFINER functions; scope limited to AEP-X schemas',inspected;
+ END IF;
 END
 $audit$;
