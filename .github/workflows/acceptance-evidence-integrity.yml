@@ -155,6 +155,39 @@ jobs:
           set -e
           test "$status" -eq 2
           grep -q 'unexpected manifest fields' /tmp/aepx-schema.out
+      - name: Reject hard-linked evidence at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          root = Path('/tmp/aepx-hardlink-evidence')
+          root.mkdir(exist_ok=True)
+          (root / 'source.txt').write_bytes(b'proof')
+          os.link(root / 'source.txt', root / 'proof.txt')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': 'proof.txt',
+                  'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'pass'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-hardlink-evidence/manifest.json > /tmp/aepx-hardlink.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          output = json.loads(Path('/tmp/aepx-hardlink.out').read_text())
+          assert output['evidence_integrity_percent'] == 0
+          assert output['independently_verified_percent'] == 0
+          PY
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -184,3 +217,4 @@ jobs:
             /tmp/aepx-invalid-utf8.out
             /tmp/aepx-reuse.out
             /tmp/aepx-schema.out
+            /tmp/aepx-hardlink.out
