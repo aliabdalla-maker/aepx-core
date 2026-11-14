@@ -444,3 +444,11 @@ reopening report paths after verification. Two regression tests cover exact
 byte identity and absence of a digest on rejected evidence; both workflows
 require at least 23 report-verifier tests. The digest is not an independently
 signed attestation.
+
+### Nonzero no-follow flag requirement
+
+Evidence verification now requires O_NOFOLLOW to be a positive integer,
+rejecting absent, zero and boolean values. Two additional regression tests
+cover zero and boolean values; both offline acceptance CI workflows require
+at least 25 report-verifier tests. This does not replace the need for actual
+CI logs and independent tenant/worker security acceptance.

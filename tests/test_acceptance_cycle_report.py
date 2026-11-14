@@ -122,6 +122,20 @@ class CycleReportTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "lacks required no-follow"):
                 mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_fails_closed_with_zero_nofollow_flag(self):
+        from unittest.mock import patch
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        with patch.object(mod.os, "O_NOFOLLOW", 0, create=True):
+            with self.assertRaisesRegex(ValueError, "lacks required no-follow"):
+                mod.verify(self.path, "a" * 40, "123", expected=2)
+
+    def test_fails_closed_with_boolean_nofollow_flag(self):
+        from unittest.mock import patch
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        with patch.object(mod.os, "O_NOFOLLOW", True, create=True):
+            with self.assertRaisesRegex(ValueError, "lacks required no-follow"):
+                mod.verify(self.path, "a" * 40, "123", expected=2)
+
     def test_rejects_symlink_swap_during_file_open(self):
         from unittest.mock import patch
         import os
