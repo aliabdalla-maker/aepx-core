@@ -6,13 +6,15 @@ on:
     paths:
       - 'tools/run_acceptance_100_iterations.py'
       - 'tests/test_acceptance_100_runner.py'
+      - 'tests/test_acceptance_evidence_integrity.py'
+      - 'tools/verify_acceptance_evidence.py'
       - '.github/workflows/acceptance-100-cycles.yml'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
   group: aepx-100-cycle-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   acceptance-100-cycles:
     runs-on: ubuntu-latest
