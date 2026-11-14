@@ -5,6 +5,7 @@ This is not an LLM agent. Only actual test attempts count; no deployment authori
 import json
 import os
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 
 MAX_ITERATIONS = 10000
@@ -37,29 +38,49 @@ def load(path):
         raise ValueError("unsafe checkpoint path")
     return validate(json.loads(path.read_text(encoding="utf-8")))
 
+@contextmanager
+def exclusive_checkpoint_lock(path):
+    """Fail closed on another writer or an abandoned lock.
+
+    Recovery requires an operator to verify no writer remains before
+    removing the lock directory. Never auto-break an unknown lock.
+    """
+    lock = path.with_name(path.name + ".lock")
+    if lock.is_symlink():
+        raise ValueError("unsafe checkpoint lock")
+    try:
+        lock.mkdir(mode=0o700)
+    except FileExistsError as exc:
+        raise ValueError("checkpoint is locked; verify writer before manual recovery") from exc
+    try:
+        yield
+    finally:
+        lock.rmdir()
+
 def append(path, result):
     path = Path(path)
     if path.is_symlink() or path.parent.is_symlink() or not path.parent.is_dir():
         raise ValueError("unsafe checkpoint destination")
-    state = load(path)
-    if len(state["attempts"]) >= MAX_ITERATIONS:
-        raise ValueError("iteration cap reached")
-    if not isinstance(result, dict) or result.get("status") not in STATUSES:
-        raise ValueError("only actual test outcomes may be recorded")
-    if not isinstance(result.get("pattern"), str) or not result["pattern"]:
-        raise ValueError("missing test pattern")
-    state["attempts"].append({"number": len(state["attempts"]) + 1,
-                              "pattern": result["pattern"], "status": result["status"]})
-    validate(state)
-    fd, tmp = tempfile.mkstemp(prefix=".aepx-pilot-", suffix=".tmp", dir=str(path.parent))
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8") as stream:
-            json.dump(state, stream, indent=2)
-            stream.write("\n")
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(tmp, path)
-    finally:
-        if os.path.exists(tmp):
-            os.unlink(tmp)
+    with exclusive_checkpoint_lock(path):
+        state = load(path)
+        if len(state["attempts"]) >= MAX_ITERATIONS:
+            raise ValueError("iteration cap reached")
+        if not isinstance(result, dict) or result.get("status") not in STATUSES:
+            raise ValueError("only actual test outcomes may be recorded")
+        if not isinstance(result.get("pattern"), str) or not result["pattern"]:
+            raise ValueError("missing test pattern")
+        state["attempts"].append({"number": len(state["attempts"]) + 1,
+                                  "pattern": result["pattern"], "status": result["status"]})
+        validate(state)
+        fd, tmp = tempfile.mkstemp(prefix=".aepx-pilot-", suffix=".tmp", dir=str(path.parent))
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                json.dump(state, stream, indent=2)
+                stream.write("\n")
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(tmp, path)
+        finally:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
     return state
