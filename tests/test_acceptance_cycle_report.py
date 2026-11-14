@@ -102,3 +102,23 @@ class CycleReportTests(unittest.TestCase):
         self.path.write_text(" " * 2_000_001, encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "oversized"):
             mod.verify(self.path, "a" * 40, "123", expected=2)
+
+    def test_rejects_boolean_iteration(self):
+        self.report["runs"][0]["iteration"] = True
+        with self.assertRaisesRegex(ValueError, "invalid cycle"):
+            self.check()
+
+    def test_rejects_boolean_return_code(self):
+        self.report["runs"][0]["return_code"] = False
+        with self.assertRaisesRegex(ValueError, "invalid cycle"):
+            self.check()
+
+    def test_rejects_negative_duration(self):
+        self.report["runs"][0]["elapsed_seconds"] = -0.01
+        with self.assertRaisesRegex(ValueError, "invalid cycle"):
+            self.check()
+
+    def test_rejects_false_independent_acceptance_claim(self):
+        self.report["independent_acceptance_established"] = True
+        with self.assertRaisesRegex(ValueError, "independent acceptance"):
+            self.check()
