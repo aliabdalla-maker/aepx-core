@@ -83,7 +83,11 @@ def verify(manifest_path: Path):
     root = manifest_path.parent.resolve()
     if os.name != "posix" or not hasattr(os, "O_NOFOLLOW"):
         raise ValueError("secure manifest reading requires POSIX no-follow support")
-    descriptor = os.open(manifest_path.name, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0), dir_fd=os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW))
+    root_fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        descriptor = os.open(manifest_path.name, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0), dir_fd=root_fd)
+    finally:
+        os.close(root_fd)
     try:
         metadata = os.fstat(descriptor)
         if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 1024 * 1024:
