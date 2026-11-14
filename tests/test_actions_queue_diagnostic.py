@@ -131,6 +131,19 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_head_sha_filter_rejects_missing_or_invalid_record_sha(self):
+        sha = "a" * 40
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            for bad in ('{"name":"CI","status":"queued"}',
+                        '{"name":"CI","headSha":null,"status":"queued"}',
+                        '{"name":"CI","headSha":"bad","status":"queued"}'):
+                with self.subTest(bad=bad):
+                    path.write_text("[" + bad + "]", encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        self.assertEqual(main(["--input-json", str(path),
+                                               "--head-sha", sha]), 2)
+
     def test_head_sha_filter_accepts_uppercase_hex(self):
         sha = "abcdef" * 6 + "abcd"
         with tempfile.TemporaryDirectory() as directory:
