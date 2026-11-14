@@ -234,6 +234,37 @@ jobs:
           set -e
           test "$status" -eq 2
           grep -q 'invalid evidence path components' /tmp/aepx-traversal.out
+      - name: Explicit failed evidence must never pass acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-explicit-fail')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': 'proof.txt',
+                  'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'fail'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-explicit-fail/manifest.json > /tmp/aepx-explicit-fail.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/aepx-explicit-fail.out').read_text())
+          assert result['evidence_integrity_percent'] == 0
+          assert result['independently_verified_percent'] == 0
+          PY
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -266,3 +297,4 @@ jobs:
             /tmp/aepx-hardlink.out
             /tmp/aepx-hardlink-manifest.out
             /tmp/aepx-traversal.out
+            /tmp/aepx-explicit-fail.out
