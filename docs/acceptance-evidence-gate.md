@@ -578,3 +578,11 @@ For offline fixture testing: `python tools/diagnose_actions_queue.py --input-jso
 Run regression checks using
 `python -m unittest discover -s tests -p 'test_actions_queue_diagnostic.py' -v`.
 A queue snapshot does not establish the scheduling root cause or CI acceptance.
+
+### Queue diagnostic CI coverage
+
+The fast offline smoke workflow now includes the read-only queue diagnostic
+utility and its regression test file in pull-request path triggers. It compiles
+both and executes the offline diagnostic test suite before acceptance cycles.
+This prevents changes to queue diagnostics from bypassing CI, but does not
+establish CI success while GitHub-hosted jobs remain queued.
