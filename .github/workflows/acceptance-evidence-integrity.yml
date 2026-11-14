@@ -99,6 +99,29 @@ jobs:
           set -e
           test "$status" -eq 2
           grep -q 'acceptance evidence rejected' /tmp/aepx-invalid-utf8.out
+      - name: Reject cross-milestone evidence reuse at CLI boundary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-reused-evidence')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          entry = {'path': 'proof.txt', 'sha256': hashlib.sha256(b'proof').hexdigest(),
+                   'result': 'pass'}
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [
+              {'id': 'rls', 'weight': 50, 'evidence': [entry]},
+              {'id': 'oidc', 'weight': 50, 'evidence': [entry]}
+          ]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-reused-evidence/manifest.json > /tmp/aepx-reuse.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'duplicate evidence path rejected' /tmp/aepx-reuse.out
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -126,3 +149,4 @@ jobs:
             /tmp/aepx-incomplete.out
             /tmp/aepx-gate-positive.json
             /tmp/aepx-invalid-utf8.out
+            /tmp/aepx-reuse.out
