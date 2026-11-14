@@ -43,3 +43,8 @@ class CycleReportTests(unittest.TestCase):
         self.report["executed"] = True
         with self.assertRaisesRegex(ValueError, "cycle count"):
             self.check()
+
+    def test_rejects_duplicate_cycle_number(self):
+        self.report["runs"][1]["iteration"] = 1
+        with self.assertRaisesRegex(ValueError, "invalid cycle"):
+            self.check()
