@@ -472,5 +472,24 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "duplicate milestone id"):
                     verify(manifest)
 
+    def test_later_invalid_evidence_schema_blocks_all_file_reads(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_bytes(b"proof")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": 50, "evidence": [{
+                    "path": "proof.txt", "sha256": hashlib.sha256(b"proof").hexdigest(),
+                    "result": "pass"
+                }]},
+                {"id": "oidc", "weight": 50, "evidence": [{
+                    "path": "../escape", "sha256": "bad", "result": "pass"
+                }]}
+            ]}))
+            with patch("tools.verify_acceptance_evidence.safe_digest",
+                       side_effect=AssertionError("invalid manifest must not read evidence")):
+                with self.assertRaisesRegex(ValueError, "invalid evidence path components"):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
