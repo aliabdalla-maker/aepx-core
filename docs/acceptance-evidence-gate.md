@@ -109,12 +109,21 @@ independent acceptance unestablished until trustworthy run evidence is reviewed.
 
 ## Manual 100-cycle offline verification
 
-The `AEP-X 100-cycle offline acceptance` workflow is **manual-only** and
+The `AEP-X 100-cycle offline acceptance` workflow can run on a scoped draft-branch push or manual dispatch and
 runs `tools/run_acceptance_100_iterations.py --iterations 100`. It executes
 the 42-test offline integrity suite sequentially, with a 90-second timeout
-per cycle, a 60-minute workflow limit, and immediate termination on the
+per cycle, a 55-minute runner budget within a 60-minute workflow limit, and immediate termination on the
 first failure. It writes a JSON report and uploads it as a seven-day artifact.
 The workflow does **not** modify code, retry known failures, execute providers,
 merge pull requests, provision OCI, or deploy. A completed 100/100 result
 would show repeatability of this narrow offline test suite only; it would
 not establish independent security acceptance or production readiness.
+
+### Workflow dispatch caveat
+
+GitHub's manual workflow-dispatch UI may require the workflow definition on
+the default branch. This draft branch is **not** to be merged merely to make
+the manual button available. The restricted push trigger allows testing the
+workflow on the draft branch without changing the default branch. Confirm a
+real runner execution and inspect the uploaded report before claiming any
+cycle passed.
