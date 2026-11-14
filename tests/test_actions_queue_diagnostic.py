@@ -36,6 +36,21 @@ class QueueDiagnosticTests(unittest.TestCase):
                         main(["--repo", repo])
                 self.assertEqual(result.exception.code, 2)
 
+    def test_fail_on_incomplete_distinguishes_running_from_queued(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            for status, expected in (("in_progress", 7), ("queued", 7),
+                                     ("action_required", 7), ("completed", 0)):
+                with self.subTest(status=status):
+                    record = {"status": status}
+                    if status == "completed":
+                        record["conclusion"] = "success"
+                    import json
+                    path.write_text(json.dumps([record]), encoding="utf-8")
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        self.assertEqual(main(["--input-json", str(path),
+                                               "--fail-on-incomplete"]), expected)
+
     def test_action_required_is_blocked_for_monitoring(self):
         report = summarize([{"databaseId": 42, "status": "action_required"}])
         self.assertEqual(report["not_started"][0]["id"], 42)
