@@ -322,6 +322,11 @@ jobs:
           set -e
           test "$status" -eq 2
           grep -q 'invalid evidence entry schema' /tmp/aepx-forged-late.out
+      - name: Verify all 13 CLI smoke checks reached and passed
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "All 13 preceding CLI smoke-check steps completed successfully" > /tmp/aepx-cli-complete.txt
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -342,7 +347,11 @@ jobs:
             else
               echo "- Python unittest result: **NOT EXECUTED OR LOG UNAVAILABLE**"
             fi
-            echo "- CLI smoke checks: 13 defined; inspect individual step outcomes"
+            if [[ -f /tmp/aepx-cli-complete.txt ]]; then
+              echo "- CLI smoke checks: 13 completed successfully"
+            else
+              echo "- CLI smoke checks: **NOT ALL CONFIRMED PASSING**"
+            fi
             echo "- Scope: offline verifier regressions and CLI contract only"
             echo "- Independent acceptance: **NOT ESTABLISHED**"
             echo "- Production deployment authorized: **NO**"
@@ -368,3 +377,4 @@ jobs:
             /tmp/aepx-explicit-fail.out
             /tmp/aepx-unknown-result.out
             /tmp/aepx-forged-late.out
+            /tmp/aepx-cli-complete.txt
