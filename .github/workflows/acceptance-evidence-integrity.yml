@@ -265,6 +265,31 @@ jobs:
           assert result['evidence_integrity_percent'] == 0
           assert result['independently_verified_percent'] == 0
           PY
+      - name: Reject unknown evidence result at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/aepx-unknown-result')
+          root.mkdir(exist_ok=True)
+          (root / 'proof.txt').write_bytes(b'proof')
+          (root / 'manifest.json').write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': [{
+                  'path': 'proof.txt',
+                  'sha256': hashlib.sha256(b'proof').hexdigest(),
+                  'result': 'pending'
+              }]
+          }]}))
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-unknown-result/manifest.json > /tmp/aepx-unknown-result.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'evidence result must be pass or fail' /tmp/aepx-unknown-result.out
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -298,3 +323,4 @@ jobs:
             /tmp/aepx-hardlink-manifest.out
             /tmp/aepx-traversal.out
             /tmp/aepx-explicit-fail.out
+            /tmp/aepx-unknown-result.out
