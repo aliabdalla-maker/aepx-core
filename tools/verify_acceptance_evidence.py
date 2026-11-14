@@ -122,9 +122,14 @@ def verify(manifest_path: Path):
     # Reject invalid allocation before opening any evidence files.
     # Otherwise an invalid final milestone could still trigger earlier file reads.
     allocation = 0
+    declared_ids = set()
     for milestone in milestones:
         if not isinstance(milestone, dict) or set(milestone) != {"id", "weight", "evidence"}:
             raise ValueError("invalid milestone schema")
+        identifier = milestone["id"]
+        if not isinstance(identifier, str) or not IDENT.fullmatch(identifier) or identifier in declared_ids:
+            raise ValueError("invalid or duplicate milestone id")
+        declared_ids.add(identifier)
         weight = milestone["weight"]
         if type(weight) is not int or weight <= 0:
             raise ValueError("weights must be positive integers")
