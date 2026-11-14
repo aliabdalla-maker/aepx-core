@@ -101,6 +101,12 @@ jobs:
               out.write(f"- All passed: {data['all_passed']}\n")
               out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\n")
               out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\n")
+              failed = next((item for item in data.get('runs', []) if not item.get('passed')), None)
+              if failed:
+                  out.write(f"- First failed cycle: {failed.get('iteration', 'unknown')}\\n")
+                  reason = failed.get('error') or failed.get('diagnostic_tail', '')[-1500:]
+                  out.write(f"- Failure detail (truncated): \\x60{str(reason).replace(chr(10), ' ')[:1500]}\\x60\\n")
+
               out.write('- Independent acceptance: NOT ESTABLISHED\n')
               out.write('- Merge or deployment authorized: NO\n')
           PY
