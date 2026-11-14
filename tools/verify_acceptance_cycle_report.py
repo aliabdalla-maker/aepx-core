@@ -32,8 +32,20 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
         raise ValueError("hardlinked evidence report is not permitted")
     if metadata.st_size > 2_000_000:
         raise ValueError("oversized evidence report")
-    report = json.loads(source.read_text(encoding="utf-8"),
-                        object_pairs_hook=_unique, parse_constant=_invalid_constant)
+    # Read through a no-follow descriptor to reject final-component symlink swaps.
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    descriptor = os.open(source, flags)
+    try:
+        opened = os.fstat(descriptor)
+        if opened.st_nlink != 1 or opened.st_size > 2_000_000:
+            raise ValueError("unsafe or oversized opened evidence report")
+        with os.fdopen(descriptor, "r", encoding="utf-8") as handle:
+            descriptor = -1
+            report = json.load(handle, object_pairs_hook=_unique,
+                               parse_constant=_invalid_constant)
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
     if not isinstance(report, dict):
         raise ValueError("report must be an object")
     if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
