@@ -642,3 +642,5 @@ Add all required workflows explicitly for the relevant release gate.
 **Strict snapshot truncation guard:** `--require-success` returns exit 6 if the number of retrieved matching runs reaches `--limit`, because there may be further runs not examined. Increase `--limit` (maximum 1000) or use authoritative workflow artifacts and GitHub API pagination to prove completeness; do not treat a truncated green sample as release approval.
 
 **Five evidence integrity checks:** diagnostics reject unknown run statuses, duplicate/invalid run IDs, malformed workflow names, missing names when required-workflow coverage is asserted, and normalize uppercase SHA selectors before live GitHub queries. Offline tests cover these cases; passing them is not equivalent to an executed GitHub Actions acceptance run.
+
+**Additional fail-closed checks:** completed runs must have recognized conclusions; noncompleted runs must not report a final conclusion; duplicate required-workflow selectors and whitespace-padded selectors are rejected; repository selector must have `owner/repo` shape. These checks validate evidence input only, not GitHub runner availability or production readiness.
