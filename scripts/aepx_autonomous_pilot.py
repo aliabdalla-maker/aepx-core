@@ -66,12 +66,17 @@ def main():
     parser.add_argument("--pattern", required=True, choices=sorted(ALLOWED_PATTERNS))
     parser.add_argument("--timeout", type=int, default=60)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--checkpoint", default="", help="Optional local checkpoint ledger path")
     args = parser.parse_args()
     if not args.execute:
         print(json.dumps({"status":"dry-run","command":command_for(args.repo,args.pattern),
                           "warning":"Run tests only inside a disposable sandbox."}, indent=2))
         return
     result = execute(args.repo,args.pattern,timeout=args.timeout,enabled=True)
+    if args.checkpoint:
+        from aepx_pilot_checkpoint import append
+        ledger = append(args.checkpoint, result)
+        result["recorded_attempt"] = len(ledger["attempts"])
     print(json.dumps(result, indent=2))
     if result["status"] != "passed":
         raise SystemExit(1)
