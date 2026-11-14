@@ -96,8 +96,8 @@ jobs:
               if data.get("report_error"):
                   out.write(f"- Report unreadable: {data['report_error']}\n")
               out.write('## Offline acceptance repetition\n')
-              out.write(f"- Cycles executed: {data['executed']} / {data['requested']}\n")
-              out.write(f"- All passed: {data['all_passed']}\n")
+              out.write(f"- Cycles executed: {data.get('executed', 'unknown')} / {data.get('requested', 'unknown')}\n")
+              out.write(f"- All passed: {data.get('all_passed') is True}\n")
               out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\n")
               out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\n")
               runs = data.get('runs')
