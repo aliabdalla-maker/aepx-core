@@ -32,6 +32,14 @@ class RunnerTests(unittest.TestCase):
         self.assertTrue(report["all_passed"])
         self.assertFalse(report["independent_acceptance_established"])
 
+    def test_report_includes_ci_provenance(self):
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\\n\\nOK\\n")
+        with patch.dict("os.environ", {"GITHUB_SHA": "a" * 40, "GITHUB_RUN_ID": "12345"}):
+            status, report = self.invoke(1, [result])
+        self.assertEqual(status, 0)
+        self.assertEqual(report["source_commit"], "a" * 40)
+        self.assertEqual(report["workflow_run_id"], "12345")
+
     def test_stops_on_first_failed_cycle(self):
         good = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         bad = subprocess.CompletedProcess([], 1, "", "Ran 42 tests in 0.1s\n\nFAILED (failures=1)\n")
