@@ -43,7 +43,9 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42, digest_out=None
         raise ValueError("platform lacks required no-follow evidence protection")
     if type(getattr(os, "O_NONBLOCK", None)) is not int or os.O_NONBLOCK <= 0:
         raise ValueError("platform lacks required nonblocking evidence protection")
-    flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK
+    if type(getattr(os, "O_CLOEXEC", None)) is not int or os.O_CLOEXEC <= 0:
+        raise ValueError("platform lacks required close-on-exec evidence protection")
+    flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC
     descriptor = os.open(source, flags)
     try:
         opened = os.fstat(descriptor)

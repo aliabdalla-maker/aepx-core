@@ -150,6 +150,15 @@ class CycleReportTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "lacks required no-follow"):
                 mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_fails_closed_without_close_on_exec_support(self):
+        from unittest.mock import patch
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        for invalid in (None, 0, True):
+            with self.subTest(invalid=invalid):
+                with patch.object(mod.os, "O_CLOEXEC", invalid, create=True):
+                    with self.assertRaisesRegex(ValueError, "lacks required close-on-exec"):
+                        mod.verify(self.path, "a" * 40, "123", expected=2)
+
     def test_fails_closed_without_nonblocking_support(self):
         from unittest.mock import patch
         self.path.write_text(json.dumps(self.report), encoding="utf-8")
