@@ -1,5 +1,13 @@
 name: AEP-X acceptance evidence integrity
 on:
+  push:
+    branches:
+      - 'fix/acceptance-evidence-gates-20261114'
+    paths:
+      - 'tools/verify_acceptance_evidence.py'
+      - 'tests/test_acceptance_evidence_integrity.py'
+      - '.github/workflows/acceptance-evidence-integrity.yml'
+      - 'docs/acceptance-evidence-gate.md'
   pull_request:
     paths:
       - 'tools/verify_acceptance_evidence.py'
