@@ -22,7 +22,12 @@ def _invalid_constant(value):
 
 
 def verify(path, commit, run_id, expected=100, minimum_tests=42):
-    report = json.loads(Path(path).read_text(encoding="utf-8"),
+    source = Path(path)
+    if source.is_symlink() or any(parent.is_symlink() for parent in source.parents):
+        raise ValueError("symlinked evidence path is not permitted")
+    if not source.is_file() or source.stat().st_size > 2_000_000:
+        raise ValueError("missing, non-file, or oversized evidence report")
+    report = json.loads(source.read_text(encoding="utf-8"),
                         object_pairs_hook=_unique, parse_constant=_invalid_constant)
     if not isinstance(report, dict):
         raise ValueError("report must be an object")
