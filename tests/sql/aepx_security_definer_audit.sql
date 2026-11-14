@@ -1,7 +1,7 @@
 -- Staging-only read-only audit of SECURITY DEFINER functions in AEP-X schemas.
 -- A fixed safe search_path is mandatory; never silently trust caller schemas.
 DO $audit$
-DECLARE f record; configured_path text; schemas text[]; part text;
+DECLARE f record; configured_path text;
 BEGIN
  IF (SELECT rolsuper OR rolbypassrls FROM pg_roles WHERE rolname=current_user)
     IS DISTINCT FROM false THEN
