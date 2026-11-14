@@ -501,3 +501,11 @@ regression suite before the repeated acceptance runner, rather than merely
 counting discovered tests. This prevents a failing integrity suite from being
 silently skipped during the preflight phase. Queued CI jobs still need actual
 runner execution and review before acceptance claims can be made.
+
+### Independent 50-cycle batch preflight parity
+
+Both 50-cycle matrix jobs now execute the evidence-integrity regression suite
+before the repeated runner, matching the 100-cycle and smoke gates. Test
+discovery counts alone are insufficient; a failing integrity test stops the
+batch before evidence generation. Full acceptance still requires actual CI
+execution, provenance verification and independent security review.
