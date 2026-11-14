@@ -41,6 +41,22 @@ class ReleaseEvidenceTests(unittest.TestCase):
         runs.append(run(module.REQUIRED[0], 1))
         self.assertTrue(module.evaluate(runs, SHA))
 
+    def test_invalid_metadata_blocks(self):
+        for key, value in [("id", 0), ("id", True), ("run_attempt", 0),
+                           ("run_attempt", True), ("created_at", "invalid"),
+                           ("created_at", "2026-11-14T00:00:00")]:
+            runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+            runs[0][key] = value
+            self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_malformed_collections_block(self):
+        self.assertTrue(module.evaluate([None], SHA))
+        self.assertTrue(module.evaluate({"invalid": True}, SHA))
+        for payload in [None, [], {"workflow_runs": [None]},
+                        {"workflow_runs": "bad"}]:
+            with self.assertRaises(ValueError):
+                module.fetch_runs("owner/repo", SHA, "token", fetch=lambda url: payload)
+
     def test_pagination_fail_closed(self):
         def fake(url):
             return {"workflow_runs": [run(module.REQUIRED[0])] * 100}
