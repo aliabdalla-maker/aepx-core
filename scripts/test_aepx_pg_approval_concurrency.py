@@ -58,7 +58,7 @@ VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+inte
     try:
         run(setup)
         created=True
-        consume=f"SELECT aepx_iteration.consume_approval('{TENANT}',{iteration},'{nonce}',7,'reviewer-one');"
+        consume=f"DO $consume$ BEGIN PERFORM aepx_iteration.consume_approval('{TENANT}',{iteration},'{nonce}',7,'reviewer-one'); END $consume$;"
         # Session 1 holds row locks after consuming; session 2 blocks until commit.
         first=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,text=True,env=env,bufsize=1)
@@ -70,15 +70,8 @@ VALUES ('{TENANT}',{iteration},'{nonce}',7,'reviewer-one',clock_timestamp()+inte
             if not ready.select(timeout=10):
                 raise RuntimeError("first session readiness timed out")
         line=first.stdout.readline()
-        if not line or "FIRST_CONSUMED" not in line:
-            # psql may emit the SELECT result before the explicit readiness marker.
-            with selectors.DefaultSelector() as ready:
-                ready.register(first.stdout,selectors.EVENT_READ)
-                if not ready.select(timeout=10):
-                    raise RuntimeError("first session marker timed out")
-            line=first.stdout.readline()
-            if "FIRST_CONSUMED" not in line:
-                raise RuntimeError("first session did not confirm consumption")
+        if "FIRST_CONSUMED" not in line:
+            raise RuntimeError("first session did not confirm consumption")
         second=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,text=True,env=env)
         try:
