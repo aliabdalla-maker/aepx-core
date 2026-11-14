@@ -102,7 +102,7 @@ class CycleReportTests(unittest.TestCase):
         from unittest.mock import patch
         self.path.write_text(json.dumps(self.report), encoding="utf-8")
         with patch.object(mod.os, "O_NOFOLLOW", None, create=True):
-            with self.assertRaises((ValueError, TypeError)):
+            with self.assertRaisesRegex(ValueError, "lacks required no-follow"):
                 mod.verify(self.path, "a" * 40, "123", expected=2)
 
     def test_rejects_symlink_swap_during_file_open(self):
