@@ -192,3 +192,12 @@ Actions, and the job summary displays them. One new self-test verifies these
 fields. These values improve traceability but do not constitute cryptographic
 attestation, independent review, or a successful test run. Release remains
 blocked pending verified CI and the broader security acceptance matrix.
+
+### Report completion and provenance gate
+
+The 100-cycle workflow now independently checks the JSON report after the
+runner finishes. It requires exactly 100 completed passing cycles, at least
+42 tests per cycle, a matching GitHub commit and run ID, and explicit false
+values for independent acceptance and deployment authorization. A mismatch
+fails the workflow before the always-run summary/artifact steps. CI evidence
+has not yet been independently observed in this conversation.
