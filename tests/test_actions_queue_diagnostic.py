@@ -131,6 +131,15 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_strict_mode_requires_explicit_scope(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as missing_scope:
+                main(["--require-success"])
+            self.assertEqual(missing_scope.exception.code, 2)
+            with self.assertRaises(SystemExit) as missing_workflow:
+                main(["--require-success", "--head-sha", "a" * 40])
+            self.assertEqual(missing_workflow.exception.code, 2)
+
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])
         self.assertIn("cannot be determined", result["diagnosis"])
