@@ -365,3 +365,12 @@ combined 100-cycle summary artifact only if both validations succeed.
 This proves only the configured offline test scope; it does not prove
 production security, independent acceptance or deployment authorization.
 Inspect the actual Actions job status and artifacts before crediting cycles.
+
+### Review state and aggregate digests (14 November 2026)
+
+PR #344 was already merged before the later acceptance-workflow changes.
+Those subsequent changes are now submitted for review in draft PR #345.
+The 50x2 aggregate manifest records SHA-256 hashes of both individually
+verified report files, enabling later tamper checks. A digest is not a
+signature, and does not substitute for independent attestation or CI success.
+Do not merge PR #345 until its checks and review are complete.
