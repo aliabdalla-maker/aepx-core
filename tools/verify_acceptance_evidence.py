@@ -162,6 +162,11 @@ def verify(manifest_path: Path):
                 raise ValueError("duplicate evidence path rejected across milestones")
             evidence_paths.add(relative)
             all_evidence_paths.add(relative)
+            # A declared failure is terminal for this entry: do not open or hash it.
+            # Path and schema validation above still runs before this branch.
+            if item["result"] == "fail":
+                passed = False
+                continue
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
                 passed = False
                 continue
