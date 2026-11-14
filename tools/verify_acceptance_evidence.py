@@ -30,7 +30,7 @@ def safe_digest(root: Path, relative: str):
     """
     if os.name != "posix" or not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "O_DIRECTORY"):
         raise ValueError("secure evidence hashing requires POSIX no-follow support")
-    if len(relative) > 4096 or "\\x00" in relative or "\\\\" in relative or relative.startswith("/"):
+    if len(relative) > 4096 or chr(0) in relative or chr(92) in relative or relative.startswith("/"):
         raise ValueError("invalid evidence path syntax")
     parts = relative.split("/")
     if not parts or len(parts) > 64 or any(p in ("", ".", "..") or len(p) > 255 for p in parts):
