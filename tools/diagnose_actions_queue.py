@@ -28,6 +28,8 @@ def main(argv=None):
     parser.add_argument("--repo", default="aliabdalla-maker/aepx-core")
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--input-json", help="Offline fixture; skip gh CLI")
+    parser.add_argument("--fail-on-queued", action="store_true",
+                        help="Exit 3 if any run is not started (for external monitoring)")
     args = parser.parse_args(argv)
     if not 1 <= args.limit <= 1000:
         parser.error("--limit must be between 1 and 1000")
@@ -60,7 +62,7 @@ def main(argv=None):
         print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
         return 2
     print(json.dumps(report, indent=2))
-    return 0
+    return 3 if args.fail_on_queued and report["not_started"] else 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
