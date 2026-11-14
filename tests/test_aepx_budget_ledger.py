@@ -72,5 +72,23 @@ class LedgerTests(unittest.TestCase):
             with self.assertRaisesRegex(BudgetDenied,"count limit"):
                 reserve(path,"req-new",LIMITS,PLAN)
 
+    def test_written_ledger_is_exactly_serialized_and_newline_terminated(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"budget.json"
+            reserve(path,"req-1",LIMITS,PLAN)
+            raw=path.read_bytes()
+            parsed=json.loads(raw)
+            expected=(json.dumps(parsed,sort_keys=True,indent=2)+"\\n").encode("utf-8")
+            self.assertEqual(raw,expected)
+            self.assertLessEqual(len(raw),4*1024*1024)
+
+    def test_settlement_preserves_exact_serialization(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"budget.json"
+            reserve(path,"req-1",LIMITS,PLAN)
+            settle(path,"req-1",ACTUAL)
+            raw=path.read_bytes()
+            self.assertEqual(raw,(json.dumps(json.loads(raw),sort_keys=True,indent=2)+"\\n").encode("utf-8"))
+
 if __name__=="__main__":
     unittest.main()
