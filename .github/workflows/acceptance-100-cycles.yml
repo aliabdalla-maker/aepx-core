@@ -100,11 +100,19 @@ jobs:
               out.write(f"- All passed: {data['all_passed']}\n")
               out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\n")
               out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\n")
-              failed = next((item for item in data.get('runs', []) if not item.get('passed')), None)
-              if failed:
-                  out.write(f"- First failed cycle: {failed.get('iteration', 'unknown')}\n")
-                  reason = failed.get('error') or failed.get('diagnostic_tail', '')[-1500:]
-                  out.write(f"- Failure detail (truncated): `{str(reason).replace(chr(10), ' ')[:1500]}`\n")
+              runs = data.get('runs')
+              if not isinstance(runs, list):
+                  runs = []
+                  out.write('- Invalid cycle records: expected a list\n')
+              failed = next((item for item in runs if not isinstance(item, dict) or item.get('passed') is not True), None)
+              if failed is not None:
+                  if not isinstance(failed, dict):
+                      out.write('- First failed cycle: malformed record\n')
+                  else:
+                      out.write(f"- First failed cycle: {failed.get('iteration', 'unknown')}\n")
+                      reason = failed.get('error') or failed.get('diagnostic_tail') or 'no diagnostic supplied'
+                      detail = str(reason).replace(chr(10), ' ').replace(chr(13), ' ')[:1500]
+                      out.write(f"- Failure detail (truncated): `{detail}`\n")
 
               out.write('- Independent acceptance: NOT ESTABLISHED\n')
               out.write('- Merge or deployment authorized: NO\n')
