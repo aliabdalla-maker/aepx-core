@@ -68,5 +68,14 @@ class EvidenceGateTests(unittest.TestCase):
                               "result": "pass"}]}]}))
             self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_malformed_evidence_entries_fail_closed(self):
+        for bad in [None, 17, "not-an-object", {"path": 42, "sha256": "0" * 64}]:
+            with self.subTest(bad=bad), tempfile.TemporaryDirectory() as tmp:
+                manifest = Path(tmp) / "manifest.json"
+                manifest.write_text(json.dumps({"milestones": [
+                    {"id": "rls", "weight": 100, "evidence": [bad]}]}))
+                with self.assertRaises(ValueError):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
