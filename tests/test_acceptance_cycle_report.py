@@ -136,6 +136,24 @@ class CycleReportTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "lacks required no-follow"):
                 mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_rejects_fifo_swapped_before_open_without_blocking(self):
+        from unittest.mock import patch
+        import os
+        if not hasattr(os, "mkfifo") or not hasattr(os, "O_NONBLOCK"):
+            self.skipTest("platform does not support nonblocking FIFO")
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        real_open = os.open
+
+        def swap_to_fifo(path, flags, *args, **kwargs):
+            self.assertTrue(flags & os.O_NONBLOCK)
+            self.path.unlink()
+            os.mkfifo(self.path)
+            return real_open(path, flags, *args, **kwargs)
+
+        with patch.object(mod.os, "open", side_effect=swap_to_fifo):
+            with self.assertRaisesRegex(ValueError, "unsafe or oversized opened evidence"):
+                mod.verify(self.path, "a" * 40, "123", expected=2)
+
     def test_rejects_symlink_swap_during_file_open(self):
         from unittest.mock import patch
         import os
