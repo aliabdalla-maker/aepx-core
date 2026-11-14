@@ -93,6 +93,9 @@ def main(argv=None):
         print(f"Invalid GitHub Actions data: {exc}", file=sys.stderr)
         return 2
     required = sorted(set(args.require_workflow))
+    if args.require_success and report["total"] >= args.limit:
+        print("Strict acceptance snapshot reached --limit; increase the limit to establish coverage", file=sys.stderr)
+        return 6
     observed = {run.get("name") for run in runs}
     missing = [name for name in required if name not in observed]
     report["required_workflows"] = required

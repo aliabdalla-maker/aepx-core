@@ -131,6 +131,19 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_strict_snapshot_limit_is_not_accepted_as_complete(self):
+        sha = "a" * 40
+        with patch("tools.diagnose_actions_queue.subprocess.run") as run:
+            run.return_value.stdout = (
+                '[{"name":"CI","headSha":"' + sha +
+                '","status":"completed","conclusion":"success"}]'
+            )
+            with contextlib.redirect_stdout(io.StringIO()):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    self.assertEqual(main(["--head-sha", sha, "--limit", "1",
+                                           "--require-workflow", "CI",
+                                           "--require-success"]), 6)
+
     def test_blank_required_workflow_rejected_before_cli(self):
         with patch("tools.diagnose_actions_queue.subprocess.run") as run:
             for name in ("", "  "):
@@ -159,7 +172,7 @@ class QueueDiagnosticTests(unittest.TestCase):
                 '","status":"completed","conclusion":"success"}]'
             )
             with contextlib.redirect_stdout(io.StringIO()):
-                self.assertEqual(main(["--head-sha", sha, "--limit", "1",
+                self.assertEqual(main(["--head-sha", sha, "--limit", "2",
                                        "--require-workflow", "CI",
                                        "--require-success"]), 0)
             command = run.call_args.args[0]
