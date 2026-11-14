@@ -292,5 +292,22 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(manifest)
 
+    def test_hard_linked_evidence_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "source.txt"
+            source.write_bytes(b"hardlink-test")
+            linked = root / "proof.txt"
+            os.link(source, linked)
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": [{
+                    "path": "proof.txt",
+                    "sha256": hashlib.sha256(b"hardlink-test").hexdigest(),
+                    "result": "pass"
+                }]
+            }]}))
+            self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
