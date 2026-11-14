@@ -385,3 +385,11 @@ JSON evidence; it emits a bounded failure category instead. Detailed
 failure diagnosis should use access-controlled GitHub Actions logs and
 reproducible local tests. Neither improvement changes independent
 acceptance status or authorizes production deployment.
+
+### Secret-leak regression coverage
+
+Two runner tests now inject distinctive canary strings into failed
+subprocess stdout/stderr and assert that persisted JSON contains neither
+canary nor raw diagnostic tail. Both the 50x2 and 100-cycle workflows
+require at least 21 runner self-tests before execution. Authored tests
+are not evidence of a successful CI run until workflow logs confirm it.
