@@ -97,3 +97,35 @@ END $$;
 
 REVOKE ALL ON FUNCTION aepx_iteration.claim(uuid,integer,text,integer) FROM PUBLIC;
 REVOKE ALL ON FUNCTION aepx_iteration.advance(uuid,integer,text,bigint,text,text) FROM PUBLIC;
+
+-- Extend an existing live lease without changing its fencing token.
+-- Stale/expired owners cannot revive a lease; they must reclaim with a new fence.
+CREATE OR REPLACE FUNCTION aepx_iteration.renew(
+ p_tenant uuid,p_number integer,p_owner text,p_fence bigint,p_seconds integer
+) RETURNS timestamptz LANGUAGE plpgsql SECURITY INVOKER AS $$
+DECLARE w aepx_iteration.work_item%ROWTYPE;
+        new_expiry timestamptz;
+BEGIN
+ IF p_tenant IS NULL OR p_tenant IS DISTINCT FROM NULLIF(current_setting('app.tenant_id',true),'')::uuid
+    OR p_number IS NULL OR p_owner IS NULL OR p_owner !~ '^[A-Za-z0-9_-]{1,128}$'
+    OR p_fence IS NULL OR p_fence<=0
+    OR p_seconds IS NULL OR p_seconds NOT BETWEEN 1 AND 600 THEN
+   RAISE EXCEPTION 'iteration renewal denied';
+ END IF;
+ SELECT * INTO w FROM aepx_iteration.work_item
+ WHERE tenant_id=p_tenant AND iteration_number=p_number FOR UPDATE;
+ IF NOT FOUND OR w.stage='completed'
+    OR w.lease_owner IS DISTINCT FROM p_owner OR w.fence IS DISTINCT FROM p_fence
+    OR w.lease_expires_at IS NULL OR w.lease_expires_at<=clock_timestamp() THEN
+   RAISE EXCEPTION 'stale or expired iteration lease';
+ END IF;
+ -- Cap extension from current time; do not let repeated renewals accumulate
+ -- an arbitrarily long future lease.
+ new_expiry:=clock_timestamp()+make_interval(secs=>p_seconds);
+ UPDATE aepx_iteration.work_item
+ SET lease_expires_at=new_expiry,updated_at=clock_timestamp()
+ WHERE tenant_id=p_tenant AND iteration_number=p_number;
+ RETURN new_expiry;
+END $$;
+
+REVOKE ALL ON FUNCTION aepx_iteration.renew(uuid,integer,text,bigint,integer) FROM PUBLIC;
