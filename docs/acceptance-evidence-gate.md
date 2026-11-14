@@ -245,3 +245,14 @@ runner self-tests and 42 integrity tests, and runs the runner self-tests.
 The always-run job summary records the first failing cycle and a bounded
 failure diagnostic when a JSON report is available. These checks do not
 replace a completed workflow run or independent acceptance evidence.
+
+### Five-pass symlink-output hardening (2026-11-14)
+
+The acceptance runner now rejects symlinked JSON report destinations and
+symlinked parent directories. Two regression tests exercise both cases,
+raising the authored runner self-test count to 18; the 100-cycle workflow
+requires discovery of at least 18 tests before execution. These are source
+changes only; no CI result, independent acceptance, merge, or deployment is
+implied. Remaining priorities: verify CI execution, collect 100-cycle report,
+then independently test OIDC/RLS, HITL replay, budget settlement, MCP egress,
+worker fencing and OCI staging before any release decision.
