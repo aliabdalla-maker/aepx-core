@@ -19,3 +19,7 @@ This lock is not a distributed lease and does not protect against remote hosts o
 ## Descriptor-based evidence verification hardening
 
 Evidence hashing now uses POSIX `openat`-style `dir_fd` traversal with `O_NOFOLLOW` on every directory and the final file. It rejects non-regular files via `fstat`, including FIFOs, and caps bytes read. This closes the symlink substitution window between path validation and opening for cooperative local filesystems. It does **not** prevent in-place content modification while hashing, prove immutable storage, or authenticate reviewer identity. Non-POSIX environments without the required flags fail closed.
+
+## Concurrent evidence modification detection
+
+The digest reader now compares device, inode, size, nanosecond modification/change times and bytes read before and after hashing. A detected change fails closed. This is **best-effort detection, not an immutable snapshot**: metadata-preserving writes, unusual filesystems, malicious writers and hash-time races remain possible. Do not use this check as an authorization signal for merge, deployment or billing; use immutable, access-controlled artifacts and authenticated reviewer provenance for that.
