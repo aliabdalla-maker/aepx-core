@@ -67,6 +67,9 @@ def main():
             except subprocess.TimeoutExpired:
                 record = {"iteration": iteration, "passed": False,
                           "error": "per-iteration execution timeout"}
+            except (OSError, subprocess.SubprocessError) as exc:
+                record = {"iteration": iteration, "passed": False,
+                          "error": f"test process failed to start or execute: {type(exc).__name__}"}
             except KeyboardInterrupt:
                 record = {"iteration": iteration, "passed": False,
                           "error": "runner interrupted before cycle completed"}
