@@ -11,6 +11,8 @@ on:
       - 'tests/test_github_release_evidence.py'
       - 'scripts/aepx_supervised_batch.py'
       - 'tests/test_aepx_supervised_batch.py'
+      - 'tests/test_aepx_pilot_standalone_lock.py'
+      - 'scripts/aepx_autonomous_pilot.py'
 permissions:
   contents: read
   actions: read
@@ -49,6 +51,8 @@ jobs:
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_github_release_evidence.py' -v
           python -m unittest discover -s tests -p 'test_actions_queue_inspector.py' -v
+      - name: Test standalone checkpoint coordination (mocked, offline)
+        run: python -m unittest discover -s tests -p 'test_aepx_pilot_standalone_lock.py' -v
       - name: Test bounded supervised pilot (mocked, offline)
         run: python -m unittest discover -s tests -p 'test_aepx_supervised_batch.py' -v
       - name: Validate milestone report
