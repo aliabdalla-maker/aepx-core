@@ -15,3 +15,9 @@ Each milestone has one of four states: `not_started` (0% of weight), `code_commi
 5. Demonstrate ten successful supervised engineering iterations, then 100, then 1,000 and 10,000 with budgets, immutable evidence and recovery tests.
 
 No external provider calls, migrations, deployments, paid OCI resources or production permissions are changed by this tracker.
+
+## Claimed versus independently verified progress
+
+The CLI now emits `claimed_progress_percent` separately from `independently_verified_percent` (currently fixed at zero because this offline calculator does not authenticate evidence). For backward compatibility `progress_percent` still means **claimed**, not verified, progress. Even a manifest with every milestone marked `accepted` and arbitrary evidence strings must report zero independently verified credit. Never present `progress_percent` alone as real completion.
+
+**Next implementation gate:** build a verifier for GitHub commit SHA and completed successful CI run identifiers, then validate signed or independently reviewed PostgreSQL/Docker acceptance artifacts. Only after these checks should the verified score become nonzero. No automatic approval is inferred from PR merge.
