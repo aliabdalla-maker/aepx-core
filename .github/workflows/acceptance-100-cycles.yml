@@ -5,6 +5,7 @@ on:
       - 'fix/acceptance-evidence-gates-20261114'
     paths:
       - 'tools/run_acceptance_100_iterations.py'
+      - 'tests/test_acceptance_100_runner.py'
       - '.github/workflows/acceptance-100-cycles.yml'
   workflow_dispatch:
 permissions:
@@ -27,7 +28,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile tools/run_acceptance_100_iterations.py tools/verify_acceptance_evidence.py tests/test_acceptance_evidence_integrity.py
+          python -m py_compile tools/run_acceptance_100_iterations.py tools/verify_acceptance_evidence.py tests/test_acceptance_evidence_integrity.py tests/test_acceptance_100_runner.py
+          python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
       - name: Run up to 100 sequential acceptance cycles (stop on failure)
         shell: bash
         run: |
