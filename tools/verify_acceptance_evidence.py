@@ -53,7 +53,7 @@ def verify(manifest_path: Path):
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
             path = (root / relative).resolve()
-            if not path.is_relative_to(root) or not path.is_file() or path.is_symlink():
+            if not path.is_relative_to(root) or not path.is_file():
                 passed = False
                 continue
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
