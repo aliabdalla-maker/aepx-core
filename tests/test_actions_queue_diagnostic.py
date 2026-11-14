@@ -131,6 +131,18 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_head_sha_filter_accepts_uppercase_hex(self):
+        sha = "abcdef" * 6 + "abcd"
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            path.write_text(
+                '[{"name":"CI","headSha":"' + sha +
+                '","status":"completed","conclusion":"success"}]',
+                encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", sha.upper(),
+                                       "--require-workflow", "CI", "--require-success"]), 0)
+
     def test_truncation_checked_before_sha_filter(self):
         sha = "a" * 40
         with tempfile.TemporaryDirectory() as directory:
