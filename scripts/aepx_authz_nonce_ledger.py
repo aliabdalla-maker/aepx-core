@@ -1,6 +1,6 @@
 """Offline SQLite replay ledger for signed authorization contexts.
 
-Local single-host testing only. NOT a distributed PostgreSQL authorization
+Local single-host testing only. Schema change requires a fresh disposable ledger. NOT a distributed PostgreSQL authorization
 boundary, and does not prove the caller is authenticated. No external calls.
 """
 import hashlib
@@ -14,11 +14,13 @@ from scripts.aepx_trusted_tenant_context import (
 
 SCHEMA="""CREATE TABLE IF NOT EXISTS consumed_context(
  fingerprint TEXT PRIMARY KEY,
+ nonce TEXT NOT NULL,
  tenant_id TEXT NOT NULL,
  principal_id TEXT NOT NULL,
  action TEXT NOT NULL,
  expires_at INTEGER NOT NULL,
- consumed_at INTEGER NOT NULL
+ consumed_at INTEGER NOT NULL,
+ UNIQUE(tenant_id,principal_id,action,nonce)
 )"""
 
 def consume_once(database,claims,signature,key,tenant_id,principal_id,action,now=None):
@@ -45,8 +47,8 @@ def consume_once(database,claims,signature,key,tenant_id,principal_id,action,now
             db.execute("BEGIN IMMEDIATE")
             try:
                 db.execute(SCHEMA)
-                db.execute("INSERT INTO consumed_context VALUES(?,?,?,?,?,?)",
-                           (fingerprint,tenant_id,principal_id,action,claims["expires_at"],clock))
+                db.execute("INSERT INTO consumed_context VALUES(?,?,?,?,?,?,?)",
+                           (fingerprint,claims["nonce"],tenant_id,principal_id,action,claims["expires_at"],clock))
                 db.execute("COMMIT")
             except BaseException:
                 db.execute("ROLLBACK")
