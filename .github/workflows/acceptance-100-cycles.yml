@@ -47,6 +47,8 @@ jobs:
               raise SystemExit("Runner self-test coverage below required minimum of 19")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
+          python -m py_compile tools/verify_acceptance_cycle_report.py tests/test_acceptance_cycle_report.py
+          python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
           python - <<'PY'
           import unittest
           suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_evidence_integrity.py")
@@ -64,53 +66,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-          def reject_duplicate_keys(pairs):
-              result = {}
-              for key, value in pairs:
-                  if key in result:
-                      raise ValueError(f"duplicate JSON key: {key}")
-                  result[key] = value
-              return result
-          report = json.loads(
-              Path("acceptance-100-iterations.json").read_text(),
-              object_pairs_hook=reject_duplicate_keys,
-              parse_constant=lambda value: (_ for _ in ()).throw(ValueError(f"invalid JSON constant: {value}")),
-          )
-          if not isinstance(report, dict):
-              raise SystemExit("invalid report root")
-          checks = (
-              (report.get("source_commit") == os.environ["GITHUB_SHA"], "commit mismatch"),
-              (report.get("workflow_run_id") == os.environ["GITHUB_RUN_ID"], "run mismatch"),
-              (type(report.get("requested")) is int and report["requested"] == 100, "requested count mismatch"),
-              (type(report.get("executed")) is int and report["executed"] == 100, "incomplete cycles"),
-              (report.get("all_passed") is True, "failed cycles"),
-              (isinstance(report.get("runs"), list) and len(report["runs"]) == 100, "missing run records"),
-          )
-          for condition, message in checks:
-              if not condition:
-                  raise SystemExit(message)
-          for i, run in enumerate(report["runs"], 1):
-              if not (
-                  isinstance(run, dict)
-                  and type(run.get("iteration")) is int and run["iteration"] == i
-                  and run.get("passed") is True
-                  and type(run.get("tests_executed")) is int
-                  and run["tests_executed"] >= 42
-                  and type(run.get("return_code")) is int and run["return_code"] == 0
-                  and type(run.get("elapsed_seconds")) in (int, float)
-                  and 0 <= run["elapsed_seconds"] <= 95
-              ):
-                  raise SystemExit(f"invalid or out-of-order cycle {i}")
-          if report.get("independent_acceptance_established") is not False:
-              raise SystemExit("invalid independent acceptance claim")
-          if report.get("production_deployment_authorized") is not False:
-              raise SystemExit("invalid deployment claim")
-          print("Offline 100-cycle report integrity checks passed; independent acceptance remains blocked.")
-          PY
+          python tools/verify_acceptance_cycle_report.py acceptance-100-iterations.json
       - name: Publish scoped result
         if: always()
         shell: bash
