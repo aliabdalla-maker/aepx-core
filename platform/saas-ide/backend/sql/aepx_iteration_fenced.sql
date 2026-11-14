@@ -86,6 +86,11 @@ BEGIN
  IF p_stage IS DISTINCT FROM expected THEN
    RAISE EXCEPTION 'out-of-order iteration transition';
  END IF;
+ -- No trusted evidence/approval verifier is connected yet. A worker lease
+ -- alone must never authorize terminal completion. Deliberately fail closed.
+ IF p_stage = 'completed' THEN
+   RAISE EXCEPTION 'iteration completion requires trusted evidence and approval gate';
+ END IF;
  UPDATE aepx_iteration.work_item
  SET stage=p_stage,evidence=evidence||jsonb_build_object(p_stage,p_evidence),
      lease_owner=CASE WHEN p_stage='completed' THEN NULL ELSE lease_owner END,
