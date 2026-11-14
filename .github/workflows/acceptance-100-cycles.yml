@@ -49,8 +49,8 @@ jobs:
           suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_100_runner.py")
           count = suite.countTestCases()
           print(f"Runner self-tests discovered: {count}")
-          if count < 19:
-              raise SystemExit("Runner self-test coverage below required minimum of 19")
+          if count < 21:
+              raise SystemExit("Runner self-test coverage below required minimum of 21")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
           python -m py_compile tools/verify_acceptance_cycle_report.py tests/test_acceptance_cycle_report.py
@@ -92,6 +92,14 @@ jobs:
         run: |
           set -euo pipefail
           python tools/verify_acceptance_cycle_report.py acceptance-100-iterations.json
+      - name: Record verified 100-cycle evidence
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '100/100 offline cycles passed provenance and report verification.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Independent acceptance: NOT ESTABLISHED' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Production deployment: NOT AUTHORIZED' >> "$GITHUB_STEP_SUMMARY"
       - name: Publish scoped result
         if: always()
         shell: bash
@@ -111,10 +119,14 @@ jobs:
               if data.get("report_error"):
                   out.write(f"- Report unreadable: {data['report_error']}\n")
               out.write('## Offline acceptance repetition\n')
-              out.write(f"- Cycles executed: {data.get('executed', 'unknown')} / {data.get('requested', 'unknown')}\n")
-              out.write(f"- All passed: {data.get('all_passed') is True}\n")
-              out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\n")
-              out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\n")
+              executed = data.get('executed')
+              requested = data.get('requested')
+              executed = executed if type(executed) is int and 0 <= executed <= 100 else 'invalid'
+              requested = requested if type(requested) is int and 1 <= requested <= 100 else 'invalid'
+              out.write(f"- Cycles executed: {executed} / {requested}\n")
+              out.write(f"- Report claims all passed (unverified summary): {data.get('all_passed') is True}\n")
+              out.write(f"- Source commit: {os.environ.get('GITHUB_SHA', 'unavailable')}\n")
+              out.write(f"- Workflow run ID: {os.environ.get('GITHUB_RUN_ID', 'unavailable')}\n")
               runs = data.get('runs')
               if not isinstance(runs, list):
                   runs = []
@@ -124,7 +136,9 @@ jobs:
                   if not isinstance(failed, dict):
                       out.write('- First failed cycle: malformed record\n')
                   else:
-                      out.write(f"- First failed cycle: {failed.get('iteration', 'unknown')}\n")
+                      index = failed.get('iteration')
+                      index = index if type(index) is int and 1 <= index <= 100 else 'invalid'
+                      out.write(f"- First failed cycle: {index}\n")
                       # Avoid publishing untrusted subprocess output or secrets to job summaries.
                       error = failed.get('error')
                       safe_errors = {

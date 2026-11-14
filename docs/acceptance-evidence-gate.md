@@ -374,3 +374,30 @@ The 50x2 aggregate manifest records SHA-256 hashes of both individually
 verified report files, enabling later tamper checks. A digest is not a
 signature, and does not substitute for independent attestation or CI success.
 Do not merge PR #345 until its checks and review are complete.
+
+### CI trigger and diagnostic privacy hardening
+
+The 50x2 workflow now triggers for relevant pull-request changes as well
+as scoped branch pushes/manual dispatch. Aggregation runs only when both
+batch jobs succeeded; failed jobs do not generate a verified aggregate.
+The runner no longer persists subprocess stdout/stderr in failed-cycle
+JSON evidence; it emits a bounded failure category instead. Detailed
+failure diagnosis should use access-controlled GitHub Actions logs and
+reproducible local tests. Neither improvement changes independent
+acceptance status or authorizes production deployment.
+
+### Secret-leak regression coverage
+
+Two runner tests now inject distinctive canary strings into failed
+subprocess stdout/stderr and assert that persisted JSON contains neither
+canary nor raw diagnostic tail. Both the 50x2 and 100-cycle workflows
+require at least 21 runner self-tests before execution. Authored tests
+are not evidence of a successful CI run until workflow logs confirm it.
+
+### 100-cycle CI summary hardening
+
+The always-run summary bounds report-supplied counters and cycle numbers,
+uses trusted GitHub environment values for commit/run provenance, and labels
+report-supplied all_passed as an unverified claim. A separate success-only
+step publishes the 100/100 verified offline-cycle outcome after the strict
+report verifier succeeds. Independent acceptance and deployment remain blocked.
