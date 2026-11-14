@@ -33,7 +33,7 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse(report["independent_acceptance_established"])
 
     def test_report_includes_ci_provenance(self):
-        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\\n\\nOK\\n")
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         with patch.dict("os.environ", {"GITHUB_SHA": "a" * 40, "GITHUB_RUN_ID": "12345"}):
             status, report = self.invoke(1, [result])
         self.assertEqual(status, 0)
