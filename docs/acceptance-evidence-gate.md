@@ -138,3 +138,13 @@ that in-flight iteration unrecorded; do not interpret the recorded count as
 proof of a complete run. The workflow performs Python syntax preflight and
 reports the first failed cycle in its job summary. Confirm the run and artifact
 in GitHub Actions before increasing any maturity or acceptance estimates.
+
+### Runner self-tests and interrupted-cycle reporting
+
+The 100-cycle workflow now runs five focused runner tests before starting its
+long repetition: successful cycles, fail-fast on failure, forged OK without a
+test count, timeout reporting, and interrupted-cycle persistence. The runner
+records an interrupted in-flight cycle as failed and returns exit code 130.
+The 42 acceptance-integrity tests remain separate from these five runner tests.
+Neither suite is considered passing until the actual workflow logs establish
+successful execution. No automatic merge or deployment is permitted.
