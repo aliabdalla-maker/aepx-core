@@ -9,3 +9,7 @@ The repository workflow runs offline tests. No PostgreSQL runtime or production 
 ## Connection lifecycle hardening
 
 The SQLite connection is now explicitly closed on successful consumption and on rejected replay. Failed transactions explicitly roll back, and Boolean or noninteger injected clocks are denied. The offline regression tests cover connection cleanup on both success and replay. This does not address database-file substitution, distributed replay, or the lack of atomicity with a protected PostgreSQL operation. No runtime CI results have been verified.
+
+## Scoped nonce uniqueness
+
+The offline schema now enforces `UNIQUE(tenant_id,principal_id,action,nonce)` in addition to the signed-payload fingerprint. A valid re-signing under another key, or a changed expiry, cannot reuse the same nonce within that scope. This is a **schema change for disposable test ledgers**; existing SQLite files are not automatically migrated and should not be treated as upgraded. Use a fresh disposable test database. This does not establish distributed or transactionally coupled production replay protection.
