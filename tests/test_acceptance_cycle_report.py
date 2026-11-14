@@ -48,3 +48,8 @@ class CycleReportTests(unittest.TestCase):
         self.report["runs"][1]["iteration"] = 1
         with self.assertRaisesRegex(ValueError, "invalid cycle"):
             self.check()
+
+    def test_rejects_insufficient_tests(self):
+        self.report["runs"][0]["tests_executed"] = 41
+        with self.assertRaisesRegex(ValueError, "invalid cycle"):
+            self.check()
