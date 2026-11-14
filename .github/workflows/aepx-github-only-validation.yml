@@ -33,6 +33,8 @@ on:
       - 'tests/test_aepx_engineering_iteration_lock.py'
       - 'tests/test_aepx_engineering_evidence.py'
       - 'tests/test_aepx_reviewed_evidence.py'
+      - 'scripts/aepx_reviewed_evidence_attestation.py'
+      - 'tests/test_aepx_reviewed_evidence_attestation.py'
       - 'tests/test_aepx_engineering_evidence_mutation.py'
       - 'scripts/aepx_engineering_evidence.py'
       - 'scripts/aepx_engineering_iteration_state.py'
@@ -108,6 +110,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_budget_pg_sql_contract.py' -v
       - name: Test concurrent evidence mutation detection
         run: python -m unittest discover -s tests -p 'test_aepx_engineering_evidence_mutation.py' -v
+      - name: Test signed reviewed evidence attestation (offline)
+        run: python -m unittest discover -s tests -p 'test_aepx_reviewed_evidence_attestation.py' -v
       - name: Test pre-completion reviewed artifact evidence verification
         run: python -m unittest discover -s tests -p 'test_aepx_reviewed_evidence.py' -v
       - name: Test offline engineering evidence verification
