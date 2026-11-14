@@ -157,3 +157,11 @@ check these paths (seven runner self-tests total). The 100-cycle workflow now
 triggers when the verifier or integrity tests change and queues rather than
 cancels an in-progress verification. These authored checks still require real
 runner execution evidence. The independent acceptance gate remains closed.
+
+### Runner exception hardening
+
+The runner now restores the previous SIGTERM handler through a finally block,
+including unexpected exceptions. Subprocess launch and execution errors are
+recorded as failed iterations with a bounded error type, rather than losing
+all prior iteration results. Two new regression tests cover these cases, for
+nine authored runner self-tests in total. This is not a claim of CI success.
