@@ -567,3 +567,14 @@ not evidence of failing tests or passing tests. Do not guess the cause.
 Release gate: queued, skipped, cancelled or unexecuted jobs are never a pass.
 Independent security acceptance and explicit release authorization remain
 required even after all offline repetitions pass.
+
+### Read-only queue snapshot utility
+
+From the repository root, with GitHub CLI authenticated, run:
+`python tools/diagnose_actions_queue.py --repo aliabdalla-maker/aepx-core --limit 100`.
+This calls only `gh run list`, prints status counts and not-started run IDs,
+and never changes GitHub settings, cancels jobs or provisions runners.
+For offline fixture testing: `python tools/diagnose_actions_queue.py --input-json runs.json`.
+Run regression checks using
+`python -m unittest discover -s tests -p 'test_actions_queue_diagnostic.py' -v`.
+A queue snapshot does not establish the scheduling root cause or CI acceptance.
