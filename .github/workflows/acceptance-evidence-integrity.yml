@@ -29,7 +29,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run offline fail-closed evidence regressions
-        run: python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v 2>&1 | tee /tmp/aepx-unittest.log
       - name: Verify CLI rejects absent manifest
         shell: bash
         run: |
@@ -83,6 +86,19 @@ jobs:
           assert result['independently_verified_percent'] == 0
           assert result['independent_verification_available'] is False
           PY
+      - name: Verify invalid UTF-8 manifest returns exit code two
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          Path('/tmp/aepx-invalid-utf8.json').write_bytes(b'\\xff\\xfe')
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-invalid-utf8.json > /tmp/aepx-invalid-utf8.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'acceptance evidence rejected' /tmp/aepx-invalid-utf8.out
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -97,16 +113,16 @@ jobs:
             echo "- Independent acceptance: **NOT ESTABLISHED**"
             echo "- Production deployment authorized: **NO**"
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Verify invalid UTF-8 manifest returns exit code two
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          Path('/tmp/aepx-invalid-utf8.json').write_bytes(b'\\xff\\xfe')
-          PY
-          set +e
-          python tools/verify_acceptance_evidence.py /tmp/aepx-invalid-utf8.json > /tmp/aepx-invalid-utf8.out 2>&1
-          status=$?
-          set -e
-          test "$status" -eq 2
-          grep -q 'acceptance evidence rejected' /tmp/aepx-invalid-utf8.out
+      - name: Upload offline diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aepx-offline-evidence-diagnostics
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            /tmp/aepx-unittest.log
+            /tmp/aepx-gate.out
+            /tmp/aepx-incomplete.out
+            /tmp/aepx-gate-positive.json
+            /tmp/aepx-invalid-utf8.out
