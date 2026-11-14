@@ -52,14 +52,25 @@ def verify(manifest_path: Path):
             digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
-            path = (root / relative).resolve()
+            candidate = root / relative
+            if any(part.is_symlink() for part in [candidate, *candidate.parents] if part != root and root in part.parents):
+                passed = False
+                continue
+            path = candidate.resolve()
             if not path.is_relative_to(root) or not path.is_file():
                 passed = False
                 continue
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
                 passed = False
                 continue
-            actual = hashlib.sha256(path.read_bytes()).hexdigest()
+            if path.stat().st_size > 16 * 1024 * 1024:
+                passed = False
+                continue
+            digest_state = hashlib.sha256()
+            with path.open("rb") as source:
+                for chunk in iter(lambda: source.read(1024 * 1024), b""):
+                    digest_state.update(chunk)
+            actual = digest_state.hexdigest()
             if actual != digest or item.get("result") != "pass":
                 passed = False
         if passed:
