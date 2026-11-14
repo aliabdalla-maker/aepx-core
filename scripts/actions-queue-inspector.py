@@ -22,13 +22,19 @@ def inspect(repo, token, get=get_json, now=None):
     data = get(f"{API}/{repo}/actions/runs?per_page=100", token)
     if not isinstance(data, dict) or not isinstance(data.get("workflow_runs"), list):
         raise ValueError("invalid Actions runs response")
+    total = data.get("total_count")
+    if type(total) is not int or total < 0:
+        raise ValueError("invalid Actions total_count")
     runs = data["workflow_runs"]
+    if len(runs) > total:
+        raise ValueError("more runs than total_count")
     if any(not isinstance(run, dict) for run in runs):
         raise ValueError("invalid Actions run record")
     result = {"repository": repo, "sample_size": len(runs),
               "sample_limit": 100, "status_counts": {}, "queued": [],
               "diagnosis": "UNDETERMINED", "release_approved": False,
-              "sample_truncated": len(runs) == 100}
+              "sample_truncated": total > len(runs),
+              "total_count": total}
     for run in runs:
         status = run.get("status", "unknown")
         result["status_counts"][status] = result["status_counts"].get(status, 0) + 1
@@ -44,7 +50,12 @@ def inspect(repo, token, get=get_json, now=None):
         jobs_data = get(f"{API}/{repo}/actions/runs/{run_id}/jobs?per_page=100", token)
         if not isinstance(jobs_data, dict) or not isinstance(jobs_data.get("jobs"), list):
             raise ValueError("invalid Actions jobs response")
+        jobs_total = jobs_data.get("total_count")
+        if type(jobs_total) is not int or jobs_total < 0:
+            raise ValueError("invalid Actions jobs total_count")
         jobs = jobs_data["jobs"]
+        if len(jobs) != jobs_total:
+            raise ValueError("incomplete queued job evidence")
         if any(not isinstance(job, dict) for job in jobs):
             raise ValueError("invalid Actions job record")
         for job in jobs:
