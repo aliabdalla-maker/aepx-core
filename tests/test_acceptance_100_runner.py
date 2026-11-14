@@ -61,8 +61,10 @@ class RunnerTests(unittest.TestCase):
 
     def test_restores_handler_on_unexpected_exception(self):
         previous = signal.getsignal(signal.SIGTERM)
-        with self.assertRaisesRegex(RuntimeError, "simulated crash"):
-            self.invoke(1, RuntimeError("simulated crash"))
+        status, report = self.invoke(1, RuntimeError("simulated crash"))
+        self.assertEqual(status, 1)
+        self.assertEqual(report["executed"], 1)
+        self.assertIn("RuntimeError", report["runs"][0]["error"])
         self.assertIs(signal.getsignal(signal.SIGTERM), previous)
 
     def test_restores_sigterm_handler_after_success(self):
