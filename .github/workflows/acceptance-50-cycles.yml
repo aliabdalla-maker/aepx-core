@@ -65,6 +65,13 @@ jobs:
         run: |
           set -euo pipefail
           python tools/verify_acceptance_cycle_report.py acceptance-50-batch-${{ matrix.batch }}.json --expected 50 --commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
+      - name: Record verified batch outcome
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Batch ${{ matrix.batch }}: 50/50 offline cycles passed report verification" >> "$GITHUB_STEP_SUMMARY"
+          echo "Evidence provenance: $GITHUB_SHA / $GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
       - name: Publish bounded result
         if: always()
         shell: bash
