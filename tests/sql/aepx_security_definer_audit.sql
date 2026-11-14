@@ -37,7 +37,7 @@ BEGIN
    ) THEN
      RAISE EXCEPTION 'DENY: PUBLIC EXECUTE on SECURITY DEFINER %.%',f.nspname,f.proname;
    END IF;
-   IF pg_has_role(current_user,f.proowner,'MEMBER') THEN
+   IF pg_has_role((SELECT oid FROM pg_roles WHERE rolname=current_user),f.proowner,'MEMBER') THEN
      RAISE EXCEPTION 'DENY: runtime role is member of SECURITY DEFINER owner';
    END IF;
    inspected := inspected + 1;

@@ -31,7 +31,7 @@ BEGIN
     IF rel_rls IS DISTINCT FROM true OR rel_force IS DISTINCT FROM true THEN
       RAISE EXCEPTION 'DENY: FORCE RLS missing on %',relation_name;
     END IF;
-    IF pg_has_role(role_name,rel_owner,'MEMBER') THEN
+    IF pg_has_role((SELECT oid FROM pg_roles WHERE rolname=role_name),rel_owner,'MEMBER') THEN
       RAISE EXCEPTION 'DENY: runtime role is member of table owner on %',relation_name;
     END IF;
     IF has_table_privilege(role_name,target,'INSERT')
