@@ -55,8 +55,8 @@ jobs:
           python - <<'PY'
           import unittest
           suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_cycle_report.py")
-          if suite.countTestCases() < 14:
-              raise SystemExit("Acceptance report verifier coverage below 14 tests")
+          if suite.countTestCases() < 18:
+              raise SystemExit("Acceptance report verifier coverage below 18 tests")
           PY
           python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
           python - <<'PY'
