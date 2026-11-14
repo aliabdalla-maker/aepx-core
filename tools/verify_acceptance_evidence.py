@@ -149,6 +149,8 @@ def verify(manifest_path: Path):
                 raise ValueError("unexpected evidence fields")
             relative = item.get("path")
             digest = item.get("sha256")
+            if item.get("result") not in ("pass", "fail") or type(item.get("result")) is not str:
+                raise ValueError("evidence result must be pass or fail")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
             if len(relative) > 4096 or chr(0) in relative or chr(92) in relative or relative.startswith("/"):
