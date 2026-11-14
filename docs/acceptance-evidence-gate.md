@@ -527,3 +527,12 @@ not cancel or weaken the full 50x2 or standalone 100-cycle evidence workflows,
 which retain separate concurrency groups and no automatic cancellation.
 This is queue hygiene, not a fix for disabled runners, account limits or
 GitHub-hosted runner outages; inspect Actions administration if jobs stay queued.
+
+### Close-on-exec evidence descriptors
+
+Report verification requires a positive integer O_CLOEXEC flag alongside
+O_NOFOLLOW and O_NONBLOCK. The evidence file descriptor is opened with
+close-on-exec protection to prevent inheritance across subprocess exec.
+The regression suite rejects absent, zero and boolean O_CLOEXEC values;
+all three offline acceptance workflows require 30 verifier tests.
+This change does not establish independent acceptance or authorize deployment.
