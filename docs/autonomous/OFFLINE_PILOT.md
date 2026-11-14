@@ -57,3 +57,7 @@ The checkpoint must be an absolute path. Never execute repository tests on produ
 The controller now refuses a batch **before executing tests** if its requested count would exceed the 10,000-record ledger cap. It also holds a separate `.batch.lock` directory throughout the batch so two cooperating batch controllers cannot execute concurrently against the same checkpoint. A crash may leave this lock behind: first confirm no batch writer is alive, then manually remove the abandoned lock directory. Do not remove a live lock.
 
 This protects cooperating batch processes only. The standalone `aepx_autonomous_pilot.py --checkpoint` path does not acquire the batch lock; do not run it concurrently against a batch checkpoint. The 10,000 limit counts **offline test attempts**, not verified autonomous engineering iterations.
+
+### Standalone/batch checkpoint coordination
+
+Standalone `aepx_autonomous_pilot.py --execute --checkpoint /absolute/path.json` now uses the same `.batch.lock` coordination as the batch controller, checking the persistent cap **before** running its test. Relative checkpoint paths are rejected for explicit checkpoint execution. Running without `--checkpoint` still performs an unrecorded test and must not be counted as an automated iteration. A crash can leave a lock; verify that no writer is running before manual recovery.
