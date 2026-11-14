@@ -217,5 +217,14 @@ class EvidenceGateTests(unittest.TestCase):
             with self.assertRaises(UnicodeDecodeError):
                 verify(manifest)
 
+    def test_single_backslash_and_actual_nul_rejected(self):
+        for path in ["folder\\\\proof.txt", "proof.txt" + chr(0) + "junk"]:
+            with self.subTest(path=repr(path)), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                manifest = root / "manifest.json"
+                manifest.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100,
+                    "evidence": [{"path": path, "sha256": "0" * 64, "result": "pass"}]}]}))
+                self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+
 if __name__ == "__main__":
     unittest.main()
