@@ -41,6 +41,9 @@ CREATE POLICY reservation_scope ON aepx_budget.reservation
  WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id',true),'')::uuid);
 
 -- Call inside a transaction after SET LOCAL app.tenant_id to an authenticated tenant.
+-- IMPORTANT: already_reserved and already_settled are NOT authorization to dispatch.
+-- Only a new 'reserved' response may authorize a first dispatch, with a separate
+-- durable provider idempotency key and fenced lease.
 -- Requires a pre-provisioned tenant_budget row; no implicit tenant creation.
 CREATE OR REPLACE FUNCTION aepx_budget.reserve(
  p_tenant uuid, p_request text, p_tokens bigint, p_cost numeric
@@ -61,6 +64,9 @@ BEGIN
  IF FOUND THEN
    IF e.reserved_tokens <> p_tokens OR e.reserved_cost <> p_cost THEN
      RAISE EXCEPTION 'conflicting request id';
+   END IF;
+   IF e.state = 'settled' THEN
+     RETURN 'already_settled';
    END IF;
    RETURN 'already_reserved';
  END IF;
