@@ -1,4 +1,4 @@
-"""Offline, append-only engineering iteration state transitions.
+"""Offline, atomic-replacement engineering iteration state transitions.
 
 No LLM, shell, network, code edits, merge, deployment or cloud access.
 This is a local planning ledger, NOT an autonomous executor.
@@ -90,3 +90,18 @@ def persist(path, state):
     finally:
         if os.path.exists(tmp):
             os.unlink(tmp)
+
+def advance_locked(path, *, number, stage, evidence):
+    """Single-host serialized read/transition/write; stale locks fail closed.
+
+    Not a distributed lease or multi-worker fencing mechanism.
+    """
+    from aepx_pilot_checkpoint import exclusive_checkpoint_lock
+    path = Path(path)
+    if not path.is_absolute() or path.parent.is_symlink() or not path.parent.is_dir() or path.is_symlink():
+        raise TransitionDenied("unsafe ledger destination")
+    with exclusive_checkpoint_lock(path):
+        state = load(path)
+        updated = advance(state, number=number, stage=stage, evidence=evidence)
+        persist(path, updated)
+        return updated
