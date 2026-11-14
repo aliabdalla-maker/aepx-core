@@ -20,11 +20,13 @@ IDENT = re.compile(r"[a-z0-9][a-z0-9_-]*\Z")
 
 def verify(manifest_path: Path):
     root = manifest_path.resolve().parent
+    if manifest_path.stat().st_size > 1024 * 1024:
+        raise ValueError("manifest exceeds 1 MiB")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
     milestones = manifest["milestones"]
-    if not isinstance(milestones, list) or not milestones:
+    if not isinstance(milestones, list) or not milestones or len(milestones) > 100:
         raise ValueError("milestones must be a nonempty list")
     ids = set()
     total_weight = 0
@@ -43,8 +45,8 @@ def verify(manifest_path: Path):
         total_weight += weight
         evidence = milestone.get("evidence", [])
         passed = isinstance(evidence, list) and len(evidence) > 0
-        if not isinstance(evidence, list):
-            raise ValueError("evidence must be a list")
+        if not isinstance(evidence, list) or len(evidence) > 100:
+            raise ValueError("evidence must be a list of at most 100 entries")
         for item in evidence:
             if not isinstance(item, dict):
                 raise ValueError("evidence entry must be an object")
