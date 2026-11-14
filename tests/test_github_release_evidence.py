@@ -12,12 +12,32 @@ SHA = "a" * 40
 
 def run(path, id=1, status="completed", conclusion="success", sha=SHA):
     return {"id": id, "run_attempt": 1, "created_at": "2026-11-14T00:00:00Z",
-            "head_sha": sha, "path": path, "status": status, "conclusion": conclusion}
+            "head_sha": sha, "path": path, "status": status, "conclusion": conclusion,
+            "event": "push", "head_branch": "master",
+            "head_repository": {"full_name": "aliabdalla-maker/aepx-core"}}
 
 class ReleaseEvidenceTests(unittest.TestCase):
     def test_all_success_is_evidence_not_approval(self):
         runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
         self.assertEqual(module.evaluate(runs, SHA), [])
+
+    def test_pull_request_success_cannot_authorize_release(self):
+        runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+        runs[0]["event"] = "pull_request"
+        self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_fork_or_wrong_branch_blocks(self):
+        for key, value in [("head_branch", "feature/untrusted"),
+                           ("head_repository", {"full_name": "attacker/fork"}),
+                           ("event", "pull_request_target")]:
+            runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+            runs[0][key] = value
+            self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_missing_provenance_blocks(self):
+        runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+        del runs[0]["head_repository"]
+        self.assertTrue(module.evaluate(runs, SHA))
 
     def test_missing_required_check_blocks(self):
         self.assertEqual(len(module.evaluate([], SHA)), len(module.REQUIRED))
