@@ -131,6 +131,16 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-success",
                                        "--require-workflow", "CI"]), 0)
 
+    def test_blank_required_workflow_rejected_before_cli(self):
+        with patch("tools.diagnose_actions_queue.subprocess.run") as run:
+            for name in ("", "  "):
+                with self.subTest(name=name):
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        with self.assertRaises(SystemExit) as failure:
+                            main(["--require-workflow", name])
+                    self.assertEqual(failure.exception.code, 2)
+            run.assert_not_called()
+
     def test_invalid_commit_rejected_before_cli_invocation(self):
         with patch("tools.diagnose_actions_queue.subprocess.run") as run:
             for invalid in ("bad", "g" * 40, "a" * 39):
