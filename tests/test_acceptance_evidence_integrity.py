@@ -309,5 +309,33 @@ class EvidenceGateTests(unittest.TestCase):
             }]}))
             self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_hard_link_created_during_hashing_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            proof = root / "proof.txt"
+            proof.write_bytes(b"proof")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": [{
+                    "path": "proof.txt",
+                    "sha256": hashlib.sha256(b"proof").hexdigest(),
+                    "result": "pass"
+                }]
+            }]}))
+            original_read = os.read
+            linked = False
+
+            def linking_read(fd, size):
+                nonlocal linked
+                chunk = original_read(fd, size)
+                if chunk == b"proof" and not linked:
+                    linked = True
+                    os.link(proof, root / "alias.txt")
+                return chunk
+
+            with patch("tools.verify_acceptance_evidence.os.read", side_effect=linking_read):
+                self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
+            self.assertTrue(linked)
+
 if __name__ == "__main__":
     unittest.main()
