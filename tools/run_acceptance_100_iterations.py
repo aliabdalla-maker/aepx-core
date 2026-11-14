@@ -22,7 +22,10 @@ def main():
         report = {"requested": args.iterations, "executed": len(records),
                   "all_passed": len(records) == args.iterations and all(x["passed"] for x in records),
                   "independent_acceptance_established": False,
-                  "production_deployment_authorized": False, "runs": records}
+                  "production_deployment_authorized": False,
+                  "source_commit": os.environ.get("GITHUB_SHA"),
+                  "workflow_run_id": os.environ.get("GITHUB_RUN_ID"),
+                  "runs": records}
         target = pathlib.Path(args.output)
         temporary = target.with_name(target.name + ".tmp")
         temporary.write_text(json.dumps(report, indent=2) + "\n")
