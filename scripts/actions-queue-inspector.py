@@ -27,7 +27,8 @@ def inspect(repo, token, get=get_json, now=None):
         raise ValueError("invalid Actions run record")
     result = {"repository": repo, "sample_size": len(runs),
               "sample_limit": 100, "status_counts": {}, "queued": [],
-              "diagnosis": "UNDETERMINED", "release_approved": False}
+              "diagnosis": "UNDETERMINED", "release_approved": False,
+              "sample_truncated": len(runs) == 100}
     for run in runs:
         status = run.get("status", "unknown")
         result["status_counts"][status] = result["status_counts"].get(status, 0) + 1
@@ -46,10 +47,16 @@ def inspect(repo, token, get=get_json, now=None):
         jobs = jobs_data["jobs"]
         if any(not isinstance(job, dict) for job in jobs):
             raise ValueError("invalid Actions job record")
+        for job in jobs:
+            if type(job.get("id")) is not int or job["id"] <= 0:
+                raise ValueError("invalid job id")
+            if not isinstance(job.get("labels"), list) or any(
+                    not isinstance(label, str) for label in job["labels"]):
+                raise ValueError("invalid runner labels")
         result["queued"].append({
             "run_id": run_id, "workflow": run.get("name"),
             "age_minutes": max(0, int((now - created).total_seconds() // 60)),
-            "jobs": [{"name": job.get("name"), "status": job.get("status"),
+            "jobs": [{"id": job["id"], "name": job.get("name"), "status": job.get("status"),
                       "labels": job.get("labels"), "runner_assigned": job.get("runner_id") is not None}
                      for job in jobs]})
     return result
