@@ -75,8 +75,10 @@ def main(argv=None):
         if (len(args.head_sha) != 40 or
                 any(ch not in "0123456789abcdefABCDEF" for ch in args.head_sha)):
             parser.error("--head-sha must be a 40-character hexadecimal commit SHA")
-        runs = [run for run in runs
-                if isinstance(run, dict) and run.get("headSha") == args.head_sha]
+        if not isinstance(runs, list) or any(not isinstance(run, dict) for run in runs):
+            print("Invalid GitHub Actions data: expected run records", file=sys.stderr)
+            return 2
+        runs = [run for run in runs if run.get("headSha") == args.head_sha]
     try:
         report = summarize(runs)
     except ValueError as exc:
