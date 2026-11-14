@@ -526,5 +526,25 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "evidence result must be pass or fail"):
                     verify(manifest)
 
+    def test_later_invalid_entry_shape_blocks_earlier_file_reads(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_bytes(b"proof")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": 50, "evidence": [{
+                    "path": "proof.txt", "sha256": hashlib.sha256(b"proof").hexdigest(),
+                    "result": "pass"
+                }]},
+                {"id": "oidc", "weight": 50, "evidence": [{
+                    "path": "other.txt", "sha256": "0" * 64, "result": "pass",
+                    "independently_verified": True
+                }]}
+            ]}))
+            with patch("tools.verify_acceptance_evidence.safe_digest",
+                       side_effect=AssertionError("invalid schema must not read evidence")):
+                with self.assertRaisesRegex(ValueError, "invalid evidence entry schema"):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
