@@ -275,3 +275,14 @@ constants; verifies typed sequential cycle records, bounded durations and
 non-authorization flags; and attempts to preserve a useful job summary if
 the report cannot be parsed. No workflow execution or independent acceptance
 has been confirmed. The changes remain on a draft, non-deployed branch.
+
+### Ten-pass standalone report-verifier implementation
+
+Added `tools/verify_acceptance_cycle_report.py` and eight authored unit
+tests in `tests/test_acceptance_cycle_report.py`. The verifier rejects
+provenance mismatches, incorrect counts, missing or reordered cycles,
+insufficient test coverage, nonfinite durations, duplicate JSON keys,
+unauthorized deployment flags, and unestablished acceptance claims. CI now
+runs the new test module and calls the verifier on the generated report.
+The workflow triggers on changes to both files. Run evidence remains required;
+these authored checks do not constitute independent acceptance.
