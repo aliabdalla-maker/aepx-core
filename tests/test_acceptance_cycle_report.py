@@ -98,6 +98,13 @@ class CycleReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "symlinked evidence"):
             mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_fails_closed_without_nofollow_support(self):
+        from unittest.mock import patch
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        with patch.object(mod.os, "O_NOFOLLOW", None, create=True):
+            with self.assertRaises((ValueError, TypeError)):
+                mod.verify(self.path, "a" * 40, "123", expected=2)
+
     def test_rejects_symlink_swap_during_file_open(self):
         from unittest.mock import patch
         import os
