@@ -14,6 +14,7 @@ DECLARE
     'aepx_budget.settle'
   ];
   found_count integer := 0;
+  function_count integer := 0;
 BEGIN
   IF (SELECT rolsuper OR rolbypassrls FROM pg_roles WHERE rolname=current_user)
      IS DISTINCT FROM false THEN
@@ -53,10 +54,14 @@ BEGIN
     IF pg_has_role(current_user,fn.proowner,'MEMBER') THEN
       RAISE EXCEPTION 'DENY: runtime role belongs to sensitive function owner';
     END IF;
+    function_count:=function_count+1;
     RAISE NOTICE 'PASS: %.% denies PUBLIC EXECUTE; SECURITY DEFINER=%; runtime EXECUTE=%',
       fn.nspname,fn.proname,fn.prosecdef,
       has_function_privilege(current_user,fn.oid,'EXECUTE');
   END LOOP;
+  IF function_count < 4 THEN
+    RAISE EXCEPTION 'DENY: required iteration authorization functions missing';
+  END IF;
   RAISE NOTICE 'Audit passed limited grant checks; tenant GUC spoofing and reviewer authentication NOT solved';
 END
 $audit$;
