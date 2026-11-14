@@ -32,3 +32,21 @@ attestation service. See `tools/verify_acceptance_evidence.py`.
 **Do not merge or deploy on the basis of this gate alone.** No external
 provider dispatch, gateway forwarding, chargeable OCI provisioning or live
 production migration is authorized by this documentation.
+
+## CI triage and evidence collection (no deployment)
+
+- Confirm the workflow is present on the PR head and that pull_request
+  path filters match the modified files. A missing run is **not** a pass.
+- Open the PR Checks tab and inspect the job conclusion and individual steps.
+  If no run appears, inspect repository Actions permissions, disabled workflows,
+  branch protection, and event/filter behavior. Do not assume a cause.
+- Collect the exact run URL, workflow name, head SHA, conclusion, timestamp,
+  and immutable artifacts. Retain failed logs without copying credentials.
+- The CLI contract is: exit 0 for all locally matching evidence, exit 1 for
+  incomplete or mismatching evidence, and exit 2 for malformed/unreadable input.
+  Even exit 0 is **not** independently attested acceptance.
+- Run disposable PostgreSQL HITL/RLS acceptance using non-superuser,
+  non-BYPASSRLS roles. Confirm tenant isolation, concurrent approval replay,
+  lease fencing, and budget settlement with recorded failure evidence.
+- Release remains blocked until trusted CI provenance, independent security
+  review and explicit approval exist. Never merge/deploy automatically.
