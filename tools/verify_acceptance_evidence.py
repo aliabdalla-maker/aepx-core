@@ -92,10 +92,19 @@ def verify(manifest_path: Path):
         metadata = os.fstat(descriptor)
         if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 1024 * 1024:
             raise ValueError("manifest must be a regular file no larger than 1 MiB")
-        with os.fdopen(descriptor, "rb", closefd=False) as source:
-            raw = source.read(1024 * 1024 + 1)
+        raw = bytearray()
+        while len(raw) <= 1024 * 1024:
+            chunk = os.read(descriptor, min(65536, 1024 * 1024 + 1 - len(raw)))
+            if not chunk:
+                break
+            raw.extend(chunk)
         if len(raw) > 1024 * 1024:
             raise ValueError("manifest exceeds 1 MiB")
+        after = os.fstat(descriptor)
+        if (metadata.st_dev, metadata.st_ino, metadata.st_size, metadata.st_mtime_ns,
+            metadata.st_ctime_ns) != (after.st_dev, after.st_ino, after.st_size,
+            after.st_mtime_ns, after.st_ctime_ns) or len(raw) != after.st_size:
+            raise ValueError("manifest changed during reading")
     finally:
         os.close(descriptor)
     manifest = json.loads(raw.decode("utf-8"), object_pairs_hook=reject_duplicate_json_keys, parse_constant=lambda _: (_ for _ in ()).throw(ValueError("non-finite JSON number rejected")))
