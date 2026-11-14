@@ -17,3 +17,13 @@ This is an **unapplied migration** for disposable staging. It does not call LLMs
 5. Wire the transaction service to a fenced worker only after sandbox and CI acceptance. Never release unknown in-flight reservations automatically.
 
 Static tests validate SQL text only; no PostgreSQL migration or concurrency test has run.
+
+## Disposable PostgreSQL acceptance suite (not automatically executed)
+
+On a local, isolated PostgreSQL instance create a **new empty database** named `aepx_test_budget`, apply the reviewed foundation SQL migration to that database using an administrative migration role, and then execute:
+
+```bash
+bash scripts/test_aepx_pg_budget_acceptance.sh --execute aepx_test_budget
+```
+
+The runner refuses non-test database names, remote `PGHOST`, `PGHOSTADDR` and service aliases; it uses local TCP and `psql -X -v ON_ERROR_STOP=1`. The SQL fixture wraps all test data in a transaction and ends with `ROLLBACK`, checking reservation replay, overspend denial, settlement replay and tenant isolation. **The migration itself persists**, so never use a production or shared database. The test does not prove RLS safety against a caller capable of changing `app.tenant_id`, and does not cover concurrent sessions; separate adversarial tests with a non-owner, non-BYPASSRLS role and real concurrency remain mandatory. This test has not been run.
