@@ -54,10 +54,12 @@ BEGIN
     IF pg_has_role((SELECT oid FROM pg_roles WHERE rolname=current_user),fn.proowner,'MEMBER') THEN
       RAISE EXCEPTION 'DENY: runtime role belongs to sensitive function owner';
     END IF;
+    IF has_function_privilege(current_user,fn.oid,'EXECUTE') THEN
+      RAISE EXCEPTION 'DENY: untrusted runtime role can execute sensitive function %.%',fn.nspname,fn.proname;
+    END IF;
     function_count:=function_count+1;
-    RAISE NOTICE 'PASS: %.% denies PUBLIC EXECUTE; SECURITY DEFINER=%; runtime EXECUTE=%',
-      fn.nspname,fn.proname,fn.prosecdef,
-      has_function_privilege(current_user,fn.oid,'EXECUTE');
+    RAISE NOTICE 'PASS: %.% denies PUBLIC and untrusted runtime EXECUTE; SECURITY DEFINER=%',
+      fn.nspname,fn.proname,fn.prosecdef;
   END LOOP;
   IF (SELECT count(DISTINCT p.proname) FROM pg_proc p
       JOIN pg_namespace n ON n.oid=p.pronamespace
@@ -65,6 +67,9 @@ BEGIN
         AND p.proname IN ('claim','advance','renew','consume_approval')) <> 4 THEN
     RAISE EXCEPTION 'DENY: required iteration authorization functions missing';
   END IF;
-  RAISE NOTICE 'Audit passed limited grant checks; tenant GUC spoofing and reviewer authentication NOT solved';
+  IF function_count < 4 THEN
+    RAISE EXCEPTION 'DENY: too few sensitive functions inspected';
+  END IF;
+  RAISE NOTICE 'Audit passed untrusted runtime grant checks; trusted controller grants, tenant GUC spoofing and reviewer authentication NOT solved';
 END
 $audit$;
