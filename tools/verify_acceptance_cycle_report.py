@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Fail-closed offline validator for the 100-cycle evidence report."""
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -22,7 +23,7 @@ def _invalid_constant(value):
     raise ValueError(f"invalid JSON constant: {value}")
 
 
-def verify(path, commit, run_id, expected=100, minimum_tests=42):
+def verify(path, commit, run_id, expected=100, minimum_tests=42, digest_out=None):
     source = Path(path)
     if source.is_symlink() or any(parent.is_symlink() for parent in source.parents):
         raise ValueError("symlinked evidence path is not permitted")
@@ -42,10 +43,13 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
         opened = os.fstat(descriptor)
         if not stat.S_ISREG(opened.st_mode) or opened.st_nlink != 1 or opened.st_size > 2_000_000:
             raise ValueError("unsafe or oversized opened evidence report")
-        with os.fdopen(descriptor, "r", encoding="utf-8") as handle:
+        with os.fdopen(descriptor, "rb") as handle:
             descriptor = -1
-            report = json.load(handle, object_pairs_hook=_unique,
-                               parse_constant=_invalid_constant)
+            raw = handle.read(2_000_001)
+        if len(raw) > 2_000_000:
+            raise ValueError("oversized evidence report")
+        report = json.loads(raw.decode("utf-8"), object_pairs_hook=_unique,
+                            parse_constant=_invalid_constant)
     finally:
         if descriptor >= 0:
             os.close(descriptor)
@@ -87,6 +91,8 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
                 or type(elapsed) not in (float, int)
                 or not math.isfinite(elapsed) or not 0 <= elapsed <= 95):
             raise ValueError(f"invalid cycle {number}")
+    if digest_out is not None:
+        digest_out.append(hashlib.sha256(raw).hexdigest())
     return report
 
 

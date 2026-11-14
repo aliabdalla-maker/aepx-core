@@ -46,7 +46,7 @@ jobs:
           import unittest
           requirements = [
               ("test_acceptance_100_runner.py", 21),
-              ("test_acceptance_cycle_report.py", 21),
+              ("test_acceptance_cycle_report.py", 23),
               ("test_acceptance_cycle_mutations.py", 3),
               ("test_acceptance_evidence_integrity.py", 42),
           ]
@@ -117,7 +117,6 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import hashlib
           import json
           import os
           from pathlib import Path
@@ -132,19 +131,20 @@ jobs:
               for path in Path("batch-evidence").iterdir()
           ):
               raise SystemExit("Unexpected or unsafe evidence artifact detected")
+          digests = {}
           for path in expected:
-              verify(path, os.environ["GITHUB_SHA"], os.environ["GITHUB_RUN_ID"], expected=50)
-              if path.stat().st_size > 2_000_000:
-                  raise SystemExit("Evidence report exceeds size limit")
+              validated_digest = []
+              verify(path, os.environ["GITHUB_SHA"], os.environ["GITHUB_RUN_ID"],
+                     expected=50, digest_out=validated_digest)
+              if len(validated_digest) != 1:
+                  raise SystemExit("Validated evidence digest unavailable")
+              digests[path.name] = validated_digest[0]
           result = {
               "source_commit": os.environ["GITHUB_SHA"],
               "workflow_run_id": os.environ["GITHUB_RUN_ID"],
               "verified_batches": 2,
               "verified_offline_cycles": 100,
-              "batch_sha256": {
-                  path.name: hashlib.sha256(path.read_bytes()).hexdigest()
-                  for path in expected
-              },
+              "batch_sha256": digests,
               "independent_acceptance_established": False,
               "production_deployment_authorized": False,
           }

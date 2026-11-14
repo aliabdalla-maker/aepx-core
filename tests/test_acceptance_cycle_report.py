@@ -31,6 +31,23 @@ class CycleReportTests(unittest.TestCase):
         self.path.write_text(json.dumps(self.report), encoding="utf-8")
         return mod.verify(self.path, "a" * 40, "123", expected=2)
 
+    def test_digest_matches_exact_validated_bytes(self):
+        import hashlib
+        raw = json.dumps(self.report, sort_keys=True).encode("utf-8")
+        self.path.write_bytes(raw)
+        digests = []
+        result = mod.verify(self.path, "a" * 40, "123", expected=2, digest_out=digests)
+        self.assertEqual(result["executed"], 2)
+        self.assertEqual(digests, [hashlib.sha256(raw).hexdigest()])
+
+    def test_invalid_report_never_emits_digest(self):
+        self.report["all_passed"] = False
+        self.path.write_text(json.dumps(self.report), encoding="utf-8")
+        digests = []
+        with self.assertRaisesRegex(ValueError, "not all passed"):
+            mod.verify(self.path, "a" * 40, "123", expected=2, digest_out=digests)
+        self.assertEqual(digests, [])
+
     def test_valid_report(self):
         self.assertEqual(self.check()["executed"], 2)
 
