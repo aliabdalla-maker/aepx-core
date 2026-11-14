@@ -21,6 +21,8 @@ IDENT = re.compile(r"[a-z0-9][a-z0-9_-]*\Z")
 def verify(manifest_path: Path):
     root = manifest_path.resolve().parent
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict):
+        raise ValueError("manifest must be an object")
     milestones = manifest["milestones"]
     if not isinstance(milestones, list) or not milestones:
         raise ValueError("milestones must be a nonempty list")
@@ -29,6 +31,8 @@ def verify(manifest_path: Path):
     verified_weight = 0
     results = []
     for milestone in milestones:
+        if not isinstance(milestone, dict):
+            raise ValueError("milestone must be an object")
         identifier = milestone["id"]
         weight = milestone["weight"]
         if not isinstance(identifier, str) or not IDENT.fullmatch(identifier) or identifier in ids:
@@ -49,7 +53,7 @@ def verify(manifest_path: Path):
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
             path = (root / relative).resolve()
-            if not path.is_relative_to(root) or not path.is_file():
+            if not path.is_relative_to(root) or not path.is_file() or path.is_symlink():
                 passed = False
                 continue
             if not isinstance(digest, str) or not SHA256.fullmatch(digest):
