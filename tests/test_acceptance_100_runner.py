@@ -81,6 +81,13 @@ class RunnerTests(unittest.TestCase):
                     runner.main()
             self.assertFalse((real_dir / "report.json").exists())
 
+    def test_rejects_directory_as_report_destination(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            argv = ["runner", "--iterations", "1", "--output", tmp]
+            with patch.object(sys, "argv", argv):
+                with self.assertRaisesRegex(OSError, "non-file report destination"):
+                    runner.main()
+
     def test_stops_on_first_failed_cycle(self):
         good = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         bad = subprocess.CompletedProcess([], 1, "", "Ran 42 tests in 0.1s\n\nFAILED (failures=1)\n")
