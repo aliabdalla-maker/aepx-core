@@ -5,4 +5,4 @@ RUN groupadd --gid 10001 pilot && useradd --uid 10001 --gid 10001 --no-create-ho
 WORKDIR /workspace
 USER 10001:10001
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
-ENTRYPOINT ["python","-I","/workspace/scripts/aepx_supervised_batch.py"]
+ENTRYPOINT ["python","-I","-c","import sys; sys.path.insert(0, '/workspace/scripts'); import aepx_supervised_batch; aepx_supervised_batch.main()"]
