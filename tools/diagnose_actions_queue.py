@@ -146,6 +146,10 @@ def main(argv=None):
                                  report["statuses"].get("completed", 0) != report["total"] or
                                  report["unsuccessful"]):
         return 4
+    if (args.fail_on_incomplete or args.fail_on_queued) and report["total"] == 0:
+        print("No workflow runs found; monitoring cannot establish a healthy state",
+              file=sys.stderr)
+        return 8
     if args.fail_on_incomplete and report["total"] != report["statuses"].get("completed", 0):
         return 7
     return 3 if args.fail_on_queued and report["not_started"] else 0
