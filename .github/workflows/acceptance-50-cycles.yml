@@ -11,7 +11,9 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: aepx-50-cycle-${{ github.ref }}
+  # Independent manual/PR runs must not serialize behind stale queued runs.
+  # Both matrix batches and the aggregate remain in this same workflow run.
+  group: aepx-50-cycle-${{ github.ref }}-${{ github.run_id }}
   cancel-in-progress: false
 jobs:
   offline-50:
