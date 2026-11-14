@@ -408,3 +408,11 @@ After PR #346 merged, the next patch rejects symlinked and non-regular
 50-cycle batch report inputs, rejects unexpected artifact directory entries,
 and rechecks a 2 MB upper bound before hashing. This reduces the risk of
 unsafe evidence ingestion; it is not an independent execution attestation.
+
+### Hardlinked cycle report rejection
+
+The standalone cycle-report verifier rejects report files with multiple
+hardlinks (st_nlink != 1). A new regression test exercises this case, and
+both 50x2 and standalone 100-cycle CI preflight gates now require at least
+19 report-verifier tests. This is defense in depth; CI execution and
+independent acceptance still require separate evidence.
