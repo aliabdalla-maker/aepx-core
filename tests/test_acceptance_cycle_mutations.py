@@ -63,6 +63,13 @@ class MutationMatrixTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         verifier.verify(path, SHA, RUN_ID, expected=2)
 
+    def test_every_mutation_changes_the_baseline(self):
+        for name, mutate in mutations():
+            with self.subTest(case=name):
+                report = copy.deepcopy(BASE)
+                mutate(report)
+                self.assertNotEqual(report, BASE, "mutation must change report")
+
     def test_unmodified_baseline_is_accepted(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "report.json"
