@@ -91,6 +91,27 @@ class QueueDiagnosticTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "lacks a conclusion"):
             summarize([{"status": "completed"}])
 
+    def test_head_sha_scope_excludes_other_commits(self):
+        sha = "a" * 40
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            path.write_text('[{"status":"completed","conclusion":"success","headSha":"' +
+                            sha + '"},{"status":"queued","headSha":"' + "b" * 40 + '"}]',
+                            encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", sha,
+                                       "--require-success"]), 0)
+                self.assertEqual(main(["--input-json", str(path), "--head-sha", "c" * 40,
+                                       "--require-success"]), 4)
+
+    def test_head_sha_scope_rejects_malformed_records(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            path.write_text('[null]', encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path),
+                                       "--head-sha", "a" * 40]), 2)
+
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])
         self.assertIn("cannot be determined", result["diagnosis"])
