@@ -219,3 +219,12 @@ codes. The runner validates unittest's terminal summary from stderr only,
 rejecting a stdout-only forged success marker. Thirteen runner self-tests
 are authored, including the stdout spoof regression. These source controls
 still require a confirmed passing GitHub Actions run and independent review.
+
+### No skipped or expected-failure acceptance cycles
+
+The 100-cycle runner now requires an unqualified terminal `OK` unittest
+summary. Python unittest can exit successfully while reporting skipped tests
+or expected failures; these qualified outcomes are no longer counted as
+acceptance passes. Two new adversarial tests cover these cases (fifteen
+runner self-tests authored). This gate is still offline and does not replace
+independent tenant, billing, MCP, worker, or OCI security verification.
