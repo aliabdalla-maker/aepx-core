@@ -10,6 +10,12 @@ from aepx_pilot_checkpoint import exclusive_checkpoint_lock
 from aepx_budget_admission import admit, BudgetDenied, _integer, _money
 
 KEYS = ("tokens", "cost_usd", "seconds", "repair_attempts")
+MAX_LEDGER_BYTES = 4 * 1024 * 1024
+MAX_RESERVATIONS = 10000
+
+def _valid_request_id(value):
+    return (isinstance(value, str) and 1 <= len(value) <= 128 and
+            all(c.isascii() and (c.isalnum() or c in "-_") for c in value))
 
 def _validate_amounts(amounts):
     if not isinstance(amounts, dict) or set(amounts) != set(KEYS):
@@ -34,10 +40,16 @@ def _read(path):
         return {"schema_version":1,"reservations":{}}
     if not path.is_file():
         raise BudgetDenied("invalid ledger path")
+    if path.stat().st_size > MAX_LEDGER_BYTES:
+        raise BudgetDenied("ledger exceeds size limit")
     state = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(state,dict) or set(state) != {"schema_version","reservations"} or state["schema_version"] != 1 or not isinstance(state["reservations"],dict):
         raise BudgetDenied("invalid ledger")
-    for entry in state["reservations"].values():
+    if len(state["reservations"]) > MAX_RESERVATIONS:
+        raise BudgetDenied("reservation count limit exceeded")
+    for request_id, entry in state["reservations"].items():
+        if not _valid_request_id(request_id):
+            raise BudgetDenied("invalid persisted request id")
         if not isinstance(entry,dict) or set(entry) != {"reserved","settled"}:
             raise BudgetDenied("invalid reservation")
         _validate_amounts(entry["reserved"])
@@ -47,6 +59,9 @@ def _read(path):
     return state
 
 def _write(path, state):
+    payload = json.dumps(state,sort_keys=True,indent=2) + "\\n"
+    if len(payload.encode("utf-8")) > MAX_LEDGER_BYTES:
+        raise BudgetDenied("ledger exceeds size limit")
     fd, temp = tempfile.mkstemp(prefix=".aepx-budget-",dir=str(path.parent))
     try:
         with os.fdopen(fd,"w",encoding="utf-8") as stream:
@@ -70,7 +85,7 @@ def reserve(path, request_id, limits, planned):
     path = Path(path)
     if path.parent.is_symlink() or not path.parent.is_dir() or path.is_symlink():
         raise BudgetDenied("unsafe budget ledger path")
-    if not isinstance(request_id,str) or not 1 <= len(request_id) <= 128 or not all(c.isascii() and (c.isalnum() or c in "-_") for c in request_id):
+    if not _valid_request_id(request_id):
         raise BudgetDenied("invalid request id")
     _validate_amounts(limits)
     _validate_amounts(planned)
@@ -81,8 +96,12 @@ def reserve(path, request_id, limits, planned):
             if existing["reserved"] != planned:
                 raise BudgetDenied("conflicting request id")
             return {"request_id":request_id,"status":"already_reserved","external_execution_authorized":False}
+        if len(state["reservations"]) >= MAX_RESERVATIONS:
+            raise BudgetDenied("reservation count limit exceeded")
         admit(limits,_total(state),planned)
         state["reservations"][request_id] = {"reserved":planned,"settled":None}
+        if len(json.dumps(state).encode("utf-8")) > MAX_LEDGER_BYTES:
+            raise BudgetDenied("ledger exceeds size limit")
         _write(path,state)
         return {"request_id":request_id,"status":"reserved","external_execution_authorized":False}
 

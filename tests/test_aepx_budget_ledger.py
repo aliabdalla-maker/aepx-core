@@ -1,4 +1,5 @@
 """Offline reservation ledger regression tests."""
+import json
 import sys
 import tempfile
 import unittest
@@ -46,6 +47,30 @@ class LedgerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaisesRegex(BudgetDenied,"unknown"):
                 settle(Path(folder)/"budget.json","missing",ACTUAL)
+
+    def test_rejects_invalid_persisted_request_id(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"budget.json"
+            path.write_text(json.dumps({"schema_version":1,"reservations":{
+                "../escape":{"reserved":PLAN,"settled":None}}}),encoding="utf-8")
+            with self.assertRaisesRegex(BudgetDenied,"persisted request id"):
+                reserve(path,"safe",LIMITS,PLAN)
+
+    def test_rejects_oversized_ledger_before_read(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"budget.json"
+            path.write_bytes(b" " * (4 * 1024 * 1024 + 1))
+            with self.assertRaisesRegex(BudgetDenied,"size limit"):
+                reserve(path,"safe",LIMITS,PLAN)
+
+    def test_rejects_reservation_count_overflow(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"budget.json"
+            data={"schema_version":1,"reservations":{
+                f"req-{i}":{"reserved":PLAN,"settled":None} for i in range(10000)}}
+            path.write_text(json.dumps(data),encoding="utf-8")
+            with self.assertRaisesRegex(BudgetDenied,"count limit"):
+                reserve(path,"req-new",LIMITS,PLAN)
 
 if __name__=="__main__":
     unittest.main()
