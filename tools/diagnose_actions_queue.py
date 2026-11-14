@@ -87,7 +87,8 @@ def main(argv=None):
         if not isinstance(runs, list) or any(not isinstance(run, dict) for run in runs):
             print("Invalid GitHub Actions data: expected run records", file=sys.stderr)
             return 2
-        runs = [run for run in runs if run.get("headSha") == args.head_sha]
+        runs = [run for run in runs if isinstance(run.get("headSha"), str)
+                and run["headSha"].lower() == args.head_sha.lower()]
     try:
         report = summarize(runs)
     except ValueError as exc:
