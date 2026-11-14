@@ -40,11 +40,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          debug=$(find app/build/intermediates -path '*debug*' -name AndroidManifest.xml | grep merged_manifest | head -1)
-          release=$(find app/build/intermediates -path '*release*' -name AndroidManifest.xml | grep merged_manifest | head -1)
-          grep -q 'ca-app-pub-3940256099942544~3347511713' "$debug"
-          if grep -q 'ca-app-pub-2980680946304710' "$debug"; then echo 'Live AdMob ID leaked into debug build' >&2; exit 1; fi
-          grep -q 'ca-app-pub-2980680946304710~2617421798' "$release"
+          aapt2=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
+          debug_apk=app/build/outputs/apk/debug/app-debug.apk
+          release_apk=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          for apk in "$debug_apk" "$release_apk"; do [ -f "$apk" ] || { echo "Missing APK: $apk" >&2; exit 1; }; done
+          "$aapt2" dump xmltree "$debug_apk" --file AndroidManifest.xml > debug-manifest.txt
+          "$aapt2" dump xmltree "$release_apk" --file AndroidManifest.xml > release-manifest.txt
+          grep -q 'ca-app-pub-3940256099942544~3347511713' debug-manifest.txt || { echo 'Debug APK lacks the Google test app ID' >&2; exit 1; }
+          if grep -q 'ca-app-pub-2980680946304710' debug-manifest.txt; then echo 'Live AdMob ID leaked into debug APK' >&2; exit 1; fi
+          grep -q 'ca-app-pub-2980680946304710~2617421798' release-manifest.txt || { echo 'Release APK lacks the live AdMob app ID' >&2; exit 1; }
           echo "Debug uses Google test app ID; release uses ca-app-pub-2980680946304710~2617421798" >> "$GITHUB_STEP_SUMMARY"
           echo 'Live ads remain disabled until ads-config.json sets formats, placements and admob.enabled.' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
