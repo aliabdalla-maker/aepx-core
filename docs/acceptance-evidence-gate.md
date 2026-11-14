@@ -182,3 +182,13 @@ embedded early OK followed by failure text, or a truncated summary, is rejected.
 Two adversarial runner tests cover these cases (eleven runner self-tests
 currently authored). A passing local repetition still does not establish
 independent security acceptance.
+
+### CI provenance and runner-test discovery
+
+The 100-cycle workflow now requires discovery of at least twelve runner
+self-tests before starting repeated acceptance verification. Reports include
+the GitHub source commit SHA and workflow run ID when provided by GitHub
+Actions, and the job summary displays them. One new self-test verifies these
+fields. These values improve traceability but do not constitute cryptographic
+attestation, independent review, or a successful test run. Release remains
+blocked pending verified CI and the broader security acceptance matrix.
