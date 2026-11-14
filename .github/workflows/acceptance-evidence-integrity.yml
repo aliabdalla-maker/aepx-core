@@ -188,6 +188,28 @@ jobs:
           assert output['evidence_integrity_percent'] == 0
           assert output['independently_verified_percent'] == 0
           PY
+      - name: Reject hard-linked manifest at CLI boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          root = Path('/tmp/aepx-hardlink-manifest')
+          root.mkdir(exist_ok=True)
+          manifest = root / 'manifest.json'
+          manifest.write_text(json.dumps({'milestones': [{
+              'id': 'rls', 'weight': 100, 'evidence': []
+          }]}))
+          os.link(manifest, root / 'manifest-alias.json')
+          PY
+          set +e
+          python tools/verify_acceptance_evidence.py /tmp/aepx-hardlink-manifest/manifest.json > /tmp/aepx-hardlink-manifest.out 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q 'acceptance evidence rejected' /tmp/aepx-hardlink-manifest.out
       - name: Publish clearly scoped CI summary
         if: always()
         shell: bash
@@ -218,3 +240,4 @@ jobs:
             /tmp/aepx-reuse.out
             /tmp/aepx-schema.out
             /tmp/aepx-hardlink.out
+            /tmp/aepx-hardlink-manifest.out
