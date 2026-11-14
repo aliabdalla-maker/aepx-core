@@ -67,7 +67,7 @@ class RunnerTests(unittest.TestCase):
 
     def test_restores_sigterm_handler_after_success(self):
         previous = signal.getsignal(signal.SIGTERM)
-        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\\n\\nOK\\n")
+        result = subprocess.CompletedProcess([], 0, "", "Ran 42 tests in 0.1s\n\nOK\n")
         status, _ = self.invoke(1, [result])
         self.assertEqual(status, 0)
         self.assertIs(signal.getsignal(signal.SIGTERM), previous)
