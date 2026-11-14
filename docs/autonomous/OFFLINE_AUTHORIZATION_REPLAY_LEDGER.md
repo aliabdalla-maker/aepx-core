@@ -1,0 +1,7 @@
+# Offline signed authorization replay ledger
+
+`scripts/aepx_authz_nonce_ledger.py` combines the existing signed tenant context verifier with a local SQLite consumed-context ledger. It uses `BEGIN IMMEDIATE`, a unique SHA256 fingerprint of canonical claims plus signature, and an atomic INSERT to deny repeated consumption across connections. Tests cover duplicate use, concurrent attempts, tampering, expiry and invalid database paths.
+
+**Strict scope:** local single-host development tests only. This component does not authenticate an OIDC principal, establish tenant membership, make `app.tenant_id` trustworthy, verify reviewer approval, or protect an external action atomically. In particular, a process crash after consumption but before a separate business action can strand authorization; a process that copies or replaces the SQLite file can bypass the local ledger. Use a trusted database transaction with single-use nonce consumption and the protected state transition for production. Do not use this module to authorize provider dispatch, financial charges or iteration completion.
+
+The repository workflow runs offline tests. No PostgreSQL runtime or production deployment has been performed.
