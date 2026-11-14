@@ -38,3 +38,8 @@ class CycleReportTests(unittest.TestCase):
         self.report["source_commit"] = "b" * 40
         with self.assertRaisesRegex(ValueError, "provenance"):
             self.check()
+
+    def test_rejects_boolean_cycle_count(self):
+        self.report["executed"] = True
+        with self.assertRaisesRegex(ValueError, "cycle count"):
+            self.check()
