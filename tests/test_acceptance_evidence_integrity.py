@@ -456,5 +456,21 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "weights must sum to 100"):
                     verify(manifest)
 
+    def test_duplicate_milestone_ids_do_not_read_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "proof.txt").write_bytes(b"proof")
+            manifest = root / "manifest.json"
+            entry = {"path": "proof.txt", "sha256": hashlib.sha256(b"proof").hexdigest(),
+                     "result": "pass"}
+            manifest.write_text(json.dumps({"milestones": [
+                {"id": "rls", "weight": 50, "evidence": [entry]},
+                {"id": "rls", "weight": 50, "evidence": []}
+            ]}))
+            with patch("tools.verify_acceptance_evidence.safe_digest",
+                       side_effect=AssertionError("duplicate milestone must not read evidence")):
+                with self.assertRaisesRegex(ValueError, "duplicate milestone id"):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
