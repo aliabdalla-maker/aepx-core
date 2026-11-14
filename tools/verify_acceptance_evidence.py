@@ -151,6 +151,11 @@ def verify(manifest_path: Path):
             digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
+            if len(relative) > 4096 or chr(0) in relative or chr(92) in relative or relative.startswith("/"):
+                raise ValueError("invalid evidence path syntax")
+            components = relative.split("/")
+            if len(components) > 64 or any(p in ("", ".", "..") or len(p) > 255 for p in components):
+                raise ValueError("invalid evidence path components")
             if relative in all_evidence_paths:
                 raise ValueError("duplicate evidence path rejected across milestones")
             evidence_paths.add(relative)
