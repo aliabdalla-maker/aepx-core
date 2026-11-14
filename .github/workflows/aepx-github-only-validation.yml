@@ -23,6 +23,7 @@ on:
       - 'tests/test_aepx_engineering_iteration_state.py'
       - 'tests/test_aepx_engineering_iteration_lock.py'
       - 'tests/test_aepx_engineering_evidence.py'
+      - 'tests/test_aepx_engineering_evidence_mutation.py'
       - 'scripts/aepx_engineering_evidence.py'
       - 'scripts/aepx_engineering_iteration_state.py'
       - 'scripts/test_aepx_docker_entrypoint_runtime.sh'
@@ -81,6 +82,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_pg_budget_acceptance_contract.py' -v
       - name: Test PostgreSQL budget SQL static contract
         run: python -m unittest discover -s tests -p 'test_aepx_budget_pg_sql_contract.py' -v
+      - name: Test concurrent evidence mutation detection
+        run: python -m unittest discover -s tests -p 'test_aepx_engineering_evidence_mutation.py' -v
       - name: Test offline engineering evidence verification
         run: python -m unittest discover -s tests -p 'test_aepx_engineering_evidence.py' -v
       - name: Test locked engineering iteration transitions
