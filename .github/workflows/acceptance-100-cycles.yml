@@ -68,7 +68,20 @@ jobs:
           import json
           import os
           from pathlib import Path
-          report = json.loads(Path("acceptance-100-iterations.json").read_text())
+          def reject_duplicate_keys(pairs):
+              result = {}
+              for key, value in pairs:
+                  if key in result:
+                      raise ValueError(f"duplicate JSON key: {key}")
+                  result[key] = value
+              return result
+          report = json.loads(
+              Path("acceptance-100-iterations.json").read_text(),
+              object_pairs_hook=reject_duplicate_keys,
+              parse_constant=lambda value: (_ for _ in ()).throw(ValueError(f"invalid JSON constant: {value}")),
+          )
+          if not isinstance(report, dict):
+              raise SystemExit("invalid report root")
           checks = (
               (report.get("source_commit") == os.environ["GITHUB_SHA"], "commit mismatch"),
               (report.get("workflow_run_id") == os.environ["GITHUB_RUN_ID"], "run mismatch"),
