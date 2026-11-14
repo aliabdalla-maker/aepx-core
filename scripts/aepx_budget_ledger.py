@@ -59,6 +59,9 @@ def _read(path):
     return state
 
 def _write(path, state):
+    payload = json.dumps(state,sort_keys=True,indent=2) + "\\n"
+    if len(payload.encode("utf-8")) > MAX_LEDGER_BYTES:
+        raise BudgetDenied("ledger exceeds size limit")
     fd, temp = tempfile.mkstemp(prefix=".aepx-budget-",dir=str(path.parent))
     try:
         with os.fdopen(fd,"w",encoding="utf-8") as stream:
