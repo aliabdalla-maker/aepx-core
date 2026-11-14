@@ -23,6 +23,22 @@ SCHEMA="""CREATE TABLE IF NOT EXISTS consumed_context(
  UNIQUE(tenant_id,principal_id,action,nonce)
 )"""
 
+EXPECTED_COLUMNS=("fingerprint","nonce","tenant_id","principal_id","action","expires_at","consumed_at")
+
+def _assert_current_schema(db):
+    """Reject legacy or modified schemas before any authorization insert."""
+    columns=db.execute("PRAGMA table_info(consumed_context)").fetchall()
+    if tuple(column[1] for column in columns)!=EXPECTED_COLUMNS:
+        raise AuthorizationDenied("incompatible authorization ledger schema")
+    indexes=db.execute("PRAGMA index_list(consumed_context)").fetchall()
+    unique_sets=set()
+    for index in indexes:
+        if index[2]:
+            cols=db.execute('PRAGMA index_info("'+index[1].replace('"','""')+'")').fetchall()
+            unique_sets.add(tuple(col[2] for col in cols))
+    if ("tenant_id","principal_id","action","nonce") not in unique_sets:
+        raise AuthorizationDenied("nonce uniqueness constraint missing")
+
 def consume_once(database,claims,signature,key,tenant_id,principal_id,action,now=None):
     """Verify then atomically consume one context. Fails closed on replay.
 
@@ -47,6 +63,7 @@ def consume_once(database,claims,signature,key,tenant_id,principal_id,action,now
             db.execute("BEGIN IMMEDIATE")
             try:
                 db.execute(SCHEMA)
+                _assert_current_schema(db)
                 db.execute("INSERT INTO consumed_context VALUES(?,?,?,?,?,?,?)",
                            (fingerprint,claims["nonce"],tenant_id,principal_id,action,claims["expires_at"],clock))
                 db.execute("COMMIT")
