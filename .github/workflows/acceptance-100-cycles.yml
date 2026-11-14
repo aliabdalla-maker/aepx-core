@@ -92,6 +92,14 @@ jobs:
         run: |
           set -euo pipefail
           python tools/verify_acceptance_cycle_report.py acceptance-100-iterations.json
+      - name: Record verified 100-cycle evidence
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '100/100 offline cycles passed provenance and report verification.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Independent acceptance: NOT ESTABLISHED' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Production deployment: NOT AUTHORIZED' >> "$GITHUB_STEP_SUMMARY"
       - name: Publish scoped result
         if: always()
         shell: bash
