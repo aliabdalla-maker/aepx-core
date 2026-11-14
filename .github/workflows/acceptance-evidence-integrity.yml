@@ -50,6 +50,13 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_acceptance_evidence_integrity.py' -v 2>&1 | tee /tmp/aepx-unittest.log
+          python - <<'PY'
+          import pathlib, re
+          log = pathlib.Path('/tmp/aepx-unittest.log').read_text()
+          match = re.search(r'^Ran (\d+) tests? in ', log, re.MULTILINE)
+          if not match or int(match.group(1)) < 42 or not re.search(r'^OK(?:\s|$)', log, re.MULTILINE):
+              raise SystemExit('Acceptance suite missing a passing completion marker for at least 42 tests')
+          PY
       - name: Verify CLI rejects absent manifest
         shell: bash
         run: |
