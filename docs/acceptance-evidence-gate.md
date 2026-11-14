@@ -165,3 +165,11 @@ including unexpected exceptions. Subprocess launch and execution errors are
 recorded as failed iterations with a bounded error type, rather than losing
 all prior iteration results. Two new regression tests cover these cases, for
 nine authored runner self-tests in total. This is not a claim of CI success.
+
+### Regression fixture and unexpected exception correction
+
+A runner self-test previously used literal backslash-n sequences in a simulated
+unittest result instead of newline escapes. The fixture is corrected. The
+runner also records unexpected exceptions as failed iterations, preserving
+failure evidence and restoring the previous SIGTERM handler. This is a source
+fix only; GitHub Actions execution remains to be independently confirmed.
