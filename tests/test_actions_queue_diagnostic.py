@@ -8,6 +8,34 @@ from unittest.mock import patch
 from tools.diagnose_actions_queue import summarize, main
 
 class QueueDiagnosticTests(unittest.TestCase):
+    def test_rejects_unknown_completed_conclusion(self):
+        with self.assertRaisesRegex(ValueError, "unknown conclusion"):
+            summarize([{"status": "completed", "conclusion": "mystery"}])
+
+    def test_rejects_noncompleted_success_conclusion(self):
+        with self.assertRaisesRegex(ValueError, "Noncompleted"):
+            summarize([{"status": "queued", "conclusion": "success"}])
+
+    def test_rejects_duplicate_required_workflow_selector(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as result:
+                main(["--require-workflow", "CI", "--require-workflow", "CI"])
+        self.assertEqual(result.exception.code, 2)
+
+    def test_rejects_whitespace_padded_workflow_selector(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as result:
+                main(["--require-workflow", " CI "])
+        self.assertEqual(result.exception.code, 2)
+
+    def test_rejects_malformed_repository_selector(self):
+        for repo in ("", "repo", "/repo", "owner/", "owner/repo/extra", " owner/repo "):
+            with self.subTest(repo=repo):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit) as result:
+                        main(["--repo", repo])
+                self.assertEqual(result.exception.code, 2)
+
     def test_counts_queued_and_completed(self):
         result = summarize([
             {"databaseId": 12, "name": "CI", "status": "queued", "createdAt": "2026-11-14"},
