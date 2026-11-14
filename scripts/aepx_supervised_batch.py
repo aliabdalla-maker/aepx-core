@@ -7,7 +7,7 @@ import json
 import time
 from pathlib import Path
 from aepx_autonomous_pilot import ALLOWED_PATTERNS, execute
-from aepx_pilot_checkpoint import append, load
+from aepx_pilot_checkpoint import MAX_ITERATIONS, append, load, exclusive_checkpoint_lock
 
 MAX_BATCH = 100
 
@@ -25,22 +25,29 @@ def run_batch(root, checkpoint, pattern, count, timeout, *, enabled=False, max_s
     checkpoint = Path(checkpoint)
     if not checkpoint.is_absolute():
         raise ValueError("checkpoint must be an absolute path")
-    start = time.monotonic()
-    initial_count = len(load(checkpoint)["attempts"])
-    results = []
-    for _ in range(count):
-        remaining = max_seconds - (time.monotonic() - start)
-        if remaining < 1:
-            break
-        outcome = execute(root, pattern, timeout=min(timeout, max(1, int(remaining))), enabled=True)
-        state = append(checkpoint, outcome)
-        results.append({"attempt": len(state["attempts"]), "status": outcome["status"]})
-        if outcome["status"] != "passed":
-            break
-    return {"initial_attempts": initial_count, "recorded": len(results),
-            "results": results, "stopped": "failure" if results and results[-1]["status"] != "passed"
-            else "time_limit" if len(results) < count else "completed",
-            "release_approved": False}
+    # Hold a batch-level lock for the full test/record cycle. Other batch
+    # processes using this controller cannot run ahead of the ledger.
+    batch_lock = checkpoint.with_name(checkpoint.name + ".batch")
+    with exclusive_checkpoint_lock(batch_lock):
+        start = time.monotonic()
+        initial_count = len(load(checkpoint)["attempts"])
+        if initial_count + count > MAX_ITERATIONS:
+            raise ValueError("batch would exceed the persistent iteration cap")
+        results = []
+        for _ in range(count):
+            remaining = max_seconds - (time.monotonic() - start)
+            if remaining < 1:
+                break
+            outcome = execute(root, pattern, timeout=min(timeout, max(1, int(remaining))), enabled=True)
+            state = append(checkpoint, outcome)
+            results.append({"attempt": len(state["attempts"]), "status": outcome["status"]})
+            if outcome["status"] != "passed":
+                break
+        return {"initial_attempts": initial_count, "recorded": len(results),
+                "results": results, "stopped": "failure" if results and results[-1]["status"] != "passed"
+                else "time_limit" if len(results) < count else "completed",
+                "release_approved": False}
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

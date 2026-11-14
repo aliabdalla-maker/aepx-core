@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from aepx_supervised_batch import run_batch
-from aepx_pilot_checkpoint import load
+from aepx_pilot_checkpoint import load, exclusive_checkpoint_lock
 
 PATTERN = "test_aepx_autonomous_checkpoint.py"
 
@@ -39,6 +39,34 @@ class BatchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaises(ValueError):
                 run_batch(directory,Path(directory)/"checkpoint.json",PATTERN,101,10,enabled=True)
+
+    def test_rejects_cap_before_test_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "checkpoint.json"
+            with patch("aepx_supervised_batch.load", return_value={"attempts": [None] * 10000}), \
+                 patch("aepx_supervised_batch.execute") as execute:
+                with self.assertRaisesRegex(ValueError, "iteration cap"):
+                    run_batch(directory,path,PATTERN,1,10,enabled=True)
+                execute.assert_not_called()
+
+    def test_rejects_overflowing_batch_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "checkpoint.json"
+            with patch("aepx_supervised_batch.load", return_value={"attempts": [None] * 9999}), \
+                 patch("aepx_supervised_batch.execute") as execute:
+                with self.assertRaisesRegex(ValueError, "iteration cap"):
+                    run_batch(directory,path,PATTERN,2,10,enabled=True)
+                execute.assert_not_called()
+
+    def test_rejects_competing_batch_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "checkpoint.json"
+            batch_lock = path.with_name(path.name + ".batch")
+            with exclusive_checkpoint_lock(batch_lock):
+                with patch("aepx_supervised_batch.execute") as execute:
+                    with self.assertRaisesRegex(ValueError, "locked"):
+                        run_batch(directory,path,PATTERN,1,10,enabled=True)
+                    execute.assert_not_called()
 
 if __name__ == "__main__":
     unittest.main()

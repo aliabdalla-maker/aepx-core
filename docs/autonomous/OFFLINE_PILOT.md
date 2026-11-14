@@ -51,3 +51,9 @@ python scripts/aepx_supervised_batch.py --pattern test_aepx_autonomous_checkpoin
 ```
 
 The checkpoint must be an absolute path. Never execute repository tests on production infrastructure. This pilot does not provide OS isolation itself. Do not enable LLM actions, auto-merge, external MCP forwarding, or deployment based on this batch report.
+
+### Batch admission and recovery
+
+The controller now refuses a batch **before executing tests** if its requested count would exceed the 10,000-record ledger cap. It also holds a separate `.batch.lock` directory throughout the batch so two cooperating batch controllers cannot execute concurrently against the same checkpoint. A crash may leave this lock behind: first confirm no batch writer is alive, then manually remove the abandoned lock directory. Do not remove a live lock.
+
+This protects cooperating batch processes only. The standalone `aepx_autonomous_pilot.py --checkpoint` path does not acquire the batch lock; do not run it concurrently against a batch checkpoint. The 10,000 limit counts **offline test attempts**, not verified autonomous engineering iterations.
