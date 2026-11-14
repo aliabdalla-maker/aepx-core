@@ -2,7 +2,9 @@ name: AEP-X two independent 50-cycle offline batches
 on:
   pull_request:
     paths:
-      - 'tools/**'
+      - 'tools/run_acceptance_100_iterations.py'
+      - 'tools/verify_acceptance_cycle_report.py'
+      - 'tools/verify_acceptance_evidence.py'
       - 'tests/test_acceptance_*.py'
       - '.github/workflows/acceptance-50-cycles.yml'
   workflow_dispatch:
