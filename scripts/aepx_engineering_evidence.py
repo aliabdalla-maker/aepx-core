@@ -86,3 +86,26 @@ def verify_iteration_artifacts(state, number, root, manifest):
         if not isinstance(path, str) or digest_artifact(root, path) != expected:
             raise EvidenceDenied("artifact digest mismatch")
     return True
+
+def verify_reviewed_iteration_artifacts(state, number, root, manifest):
+    """Check all five pre-completion stage artifacts before approval.
+
+    The caller supplies a local ledger snapshot and manifest. This does not
+    authenticate either, make the files immutable, or authorize completion.
+    """
+    from scripts.aepx_engineering_iteration_state import validate, STAGES
+    validate(state)
+    if type(number) is not int or not 1 <= number <= len(state["iterations"]):
+        raise EvidenceDenied("unknown iteration")
+    item = state["iterations"][number - 1]
+    stages = STAGES[:-1]
+    if item["stage"] != "reviewed" or not isinstance(manifest, dict) or set(manifest) != set(stages):
+        raise EvidenceDenied("iteration not reviewed or manifest incomplete")
+    for stage in stages:
+        expected = item["evidence"][stage]
+        if not isinstance(expected, str) or not DIGEST.fullmatch(expected):
+            raise EvidenceDenied("invalid reviewed evidence digest")
+        path = manifest[stage]
+        if not isinstance(path, str) or digest_artifact(root, path) != expected:
+            raise EvidenceDenied("reviewed artifact digest mismatch")
+    return True
