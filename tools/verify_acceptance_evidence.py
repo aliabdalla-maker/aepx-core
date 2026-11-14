@@ -119,6 +119,18 @@ def verify(manifest_path: Path):
     milestones = manifest["milestones"]
     if not isinstance(milestones, list) or not milestones or len(milestones) > 100:
         raise ValueError("milestones must be a nonempty list")
+    # Reject invalid allocation before opening any evidence files.
+    # Otherwise an invalid final milestone could still trigger earlier file reads.
+    allocation = 0
+    for milestone in milestones:
+        if not isinstance(milestone, dict) or set(milestone) != {"id", "weight", "evidence"}:
+            raise ValueError("invalid milestone schema")
+        weight = milestone["weight"]
+        if type(weight) is not int or weight <= 0:
+            raise ValueError("weights must be positive integers")
+        allocation += weight
+    if allocation != 100:
+        raise ValueError("milestone weights must sum to 100")
     ids = set()
     all_evidence_paths = set()
     total_weight = 0
