@@ -112,6 +112,25 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path),
                                        "--head-sha", "a" * 40]), 2)
 
+    def test_required_workflow_coverage_rejects_missing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            path.write_text('[{"name":"CI","status":"completed","conclusion":"success"}]',
+                            encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--require-success",
+                                       "--require-workflow", "CI",
+                                       "--require-workflow", "AEP-X fast offline acceptance smoke"]), 5)
+
+    def test_required_workflow_coverage_accepts_present(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            path.write_text('[{"name":"CI","status":"completed","conclusion":"success"}]',
+                            encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--require-success",
+                                       "--require-workflow", "CI"]), 0)
+
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])
         self.assertIn("cannot be determined", result["diagnosis"])

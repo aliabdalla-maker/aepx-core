@@ -623,3 +623,14 @@ are evaluated. An empty match fails strict success with exit 4. The CLI
 `--limit` still bounds the fetched snapshot, so a successful result covers
 only returned runs for that commit, not proof that all required workflows ran.
 Do not treat this snapshot as a release authorization.
+
+### Mandatory workflow coverage in queue snapshots
+
+To prevent a partial green snapshot from masquerading as acceptance, specify
+required exact workflow names, e.g. `python tools/diagnose_actions_queue.py
+--head-sha <FULL_40_CHARACTER_SHA> --require-success --require-workflow CI
+--require-workflow 'AEP-X fast offline acceptance smoke'`.
+Exit 5 means at least one required workflow name is absent from the queried
+snapshot; output lists `missing_workflows`. This check is limited to the
+returned `--limit` runs and does not validate job-level evidence or artifacts.
+Add all required workflows explicitly for the relevant release gate.
