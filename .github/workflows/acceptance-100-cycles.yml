@@ -118,8 +118,17 @@ jobs:
           if [[ -f acceptance-100-iterations.json ]]; then
             python - <<'PY'
           import json, os
-          data = json.load(open('acceptance-100-iterations.json'))
+          try:
+              with open('acceptance-100-iterations.json', encoding='utf-8') as handle:
+                  data = json.load(handle)
+              if not isinstance(data, dict):
+                  raise ValueError("report root is not an object")
+          except (OSError, ValueError, TypeError) as exc:
+              data = {"requested": "unknown", "executed": "unknown", "all_passed": False,
+                      "runs": [], "report_error": type(exc).__name__}
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              if data.get("report_error"):
+                  out.write(f"- Report unreadable: {data['report_error']}\n")
               out.write('## Offline acceptance repetition\n')
               out.write(f"- Cycles executed: {data['executed']} / {data['requested']}\n")
               out.write(f"- All passed: {data['all_passed']}\n")
