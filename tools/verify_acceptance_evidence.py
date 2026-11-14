@@ -82,6 +82,8 @@ def reject_duplicate_json_keys(pairs):
 
 
 def verify(manifest_path: Path):
+    if manifest_path.name in ("", ".", "..") or chr(0) in str(manifest_path):
+        raise ValueError("invalid manifest path")
     root = manifest_path.parent.resolve()
     if os.name != "posix" or not hasattr(os, "O_NOFOLLOW"):
         raise ValueError("secure manifest reading requires POSIX no-follow support")
