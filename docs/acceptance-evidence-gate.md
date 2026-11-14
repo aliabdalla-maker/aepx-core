@@ -603,3 +603,13 @@ no not-started runs, exit 3 means at least one run is queued/waiting/pending/
 requested, and exit 2 means the query or input failed. Exit 0 does **not**
 mean completed workflows passed; inspect their conclusions separately.
 This flag does not schedule, cancel or rerun any GitHub Actions job.
+
+### Strict workflow conclusion monitoring
+
+Use `python tools/diagnose_actions_queue.py --require-success` for a
+read-only snapshot check that rejects any queued/incomplete run, any completed
+run whose conclusion is not `success`, and empty snapshots. Exit 4 means
+strict success was not established; exit 2 means a diagnostic/input error.
+The output includes per-conclusion counts and unsuccessful run IDs. This is
+**not** a substitute for checking the correct commit, workflow coverage,
+required security tests, report provenance or independent release approval.
