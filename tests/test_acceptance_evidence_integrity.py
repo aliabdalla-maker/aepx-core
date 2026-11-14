@@ -77,5 +77,14 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(manifest)
 
+    def test_malformed_top_level_and_milestone_rejected(self):
+        for payload in [None, [], {"milestones": [None]},
+                        {"milestones": ["bad"]}, {"milestones": []}]:
+            with self.subTest(payload=payload), tempfile.TemporaryDirectory() as tmp:
+                manifest = Path(tmp) / "manifest.json"
+                manifest.write_text(json.dumps(payload))
+                with self.assertRaises(ValueError):
+                    verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
