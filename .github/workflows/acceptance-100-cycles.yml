@@ -57,8 +57,8 @@ jobs:
               out.write('## Offline acceptance repetition\n')
               out.write(f"- Cycles executed: {data['executed']} / {data['requested']}\n")
               out.write(f"- All passed: {data['all_passed']}\n")
-              out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\\n")
-              out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\\n")
+              out.write(f"- Source commit: {data.get('source_commit') or 'unavailable'}\n")
+              out.write(f"- Workflow run ID: {data.get('workflow_run_id') or 'unavailable'}\n")
               out.write('- Independent acceptance: NOT ESTABLISHED\n')
               out.write('- Merge or deployment authorized: NO\n')
           PY
