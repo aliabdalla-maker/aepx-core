@@ -509,3 +509,11 @@ before the repeated runner, matching the 100-cycle and smoke gates. Test
 discovery counts alone are insufficient; a failing integrity test stops the
 batch before evidence generation. Full acceptance still requires actual CI
 execution, provenance verification and independent security review.
+
+### Smoke gate trigger coverage
+
+The fast smoke workflow now runs for pull requests that modify either
+long-running acceptance workflow (50-cycle matrix or standalone 100-cycle),
+in addition to runner, verifier and regression test changes. A queued smoke
+job is not a pass. Before authorizing release, inspect actual job logs and
+provenance-validated reports; smoke is not a replacement for full acceptance.

@@ -7,6 +7,8 @@ on:
       - 'tools/verify_acceptance_evidence.py'
       - 'tests/test_acceptance_*.py'
       - '.github/workflows/acceptance-smoke.yml'
+      - '.github/workflows/acceptance-50-cycles.yml'
+      - '.github/workflows/acceptance-100-cycles.yml'
   workflow_dispatch:
 permissions:
   contents: read
