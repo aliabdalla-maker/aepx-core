@@ -91,7 +91,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          Path('/tmp/aepx-invalid-utf8.json').write_bytes(b'\\xff\\xfe')
+          Path('/tmp/aepx-invalid-utf8.json').write_bytes(bytes([255, 254]))
           PY
           set +e
           python tools/verify_acceptance_evidence.py /tmp/aepx-invalid-utf8.json > /tmp/aepx-invalid-utf8.out 2>&1
