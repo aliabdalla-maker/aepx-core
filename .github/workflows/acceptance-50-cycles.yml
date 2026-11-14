@@ -88,3 +88,59 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
           path: acceptance-50-batch-${{ matrix.batch }}.json
+
+  aggregate-evidence:
+    needs: [offline-50]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Retrieve both independent batch reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: aepx-50-cycle-batch-*-report
+          path: batch-evidence
+          merge-multiple: true
+      - name: Verify both reports and aggregate 100-cycle evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from tools.verify_acceptance_cycle_report import verify
+
+          expected = [Path(f"batch-evidence/acceptance-50-batch-{i}.json") for i in (1, 2)]
+          if any(not path.is_file() for path in expected):
+              raise SystemExit("Both 50-cycle evidence artifacts are required")
+          for path in expected:
+              verify(path, os.environ["GITHUB_SHA"], os.environ["GITHUB_RUN_ID"], expected=50)
+          result = {
+              "source_commit": os.environ["GITHUB_SHA"],
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "verified_batches": 2,
+              "verified_offline_cycles": 100,
+              "independent_acceptance_established": False,
+              "production_deployment_authorized": False,
+          }
+          Path("acceptance-50x2-aggregate.json").write_text(
+              json.dumps(result, indent=2) + "\n", encoding="utf-8"
+          )
+          print("Two independently verified 50-cycle reports; release still blocked")
+          PY
+          echo 'Two 50-cycle reports verified (100 offline cycles total).' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Independent acceptance: NOT ESTABLISHED' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: aepx-50x2-verified-aggregate
+          retention-days: 7
+          if-no-files-found: error
+          path: acceptance-50x2-aggregate.json
