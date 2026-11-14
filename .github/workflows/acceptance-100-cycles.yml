@@ -116,7 +116,7 @@ jobs:
               executed = executed if type(executed) is int and 0 <= executed <= 100 else 'invalid'
               requested = requested if type(requested) is int and 1 <= requested <= 100 else 'invalid'
               out.write(f"- Cycles executed: {executed} / {requested}\n")
-              out.write(f"- All passed: {data.get('all_passed') is True}\n")
+              out.write(f"- Report claims all passed (unverified summary): {data.get('all_passed') is True}\n")
               out.write(f"- Source commit: {os.environ.get('GITHUB_SHA', 'unavailable')}\n")
               out.write(f"- Workflow run ID: {os.environ.get('GITHUB_RUN_ID', 'unavailable')}\n")
               runs = data.get('runs')
