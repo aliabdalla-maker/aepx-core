@@ -5,6 +5,7 @@ import json
 import math
 import os
 import re
+import stat
 from pathlib import Path
 
 
@@ -37,7 +38,7 @@ def verify(path, commit, run_id, expected=100, minimum_tests=42):
     descriptor = os.open(source, flags)
     try:
         opened = os.fstat(descriptor)
-        if opened.st_nlink != 1 or opened.st_size > 2_000_000:
+        if not stat.S_ISREG(opened.st_mode) or opened.st_nlink != 1 or opened.st_size > 2_000_000:
             raise ValueError("unsafe or oversized opened evidence report")
         with os.fdopen(descriptor, "r", encoding="utf-8") as handle:
             descriptor = -1
