@@ -82,7 +82,6 @@ def main():
                 run = subprocess.run(command, capture_output=True, text=True,
                                      timeout=min(90, remaining), check=False,
                                      env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
-                output = run.stdout + run.stderr
                 # unittest writes its completion summary to stderr by default.
                 # Check that stream alone to avoid forged success text on stdout.
                 summary_output = run.stderr
@@ -99,7 +98,7 @@ def main():
                           "return_code": run.returncode,
                           "elapsed_seconds": round(time.monotonic() - start, 3)}
                 if not passed:
-                    record["diagnostic_tail"] = output[-12000:]
+                    record["error"] = "test suite failed or completion summary missing"
             except subprocess.TimeoutExpired:
                 record = {"iteration": iteration, "passed": False,
                           "error": "per-iteration execution timeout"}
