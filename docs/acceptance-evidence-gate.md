@@ -65,7 +65,7 @@ the evidence, establish a trusted CI run, or prove production readiness.
 
 1. Open the `AEP-X acceptance evidence integrity` workflow on the draft PR branch.
 2. Confirm that the most recent **non-cancelled** run belongs to the intended commit SHA.
-3. Require the Python preflight, all 35 discovered tests and all 12 CLI checks to pass.
+3. Require the Python preflight, all 41 discovered tests and all 12 CLI checks to pass.
 4. Download the `aepx-offline-evidence-diagnostics` artifact if any step fails.
 5. Record the run URL, commit SHA, workflow conclusion and reviewer identity in the release checklist.
 6. Keep independent acceptance **NOT ESTABLISHED** until trusted provenance and independent review are available.
@@ -73,3 +73,12 @@ the evidence, establish a trusted CI run, or prove production readiness.
 A passing offline gate is necessary for this verifier's contract but is not proof of
 end-to-end AEP-X safety, PostgreSQL acceptance, HITL correctness or deployment readiness.
 No merge, external provider execution, gateway forwarding or OCI provisioning is authorized by this workflow.
+
+## Current verification boundary
+
+The workflow's discovery floor is 41 Python tests and the workflow defines 12
+CLI smoke checks. These are authored checks, not confirmed executions. A
+missing or inconclusive GitHub Actions run must be reported as **unverified**,
+never as passing. Do not increase maturity percentages on the basis of test
+counts, local digest matches, or commits alone. Reconcile this count against
+the workflow whenever tests are added or removed.
