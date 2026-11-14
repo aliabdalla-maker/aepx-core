@@ -9,8 +9,7 @@ CREATE TABLE IF NOT EXISTS aepx_iteration.approval_nonce (
  reviewer_id text NOT NULL CHECK (reviewer_id ~ '^[A-Za-z0-9_-]{1,128}$'),
  expires_at timestamptz NOT NULL,
  consumed_at timestamptz,
- PRIMARY KEY (tenant_id,nonce),
- CHECK (consumed_at IS NULL OR consumed_at<=clock_timestamp()+interval '1 day')
+ PRIMARY KEY (tenant_id,nonce)
 );
 ALTER TABLE aepx_iteration.approval_nonce ENABLE ROW LEVEL SECURITY;
 ALTER TABLE aepx_iteration.approval_nonce FORCE ROW LEVEL SECURITY;
