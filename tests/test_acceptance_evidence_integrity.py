@@ -197,5 +197,18 @@ class EvidenceGateTests(unittest.TestCase):
                               "result": "pass"}]}]}))
             self.assertEqual(verify(manifest)["evidence_integrity_percent"], 0)
 
+    def test_symlink_manifest_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "actual.json"
+            target.write_text(json.dumps({"milestones": [{"id": "rls", "weight": 100, "evidence": []}]}))
+            alias = root / "manifest.json"
+            try:
+                alias.symlink_to(target)
+            except (OSError, NotImplementedError):
+                self.skipTest("symlinks unavailable")
+            with self.assertRaises(OSError):
+                verify(alias)
+
 if __name__ == "__main__":
     unittest.main()
