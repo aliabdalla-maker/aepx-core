@@ -33,6 +33,8 @@ on:
       - 'tests/test_aepx_pg_settled_replay_contract.py'
       - 'scripts/aepx_provider_dispatch_admission.py'
       - 'tests/test_aepx_provider_dispatch_admission.py'
+      - 'scripts/aepx_signed_dispatch_approval.py'
+      - 'tests/test_aepx_signed_dispatch_approval.py'
       - 'tests/sql/aepx_budget_pg_acceptance.sql'
       - 'scripts/test_aepx_pg_budget_acceptance.sh'
       - 'platform/saas-ide/backend/sql/aepx_budget_transactional.sql'
@@ -82,6 +84,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_aepx_pilot_standalone_lock.py' -v
       - name: Test offline persistent budget reservations
         run: python -m unittest discover -s tests -p 'test_aepx_budget_ledger.py' -v
+      - name: Test signed offline dispatch approval verification
+        run: python -m unittest discover -s tests -p 'test_aepx_signed_dispatch_approval.py' -v
       - name: Test offline provider dispatch admission policy
         run: python -m unittest discover -s tests -p 'test_aepx_provider_dispatch_admission.py' -v
       - name: Test PostgreSQL settled reservation replay contract

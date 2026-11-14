@@ -1,0 +1,5 @@
+# Offline signed dispatch approvals
+
+`scripts/aepx_signed_dispatch_approval.py` verifies a canonical HMAC-SHA256 envelope scoped to `tenant_id`, `request_id`, `lease_fence`, `idempotency_key`, `expires_at` and `reviewer_id`. It rejects expired signatures, cross-tenant/request replay, stale fences and modified envelopes. `evaluate_signed_dispatch` composes this verification with the existing fail-closed admission policy.
+
+**Not production approval:** The HMAC key must be provisioned and controlled by a trusted approval service; the presence of a `reviewer_id` in signed bytes does not prove a human reviewed anything. This module does not mint keys or sign approvals, authenticate users, revoke approvals, protect against replay of an unexpired valid envelope, or guarantee atomic single-use dispatch. Never expose the verification key to agents or untrusted workers. Production requires a separate trusted approval service, identity binding, key rotation, one-time durable claims, transactional budget+lease fencing, immutable audit records and independent gateway enforcement. No provider calls are enabled by this code.
