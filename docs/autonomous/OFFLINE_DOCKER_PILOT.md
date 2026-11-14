@@ -44,3 +44,13 @@ The probe writes a temporary checkpoint file as UID 10001, flushes and fsyncs it
 ## Isolated Python runner import fix
 
 The image uses `python -I -c` and explicitly inserts `/workspace/scripts` into `sys.path` before importing `aepx_supervised_batch.main()`. This avoids the sibling-module import failure caused by directly executing `/workspace/scripts/aepx_supervised_batch.py` with `-I`, which omits its script directory from Python's import path. The added offline regression test exercises the import pattern with `--help`; the real Docker image still needs a runtime acceptance check. Only the mounted repository scripts are added to the import path, so this is not a substitute for reviewing untrusted repository code.
+
+## Real-image entrypoint smoke test
+
+On a disposable trusted Docker host with a reviewed locally built `aepx-offline-pilot:local` image, run:
+
+```bash
+bash scripts/test_aepx_docker_entrypoint_runtime.sh --execute
+```
+
+This starts the actual image with its default isolated Python entrypoint and `--help`. It verifies the runner imports and exposes `--checkpoint` and `--execute`, while preserving nonroot, network-disabled, read-only and no-new-privileges Docker flags. It does **not** run repository tests, write a checkpoint, or call an LLM. The image must already exist locally; `--pull never` prevents an implicit registry fetch. This runtime test is deliberately not automatically executed in CI.
