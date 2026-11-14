@@ -39,8 +39,8 @@ jobs:
               start_dir='tests', pattern='test_acceptance_evidence_integrity.py')
           count = suite.countTestCases()
           print(f'Discovered {count} acceptance integrity tests')
-          if count < 32:
-              raise SystemExit(f'Expected at least 32 tests, discovered {count}')
+          if count < 33:
+              raise SystemExit(f'Expected at least 33 tests, discovered {count}')
           PY
       - name: Run offline fail-closed evidence regressions
         shell: bash
