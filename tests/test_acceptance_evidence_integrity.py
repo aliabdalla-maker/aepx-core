@@ -377,5 +377,16 @@ class EvidenceGateTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 verify(invalid)
 
+    def test_invalid_path_with_malformed_digest_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"milestones": [{
+                "id": "rls", "weight": 100, "evidence": [{
+                    "path": "../outside.txt", "sha256": "not-a-digest", "result": "pass"
+                }]
+            }]}))
+            with self.assertRaises(ValueError):
+                verify(manifest)
+
 if __name__ == "__main__":
     unittest.main()
