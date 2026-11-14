@@ -36,6 +36,18 @@ class QueueDiagnosticTests(unittest.TestCase):
                         main(["--repo", repo])
                 self.assertEqual(result.exception.code, 2)
 
+    def test_empty_monitoring_snapshot_fails_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "empty.json"
+            path.write_text("[]", encoding="utf-8")
+            for option in ("--fail-on-incomplete", "--fail-on-queued"):
+                with self.subTest(option=option):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        with contextlib.redirect_stderr(io.StringIO()):
+                            self.assertEqual(main(["--input-json", str(path), option]), 8)
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path)]), 0)
+
     def test_fail_on_incomplete_distinguishes_running_from_queued(self):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "runs.json"
