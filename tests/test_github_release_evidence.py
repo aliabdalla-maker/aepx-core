@@ -57,9 +57,56 @@ class ReleaseEvidenceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 module.fetch_runs("owner/repo", SHA, "token", fetch=lambda url: payload)
 
+    def test_latest_rerun_attempt_must_pass(self):
+        runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+        runs[0]["run_attempt"] = 2
+        runs[0]["status"] = "queued"
+        runs[0]["conclusion"] = None
+        self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_failed_latest_run_blocks_even_if_older_passed(self):
+        runs = [run(path, i + 1) for i, path in enumerate(module.REQUIRED)]
+        runs.append(run(module.REQUIRED[0], 100, "completed", "failure"))
+        self.assertTrue(module.evaluate(runs, SHA))
+
+    def test_zero_results_with_zero_total_is_valid_fetch_but_blocks_release(self):
+        evidence = module.fetch_runs("owner/repo", SHA, "token",
+            fetch=lambda url: {"total_count": 0, "workflow_runs": []})
+        self.assertEqual(evidence, [])
+        self.assertTrue(module.evaluate(evidence, SHA))
+
+    def test_missing_total_count_blocks(self):
+        with self.assertRaises(ValueError):
+            module.fetch_runs("owner/repo", SHA, "token",
+                              fetch=lambda url: {"workflow_runs": []})
+
+    def test_incomplete_page_blocks(self):
+        with self.assertRaises(ValueError):
+            module.fetch_runs("owner/repo", SHA, "token",
+                              fetch=lambda url: {"total_count": 2, "workflow_runs": [run(module.REQUIRED[0])]})
+
+    def test_complete_two_pages(self):
+        calls = []
+        def fake(url):
+            calls.append(url)
+            if len(calls) == 1:
+                return {"total_count": 101, "workflow_runs": [run(module.REQUIRED[0], i + 1) for i in range(100)]}
+            return {"total_count": 101, "workflow_runs": [run(module.REQUIRED[0], 101)]}
+        self.assertEqual(len(module.fetch_runs("owner/repo", SHA, "token", fetch=fake)), 101)
+
+    def test_total_changes_blocks(self):
+        calls = []
+        def fake(url):
+            calls.append(url)
+            if len(calls) == 1:
+                return {"total_count": 101, "workflow_runs": [run(module.REQUIRED[0], i + 1) for i in range(100)]}
+            return {"total_count": 102, "workflow_runs": [run(module.REQUIRED[0], 101)]}
+        with self.assertRaises(ValueError):
+            module.fetch_runs("owner/repo", SHA, "token", fetch=fake)
+
     def test_pagination_fail_closed(self):
         def fake(url):
-            return {"workflow_runs": [run(module.REQUIRED[0])] * 100}
+            return {"total_count": 1000, "workflow_runs": [run(module.REQUIRED[0])] * 100}
         with self.assertRaises(ValueError):
             module.fetch_runs("owner/repo", SHA, "token", fetch=fake)
 

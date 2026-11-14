@@ -26,19 +26,31 @@ def fetch_runs(repo, sha, token, fetch=None):
             with urllib.request.urlopen(request, timeout=20) as response:
                 return json.load(response)
     runs = []
+    expected_total = None
     for page in range(1, 11):
         url = (f"https://api.github.com/repos/{repo}/actions/runs"
                f"?head_sha={sha}&per_page=100&page={page}")
         data = fetch(url)
         if not isinstance(data, dict):
             raise ValueError("malformed API page")
+        total = data.get("total_count")
+        if type(total) is not int or total < 0:
+            raise ValueError("missing or invalid total_count")
+        if expected_total is None:
+            expected_total = total
+        elif total != expected_total:
+            raise ValueError("total_count changed during pagination")
         batch = data.get("workflow_runs")
         if not isinstance(batch, list):
             raise ValueError("missing workflow_runs")
         if any(not isinstance(item, dict) for item in batch):
             raise ValueError("malformed run record")
         runs.extend(batch)
+        if len(runs) > expected_total:
+            raise ValueError("more runs than total_count")
         if len(batch) < 100:
+            if len(runs) != expected_total:
+                raise ValueError("incomplete evidence pagination")
             return runs
     raise ValueError("workflow evidence pagination limit reached; fail closed")
 
