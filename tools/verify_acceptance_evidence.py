@@ -42,8 +42,10 @@ def verify(manifest_path: Path):
         if not isinstance(evidence, list):
             raise ValueError("evidence must be a list")
         for item in evidence:
-            relative = item["path"]
-            digest = item["sha256"]
+            if not isinstance(item, dict):
+                raise ValueError("evidence entry must be an object")
+            relative = item.get("path")
+            digest = item.get("sha256")
             if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
                 raise ValueError("evidence path must be relative")
             path = (root / relative).resolve()
