@@ -65,6 +65,32 @@ class QueueDiagnosticTests(unittest.TestCase):
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(main(["--input-json", str(path), "--fail-on-queued"]), 0)
 
+    def test_require_success_rejects_failed_completed_runs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "failed.json"
+            path.write_text('[{"status":"completed","conclusion":"failure"}]', encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--require-success"]), 4)
+
+    def test_require_success_rejects_queued_and_empty(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "runs.json"
+            for payload in ('[{"status":"queued"}]', "[]"):
+                path.write_text(payload, encoding="utf-8")
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(main(["--input-json", str(path), "--require-success"]), 4)
+
+    def test_require_success_accepts_completed_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "passed.json"
+            path.write_text('[{"status":"completed","conclusion":"success"}]', encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--input-json", str(path), "--require-success"]), 0)
+
+    def test_completed_run_requires_conclusion(self):
+        with self.assertRaisesRegex(ValueError, "lacks a conclusion"):
+            summarize([{"status": "completed"}])
+
     def test_does_not_infer_root_cause(self):
         result = summarize([{"status": "queued"}])
         self.assertIn("cannot be determined", result["diagnosis"])
