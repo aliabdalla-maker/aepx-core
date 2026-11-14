@@ -52,6 +52,12 @@ jobs:
           PY
           python -m unittest discover -s tests -p 'test_acceptance_100_runner.py' -v
           python -m py_compile tools/verify_acceptance_cycle_report.py tests/test_acceptance_cycle_report.py
+          python - <<'PY'
+          import unittest
+          suite = unittest.defaultTestLoader.discover("tests", pattern="test_acceptance_cycle_report.py")
+          if suite.countTestCases() < 12:
+              raise SystemExit("Acceptance report verifier coverage below 12 tests")
+          PY
           python -m unittest discover -s tests -p 'test_acceptance_cycle_report.py' -v
           python - <<'PY'
           import unittest
