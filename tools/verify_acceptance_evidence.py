@@ -80,10 +80,21 @@ def reject_duplicate_json_keys(pairs):
 
 
 def verify(manifest_path: Path):
-    root = manifest_path.resolve().parent
-    if manifest_path.stat().st_size > 1024 * 1024:
-        raise ValueError("manifest exceeds 1 MiB")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_json_keys, parse_constant=lambda _: (_ for _ in ()).throw(ValueError("non-finite JSON number rejected")))
+    root = manifest_path.parent.resolve()
+    if os.name != "posix" or not hasattr(os, "O_NOFOLLOW"):
+        raise ValueError("secure manifest reading requires POSIX no-follow support")
+    descriptor = os.open(manifest_path.name, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0), dir_fd=os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW))
+    try:
+        metadata = os.fstat(descriptor)
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 1024 * 1024:
+            raise ValueError("manifest must be a regular file no larger than 1 MiB")
+        with os.fdopen(descriptor, "rb", closefd=False) as source:
+            raw = source.read(1024 * 1024 + 1)
+        if len(raw) > 1024 * 1024:
+            raise ValueError("manifest exceeds 1 MiB")
+    finally:
+        os.close(descriptor)
+    manifest = json.loads(raw.decode("utf-8"), object_pairs_hook=reject_duplicate_json_keys, parse_constant=lambda _: (_ for _ in ()).throw(ValueError("non-finite JSON number rejected")))
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
     milestones = manifest["milestones"]
