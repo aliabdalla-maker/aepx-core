@@ -148,3 +148,12 @@ records an interrupted in-flight cycle as failed and returns exit code 130.
 The 42 acceptance-integrity tests remain separate from these five runner tests.
 Neither suite is considered passing until the actual workflow logs establish
 successful execution. No automatic merge or deployment is permitted.
+
+### Signal restoration and non-cancelling CI (latest)
+
+The runner now restores the previous SIGTERM handler after normal completion
+and after its handled interrupted-cycle return. Two additional runner self-tests
+check these paths (seven runner self-tests total). The 100-cycle workflow now
+triggers when the verifier or integrity tests change and queues rather than
+cancels an in-progress verification. These authored checks still require real
+runner execution evidence. The independent acceptance gate remains closed.
