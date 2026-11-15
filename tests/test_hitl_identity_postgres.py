@@ -16,17 +16,30 @@ class PostgresIdentityTests(unittest.TestCase):
         self.args=dict(connection_factory=self.factory,subject="operator-123",
             tenant_id=str(uuid4()),token_id="jwt-token-123",
             issuer="https://identity.example")
+    # enforce_postgres_identity() makes ONE atomic statement decide freshness, membership and
+    # revocation (shared MVCC snapshot). Unit tests pin that contract; the semantics of
+    # inactive/revoked/stale/cross-tenant denial are proven against real PostgreSQL in
+    # test_hitl_atomic_identity_pg_integration.py and test_hitl_atomic_identity_mvcc_pg.py.
     def test_active_member_and_not_revoked(self):
-        self.cur.fetchone.side_effect=[(True,),(True,),(True,),(False,)]
+        self.cur.fetchone.return_value=(True,)
         self.assertTrue(enforce_postgres_identity(**self.args))
-        self.assertEqual(self.cur.execute.call_count,4)
+        self.assertEqual(self.cur.execute.call_count,1)
+        sql,params=self.cur.execute.call_args.args
+        t,s,i,j=self.args["tenant_id"],self.args["subject"],self.args["issuer"],self.args["token_id"]
+        self.assertEqual(params,(t,i,t,s,i,t,s,i,j))
+        for clause in ("identity_authority_sync","healthy IS TRUE","interval '60 seconds'",
+                       "identity_memberships","active IS TRUE",
+                       "NOT EXISTS (SELECT 1 FROM hitl.identity_revocations"):
+            self.assertIn(clause,sql)
     def test_inactive_membership_denied(self):
-        self.cur.fetchone.side_effect=[(True,),(False,)]
+        # The atomic statement evaluates to FALSE when the membership is inactive.
+        self.cur.fetchone.return_value=(False,)
         with self.assertRaises(IdentityPolicyDenied):
             enforce_postgres_identity(**self.args)
-        self.assertEqual(self.cur.execute.call_count,2)
+        self.assertEqual(self.cur.execute.call_count,1)
     def test_revoked_token_denied(self):
-        self.cur.fetchone.side_effect=[(True,),(True,),(True,),(True,)]
+        # ...and FALSE when a revocation row exists for the token.
+        self.cur.fetchone.return_value=(False,)
         with self.assertRaises(IdentityPolicyDenied):
             enforce_postgres_identity(**self.args)
     def test_database_outage_denied(self):
@@ -43,7 +56,7 @@ class PostgresIdentityTests(unittest.TestCase):
             enforce_postgres_identity(**self.args)
         self.assertEqual(self.cur.execute.call_count,1)
     def test_sync_healthy_but_unknown_revocation_denied_on_ambiguous_result(self):
-        self.cur.fetchone.side_effect=[(True,),(True,),(True,),(None,)]
+        self.cur.fetchone.return_value=(None,)
         with self.assertRaises(IdentityPolicyDenied):
             enforce_postgres_identity(**self.args)
     def test_missing_factory_denied(self):

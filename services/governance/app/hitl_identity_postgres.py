@@ -5,12 +5,13 @@ The database must be maintained by an independent trusted identity service.
 """
 from uuid import UUID
 
+from .hitl_identity_policy import IdentityPolicyDenied
+
 # Authority freshness is checked in the database, not the application clock.
 _AUTHORITY_FRESH = """SELECT EXISTS(
     SELECT 1 FROM hitl.identity_authority_sync
     WHERE tenant_id=%s AND issuer=%s AND healthy IS TRUE
       AND synced_at >= now() - interval '60 seconds')"""
-from .hitl_identity_policy import enforce_identity_policy,IdentityPolicyDenied
 
 def postgres_identity_verifiers(connection_factory):
     if not callable(connection_factory):

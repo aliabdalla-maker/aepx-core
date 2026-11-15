@@ -36,5 +36,7 @@ def test_adjust_trust_clamps_to_100():
 
 
 def test_adjust_unknown_component():
-    resp = client.post("/trust/agent-4/adjust", json={"component": "nonsense", "delta": 5}).json()
-    assert "error" in resp
+    resp = client.post("/trust/agent-4/adjust", json={"component": "nonsense", "delta": 5})
+    # Unknown components are a client error (422), not a 200 with an error field.
+    assert resp.status_code == 422
+    assert resp.json() == {"detail": "Unknown trust component"}
