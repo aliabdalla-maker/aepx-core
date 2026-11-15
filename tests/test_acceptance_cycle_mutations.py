@@ -68,7 +68,11 @@ class MutationMatrixTests(unittest.TestCase):
             with self.subTest(case=name):
                 report = copy.deepcopy(BASE)
                 mutate(report)
-                self.assertNotEqual(report, BASE, "mutation must change report")
+                # Compare serialized bytes: Python treats 2.0 == 2 and True == 1, but
+                # the verifier receives JSON, where those are distinct values.
+                self.assertNotEqual(json.dumps(report, sort_keys=True),
+                                    json.dumps(BASE, sort_keys=True),
+                                    "mutation must change report")
 
     def test_unmodified_baseline_is_accepted(self):
         with tempfile.TemporaryDirectory() as tmp:
