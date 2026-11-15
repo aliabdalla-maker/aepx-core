@@ -1,0 +1,90 @@
+name: IDE distribution checks (plugins, desktop policy, tooling)
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/marketplace/**'
+      - 'platform/saas-ide/desktop/**'
+      - 'platform/saas-ide/distribution/**'
+      - 'platform/saas-ide/web/components/PlanBanner.tsx'
+      - '.github/workflows/distribution-checks.yml'
+      - '.github/workflows/android-release.yml'
+      - '.github/workflows/aepx-distribution-build.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  tooling:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Distribution scripts (Play upload, artifact verification, downloads manifest)
+        working-directory: platform/saas-ide/distribution
+        run: |
+          python -m pip install --quiet pytest==8.3.4 pyyaml==6.0.2
+          python -m pytest -q
+          python generate_downloads.py --check
+      - name: Desktop navigation/permission policy
+        working-directory: platform/saas-ide/desktop
+        run: npm test
+      - name: Workflow YAML parses
+        run: python -m pip install --quiet pyyaml==6.0.2 && python -c "import glob,yaml;[yaml.safe_load(open(f)) for f in glob.glob('.github/workflows/*.yml')]"
+  vscode:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: platform/saas-ide/marketplace/vscode
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vscode-extension
+          path: platform/saas-ide/marketplace/vscode/aepx-agentic-ide.vsix
+          retention-days: 14
+  jetbrains:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: platform/saas-ide/marketplace/jetbrains
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - run: gradle --no-daemon test buildPlugin
+      - run: gradle --no-daemon verifyPlugin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jetbrains-plugin
+          path: platform/saas-ide/marketplace/jetbrains/build/distributions/*.zip
+          retention-days: 14

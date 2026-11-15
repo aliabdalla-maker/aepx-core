@@ -211,3 +211,22 @@ def test_app_store_update_binds_account_and_product(apple_chain):
     other = {"data": [{"lastTransactions": [{"status": 1, "signedTransactionInfo": sign(_tx(product="other"))}]}]}
     with pytest.raises(subs.BillingDenied):
         subs.app_store_update(ACCOUNT, other, pin, bundle, product)
+
+
+def test_apple_apps_pairs_bundles_with_products(monkeypatch):
+    monkeypatch.setenv("APPLE_BUNDLE_ID", "com.equalitysoftware.aepx.companion, com.equalitysoftware.aepx.ide")
+    monkeypatch.setenv("APPLE_PRODUCT_ID", "com.softwareequality.aepx.pro.monthly,com.softwareequality.aepx.ide.pro.monthly")
+    assert subs.apple_apps() == {
+        "com.equalitysoftware.aepx.companion": "com.softwareequality.aepx.pro.monthly",
+        "com.equalitysoftware.aepx.ide": "com.softwareequality.aepx.ide.pro.monthly",
+    }
+    monkeypatch.setenv("APPLE_PRODUCT_ID", "only-one")
+    with pytest.raises(subs.BillingUnavailable):
+        subs.apple_apps()
+
+
+def test_verify_app_store_rejects_unconfigured_bundle(monkeypatch):
+    monkeypatch.setenv("APPLE_BUNDLE_ID", "com.equalitysoftware.aepx.companion")
+    monkeypatch.setenv("APPLE_PRODUCT_ID", "com.softwareequality.aepx.pro.monthly")
+    with pytest.raises(subs.BillingDenied, match="unknown iOS app"):
+        subs.verify_app_store("0b6f3c2e-8d1a-4f1e-9a51-2a7c9e4d5b60", "2000000123", bundle_id="com.evil.app")

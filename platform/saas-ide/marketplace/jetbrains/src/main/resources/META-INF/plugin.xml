@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>com.softwareequality.aepx</id>
+    <name>AEP-X Agentic IDE</name>
+    <vendor email="support@softwareequality.com" url="https://www.softwareequality.com">Equality Software Ltd</vendor>
+    <description><![CDATA[
+      Opens the <b>AEP-X Agentic IDE</b>: a governed workspace where an agent crew plans your change,
+      you approve each step, and every decision is audited.
+      <ul>
+        <li><b>Tools | AEP-X | Open Agentic IDE</b></li>
+        <li><b>Tools | AEP-X | Plans and Pricing</b>: 30-day free trial with ads, then £4.99/month for 95% fewer ads,
+            or the free ad-supported plan.</li>
+      </ul>
+      The plugin reads no project files, stores no credentials and makes no network requests itself.
+    ]]></description>
+    <depends>com.intellij.modules.platform</depends>
+    <actions>
+        <group id="aepx.ToolsGroup" text="AEP-X" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="aepx.OpenIde" class="com.softwareequality.aepx.OpenIdeAction" text="Open Agentic IDE"
+                    description="Open the AEP-X Agentic IDE in your browser"/>
+            <action id="aepx.OpenPricing" class="com.softwareequality.aepx.OpenPricingAction" text="Plans and Pricing"
+                    description="AEP-X plans: 30-day trial, £4.99/month Pro, free tier"/>
+        </group>
+    </actions>
+</idea-plugin>

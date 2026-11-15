@@ -1,0 +1,21 @@
+// Build configuration shared by both iOS apps. No secrets: everything here ships inside the app.
+// "https:/$()/" is the xcconfig idiom for "https://" (a bare "//" would start a comment).
+AEPX_API_BASE_URL = https:/$()/ide-api.softwareequality.com
+AEPX_IDE_URL = https:/$()/ide.softwareequality.com
+AEPX_TENANT =
+AEPX_OIDC_ISSUER =
+AEPX_OIDC_CLIENT_ID = aepx-ios-companion
+// Space-separated IdP origins the IDE wrapper may show in-app during sign-in.
+AEPX_IDP_ORIGINS =
+// App Store Connect subscription product IDs (each app has its own; backend APPLE_PRODUCT_ID lists both).
+AEPX_COMPANION_PRODUCT_ID = com.softwareequality.aepx.pro.monthly
+AEPX_IDE_PRODUCT_ID = com.softwareequality.aepx.ide.pro.monthly
+// AdMob app IDs are per platform: the Android app ID cannot be used here. Until the owner creates the
+// iOS app in AdMob this is Google's sample iOS app ID and release builds request no ads (units empty).
+AEPX_ADMOB_APP_ID = ca-app-pub-3940256099942544~1458002511
+AEPX_ADMOB_BANNER_UNIT =
+AEPX_ADMOB_INTERSTITIAL_UNIT =
+AEPX_TEAM_ID =
+
+// Optional local overrides (git-ignored).
+#include? "Local.xcconfig"

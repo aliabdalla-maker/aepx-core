@@ -1,0 +1,141 @@
+{
+  "version": "0.2.0",
+  "updated": "2026-11-15",
+  "artifacts": [
+    {
+      "platform": "windows",
+      "label": "Windows 10/11 installer (x64)",
+      "filename": "AEP-X-IDE-0.2.0-win-x64.exe",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "windows",
+      "label": "Windows 11 installer (Arm64)",
+      "filename": "AEP-X-IDE-0.2.0-win-arm64.exe",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "macos",
+      "label": "macOS 11+ (Apple silicon)",
+      "filename": "AEP-X-IDE-0.2.0-mac-arm64.dmg",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "macos",
+      "label": "macOS 11+ (Intel)",
+      "filename": "AEP-X-IDE-0.2.0-mac-x64.dmg",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "linux",
+      "label": "Linux AppImage (x64)",
+      "filename": "AEP-X-IDE-0.2.0-linux-x86_64.AppImage",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "linux",
+      "label": "Debian / Ubuntu (.deb, x64)",
+      "filename": "AEP-X-IDE-0.2.0-linux-amd64.deb",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "linux",
+      "label": "Fedora / RHEL (.rpm, x64)",
+      "filename": "AEP-X-IDE-0.2.0-linux-x86_64.rpm",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "unix",
+      "label": "Linux / Unix-like tarball (x64)",
+      "filename": "AEP-X-IDE-0.2.0-linux-x64.tar.gz",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "unix",
+      "label": "Linux / Unix-like tarball (Arm64)",
+      "filename": "AEP-X-IDE-0.2.0-linux-arm64.tar.gz",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "android",
+      "label": "Android APK (direct download)",
+      "filename": "aepx-companion-0.2.0.apk",
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "store",
+      "label": "Google Play",
+      "filename": null,
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "store",
+      "label": "App Store: AEP-X (iPhone and iPad)",
+      "filename": null,
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "store",
+      "label": "App Store: AEP-X IDE (iPhone and iPad)",
+      "filename": null,
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "plugin",
+      "label": "VS Code Marketplace",
+      "filename": null,
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    },
+    {
+      "platform": "plugin",
+      "label": "JetBrains Marketplace",
+      "filename": null,
+      "url": null,
+      "sha256": null,
+      "bytes": null,
+      "signed": false
+    }
+  ]
+}

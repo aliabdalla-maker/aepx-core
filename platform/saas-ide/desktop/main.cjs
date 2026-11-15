@@ -1,29 +1,63 @@
-const { app, BrowserWindow, shell, session } = require("electron");
-const { URL } = require("node:url");
-const APP_URL = process.env.AEPX_DESKTOP_URL || "https://ide.softwareequality.com";
-const target = new URL(APP_URL);
-if (target.protocol !== "https:" || target.username || target.password ||
-    !["ide.softwareequality.com"].includes(target.hostname) ||
-    target.port || target.pathname !== "/" || target.search || target.hash) {
-  throw new Error("Only the approved HTTPS IDE origin is allowed");
+"use strict";
+// AEP-X IDE desktop shell: a locked-down window onto the hosted web IDE. It holds no credentials of
+// its own (the web app's OIDC session lives in a persistent, sandboxed partition) and exposes no
+// Node APIs to the page. Plan, trial and ads are decided by the IDE backend exactly as on the web.
+const { app, BrowserWindow, shell, session, Menu } = require("electron");
+const policy = require("./policy.cjs");
+const pkg = require("./package.json");
+
+const IDE = policy.ideOrigin(process.env.AEPX_DESKTOP_URL || pkg.aepx.ideUrl);
+const IDPS = policy.idpOrigins(pkg.aepx.idpOrigins);
+const PARTITION = "persist:aepx";
+
+if (!app.requestSingleInstanceLock()) app.quit();
+
+function route(event, url) {
+  const verdict = policy.decide(url, IDE, IDPS);
+  if (verdict === "allow") return;
+  if (event) event.preventDefault();
+  if (verdict === "external") void shell.openExternal(url);
 }
-app.whenReady().then(() => {
+
+function createWindow() {
   const win = new BrowserWindow({
-    width: 1440, height: 900,
-    webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true,
-      webSecurity: true, partition: "persist:aepx" }
+    width: 1440, height: 900, minWidth: 960, minHeight: 600, show: false,
+    title: "AEP-X Agentic IDE", backgroundColor: "#0b1020",
+    webPreferences: {
+      nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true,
+      allowRunningInsecureContent: false, spellcheck: true, partition: PARTITION,
+      devTools: !app.isPackaged,
+    },
   });
-  win.webContents.setWindowOpenHandler(({url}) => {
-    try { const u = new URL(url); if (u.protocol === "https:" && u.hostname === target.hostname) {
-      void shell.openExternal(url);
-    }} catch (_) {}
-    return {action:"deny"};
+  win.once("ready-to-show", () => win.show());
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    const verdict = policy.decide(url, IDE, IDPS);
+    if (verdict !== "deny") void shell.openExternal(url);
+    return { action: "deny" }; // never spawn extra app windows
   });
-  win.webContents.on("will-navigate", (event, url) => {
-    const u = new URL(url);
-    if (u.origin !== target.origin) event.preventDefault();
-  });
-  session.fromPartition("persist:aepx").setPermissionRequestHandler((_wc, _permission, callback) => callback(false));
-  void win.loadURL(target.toString());
+  win.webContents.on("will-navigate", route);
+  win.webContents.on("will-redirect", route);
+  win.webContents.on("will-attach-webview", (event) => event.preventDefault());
+  void win.loadURL(IDE + "/");
+  return win;
+}
+
+app.on("second-instance", () => {
+  const [win] = BrowserWindow.getAllWindows();
+  if (win) { if (win.isMinimized()) win.restore(); win.focus(); }
 });
+
+app.whenReady().then(() => {
+  const ses = session.fromPartition(PARTITION);
+  ses.setPermissionRequestHandler((wc, permission, callback) =>
+    callback(policy.permissionAllowed(permission, wc.getURL(), IDE)));
+  ses.setPermissionCheckHandler((wc, permission, origin) => policy.permissionAllowed(permission, origin, IDE));
+  if (app.isPackaged) Menu.setApplicationMenu(Menu.buildFromTemplate([
+    ...(process.platform === "darwin" ? [{ role: "appMenu" }] : []),
+    { role: "editMenu" }, { role: "viewMenu" }, { role: "windowMenu" },
+  ]));
+  createWindow();
+  app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
+});
+
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });

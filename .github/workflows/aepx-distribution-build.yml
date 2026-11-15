@@ -1,49 +1,88 @@
 name: AEP-X distribution build (draft artifacts only)
+# Manual only. Builds desktop installers for Windows, macOS and Linux/Unix. Signing and macOS
+# notarization happen only when the owner has configured the secrets; otherwise artifacts are
+# built unsigned and labelled as such. Nothing is published anywhere (electron-builder --publish never).
 on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 jobs:
   desktop:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2022
             target: win
-          - os: macos-latest
+          - os: macos-15
             target: mac
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             target: linux
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
     defaults:
       run:
+        shell: bash
         working-directory: platform/saas-ide/desktop
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-audit --no-fund
-      - run: npm run dist -- --${{ matrix.target }}
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - name: Linux packaging tools
+        if: matrix.target == 'linux'
+        run: sudo apt-get update -q && sudo apt-get install -y -q rpm
+      - name: Build installers
         env:
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: 'false'
+          # Windows Authenticode / macOS Developer ID certificate (base64 .p12) -- optional.
+          CSC_LINK: ${{ matrix.target == 'win' && secrets.AEPX_WIN_CSC_LINK || matrix.target == 'mac' && secrets.AEPX_MAC_CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ matrix.target == 'win' && secrets.AEPX_WIN_CSC_KEY_PASSWORD || matrix.target == 'mac' && secrets.AEPX_MAC_CSC_KEY_PASSWORD || '' }}
+          APPLE_ID: ${{ secrets.AEPX_APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.AEPX_APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.AEPX_APPLE_TEAM_ID }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          extra=()
+          signed=false
+          if [ -n "${CSC_LINK:-}" ]; then signed=true; else export CSC_IDENTITY_AUTO_DISCOVERY=false; unset CSC_LINK CSC_KEY_PASSWORD; fi
+          if [ "$TARGET" = mac ] && [ "$signed" = true ] && [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_TEAM_ID:-}" ]; then
+            extra+=(-c.mac.notarize=true)
+          fi
+          # ${extra[@]+...}: macOS bash 3.2 treats an empty array as unbound under set -u
+          npx electron-builder --publish never "--$TARGET" ${extra[@]+"${extra[@]}"}
+          echo "SIGNED=$signed" >> "$GITHUB_ENV"
+      - name: Checksums and signing status
+        run: |
+          set -euo pipefail
+          cd dist
+          shopt -s nullglob
+          files=( *.exe *.dmg *.zip *.AppImage *.deb *.rpm *.tar.gz )
+          [ ${#files[@]} -gt 0 ] || { echo 'No installers produced' >&2; exit 1; }
+          if command -v sha256sum >/dev/null; then sha256sum -- "${files[@]}"; else shasum -a 256 -- "${files[@]}"; fi > SHA256SUMS-${{ matrix.target }}.txt
+          cat SHA256SUMS-${{ matrix.target }}.txt
+          echo "${{ matrix.target }}: ${#files[@]} installers, signed=$SIGNED" >> "$GITHUB_STEP_SUMMARY"
+          [ "$SIGNED" = true ] || echo '::warning::Unsigned build: OK for QA, not for the public downloads page.'
       - uses: actions/upload-artifact@v4
         with:
-          name: aepx-draft-${{ matrix.target }}
-          path: platform/saas-ide/desktop/dist/
-          retention-days: 7
-  web:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: platform/saas-ide/web
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - run: npm install --no-audit --no-fund
-      - run: npm run typecheck
-      - run: npm run build
+          name: aepx-desktop-${{ matrix.target }}
+          path: |
+            platform/saas-ide/desktop/dist/*.exe
+            platform/saas-ide/desktop/dist/*.dmg
+            platform/saas-ide/desktop/dist/*.zip
+            platform/saas-ide/desktop/dist/*.AppImage
+            platform/saas-ide/desktop/dist/*.deb
+            platform/saas-ide/desktop/dist/*.rpm
+            platform/saas-ide/desktop/dist/*.tar.gz
+            platform/saas-ide/desktop/dist/SHA256SUMS-*.txt
+          retention-days: 14

@@ -18,6 +18,12 @@ val testAdMobAppId = "ca-app-pub-3940256099942544~3347511713"
 val liveAdMobAppId = "ca-app-pub-2980680946304710~2617421798"
 
 fun prop(name: String) = providers.gradleProperty(name).get()
+fun env(name: String): String? = providers.environmentVariable(name).orNull?.takeIf { it.isNotBlank() }
+
+// Release signing comes only from the CI environment (android-release.yml); nothing is committed.
+val uploadKeystore = env("AEPX_UPLOAD_KEYSTORE")
+val releaseSigningReady = uploadKeystore != null &&
+    listOf("AEPX_UPLOAD_STORE_PASSWORD", "AEPX_UPLOAD_KEY_ALIAS", "AEPX_UPLOAD_KEY_PASSWORD").all { env(it) != null }
 fun quoted(value: String) = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
 /** Packages monetization/ads-config.json (single source of truth shared with the web IDE) as an asset. */
@@ -49,8 +55,8 @@ android {
         applicationId = "com.equalitysoftware.aepx.companion"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = providers.gradleProperty("aepx.versionCode").orNull?.toInt() ?: 1
+        versionName = providers.gradleProperty("aepx.versionName").orNull ?: "0.1.0"
         buildConfigField("String", "API_BASE_URL", quoted(prop("aepx.apiBaseUrl")))
         buildConfigField("String", "TENANT", quoted(prop("aepx.tenant")))
         buildConfigField("String", "OIDC_ISSUER", quoted(prop("aepx.oidcIssuer")))
@@ -58,6 +64,17 @@ android {
         buildConfigField("String", "PLAY_SUBSCRIPTION_ID", quoted(prop("aepx.playSubscriptionId")))
         manifestPlaceholders["appAuthRedirectScheme"] = "com.equalitysoftware.aepx.companion"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        if (releaseSigningReady) {
+            create("release") {
+                storeFile = file(uploadKeystore!!)
+                storePassword = env("AEPX_UPLOAD_STORE_PASSWORD")
+                keyAlias = env("AEPX_UPLOAD_KEY_ALIAS")
+                keyPassword = env("AEPX_UPLOAD_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -69,6 +86,8 @@ android {
             manifestPlaceholders["admobAppId"] = liveAdMobAppId
             manifestPlaceholders["usesCleartext"] = "false"
             isMinifyEnabled = false
+            // Unsigned unless the upload key is supplied (CI checks build unsigned; release workflow signs).
+            if (releaseSigningReady) signingConfig = signingConfigs.getByName("release")
         }
     }
 

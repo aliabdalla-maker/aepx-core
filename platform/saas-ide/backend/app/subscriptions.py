@@ -310,9 +310,23 @@ def verify_apple_jws(token: str, root_sha256: str, now: datetime | None = None) 
     return jwt.decode(token, certs[0].public_key(), algorithms=["ES256"], options={"verify_aud": False})
 
 
-def _apple_api_token() -> str:
+def apple_apps() -> dict[str, str]:
+    """Configured iOS apps as {bundle_id: product_id}.
+
+    APPLE_BUNDLE_ID and APPLE_PRODUCT_ID are comma-separated lists paired by position, so the native
+    companion and the IDE wrapper (two App Store apps, each with its own subscription product) can both sell
+    the plan. A single value in each keeps the original one-app behaviour.
+    """
+    bundles = [b.strip() for b in os.getenv("APPLE_BUNDLE_ID", "").split(",") if b.strip()]
+    products = [p.strip() for p in os.getenv("APPLE_PRODUCT_ID", "").split(",") if p.strip()]
+    if not bundles or len(bundles) != len(products):
+        raise BillingUnavailable("App Store product not configured")
+    return dict(zip(bundles, products))
+
+
+def _apple_api_token(bundle: str) -> str:
     issuer, key_id = os.getenv("APPLE_ISSUER_ID", ""), os.getenv("APPLE_KEY_ID", "")
-    bundle, key_path = os.getenv("APPLE_BUNDLE_ID", ""), os.getenv("APPLE_PRIVATE_KEY_FILE", "")
+    key_path = os.getenv("APPLE_PRIVATE_KEY_FILE", "")
     if not (issuer and key_id and bundle and key_path and os.path.isfile(key_path)):
         raise BillingUnavailable("App Store Server API not configured")
     with open(key_path, encoding="utf-8") as handle:
@@ -343,16 +357,19 @@ def app_store_update(account_id: str, payload: dict, root_sha256: str, bundle: s
     return best
 
 
-def verify_app_store(account_id: str, original_transaction_id: str, http=httpx) -> dict:
+def verify_app_store(account_id: str, original_transaction_id: str, http=httpx,
+                     bundle_id: str | None = None) -> dict:
     if not isinstance(original_transaction_id, str) or not re.fullmatch(r"\d{1,32}", original_transaction_id):
         raise BillingDenied("invalid original transaction id")
-    bundle, product = os.getenv("APPLE_BUNDLE_ID", ""), os.getenv("APPLE_PRODUCT_ID", "")
-    if not bundle or not product:
-        raise BillingUnavailable("App Store product not configured")
+    apps = apple_apps()
+    bundle = bundle_id or next(iter(apps))
+    if bundle not in apps:
+        raise BillingDenied("unknown iOS app")
+    product = apps[bundle]
     host = ("https://api.storekit-sandbox.itunes.apple.com" if os.getenv("APPLE_ENVIRONMENT") == "sandbox"
             else "https://api.storekit.itunes.apple.com")
     response = http.get(f"{host}/inApps/v1/subscriptions/{original_transaction_id}", timeout=15,
-                        headers={"Authorization": "Bearer " + _apple_api_token()})
+                        headers={"Authorization": "Bearer " + _apple_api_token(bundle)})
     if response.status_code == 404:
         raise BillingDenied("unknown App Store transaction")
     if response.status_code != 200:
