@@ -3,11 +3,12 @@ import { useCallback, useEffect, useState } from "react";
 import type { AuditEvent, IdeApi, Member } from "../lib/api";
 import { MEMBER_ROLES } from "../lib/api";
 import { ago } from "../lib/modules";
+import { accountUrl } from "../lib/signin";
 
 // Keycloak account console for the IDE realm: users add an authenticator app (TOTP) here; the
 // sign-in flow then asks for the code on every login.
-const ACCOUNT_SECURITY = (process.env.NEXT_PUBLIC_OIDC_AUTHORITY || "https://auth.softwareequality.com/realms/aepx")
-  .replace(/\/$/, "") + "/account/#/security/signingin";
+const AUTHORITY = process.env.NEXT_PUBLIC_OIDC_AUTHORITY || "https://auth.softwareequality.com/realms/aepx";
+const ACCOUNT_SECURITY = accountUrl(AUTHORITY, "signing-in");
 
 type Props = { api: IdeApi | null; role?: string; onStatus: (m: string) => void };
 const ROLE_HELP: Record<string, string> = {
@@ -50,8 +51,13 @@ export default function TeamPanel({ api, role, onStatus }: Props) {
   if (!api) return <p className="muted">Sign in to manage your team.</p>;
   return <div className="team">
     <p className="muted small">Your role: <strong>{role ?? "…"}</strong>{role && ROLE_HELP[role] ? ` — ${ROLE_HELP[role]}` : ""}</p>
-    <p className="small"><a href={ACCOUNT_SECURITY} target="_blank" rel="noopener noreferrer">Set up two-step sign-in (authenticator app)</a>
-      <span className="muted"> — recommended for owners and admins.</span></p>
+    <p className="small"><a href={ACCOUNT_SECURITY} target="_blank" rel="noopener noreferrer">Password and two-step sign-in (authenticator app)</a>
+      <span className="muted"> — two-step is recommended for owners and admins.</span></p>
+    <p className="small account-links">
+      <a href={accountUrl(AUTHORITY, "personal-info")} target="_blank" rel="noopener noreferrer">Profile</a>{" · "}
+      <a href={accountUrl(AUTHORITY, "linked-accounts")} target="_blank" rel="noopener noreferrer">Linked Google / GitHub</a>{" · "}
+      <a href={accountUrl(AUTHORITY, "device-activity")} target="_blank" rel="noopener noreferrer">Signed-in devices</a>
+    </p>
     <h4>Members</h4>
     <ul className="members">{members.map(m => <li key={m.subject} className="row">
       <span className="member-id" title={m.subject}>{m.subject}</span><span className="spacer" />

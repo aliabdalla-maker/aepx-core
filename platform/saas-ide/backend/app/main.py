@@ -146,6 +146,38 @@ def health():
     return {"status": "ok", "service": "hybrid-ide-api"}
 
 
+def _flag(name: str) -> bool:
+    return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+@app.get("/api/v1/auth-options")
+def auth_options():
+    """Public, unauthenticated sign-in options. Booleans only; never secrets or client IDs.
+
+    Each flag is set by the deployment only after the matching identity-provider
+    configuration has been applied, so the UI never shows a button that cannot work.
+    """
+    return {
+        "google": _flag("IDE_AUTH_GOOGLE_ENABLED"),
+        "github": _flag("IDE_AUTH_GITHUB_ENABLED"),
+        "password_reset": _flag("IDE_AUTH_PASSWORD_RESET_ENABLED"),
+        "registration": not _flag("IDE_AUTH_REGISTRATION_DISABLED"),
+        "mfa": _flag("IDE_AUTH_MFA_AVAILABLE"),
+    }
+
+
+_SHA_CHARS = set("0123456789abcdef")
+
+
+@app.get("/api/v1/version")
+def version():
+    """Deployed release identity so drift between the web bundle and the API is detectable."""
+    sha = os.getenv("IDE_RELEASE_SHA", "").strip().lower()
+    if not (7 <= len(sha) <= 40 and set(sha) <= _SHA_CHARS):
+        sha = None
+    return {"service": "hybrid-ide-api", "api_version": app.version, "release_sha": sha}
+
+
 @app.get("/api/v1/me")
 def me(p: Principal = Depends(principal)):
     return p
