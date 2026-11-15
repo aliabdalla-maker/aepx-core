@@ -66,14 +66,14 @@ jobs:
             echo "Release blocked; owner must configure: ${missing[*]}" >&2; exit 1
           fi
           case "$API_BASE" in https://*) ;; *) echo 'AEPX_API_BASE_URL must be https' >&2; exit 1;; esac
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: '8.10.2'
       - name: Decode upload key (runner temp only)
@@ -116,7 +116,7 @@ jobs:
           cp "$aab" "$RUNNER_TEMP/out/aepx-companion-$VERSION_NAME.aab"
           cp "$apk" "$RUNNER_TEMP/out/aepx-companion-$VERSION_NAME.apk"
           (cd "$RUNNER_TEMP/out" && sha256sum -- *.aab *.apk | tee SHA256SUMS)
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: android-release-${{ inputs.version_name }}
           path: ${{ runner.temp }}/out/

@@ -1,38 +1,187 @@
 openapi: 3.1.0
 info:
-  title: AEP-X Hybrid IDE Read-only Operations
-  version: 0.1.0
-  description: Draft API schema; requires authenticated account linking and review before publication.
+  title: AEP-X Universal Agentic IDE
+  version: 0.3.0
+  description: >
+    Create projects in the AEP-X IDE's nine modules and run approval-gated agent crews. Every
+    write needs the signed-in user's account (OAuth through auth.softwareequality.com) and their
+    workspace id. Agent runs are created awaiting approval; approve only when the user says so.
 servers:
   - url: https://ide.softwareequality.com
-paths:
-  /api/v1/operations/mcp/metrics:
-    get:
-      operationId: getMcpExecutionMetrics
-      summary: Read tenant-scoped MCP execution metrics
-      security:
-        - OAuth2: [aepx.operations.read]
-      responses:
-        '200':
-          description: Counts by execution state
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  counts:
-                    type: object
-                    additionalProperties: {type: integer}
-                  automatic_replay_enabled: {type: boolean}
-        '401': {description: Unauthenticated}
-        '403': {description: Forbidden}
+security:
+  - OAuth2: [openid]
 components:
   securitySchemes:
     OAuth2:
       type: oauth2
       flows:
         authorizationCode:
-          authorizationUrl: https://auth.softwareequality.com/authorize
-          tokenUrl: https://auth.softwareequality.com/token
+          authorizationUrl: https://auth.softwareequality.com/realms/aepx/protocol/openid-connect/auth
+          tokenUrl: https://auth.softwareequality.com/realms/aepx/protocol/openid-connect/token
           scopes:
-            aepx.operations.read: Read MCP execution metrics
+            openid: Sign in with your AEP-X account
+  parameters:
+    Tenant:
+      name: X-Tenant-ID
+      in: header
+      required: true
+      description: Workspace id returned by openWorkspace (u-...).
+      schema: {type: string, maxLength: 128}
+  schemas:
+    Project:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        description: {type: string}
+        module: {type: string}
+    Run:
+      type: object
+      properties:
+        id: {type: string}
+        status: {type: string, description: "awaiting_approval, approved, running, completed, failed, rejected or cancelled"}
+        model_route: {type: string}
+        plan: {type: string, description: JSON list of agent steps}
+        result: {type: string}
+paths:
+  /api/v1/ide-modules:
+    get:
+      operationId: listModules
+      summary: List the IDE modules (available and planned)
+      security: []
+      responses:
+        '200':
+          description: Modules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: {type: string}
+                    name: {type: string}
+                    status: {type: string}
+                    summary: {type: string}
+                    quick_tasks: {type: array, items: {type: string}}
+  /api/v1/workspace:
+    post:
+      operationId: openWorkspace
+      summary: Open (creating on first use) the user's personal workspace
+      responses:
+        '200':
+          description: Workspace
+          content:
+            application/json:
+              schema: {type: object, properties: {tenant_id: {type: string}}}
+  /api/v1/projects:
+    get:
+      operationId: listProjects
+      summary: List projects
+      parameters: [{$ref: '#/components/parameters/Tenant'}]
+      responses:
+        '200':
+          description: Projects
+          content:
+            application/json:
+              schema: {type: array, items: {$ref: '#/components/schemas/Project'}}
+    post:
+      operationId: createProject
+      summary: Create a project in one IDE module (starter files included)
+      parameters: [{$ref: '#/components/parameters/Tenant'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: {type: string, maxLength: 120}
+                description: {type: string, maxLength: 2000}
+                module:
+                  type: string
+                  enum: [software, sound, music, film, animation, sdk, social, multimedia, media]
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Project'}
+  /api/v1/projects/{project_id}/files:
+    get:
+      operationId: listFiles
+      summary: List a project's files with content
+      parameters:
+        - {$ref: '#/components/parameters/Tenant'}
+        - {name: project_id, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: Files
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {type: object, properties: {path: {type: string}, content: {type: string}}}
+  /api/v1/agent-runs:
+    post:
+      operationId: createAgentRun
+      summary: Ask the project's agent crew to do a task; returns a plan awaiting approval
+      parameters: [{$ref: '#/components/parameters/Tenant'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project_id, task]
+              properties:
+                project_id: {type: string}
+                task: {type: string, minLength: 5, maxLength: 4000}
+      responses:
+        '201':
+          description: Plan
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Run'}
+  /api/v1/agent-runs/{run_id}:
+    get:
+      operationId: getAgentRun
+      summary: Get a run's status, plan and result
+      parameters:
+        - {$ref: '#/components/parameters/Tenant'}
+        - {name: run_id, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: Run
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Run'}
+  /api/v1/agent-runs/{run_id}/decision:
+    post:
+      operationId: decideAgentRun
+      summary: Record the user's approval or rejection of a plan (only after the user decides)
+      x-openai-isConsequential: true
+      parameters:
+        - {$ref: '#/components/parameters/Tenant'}
+        - {name: run_id, in: path, required: true, schema: {type: string}}
+        - {name: approved, in: query, required: true, schema: {type: boolean}}
+      responses:
+        '200': {description: Decision recorded}
+  /api/v1/agent-runs/{run_id}/enqueue:
+    post:
+      operationId: runApprovedPlan
+      summary: Start an approved run on the AI agent worker
+      x-openai-isConsequential: true
+      parameters:
+        - {$ref: '#/components/parameters/Tenant'}
+        - {name: run_id, in: path, required: true, schema: {type: string}}
+      responses:
+        '200': {description: Queued}
+  /api/v1/ai-usage:
+    get:
+      operationId: getAiUsage
+      summary: Today's AI allowance for the user's plan
+      parameters: [{$ref: '#/components/parameters/Tenant'}]
+      responses:
+        '200': {description: Usage}
