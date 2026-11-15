@@ -17,7 +17,11 @@
   },
   "aepx": {
     "ideUrl": "https://ide.softwareequality.com",
-    "idpOrigins": []
+    "idpOrigins": [
+      "https://auth.softwareequality.com",
+      "https://github.com",
+      "https://accounts.google.com"
+    ]
   },
   "devDependencies": {
     "electron": "33.4.11",
@@ -58,7 +62,8 @@
     "nsis": {
       "oneClick": false,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "AEP-X-IDE-Setup-${version}.${ext}"
     },
     "mac": {
       "target": [
@@ -116,6 +121,9 @@
       "synopsis": "Governed agentic development workspace"
     },
     "publish": null,
-    "afterPack": "./fuses.cjs"
+    "afterPack": "./fuses.cjs",
+    "portable": {
+      "artifactName": "AEP-X-IDE-Portable-${version}.${ext}"
+    }
   }
 }

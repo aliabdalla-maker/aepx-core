@@ -61,6 +61,12 @@ object IdeJson {
 
     fun audit(body: String) = JSONArray(body).objects().map { AuditEntry(it.optString("actor"), it.optString("action")) }
 
+    /** Personal workspace ids are "u-" + 32 hex characters; anything else is refused. */
+    fun workspaceId(body: String): String {
+        val id = JSONObject(body).getString("tenant_id")
+        require(Regex("^u-[0-9a-f]{32}$").matches(id)) { "Invalid workspace" }
+        return id
+    }
     fun errorDetail(body: String?): String? = runCatching { JSONObject(body ?: "").optString("detail").ifEmpty { null } }.getOrNull()
 }
 
@@ -73,12 +79,24 @@ fun validateBaseUrl(base: String, debug: Boolean): String {
     return uri.toString()
 }
 
-class IdeClient(baseUrl: String, private val tenant: String, private val token: () -> String?, debug: Boolean) {
+class IdeClient(baseUrl: String, fixedTenant: String, private val token: () -> String?, debug: Boolean) {
     private val base = validateBaseUrl(baseUrl, debug)
+    // Without a fixed tenant, each user works in their own workspace, opened on first use.
+    @Volatile private var tenant: String = fixedTenant
+
+    private suspend fun workspace(): String {
+        if (tenant.isNotEmpty()) return tenant
+        val id = IdeJson.workspaceId(request("/api/v1/workspace", "POST", null, tenantHeader = null))
+        tenant = id
+        return id
+    }
 
     private fun seg(value: String) = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
 
-    private suspend fun call(path: String, method: String = "GET", json: String? = null): String = withContext(Dispatchers.IO) {
+    private suspend fun call(path: String, method: String = "GET", json: String? = null): String =
+        request(path, method, json, tenantHeader = workspace())
+
+    private suspend fun request(path: String, method: String, json: String?, tenantHeader: String?): String = withContext(Dispatchers.IO) {
         val bearer = token() ?: throw ApiException(401, "Sign in first")
         val conn = URI(base + path).toURL().openConnection() as HttpURLConnection
         try {
@@ -87,7 +105,7 @@ class IdeClient(baseUrl: String, private val tenant: String, private val token: 
             conn.readTimeout = 30_000
             conn.instanceFollowRedirects = false
             conn.setRequestProperty("Authorization", "Bearer $bearer")
-            conn.setRequestProperty("X-Tenant-ID", tenant)
+            if (tenantHeader != null) conn.setRequestProperty("X-Tenant-ID", tenantHeader)
             conn.setRequestProperty("Accept", "application/json")
             if (method == "POST") {
                 conn.doOutput = true

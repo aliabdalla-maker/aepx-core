@@ -41,3 +41,12 @@ test("permissions: clipboard write from the IDE only", () => {
     assert.equal(p.permissionAllowed(perm, IDE + "/", IDE), false);
   }
 });
+
+test("production sign-in pages stay inside the app window", () => {
+  const pkg = require("./package.json");
+  const ide = p.ideOrigin(pkg.aepx.ideUrl);
+  const idps = p.idpOrigins(pkg.aepx.idpOrigins);
+  assert.equal(p.decide("https://auth.softwareequality.com/realms/aepx/protocol/openid-connect/auth?x=1", ide, idps), "allow");
+  assert.equal(p.decide("https://ide.softwareequality.com/callback?code=x", ide, idps), "allow");
+  assert.equal(p.decide("http://auth.softwareequality.com/", ide, idps), "deny");
+});

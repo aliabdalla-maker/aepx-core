@@ -1,0 +1,174 @@
+name: AEP-X IDE release (desktop + APK downloads)
+# Pushing a tag ide-vX.Y.Z builds the desktop apps (Windows, macOS, Linux) and, when the
+# upload-key secrets exist, the signed Android APK, then publishes them on a GitHub Release
+# under fixed file names. softwareequality.com/aepx-ide links straight to
+#   https://github.com/aliabdalla-maker/aepx-core/releases/download/<tag>/<fixed name>
+# so each button is a one-click download. Builds are signed and notarised only when the
+# owner has added the certificate secrets; the release notes say which builds are signed.
+on:
+  push:
+    tags: ['ide-v*.*.*']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            target: win
+          - os: macos-15
+            target: mac
+          - os: ubuntu-24.04
+            target: linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+        working-directory: platform/saas-ide/desktop
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Version from tag
+        run: |
+          set -euo pipefail
+          v="${GITHUB_REF_NAME#ide-v}"
+          [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Tag must be ide-vMAJOR.MINOR.PATCH" >&2; exit 1; }
+          npm pkg set version="$v"
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - name: Linux packaging tools
+        if: matrix.target == 'linux'
+        run: sudo apt-get update -q && sudo apt-get install -y -q rpm
+      - name: Build installers
+        env:
+          CSC_LINK: ${{ matrix.target == 'win' && secrets.AEPX_WIN_CSC_LINK || matrix.target == 'mac' && secrets.AEPX_MAC_CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ matrix.target == 'win' && secrets.AEPX_WIN_CSC_KEY_PASSWORD || matrix.target == 'mac' && secrets.AEPX_MAC_CSC_KEY_PASSWORD || '' }}
+          APPLE_ID: ${{ secrets.AEPX_APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.AEPX_APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.AEPX_APPLE_TEAM_ID }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          extra=()
+          signed=false
+          if [ -n "${CSC_LINK:-}" ]; then signed=true; else export CSC_IDENTITY_AUTO_DISCOVERY=false; unset CSC_LINK CSC_KEY_PASSWORD; fi
+          if [ "$TARGET" = mac ] && [ "$signed" = true ] && [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_TEAM_ID:-}" ]; then
+            extra+=(-c.mac.notarize=true)
+          fi
+          npx electron-builder --publish never "--$TARGET" ${extra[@]+"${extra[@]}"}
+          mkdir -p "$RUNNER_TEMP/out"
+          echo "$TARGET: signed=$signed" > "$RUNNER_TEMP/out/SIGNING-$TARGET.txt"
+      - name: Fixed download names
+        run: python ../distribution/release_names.py dist "$RUNNER_TEMP/out"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ide-${{ matrix.target }}
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+          if-no-files-found: error
+
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+        working-directory: platform/saas-ide/android-companion
+    steps:
+      - name: Check for the upload key
+        id: key
+        working-directory: .
+        env:
+          KEYSTORE_B64: ${{ secrets.AEPX_UPLOAD_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then echo "ready=true" >> "$GITHUB_OUTPUT"
+          else echo "::warning::AEPX_UPLOAD_KEYSTORE_B64 is not set; the APK is skipped for this release."; echo "ready=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/checkout@v4
+        if: steps.key.outputs.ready == 'true'
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        if: steps.key.outputs.ready == 'true'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.key.outputs.ready == 'true'
+        with:
+          gradle-version: '8.10.2'
+      - name: Build signed APK
+        if: steps.key.outputs.ready == 'true'
+        env:
+          KEYSTORE_B64: ${{ secrets.AEPX_UPLOAD_KEYSTORE_B64 }}
+          AEPX_UPLOAD_STORE_PASSWORD: ${{ secrets.AEPX_UPLOAD_STORE_PASSWORD }}
+          AEPX_UPLOAD_KEY_ALIAS: ${{ secrets.AEPX_UPLOAD_KEY_ALIAS }}
+          AEPX_UPLOAD_KEY_PASSWORD: ${{ secrets.AEPX_UPLOAD_KEY_PASSWORD }}
+          P_API: ${{ vars.AEPX_API_BASE_URL || 'https://ide.softwareequality.com' }}
+          P_TENANT: ${{ vars.AEPX_TENANT || '' }}
+          P_ISSUER: ${{ vars.AEPX_OIDC_ISSUER || 'https://auth.softwareequality.com/realms/aepx' }}
+          P_CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID || 'aepx-ide-browser' }}
+        run: |
+          set -euo pipefail
+          umask 077
+          printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          export AEPX_UPLOAD_KEYSTORE="$RUNNER_TEMP/upload.jks"
+          v="${GITHUB_REF_NAME#ide-v}"
+          IFS=. read -r a b c <<< "$v"
+          code=$(( a * 1000000 + b * 1000 + c ))
+          trap 'rm -f "$RUNNER_TEMP/upload.jks"' EXIT
+          gradle --no-daemon testReleaseUnitTest assembleRelease \
+            -Paepx.versionCode="$code" -Paepx.versionName="$v" \
+            -Paepx.apiBaseUrl="$P_API" -Paepx.tenant="$P_TENANT" \
+            -Paepx.oidcIssuer="$P_ISSUER" -Paepx.oidcClientId="$P_CLIENT"
+          apk=app/build/outputs/apk/release/app-release.apk
+          tools=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          "$tools/apksigner" verify "$apk"
+          mkdir -p "$RUNNER_TEMP/out"
+          cp "$apk" "$RUNNER_TEMP/out/AEP-X-IDE-Android.apk"
+      - uses: actions/upload-artifact@v4
+        if: steps.key.outputs.ready == 'true'
+        with:
+          name: ide-android
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+
+  publish:
+    needs: [desktop, android]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ide-*
+          path: out
+          merge-multiple: true
+      - name: Checksums and signing summary
+        run: |
+          set -euo pipefail
+          cd out
+          cat SIGNING-*.txt > ../SIGNING.txt && rm -f SIGNING-*.txt
+          sha256sum -- * > SHA256SUMS.txt
+          ls -la
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          signing=$(tr '\n' ' ' < SIGNING.txt)
+          gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --latest=false \
+            --title "AEP-X Agentic IDE ${GITHUB_REF_NAME#ide-v}" \
+            --notes "Desktop apps for Windows, macOS and Linux, and the Android APK when its signing key is configured, for https://ide.softwareequality.com. Download page: https://softwareequality.com/aepx-ide. Code signing: ${signing}. Checksums: SHA256SUMS.txt."
