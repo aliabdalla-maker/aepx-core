@@ -10,6 +10,7 @@ a missing token skips the store with a notice and never fails the release.
 | Visual Studio Marketplace | `softwareequality.aepx-agentic-ide` | Create publisher `softwareequality` at marketplace.visualstudio.com/manage; create an Azure DevOps personal access token with scope *Marketplace → Manage* | `VSCE_PAT` |
 | Open VSX (VSCodium, Cursor, Windsurf, Gitpod) | `softwareequality.aepx-agentic-ide` | Sign in at open-vsx.org with GitHub, sign the publisher agreement, create namespace `softwareequality`, create an access token | `OVSX_PAT` |
 | JetBrains Marketplace | `com.softwareequality.aepx` | Create a vendor profile at plugins.jetbrains.com, upload the first `AEP-X-IDE-JetBrains.zip` by hand (JetBrains reviews new plugins), then create a permanent token | `JB_MARKETPLACE_TOKEN` (optional signing: `JB_CERTIFICATE_CHAIN`, `JB_PRIVATE_KEY`, `JB_PRIVATE_KEY_PASSWORD`) |
+| ChatGPT (custom GPT action) | — | In ChatGPT, create a GPT, add an Action from `marketplace/chatgpt/openapi.yaml`, choose OAuth, and register ChatGPT's callback URL as a redirect URI on a new confidential Keycloak client in realm `aepx` | — (client id and secret go into the GPT, not GitHub) |
 | Claude Code plugin marketplace | `aepx-ide@aepx` | None: listed in `.claude-plugin/marketplace.json` on `master` | — |
 
 Install in Claude Code:

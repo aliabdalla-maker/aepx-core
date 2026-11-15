@@ -34,13 +34,13 @@ jobs:
         shell: bash
         working-directory: platform/saas-ide/desktop
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Version from tag
@@ -75,7 +75,7 @@ jobs:
           echo "$TARGET: signed=$signed" > "$RUNNER_TEMP/out/SIGNING-$TARGET.txt"
       - name: Fixed download names
         run: python ../distribution/release_names.py dist "$RUNNER_TEMP/out"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ide-${{ matrix.target }}
           path: ${{ runner.temp }}/out/
@@ -98,16 +98,16 @@ jobs:
         run: |
           if [ -n "$KEYSTORE_B64" ]; then echo "ready=true" >> "$GITHUB_OUTPUT"
           else echo "::warning::AEPX_UPLOAD_KEYSTORE_B64 is not set; the APK is skipped for this release."; echo "ready=false" >> "$GITHUB_OUTPUT"; fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: steps.key.outputs.ready == 'true'
         with:
           persist-credentials: false
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         if: steps.key.outputs.ready == 'true'
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         if: steps.key.outputs.ready == 'true'
         with:
           gradle-version: '8.10.2'
@@ -140,7 +140,7 @@ jobs:
           "$tools/apksigner" verify "$apk"
           mkdir -p "$RUNNER_TEMP/out"
           cp "$apk" "$RUNNER_TEMP/out/AEP-X-IDE-Android.apk"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: steps.key.outputs.ready == 'true'
         with:
           name: ide-android
@@ -151,17 +151,17 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: '8.10.2'
       - name: Version from tag
@@ -184,7 +184,7 @@ jobs:
           zips=(platform/saas-ide/marketplace/jetbrains/build/distributions/*.zip)
           [ "${#zips[@]}" -eq 1 ] || { echo "expected one JetBrains plugin zip" >&2; exit 1; }
           cp "${zips[0]}" "$RUNNER_TEMP/out/AEP-X-IDE-JetBrains.zip"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ide-plugins
           path: ${{ runner.temp }}/out/
@@ -195,10 +195,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Test and package the Python Agentic SDK
@@ -212,7 +212,7 @@ jobs:
           git archive --format=zip --prefix=aepx-sdk/ -o "$RUNNER_TEMP/out/AEP-X-Agentic-SDK-Python.zip" HEAD .
           python -m pip install --quiet "$RUNNER_TEMP/out/AEP-X-Agentic-SDK-Python.zip"
           python -c "import aepx; print('SDK import ok')"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ide-sdk
           path: ${{ runner.temp }}/out/
@@ -225,7 +225,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           pattern: ide-*
           path: out
@@ -257,14 +257,14 @@ jobs:
     timeout-minutes: 30
     environment: marketplaces
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: ide-plugins
           path: ${{ runner.temp }}/plugins
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - name: Visual Studio Marketplace
@@ -279,11 +279,11 @@ jobs:
         run: |
           if [ -z "$OVSX_PAT" ]; then echo "::notice::OVSX_PAT not set; Open VSX skipped"; exit 0; fi
           npx --yes ovsx@0.10.1 publish "$RUNNER_TEMP/plugins/AEP-X-IDE-VSCode.vsix" -p "$OVSX_PAT"
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: '8.10.2'
       - name: JetBrains Marketplace
