@@ -67,7 +67,7 @@ class SearchIn(BaseModel):
     query: str = Field(min_length=2, max_length=200)
 
 
-PROVIDERS = ("oci", "openai", "anthropic", "gemini")
+PROVIDERS = ("oci", "openai", "anthropic", "gemini", "openrouter")
 
 
 def route_model(preferred: str | None = None) -> str:
@@ -78,7 +78,7 @@ def route_model(preferred: str | None = None) -> str:
         return preferred
     if not enabled:
         return "unconfigured"
-    priority = os.getenv("IDE_LLM_PRIORITY", "oci,openai,anthropic,gemini").split(",")
+    priority = os.getenv("IDE_LLM_PRIORITY", "oci,openai,anthropic,gemini,openrouter").split(",")
     return next((p for p in priority if p in enabled), enabled[0])
 
 

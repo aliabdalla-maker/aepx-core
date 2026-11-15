@@ -29,6 +29,12 @@ def test_gateway_pins_public_dns():
     assert gateway.permitted_destination("provider.example:443",{"provider.example"},
                                         resolver("8.8.8.8"))=="8.8.8.8"
 
+def test_gateway_accepts_cdn_answers_and_pins_one_ipv4():
+    def cdn(*a,**kw):
+        return (resolver("104.18.3.115")(*a,**kw)+resolver("104.18.2.115")(*a,**kw)
+                +[(10,1,6,"",("2606:4700::6812:273",443,0,0))])
+    assert gateway.permitted_destination("provider.example:443",{"provider.example"},cdn)=="104.18.2.115"
+
 def test_gateway_rejects_mixed_dns():
     def mixed(*a,**kw):
         return resolver("8.8.8.8")(*a,**kw)+resolver("10.1.2.3")(*a,**kw)

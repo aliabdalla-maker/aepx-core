@@ -24,9 +24,12 @@ def permitted_destination(authority, hosts, resolver=socket.getaddrinfo):
         raise PermissionError("Malformed hostname")
     answers=resolver(host,443,type=socket.SOCK_STREAM)
     ips={item[4][0] for item in answers}
-    if len(ips)!=1 or any((not ipaddress.ip_address(ip).is_global) or ipaddress.ip_address(ip).is_multicast for ip in ips):
-        raise PermissionError("DNS not pinned to a single public address")
-    return next(iter(ips))
+    # CDN-fronted providers (OpenRouter, OpenAI, Anthropic) answer with several addresses.
+    # Every answer must be a global unicast address, so one poisoned or rebinding answer
+    # rejects the whole lookup; the connection is then pinned to one checked address.
+    if not ips or len(ips)>16 or any((not ipaddress.ip_address(ip).is_global) or ipaddress.ip_address(ip).is_multicast for ip in ips):
+        raise PermissionError("DNS answers must all be public addresses")
+    return sorted(ips,key=lambda ip:(ipaddress.ip_address(ip).version,ip))[0]
 
 class Handler(socketserver.BaseRequestHandler):
     def handle(self):
