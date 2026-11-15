@@ -115,14 +115,20 @@ def plan_steps(task: str) -> list[dict]:
 
 
 def create_run(db: Session, p: Principal, body: RunRequest) -> AgentRun:
-    if p.role not in ("owner", "admin", "editor"):
+    from .acl import allowed
+    from .modules import crew_steps
+    if not allowed(p.role, "execute_agent"):
         raise PermissionError("Read-only membership")
-    project_or_404(db, p.tenant_id, body.project_id)
+    project = project_or_404(db, p.tenant_id, body.project_id)
     route = route_model(body.preferred_provider)
     import json
+    steps = plan_steps(body.task)
+    # The project's IDE module adds its specialist crew before the verifier.
+    steps[-1:-1] = [s for s in crew_steps(getattr(project, "module", None))
+                    if s["agent"] not in {x["agent"] for x in steps}]
     run = AgentRun(id=str(uuid.uuid4()), tenant_id=p.tenant_id, project_id=body.project_id,
                    subject=p.subject, request=body.task, model_route=route,
-                   status="awaiting_approval", plan=json.dumps(plan_steps(body.task)))
+                   status="awaiting_approval", plan=json.dumps(steps))
     db.add(run)
     db.flush()
     audit(db, p, run.id, "created")
@@ -138,8 +144,9 @@ def decide(db: Session, p: Principal, run_id: str, approve: bool) -> AgentRun:
     run = get_run(db, p, run_id)
     if run is None:
         raise LookupError("Run not found")
-    if p.role not in ("owner", "admin"):
-        raise PermissionError("Only owners/admins can approve")
+    from .acl import allowed
+    if not allowed(p.role, "approve"):
+        raise PermissionError("Only owners, admins and reviewers can approve")
     if run.status != "awaiting_approval":
         raise ValueError("Run already decided")
     # Approval authorizes a planning-only worker, not arbitrary tool/code execution.

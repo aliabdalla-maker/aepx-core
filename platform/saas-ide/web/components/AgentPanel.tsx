@@ -9,13 +9,15 @@ type Props = {
   api: IdeApi | null; project: string; capabilities: Capabilities | null; onStatus: (m: string) => void;
   /** Saves an agent-proposed file into the project and opens it in the editor. */
   onSaveFile?: (path: string, content: string) => Promise<void>;
+  /** Quick tasks for the open project's IDE module; defaults to the general set. */
+  quickTasks?: { label: string; task: string }[];
 };
 const ACTIVE = new Set(["awaiting_approval", "approved", "running"]);
 const WORKING = new Set(["approved", "running"]);
 const PROVIDERS: Provider[] = ["openrouter", "oci", "openai", "anthropic", "gemini"];
 const PROVIDER_LABEL: Record<string, string> = { openrouter: "AEP-X AI (OpenRouter)" };
 
-export default function AgentPanel({ api, project, capabilities, onStatus, onSaveFile }: Props) {
+export default function AgentPanel({ api, project, capabilities, onStatus, onSaveFile, quickTasks = QUICK_TASKS }: Props) {
   const [task, setTask] = useState("");
   const [provider, setProvider] = useState<Provider | "">("");
   const [runs, setRuns] = useState<RunSummary[]>([]);
@@ -127,7 +129,7 @@ export default function AgentPanel({ api, project, capabilities, onStatus, onSav
       </div>}
     </div>
     <div className="chips" aria-label="Quick tasks">
-      {QUICK_TASKS.map(q => <button key={q.label} className="chip" onClick={() => setTask(q.task)}>{q.label}</button>)}
+      {quickTasks.map(q => <button key={q.task} className="chip" onClick={() => setTask(q.task)}>{q.label}</button>)}
     </div>
     <div className="compose">
       <textarea aria-label="Agent task" rows={3} maxLength={4000} value={task}

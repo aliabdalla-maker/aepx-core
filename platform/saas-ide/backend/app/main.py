@@ -10,7 +10,7 @@ from jwt import PyJWKClient
 from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from sqlalchemy import String, Text, create_engine, select, text
+from sqlalchemy import DateTime, String, Text, create_engine, select, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 DATABASE_URL = os.getenv("IDE_DATABASE_URL", "")
@@ -28,7 +28,7 @@ engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 app = FastAPI(title="AEP-X Hybrid IDE API", version="0.2.0")
 origin = os.getenv("IDE_WEB_ORIGIN", "http://localhost:3000")
-app.add_middleware(CORSMiddleware, allow_origins=[origin], allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type", "X-Tenant-ID"])
+app.add_middleware(CORSMiddleware, allow_origins=[origin], allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"], allow_headers=["Authorization", "Content-Type", "X-Tenant-ID"])
 
 
 class Base(DeclarativeBase):
@@ -48,6 +48,8 @@ class Project(Base):
     tenant_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    module: Mapped[str] = mapped_column(String(32), nullable=False, default="software")
+    archived_at: Mapped[object | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class WorkspaceFile(Base):
@@ -114,6 +116,8 @@ def principal(
 class ProjectIn(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     description: str = Field(default="", max_length=2000)
+    # IDE module (software, sound, music, film, animation, sdk, social, multimedia, media).
+    module: str = Field(default="software", max_length=32)
 
 
 class ProjectOut(ProjectIn):
@@ -126,7 +130,7 @@ class FileIn(BaseModel):
 
 def project_or_404(db: Session, tenant: str, project_id: str) -> Project:
     project = db.get(Project, project_id)
-    if project is None or project.tenant_id != tenant:
+    if project is None or project.tenant_id != tenant or project.archived_at is not None:
         raise HTTPException(404, "Project not found")
     return project
 
@@ -149,24 +153,39 @@ def me(p: Principal = Depends(principal)):
 
 @app.post("/api/v1/projects", response_model=ProjectOut, status_code=201)
 def create_project(body: ProjectIn, p: Principal = Depends(principal), db: Session = Depends(db_session)):
-    if p.role not in ("owner", "admin", "editor"):
+    from . import acl
+    from .modules import AVAILABLE
+    from .universal import audit, record_version
+    if not acl.allowed(p.role, "create", "project"):
         raise HTTPException(403, "Read-only membership")
-    project = Project(id=str(uuid.uuid4()), tenant_id=p.tenant_id, name=body.name, description=body.description)
+    module = AVAILABLE.get(body.module)
+    if module is None:
+        raise HTTPException(400, "Unknown or not yet available IDE module")
+    project = Project(id=str(uuid.uuid4()), tenant_id=p.tenant_id, name=body.name,
+                      description=body.description, module=module["id"])
     db.add(project)
+    db.flush()
+    # Each module starts with its own layout (e.g. film/script.fountain, music/song.json).
+    for path, content in module["starter_files"].items():
+        db.add(WorkspaceFile(tenant_id=p.tenant_id, project_id=project.id, path=path, content=content))
+        db.flush()
+        record_version(db, p, project.id, path, "save", content)
+    audit(db, p, "project.create", "project", project.id, module["id"])
     db.commit()
-    return ProjectOut(id=project.id, name=project.name, description=project.description)
+    return ProjectOut(id=project.id, name=project.name, description=project.description, module=project.module)
 
 
 @app.get("/api/v1/projects", response_model=list[ProjectOut])
 def list_projects(p: Principal = Depends(principal), db: Session = Depends(db_session)):
-    projects = db.scalars(select(Project).where(Project.tenant_id == p.tenant_id).order_by(Project.name)).all()
-    return [ProjectOut(id=x.id, name=x.name, description=x.description) for x in projects]
+    projects = db.scalars(select(Project).where(Project.tenant_id == p.tenant_id,
+                                                Project.archived_at.is_(None)).order_by(Project.name)).all()
+    return [ProjectOut(id=x.id, name=x.name, description=x.description, module=x.module) for x in projects]
 
 
 @app.get("/api/v1/projects/{project_id}", response_model=ProjectOut)
 def get_project(project_id: str, p: Principal = Depends(principal), db: Session = Depends(db_session)):
     x = project_or_404(db, p.tenant_id, project_id)
-    return ProjectOut(id=x.id, name=x.name, description=x.description)
+    return ProjectOut(id=x.id, name=x.name, description=x.description, module=x.module)
 
 
 @app.get("/api/v1/projects/{project_id}/files")
@@ -178,17 +197,25 @@ def list_files(project_id: str, p: Principal = Depends(principal), db: Session =
 
 @app.put("/api/v1/projects/{project_id}/files/{path:path}")
 def save_file(project_id: str, path: str, body: FileIn, p: Principal = Depends(principal), db: Session = Depends(db_session)):
-    if p.role not in ("owner", "admin", "editor"):
+    from . import acl
+    from .universal import _commit, audit, record_version
+    if p.role in ("viewer", "reviewer"):
         raise HTTPException(403, "Read-only membership")
-    project_or_404(db, p.tenant_id, project_id)
     path = safe_path(path)
+    project_or_404(db, p.tenant_id, project_id)
     file = db.get(WorkspaceFile, (p.tenant_id, project_id, path))
+    if not acl.allowed(p.role, "create" if file is None else "edit", "file", path):
+        raise HTTPException(403, "Read-only membership" if p.role in ("viewer", "reviewer")
+                            else "Your role may only change media files (media/, audio/, music/, video/, film/ ...)")
     if file is None:
         file = WorkspaceFile(tenant_id=p.tenant_id, project_id=project_id, path=path, content=body.content)
         db.add(file)
     else:
         file.content = body.content
-    db.commit()
+    db.flush()
+    version = record_version(db, p, project_id, path, "save", body.content)
+    audit(db, p, "file.save", "file", f"{project_id}/{path}", f"version {version}")
+    _commit(db)
     return {"path": path, "saved": True}
 
 # Phase 2 endpoints reuse the verified OIDC subject and tenant-scoped DB session.
@@ -589,3 +616,8 @@ def ai_usage(p: Principal = Depends(principal), db: Session = Depends(db_session
             "used_today_microusd": int(used), "daily_allowance_microusd": allowance,
             "used_today_percent": min(100, round(100 * int(used) / allowance)) if allowance else 100,
             "platform_budget_available": cap > 0 and int(month) < cap}
+
+
+# Universal IDE platform: modules, ACL matrix, members, CRUD lifecycle and audit chain.
+from .universal import router as universal_router  # noqa: E402
+app.include_router(universal_router)

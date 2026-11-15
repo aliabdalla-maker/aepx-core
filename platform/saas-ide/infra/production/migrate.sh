@@ -54,5 +54,9 @@ GRANT SELECT, INSERT ON ide_media_audit TO ide_runtime;
 GRANT EXECUTE ON FUNCTION ide_open_personal_workspace(VARCHAR, VARCHAR) TO ide_runtime;
 GRANT SELECT, INSERT, UPDATE ON ide_ai_monthly_spend, ide_ai_usage TO ide_runtime;
 GRANT EXECUTE ON FUNCTION ide_dispatchable_tenants(INTEGER), ide_ensure_agent_budget(VARCHAR, BIGINT) TO ide_runtime;
+GRANT SELECT, INSERT ON ide_file_versions TO ide_runtime;
+GRANT SELECT ON ide_audit_events TO ide_runtime;
+GRANT DELETE ON ide_workspace_files TO ide_runtime;
+GRANT EXECUTE ON FUNCTION ide_append_audit(VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT), ide_verify_audit(VARCHAR), ide_set_member_role(VARCHAR, VARCHAR, VARCHAR, VARCHAR) TO ide_runtime;
 SQL
 echo "IDE database ready"

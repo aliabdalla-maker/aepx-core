@@ -18,7 +18,7 @@ describe("api client", () => {
     expect(url).toBe("https://api.test/api/v1/projects");
     expect(init.method).toBe("POST");
     expect(init.headers).toMatchObject({ Authorization: "Bearer tok", "X-Tenant-ID": "alpha", "Content-Type": "application/json" });
-    expect(JSON.parse(init.body)).toEqual({ name: "x", description: "" });
+    expect(JSON.parse(init.body)).toEqual({ name: "x", description: "", module: "software" });
   });
 
   it("refuses to call without a token and surfaces backend detail", async () => {
@@ -248,5 +248,43 @@ describe("agent assistant", () => {
     const api = ideApi(makeRequester("https://api.test", "tok", "alpha", fetchMock as unknown as typeof fetch));
     await expect(api.aiUsage()).resolves.toMatchObject({ plan: "trial" });
     expect(fetchMock.mock.calls[0][0]).toBe("https://api.test/api/v1/ai-usage");
+  });
+});
+
+describe("universal IDE modules", () => {
+  const mods = [
+    { id: "software", name: "Software IDE", summary: "", status: "available", crew: [], starter_files: {}, quick_tasks: ["Build an API"] },
+    { id: "music", name: "Music IDE", summary: "", status: "available", crew: [], starter_files: {}, quick_tasks: ["Compose a 30s upbeat electronic piece for a product launch video"] },
+    { id: "xr", name: "AR/VR/XR IDE", summary: "", status: "planned", crew: [], starter_files: {}, quick_tasks: [] },
+  ];
+  it("separates available and planned modules and labels projects", async () => {
+    const { availableModules, plannedModules, moduleLabel } = await import("./modules");
+    expect(availableModules(mods).map(m => m.id)).toEqual(["software", "music"]);
+    expect(plannedModules(mods).map(m => m.id)).toEqual(["xr"]);
+    expect(moduleLabel(mods, "music")).toBe("Music IDE");
+    expect(moduleLabel(mods, undefined)).toBe("Software IDE");
+    expect(moduleLabel(mods, "unknown")).toBe("Software IDE");
+  });
+  it("puts module quick tasks first and shortens long labels", async () => {
+    const { moduleTasks } = await import("./modules");
+    const tasks = moduleTasks(mods, "music", QUICK_TASKS);
+    expect(tasks[0].task).toContain("Compose a 30s");
+    expect(tasks[0].label.endsWith("…")).toBe(true);
+    expect(tasks.length).toBeLessThanOrEqual(10);
+  });
+  it("formats ages and calls CRUD endpoints with safe paths", async () => {
+    const { ago } = await import("./modules");
+    expect(ago("2026-01-01T00:00:00Z", Date.parse("2026-01-01T00:00:30Z"))).toBe("30s ago");
+    expect(ago("2026-01-01T00:00:00Z", Date.parse("2026-01-03T00:00:00Z"))).toBe("2d ago");
+    const fetchMock = vi.fn().mockImplementation(async () => json(200, { version: 3 }));
+    const api = ideApi(makeRequester("https://api.test", "tok", "t", fetchMock as unknown as typeof fetch));
+    await api.deleteFile("p1", "music/song.json");
+    expect(fetchMock.mock.calls[0][0]).toBe("https://api.test/api/v1/projects/p1/files/music/song.json");
+    expect(fetchMock.mock.calls[0][1].method).toBe("DELETE");
+    await expect(api.deleteFile("p1", "../etc")).rejects.toBeInstanceOf(ApiError);
+    await api.history("p1", "a b.txt");
+    expect(fetchMock.mock.calls[1][0]).toBe("https://api.test/api/v1/projects/p1/history?path=a%20b.txt");
+    await api.createProject("Film", "", "film");
+    expect(JSON.parse(fetchMock.mock.calls[2][1].body)).toEqual({ name: "Film", description: "", module: "film" });
   });
 });

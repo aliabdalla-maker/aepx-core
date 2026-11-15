@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { oidcConfigured, oidcManager } from "../lib/auth";
-import type { Capabilities, Entitlement, FileEntry, IdeApi, Project } from "../lib/api";
+import type { Capabilities, Entitlement, FileEntry, IdeApi, IdeModule, Project } from "../lib/api";
 import { ensureWorkspace, ideApi, isSafeRelativePath, makeBlobFetcher, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
 import { readConsent, writeConsent } from "../lib/ads";
@@ -15,6 +15,11 @@ import InstallApp from "./InstallApp";
 import FileTree from "./FileTree";
 import { AdSlot, ConsentBanner } from "./Ads";
 import PlanBanner from "./PlanBanner";
+import ModuleLauncher from "./ModuleLauncher";
+import FileHistory from "./FileHistory";
+import TeamPanel from "./TeamPanel";
+import { moduleLabel, moduleTasks } from "../lib/modules";
+import { QUICK_TASKS } from "../lib/agentResult";
 
 // Monaco is self-hosted from /monaco/vs (copied by scripts/copy-monaco.mjs); never from a CDN.
 const Editor = dynamic(async () => {
@@ -26,7 +31,7 @@ const apiBase = process.env.NEXT_PUBLIC_IDE_API_URL || "http://localhost:8090";
 // A fixed tenant is optional. Without one, each user gets a personal workspace on first sign-in.
 const fixedTenant = process.env.NEXT_PUBLIC_IDE_TENANT || "";
 const manager = oidcManager;
-type Panel = "agent" | "studio" | "knowledge" | "ops";
+type Panel = "agent" | "studio" | "knowledge" | "team" | "ops";
 
 export default function Workspace() {
   const [token, setToken] = useState("");
@@ -41,6 +46,9 @@ export default function Workspace() {
   const [consent, setConsent] = useState<Consent>("unknown");
   const [entitlement, setEntitlement] = useState<Entitlement | null>(null);
   const [tenant, setTenant] = useState(fixedTenant);
+  const [modules, setModules] = useState<IdeModule[]>([]);
+  const [launcher, setLauncher] = useState(false);
+  const [historyFor, setHistoryFor] = useState("");
   const configured = oidcConfigured;
 
   const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token, tenant]);
@@ -82,6 +90,7 @@ export default function Workspace() {
     api.projects().then(p => { setProjects(p); setMessage(p.length ? "Select a project" : "Create your first project"); })
       .catch(e => setMessage(String(e.message ?? e)));
     api.capabilities().then(setCapabilities).catch(() => setCapabilities(null));
+    api.modules().then(setModules).catch(() => setModules([]));
     api.me().then(m => setRole(m.role)).catch(() => setRole(undefined));
     // Server-side plan: trial (100% ads) -> Pro £4.99/month (5% ads) -> free (100% ads).
     api.entitlement().then(setEntitlement).catch(() => setEntitlement(null));
@@ -110,13 +119,38 @@ export default function Workspace() {
     setTabs(t => openTab(t, path, content)); setActive(path);
   }
 
-  async function createProject() {
+  function createProject() { if (api) setLauncher(true); }
+
+  async function projectCreated(p: Project) {
+    setLauncher(false); setProjects(x => [...x, p]);
     if (!api) return;
-    const name = window.prompt("Project name")?.trim();
-    if (!name) return;
-    try { const p = await api.createProject(name.slice(0, 120)); setProjects(x => [...x, p]); await openProject(p.id); }
-    catch (e) { setMessage(String((e as Error).message ?? e)); }
+    // Open directly (the projects list in state may not include it yet).
+    try {
+      const data = await api.files(p.id);
+      setProject(p.id); setFiles(data); setTabs([]); setActive(""); setHistoryFor("");
+      if (data[0]) { setTabs([{ path: data[0].path, content: data[0].content, saved: data[0].content }]); setActive(data[0].path); }
+      setMessage(`Created ${p.name} · ${moduleLabel(modules, p.module)}`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
   }
+
+  async function deleteFile(path: string) {
+    if (!api || !project) return;
+    if (!window.confirm(`Delete ${path}? You can restore it from its history.`)) return;
+    try {
+      const r = await api.deleteFile(project, path);
+      setFiles(f => f.filter(x => x.path !== path));
+      setTabs(t => t.filter(x => x.path !== path)); if (active === path) setActive("");
+      setMessage(`Deleted ${path} (version ${r.version} kept in history)`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  function restored(path: string, content: string) {
+    setFiles(f => [...f.filter(x => x.path !== path), { path, content }]);
+    setTabs(t => markSaved(openTab(t.filter(x => x.path !== path), path, content), path)); setActive(path);
+  }
+
+  const currentProject = projects.find(p => p.id === project);
+  const agentTasks = useMemo(() => moduleTasks(modules, currentProject?.module, QUICK_TASKS), [modules, currentProject]);
 
   function newFile() {
     const name = window.prompt("Relative file path (e.g. src/main.py)")?.trim();
@@ -172,7 +206,7 @@ export default function Workspace() {
       <strong>AEP-X <span>Agentic IDE</span></strong>
       <select aria-label="Project" value={project} disabled={!api} onChange={e => void openProject(e.target.value)}>
         <option value="">{api ? "Select project…" : "Sign in to choose a project"}</option>
-        {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+        {projects.map(p => <option key={p.id} value={p.id}>{p.name} · {moduleLabel(modules, p.module)}</option>)}
       </select>
       <nav>
         <PlanBanner api={api} entitlement={entitlement} onStatus={status} onEntitlement={setEntitlement} />
@@ -206,6 +240,9 @@ export default function Workspace() {
             </div>)}
           </nav>
           <span className="spacer" />
+          {current && <button onClick={() => setHistoryFor(h => h === current.path ? "" : current.path)}
+            aria-pressed={historyFor === current.path}>History</button>}
+          {current && <button onClick={() => void deleteFile(current.path)}>Delete</button>}
           <button className="primary" disabled={!current || !isDirty(current)} onClick={() => void save()}>Save</button>
         </div>
         {current ? <div className="editor-host"><Editor height="100%" theme="aepx-dark" path={current.path}
@@ -222,6 +259,8 @@ export default function Workspace() {
               <p className="muted">Plan work with the agent crew, approve each step, and keep a full audit trail.</p>
               <AdSlot surface="projectHome" consent={consent} rate={entitlement?.ad_rate ?? 1} />
             </div>}
+        {api && project && historyFor && <FileHistory api={api} project={project} path={historyFor}
+          onRestored={restored} onStatus={status} onClose={() => setHistoryFor("")} />}
         <footer className="statusbar" role="status">
           <span>{message}</span>
           <span className="spacer" />
@@ -231,12 +270,13 @@ export default function Workspace() {
 
       <aside className="side-panel" aria-label="Agent tools">
         <div className="panel-tabs" role="tablist">
-          {(["agent", "studio", "knowledge", "ops"] as Panel[]).map(p => <button key={p} role="tab" aria-selected={panel === p}
+          {(["agent", "studio", "knowledge", "team", "ops"] as Panel[]).map(p => <button key={p} role="tab" aria-selected={panel === p}
             className={panel === p ? "active" : ""} onClick={() => setPanel(p)}>
-            {{ agent: "Agents", studio: "Studio", knowledge: "Knowledge", ops: "Operations" }[p]}</button>)}
+            {{ agent: "Agents", studio: "Studio", knowledge: "Knowledge", team: "Team", ops: "Operations" }[p]}</button>)}
         </div>
         <div className="panel-body">
-          {panel === "agent" && <AgentPanel api={api} project={project} capabilities={capabilities} onStatus={status} onSaveFile={saveAgentFile} />}
+          {panel === "agent" && <AgentPanel api={api} project={project} capabilities={capabilities} onStatus={status} onSaveFile={saveAgentFile} quickTasks={agentTasks} />}
+          {panel === "team" && <TeamPanel api={api} role={role} onStatus={status} />}
           {panel === "studio" && <StudioPanel request={requester} fetchAsset={fetchAsset} project={project} role={role} onStatus={status} />}
           {panel === "knowledge" && <KnowledgePanel api={api} project={project} onStatus={status} />}
           {panel === "ops" && <McpOperations request={requester} enabled={Boolean(token)} />}
@@ -244,5 +284,7 @@ export default function Workspace() {
       </aside>
     </div>
     <ConsentBanner consent={consent} onChoose={chooseConsent} />
+    {launcher && api && <ModuleLauncher api={api} onCreated={p => void projectCreated(p)}
+      onClose={() => setLauncher(false)} onStatus={status} />}
   </main>;
 }
