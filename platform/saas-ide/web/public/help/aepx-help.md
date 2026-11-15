@@ -21,6 +21,15 @@ Pick a project from the list at the top, or choose **New project** and the IDE m
 ## Files and saving
 Open files from the **Explorer**. Edits are kept in the tab until you choose **Save** (or press Ctrl/⌘+S). Save is greyed out when there is nothing to save; hover it to see why. Every save creates a version you can restore from the file history.
 
+## Renaming, moving and deleting
+Choose **Rename** above the editor to rename or move the open file: type a new name or a new path such as src/utils/helpers.py. Hover a folder in the Explorer for ✎ (rename or move the whole folder) and 🗑 (delete it). **New folder** (🗀) creates an empty folder. Nothing is lost: every renamed, moved or deleted file keeps its history and can be restored. A rename that would overwrite an existing file is refused.
+
+## Searching a project
+Type at least two characters in **Search files…** at the top of the Explorer. Matches in file names and saved file contents are listed with their line numbers; choose one to open the file at that line.
+
+## Renaming and archiving projects
+**Rename project** (owners, admins and developers) changes the project's name. **Archive** (owners and admins) hides a project without deleting anything; **Archived** lists archived projects and lets owners and admins restore them.
+
 ## Importing files
 Choose **Import** in the Explorer. You can import individual files, a whole folder, or a .zip archive. Text files up to 1 MB each are imported (up to 300 files at a time); binary files and folders such as node_modules and .git are skipped and listed. Existing files are only overwritten when you tick **Replace existing files**. Each imported file is saved as a new version, so it can be undone from the file history.
 
