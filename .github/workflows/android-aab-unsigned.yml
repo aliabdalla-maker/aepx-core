@@ -1,0 +1,51 @@
+name: Android companion AAB (unsigned, for owner signing)
+# Pushing a branch build/android-aab-vX.Y.Z builds the production Play bundle (live AdMob app
+# ID, ide.softwareequality.com, auth.softwareequality.com sign-in) WITHOUT signing it, and keeps
+# it as a workflow artifact for 7 days. The owner signs it with the upload key off GitHub
+# (jarsigner) and uploads it in Play Console. Used while the AEPX_UPLOAD_* secrets are not set;
+# once they are, android-release.yml builds and signs the bundle itself.
+on:
+  push:
+    branches: ['build/android-aab-v*.*.*']
+permissions:
+  contents: read
+jobs:
+  aab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+        working-directory: platform/saas-ide/android-companion
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Build the production bundle (unsigned)
+        run: |
+          set -euo pipefail
+          v="${GITHUB_REF_NAME#build/android-aab-v}"
+          [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "branch must be build/android-aab-vMAJOR.MINOR.PATCH" >&2; exit 1; }
+          IFS=. read -r a b c <<< "$v"
+          code=$(( a * 1000000 + b * 1000 + c ))
+          gradle --no-daemon testReleaseUnitTest bundleRelease \
+            -Paepx.versionCode="$code" -Paepx.versionName="$v" \
+            -Paepx.apiBaseUrl=https://ide.softwareequality.com -Paepx.tenant= \
+            -Paepx.oidcIssuer=https://auth.softwareequality.com/realms/aepx \
+            -Paepx.oidcClientId=aepx-ide-browser
+          mkdir -p "$RUNNER_TEMP/out"
+          cp app/build/outputs/bundle/release/app-release.aab "$RUNNER_TEMP/out/AEP-X-IDE-$v-unsigned.aab"
+          echo "versionCode=$code versionName=$v" > "$RUNNER_TEMP/out/VERSION.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-aab-unsigned
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+          if-no-files-found: error
