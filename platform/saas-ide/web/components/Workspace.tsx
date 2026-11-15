@@ -1,7 +1,9 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { oidcConfigured, oidcManager } from "../lib/auth";
+import { oidcAuthority, oidcClientId, oidcConfigured, oidcManager } from "../lib/auth";
+import { DEFAULT_AUTH_OPTIONS, fetchAuthOptions, forgotPasswordUrl, releaseLabel, saveHint, signinArgs, type AuthOptions } from "../lib/signin";
+import SignedOutWelcome from "./SignedOutWelcome";
 import type { Capabilities, Entitlement, FileEntry, IdeApi, IdeModule, Project } from "../lib/api";
 import { ensureWorkspace, ideApi, isSafeRelativePath, makeBlobFetcher, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
@@ -55,6 +57,16 @@ export default function Workspace() {
   // the Code view shows the same file as text.
   const [codeView, setCodeView] = useState<Set<string>>(new Set());
   const configured = oidcConfigured;
+  const [authOptions, setAuthOptions] = useState<AuthOptions>(DEFAULT_AUTH_OPTIONS);
+  const [apiRelease, setApiRelease] = useState<string | null>(null);
+  const release = releaseLabel(process.env.NEXT_PUBLIC_RELEASE_SHA, apiRelease);
+  const signIn = (kind: "email" | "create" | "google" | "github") => void manager().signinRedirect(signinArgs(kind));
+  // Public, unauthenticated: which sign-in methods work here, and which API build is live.
+  useEffect(() => {
+    void fetchAuthOptions(apiBase).then(setAuthOptions);
+    fetch(apiBase + "/api/v1/version", { credentials: "omit" }).then(r => (r.ok ? r.json() : null))
+      .then(v => setApiRelease(v?.release_sha ?? null)).catch(() => setApiRelease(null));
+  }, []);
 
   const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token, tenant]);
   const fetchAsset = useMemo(() => makeBlobFetcher(apiBase, token, tenant), [token, tenant]);
@@ -235,7 +247,7 @@ export default function Workspace() {
         {token ? <>
           <button onClick={() => void createProject()}>New project</button>
           <button onClick={() => void manager().signoutRedirect()}>Sign out</button>
-        </> : <button className="primary" disabled={!configured} onClick={() => void manager().signinRedirect()}>Sign in or create an account</button>}
+        </> : configured && <button className="primary" onClick={() => signIn("email")}>Sign in</button>}
       </nav>
     </header>
 
@@ -268,7 +280,9 @@ export default function Workspace() {
           {current && <button onClick={() => setHistoryFor(h => h === current.path ? "" : current.path)}
             aria-pressed={historyFor === current.path}>History</button>}
           {current && <button onClick={() => void deleteFile(current.path)}>Delete</button>}
-          <button className="primary" disabled={!current || !isDirty(current)} onClick={() => void save()}>Save</button>
+          {(() => { const hint = saveHint({ signedIn: Boolean(token), hasFile: Boolean(current), dirty: Boolean(current && isDirty(current)) });
+            return <button className="primary" disabled={!current || !isDirty(current)} title={hint} aria-description={hint}
+              onClick={() => void save()}>Save</button>; })()}
         </div>
         {current && hasVisualEditor(current.path) && !codeView.has(current.path)
           ? <div className="editor-host visual"><ModuleEditor path={current.path} content={current.content}
@@ -283,8 +297,12 @@ export default function Workspace() {
           onChange={v => setTabs(t => updateTab(t, current.path, v ?? ""))}
           options={{ minimap: { enabled: false }, automaticLayout: true, fontSize: 14, scrollBeyondLastLine: false }} /></div>
           : <div className="empty">
-              <h2>{project ? "Open a file from the explorer" : "Welcome to AEP-X"}</h2>
-              <p className="muted">Plan work with the agent crew, approve each step, and keep a full audit trail.</p>
+              {!token ? <SignedOutWelcome configured={configured} options={authOptions}
+                  forgotUrl={configured ? forgotPasswordUrl(oidcAuthority, oidcClientId) : ""} onSignIn={signIn} />
+                : <><h2>{project ? "Open a file from the explorer" : "Welcome to AEP-X"}</h2>
+                  <p className="muted">{project ? "Plan work with the agent crew, approve each step, and keep a full audit trail."
+                    : projects.length ? "Choose a project at the top, or start a new one." : "Create your first project to get started."}</p>
+                  {!project && <button className="primary" onClick={() => void createProject()}>New project</button>}</>}
               <AdSlot surface="projectHome" consent={consent} rate={entitlement?.ad_rate ?? 1} />
             </div>}
         {api && project && historyFor && <FileHistory api={api} project={project} path={historyFor}
@@ -293,6 +311,9 @@ export default function Workspace() {
           <span>{message}</span>
           <span className="spacer" />
           {current && <span>{languageFor(current.path)} · {isDirty(current) ? "unsaved" : "saved"} · Ctrl/⌘+S</span>}
+          {release.text && <span className={release.drift ? "warn" : "muted"}
+            title={release.drift ? "The web app and API are on different builds; reload, and if it persists the deploy is incomplete." : "Deployed build"}>
+            {release.text}</span>}
         </footer>
       </section>
 

@@ -1,0 +1,24 @@
+id,phase,requirement,status,evidence,weight
+P00-1,P00,Inventory live signed-out IDE and record root causes,verified-local,DEFECTS.md (live Keycloak login probe 2026-11-15),2
+P01-1,P01,Continue with Google sign-in,blocked-owner,Code + local Keycloak broker redirect verified; needs Google OAuth client id/secret in server .env,5
+P01-2,P01,Forgot password / reset by e-mail,implemented-local,keycloak-setup.sh enables reset only with SMTP; local Keycloak shows reset form; needs Resend domain verification + deploy,5
+P01-3,P01,Create account from the welcome screen,implemented-local,prompt=create verified on local Keycloak 26 (registration form),3
+P01-4,P01,Authenticator-app (TOTP) two-step sign-in available,implemented-local,OTP policy applied on local Keycloak; account console link in Team panel,3
+P01-5,P01,GitHub e-mail not trusted for account linking,implemented-local,identity provider trustEmail=false on local Keycloak,2
+P01-6,P01,Brute-force protection,implemented-local,bruteForceProtected=true with backoff (already in realm; reasserted),1
+P01-7,P01,SPF/DKIM/DMARC for sender domain,blocked-owner,Requires Resend domain verification DNS records for softwareequality.com,3
+P01-8,P01,Sessions / signed-in devices visible to the user,implemented-local,Account console device-activity link,1
+P02-1,P02,Signed-out welcome with every working way in and nothing broken,implemented-local,SignedOutWelcome.tsx; headless Chrome render of both configurations,4
+P02-2,P02,Disabled Save explains why,implemented-local,saveHint tooltip + aria-description; vitest,1
+P02-3,P02,Panels show signed-out / denied / unavailable / failed / empty distinctly,implemented-local,McpOperations + panelStateFromError; vitest,3
+P02-4,P02,Launcher status labels for every module,not-started,,3
+P03-1,P03,Adversarial CRUD/ACL/RLS tests,partial,Existing test_universal_acl.py; no new adversarial suite yet,6
+P04-1,P04,Software IDE search / diagnostics / Git / sandbox terminal,not-started,,8
+P05-1,P05,Provider 401/403/429/5xx/timeout handling with bounded retry and no double charge,not-started,,6
+P06-1,P06,Specialist IDE editors,implemented-local,PR #409 editors merged; production signed-in use not verified,6
+P07-1,P07,In-product plugin marketplace (signed manifests / sandbox / install-rollback-uninstall),not-started,,8
+P08-1,P08,Release SHA exposed and drift visible,implemented-local,GET /api/v1/version + status-bar label; pytest + vitest + render,2
+P08-2,P08,Operations distinguishes no data / denied / unavailable / failed,implemented-local,see P02-3,2
+P08-3,P08,PWA install,verified-prod-signed-out,Install dialog seen in owner screenshots,1
+P09-1,P09,CI gates for backend + web tests,partial,Existing workflows run pytest and vitest; this PR's CI not yet observed,4
+P09-2,P09,Release gate requires production verification evidence,not-started,,4
