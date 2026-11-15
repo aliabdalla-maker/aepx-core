@@ -12,4 +12,11 @@ class AepxLinksTest {
         listOf("http://ide.softwareequality.com", "file:///etc/passwd", "https://u:p@x.org", "nonsense")
             .forEach { assertFalse(it, AepxLinks.isSafe(it)) }
     }
+
+    @Test
+    fun newProjectLinksOnlyForKnownModules() {
+        assertTrue(AepxLinks.newProject("music") == "https://ide.softwareequality.com/?new=music")
+        assertTrue(AepxLinks.newProject("x&evil=1") == AepxLinks.IDE)
+        AepxLinks.MODULES.forEach { assertTrue(AepxLinks.isSafe(AepxLinks.newProject(it))) }
+    }
 }

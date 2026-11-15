@@ -164,12 +164,18 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
+      - name: Version from tag
+        run: |
+          set -euo pipefail
+          v="${GITHUB_REF_NAME#release/}"; v="${v#ide-v}"
+          [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Tag must be ide-vMAJOR.MINOR.PATCH" >&2; exit 1; }
+          echo "AEPX_VERSION=$v" >> "$GITHUB_ENV"
       - name: VS Code extension
         working-directory: platform/saas-ide/marketplace/vscode
-        run: npm ci --no-audit --no-fund && npm test && npm run package
+        run: npm ci --no-audit --no-fund && npm pkg set version="$AEPX_VERSION" && npm test && npm run package
       - name: JetBrains plugin
         working-directory: platform/saas-ide/marketplace/jetbrains
-        run: gradle --no-daemon test buildPlugin verifyPlugin
+        run: gradle --no-daemon -Paepx.version="$AEPX_VERSION" test buildPlugin verifyPlugin
       - name: Fixed download names
         run: |
           set -euo pipefail
@@ -241,3 +247,53 @@ jobs:
           gh release create "$tag" out/* --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --latest=false \
             --title "AEP-X Agentic IDE ${tag#ide-v}" \
             --notes "Desktop apps for Windows, macOS and Linux, the Android APK when its signing key is configured, the VS Code and JetBrains plugins and the Python Agentic SDK, for https://ide.softwareequality.com. Download page: https://softwareequality.com/aepx-ide. Code signing: ${signing}. Checksums: SHA256SUMS.txt."
+
+  # Lists the plugins on the public marketplaces. Each store publishes only when its token
+  # secret exists (VSCE_PAT, OVSX_PAT, JB_MARKETPLACE_TOKEN); otherwise it is skipped with a
+  # notice, so a release never fails for a missing store account.
+  marketplaces:
+    needs: [plugins]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: marketplaces
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: ide-plugins
+          path: ${{ runner.temp }}/plugins
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Visual Studio Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then echo "::notice::VSCE_PAT not set; Visual Studio Marketplace skipped"; exit 0; fi
+          npx --yes @vscode/vsce@3.2.1 publish --packagePath "$RUNNER_TEMP/plugins/AEP-X-IDE-VSCode.vsix"
+      - name: Open VSX
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          if [ -z "$OVSX_PAT" ]; then echo "::notice::OVSX_PAT not set; Open VSX skipped"; exit 0; fi
+          npx --yes ovsx@0.10.1 publish "$RUNNER_TEMP/plugins/AEP-X-IDE-VSCode.vsix" -p "$OVSX_PAT"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: JetBrains Marketplace
+        working-directory: platform/saas-ide/marketplace/jetbrains
+        env:
+          JB_MARKETPLACE_TOKEN: ${{ secrets.JB_MARKETPLACE_TOKEN }}
+          JB_CERTIFICATE_CHAIN: ${{ secrets.JB_CERTIFICATE_CHAIN }}
+          JB_PRIVATE_KEY: ${{ secrets.JB_PRIVATE_KEY }}
+          JB_PRIVATE_KEY_PASSWORD: ${{ secrets.JB_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if [ -z "$JB_MARKETPLACE_TOKEN" ]; then echo "::notice::JB_MARKETPLACE_TOKEN not set; JetBrains Marketplace skipped"; exit 0; fi
+          v="${GITHUB_REF_NAME#release/}"; v="${v#ide-v}"
+          gradle --no-daemon -Paepx.version="$v" publishPlugin

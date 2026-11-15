@@ -2,7 +2,7 @@
 // Opens the hosted AEP-X Agentic IDE from VS Code. The extension reads no workspace files, stores no
 // credentials and makes no network calls itself: sign-in, plans and agent work all happen in the IDE.
 const vscode = require("vscode");
-const { ideUrl, PRICING } = require("./url.js");
+const { ideUrl, newProjectUrl, MODULES, PRICING } = require("./url.js");
 
 function configuredIde() {
   // machine-scoped setting: a cloned workspace's .vscode/settings.json cannot redirect it.
@@ -14,6 +14,12 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("aepx.openIde", () => open(configuredIde())),
     vscode.commands.registerCommand("aepx.openPricing", () => open(PRICING)),
+    vscode.commands.registerCommand("aepx.newProject", async () => {
+      const pick = await vscode.window.showQuickPick(
+        MODULES.map(m => ({ label: m.label, detail: m.detail, id: m.id })),
+        { title: "AEP-X: new project in…", placeHolder: "Choose an IDE" });
+      if (pick) open(newProjectUrl(vscode.workspace.getConfiguration("aepx").get("ideUrl"), pick.id));
+    }),
   );
   const item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   item.text = "$(rocket) AEP-X";

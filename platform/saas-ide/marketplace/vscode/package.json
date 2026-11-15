@@ -1,23 +1,62 @@
 {
   "name": "aepx-agentic-ide",
   "displayName": "AEP-X Agentic IDE",
-  "description": "Open the governed AEP-X Agentic IDE: plan with an agent crew, approve every step, keep a full audit trail.",
-  "version": "0.2.0",
+  "description": "Universal agentic IDE: software, sound, music, film, animation, SDK, social and media projects with an AI agent crew, human approval and a full audit trail.",
+  "version": "0.3.0",
   "publisher": "softwareequality",
   "license": "SEE LICENSE IN LICENSE.md",
-  "private": true,
-  "repository": { "type": "git", "url": "https://github.com/aliabdalla-maker/aepx-core" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aliabdalla-maker/aepx-core"
+  },
   "homepage": "https://www.softwareequality.com/aepx",
-  "engines": { "vscode": "^1.90.0" },
-  "categories": ["AI", "Other"],
-  "keywords": ["agents", "ai", "governance", "ide"],
-  "activationEvents": ["onStartupFinished"],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "agents",
+    "ai",
+    "governance",
+    "ide",
+    "music",
+    "video",
+    "film",
+    "animation",
+    "sdk",
+    "social media"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./extension.js",
-  "capabilities": { "untrustedWorkspaces": { "supported": true }, "virtualWorkspaces": true },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
   "contributes": {
     "commands": [
-      { "command": "aepx.openIde", "title": "Open Agentic IDE", "category": "AEP-X" },
-      { "command": "aepx.openPricing", "title": "Plans and pricing", "category": "AEP-X" }
+      {
+        "command": "aepx.openIde",
+        "title": "Open Agentic IDE",
+        "category": "AEP-X"
+      },
+      {
+        "command": "aepx.newProject",
+        "title": "New project (choose an IDE)",
+        "category": "AEP-X"
+      },
+      {
+        "command": "aepx.openPricing",
+        "title": "Plans and pricing",
+        "category": "AEP-X"
+      }
     ],
     "configuration": {
       "title": "AEP-X",
@@ -28,7 +67,11 @@
           "scope": "machine",
           "markdownDescription": "HTTPS address of the AEP-X IDE (change only for a self-hosted deployment)."
         },
-        "aepx.showStatusBar": { "type": "boolean", "default": true, "description": "Show the AEP-X status bar button." }
+        "aepx.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the AEP-X status bar button."
+        }
       }
     }
   },
@@ -36,5 +79,12 @@
     "test": "node --test url.test.js",
     "package": "vsce package --no-dependencies --out aepx-agentic-ide.vsix"
   },
-  "devDependencies": { "@vscode/vsce": "3.2.1" }
+  "devDependencies": {
+    "@vscode/vsce": "3.2.1"
+  },
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#0b1220",
+    "theme": "dark"
+  }
 }

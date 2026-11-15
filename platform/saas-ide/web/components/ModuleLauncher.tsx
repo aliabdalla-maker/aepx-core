@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import type { IdeApi, IdeModule, Project } from "../lib/api";
 import { availableModules, plannedModules } from "../lib/modules";
 
-type Props = { api: IdeApi; onCreated: (p: Project) => void; onClose: () => void; onStatus: (m: string) => void };
+type Props = { api: IdeApi; initial?: string; onCreated: (p: Project) => void; onClose: () => void; onStatus: (m: string) => void };
 
 /** New-project dialog: pick one of the specialised IDEs (spec §2-4) that share the same platform. */
-export default function ModuleLauncher({ api, onCreated, onClose, onStatus }: Props) {
+export default function ModuleLauncher({ api, initial, onCreated, onClose, onStatus }: Props) {
   const [modules, setModules] = useState<IdeModule[]>([]);
-  const [choice, setChoice] = useState("software");
+  const [choice, setChoice] = useState(initial || "software");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -23,6 +23,9 @@ export default function ModuleLauncher({ api, onCreated, onClose, onStatus }: Pr
   }
 
   const available = availableModules(modules);
+  useEffect(() => {
+    if (modules.length && !available.some(m => m.id === choice)) setChoice("software");
+  }, [modules, available, choice]);
   const planned = plannedModules(modules);
   return <div className="modal-backdrop" role="presentation" onClick={onClose}>
     <div className="modal" role="dialog" aria-modal="true" aria-labelledby="launcher-title" onClick={e => e.stopPropagation()}

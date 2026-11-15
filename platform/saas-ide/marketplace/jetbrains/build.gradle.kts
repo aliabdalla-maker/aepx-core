@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.softwareequality.aepx"
-version = "0.2.0"
+version = providers.gradleProperty("aepx.version").getOrElse("0.3.0")
 
 repositories {
     mavenCentral()

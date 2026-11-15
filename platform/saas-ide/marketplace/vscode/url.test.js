@@ -10,3 +10,12 @@ test("https IDE URLs are kept, everything else falls back", () => {
     assert.equal(ideUrl(bad), DEFAULT_IDE);
   }
 });
+
+test("new-project links carry only known modules", () => {
+  const { newProjectUrl, MODULES } = require("./url.js");
+  assert.equal(MODULES.length, 9);
+  assert.equal(newProjectUrl(undefined, "music"), "https://ide.softwareequality.com/?new=music");
+  assert.equal(newProjectUrl("https://ide.example.org/app", "film"), "https://ide.example.org/app?new=film");
+  assert.equal(newProjectUrl(undefined, "x&evil=1"), DEFAULT_IDE);
+  assert.equal(newProjectUrl("http://bad", "sound"), "https://ide.softwareequality.com/?new=sound");
+});
