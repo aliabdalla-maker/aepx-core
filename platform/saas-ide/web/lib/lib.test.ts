@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { ApiError, encodePath, ideApi, isSafeRelativePath, makeRequester, runActions } from "./api";
+import { ApiError, encodePath, ensureWorkspace, ideApi, isSafeRelativePath, makeRequester, runActions } from "./api";
 import { adsenseSettings, impressionAllowed, readConsent, shouldRenderAd, writeConsent } from "./ads";
 import { buildTree, closeTab, isDirty, languageFor, markSaved, openTab, parsePlan, updateTab } from "./workspace";
 
@@ -160,5 +160,20 @@ describe("iOS StoreKit bridge", () => {
     expect(bundleIdFrom({ bundleId: "com.equalitysoftware.aepx.ide" })).toBe("com.equalitysoftware.aepx.ide");
     expect(bundleIdFrom({ bundleId: "x'); alert(1)//" })).toBeUndefined();
     expect(bundleIdFrom(null)).toBeUndefined();
+  });
+});
+
+describe("ensureWorkspace", () => {
+  const ok = (body: unknown) => (async () => new Response(JSON.stringify(body), { status: 200 })) as unknown as typeof fetch;
+  it("returns the personal workspace id from the API", async () => {
+    const id = "u-" + "a".repeat(32);
+    await expect(ensureWorkspace("https://ide.test", "tok", ok({ tenant_id: id }))).resolves.toBe(id);
+  });
+  it("rejects a malformed workspace id", async () => {
+    await expect(ensureWorkspace("https://ide.test", "tok", ok({ tenant_id: "alpha" }))).rejects.toThrow();
+  });
+  it("surfaces API errors", async () => {
+    const denied = (async () => new Response("{}", { status: 401 })) as unknown as typeof fetch;
+    await expect(ensureWorkspace("https://ide.test", "tok", denied)).rejects.toThrow("401");
   });
 });

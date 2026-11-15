@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { oidcConfigured, oidcManager } from "../lib/auth";
 import type { Capabilities, Entitlement, FileEntry, IdeApi, Project } from "../lib/api";
-import { ideApi, isSafeRelativePath, makeRequester } from "../lib/api";
+import { ensureWorkspace, ideApi, isSafeRelativePath, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
 import { readConsent, writeConsent } from "../lib/ads";
 import { buildTree, closeTab, isDirty, languageFor, markSaved, openTab, updateTab, type Tab } from "../lib/workspace";
@@ -22,7 +22,8 @@ const Editor = dynamic(async () => {
   return mod.default;
 }, { ssr: false, loading: () => <div className="empty muted">Loading editor…</div> });
 const apiBase = process.env.NEXT_PUBLIC_IDE_API_URL || "http://localhost:8090";
-const tenant = process.env.NEXT_PUBLIC_IDE_TENANT || "";
+// A fixed tenant is optional. Without one, each user gets a personal workspace on first sign-in.
+const fixedTenant = process.env.NEXT_PUBLIC_IDE_TENANT || "";
 const manager = oidcManager;
 type Panel = "agent" | "knowledge" | "ops";
 
@@ -38,15 +39,25 @@ export default function Workspace() {
   const [message, setMessage] = useState("Sign in to load your workspace.");
   const [consent, setConsent] = useState<Consent>("unknown");
   const [entitlement, setEntitlement] = useState<Entitlement | null>(null);
-  const configured = oidcConfigured && Boolean(tenant);
+  const [tenant, setTenant] = useState(fixedTenant);
+  const configured = oidcConfigured;
 
-  const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token]);
-  const api: IdeApi | null = useMemo(() => (token ? ideApi(requester) : null), [token, requester]);
+  const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token, tenant]);
+  const api: IdeApi | null = useMemo(() => (token && tenant ? ideApi(requester) : null), [token, tenant, requester]);
   const status = useCallback((m: string) => setMessage(m), []);
+
+  useEffect(() => {
+    if (!token || fixedTenant) return;
+    let cancelled = false;
+    ensureWorkspace(apiBase, token)
+      .then(id => { if (!cancelled) setTenant(id); })
+      .catch(() => { if (!cancelled) setMessage("Could not open your workspace. Try signing in again."); });
+    return () => { cancelled = true; };
+  }, [token]);
 
   useEffect(() => { setConsent(readConsent(typeof window === "undefined" ? undefined : window.localStorage)); }, []);
   useEffect(() => {
-    if (!configured) { setMessage("Set NEXT_PUBLIC_OIDC_AUTHORITY, NEXT_PUBLIC_OIDC_CLIENT_ID and NEXT_PUBLIC_IDE_TENANT to sign in."); return; }
+    if (!configured) { setMessage("Set NEXT_PUBLIC_OIDC_AUTHORITY and NEXT_PUBLIC_OIDC_CLIENT_ID to sign in."); return; }
     const m = manager();
     m.getUser().then(u => { if (u && !u.expired) setToken(u.access_token); })
       .catch(() => setMessage("Authentication session unavailable"));
@@ -155,7 +166,7 @@ export default function Workspace() {
         {token ? <>
           <button onClick={() => void createProject()}>New project</button>
           <button onClick={() => void manager().signoutRedirect()}>Sign out</button>
-        </> : <button className="primary" disabled={!configured} onClick={() => void manager().signinRedirect()}>Sign in with OIDC</button>}
+        </> : <button className="primary" disabled={!configured} onClick={() => void manager().signinRedirect()}>Sign in or create an account</button>}
       </nav>
     </header>
 

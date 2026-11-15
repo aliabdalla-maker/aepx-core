@@ -1333,3 +1333,18 @@ def test_subscription_trial_webhook_idempotency_and_ordering(prepared_db, tokens
     other = {"Authorization": f"Bearer {tokens(subject='billing-user-2')}"}
     assert client.get("/api/v1/entitlement", headers=other).json()["plan"] == "trial"  # isolation
     assert client.get("/api/v1/entitlement").status_code == 401
+
+
+def test_personal_workspace_signup_is_private_and_idempotent(prepared_db, tokens):
+    client = TestClient(main.app)
+    first = client.post("/api/v1/workspace", headers={"Authorization": f"Bearer {tokens('new-user-1')}"})
+    assert first.status_code == 200 and first.json()["role"] == "owner"
+    tenant = first.json()["tenant_id"]
+    again = client.post("/api/v1/workspace", headers={"Authorization": f"Bearer {tokens('new-user-1')}"})
+    assert again.json()["tenant_id"] == tenant
+    owner = headers(tokens("new-user-1"), tenant)
+    assert client.post("/api/v1/projects", headers=owner, json={"name": "first"}).status_code == 201
+    # Another signed-up user cannot read or join the first user's workspace.
+    other = client.post("/api/v1/workspace", headers={"Authorization": f"Bearer {tokens('new-user-2')}"}).json()["tenant_id"]
+    assert other != tenant
+    assert client.get("/api/v1/projects", headers=headers(tokens("new-user-2"), tenant)).status_code == 403

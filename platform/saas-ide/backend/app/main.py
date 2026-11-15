@@ -1,4 +1,5 @@
 """Hybrid IDE Phase 1 API. OIDC access tokens + explicit PostgreSQL tenant membership."""
+import hashlib
 import os
 import uuid
 from functools import lru_cache
@@ -535,3 +536,24 @@ def app_store_verify(body: AppStorePurchase, subject: str = Depends(verified_sub
     update = _billing(lambda: subs.verify_app_store(account, body.original_transaction_id, bundle_id=body.bundle_id))
     _apply_verified(update)
     return get_entitlement(subject)
+
+
+# --------------------------------------------------------------------------- personal workspaces
+# Self-service sign-up: the first time a verified user opens the IDE they get a private,
+# single-member workspace. The id is derived from the verified issuer and subject, so it is
+# stable, unguessable from outside and cannot collide with another user's workspace.
+
+def personal_tenant_id(subject: str) -> str:
+    return "u-" + hashlib.sha256(f"{OIDC_ISSUER}|{subject}".encode()).hexdigest()[:32]
+
+
+@app.post("/api/v1/workspace")
+def open_personal_workspace(subject: str = Depends(verified_subject)):
+    tenant_id = personal_tenant_id(subject)
+    with SessionLocal() as db:
+        # The runtime role cannot write memberships directly; this audited function only
+        # creates a caller-owned workspace and refuses to add anyone to an existing one.
+        db.execute(text("SELECT ide_open_personal_workspace(:tenant, :subject)"),
+                   {"tenant": tenant_id, "subject": subject})
+        db.commit()
+    return {"tenant_id": tenant_id, "role": "owner"}
