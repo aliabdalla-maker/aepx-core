@@ -24,7 +24,7 @@ Release status: HOLD. No cloud resources provisioned, no public website changes,
 - [ ] Confirm package ID and Google Play App Signing SHA-256
 - [ ] Deploy assetlinks.json with actual fingerprint
 - [ ] Complete Data safety, privacy policy, store listing and internal testing
-- [ ] Review Play Console before any production release
+- [ ] Review Play Console before any production release (step by step: play-listing/PUBLISH.md; website: website/README.md)
 
 ## Marketplaces
 - [ ] VS Code: register publisher, test extension, package and submit for review

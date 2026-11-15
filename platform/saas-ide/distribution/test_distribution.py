@@ -138,3 +138,25 @@ def test_committed_page_matches_manifest():
     page = gd.render(json.loads((here / "releases.json").read_text(encoding="utf-8")))
     assert (here / "website-downloads.html").read_text(encoding="utf-8") == page
     assert "0 of 15 downloads available" in page  # nothing is offered before signed builds exist
+
+
+def test_app_ads_txt_authorises_only_our_admob_publisher():
+    assert gd.APP_ADS_TXT == "google.com, pub-2980680946304710, DIRECT, f08c47fec0942fa0\n"
+
+
+def test_website_package_is_in_sync_and_self_contained():
+    import json
+    from pathlib import Path
+    here = Path(gd.__file__).parent
+    manifest = json.loads((here / "releases.json").read_text(encoding="utf-8"))
+    static = here / "website" / "static"
+    assert (static / "app-ads.txt").read_text() == gd.APP_ADS_TXT
+    assert (static / "aepx" / "index.html").read_text(encoding="utf-8") == gd.render(manifest)
+    for asset in ("logo.svg", "favicon.ico", "apple-touch-icon.png", "og-image.png"):
+        assert (static / "aepx" / asset).is_file(), asset
+    privacy = (static / "aepx" / "privacy.html").read_text(encoding="utf-8")
+    for must in ("AdMob", "consent", "UK GDPR", "Equality Software Ltd", "not directed at children"):
+        assert must in privacy
+    block = (here / "website" / "wordpress" / "aepx-downloads-block.html").read_text(encoding="utf-8")
+    assert "<html" not in block and "https://www.softwareequality.com/aepx/logo.svg" in block
+    assert ".aepx-page" in block  # styles scoped so they cannot restyle the WordPress theme

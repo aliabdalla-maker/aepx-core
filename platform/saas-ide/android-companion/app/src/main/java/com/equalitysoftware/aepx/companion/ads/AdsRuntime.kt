@@ -29,6 +29,8 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
@@ -44,6 +46,15 @@ class AdsRuntime(val activity: Activity, val registry: AdUnitRegistry) {
     private val interstitialCap = FrequencyCap(3 * 60_000L, 3) { SystemClock.elapsedRealtime() }
     private val appOpenCap = FrequencyCap(4 * 60 * 60_000L, 1) { SystemClock.elapsedRealtime() }
     private var interstitial: InterstitialAd? = null
+    private var rewarded: RewardedAd? = null
+
+    /** True when an opt-in rewarded ad is loaded and can be offered to the user. */
+    var rewardedReady by mutableStateOf(false)
+        private set
+
+    /** True while the user enjoys an earned ad-free break (re-read on recomposition). */
+    var adBreakActive by mutableStateOf(false)
+        private set
     private val appOpenPending = AtomicBoolean(true)
 
     /** Plan-based thinning. No ad of any kind is shown until the entitlement sets a rate. */
@@ -90,9 +101,40 @@ class AdsRuntime(val activity: Activity, val registry: AdUnitRegistry) {
         MobileAds.initialize(activity) {
             ready = true
             preloadInterstitial()
+            preloadRewarded()
             if (gate.rate != null) showAppOpenOnce()
         }
     }
+
+    private fun preloadRewarded() {
+        val unit = registry.unitFor(Placement.REWARDED_AD_BREAK) ?: return
+        RewardedAd.load(activity, unit, AdRequest.Builder().build(), object : RewardedAdLoadCallback() {
+            override fun onAdLoaded(ad: RewardedAd) { rewarded = ad; rewardedReady = true }
+            override fun onAdFailedToLoad(error: LoadAdError) { rewarded = null; rewardedReady = false }
+        })
+    }
+
+    /**
+     * User-initiated only (a button that says what they get). The reward is granted only in
+     * onUserEarnedReward, i.e. after the ad was watched as AdMob defines it.
+     */
+    fun watchForAdBreak(onRewarded: () -> Unit = {}) {
+        val ad = rewarded ?: return
+        rewarded = null
+        rewardedReady = false
+        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() { preloadRewarded() }
+            override fun onAdFailedToShowFullScreenContent(error: AdError) { preloadRewarded() }
+        }
+        ad.show(activity) {
+            gate.pauseFor(AD_BREAK_MS)
+            adBreakActive = true
+            onRewarded()
+        }
+    }
+
+    /** Re-evaluates the break when screens appear (the flag is display-only; the gate enforces it). */
+    fun refreshAdBreak() { adBreakActive = gate.paused }
 
     private fun preloadInterstitial() {
         val unit = registry.unitFor(Placement.RUN_COMPLETED_INTERSTITIAL) ?: return

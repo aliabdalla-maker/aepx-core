@@ -32,7 +32,9 @@ enum class Placement(val key: String, val format: AdFormat) {
     RUNS_LIST_BANNER("runs_list_banner", AdFormat.BANNER),
     RUN_COMPLETED_INTERSTITIAL("run_completed_interstitial", AdFormat.INTERSTITIAL),
     APP_OPEN("app_open", AdFormat.APP_OPEN),
-    NATIVE_FEED("native_feed", AdFormat.NATIVE);
+    NATIVE_FEED("native_feed", AdFormat.NATIVE),
+    /** Opt-in only: the user taps "watch an ad" to earn an ad-free break. Never shown automatically. */
+    REWARDED_AD_BREAK("rewarded_ad_break", AdFormat.REWARDED);
 
     companion object {
         fun fromKey(key: String): Placement =
@@ -138,12 +140,25 @@ object AdRate {
 }
 
 /** Counts ad opportunities; rate is null until the entitlement is known, and then no ad is shown. */
-class AdGate {
+class AdGate(private val now: () -> Long = { System.currentTimeMillis() }) {
     @Volatile var rate: Double? = null
     private val opportunities = java.util.concurrent.atomic.AtomicLong(0)
+    @Volatile private var pausedUntil = 0L
+
+    /** Reward for an opt-in rewarded ad: no automatic ads until the break ends. */
+    fun pauseFor(durationMs: Long) {
+        require(durationMs > 0)
+        pausedUntil = maxOf(pausedUntil, now() + durationMs)
+    }
+
+    val paused: Boolean get() = now() < pausedUntil
 
     fun tryOpportunity(): Boolean {
+        if (paused) return false
         val r = rate ?: return false
         return AdRate.allowed(r, opportunities.getAndIncrement())
     }
 }
+
+/** Length of the ad-free break earned by watching one rewarded ad. */
+const val AD_BREAK_MS = 30 * 60_000L

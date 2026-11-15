@@ -178,7 +178,7 @@ private fun App(authService: AuthorizationService, ads: AdsRuntime?, registry: A
         }
         if (message.isNotEmpty()) Text(message, Modifier.padding(horizontal = 12.dp), color = MaterialTheme.colorScheme.error)
         val plan = entitlement
-        if (plan != null && screen !is Screen.Run) PlanCard(plan, subscribe)
+        if (plan != null && screen !is Screen.Run) PlanCard(plan, ads, subscribe)
         Column(Modifier.weight(1f)) {
             when (val s = screen) {
                 Screen.SignIn -> SignIn(enabled = client != null, onSignIn = signIn)
@@ -201,11 +201,23 @@ private fun App(authService: AuthorizationService, ads: AdsRuntime?, registry: A
 }
 
 @Composable
-private fun PlanCard(plan: Entitlement, onSubscribe: () -> Unit) {
+private fun PlanCard(plan: Entitlement, ads: AdsRuntime?, onSubscribe: () -> Unit) {
+    LaunchedEffect(Unit) { ads?.refreshAdBreak() }
     Card(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
-        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(plan.label, Modifier.weight(1f))
-            if (plan.canBuyOnPlay) Button(onClick = onSubscribe) { Text("Go Pro ${plan.price}") }
+        Column(Modifier.padding(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(plan.label, Modifier.weight(1f))
+                if (plan.canBuyOnPlay) Button(onClick = onSubscribe) { Text("Go Pro ${plan.price}") }
+            }
+            // Opt-in rewarded ad for trial/free users: one ad buys a 30-minute break from all other ads.
+            if (ads != null && plan.plan != "pro") {
+                when {
+                    ads.adBreakActive -> Text("Ad-free break active (30 min)", style = MaterialTheme.typography.bodySmall)
+                    ads.rewardedReady -> TextButton(onClick = { ads.watchForAdBreak() }) {
+                        Text("Watch a short ad for 30 ad-free minutes")
+                    }
+                }
+            }
         }
     }
 }

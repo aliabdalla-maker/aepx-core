@@ -128,13 +128,15 @@ describe("web ads gating", () => {
     const cfg = JSON.parse(readFileSync(join(__dirname, "..", "..", "monetization", "ads-config.json"), "utf8"));
     expect(cfg.adsense.client).toBe(adsenseSettings({}).client);
     expect(cfg.adsense.enabled).toBe(false);
-    expect(cfg.admob.enabled).toBe(false);
+    expect(cfg.admob.enabled).toBe(true); // owner chose the standard layout on 2026-11-15
     expect(cfg.admob.appId).toBe("ca-app-pub-2980680946304710~2617421798");
     expect(cfg.admob.adUnits).toHaveLength(6);
     for (const unit of cfg.admob.adUnits) {
       expect(unit.id).toMatch(/^ca-app-pub-2980680946304710\/\d{10}$/);
-      expect(unit.format === null || cfg.admob.allowedFormats.includes(unit.format)).toBe(true);
+      expect(cfg.admob.allowedFormats).toContain(unit.format);
+      expect(cfg.admob.allowedPlacements).toContain(unit.placement);
     }
+    expect(new Set(cfg.admob.adUnits.map((u: { placement: string }) => u.placement)).size).toBe(6);
     expect(new Set(cfg.admob.adUnits.map((u: { id: string }) => u.id)).size).toBe(6);
   });
 });
