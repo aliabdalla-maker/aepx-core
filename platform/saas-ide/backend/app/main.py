@@ -458,6 +458,7 @@ class PlayPurchase(BaseModel):
 
 class AppStorePurchase(BaseModel):
     original_transaction_id: str = Field(min_length=1, max_length=32)
+    bundle_id: str | None = Field(default=None, max_length=155, pattern=r"^[A-Za-z0-9.-]+$")
 
 
 def _billing(call):
@@ -531,6 +532,6 @@ def google_play_verify(body: PlayPurchase, subject: str = Depends(verified_subje
 @app.post("/api/v1/billing/app-store/verify")
 def app_store_verify(body: AppStorePurchase, subject: str = Depends(verified_subject)):
     account = _entitlement_for(subject)["account_id"]
-    update = _billing(lambda: subs.verify_app_store(account, body.original_transaction_id))
+    update = _billing(lambda: subs.verify_app_store(account, body.original_transaction_id, bundle_id=body.bundle_id))
     _apply_verified(update)
     return get_entitlement(subject)

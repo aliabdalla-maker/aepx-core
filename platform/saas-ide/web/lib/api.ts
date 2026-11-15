@@ -82,6 +82,9 @@ export const ideApi = (r: Requester) => ({
   entitlement: () => r<Entitlement>("/api/v1/entitlement"),
   stripeCheckout: () => r<{ url: string }>("/api/v1/billing/stripe/checkout", "POST"),
   stripePortal: () => r<{ url: string }>("/api/v1/billing/stripe/portal", "POST"),
+  appStoreVerify: (originalTransactionId: string, bundleId?: string) =>
+    r<Entitlement>("/api/v1/billing/app-store/verify", "POST",
+      { original_transaction_id: originalTransactionId, ...(bundleId ? { bundle_id: bundleId } : {}) }),
   capabilities: () => r<Capabilities>("/api/v1/agent-capabilities"),
   projects: () => r<Project[]>("/api/v1/projects"),
   createProject: (name: string, description = "") =>

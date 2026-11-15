@@ -1,0 +1,79 @@
+name: AEPX
+options:
+  bundleIdPrefix: com.equalitysoftware.aepx
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+packages:
+  AEPXKit:
+    path: AEPXKit
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads
+    majorVersion: 11.13.0
+  GoogleUserMessagingPlatform:
+    url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform
+    majorVersion: 2.7.0
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: 0.2.0
+    CURRENT_PROJECT_VERSION: 1
+    DEVELOPMENT_TEAM: $(AEPX_TEAM_ID)
+    TARGETED_DEVICE_FAMILY: "1,2"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targetTemplates:
+  AEPXApp:
+    type: application
+    platform: iOS
+    dependencies:
+      - package: AEPXKit
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    scheme: {}
+    info:
+      properties: &info
+        CFBundleDisplayName: $(PRODUCT_NAME)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        ITSAppUsesNonExemptEncryption: false
+        GADApplicationIdentifier: $(AEPX_ADMOB_APP_ID)
+        SKAdNetworkItems:
+          - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
+        AEPXAPIBaseURL: $(AEPX_API_BASE_URL)
+        AEPXIDEURL: $(AEPX_IDE_URL)
+        AEPXTenant: $(AEPX_TENANT)
+        AEPXOIDCIssuer: $(AEPX_OIDC_ISSUER)
+        AEPXOIDCClientID: $(AEPX_OIDC_CLIENT_ID)
+        AEPXIdPOrigins: $(AEPX_IDP_ORIGINS)
+        AEPXAdMobBannerUnit: $(AEPX_ADMOB_BANNER_UNIT)
+        AEPXAdMobInterstitialUnit: $(AEPX_ADMOB_INTERSTITIAL_UNIT)
+targets:
+  AEPXCompanion:
+    templates: [AEPXApp]
+    sources: [Companion, Shared, Resources]
+    info:
+      path: Companion/Info.plist
+      properties:
+        <<: *info
+        AEPXAppStoreProductID: $(AEPX_COMPANION_PRODUCT_ID)
+        CFBundleURLTypes:
+          - CFBundleURLSchemes: [com.equalitysoftware.aepx.companion]
+    settings:
+      base:
+        PRODUCT_NAME: AEP-X
+        PRODUCT_BUNDLE_IDENTIFIER: com.equalitysoftware.aepx.companion
+  AEPXIDE:
+    templates: [AEPXApp]
+    sources: [IDEWrapper, Shared, Resources]
+    info:
+      path: IDEWrapper/Info.plist
+      properties:
+        <<: *info
+        AEPXAppStoreProductID: $(AEPX_IDE_PRODUCT_ID)
+    settings:
+      base:
+        PRODUCT_NAME: AEP-X IDE
+        PRODUCT_BUNDLE_IDENTIFIER: com.equalitysoftware.aepx.ide

@@ -98,3 +98,43 @@ def test_verify_artifacts_rejects_path_traversal(tmp_path):
     manifest.write_text(json.dumps([{"filename": "../x", "sha256": "0" * 64}]))
     with pytest.raises(ValueError):
         verify_artifacts.verify(tmp_path, manifest)
+
+
+import generate_downloads as gd
+
+GOOD = {"platform": "macos", "label": "macOS", "filename": "AEP-X.dmg", "signed": True, "bytes": 120_000_000,
+        "sha256": "a" * 64, "url": "https://downloads.softwareequality.com/aepx/0.2.0/AEP-X.dmg"}
+
+
+def test_download_button_only_for_signed_checksummed_official_host():
+    assert gd.is_live(GOOD)
+    for bad in [{**GOOD, "signed": False}, {**GOOD, "sha256": None}, {**GOOD, "sha256": "A" * 64},
+                {**GOOD, "bytes": 0}, {**GOOD, "url": "http://downloads.softwareequality.com/x.dmg"},
+                {**GOOD, "url": "https://evil.example/x.dmg"},
+                {**GOOD, "url": "https://downloads.softwareequality.com.evil.example/x.dmg"},
+                {**GOOD, "filename": "../x.dmg"}]:
+        assert not gd.is_live(bad), bad
+
+
+def test_store_links_need_official_store_host():
+    assert gd.is_live({"platform": "store", "url": "https://play.google.com/store/apps/details?id=x"})
+    assert not gd.is_live({"platform": "store", "url": "https://play.google.com.evil.example/"})
+    assert not gd.is_live({"platform": "plugin", "url": None})
+
+
+def test_render_escapes_and_shows_pricing():
+    page = gd.render({"version": "1", "updated": "2026-11-15", "artifacts": [
+        GOOD, {"platform": "linux", "label": "<script>x</script>", "signed": False}]})
+    assert "Download (120 MB)" in page and "SHA-256 " + "a" * 64 in page
+    assert "<script>" not in page and "&lt;script&gt;" in page
+    assert "30 days free" in page and "£4.99/month" in page and "95% fewer ads" in page
+    assert "1 of 2 downloads available" in page
+
+
+def test_committed_page_matches_manifest():
+    import json
+    from pathlib import Path
+    here = Path(gd.__file__).parent
+    page = gd.render(json.loads((here / "releases.json").read_text(encoding="utf-8")))
+    assert (here / "website-downloads.html").read_text(encoding="utf-8") == page
+    assert "0 of 14 downloads available" in page  # nothing is offered before signed builds exist

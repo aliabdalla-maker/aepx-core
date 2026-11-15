@@ -1,3 +1,4 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
@@ -31,7 +32,13 @@ intellijPlatform {
             untilBuild = provider { null } // no upper bound; the verifier checks current IDEs
         }
     }
-    pluginVerification { ides { recommended() } }
+    // Pinned IDE builds: IntelliJ IDEA Community is no longer published separately from 2025.3.
+    pluginVerification {
+        ides {
+            ide(IntelliJPlatformType.IntellijIdeaCommunity, "2024.2.4")
+            ide(IntelliJPlatformType.IntellijIdeaCommunity, "2025.1")
+        }
+    }
     // Signing/publishing read env vars only; never run in CI (owner-only, see README).
     signing {
         certificateChain = providers.environmentVariable("JB_CERTIFICATE_CHAIN")

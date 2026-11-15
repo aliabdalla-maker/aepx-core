@@ -138,3 +138,25 @@ describe("web ads gating", () => {
     expect(new Set(cfg.admob.adUnits.map((u: { id: string }) => u.id)).size).toBe(6);
   });
 });
+
+import { bundleIdFrom, nativeStore, transactionIdFrom } from "./nativeStore";
+
+describe("iOS StoreKit bridge", () => {
+  it("is detected only when the wrapper's handler exists", () => {
+    expect(nativeStore(undefined)).toBeNull();
+    expect(nativeStore({})).toBeNull();
+    expect(nativeStore({ webkit: { messageHandlers: { aepxStore: { postMessage: "x" } } } })).toBeNull();
+    const handler = { postMessage: () => undefined };
+    expect(nativeStore({ webkit: { messageHandlers: { aepxStore: handler } } })).toBe(handler);
+  });
+  it("accepts only decimal transaction ids", () => {
+    expect(transactionIdFrom({ originalTransactionId: "2000000123456789" })).toBe("2000000123456789");
+    for (const bad of [null, {}, { originalTransactionId: 12 }, { originalTransactionId: "12a" },
+      { originalTransactionId: "1".repeat(21) }]) expect(transactionIdFrom(bad)).toBeNull();
+  });
+  it("passes only well-formed bundle ids", () => {
+    expect(bundleIdFrom({ bundleId: "com.equalitysoftware.aepx.ide" })).toBe("com.equalitysoftware.aepx.ide");
+    expect(bundleIdFrom({ bundleId: "x'); alert(1)//" })).toBeUndefined();
+    expect(bundleIdFrom(null)).toBeUndefined();
+  });
+});
