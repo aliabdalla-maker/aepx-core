@@ -29,6 +29,11 @@ export type Capabilities = {
 export type LexicalMatch = { id: string; title: string; excerpt: string; score: number };
 export type VectorMatch = { document_id: string; excerpt: string; score: number };
 export type Provider = "oci" | "openai" | "anthropic" | "gemini";
+export type Entitlement = {
+  plan: "trial" | "pro" | "free"; ad_rate: number; subscribed: boolean; trial_days_left: number;
+  trial_ends_at: string; renews_at: string | null; will_renew: boolean; price: string;
+  account_id: string; source: string | null; can_manage_on_web: boolean;
+};
 
 export type Requester = <T = unknown>(url: string, method?: string, body?: unknown) => Promise<T>;
 
@@ -74,6 +79,9 @@ export function isSafeRelativePath(path: string): boolean {
 
 export const ideApi = (r: Requester) => ({
   me: () => r<{ subject: string; tenant_id: string; role: string }>("/api/v1/me"),
+  entitlement: () => r<Entitlement>("/api/v1/entitlement"),
+  stripeCheckout: () => r<{ url: string }>("/api/v1/billing/stripe/checkout", "POST"),
+  stripePortal: () => r<{ url: string }>("/api/v1/billing/stripe/portal", "POST"),
   capabilities: () => r<Capabilities>("/api/v1/agent-capabilities"),
   projects: () => r<Project[]>("/api/v1/projects"),
   createProject: (name: string, description = "") =>

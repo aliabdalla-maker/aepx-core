@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AdSurface, Consent } from "../lib/ads";
-import { adsenseSettings, shouldRenderAd } from "../lib/ads";
+import { adsenseSettings, impressionAllowed, shouldRenderAd } from "../lib/ads";
 
 // Next.js inlines NEXT_PUBLIC_* at build time, so read each key explicitly.
 export const ADSENSE = adsenseSettings({
@@ -24,9 +24,12 @@ function loadScript(client: string) {
 }
 
 /** Renders nothing unless shouldRenderAd() passes; never placed on editor/approval surfaces. */
-export function AdSlot({ surface, consent }: { surface: AdSurface; consent: Consent }) {
+let opportunities = 0; // per page session; each mounted slot is one ad opportunity
+
+export function AdSlot({ surface, consent, rate = 1 }: { surface: AdSurface; consent: Consent; rate?: number }) {
   const ref = useRef<HTMLModElement>(null);
-  const allowed = shouldRenderAd(ADSENSE, surface, consent);
+  const [ticket] = useState(() => opportunities++);
+  const allowed = shouldRenderAd(ADSENSE, surface, consent) && impressionAllowed(rate, ticket);
   useEffect(() => {
     if (!allowed || !ref.current || ref.current.dataset.adsbygoogleStatus) return;
     loadScript(ADSENSE.client);

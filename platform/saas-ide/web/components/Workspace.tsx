@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { oidcConfigured, oidcManager } from "../lib/auth";
-import type { Capabilities, FileEntry, IdeApi, Project } from "../lib/api";
+import type { Capabilities, Entitlement, FileEntry, IdeApi, Project } from "../lib/api";
 import { ideApi, isSafeRelativePath, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
 import { readConsent, writeConsent } from "../lib/ads";
@@ -13,6 +13,7 @@ import McpOperations from "./McpOperations";
 import InstallApp from "./InstallApp";
 import FileTree from "./FileTree";
 import { AdSlot, ConsentBanner } from "./Ads";
+import PlanBanner from "./PlanBanner";
 
 // Monaco is self-hosted from /monaco/vs (copied by scripts/copy-monaco.mjs); never from a CDN.
 const Editor = dynamic(async () => {
@@ -36,6 +37,7 @@ export default function Workspace() {
   const [capabilities, setCapabilities] = useState<Capabilities | null>(null);
   const [message, setMessage] = useState("Sign in to load your workspace.");
   const [consent, setConsent] = useState<Consent>("unknown");
+  const [entitlement, setEntitlement] = useState<Entitlement | null>(null);
   const configured = oidcConfigured && Boolean(tenant);
 
   const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token]);
@@ -66,6 +68,11 @@ export default function Workspace() {
     api.projects().then(p => { setProjects(p); setMessage(p.length ? "Select a project" : "Create your first project"); })
       .catch(e => setMessage(String(e.message ?? e)));
     api.capabilities().then(setCapabilities).catch(() => setCapabilities(null));
+    // Server-side plan: trial (100% ads) -> Pro £4.99/month (5% ads) -> free (100% ads).
+    api.entitlement().then(setEntitlement).catch(() => setEntitlement(null));
+    const billing = new URLSearchParams(window.location.search).get("billing");
+    if (billing === "success") setMessage("Thanks for subscribing — your plan updates as soon as Stripe confirms payment.");
+    if (billing) window.history.replaceState(null, "", window.location.pathname);
   }, [api]);
 
   const current = tabs.find(t => t.path === active);
@@ -143,6 +150,7 @@ export default function Workspace() {
         {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
       </select>
       <nav>
+        <PlanBanner api={api} entitlement={entitlement} onStatus={status} />
         <InstallApp />
         {token ? <>
           <button onClick={() => void createProject()}>New project</button>
@@ -156,7 +164,7 @@ export default function Workspace() {
         <div className="section-head"><h3>Explorer</h3>{project && <button className="icon" title="New file" aria-label="New file" onClick={newFile}>+</button>}</div>
         {project ? <FileTree nodes={tree} active={active} dirty={dirty} onOpen={openFile} />
           : <p className="muted small">No project open.</p>}
-        <AdSlot surface="sidebar" consent={consent} />
+        <AdSlot surface="sidebar" consent={consent} rate={entitlement?.ad_rate ?? 1} />
       </aside>
 
       <section className="editor-area" aria-label="Editor">
@@ -187,7 +195,7 @@ export default function Workspace() {
           : <div className="empty">
               <h2>{project ? "Open a file from the explorer" : "Welcome to AEP-X"}</h2>
               <p className="muted">Plan work with the agent crew, approve each step, and keep a full audit trail.</p>
-              <AdSlot surface="projectHome" consent={consent} />
+              <AdSlot surface="projectHome" consent={consent} rate={entitlement?.ad_rate ?? 1} />
             </div>}
         <footer className="statusbar" role="status">
           <span>{message}</span>

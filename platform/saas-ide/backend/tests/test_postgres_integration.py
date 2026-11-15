@@ -1292,3 +1292,44 @@ def test_mcp_atomic_claim_rejects_cancelled_run_postgres(prepared_db, tokens, mo
         assert db.execute(text(
             "SELECT state FROM ide_mcp_executions WHERE approval_id=:a"),
             {"a":approval}).scalar()=="reserved"
+
+
+def test_subscription_trial_webhook_idempotency_and_ordering(prepared_db, tokens, monkeypatch):
+    """30-day trial on first sight; signed Stripe events upgrade to 5% ads exactly once, in order."""
+    import hashlib, hmac, json, time
+    client = TestClient(main.app)
+    auth = {"Authorization": f"Bearer {tokens(subject='billing-user-1')}"}
+    first = client.get("/api/v1/entitlement", headers=auth)
+    assert first.status_code == 200, first.text
+    body = first.json()
+    assert (body["plan"], body["ad_rate"], body["trial_days_left"]) == ("trial", 1.0, 30)
+    account = body["account_id"]
+    assert client.get("/api/v1/entitlement", headers=auth).json()["account_id"] == account  # stable
+
+    secret = "whsec_integration_secret_0123"
+    monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", secret)
+    def send(event_id, status, created, period_days=30):
+        event = {"id": event_id, "type": "customer.subscription.updated", "created": created,
+                 "data": {"object": {"id": "sub_it", "customer": "cus_it", "status": status,
+                                     "metadata": {"aepx_account": account},
+                                     "current_period_end": created + period_days * 86400}}}
+        payload = json.dumps(event).encode()
+        ts = int(time.time())
+        sig = hmac.new(secret.encode(), f"{ts}.".encode() + payload, hashlib.sha256).hexdigest()
+        return client.post("/api/v1/billing/stripe/webhook", content=payload,
+                           headers={"Stripe-Signature": f"t={ts},v1={sig}", "Content-Type": "application/json"})
+
+    now = int(time.time())
+    assert send("evt_it_1", "active", now).json()["applied"] is True
+    pro = client.get("/api/v1/entitlement", headers=auth).json()
+    assert (pro["plan"], pro["ad_rate"], pro["can_manage_on_web"]) == ("pro", 0.05, True)
+    assert send("evt_it_1", "canceled", now).json()["duplicate"] is True          # replay ignored
+    assert send("evt_it_0", "unpaid", now - 60).json()["applied"] is False        # older event ignored
+    assert client.get("/api/v1/entitlement", headers=auth).json()["plan"] == "pro"
+
+    bad = client.post("/api/v1/billing/stripe/webhook", content=b"{}",
+                      headers={"Stripe-Signature": f"t={int(time.time())},v1={'0'*64}"})
+    assert bad.status_code == 403
+    other = {"Authorization": f"Bearer {tokens(subject='billing-user-2')}"}
+    assert client.get("/api/v1/entitlement", headers=other).json()["plan"] == "trial"  # isolation
+    assert client.get("/api/v1/entitlement").status_code == 401

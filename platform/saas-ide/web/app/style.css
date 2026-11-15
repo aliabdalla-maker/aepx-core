@@ -20,7 +20,8 @@ input{min-width:0}
 .topbar{height:52px;display:flex;align-items:center;gap:16px;padding:0 16px;background:#101a2d;border-bottom:1px solid var(--line)}
 .topbar strong{font-size:17px;white-space:nowrap}.topbar strong span{color:#6fc6ff}
 .topbar select{max-width:280px}
-.topbar nav{margin-left:auto;display:flex;gap:8px}
+.topbar nav{margin-left:auto;display:flex;gap:8px;align-items:center}
+.plan{display:flex;gap:8px;align-items:center}
 .ide{flex:1;min-height:0;display:grid;grid-template-columns:240px minmax(0,1fr) 380px}
 .explorer{background:var(--panel);border-right:1px solid var(--line);overflow:auto;padding:10px 6px;display:flex;flex-direction:column;gap:8px}
 .section-head{display:flex;align-items:center;justify-content:space-between;padding:0 6px}

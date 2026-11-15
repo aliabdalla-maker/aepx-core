@@ -44,6 +44,17 @@ export function shouldRenderAd(settings: AdsenseSettings, surface: AdSurface, co
   return isValidClient(settings.client) && isValidWebSlot(settings.slots[surface]);
 }
 
+/**
+ * Server-issued ad rate: 1.0 on trial/free, 0.05 for £4.99 subscribers ("95% ads off").
+ * Deterministic thinning: with rate r, show the 1st, (1/r+1)th, ... opportunity (1 in 20 at 5%).
+ */
+export function impressionAllowed(rate: number, opportunity: number): boolean {
+  if (!Number.isFinite(rate) || rate <= 0) return false;
+  if (rate >= 1) return true;
+  const every = Math.max(1, Math.round(1 / rate));
+  return Number.isInteger(opportunity) && opportunity >= 0 && opportunity % every === 0;
+}
+
 /** Read consent defensively: storage can be unavailable (privacy mode, embedded contexts). */
 export function readConsent(storage: Pick<Storage, "getItem"> | undefined): Consent {
   try {

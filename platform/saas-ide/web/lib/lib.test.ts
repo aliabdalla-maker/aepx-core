@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { ApiError, encodePath, ideApi, isSafeRelativePath, makeRequester, runActions } from "./api";
-import { adsenseSettings, readConsent, shouldRenderAd, writeConsent } from "./ads";
+import { adsenseSettings, impressionAllowed, readConsent, shouldRenderAd, writeConsent } from "./ads";
 import { buildTree, closeTab, isDirty, languageFor, markSaved, openTab, parsePlan, updateTab } from "./workspace";
 
 const json = (status: number, body: unknown) =>
@@ -105,6 +105,15 @@ describe("web ads gating", () => {
     const admob = adsenseSettings({ NEXT_PUBLIC_ADS_ENABLED: "true", NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR: "ca-app-pub-2980680946304710/1032845563" });
     expect(shouldRenderAd(admob, "sidebar", "granted")).toBe(false);
     expect(shouldRenderAd({ ...live, client: "ca-app-pub-2980680946304710" }, "sidebar", "granted")).toBe(false);
+  });
+
+  it("thins impressions to the server-issued ad rate", () => {
+    const shown = (rate: number) => Array.from({ length: 200 }, (_, i) => impressionAllowed(rate, i)).filter(Boolean).length;
+    expect(shown(1)).toBe(200);            // trial / free: every opportunity
+    expect(shown(0.05)).toBe(10);          // £4.99 subscriber: 1 in 20 = 95% fewer
+    expect(shown(0)).toBe(0);
+    expect(impressionAllowed(Number.NaN, 0)).toBe(false);
+    expect(impressionAllowed(0.05, -1)).toBe(false);
   });
 
   it("treats unavailable storage as no consent", () => {
