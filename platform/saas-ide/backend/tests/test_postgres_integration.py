@@ -180,6 +180,32 @@ def test_phase22_durable_queue_tool_approval_and_rls(prepared_db, tokens, monkey
         assert db.execute(text("SELECT count(*) FROM ide_tool_approvals")).scalar()>=1
 
 
+def test_tool_approval_queue_listing_is_tenant_scoped_and_digest_only(prepared_db, tokens, monkeypatch):
+    client=TestClient(main.app)
+    owner=headers(tokens(),"alpha")
+    other_tenant=headers(tokens(),"beta")
+    project=client.post("/api/v1/projects",headers=owner,json={"name":"approval-queue"}).json()
+    run_id=client.post("/api/v1/agent-runs",headers=owner,json={
+        "project_id":project["id"],"task":"List pending tool approvals"}).json()["id"]
+    assert client.get(f"/api/v1/agent-runs/{run_id}/tool-approvals",headers=owner).json()==[]
+    assert client.post(f"/api/v1/agent-runs/{run_id}/decision?approved=true",headers=owner).status_code==200
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_URL","https://mcp.example.test/mcp")
+    monkeypatch.setenv("IDE_MCP_KNOWLEDGE_TOOLS","search")
+    secret_arg={"query":"queue-listing-secret-argument"}
+    made=client.post(f"/api/v1/agent-runs/{run_id}/tool-requests",headers=owner,
+                     json={"server":"knowledge","tool":"search","arguments":secret_arg})
+    assert made.status_code==201,made.text
+    listed=client.get(f"/api/v1/agent-runs/{run_id}/tool-approvals",headers=owner)
+    assert listed.status_code==200,listed.text
+    rows=listed.json()
+    assert [r["id"] for r in rows]==[made.json()["id"]]
+    assert rows[0]["state"]=="pending" and rows[0]["server"]=="knowledge" and rows[0]["tool"]=="search"
+    assert rows[0]["args_sha256"]==made.json()["args_sha256"]
+    assert "queue-listing-secret-argument" not in listed.text
+    assert client.get(f"/api/v1/agent-runs/{run_id}/tool-approvals",headers=other_tenant).status_code==404
+    assert client.get("/api/v1/agent-runs/does-not-exist/tool-approvals",headers=owner).status_code==404
+
+
 def test_phase23_fencing_budget_and_rls(prepared_db, tokens):
     from app.phase23 import fenced_claim, heartbeat, fenced_finish, reserve_budget, settle_budget
     client=TestClient(main.app)
@@ -1266,3 +1292,44 @@ def test_mcp_atomic_claim_rejects_cancelled_run_postgres(prepared_db, tokens, mo
         assert db.execute(text(
             "SELECT state FROM ide_mcp_executions WHERE approval_id=:a"),
             {"a":approval}).scalar()=="reserved"
+
+
+def test_subscription_trial_webhook_idempotency_and_ordering(prepared_db, tokens, monkeypatch):
+    """30-day trial on first sight; signed Stripe events upgrade to 5% ads exactly once, in order."""
+    import hashlib, hmac, json, time
+    client = TestClient(main.app)
+    auth = {"Authorization": f"Bearer {tokens(subject='billing-user-1')}"}
+    first = client.get("/api/v1/entitlement", headers=auth)
+    assert first.status_code == 200, first.text
+    body = first.json()
+    assert (body["plan"], body["ad_rate"], body["trial_days_left"]) == ("trial", 1.0, 30)
+    account = body["account_id"]
+    assert client.get("/api/v1/entitlement", headers=auth).json()["account_id"] == account  # stable
+
+    secret = "whsec_integration_secret_0123"
+    monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", secret)
+    def send(event_id, status, created, period_days=30):
+        event = {"id": event_id, "type": "customer.subscription.updated", "created": created,
+                 "data": {"object": {"id": "sub_it", "customer": "cus_it", "status": status,
+                                     "metadata": {"aepx_account": account},
+                                     "current_period_end": created + period_days * 86400}}}
+        payload = json.dumps(event).encode()
+        ts = int(time.time())
+        sig = hmac.new(secret.encode(), f"{ts}.".encode() + payload, hashlib.sha256).hexdigest()
+        return client.post("/api/v1/billing/stripe/webhook", content=payload,
+                           headers={"Stripe-Signature": f"t={ts},v1={sig}", "Content-Type": "application/json"})
+
+    now = int(time.time())
+    assert send("evt_it_1", "active", now).json()["applied"] is True
+    pro = client.get("/api/v1/entitlement", headers=auth).json()
+    assert (pro["plan"], pro["ad_rate"], pro["can_manage_on_web"]) == ("pro", 0.05, True)
+    assert send("evt_it_1", "canceled", now).json()["duplicate"] is True          # replay ignored
+    assert send("evt_it_0", "unpaid", now - 60).json()["applied"] is False        # older event ignored
+    assert client.get("/api/v1/entitlement", headers=auth).json()["plan"] == "pro"
+
+    bad = client.post("/api/v1/billing/stripe/webhook", content=b"{}",
+                      headers={"Stripe-Signature": f"t={int(time.time())},v1={'0'*64}"})
+    assert bad.status_code == 403
+    other = {"Authorization": f"Bearer {tokens(subject='billing-user-2')}"}
+    assert client.get("/api/v1/entitlement", headers=other).json()["plan"] == "trial"  # isolation
+    assert client.get("/api/v1/entitlement").status_code == 401

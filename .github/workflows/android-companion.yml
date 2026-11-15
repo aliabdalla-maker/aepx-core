@@ -1,0 +1,59 @@
+name: Android companion (AdMob) checks
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/android-companion/**'
+      - 'platform/saas-ide/monetization/**'
+      - '.github/workflows/android-companion.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: platform/saas-ide/android-companion
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: JVM unit tests (ad policy, config, API parsing)
+        run: gradle --no-daemon testDebugUnitTest
+      - name: Build debug (Google test ad IDs) and unsigned release APKs
+        run: gradle --no-daemon assembleDebug assembleRelease
+      - name: Verify merged manifests carry the right AdMob app IDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          aapt2=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
+          debug_apk=app/build/outputs/apk/debug/app-debug.apk
+          release_apk=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          for apk in "$debug_apk" "$release_apk"; do [ -f "$apk" ] || { echo "Missing APK: $apk" >&2; exit 1; }; done
+          "$aapt2" dump xmltree "$debug_apk" --file AndroidManifest.xml > debug-manifest.txt
+          "$aapt2" dump xmltree "$release_apk" --file AndroidManifest.xml > release-manifest.txt
+          grep -q 'ca-app-pub-3940256099942544~3347511713' debug-manifest.txt || { echo 'Debug APK lacks the Google test app ID' >&2; exit 1; }
+          if grep -q 'ca-app-pub-2980680946304710' debug-manifest.txt; then echo 'Live AdMob ID leaked into debug APK' >&2; exit 1; fi
+          grep -q 'ca-app-pub-2980680946304710~2617421798' release-manifest.txt || { echo 'Release APK lacks the live AdMob app ID' >&2; exit 1; }
+          echo "Debug uses Google test app ID; release uses ca-app-pub-2980680946304710~2617421798" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Live ads remain disabled until ads-config.json sets formats, placements and admob.enabled.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-companion-test-reports
+          path: platform/saas-ide/android-companion/app/build/reports/tests
+          if-no-files-found: ignore

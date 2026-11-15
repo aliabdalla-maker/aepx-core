@@ -1,30 +1,29 @@
-# AdSense and AdMob integration — configuration phase
+# AdSense and AdMob integration
 
-The supplied identifiers are recorded in `ads-config.json`. **Live ad serving is disabled.**
+`ads-config.json` (schema v2) is the single source of truth for both ad networks. **All live ad serving is
+disabled** (`adsense.enabled` and `admob.enabled` are `false`) until the steps below are done.
 
-## Important distinction
-- **AdSense** is for the browser-based SaaS IDE. Publisher: `pub-2980680946304710`; script client: `ca-pub-2980680946304710`. The provided `ca-app-pub-...` values are **AdMob**, not web AdSense slots. No web slot ID has been supplied.
-- **AdMob** is for a future native Android IDE companion app, **not** a Next.js browser page. The `~` ID is an AdMob app ID, and six `/` IDs are mobile ad units. Their formats (banner, interstitial, rewarded, etc.) are unknown, so do not assume or interchange them.
+## Which network serves where
+- **AdMob** (`ca-app-pub-…`): native Android companion app only — `../android-companion/`.
+  App ID `ca-app-pub-2980680946304710~2617421798`; six units, each with `format`/`placement` = `null`
+  until you copy the format from the AdMob console. Units without a format are never requested.
+  Debug builds always use Google's test IDs. See `../android-companion/README.md`.
+- **AdSense** (`ca-pub-2980680946304710`): web IDE, sidebar and project home only — never the editor,
+  approvals, terminals or code output. Needs 10-digit **web** slot IDs created in AdSense
+  (`NEXT_PUBLIC_ADSENSE_SLOT_*`), `NEXT_PUBLIC_ADS_ENABLED=true`, and the visitor's consent. AdMob unit IDs
+  are rejected as web slots by `web/lib/ads.ts`.
+- **ads.txt**: served by the web app at `/ads.txt` (`web/public/ads.txt`). For AdMob, publish the same line
+  as `app-ads.txt` on the developer website listed in Google Play.
 
-## Website steps
-1. Confirm the production IDE website is approved in AdSense and the publisher ID is linked to it.
-2. Copy `ads.txt` to the actual website's **root** `/ads.txt` (not the API service or an arbitrary repo path); verify its public URL.
-3. For Auto ads, enable only after consent/privacy configuration and website approval, using the AdSense client `ca-pub-2980680946304710`.
-4. For manual placements, obtain **web AdSense ad slot IDs** from AdSense; none of the six mobile unit IDs can be used as web slots.
-5. Keep ads away from editor controls, terminals, code execution results and accidental-click surfaces. Offer an ad-free paid tier if desired.
+## Turning ads on (owner actions)
+1. AdMob console: confirm the Android package is linked to the app ID and note each unit's format.
+2. Edit `ads-config.json`: set each unit's `format` and a `placement`, run the Android and web tests.
+3. AdMob: publish a UMP consent message (GDPR/UK) — the app shows it before any ad request.
+4. AdSense: get site approval and web slot IDs; for UK/EEA traffic use a Google-certified CMP before
+   enabling personalised ads (the built-in banner only gates on explicit consent).
+5. Test with Google test IDs / registered test devices. Never click live ads.
+6. Only then set `enabled: true` for the network you are shipping.
 
-## Android steps
-1. Confirm the Android package is registered against the supplied AdMob app ID.
-2. Merge `AndroidManifest-admob-snippet.xml` into the Android app's `<application>` and add the current Google Mobile Ads SDK dependency.
-3. Check the format of **each** of the six units in AdMob before mapping it to banner, rewarded, interstitial or native ad code.
-4. During development use Google test ad IDs or registered test devices, never repeatedly request or click live ads.
-5. Obtain required user consent and implement applicable privacy disclosures, EEA/UK consent handling, and child-directed treatment before requesting live ads.
-6. Publish `app-ads.txt` at the verified developer website root if required by AdMob; this file is not automatically deployed by committing it here.
-
-## Safety and deployment
-- No ad SDK is initialised by these files, and no ads are requested.
-- IDs are identifiers, not API secrets; never commit account passwords or service keys.
-- OCI London remains the deployment target, but there is no verified instance or production rollout.
-- Activate only after reviewing ad network policies, consent, site/app verification and integration tests.
-
-References: https://support.google.com/adsense/answer/105516 and https://support.google.com/admob/answer/7356431
+IDs here are identifiers, not secrets; never commit account passwords, keystores or service keys.
+References: https://support.google.com/adsense/answer/105516 · https://support.google.com/admob/answer/7356431 ·
+https://developers.google.com/admob/android/privacy

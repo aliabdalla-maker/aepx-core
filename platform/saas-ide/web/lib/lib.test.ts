@@ -1,0 +1,140 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { describe, expect, it, vi } from "vitest";
+import { ApiError, encodePath, ideApi, isSafeRelativePath, makeRequester, runActions } from "./api";
+import { adsenseSettings, impressionAllowed, readConsent, shouldRenderAd, writeConsent } from "./ads";
+import { buildTree, closeTab, isDirty, languageFor, markSaved, openTab, parsePlan, updateTab } from "./workspace";
+
+const json = (status: number, body: unknown) =>
+  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
+
+describe("api client", () => {
+  it("sends bearer token, tenant header and JSON body", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(json(201, { id: "p1", name: "x", description: "" }));
+    const api = ideApi(makeRequester("https://api.test", "tok", "alpha", fetchMock as unknown as typeof fetch));
+    await api.createProject("x");
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("https://api.test/api/v1/projects");
+    expect(init.method).toBe("POST");
+    expect(init.headers).toMatchObject({ Authorization: "Bearer tok", "X-Tenant-ID": "alpha", "Content-Type": "application/json" });
+    expect(JSON.parse(init.body)).toEqual({ name: "x", description: "" });
+  });
+
+  it("refuses to call without a token and surfaces backend detail", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(json(409, { detail: "Retry not permitted" }));
+    await expect(makeRequester("", "", "t", fetchMock as unknown as typeof fetch)("/x")).rejects.toBeInstanceOf(ApiError);
+    expect(fetchMock).not.toHaveBeenCalled();
+    const r = makeRequester("", "tok", "t", fetchMock as unknown as typeof fetch);
+    await expect(r("/x", "POST")).rejects.toThrow("409: Retry not permitted");
+  });
+
+  it("encodes ids and paths and rejects traversal before any request", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(json(200, {}));
+    const api = ideApi(makeRequester("", "tok", "t", fetchMock as unknown as typeof fetch));
+    await api.decide("a/b", true);
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/v1/agent-runs/a%2Fb/decision?approved=true");
+    await expect(api.saveFile("p", "../etc/passwd", "x")).rejects.toThrow("Invalid file path");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(encodePath("src/my file.ts")).toBe("src/my%20file.ts");
+    for (const bad of ["", "/abs", "a//b", "a/./b", "a\\b", "a/../b", "x".repeat(513)]) expect(isSafeRelativePath(bad)).toBe(false);
+    expect(isSafeRelativePath("src/app/main.py")).toBe(true);
+  });
+
+  it("offers lifecycle actions that match supervisor transitions", () => {
+    expect(runActions("awaiting_approval", 0)).toMatchObject({ decide: true, enqueue: false, cancel: true });
+    expect(runActions("approved", 0)).toMatchObject({ decide: false, enqueue: true, requestTool: true });
+    expect(runActions("failed", 1).retry).toBe(true);
+    expect(runActions("failed", 2).retry).toBe(false);
+    expect(runActions("succeeded", 0)).toEqual({ decide: false, enqueue: false, cancel: false, retry: false, requestTool: false });
+  });
+});
+
+describe("workspace helpers", () => {
+  it("detects editor languages", () => {
+    expect(languageFor("a/b/main.py")).toBe("python");
+    expect(languageFor("App.TSX")).toBe("typescript");
+    expect(languageFor("Dockerfile")).toBe("dockerfile");
+    expect(languageFor("README")).toBe("plaintext");
+  });
+
+  it("builds a folders-first sorted tree without duplicates", () => {
+    const tree = buildTree(["z.py", "src/b.ts", "src/a.ts", "src/lib/c.ts", "a.md", "src/a.ts"]);
+    expect(tree.map(n => n.name)).toEqual(["src", "a.md", "z.py"]);
+    expect(tree[0].children?.map(n => n.name)).toEqual(["lib", "a.ts", "b.ts"]);
+    expect(tree[0].children?.[0].children?.[0].path).toBe("src/lib/c.ts");
+  });
+
+  it("manages tabs, dirty state and close focus", () => {
+    let tabs = openTab([], "a.py", "1");
+    tabs = openTab(tabs, "b.py", "2");
+    tabs = openTab(tabs, "a.py", "ignored");
+    expect(tabs).toHaveLength(2);
+    tabs = updateTab(tabs, "a.py", "changed");
+    expect(isDirty(tabs[0])).toBe(true);
+    expect(isDirty(markSaved(tabs, "a.py")[0])).toBe(false);
+    expect(closeTab(tabs, "b.py", "b.py").active).toBe("a.py");
+    expect(closeTab(tabs, "a.py", "b.py").active).toBe("b.py");
+    expect(closeTab([tabs[0]], "a.py", "a.py").active).toBe("");
+  });
+
+  it("parses the supervisor plan JSON text", () => {
+    const plan = JSON.stringify([{ agent: "architect", action: "design", goal: "Boundaries" }]);
+    expect(parsePlan(plan)).toEqual([{ title: "architect · design", detail: "Boundaries" }]);
+    expect(parsePlan("not json")).toEqual([{ title: "not json" }]);
+    expect(parsePlan(null)).toEqual([]);
+    expect(parsePlan({ steps: ["a"] })).toEqual([{ title: "a" }]);
+  });
+});
+
+describe("web ads gating", () => {
+  const live = adsenseSettings({ NEXT_PUBLIC_ADS_ENABLED: "true", NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR: "1234567890" });
+
+  it("is off by default", () => {
+    expect(shouldRenderAd(adsenseSettings({}), "sidebar", "granted")).toBe(false);
+  });
+
+  it("requires consent and a safe surface", () => {
+    expect(shouldRenderAd(live, "sidebar", "granted")).toBe(true);
+    expect(shouldRenderAd(live, "sidebar", "unknown")).toBe(false);
+    expect(shouldRenderAd(live, "sidebar", "denied")).toBe(false);
+    for (const s of ["editor", "approvals", "terminal"] as const)
+      expect(shouldRenderAd({ ...live, slots: { [s]: "1234567890" } }, s, "granted")).toBe(false);
+  });
+
+  it("rejects AdMob unit IDs and malformed clients as web slots", () => {
+    const admob = adsenseSettings({ NEXT_PUBLIC_ADS_ENABLED: "true", NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR: "ca-app-pub-2980680946304710/1032845563" });
+    expect(shouldRenderAd(admob, "sidebar", "granted")).toBe(false);
+    expect(shouldRenderAd({ ...live, client: "ca-app-pub-2980680946304710" }, "sidebar", "granted")).toBe(false);
+  });
+
+  it("thins impressions to the server-issued ad rate", () => {
+    const shown = (rate: number) => Array.from({ length: 200 }, (_, i) => impressionAllowed(rate, i)).filter(Boolean).length;
+    expect(shown(1)).toBe(200);            // trial / free: every opportunity
+    expect(shown(0.05)).toBe(10);          // £4.99 subscriber: 1 in 20 = 95% fewer
+    expect(shown(0)).toBe(0);
+    expect(impressionAllowed(Number.NaN, 0)).toBe(false);
+    expect(impressionAllowed(0.05, -1)).toBe(false);
+  });
+
+  it("treats unavailable storage as no consent", () => {
+    expect(readConsent({ getItem: () => { throw new Error("blocked"); } })).toBe("unknown");
+    expect(readConsent(undefined)).toBe("unknown");
+    const store = new Map<string, string>();
+    writeConsent({ setItem: (k, v) => void store.set(k, v) }, "granted");
+    expect(readConsent({ getItem: k => store.get(k) ?? null })).toBe("granted");
+  });
+
+  it("stays consistent with monetization/ads-config.json", () => {
+    const cfg = JSON.parse(readFileSync(join(__dirname, "..", "..", "monetization", "ads-config.json"), "utf8"));
+    expect(cfg.adsense.client).toBe(adsenseSettings({}).client);
+    expect(cfg.adsense.enabled).toBe(false);
+    expect(cfg.admob.enabled).toBe(false);
+    expect(cfg.admob.appId).toBe("ca-app-pub-2980680946304710~2617421798");
+    expect(cfg.admob.adUnits).toHaveLength(6);
+    for (const unit of cfg.admob.adUnits) {
+      expect(unit.id).toMatch(/^ca-app-pub-2980680946304710\/\d{10}$/);
+      expect(unit.format === null || cfg.admob.allowedFormats.includes(unit.format)).toBe(true);
+    }
+    expect(new Set(cfg.admob.adUnits.map((u: { id: string }) => u.id)).size).toBe(6);
+  });
+});

@@ -340,6 +340,19 @@ def request_agent_tool(run_id: str, body: ToolRequest, p: Principal = Depends(pr
         raise HTTPException(400,str(exc))
     return {"id":item.id,"state":item.state,"args_sha256":item.args_sha256}
 
+@app.get("/api/v1/agent-runs/{run_id}/tool-approvals")
+def list_tool_approvals(run_id: str, p: Principal = Depends(principal),
+                        db: Session = Depends(db_session)):
+    """Tenant-scoped approval queue for one run; arguments are exposed only as a digest."""
+    if get_run(db, p, run_id) is None:
+        raise HTTPException(404, "Run not found")
+    rows = db.scalars(select(ToolApproval).where(
+        ToolApproval.tenant_id == p.tenant_id, ToolApproval.run_id == run_id
+    ).order_by(ToolApproval.id).limit(100)).all()
+    return [{"id": a.id, "server": a.server_name, "tool": a.tool_name,
+             "args_sha256": a.args_sha256, "state": a.state,
+             "requested_by": a.requested_by, "decided_by": a.decided_by} for a in rows]
+
 @app.post("/api/v1/tool-approvals/{approval_id}/decision")
 def decide_agent_tool(approval_id: str, approved: bool, p: Principal = Depends(principal),
                       db: Session = Depends(db_session)):
@@ -430,3 +443,94 @@ def mcp_execution_metrics(p: Principal = Depends(principal),
         WHERE tenant_id=:tenant GROUP BY state"""), {"tenant": p.tenant_id}).all()
     return {"counts": {state: count for state, count in rows},
             "automatic_replay_enabled": False}
+
+
+# --------------------------------------------------------------------------- subscriptions
+# User-level plan: 30-day trial (100% ads) -> £4.99/month (5% ads) -> free tier (100% ads).
+# Only verified provider state changes a plan; clients just read the returned ad_rate.
+from fastapi import Request
+from . import subscriptions as subs
+
+
+class PlayPurchase(BaseModel):
+    purchase_token: str = Field(min_length=10, max_length=1024)
+
+
+class AppStorePurchase(BaseModel):
+    original_transaction_id: str = Field(min_length=1, max_length=32)
+
+
+def _billing(call):
+    try:
+        return call()
+    except subs.BillingError as exc:
+        raise HTTPException(exc.status_code, str(exc)) from None
+
+
+def _entitlement_for(subject: str) -> dict:
+    with SessionLocal() as db:
+        return subs.ensure_entitlement(db, subject)
+
+
+def _apply_verified(update: dict) -> dict:
+    with SessionLocal() as db:
+        subs.apply_update(db, update)
+        db.commit()
+    return update
+
+
+@app.get("/api/v1/entitlement")
+def get_entitlement(subject: str = Depends(verified_subject)):
+    row = _entitlement_for(subject)
+    state = subs.entitlement_state(row["trial_started_at"], row["status"], row["current_period_end"])
+    return {**state, "account_id": row["account_id"], "source": row["source"],
+            "can_manage_on_web": row["source"] == "stripe" and bool(row["customer_ref"])}
+
+
+@app.post("/api/v1/billing/stripe/checkout")
+def stripe_checkout(subject: str = Depends(verified_subject)):
+    account = _entitlement_for(subject)["account_id"]
+    return {"url": _billing(lambda: subs.create_stripe_checkout(account))}
+
+
+@app.post("/api/v1/billing/stripe/portal")
+def stripe_portal(subject: str = Depends(verified_subject)):
+    customer = _entitlement_for(subject)["customer_ref"]
+    return {"url": _billing(lambda: subs.create_stripe_portal(customer))}
+
+
+@app.post("/api/v1/billing/stripe/webhook")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+    if len(payload) > 256_000:
+        raise HTTPException(413, "payload too large")
+    event = _billing(lambda: subs.verify_stripe_signature(
+        payload, request.headers.get("stripe-signature"), os.getenv("STRIPE_WEBHOOK_SECRET")))
+    try:
+        update = subs.stripe_subscription_update(event)
+    except subs.BillingDenied:
+        # Authentic event, but not created through AEP-X checkout: acknowledge, never apply.
+        update = None
+    with SessionLocal() as db:
+        if not subs.record_event(db, "stripe", event["id"]):
+            db.rollback()
+            return {"received": True, "duplicate": True}
+        applied = subs.apply_update(db, update) if update else False
+        db.commit()
+    return {"received": True, "applied": applied}
+
+
+@app.post("/api/v1/billing/google-play/verify")
+def google_play_verify(body: PlayPurchase, subject: str = Depends(verified_subject)):
+    account = _entitlement_for(subject)["account_id"]
+    update = _billing(lambda: subs.verify_google_play(account, body.purchase_token))
+    _apply_verified(update)
+    return get_entitlement(subject)
+
+
+@app.post("/api/v1/billing/app-store/verify")
+def app_store_verify(body: AppStorePurchase, subject: str = Depends(verified_subject)):
+    account = _entitlement_for(subject)["account_id"]
+    update = _billing(lambda: subs.verify_app_store(account, body.original_transaction_id))
+    _apply_verified(update)
+    return get_entitlement(subject)
