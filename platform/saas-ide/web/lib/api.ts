@@ -126,6 +126,15 @@ export const ideApi = (r: Requester) => ({
   archiveProject: (id: string) => r(`/api/v1/projects/${encodeURIComponent(id)}`, "DELETE"),
   archivedProjects: () => r<(Project & { archived_at: string })[]>("/api/v1/projects-archived"),
   restoreProject: (id: string) => r(`/api/v1/projects/${encodeURIComponent(id)}/restore`, "POST"),
+  moveFiles: (project: string, from: string, to: string) => {
+    if (!isSafeRelativePath(from) || !isSafeRelativePath(to)) return Promise.reject(new ApiError(400, "Invalid file path"));
+    return r<{ moved: { from: string; to: string }[]; count: number }>(
+      `/api/v1/projects/${encodeURIComponent(project)}/files-move`, "POST", { from_path: from, to_path: to });
+  },
+  deleteFolder: (project: string, folder: string) => {
+    if (!isSafeRelativePath(folder)) return Promise.reject(new ApiError(400, "Invalid folder path"));
+    return r<{ folder: string; deleted: number }>(`/api/v1/projects/${encodeURIComponent(project)}/folders/${encodePath(folder)}`, "DELETE");
+  },
   deleteFile: (project: string, path: string) => {
     if (!isSafeRelativePath(path)) return Promise.reject(new ApiError(400, "Invalid file path"));
     return r<{ version: number }>(`/api/v1/projects/${encodeURIComponent(project)}/files/${encodePath(path)}`, "DELETE");

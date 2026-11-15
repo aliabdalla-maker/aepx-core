@@ -40,3 +40,10 @@ Not verified: anything in production; any signed-in flow; real e-mail delivery; 
 | Password policy | `keycloak-setup.sh` on Keycloak 26.0.7 with the production realm, then admin API | 7-char and no-upper-case passwords rejected; reuse of the last password rejected; compliant password accepted. Note: `notUsername` blocks a password equal to the username, not one containing it (help text says so). |
 | End-to-end, local stack (Keycloak HTTPS + API on PostgreSQL 16 + production web build, headless Chrome) | `/tmp/e2e.py` | **14/14**: assistant answers from help signed out; Create an account opens registration; weak password rejected at registration; e-mail sign-in; project created; existing README not overwritten by default; .zip import (2 text files, binary + node_modules skipped); saved; reload + reopen keeps the edit; footer build; assistant uses module context; AI-off reason shown |
 | Ask AI end-to-end | — | **not verified**: needs the isolated metered worker (not run locally). It uses the existing create/decide/enqueue/run endpoints unchanged. |
+
+## File and project operations (branch feat/ide-file-ops)
+| Check | Method | Result |
+|---|---|---|
+| API | `pytest tests/test_file_ops.py` on PostgreSQL 16 | 7/7: file rename keeps content + history (delete/save versions); folder move moves only that folder; overlapping move (a/x -> a) succeeds; conflict 409, same name 400, into-itself 400, traversal 400, missing 404 with nothing changed; folder delete versioned and scoped; media editor limited to media paths, viewer/other tenant refused; `file.move` audited. Full backend suite 265 passed. |
+| Web | `vitest` | 64 passed (5 new: move mapping, tabs keep unsaved edits, client-side rename validation, search with line numbers and caps) |
+| End-to-end, local stack (Keycloak HTTPS + API + production web build, headless Chrome) | `/tmp/e2e2.py` | **12/12**: create + save files; search finds `src/lib/util.py:2` and opens it at line 2; rename file (tab follows); move folder `src/lib` -> `pkg/lib`; rename onto an existing file refused; new folder; delete folder; state persists after reload; rename project; archive; restore |

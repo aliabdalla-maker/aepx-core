@@ -1,11 +1,12 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { oidcAuthority, oidcClientId, oidcConfigured, oidcManager, oidcRegistrationManager } from "../lib/auth";
 import { DEFAULT_AUTH_OPTIONS, fetchAuthOptions, forgotPasswordUrl, releaseLabel, saveHint, signinArgs, type AuthOptions } from "../lib/signin";
 import SignedOutWelcome from "./SignedOutWelcome";
 import Assistant from "./Assistant";
 import ImportDialog from "./ImportDialog";
+import { applyMoveToFiles, applyMoveToTabs, inFolder, renameError, searchFiles } from "../lib/fileops";
 import type { Capabilities, Entitlement, FileEntry, IdeApi, IdeModule, Project } from "../lib/api";
 import { ensureWorkspace, ideApi, isSafeRelativePath, makeBlobFetcher, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
@@ -180,6 +181,93 @@ export default function Workspace() {
     } catch (e) { setMessage(String((e as Error).message ?? e)); }
   }
 
+  async function renamePath(from: string, kind: "file" | "folder") {
+    if (!api || !project) return;
+    const to = window.prompt(`New name or location for the ${kind} ${from}`, from)?.trim();
+    if (!to) return;
+    const problem = renameError(from, to, files.map(f => f.path));
+    if (problem) { setMessage(problem); return; }
+    try {
+      const r = await api.moveFiles(project, from, to);
+      setFiles(f => applyMoveToFiles(f, r.moved));
+      setTabs(t => applyMoveToTabs(t, r.moved));
+      const followed = r.moved.find(m => m.from === active);
+      if (followed) setActive(followed.to);
+      setHistoryFor("");
+      setMessage(`Moved ${from} to ${to} (${r.count} file${r.count === 1 ? "" : "s"})`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  async function deleteFolderAt(folder: string) {
+    if (!api || !project) return;
+    const inside = files.filter(f => inFolder(f.path, folder));
+    const unsaved = tabs.filter(t => inFolder(t.path, folder) && isDirty(t)).length;
+    if (!window.confirm(`Delete the folder ${folder} and its ${inside.length} file${inside.length === 1 ? "" : "s"}?`
+      + (unsaved ? ` ${unsaved} open file${unsaved === 1 ? " has" : "s have"} unsaved changes that will be lost.` : "")
+      + " Each file can be restored from its history.")) return;
+    try {
+      const r = await api.deleteFolder(project, folder);
+      setFiles(f => f.filter(x => !inFolder(x.path, folder)));
+      setTabs(t => t.filter(x => !inFolder(x.path, folder)));
+      if (inFolder(active, folder)) setActive("");
+      setMessage(`Deleted folder ${folder} (${r.deleted} file${r.deleted === 1 ? "" : "s"} kept in history)`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  async function newFolder() {
+    if (!api || !project) return;
+    const name = window.prompt("New folder (e.g. src/components)")?.trim().replace(/\/+$/, "");
+    if (!name) return;
+    const marker = `${name}/.gitkeep`;
+    if (!isSafeRelativePath(marker)) { setMessage("Invalid folder name: use a relative path without '..' or empty parts"); return; }
+    if (files.some(f => inFolder(f.path, name))) { setMessage(`${name} already exists`); return; }
+    try {
+      await api.saveFile(project, marker, "");
+      setFiles(f => [...f, { path: marker, content: "" }]);
+      setMessage(`Created folder ${name}`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  async function renameProject() {
+    if (!api || !currentProject) return;
+    const name = window.prompt("Project name", currentProject.name)?.trim();
+    if (!name || name === currentProject.name) return;
+    if (name.length > 120) { setMessage("Project names can be up to 120 characters"); return; }
+    try {
+      const p = await api.updateProject(currentProject.id, { name });
+      setProjects(list => list.map(x => (x.id === p.id ? { ...x, name: p.name } : x)));
+      setMessage(`Renamed project to ${p.name}`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  async function archiveProject() {
+    if (!api || !currentProject) return;
+    if (dirty.size && !window.confirm("Open files have unsaved changes that will be lost. Continue?")) return;
+    if (!window.confirm(`Archive ${currentProject.name}? It disappears from the list and can be restored from Archived projects.`)) return;
+    try {
+      await api.archiveProject(currentProject.id);
+      setProjects(list => list.filter(x => x.id !== currentProject.id));
+      setProject(""); setFiles([]); setTabs([]); setActive(""); setHistoryFor("");
+      setMessage(`Archived ${currentProject.name}`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  async function showArchived() {
+    if (!api) return;
+    try { setArchived(await api.archivedProjects()); }
+    catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
+  async function restoreProject(p: Project) {
+    if (!api) return;
+    try {
+      await api.restoreProject(p.id);
+      setArchived(list => (list ?? []).filter(x => x.id !== p.id));
+      setProjects(list => [...list, { id: p.id, name: p.name, description: p.description, module: p.module }]);
+      setMessage(`Restored ${p.name}`);
+    } catch (e) { setMessage(String((e as Error).message ?? e)); }
+  }
+
   function restored(path: string, content: string) {
     setFiles(f => [...f.filter(x => x.path !== path), { path, content }]);
     setTabs(t => markSaved(openTab(t.filter(x => x.path !== path), path, content), path)); setActive(path);
@@ -188,6 +276,18 @@ export default function Workspace() {
   const currentProject = projects.find(p => p.id === project);
   const agentTasks = useMemo(() => moduleTasks(modules, currentProject?.module, QUICK_TASKS), [modules, currentProject]);
   const [importOpen, setImportOpen] = useState(false);
+  const [archived, setArchived] = useState<(Project & { archived_at: string })[] | null>(null);
+  const [search, setSearch] = useState("");
+  const searchResult = useMemo(() => searchFiles(files, search), [files, search]);
+  const editorRef = useRef<{ revealLineInCenter: (n: number) => void; setPosition: (p: { lineNumber: number; column: number }) => void; focus: () => void } | null>(null);
+  const [pendingLine, setPendingLine] = useState(0);
+  useEffect(() => {
+    if (!pendingLine || !editorRef.current) return;
+    editorRef.current.revealLineInCenter(pendingLine);
+    editorRef.current.setPosition({ lineNumber: pendingLine, column: 1 });
+    editorRef.current.focus();
+    setPendingLine(0);
+  }, [pendingLine, active]);
   const readOnly = role === "viewer" || role === "reviewer";
   const assistantModule = currentProject ? (currentProject.module || "software") : "general";
   const assistantModuleName = currentProject ? moduleLabel(modules, currentProject.module) : "AEP-X IDE";
@@ -252,6 +352,11 @@ export default function Workspace() {
         <PlanBanner api={api} entitlement={entitlement} onStatus={status} onEntitlement={setEntitlement} />
         <InstallApp />
         {token ? <>
+          {currentProject && (role === "owner" || role === "admin" || role === "editor") &&
+            <button onClick={() => void renameProject()} title="Rename this project">Rename project</button>}
+          {currentProject && (role === "owner" || role === "admin") &&
+            <button onClick={() => void archiveProject()} title="Archive this project (restorable)">Archive</button>}
+          <button onClick={() => void showArchived()} title="Archived projects you can restore">Archived</button>
           <button onClick={() => void createProject()}>New project</button>
           <button onClick={() => void manager().signoutRedirect()}>Sign out</button>
         </> : configured && <button className="primary" onClick={() => signIn("email")}>Sign in</button>}
@@ -263,8 +368,25 @@ export default function Workspace() {
         <div className="section-head"><h3>Explorer</h3>{project && <span>
           {api && !readOnly && <button className="icon" title="Import files, a folder or a .zip" aria-label="Import files"
             onClick={() => setImportOpen(true)}>⇪</button>}
+          {api && !readOnly && <button className="icon" title="New folder" aria-label="New folder" onClick={() => void newFolder()}>🗀</button>}
           <button className="icon" title="New file" aria-label="New file" onClick={newFile}>+</button></span>}</div>
-        {project ? <FileTree nodes={tree} active={active} dirty={dirty} onOpen={openFile} />
+        {project && <div className="search-box">
+          <label className="sr-only" htmlFor="project-search">Search in project</label>
+          <input id="project-search" type="search" placeholder="Search files…" value={search} maxLength={200}
+            onChange={e => setSearch(e.target.value)} />
+          {search.trim().length >= 2 && <div className="search-results" role="region" aria-label="Search results">
+            <p className="muted small" role="status">{searchResult.hits.length
+              ? `${searchResult.hits.length}${searchResult.truncated ? "+" : ""} match${searchResult.hits.length === 1 ? "" : "es"}`
+              : "No matches"} · saved content</p>
+            {searchResult.hits.map((h, i) => <button key={h.path + ":" + h.line + ":" + i} className="search-hit"
+              onClick={() => { openFile(h.path); if (h.line) setPendingLine(h.line); }}>
+              <span className="small">{h.path}{h.line ? `:${h.line}` : ""}</span>
+              {h.line > 0 && <span className="muted small"> {h.text}</span>}</button>)}
+          </div>}
+        </div>}
+        {project ? <FileTree nodes={tree} active={active} dirty={dirty} onOpen={openFile}
+            onRenameFolder={api && !readOnly ? p => void renamePath(p, "folder") : undefined}
+            onDeleteFolder={api && !readOnly ? p => void deleteFolderAt(p) : undefined} />
           : <p className="muted small">No project open.</p>}
         <AdSlot surface="sidebar" consent={consent} rate={entitlement?.ad_rate ?? 1} />
       </aside>
@@ -289,6 +411,8 @@ export default function Workspace() {
           </div>}
           {current && <button onClick={() => setHistoryFor(h => h === current.path ? "" : current.path)}
             aria-pressed={historyFor === current.path}>History</button>}
+          {current && !readOnly && files.some(f => f.path === current.path) &&
+            <button onClick={() => void renamePath(current.path, "file")} title="Rename or move this file">Rename</button>}
           {current && <button onClick={() => void deleteFile(current.path)}>Delete</button>}
           {(() => { const hint = saveHint({ signedIn: Boolean(token), hasFile: Boolean(current), dirty: Boolean(current && isDirty(current)) });
             return <button className="primary" disabled={!current || !isDirty(current)} title={hint} aria-description={hint}
@@ -305,6 +429,7 @@ export default function Workspace() {
           })}
           language={languageFor(current.path)} value={current.content}
           onChange={v => setTabs(t => updateTab(t, current.path, v ?? ""))}
+          onMount={editor => { editorRef.current = editor; }}
           options={{ minimap: { enabled: false }, automaticLayout: true, fontSize: 14, scrollBeyondLastLine: false }} /></div>
           : <div className="empty">
               {!token ? <SignedOutWelcome configured={configured} options={authOptions}
@@ -345,6 +470,18 @@ export default function Workspace() {
     <ConsentBanner consent={consent} onChoose={chooseConsent} />
     {launcher && api && <ModuleLauncher api={api} initial={launchModule} onCreated={p => void projectCreated(p)}
       onClose={() => setLauncher(false)} onStatus={status} />}
+    {archived && <div className="modal-backdrop" role="presentation" onClick={e => { if (e.target === e.currentTarget) setArchived(null); }}>
+      <section className="modal" role="dialog" aria-modal="true" aria-label="Archived projects">
+        <h2>Archived projects</h2>
+        {archived.length ? <ul className="archived-list">{archived.map(p => <li key={p.id}>
+            <span>{p.name} <span className="muted small">· archived {new Date(p.archived_at).toLocaleDateString()}</span></span>
+            {(role === "owner" || role === "admin")
+              ? <button onClick={() => void restoreProject(p)}>Restore</button>
+              : <span className="muted small">Ask an owner or admin to restore</span>}</li>)}</ul>
+          : <p className="muted">No archived projects.</p>}
+        <div className="modal-actions"><button onClick={() => setArchived(null)}>Close</button></div>
+      </section>
+    </div>}
     {importOpen && api && project && <ImportDialog api={api} project={project}
       existing={new Set(files.map(f => f.path))} onClose={() => setImportOpen(false)} onStatus={status}
       onImported={saved => setFiles(f => [...f.filter(x => !saved.some(s => s.path === x.path)), ...saved])} />}

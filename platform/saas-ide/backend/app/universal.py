@@ -163,6 +163,87 @@ def delete_file(project_id: str, path: str, p: Principal = Depends(principal),
     return {"path": path, "deleted": True, "version": version}
 
 
+class MoveIn(BaseModel):
+    from_path: str = Field(min_length=1, max_length=255)
+    to_path: str = Field(min_length=1, max_length=255)
+
+
+MAX_TREE_FILES = 2000
+
+
+def _tree(db: Session, p: Principal, project_id: str, path: str):
+    """The file at `path` plus every file under the folder `path/` (prefix compare, no LIKE)."""
+    return db.execute(text("""SELECT path, content FROM ide_workspace_files
+        WHERE tenant_id=:t AND project_id=:p AND (path=:f OR left(path, :n) = :prefix)
+        ORDER BY path"""), {"t": p.tenant_id, "p": project_id, "f": path,
+                             "n": len(path) + 1, "prefix": path + "/"}).all()
+
+
+@router.post("/api/v1/projects/{project_id}/files-move")
+def move_files(project_id: str, body: MoveIn, p: Principal = Depends(principal),
+               db: Session = Depends(db_session)):
+    """Rename or move a file, or a whole folder. All-or-nothing; history is kept on both paths."""
+    src, dst = safe_path(body.from_path), safe_path(body.to_path)
+    if src == dst:
+        raise HTTPException(400, "The new name is the same as the old one")
+    if dst.startswith(src + "/"):
+        raise HTTPException(400, "A folder cannot be moved into itself")
+    live_project(db, p, project_id)
+    rows = _tree(db, p, project_id, src)
+    if not rows:
+        db.rollback()
+        raise HTTPException(404, "File or folder not found")
+    if len(rows) > MAX_TREE_FILES:
+        db.rollback()
+        raise HTTPException(400, f"Folders with more than {MAX_TREE_FILES} files cannot be moved in one step")
+    moves = [(r.path, dst + r.path[len(src):], r.content) for r in rows]
+    for old, new, _ in moves:
+        safe_path(new)
+        acl.require(p.role, "delete", "file", old)
+        acl.require(p.role, "create", "file", new)
+    moving = {old for old, _, _ in moves}
+    clash = db.execute(text("""SELECT path FROM ide_workspace_files
+        WHERE tenant_id=:t AND project_id=:p AND path = ANY(:paths)"""),
+        {"t": p.tenant_id, "p": project_id, "paths": [n for _, n, _ in moves]}).scalars().all()
+    clash = [c for c in clash if c not in moving]
+    if clash:
+        db.rollback()
+        raise HTTPException(409, "These files already exist: " + ", ".join(clash[:5]))
+    # Delete then insert inside one transaction, so overlapping old/new paths never collide.
+    for old, _, content in moves:
+        db.execute(text("DELETE FROM ide_workspace_files WHERE tenant_id=:t AND project_id=:p AND path=:f"),
+                   {"t": p.tenant_id, "p": project_id, "f": old})
+        record_version(db, p, project_id, old, "delete", content)
+    for _, new, content in moves:
+        db.execute(text("""INSERT INTO ide_workspace_files(tenant_id, project_id, path, content)
+            VALUES (:t, :p, :f, :c)"""), {"t": p.tenant_id, "p": project_id, "f": new, "c": content})
+        record_version(db, p, project_id, new, "save", content)
+    audit(db, p, "file.move", "file", f"{project_id}/{src}", f"to {dst} ({len(moves)} file{'s' if len(moves) != 1 else ''})")
+    _commit(db)
+    return {"moved": [{"from": o, "to": n} for o, n, _ in moves], "count": len(moves)}
+
+
+@router.delete("/api/v1/projects/{project_id}/folders/{path:path}")
+def delete_folder(project_id: str, path: str, p: Principal = Depends(principal),
+                  db: Session = Depends(db_session)):
+    """Delete every file in a folder. Each file keeps its history and can be restored."""
+    path = safe_path(path)
+    live_project(db, p, project_id)
+    rows = [r for r in _tree(db, p, project_id, path) if r.path != path]
+    if not rows:
+        db.rollback()
+        raise HTTPException(404, "Folder not found or empty")
+    for r in rows:
+        acl.require(p.role, "delete", "file", r.path)
+    for r in rows:
+        db.execute(text("DELETE FROM ide_workspace_files WHERE tenant_id=:t AND project_id=:p AND path=:f"),
+                   {"t": p.tenant_id, "p": project_id, "f": r.path})
+        record_version(db, p, project_id, r.path, "delete", r.content)
+    audit(db, p, "folder.delete", "file", f"{project_id}/{path}/", f"{len(rows)} files")
+    _commit(db)
+    return {"folder": path, "deleted": len(rows)}
+
+
 @router.get("/api/v1/projects/{project_id}/history")
 def file_history(project_id: str, path: str, p: Principal = Depends(principal),
                  db: Session = Depends(db_session)):
