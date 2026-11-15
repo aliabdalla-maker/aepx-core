@@ -137,4 +137,4 @@ def test_committed_page_matches_manifest():
     here = Path(gd.__file__).parent
     page = gd.render(json.loads((here / "releases.json").read_text(encoding="utf-8")))
     assert (here / "website-downloads.html").read_text(encoding="utf-8") == page
-    assert "0 of 14 downloads available" in page  # nothing is offered before signed builds exist
+    assert "0 of 15 downloads available" in page  # nothing is offered before signed builds exist
