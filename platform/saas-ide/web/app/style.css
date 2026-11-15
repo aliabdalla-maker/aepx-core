@@ -34,6 +34,7 @@ input{min-width:0}
 .editor-area{display:flex;flex-direction:column;min-width:0;min-height:0}
 .tabs{height:38px;display:flex;align-items:stretch;gap:2px;background:var(--panel2);border-bottom:1px solid var(--line);padding:0 6px;overflow-x:auto}
 .tabs>button{align-self:center}
+.tab-strip{display:flex;align-items:stretch;gap:2px;min-width:0;overflow-x:auto}
 .tab{display:flex;align-items:center;border-bottom:2px solid transparent}
 .tab.active{border-bottom-color:var(--accent);background:#1a2540}
 .tab .tab-name{border:0;background:transparent;padding:6px 4px 6px 10px;white-space:nowrap}

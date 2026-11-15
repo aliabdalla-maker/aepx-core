@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { UserManager, WebStorageStateStore } from "oidc-client-ts";
+import { oidcConfigured, oidcManager } from "../lib/auth";
 import type { Capabilities, FileEntry, IdeApi, Project } from "../lib/api";
 import { ideApi, isSafeRelativePath, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
@@ -21,13 +21,8 @@ const Editor = dynamic(async () => {
   return mod.default;
 }, { ssr: false, loading: () => <div className="empty muted">Loading editor…</div> });
 const apiBase = process.env.NEXT_PUBLIC_IDE_API_URL || "http://localhost:8090";
-const issuer = process.env.NEXT_PUBLIC_OIDC_AUTHORITY || "";
-const clientId = process.env.NEXT_PUBLIC_OIDC_CLIENT_ID || "";
 const tenant = process.env.NEXT_PUBLIC_IDE_TENANT || "";
-const manager = () => new UserManager({
-  authority: issuer, client_id: clientId, redirect_uri: window.location.origin + "/callback",
-  response_type: "code", scope: "openid profile", userStore: new WebStorageStateStore({ store: window.sessionStorage }),
-});
+const manager = oidcManager;
 type Panel = "agent" | "knowledge" | "ops";
 
 export default function Workspace() {
@@ -41,7 +36,7 @@ export default function Workspace() {
   const [capabilities, setCapabilities] = useState<Capabilities | null>(null);
   const [message, setMessage] = useState("Sign in to load your workspace.");
   const [consent, setConsent] = useState<Consent>("unknown");
-  const configured = Boolean(issuer && clientId && tenant);
+  const configured = oidcConfigured && Boolean(tenant);
 
   const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token]);
   const api: IdeApi | null = useMemo(() => (token ? ideApi(requester) : null), [token, requester]);
@@ -50,8 +45,21 @@ export default function Workspace() {
   useEffect(() => { setConsent(readConsent(typeof window === "undefined" ? undefined : window.localStorage)); }, []);
   useEffect(() => {
     if (!configured) { setMessage("Set NEXT_PUBLIC_OIDC_AUTHORITY, NEXT_PUBLIC_OIDC_CLIENT_ID and NEXT_PUBLIC_IDE_TENANT to sign in."); return; }
-    manager().getUser().then(u => { if (u && !u.expired) setToken(u.access_token); })
+    const m = manager();
+    m.getUser().then(u => { if (u && !u.expired) setToken(u.access_token); })
       .catch(() => setMessage("Authentication session unavailable"));
+    // Silent renewal keeps the session alive; on failure keep open tabs and ask to sign in again.
+    const onLoaded = (u: { access_token: string }) => setToken(u.access_token);
+    const onExpired = () => { setToken(""); setMessage("Session expired — sign in again. Unsaved tabs are kept in this window."); };
+    const onRenewError = () => setMessage("Session renewal failed — save your work and sign in again.");
+    m.events.addUserLoaded(onLoaded);
+    m.events.addAccessTokenExpired(onExpired);
+    m.events.addSilentRenewError(onRenewError);
+    return () => {
+      m.events.removeUserLoaded(onLoaded);
+      m.events.removeAccessTokenExpired(onExpired);
+      m.events.removeSilentRenewError(onRenewError);
+    };
   }, [configured]);
   useEffect(() => {
     if (!api) return;
@@ -152,18 +160,27 @@ export default function Workspace() {
       </aside>
 
       <section className="editor-area" aria-label="Editor">
-        <div className="tabs" role="tablist">
-          {tabs.map(t => <div key={t.path} role="tab" aria-selected={t.path === active}
-            className={"tab" + (t.path === active ? " active" : "")}>
-            <button className="tab-name" onClick={() => setActive(t.path)} title={t.path}>
-              {t.path.split("/").pop()}{isDirty(t) && <span className="dot"> ●</span>}
-            </button>
-            <button className="icon" aria-label={"Close " + t.path} onClick={() => close(t.path)}>×</button>
-          </div>)}
+        <div className="tabs">
+          {/* Open files are a navigation list (each tab has its own close button), not an ARIA
+              tablist, which may not contain nested interactive controls. */}
+          <nav aria-label="Open files" className="tab-strip">
+            {tabs.map(t => <div key={t.path} className={"tab" + (t.path === active ? " active" : "")}>
+              <button className="tab-name" onClick={() => setActive(t.path)} title={t.path}
+                aria-current={t.path === active ? "page" : undefined}>
+                {t.path.split("/").pop()}{isDirty(t) && <span className="dot" aria-label="unsaved"> ●</span>}
+              </button>
+              <button className="icon" aria-label={"Close " + t.path} onClick={() => close(t.path)}>×</button>
+            </div>)}
+          </nav>
           <span className="spacer" />
           <button className="primary" disabled={!current || !isDirty(current)} onClick={() => void save()}>Save</button>
         </div>
-        {current ? <div className="editor-host"><Editor height="100%" theme="vs-dark" path={current.path}
+        {current ? <div className="editor-host"><Editor height="100%" theme="aepx-dark" path={current.path}
+          beforeMount={monaco => monaco.editor.defineTheme("aepx-dark", {
+            base: "vs-dark", inherit: true, colors: {},
+            // vs-dark comments (#608B4E) are 4.2:1 on #1E1E1E; WCAG AA needs 4.5:1.
+            rules: [{ token: "comment", foreground: "6A9955" }],
+          })}
           language={languageFor(current.path)} value={current.content}
           onChange={v => setTabs(t => updateTab(t, current.path, v ?? ""))}
           options={{ minimap: { enabled: false }, automaticLayout: true, fontSize: 14, scrollBeyondLastLine: false }} /></div>
