@@ -1,0 +1,7 @@
+AEPX.xcodeproj/
+*/Info.plist
+Config/Local.xcconfig
+.build/
+DerivedData/
+AEPXKit/.build/
+AEPXKit/.swiftpm/

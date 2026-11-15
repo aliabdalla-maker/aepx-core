@@ -150,7 +150,7 @@ export default function Workspace() {
         {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
       </select>
       <nav>
-        <PlanBanner api={api} entitlement={entitlement} onStatus={status} />
+        <PlanBanner api={api} entitlement={entitlement} onStatus={status} onEntitlement={setEntitlement} />
         <InstallApp />
         {token ? <>
           <button onClick={() => void createProject()}>New project</button>

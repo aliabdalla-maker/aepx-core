@@ -1,32 +1,40 @@
 {
-  "name": "aepx-hybrid-ide",
-  "displayName": "AEP-X Hybrid IDE",
-  "description": "Open the governed AEP-X Hybrid IDE workspace",
-  "version": "0.1.0",
+  "name": "aepx-agentic-ide",
+  "displayName": "AEP-X Agentic IDE",
+  "description": "Open the governed AEP-X Agentic IDE: plan with an agent crew, approve every step, keep a full audit trail.",
+  "version": "0.2.0",
   "publisher": "softwareequality",
+  "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
-  "engines": {
-    "vscode": "^1.90.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:aepx.openIde"
-  ],
+  "repository": { "type": "git", "url": "https://github.com/aliabdalla-maker/aepx-core" },
+  "homepage": "https://www.softwareequality.com/aepx",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["AI", "Other"],
+  "keywords": ["agents", "ai", "governance", "ide"],
+  "activationEvents": ["onStartupFinished"],
   "main": "./extension.js",
+  "capabilities": { "untrustedWorkspaces": { "supported": true }, "virtualWorkspaces": true },
   "contributes": {
     "commands": [
-      {
-        "command": "aepx.openIde",
-        "title": "AEP-X: Open Hybrid IDE"
+      { "command": "aepx.openIde", "title": "Open Agentic IDE", "category": "AEP-X" },
+      { "command": "aepx.openPricing", "title": "Plans and pricing", "category": "AEP-X" }
+    ],
+    "configuration": {
+      "title": "AEP-X",
+      "properties": {
+        "aepx.ideUrl": {
+          "type": "string",
+          "default": "https://ide.softwareequality.com/",
+          "scope": "machine",
+          "markdownDescription": "HTTPS address of the AEP-X IDE (change only for a self-hosted deployment)."
+        },
+        "aepx.showStatusBar": { "type": "boolean", "default": true, "description": "Show the AEP-X status bar button." }
       }
-    ]
+    }
   },
   "scripts": {
-    "package": "vsce package --no-dependencies"
+    "test": "node --test url.test.js",
+    "package": "vsce package --no-dependencies --out aepx-agentic-ide.vsix"
   },
-  "devDependencies": {
-    "@vscode/vsce": "^3.2.0"
-  }
+  "devDependencies": { "@vscode/vsce": "3.2.1" }
 }
