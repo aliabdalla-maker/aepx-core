@@ -117,6 +117,9 @@ export const ideApi = (r: Requester) => ({
       { original_transaction_id: originalTransactionId, ...(bundleId ? { bundle_id: bundleId } : {}) }),
   capabilities: () => r<Capabilities>("/api/v1/agent-capabilities"),
   aiUsage: () => r<AiUsage>("/api/v1/ai-usage"),
+  executionStatus: () => r<import("./run").ExecutionStatus>("/api/v1/execution"),
+  runFile: (project: string, entry: string, stdin = "") =>
+    r<import("./run").RunOutput>(`/api/v1/projects/${encodeURIComponent(project)}/run`, "POST", { entry, stdin }),
   projects: () => r<Project[]>("/api/v1/projects"),
   createProject: (name: string, description = "", module = "software") =>
     r<Project>("/api/v1/projects", "POST", { name, description, module }),

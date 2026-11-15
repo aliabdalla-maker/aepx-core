@@ -47,3 +47,13 @@ Not verified: anything in production; any signed-in flow; real e-mail delivery; 
 | API | `pytest tests/test_file_ops.py` on PostgreSQL 16 | 7/7: file rename keeps content + history (delete/save versions); folder move moves only that folder; overlapping move (a/x -> a) succeeds; conflict 409, same name 400, into-itself 400, traversal 400, missing 404 with nothing changed; folder delete versioned and scoped; media editor limited to media paths, viewer/other tenant refused; `file.move` audited. Full backend suite 265 passed. |
 | Web | `vitest` | 64 passed (5 new: move mapping, tabs keep unsaved edits, client-side rename validation, search with line numbers and caps) |
 | End-to-end, local stack (Keycloak HTTPS + API + production web build, headless Chrome) | `/tmp/e2e2.py` | **12/12**: create + save files; search finds `src/lib/util.py:2` and opens it at line 2; rename file (tab follows); move folder `src/lib` -> `pkg/lib`; rename onto an existing file refused; new folder; delete folder; state persists after reload; rename project; archive; restore |
+
+## Sandboxed code execution (branch feat/sandbox-runner) — not enabled in production
+| Check | Method | Result |
+|---|---|---|
+| Runner validation, flags, HMAC, replay | `pytest runner/tests` (no Docker part) | pass |
+| Real containers (runc, local) | `pytest runner/tests` with a local image built from the workspace's own Python/Node (Docker Hub is blocked in this workspace) | 12/12: Python + Node output and exit codes, multi-file imports, **no network**, **read-only project and root**, **uid 65534**, **10 s timeout kills the container**, **memory limit**, **process limit**, output cap. Two real bugs found and fixed: `-I` broke multi-file imports; `/tmp` was not writable by the sandbox user. |
+| API endpoint | `pytest tests/test_execution.py` on PostgreSQL 16 | 9/9: off by default with reason; misconfigured runner stays off; runs saved files and audits `code.run`; unsaved/unsupported/path-traversal refused; viewer refused; other tenant refused; rate limit; honest runner errors; runner URL must be HTTPS or explicitly allowed private HTTP |
+| Full chain | API -> HMAC-signed request -> runner app -> real container | Python with local import printed 42 with exit code 5; Node printed `node 42`; forged signature refused (401) |
+| gVisor | CI job `runner` (PR #412) on GitHub runners: runsc 20261109 installed, same 12 tests | **12/12 under runsc**; guest kernel `4.19.0-gvisor` vs host `7.0.0-1014-aws`, so runs really are inside gVisor; production runner image builds |
+| Production | — | **not enabled**: `IDE_CODE_EXECUTION_ENABLED` stays false until a gVisor host passes the setup self-test and the acceptance run |

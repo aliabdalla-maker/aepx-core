@@ -158,7 +158,7 @@ class QueueDiagnosticTests(unittest.TestCase):
                 self.assertEqual(main(["--input-json", str(path), "--head-sha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "--require-workflow", "CI", "--require-success"]), 0)
 
     def test_completed_run_requires_conclusion(self):
-        with self.assertRaisesRegex(ValueError, "lacks a conclusion"):
+        with self.assertRaisesRegex(ValueError, "missing or unknown conclusion"):
             summarize([{"status": "completed"}])
 
     def test_head_sha_scope_excludes_other_commits(self):
