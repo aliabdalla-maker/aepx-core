@@ -12,17 +12,55 @@
   },
   "admob": {
     "appId": "ca-app-pub-2980680946304710~2617421798",
-    "enabled": false,
+    "enabled": true,
     "adUnits": [
-      { "id": "ca-app-pub-2980680946304710/1032845563", "format": null, "placement": null },
-      { "id": "ca-app-pub-2980680946304710/2172884450", "format": null, "placement": null },
-      { "id": "ca-app-pub-2980680946304710/3668921616", "format": null, "placement": null },
-      { "id": "ca-app-pub-2980680946304710/5953999752", "format": null, "placement": null },
-      { "id": "ca-app-pub-2980680946304710/6184281650", "format": null, "placement": null },
-      { "id": "ca-app-pub-2980680946304710/6514576804", "format": null, "placement": null }
+      {
+        "id": "ca-app-pub-2980680946304710/1032845563",
+        "format": "banner",
+        "placement": "project_list_banner"
+      },
+      {
+        "id": "ca-app-pub-2980680946304710/2172884450",
+        "format": "banner",
+        "placement": "runs_list_banner"
+      },
+      {
+        "id": "ca-app-pub-2980680946304710/3668921616",
+        "format": "interstitial",
+        "placement": "run_completed_interstitial"
+      },
+      {
+        "id": "ca-app-pub-2980680946304710/5953999752",
+        "format": "native",
+        "placement": "native_feed"
+      },
+      {
+        "id": "ca-app-pub-2980680946304710/6184281650",
+        "format": "app_open",
+        "placement": "app_open"
+      },
+      {
+        "id": "ca-app-pub-2980680946304710/6514576804",
+        "format": "rewarded",
+        "placement": "rewarded_ad_break"
+      }
     ],
-    "allowedFormats": ["banner", "interstitial", "rewarded", "rewarded_interstitial", "native", "app_open"],
-    "allowedPlacements": ["runs_list_banner", "project_list_banner", "run_completed_interstitial", "app_open", "native_feed"],
-    "reason": "Set each unit's format exactly as shown in the AdMob console, then a placement. Units with a null format are never requested. Debug builds always use Google test unit IDs."
+    "allowedFormats": [
+      "banner",
+      "interstitial",
+      "rewarded",
+      "rewarded_interstitial",
+      "native",
+      "app_open"
+    ],
+    "allowedPlacements": [
+      "project_list_banner",
+      "runs_list_banner",
+      "run_completed_interstitial",
+      "native_feed",
+      "app_open",
+      "rewarded_ad_break"
+    ],
+    "reason": "Standard layout chosen by the owner (2026-11-15). If AdMob shows a different format for a unit, change only that unit's format/placement here. Debug builds always use Google test unit IDs; release builds use these units after UMP consent; subscribers see 1 in 20 ad opportunities; approval screens never show ads."
   }
 }

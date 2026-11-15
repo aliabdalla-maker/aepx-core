@@ -50,7 +50,7 @@ jobs:
           if grep -q 'ca-app-pub-2980680946304710' debug-manifest.txt; then echo 'Live AdMob ID leaked into debug APK' >&2; exit 1; fi
           grep -q 'ca-app-pub-2980680946304710~2617421798' release-manifest.txt || { echo 'Release APK lacks the live AdMob app ID' >&2; exit 1; }
           echo "Debug uses Google test app ID; release uses ca-app-pub-2980680946304710~2617421798" >> "$GITHUB_STEP_SUMMARY"
-          echo 'Live ads remain disabled until ads-config.json sets formats, placements and admob.enabled.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Release builds request the six live AdMob units (after UMP consent); debug builds use Google test units only.' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

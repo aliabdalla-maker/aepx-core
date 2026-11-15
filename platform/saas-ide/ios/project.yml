@@ -24,6 +24,7 @@ settings:
     DEVELOPMENT_TEAM: $(AEPX_TEAM_ID)
     TARGETED_DEVICE_FAMILY: "1,2"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 targetTemplates:
   AEPXApp:
     type: application

@@ -1,6 +1,7 @@
 package com.equalitysoftware.aepx.companion
 
 import com.equalitysoftware.aepx.companion.ads.AdFormat
+import com.equalitysoftware.aepx.companion.ads.AD_BREAK_MS
 import com.equalitysoftware.aepx.companion.ads.AdGate
 import com.equalitysoftware.aepx.companion.ads.AdRate
 import com.equalitysoftware.aepx.companion.billing.Entitlement
@@ -31,22 +32,51 @@ class CompanionUnitTest {
         return """{"admob":{"appId":"ca-app-pub-$pub~2617421798","enabled":$enabled,"adUnits":[$list]}}"""
     }
 
-    @Test fun repositoryConfigParsesAndKeepsEveryUnitDisabledUntilFormatsAreSet() {
+    @Test fun repositoryConfigServesTheOwnersSixUnitsInReleaseAndTestUnitsInDebug() {
         val file = File("../../monetization/ads-config.json")
         assertTrue("shared ads-config.json must exist at ${file.absolutePath}", file.exists())
         val cfg = AdsConfig.parse(file.readText())
         assertEquals("ca-app-pub-$pub~2617421798", cfg.appId)
         assertEquals(6, cfg.units.size)
-        assertFalse(cfg.enabled)
+        assertTrue(cfg.enabled)
         val release = AdUnitRegistry(cfg, debug = false)
         val debug = AdUnitRegistry(cfg, debug = true)
-        for (p in Placement.entries) {
-            assertNull(release.unitFor(p))
-            // Debug only shows test ads for placements that are actually mapped; none are yet.
-            assertNull(debug.unitFor(p))
+        val expected = mapOf(
+            Placement.PROJECT_LIST_BANNER to "1032845563",
+            Placement.RUNS_LIST_BANNER to "2172884450",
+            Placement.RUN_COMPLETED_INTERSTITIAL to "3668921616",
+            Placement.NATIVE_FEED to "5953999752",
+            Placement.APP_OPEN to "6184281650",
+            Placement.REWARDED_AD_BREAK to "6514576804",
+        )
+        assertEquals(Placement.entries.toSet(), expected.keys)
+        for ((placement, unit) in expected) {
+            assertEquals("ca-app-pub-$pub/$unit", release.unitFor(placement))
+            // Debug builds must never request live units (AdMob policy: no clicks on your own ads).
+            assertEquals(TestAdUnits.forFormat(placement.format), debug.unitFor(placement))
         }
-        assertFalse(release.mayInitialize(canRequestAds = true))
-        assertEquals(6, release.unconfiguredUnits().size)
+        assertTrue(release.mayInitialize(canRequestAds = true))
+        assertFalse(release.mayInitialize(canRequestAds = false)) // consent first
+        assertTrue(release.unconfiguredUnits().isEmpty())
+    }
+
+    @Test fun rewardedAdBreakPausesEveryAutomaticAdThenExpires() {
+        var now = 1_000L
+        val gate = AdGate { now }
+        gate.rate = 1.0
+        assertTrue(gate.tryOpportunity())
+        gate.pauseFor(AD_BREAK_MS)
+        assertTrue(gate.paused)
+        assertFalse(gate.tryOpportunity())
+        now += AD_BREAK_MS - 1
+        assertFalse(gate.tryOpportunity())
+        now += 1
+        assertFalse(gate.paused)
+        assertTrue(gate.tryOpportunity())
+        gate.pauseFor(10_000)
+        gate.pauseFor(5_000) // a shorter second break never shortens the first
+        now += 9_000
+        assertTrue(gate.paused)
     }
 
     @Test fun releaseServesLiveUnitOnlyWhenEnabledAndFormatMatches() {
