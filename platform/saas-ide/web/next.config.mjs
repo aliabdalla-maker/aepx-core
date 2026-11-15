@@ -23,6 +23,7 @@ const csp = [
   `script-src ${list("'self'", "'unsafe-inline'", ads)}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src ${list("'self'", "data:", "blob:", ads)}`,
+  "media-src 'self' blob:", // previews of generated audio are fetched with auth and played from blob: URLs
   "font-src 'self' data:",
   `connect-src ${list("'self'", api, idp, ads)}`,
   `frame-src ${list("'self'", idp, ads)}`,

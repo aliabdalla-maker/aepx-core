@@ -139,6 +139,42 @@ describe("web ads gating", () => {
   });
 });
 
+import { canApprove, canEdit, charsLeft, formatPence, providersFor, runtime, type MediaCapabilities } from "./media";
+
+describe("Media Studio helpers", () => {
+  const caps = {
+    providers: { mock: { kinds: ["image", "music"], configured: true }, openai: { kinds: ["image", "script"], configured: true },
+      runway: { kinds: ["video"], configured: false } },
+    platforms: { x: { mode: "api", limit: 280, configured: true } },
+    templates: [], approval_required: true, four_eyes: false,
+  } as unknown as MediaCapabilities;
+  it("formats cost estimates", () => {
+    expect(formatPence(0)).toBe("free");
+    expect(formatPence(40)).toBe("~40p");
+    expect(formatPence(250)).toBe("~£2.50");
+  });
+  it("gates actions by role", () => {
+    expect(canApprove("owner") && canApprove("admin")).toBe(true);
+    expect(canApprove("editor")).toBe(false);
+    expect(canEdit("editor")).toBe(true);
+    expect(canEdit("viewer") || canEdit(undefined)).toBe(false);
+  });
+  it("lists only enabled providers for a kind, mock last", () => {
+    expect(providersFor(caps, "image")).toEqual(["openai", "mock"]);
+    expect(providersFor(caps, "video")).toEqual([]);
+    expect(providersFor(null, "image")).toEqual([]);
+  });
+  it("counts characters per platform limit", () => {
+    expect(charsLeft(caps, "x", "a".repeat(280))).toBe(0);
+    expect(charsLeft(caps, "x", "a".repeat(281))).toBe(-1);
+    expect(charsLeft(caps, "x", "👍")).toBe(279);
+  });
+  it("computes timeline runtime", () => {
+    expect(runtime({ timeline: [{ shot_id: "a", start_s: 0, end_s: 5 }, { shot_id: "b", start_s: 5, end_s: 75 }] })).toBe("1:15");
+    expect(runtime({ timeline: [] })).toBe("0:00");
+  });
+});
+
 import { bundleIdFrom, nativeStore, transactionIdFrom } from "./nativeStore";
 
 describe("iOS StoreKit bridge", () => {
