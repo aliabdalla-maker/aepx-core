@@ -15,6 +15,9 @@ class LifecycleHTTPTests(unittest.TestCase):
         self.client=TestClient(app)
         self.tenant=uuid4()
         self.expiry=(datetime.now(timezone.utc)+timedelta(hours=1)).isoformat()
+        # Live identity-authority gate is covered by test_hitl_live_identity_gate.py.
+        gate=patch("app.hitl_api._authoritative_identity",return_value=None)
+        gate.start(); self.addCleanup(gate.stop)
     def test_request_denies_missing_auth(self):
         response=self.client.post("/hitl/requests",json={"tenant_id":str(self.tenant),"action":{"tool":"test"},"expires_at":self.expiry})
         self.assertEqual(response.status_code,403)
