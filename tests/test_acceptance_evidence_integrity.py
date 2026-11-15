@@ -219,7 +219,7 @@ class EvidenceGateTests(unittest.TestCase):
     def test_invalid_utf8_manifest_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = Path(tmp) / "manifest.json"
-            manifest.write_bytes(b"\\xff\\xfe")
+            manifest.write_bytes(bytes.fromhex("ff fe"))
             with self.assertRaises(UnicodeDecodeError):
                 verify(manifest)
 
