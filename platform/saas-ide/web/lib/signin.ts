@@ -39,7 +39,7 @@ export function accountUrl(authority: string, section: AccountSection): string {
 
 /** Extra authorisation-request parameters for each sign-in button. */
 export function signinArgs(kind: "email" | "create" | "google" | "github"): { prompt?: string; extraQueryParams?: Record<string, string> } {
-  if (kind === "create") return { prompt: "create" };
+  if (kind === "create") return {}; // sent to the registrations endpoint instead (see auth.ts)
   if (kind === "google" || kind === "github") return { extraQueryParams: { kc_idp_hint: kind } };
   return {};
 }

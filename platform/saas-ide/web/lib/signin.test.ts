@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { ApiError } from "./api";
+import { registrationEndpoint } from "./auth";
 import {
   DEFAULT_AUTH_OPTIONS, PANEL_TEXT, accountUrl, fetchAuthOptions, forgotPasswordUrl, panelStateFromError,
   parseAuthOptions, releaseLabel, saveHint, signinArgs,
@@ -32,7 +33,9 @@ describe("links", () => {
   });
   it("maps buttons to authorisation parameters", () => {
     expect(signinArgs("email")).toEqual({});
-    expect(signinArgs("create")).toEqual({ prompt: "create" });
+    expect(signinArgs("create")).toEqual({});
+    expect(registrationEndpoint("https://auth.example.test/realms/aepx/")).toBe(
+      "https://auth.example.test/realms/aepx/protocol/openid-connect/registrations");
     expect(signinArgs("google")).toEqual({ extraQueryParams: { kc_idp_hint: "google" } });
   });
 });

@@ -1,20 +1,20 @@
 # AEP-X IDE — implementation progress (unified protocol v5.0)
 
-Formula: `progress = 100 × verified_weight / total_weight`, over the 23 weighted requirements in
-[REQUIREMENTS.csv](REQUIREMENTS.csv) (total weight 83). Per the protocol, code written, unrun tests,
+Formula: `progress = 100 × verified_weight / total_weight`, over the 27 weighted requirements in
+[REQUIREMENTS.csv](REQUIREMENTS.csv) (total weight 95). Per the protocol, code written, unrun tests,
 screenshots, and a passing build are **never** counted as verified.
 
-| Measure (2026-11-15, branch `feat/p01-identity-ux`) | Weight | % |
+| Measure (2026-11-15 20:30, live release 1248102 + branch feat/assistant-import-passwordpolicy) | Weight | % |
 |---|---|---|
-| **Verified in production** | 1 / 83 | **1.2 %** |
-| Verified (production + local integration evidence) | 3 / 83 | 3.6 % |
-| Implemented and tested locally, awaiting deploy + production check | 33 / 83 | 39.8 % |
-| Blocked on owner action | 8 / 83 | 9.6 % |
-| Partial / not started | 39 / 83 | 47.0 % |
+| **Verified in production** (signed-out checks; signed-in flows not yet) | 10 / 95 | **10.5 %** |
+| Verified (production + local integration evidence) | 12 / 95 | 12.6 % |
+| Implemented and tested locally, awaiting deploy + production check | 36 / 95 | 37.9 % |
+| Blocked on owner action | 8 / 95 | 8.4 % |
+| Partial / not started | 39 / 95 | 41.1 % |
 
 ```
-Production-verified  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   1.2 %
-Locally implemented  ████████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  39.8 %  (not counted as verified)
+Production-verified  █████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  10.5 %
+Locally implemented  ███████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  37.9 %  (not counted as verified)
 ```
 
 ## By phase
