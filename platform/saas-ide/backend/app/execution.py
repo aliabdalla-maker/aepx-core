@@ -37,8 +37,10 @@ class RunIn(BaseModel):
 def runner_url_ok(url: str) -> bool:
     """HTTPS anywhere; plain HTTP only to the same-host compose service or, when explicitly
     allowed, to a private-network address (OCI VCN), because the request carries user code."""
-    from ipaddress import ip_address
+    from ipaddress import ip_address, ip_network
     from urllib.parse import urlparse
+    # RFC 1918 and IPv6 unique-local only (ipaddress.is_private also accepts documentation ranges).
+    private = [ip_network(n) for n in ("10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fd00::/8")]
     u = urlparse(url)
     if u.scheme == "https" and u.hostname:
         return True
@@ -47,7 +49,9 @@ def runner_url_ok(url: str) -> bool:
     if u.hostname == "ide-runner":
         return True
     try:
-        return os.getenv("IDE_RUNNER_ALLOW_PRIVATE_HTTP") == "true" and ip_address(u.hostname).is_private
+        address = ip_address(u.hostname)
+        return os.getenv("IDE_RUNNER_ALLOW_PRIVATE_HTTP") == "true" and any(
+            address.version == n.version and address in n for n in private)
     except ValueError:
         return False
 
