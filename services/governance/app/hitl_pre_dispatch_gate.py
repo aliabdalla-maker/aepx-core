@@ -3,7 +3,6 @@
 This is a pure authorization gate. It performs no external effects and must
 be called by the actual fenced worker immediately before effect execution.
 """
-from .hitl_identity_policy import IdentityPolicyDenied
 from .hitl_identity_postgres import enforce_postgres_identity
 
 class DispatchDenied(PermissionError):
