@@ -20,7 +20,7 @@ jobs:
         include:
           - os: windows-2022
             target: win
-          - os: macos-14
+          - os: macos-15
             target: mac
           - os: ubuntu-24.04
             target: linux
