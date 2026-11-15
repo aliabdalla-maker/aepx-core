@@ -141,3 +141,32 @@ details>*+*{margin-top:6px}
 .members{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
 .member-id{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%;font-size:12px}
 button.small{font-size:12px;padding:2px 8px}
+/* Module visual editors */
+.editor-host.visual{overflow:auto;padding:12px}
+.visual-editor section{display:flex;flex-direction:column;gap:10px}
+.visual-editor label{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.visual-editor input.narrow{width:76px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:0;border-radius:0}
+.seg button[aria-pressed="true"]{background:var(--accent-bg);color:#fff}
+.seq{border-collapse:collapse}
+.seq th{text-align:left;padding-right:8px;white-space:nowrap}
+.seq th input{width:90px}
+.step{width:26px;height:26px;padding:0;border-radius:4px;background:#1a2438;border:1px solid #2a3550}
+.step.beat{border-color:#3d4d6e}
+.step.on{background:#4da3ff;border-color:#4da3ff}
+.step.now{outline:2px solid #ffe08a}
+.wave,.stage{background:#0f1729;border:1px solid var(--line);border-radius:6px;max-width:100%;height:auto}
+.stage{background:#fff}
+.timeline{display:flex;gap:2px;height:28px}
+.timeline span{background:#173f63;color:#9fd3ff;font-size:11px;display:flex;align-items:center;justify-content:center;border-radius:3px;min-width:18px;overflow:hidden}
+.grid-edit{border-collapse:collapse;width:100%}
+.grid-edit th,.grid-edit td{border-bottom:1px solid var(--line);padding:4px;text-align:left;font-size:13px}
+.grid-edit input,.grid-edit select{width:100%}
+.nowrap{white-space:nowrap}
+.file-btn{position:relative;border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.chip.active{border-color:var(--accent);background:var(--accent-bg)}
+.error{color:#ffadb2}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.undo-bar{justify-content:flex-end;margin-bottom:6px}

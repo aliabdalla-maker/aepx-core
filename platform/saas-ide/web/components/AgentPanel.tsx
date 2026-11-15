@@ -109,7 +109,7 @@ export default function AgentPanel({ api, project, capabilities, onStatus, onSav
       () => api.requestTool(selected, tool.server, tool.name.trim(), args));
   }
 
-  const enabledProviders = capabilities ? PROVIDERS.filter(p => capabilities.providers[p]) : PROVIDERS;
+  const enabledProviders = capabilities ? PROVIDERS.filter(p => capabilities.providers[p]) : [];
   const actions = detail ? runActions(detail.status, runs.find(r => r.id === detail.id)?.attempts ?? 0) : null;
   const plan = detail ? parsePlan(detail.plan) : [];
 
@@ -139,8 +139,7 @@ export default function AgentPanel({ api, project, capabilities, onStatus, onSav
       <div className="row">
         <label>Model <select value={provider} onChange={e => setProvider(e.target.value as Provider | "")}>
           <option value="">Auto route</option>
-          {PROVIDERS.map(p => <option key={p} value={p} disabled={!enabledProviders.includes(p)}>
-            {PROVIDER_LABEL[p] ?? p}{enabledProviders.includes(p) ? "" : " (disabled)"}</option>)}
+          {enabledProviders.map(p => <option key={p} value={p}>{PROVIDER_LABEL[p] ?? p}</option>)}
         </select></label>
         <button className="primary" disabled={busy || task.trim().length < 5} onClick={() => void submit()}>{live ? "Ask the agents" : "Plan task"}</button>
       </div>
