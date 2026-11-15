@@ -85,3 +85,16 @@ details>*+*{margin-top:6px}
   .topbar nav button{padding:5px 8px}
   .shell{height:auto;min-height:100vh}
 }
+
+/* Media Studio */
+.studio { display: flex; flex-direction: column; gap: .5rem; }
+.studio textarea { width: 100%; box-sizing: border-box; }
+.studio button[aria-pressed="true"] { outline: 2px solid #7acbff; }
+.studio .cards, .studio .jobs { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .5rem; }
+.studio .cards li, .studio .jobs li { border: 1px solid #2a3550; border-radius: 8px; padding: .5rem .6rem; }
+.studio img, .studio audio { max-width: 100%; margin-top: .4rem; }
+.studio pre { white-space: pre-wrap; max-height: 12rem; overflow: auto; }
+.studio .error { color: #ff9b9b; }
+.studio .storyboard ol { padding-left: 1.2rem; }
+.studio .row { display: flex; flex-wrap: wrap; gap: .4rem; }
+.studio .row select { flex: 1 1 8rem; min-width: 0; max-width: 100%; }

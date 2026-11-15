@@ -534,3 +534,9 @@ def app_store_verify(body: AppStorePurchase, subject: str = Depends(verified_sub
     update = _billing(lambda: subs.verify_app_store(account, body.original_transaction_id))
     _apply_verified(update)
     return get_entitlement(subject)
+
+
+# Media Studio: agentic music, video, film, multimedia and social publishing (all approval-gated).
+from .media import router as media_router  # noqa: E402
+
+app.include_router(media_router)
