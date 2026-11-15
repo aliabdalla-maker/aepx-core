@@ -33,3 +33,16 @@ def test_reject_unsafe_workspace_paths():
         else:
             raise AssertionError(f"Unsafe path accepted: {path!r}")
     assert safe_path("src/main.py") == "src/main.py"
+
+
+def test_personal_workspace_requires_a_verified_token():
+    client = TestClient(app)
+    assert client.post("/api/v1/workspace").status_code == 401
+    assert client.post("/api/v1/workspace", headers={"Authorization": "Bearer invalid"}).status_code == 401
+
+
+def test_personal_workspace_id_is_stable_and_per_user():
+    from app.main import personal_tenant_id
+    a, b = personal_tenant_id("user-a"), personal_tenant_id("user-b")
+    assert a == personal_tenant_id("user-a") and a != b
+    assert a.startswith("u-") and len(a) == 34 and all(c in "0123456789abcdef" for c in a[2:])

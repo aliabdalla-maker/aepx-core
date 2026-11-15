@@ -146,3 +146,14 @@ export function runActions(status: RunStatus, attempts: number) {
     requestTool: status === "approved" || status === "running",
   };
 }
+
+/** Opens (creating on first use) the signed-in user's personal workspace and returns its tenant id. */
+export async function ensureWorkspace(base: string, token: string, fetchImpl: typeof fetch = fetch): Promise<string> {
+  const response = await fetchImpl(base + "/api/v1/workspace", {
+    method: "POST", headers: { Authorization: "Bearer " + token }, cache: "no-store",
+  });
+  if (!response.ok) throw new ApiError(response.status, `API error ${response.status}`);
+  const data = await response.json();
+  if (typeof data?.tenant_id !== "string" || !/^u-[0-9a-f]{32}$/.test(data.tenant_id)) throw new ApiError(502, "Invalid workspace");
+  return data.tenant_id;
+}

@@ -188,4 +188,11 @@ class CompanionUnitTest {
         assertEquals("t2", OfferPolicy.choose(offers)?.token)
         assertNull(OfferPolicy.choose(listOf(Offer("monthly", "promo", "t3"))))
     }
+
+    @Test
+    fun personalWorkspaceIdIsValidated() {
+        val id = "u-" + "0123456789abcdef".repeat(2)
+        assertEquals(id, IdeJson.workspaceId("""{"tenant_id":"$id","role":"owner"}"""))
+        assertThrows(IllegalArgumentException::class.java) { IdeJson.workspaceId("""{"tenant_id":"alpha"}""") }
+    }
 }

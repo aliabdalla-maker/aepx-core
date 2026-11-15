@@ -51,14 +51,15 @@ jobs:
           STORE_PW: ${{ secrets.AEPX_UPLOAD_STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.AEPX_UPLOAD_KEY_ALIAS }}
           KEY_PW: ${{ secrets.AEPX_UPLOAD_KEY_PASSWORD }}
-          API_BASE: ${{ vars.AEPX_API_BASE_URL }}
-          TENANT: ${{ vars.AEPX_TENANT }}
-          ISSUER: ${{ vars.AEPX_OIDC_ISSUER }}
-          CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID }}
+          API_BASE: ${{ vars.AEPX_API_BASE_URL || 'https://ide.softwareequality.com' }}
+          TENANT: ${{ vars.AEPX_TENANT || '' }}
+          ISSUER: ${{ vars.AEPX_OIDC_ISSUER || 'https://auth.softwareequality.com/realms/aepx' }}
+          CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID || 'aepx-ide-browser' }}
         run: |
           set -euo pipefail
           missing=()
-          for v in KEYSTORE_B64 STORE_PW KEY_ALIAS KEY_PW API_BASE TENANT ISSUER CLIENT; do
+          # TENANT is optional: without it each user gets a personal workspace.
+          for v in KEYSTORE_B64 STORE_PW KEY_ALIAS KEY_PW API_BASE ISSUER CLIENT; do
             [ -n "${!v}" ] || missing+=("$v")
           done
           if [ ${#missing[@]} -gt 0 ]; then
@@ -91,10 +92,10 @@ jobs:
           AEPX_UPLOAD_STORE_PASSWORD: ${{ secrets.AEPX_UPLOAD_STORE_PASSWORD }}
           AEPX_UPLOAD_KEY_ALIAS: ${{ secrets.AEPX_UPLOAD_KEY_ALIAS }}
           AEPX_UPLOAD_KEY_PASSWORD: ${{ secrets.AEPX_UPLOAD_KEY_PASSWORD }}
-          P_API: ${{ vars.AEPX_API_BASE_URL }}
-          P_TENANT: ${{ vars.AEPX_TENANT }}
-          P_ISSUER: ${{ vars.AEPX_OIDC_ISSUER }}
-          P_CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID }}
+          P_API: ${{ vars.AEPX_API_BASE_URL || 'https://ide.softwareequality.com' }}
+          P_TENANT: ${{ vars.AEPX_TENANT || '' }}
+          P_ISSUER: ${{ vars.AEPX_OIDC_ISSUER || 'https://auth.softwareequality.com/realms/aepx' }}
+          P_CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID || 'aepx-ide-browser' }}
         run: >-
           gradle --no-daemon bundleRelease assembleRelease
           -Paepx.versionCode="$VERSION_CODE" -Paepx.versionName="$VERSION_NAME"
