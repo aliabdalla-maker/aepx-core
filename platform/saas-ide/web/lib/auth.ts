@@ -24,3 +24,22 @@ export function oidcManager(): UserManager {
   });
   return manager;
 }
+
+let registration: UserManager | null = null;
+
+/** Same client, but the authorisation request goes to Keycloak's registration page (Keycloak
+ *  ignores prompt=create). The callback is handled by oidcManager() as for any sign-in. */
+export function oidcRegistrationManager(): UserManager {
+  if (typeof window === "undefined") throw new Error("OIDC is browser-only");
+  const base = oidcManager().settings;
+  registration ??= new UserManager({
+    ...base,
+    automaticSilentRenew: false,
+    metadataSeed: { authorization_endpoint: registrationEndpoint(oidcAuthority) },
+  });
+  return registration;
+}
+
+export function registrationEndpoint(authority: string): string {
+  return authority.replace(/\/+$/, "") + "/protocol/openid-connect/registrations";
+}

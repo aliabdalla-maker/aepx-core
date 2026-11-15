@@ -1,9 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { oidcAuthority, oidcClientId, oidcConfigured, oidcManager } from "../lib/auth";
+import { oidcAuthority, oidcClientId, oidcConfigured, oidcManager, oidcRegistrationManager } from "../lib/auth";
 import { DEFAULT_AUTH_OPTIONS, fetchAuthOptions, forgotPasswordUrl, releaseLabel, saveHint, signinArgs, type AuthOptions } from "../lib/signin";
 import SignedOutWelcome from "./SignedOutWelcome";
+import Assistant from "./Assistant";
+import ImportDialog from "./ImportDialog";
 import type { Capabilities, Entitlement, FileEntry, IdeApi, IdeModule, Project } from "../lib/api";
 import { ensureWorkspace, ideApi, isSafeRelativePath, makeBlobFetcher, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
@@ -60,7 +62,8 @@ export default function Workspace() {
   const [authOptions, setAuthOptions] = useState<AuthOptions>(DEFAULT_AUTH_OPTIONS);
   const [apiRelease, setApiRelease] = useState<string | null>(null);
   const release = releaseLabel(process.env.NEXT_PUBLIC_RELEASE_SHA, apiRelease);
-  const signIn = (kind: "email" | "create" | "google" | "github") => void manager().signinRedirect(signinArgs(kind));
+  const signIn = (kind: "email" | "create" | "google" | "github") =>
+    void (kind === "create" ? oidcRegistrationManager() : manager()).signinRedirect(signinArgs(kind));
   // Public, unauthenticated: which sign-in methods work here, and which API build is live.
   useEffect(() => {
     void fetchAuthOptions(apiBase).then(setAuthOptions);
@@ -184,6 +187,10 @@ export default function Workspace() {
 
   const currentProject = projects.find(p => p.id === project);
   const agentTasks = useMemo(() => moduleTasks(modules, currentProject?.module, QUICK_TASKS), [modules, currentProject]);
+  const [importOpen, setImportOpen] = useState(false);
+  const readOnly = role === "viewer" || role === "reviewer";
+  const assistantModule = currentProject ? (currentProject.module || "software") : "general";
+  const assistantModuleName = currentProject ? moduleLabel(modules, currentProject.module) : "AEP-X IDE";
 
   function newFile() {
     const name = window.prompt("Relative file path (e.g. src/main.py)")?.trim();
@@ -253,7 +260,10 @@ export default function Workspace() {
 
     <div className="ide">
       <aside className="explorer" aria-label="Explorer">
-        <div className="section-head"><h3>Explorer</h3>{project && <button className="icon" title="New file" aria-label="New file" onClick={newFile}>+</button>}</div>
+        <div className="section-head"><h3>Explorer</h3>{project && <span>
+          {api && !readOnly && <button className="icon" title="Import files, a folder or a .zip" aria-label="Import files"
+            onClick={() => setImportOpen(true)}>⇪</button>}
+          <button className="icon" title="New file" aria-label="New file" onClick={newFile}>+</button></span>}</div>
         {project ? <FileTree nodes={tree} active={active} dirty={dirty} onOpen={openFile} />
           : <p className="muted small">No project open.</p>}
         <AdSlot surface="sidebar" consent={consent} rate={entitlement?.ad_rate ?? 1} />
@@ -335,5 +345,11 @@ export default function Workspace() {
     <ConsentBanner consent={consent} onChoose={chooseConsent} />
     {launcher && api && <ModuleLauncher api={api} initial={launchModule} onCreated={p => void projectCreated(p)}
       onClose={() => setLauncher(false)} onStatus={status} />}
+    {importOpen && api && project && <ImportDialog api={api} project={project}
+      existing={new Set(files.map(f => f.path))} onClose={() => setImportOpen(false)} onStatus={status}
+      onImported={saved => setFiles(f => [...f.filter(x => !saved.some(s => s.path === x.path)), ...saved])} />}
+    <Assistant api={api} signedIn={Boolean(token)} project={project} module={assistantModule}
+      moduleName={assistantModuleName} file={current?.path} agentsLive={Boolean(capabilities?.agents_live)}
+      role={role} onStatus={status} onSaveFile={project ? saveAgentFile : undefined} />
   </main>;
 }

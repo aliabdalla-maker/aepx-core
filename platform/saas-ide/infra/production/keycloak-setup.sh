@@ -84,6 +84,10 @@ verify=false
 if $mail_ready && is_true "${AEPX_VERIFY_EMAIL:-false}"; then verify=true; fi
 registration=true
 if is_true "${AEPX_REGISTRATION_DISABLED:-false}"; then registration=false; fi
-printf '{"resetPasswordAllowed":%s,"verifyEmail":%s,"registrationAllowed":%s,"loginWithEmailAllowed":true,"bruteForceProtected":true,"permanentLockout":false,"failureFactor":10,"waitIncrementSeconds":60,"maxFailureWaitSeconds":900,"otpPolicyType":"totp","otpPolicyAlgorithm":"HmacSHA1","otpPolicyDigits":6,"otpPolicyPeriod":30,"otpPolicyLookAheadWindow":1}' \
-  "$mail_ready" "$verify" "$registration" | $KC update "realms/$REALM" -f -
+# Password policy for e-mail accounts (Google accounts use Google's own password rules).
+# Keep it in step with "Password rules" in web/public/help/aepx-help.md.
+POLICY=${AEPX_PASSWORD_POLICY:-"length(12) and maxLength(128) and upperCase(1) and lowerCase(1) and digits(1) and notUsername(undefined) and notEmail(undefined) and passwordHistory(3)"}
+printf '{"resetPasswordAllowed":%s,"verifyEmail":%s,"registrationAllowed":%s,"loginWithEmailAllowed":true,"bruteForceProtected":true,"permanentLockout":false,"failureFactor":10,"waitIncrementSeconds":60,"maxFailureWaitSeconds":900,"otpPolicyType":"totp","otpPolicyAlgorithm":"HmacSHA1","otpPolicyDigits":6,"otpPolicyPeriod":30,"otpPolicyLookAheadWindow":1,"passwordPolicy":%s}' \
+  "$mail_ready" "$verify" "$registration" "$(json_str "$POLICY")" | $KC update "realms/$REALM" -f -
+echo "password policy: $POLICY"
 echo "forgot-password $([ "$mail_ready" = true ] && echo enabled || echo disabled); e-mail verification $verify; registration $registration; authenticator-app (TOTP) available"

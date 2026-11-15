@@ -46,6 +46,24 @@ input{min-width:0}
 .welcome{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:440px}
 .signin-actions{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px}
 .signin-actions button{width:100%;padding:10px 14px}
+.assistant-fab{position:fixed;right:16px;bottom:44px;z-index:40;border-radius:20px;padding:9px 16px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.assistant-drawer{position:fixed;right:16px;bottom:92px;z-index:45;width:min(400px,calc(100vw - 32px));height:min(560px,calc(100vh - 140px));background:#121a2c;border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.assistant-head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.assistant-head a{margin-left:auto;color:#8ab4f8}
+.assistant-log{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:10px}
+.assistant-log .msg{margin:0;padding:8px 10px;border-radius:8px;background:#0e1524}
+.assistant-log .msg.you{align-self:flex-end;background:#1f3b63;max-width:85%}
+.assistant-log details summary{cursor:pointer;font-weight:600}
+.assistant-log pre{white-space:pre-wrap;max-height:240px;overflow:auto}
+.help-body{white-space:pre-wrap;margin:6px 0}
+.link-button{display:block;background:none;border:0;color:#8ab4f8;padding:3px 0;text-align:left;cursor:pointer}
+.assistant-input{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.assistant-input input{flex:1}
+.import-pickers{display:flex;gap:8px;flex-wrap:wrap}
+label.button{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer}
+label.button:focus-within{outline:2px solid #8ab4f8}
+.import-list{max-height:180px;overflow:auto;font-size:12px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px}
 .welcome a,.account-links a{color:#8ab4f8}.welcome a:hover,.account-links a:hover{color:#bcd6ff}
 .statusbar{height:26px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:12px;background:#0e2440;color:#b9cbe6;border-top:1px solid var(--line);white-space:nowrap;overflow:hidden}
 .side-panel{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}

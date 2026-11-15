@@ -13,10 +13,30 @@ All runs below were executed in this session; none are production runs.
 | Scenario B (Resend + Google + GitHub, secrets with `"` and `\`) | same | reset on, verifyEmail on (flag), Google trustEmail=true, GitHub trustEmail=false, SMTP stored (smtp.resend.com:465 SSL, user `resend`); **0 secret occurrences in script output**; login page shows Google, GitHub, Forgot password, Register |
 | Scenario C (credentials removed) | same | IdPs deleted, SMTP cleared, reset off again |
 | Reset link without a session | `GET /realms/aepx/login-actions/reset-credentials?client_id=aepx-ide-browser` | "Forgot Your Password?" form |
-| Create-account button | auth request with `prompt=create` | registration form |
+| Create-account button | auth request with `prompt=create` | **Correction (2026-11-15 evening):** Keycloak 26.0.7 ignores `prompt=create` and shows the sign-in page (the earlier check matched the login page's own "Register" link). Fixed in the assistant/import PR by sending this button to `/protocol/openid-connect/registrations`, verified to show `#kc-register-form`. |
 | Google button | auth request with `kc_idp_hint=google` | 303 to `/broker/google/login` |
 | Signed-out UI, default options | headless Chrome against `next start`, API mocked | e-mail + create buttons only; reset explained; Operations "Sign in to see operations." with no Refresh; Save tooltip; `build 0f9044c` |
 | Signed-out UI, Google + reset enabled | same, API reports a different SHA | Google button first; working reset link; footer `web 0f9044c · api abcdef0` in warning colour |
 | Fail-safe | page built without an allowed API origin (CSP blocks the call) | falls back to e-mail-only buttons; nothing broken shown |
 
 Not verified: anything in production; any signed-in flow; real e-mail delivery; real Google OAuth.
+
+## Release 1248102 in production (2026-11-15 20:06 UTC, deployed via good-hour #22)
+| Check | Result |
+|---|---|
+| `GET /health` | 200 `{"status":"ok"}` |
+| `GET /api/v1/version` | `release_sha` 1248102037c98625f5657d95e9f61e8a0c365f77 (server `.env` does not override the pin) |
+| Footer | `build 1248102`, no web/API drift |
+| Signed-out home | Sign in with e-mail, Create an account, honest password-reset note |
+| Operations (signed out) | "Sign in to see operations.", no Refresh button |
+| Sign in with e-mail | reaches the Keycloak sign-in page |
+| Signed-in create/save/reopen | **not verified in production** (needs the owner's test account) |
+
+## Assistant, import and password policy (branch feat/assistant-import-passwordpolicy)
+| Check | Method | Result |
+|---|---|---|
+| Unit tests | `vitest run` | 59 passed (13 new: help parsing/search, AI task limits, zip reader on a real archive, import planning) |
+| Typecheck / build | `tsc --noEmit`, `next build` | clean / success |
+| Password policy | `keycloak-setup.sh` on Keycloak 26.0.7 with the production realm, then admin API | 7-char and no-upper-case passwords rejected; reuse of the last password rejected; compliant password accepted. Note: `notUsername` blocks a password equal to the username, not one containing it (help text says so). |
+| End-to-end, local stack (Keycloak HTTPS + API on PostgreSQL 16 + production web build, headless Chrome) | `/tmp/e2e.py` | **14/14**: assistant answers from help signed out; Create an account opens registration; weak password rejected at registration; e-mail sign-in; project created; existing README not overwritten by default; .zip import (2 text files, binary + node_modules skipped); saved; reload + reopen keeps the edit; footer build; assistant uses module context; AI-off reason shown |
+| Ask AI end-to-end | — | **not verified**: needs the isolated metered worker (not run locally). It uses the existing create/decide/enqueue/run endpoints unchanged. |
