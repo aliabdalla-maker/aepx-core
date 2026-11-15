@@ -123,3 +123,27 @@ class FrequencyCap(private val minIntervalMs: Long, private val maxPerSession: I
         return true
     }
 }
+
+/**
+ * Plan-based ad thinning, identical to web lib/ads.ts impressionAllowed():
+ * trial and free plans get rate 1.0 (every opportunity), subscribers get 0.05 (1 in 20).
+ */
+object AdRate {
+    fun allowed(rate: Double, opportunity: Long): Boolean {
+        if (rate.isNaN() || rate <= 0.0) return false
+        if (rate >= 1.0) return true
+        val every = maxOf(1L, Math.round(1.0 / rate))
+        return opportunity >= 0 && opportunity % every == 0L
+    }
+}
+
+/** Counts ad opportunities; rate is null until the entitlement is known, and then no ad is shown. */
+class AdGate {
+    @Volatile var rate: Double? = null
+    private val opportunities = java.util.concurrent.atomic.AtomicLong(0)
+
+    fun tryOpportunity(): Boolean {
+        val r = rate ?: return false
+        return AdRate.allowed(r, opportunities.getAndIncrement())
+    }
+}

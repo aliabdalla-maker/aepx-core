@@ -1,5 +1,6 @@
 package com.equalitysoftware.aepx.companion
 
+import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.equalitysoftware.aepx.companion.ads.AdUnitRegistry
@@ -52,6 +55,8 @@ import com.equalitysoftware.aepx.companion.api.Project
 import com.equalitysoftware.aepx.companion.api.RunDetail
 import com.equalitysoftware.aepx.companion.api.RunSummary
 import com.equalitysoftware.aepx.companion.api.ToolApproval
+import com.equalitysoftware.aepx.companion.billing.Entitlement
+import com.equalitysoftware.aepx.companion.billing.PlayBilling
 import kotlinx.coroutines.launch
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationRequest
@@ -108,6 +113,31 @@ private fun App(authService: AuthorizationService, ads: AdsRuntime?, registry: A
     }
     if (client == null && message.isEmpty()) message = "API base URL must use HTTPS"
 
+    // Plan + ads: the backend entitlement decides the ad rate (trial/free 100%, Pro 5%).
+    val activity = LocalContext.current as Activity
+    val scope = rememberCoroutineScope()
+    var entitlement by remember { mutableStateOf<Entitlement?>(null) }
+    val billing = remember {
+        PlayBilling(activity, BuildConfig.PLAY_SUBSCRIPTION_ID) { purchaseToken ->
+            scope.launch {
+                runCatching { client?.verifyPlayPurchase(purchaseToken) }
+                    .onSuccess { e -> if (e != null) { entitlement = e; ads?.setAdRate(e.adRate) } }
+                    .onFailure { message = "Purchase received; verification pending: ${it.message}" }
+            }
+        }
+    }
+    DisposableEffect(Unit) { onDispose { billing.close() } }
+    LaunchedEffect(token) {
+        if (token == null || client == null) { entitlement = null; return@LaunchedEffect }
+        runCatching { client.entitlement() }
+            .onSuccess { e -> entitlement = e; ads?.setAdRate(e.adRate); runCatching { billing.restore() } }
+            .onFailure { message = it.message ?: "Could not load your plan" }
+    }
+    val subscribe: () -> Unit = {
+        val account = entitlement?.accountId
+        if (account != null) scope.launch { billing.subscribe(account)?.let { message = it } }
+    }
+
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val data = result.data
         val response = data?.let { AuthorizationResponse.fromIntent(it) }
@@ -147,6 +177,8 @@ private fun App(authService: AuthorizationService, ads: AdsRuntime?, registry: A
             if (token != null) TextButton(onClick = { token = null; screen = Screen.SignIn }) { Text("Sign out") }
         }
         if (message.isNotEmpty()) Text(message, Modifier.padding(horizontal = 12.dp), color = MaterialTheme.colorScheme.error)
+        val plan = entitlement
+        if (plan != null && screen !is Screen.Run) PlanCard(plan, subscribe)
         Column(Modifier.weight(1f)) {
             when (val s = screen) {
                 Screen.SignIn -> SignIn(enabled = client != null, onSignIn = signIn)
@@ -164,6 +196,16 @@ private fun App(authService: AuthorizationService, ads: AdsRuntime?, registry: A
                     AboutScreen(ads, registry)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun PlanCard(plan: Entitlement, onSubscribe: () -> Unit) {
+    Card(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
+        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(plan.label, Modifier.weight(1f))
+            if (plan.canBuyOnPlay) Button(onClick = onSubscribe) { Text("Go Pro ${plan.price}") }
         }
     }
 }

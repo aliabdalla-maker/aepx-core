@@ -7,6 +7,7 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URLEncoder
+import com.equalitysoftware.aepx.companion.billing.Entitlement
 
 data class Project(val id: String, val name: String)
 data class RunSummary(val id: String, val status: String, val task: String, val modelRoute: String, val attempts: Int)
@@ -77,7 +78,7 @@ class IdeClient(baseUrl: String, private val tenant: String, private val token: 
 
     private fun seg(value: String) = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
 
-    private suspend fun call(path: String, method: String = "GET"): String = withContext(Dispatchers.IO) {
+    private suspend fun call(path: String, method: String = "GET", json: String? = null): String = withContext(Dispatchers.IO) {
         val bearer = token() ?: throw ApiException(401, "Sign in first")
         val conn = URI(base + path).toURL().openConnection() as HttpURLConnection
         try {
@@ -88,7 +89,11 @@ class IdeClient(baseUrl: String, private val tenant: String, private val token: 
             conn.setRequestProperty("Authorization", "Bearer $bearer")
             conn.setRequestProperty("X-Tenant-ID", tenant)
             conn.setRequestProperty("Accept", "application/json")
-            if (method == "POST") { conn.doOutput = true; conn.outputStream.use { } }
+            if (method == "POST") {
+                conn.doOutput = true
+                if (json != null) conn.setRequestProperty("Content-Type", "application/json")
+                conn.outputStream.use { out -> if (json != null) out.write(json.toByteArray(Charsets.UTF_8)) }
+            }
             val code = conn.responseCode
             val stream = if (code in 200..299) conn.inputStream else conn.errorStream
             val body = stream?.bufferedReader()?.use { it.readText() } ?: ""
@@ -106,4 +111,8 @@ class IdeClient(baseUrl: String, private val tenant: String, private val token: 
     suspend fun approvals(id: String) = IdeJson.approvals(call("/api/v1/agent-runs/${seg(id)}/tool-approvals"))
     suspend fun decide(id: String, approved: Boolean) { call("/api/v1/agent-runs/${seg(id)}/decision?approved=$approved", "POST") }
     suspend fun decideTool(id: String, approved: Boolean) { call("/api/v1/tool-approvals/${seg(id)}/decision?approved=$approved", "POST") }
+
+    suspend fun entitlement() = Entitlement.parse(call("/api/v1/entitlement"))
+    suspend fun verifyPlayPurchase(token: String) = Entitlement.parse(
+        call("/api/v1/billing/google-play/verify", "POST", JSONObject().put("purchase_token", token).toString()))
 }

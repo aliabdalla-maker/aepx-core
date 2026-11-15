@@ -1,6 +1,11 @@
 package com.equalitysoftware.aepx.companion
 
 import com.equalitysoftware.aepx.companion.ads.AdFormat
+import com.equalitysoftware.aepx.companion.ads.AdGate
+import com.equalitysoftware.aepx.companion.ads.AdRate
+import com.equalitysoftware.aepx.companion.billing.Entitlement
+import com.equalitysoftware.aepx.companion.billing.Offer
+import com.equalitysoftware.aepx.companion.billing.OfferPolicy
 import com.equalitysoftware.aepx.companion.ads.AdUnitRegistry
 import com.equalitysoftware.aepx.companion.ads.AdsConfig
 import com.equalitysoftware.aepx.companion.ads.FrequencyCap
@@ -106,5 +111,51 @@ class CompanionUnitTest {
         assertThrows(IllegalArgumentException::class.java) { validateBaseUrl("http://10.0.2.2:8090", debug = false) }
         assertEquals("http://10.0.2.2:8090", validateBaseUrl("http://10.0.2.2:8090", debug = true))
         assertThrows(IllegalArgumentException::class.java) { validateBaseUrl("http://evil.example.com", debug = true) }
+    }
+
+    @Test
+    fun adRateMatchesWebPolicy() {
+        assertTrue((0L until 20L).all { AdRate.allowed(1.0, it) })
+        assertEquals(1, (0L until 20L).count { AdRate.allowed(0.05, it) })
+        assertEquals(5, (0L until 100L).count { AdRate.allowed(0.05, it) })
+        assertFalse(AdRate.allowed(0.0, 0))
+        assertFalse(AdRate.allowed(Double.NaN, 0))
+        assertFalse(AdRate.allowed(0.05, -1))
+    }
+
+    @Test
+    fun gateShowsNothingUntilEntitlementKnown() {
+        val gate = AdGate()
+        assertFalse(gate.tryOpportunity())
+        gate.rate = 0.05
+        val shown = (0 until 40).count { gate.tryOpportunity() }
+        assertEquals(2, shown)
+    }
+
+    @Test
+    fun entitlementParsingFailsClosed() {
+        val account = "0b6f3c2e-8d1a-4f1e-9a51-2a7c9e4d5b60"
+        val trial = Entitlement.parse("""{"plan":"trial","ad_rate":1.0,"subscribed":false,"trial_days_left":30,"price":"£4.99/month","account_id":"$account","source":null}""")
+        assertEquals(1.0, trial.adRate, 0.0)
+        assertTrue(trial.canBuyOnPlay)
+        assertEquals("Free trial · 30 days left", trial.label)
+        val pro = Entitlement.parse("""{"plan":"pro","ad_rate":0.05,"subscribed":true,"account_id":"$account","source":"google_play"}""")
+        assertFalse(pro.canBuyOnPlay)
+        assertThrows(IllegalArgumentException::class.java) {
+            Entitlement.parse("""{"plan":"vip","ad_rate":0,"account_id":"$account"}""")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            Entitlement.parse("""{"plan":"pro","ad_rate":1.5,"account_id":"$account"}""")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            Entitlement.parse("""{"plan":"pro","ad_rate":0.05,"account_id":"not-a-uuid"}""")
+        }
+    }
+
+    @Test
+    fun playOfferNeverStacksAStoreTrialOnOurTrial() {
+        val offers = listOf(Offer("monthly", "free-trial-7d", "t1"), Offer("monthly", null, "t2"))
+        assertEquals("t2", OfferPolicy.choose(offers)?.token)
+        assertNull(OfferPolicy.choose(listOf(Offer("monthly", "promo", "t3"))))
     }
 }

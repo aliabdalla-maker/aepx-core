@@ -55,6 +55,7 @@ android {
         buildConfigField("String", "TENANT", quoted(prop("aepx.tenant")))
         buildConfigField("String", "OIDC_ISSUER", quoted(prop("aepx.oidcIssuer")))
         buildConfigField("String", "OIDC_CLIENT_ID", quoted(prop("aepx.oidcClientId")))
+        buildConfigField("String", "PLAY_SUBSCRIPTION_ID", quoted(prop("aepx.playSubscriptionId")))
         manifestPlaceholders["appAuthRedirectScheme"] = "com.equalitysoftware.aepx.companion"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -100,6 +101,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:23.6.0")
     implementation("com.google.android.ump:user-messaging-platform:3.1.0")
     implementation("net.openid:appauth:0.11.1")
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
 
     testImplementation("junit:junit:4.13.2")
     // Real org.json for JVM unit tests (android.jar only ships stubs).
