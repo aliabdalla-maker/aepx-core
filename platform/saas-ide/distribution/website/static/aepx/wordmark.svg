@@ -16,6 +16,8 @@
   <circle cx="262" cy="796" r="60" fill="#3b82f6" stroke="#0b1020" stroke-width="20"/>
   <circle cx="762" cy="796" r="60" fill="#3b82f6" stroke="#0b1020" stroke-width="20"/>
   </g>
-  <text x="420" y="225" font-family="Inter, 'DejaVu Sans', sans-serif" font-weight="800" font-size="150" fill="#e7ecf7" letter-spacing="2">AEP-X</text>
-  <text x="426" y="315" font-family="Inter, 'DejaVu Sans', sans-serif" font-weight="500" font-size="64" fill="#7acbff">Agentic IDE</text>
+  <text x="420" y="190" font-family="Inter, 'DejaVu Sans', sans-serif" font-weight="800" font-size="150" fill="#e7ecf7" letter-spacing="2">AEP-X</text>
+  <text x="426" y="268" font-family="Inter, 'DejaVu Sans', sans-serif" font-weight="500" font-size="64" fill="#7acbff">Agentic IDE</text>
+  <rect x="426" y="296" width="560" height="3" fill="#40506a"/>
+  <text x="426" y="352" font-family="Inter, 'DejaVu Sans', sans-serif" font-weight="600" font-size="46" fill="#a9b4c8" letter-spacing="1">by Equality Software</text>
 </svg>
