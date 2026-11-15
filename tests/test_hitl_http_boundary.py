@@ -17,6 +17,10 @@ class HitlApiTests(unittest.TestCase):
         self.tenant=uuid4()
         self.body={"tenant_id":str(self.tenant),"approval_id":str(uuid4()),
                    "action":{"operation":"test"},"idempotency_key":"test-unique-123"}
+        # The live identity-authority gate is covered by test_hitl_live_identity_gate.py;
+        # here it passes so these tests exercise the consume/replay boundary behind it.
+        gate=patch("app.hitl_api._authoritative_identity",return_value=None)
+        gate.start(); self.addCleanup(gate.stop)
     def test_missing_token_denied(self):
         self.assertEqual(self.client.post("/hitl/consume",json=self.body).status_code,403)
     def test_bad_token_denied(self):
