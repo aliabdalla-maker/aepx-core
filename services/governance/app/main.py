@@ -5,10 +5,10 @@ import threading
 import time
 
 from app import ledger
+from app.hitl_api import router as hitl_router
 
 app = FastAPI(title="AEP-X Governance Engine", version="0.2.0")
 
-from app.hitl_api import router as hitl_router
 app.include_router(hitl_router)
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://aepx:aepx_dev_only@postgres:5432/aepx")

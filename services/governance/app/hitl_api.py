@@ -12,7 +12,7 @@ from app.hitl_oidc import verify_bearer, AuthenticationDenied
 from app.hitl_authz import authorize_consume, AuthorizationDenied
 from app.hitl_postgres import consume_with_outbox, ApprovalError
 from app.hitl_replay import find_matching_replay
-from app.hitl_authz import authorize_request, authorize_decision
+from app.hitl_authz import authorize_request
 from app.hitl_lifecycle import create_request, decide_request, DecisionConflict
 from app.hitl_verified_bearer_identity import verify_bearer_identity
 from app.hitl_identity_policy import IdentityPolicyDenied
