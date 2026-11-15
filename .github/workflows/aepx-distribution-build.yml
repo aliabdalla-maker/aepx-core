@@ -59,7 +59,8 @@ jobs:
           if [ "$TARGET" = mac ] && [ "$signed" = true ] && [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_TEAM_ID:-}" ]; then
             extra+=(-c.mac.notarize=true)
           fi
-          npx electron-builder --publish never "--$TARGET" "${extra[@]}"
+          # ${extra[@]+...}: macOS bash 3.2 treats an empty array as unbound under set -u
+          npx electron-builder --publish never "--$TARGET" ${extra[@]+"${extra[@]}"}
           echo "SIGNED=$signed" >> "$GITHUB_ENV"
       - name: Checksums and signing status
         run: |
