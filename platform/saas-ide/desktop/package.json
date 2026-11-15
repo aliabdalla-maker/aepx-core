@@ -36,6 +36,7 @@
     "files": [
       "main.cjs",
       "policy.cjs",
+      "offline.html",
       "package.json"
     ],
     "directories": {

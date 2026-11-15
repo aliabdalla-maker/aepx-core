@@ -2,6 +2,7 @@
 // AEP-X IDE desktop shell: a locked-down window onto the hosted web IDE. It holds no credentials of
 // its own (the web app's OIDC session lives in a persistent, sandboxed partition) and exposes no
 // Node APIs to the page. Plan, trial and ads are decided by the IDE backend exactly as on the web.
+const path = require("node:path");
 const { app, BrowserWindow, shell, session, Menu } = require("electron");
 const policy = require("./policy.cjs");
 const pkg = require("./package.json");
@@ -38,6 +39,13 @@ function createWindow() {
   win.webContents.on("will-navigate", route);
   win.webContents.on("will-redirect", route);
   win.webContents.on("will-attach-webview", (event) => event.preventDefault());
+  // If the hosted IDE cannot be reached (offline, DNS, server down), show a branded screen that
+  // retries automatically instead of an empty window. -3 is ERR_ABORTED (a normal redirect/stop).
+  win.webContents.on("did-fail-load", (_event, code, _desc, url, isMainFrame) => {
+    if (!isMainFrame || code === -3 || !String(url).startsWith(IDE)) return;
+    void win.loadFile(path.join(__dirname, "offline.html"), { query: { target: IDE + "/" } });
+    if (!win.isVisible()) win.show();
+  });
   void win.loadURL(IDE + "/");
   return win;
 }
