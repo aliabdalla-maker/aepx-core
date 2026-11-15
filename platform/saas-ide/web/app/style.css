@@ -121,3 +121,23 @@ details>*+*{margin-top:6px}
 .answer-code figcaption .spacer{flex:1}
 .answer-code figcaption button{font-size:12px;padding:2px 8px}
 .answer-code pre{margin:0;padding:8px;background:#0f1729;overflow:auto;max-height:280px;font-size:12px}
+/* Universal IDE: module launcher, file history, team */
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,10,20,.7);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{background:#121a2c;border:1px solid var(--line);border-radius:12px;padding:18px;max-width:860px;width:100%;max-height:90vh;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.modal h2{margin:0}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;border:0;padding:0;margin:0}
+.module-grid legend{font-size:13px;margin-bottom:6px}
+.module-card{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:8px;padding:10px;cursor:pointer}
+.module-card input{position:absolute;opacity:0;pointer-events:none}
+.module-card:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.module-card.active{border-color:var(--accent);background:var(--accent-bg)}
+.module-card .crew{color:#9fd3ff}
+.row.end{justify-content:flex-end}
+.history{border-top:1px solid var(--line);padding:6px 10px;max-height:200px;overflow:auto;background:#0f1729}
+.history ol{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.badge.save{background:#173f63;color:#9fd3ff}.badge.delete{background:#4d1c22;color:#ffadb2}.badge.restore{background:#14432f;color:#8be0b8}
+.team{display:flex;flex-direction:column;gap:8px}
+.members{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.member-id{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%;font-size:12px}
+button.small{font-size:12px;padding:2px 8px}

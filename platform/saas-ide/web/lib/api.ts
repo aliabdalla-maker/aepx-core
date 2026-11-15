@@ -2,7 +2,15 @@
 // Every call is tenant-scoped by the X-Tenant-ID header and authorised by the OIDC bearer token;
 // the backend re-verifies membership and role, so nothing here is a security boundary.
 
-export type Project = { id: string; name: string; description: string };
+export type Project = { id: string; name: string; description: string; module?: string };
+export type IdeModule = {
+  id: string; name: string; summary: string; status: "available" | "planned" | string;
+  crew: { agent: string; goal: string }[]; starter_files: Record<string, string>; quick_tasks: string[];
+};
+export type FileVersion = { version: number; op: "save" | "delete" | "restore" | string; author: string; created_at: string; size: number };
+export type Member = { subject: string; role: string };
+export type AuditEvent = { id: number; actor: string; action: string; resource_type: string; resource_id: string; detail: string; hash: string; created_at: string };
+export const MEMBER_ROLES = ["owner", "admin", "editor", "media_editor", "reviewer", "viewer"] as const;
 export type FileEntry = { path: string; content: string };
 export type RunStatus =
   | "awaiting_approval" | "approved" | "rejected" | "running" | "succeeded"
@@ -110,8 +118,29 @@ export const ideApi = (r: Requester) => ({
   capabilities: () => r<Capabilities>("/api/v1/agent-capabilities"),
   aiUsage: () => r<AiUsage>("/api/v1/ai-usage"),
   projects: () => r<Project[]>("/api/v1/projects"),
-  createProject: (name: string, description = "") =>
-    r<Project>("/api/v1/projects", "POST", { name, description }),
+  createProject: (name: string, description = "", module = "software") =>
+    r<Project>("/api/v1/projects", "POST", { name, description, module }),
+  modules: () => r<IdeModule[]>("/api/v1/ide-modules"),
+  updateProject: (id: string, changes: { name?: string; description?: string }) =>
+    r<Project>(`/api/v1/projects/${encodeURIComponent(id)}`, "PATCH", changes),
+  archiveProject: (id: string) => r(`/api/v1/projects/${encodeURIComponent(id)}`, "DELETE"),
+  archivedProjects: () => r<(Project & { archived_at: string })[]>("/api/v1/projects-archived"),
+  restoreProject: (id: string) => r(`/api/v1/projects/${encodeURIComponent(id)}/restore`, "POST"),
+  deleteFile: (project: string, path: string) => {
+    if (!isSafeRelativePath(path)) return Promise.reject(new ApiError(400, "Invalid file path"));
+    return r<{ version: number }>(`/api/v1/projects/${encodeURIComponent(project)}/files/${encodePath(path)}`, "DELETE");
+  },
+  history: (project: string, path: string) =>
+    r<FileVersion[]>(`/api/v1/projects/${encodeURIComponent(project)}/history?path=${encodeURIComponent(path)}`),
+  restoreFile: (project: string, path: string, version: number) =>
+    r<{ path: string; content: string; version: number }>(
+      `/api/v1/projects/${encodeURIComponent(project)}/restore-file`, "POST", { path, version }),
+  members: () => r<Member[]>("/api/v1/members"),
+  setMember: (subject: string, role: string) =>
+    r<Member>(`/api/v1/members/${encodeURIComponent(subject)}`, "PUT", { role }),
+  permissions: () => r<{ role: string; permissions: Record<string, string> }>("/api/v1/me/permissions"),
+  auditEvents: (limit = 100) => r<AuditEvent[]>(`/api/v1/audit-events?limit=${limit}`),
+  verifyAudit: () => r<{ intact: boolean; first_broken_event: number | null }>("/api/v1/audit-events/verify"),
   files: (project: string) => r<FileEntry[]>(`/api/v1/projects/${encodeURIComponent(project)}/files`),
   saveFile: (project: string, path: string, content: string) => {
     if (!isSafeRelativePath(path)) return Promise.reject(new ApiError(400, "Invalid file path"));

@@ -1522,3 +1522,82 @@ def test_metered_agent_run_reconciles_provider_cost_and_caps(prepared_db, tokens
         assert [r[0] for r in db.execute(text("SELECT tenant_id FROM ide_dispatchable_tenants(20)"))].count("gamma") == 0
         db.rollback()
     admin.dispose()
+
+
+def test_universal_modules_acl_crud_versions_and_audit_chain(prepared_db, tokens):
+    admin = create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    with admin.begin() as db:
+        db.execute(text("""INSERT INTO ide_memberships (tenant_id, subject, role) VALUES
+            ('delta','d-owner','owner'), ('delta','d-media','media_editor'),
+            ('delta','d-review','reviewer'), ('delta','d-dev','editor')
+            ON CONFLICT DO NOTHING"""))
+    client = TestClient(main.app)
+    owner, media = headers(tokens("d-owner"), "delta"), headers(tokens("d-media"), "delta")
+    review, dev = headers(tokens("d-review"), "delta"), headers(tokens("d-dev"), "delta")
+
+    # Modules: a music project starts with its own layout; planned modules cannot be chosen.
+    assert len(client.get("/api/v1/ide-modules").json()) == 25
+    assert client.post("/api/v1/projects", headers=owner, json={"name": "x", "module": "xr"}).status_code == 400
+    song = client.post("/api/v1/projects", headers=owner, json={"name": "Album", "module": "music"}).json()
+    pid = song["id"]
+    assert song["module"] == "music"
+    assert [f["path"] for f in client.get(f"/api/v1/projects/{pid}/files", headers=owner).json()] == ["music/song.json"]
+    run = client.post("/api/v1/agent-runs", headers=media, json={"project_id": pid, "task": "Compose a chorus"}).json()
+    assert "composer" in run["plan"] and "rights-checker" in run["plan"]
+
+    # ACL: media editors change media files only; reviewers approve but never edit.
+    assert client.put(f"/api/v1/projects/{pid}/files/music/chorus.json", headers=media, json={"content": "{}"}).status_code == 200
+    assert client.put(f"/api/v1/projects/{pid}/files/src/app.py", headers=media, json={"content": "x"}).status_code == 403
+    assert client.put(f"/api/v1/projects/{pid}/files/music/a.json", headers=review, json={"content": "x"}).status_code == 403
+    assert client.post(f"/api/v1/agent-runs/{run['id']}/decision?approved=true", headers=dev).status_code == 403
+    assert client.post(f"/api/v1/agent-runs/{run['id']}/decision?approved=true", headers=review).status_code == 200
+    assert client.delete(f"/api/v1/projects/{pid}", headers=dev).status_code == 403
+
+    # CRUD lifecycle: versions on every save, delete, and restore of a deleted file.
+    path = "music/song.json"
+    assert client.put(f"/api/v1/projects/{pid}/files/{path}", headers=dev, json={"content": "v2"}).status_code == 200
+    assert client.delete(f"/api/v1/projects/{pid}/files/{path}", headers=dev).json()["version"] == 3
+    assert client.delete(f"/api/v1/projects/{pid}/files/{path}", headers=dev).status_code == 404
+    history = client.get(f"/api/v1/projects/{pid}/history", params={"path": path}, headers=owner).json()
+    assert [(h["version"], h["op"]) for h in history] == [(3, "delete"), (2, "save"), (1, "save")]
+    assert client.get(f"/api/v1/projects/{pid}/history/2", params={"path": path}, headers=owner).json()["content"] == "v2"
+    restored = client.post(f"/api/v1/projects/{pid}/restore-file", headers=dev, json={"path": path, "version": 2}).json()
+    assert restored["version"] == 4 and restored["content"] == "v2"
+    assert client.post(f"/api/v1/projects/{pid}/restore-file", headers=owner, json={"path": "../x", "version": 1}).status_code == 400
+
+    # Project update, safe delete (archive) and restore.
+    assert client.patch(f"/api/v1/projects/{pid}", headers=dev, json={"name": "Album 2"}).json()["name"] == "Album 2"
+    assert client.delete(f"/api/v1/projects/{pid}", headers=owner).status_code == 200
+    assert client.get(f"/api/v1/projects/{pid}", headers=owner).status_code == 404
+    assert [p["id"] for p in client.get("/api/v1/projects-archived", headers=owner).json()] == [pid]
+    assert client.post(f"/api/v1/projects/{pid}/restore", headers=owner).status_code == 200
+    assert client.get(f"/api/v1/projects/{pid}", headers=owner).status_code == 200
+
+    # Members: only owners/admins manage; the last owner cannot be demoted.
+    assert client.put("/api/v1/members/new-person", headers=dev, json={"role": "viewer"}).status_code == 403
+    assert client.put("/api/v1/members/new-person", headers=owner, json={"role": "reviewer"}).status_code == 200
+    assert client.put("/api/v1/members/d-owner", headers=owner, json={"role": "viewer"}).status_code == 409
+    assert client.put("/api/v1/members/new-person", headers=owner, json={"role": "root"}).status_code == 422
+    roles = {m["subject"]: m["role"] for m in client.get("/api/v1/members", headers=owner).json()}
+    assert roles["new-person"] == "reviewer"
+
+    # Audit chain: complete, readable by reviewers, append-only for the runtime role, tamper-evident.
+    assert client.get("/api/v1/audit-events", headers=dev).status_code == 403
+    events = client.get("/api/v1/audit-events", headers=review).json()
+    actions = {e["action"] for e in events}
+    assert {"project.create", "file.save", "file.delete", "file.restore", "project.archive",
+            "project.restore", "member.reviewer"} <= actions
+    assert client.get("/api/v1/audit-events/verify", headers=owner).json() == {"intact": True, "first_broken_event": None}
+    with main.SessionLocal() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','delta',true)"))
+        with pytest.raises(Exception):
+            db.execute(text("UPDATE ide_audit_events SET detail='x' WHERE tenant_id='delta'"))
+        db.rollback()
+    with admin.begin() as db:
+        victim = db.execute(text("SELECT min(id) FROM ide_audit_events WHERE tenant_id='delta'")).scalar()
+        db.execute(text("UPDATE ide_audit_events SET actor='someone-else' WHERE id=:i"), {"i": victim})
+    assert client.get("/api/v1/audit-events/verify", headers=owner).json()["first_broken_event"] == victim
+    # Another tenant sees none of delta's audit events.
+    assert client.get("/api/v1/audit-events", headers=headers(tokens(), "alpha")).json() == [] or all(
+        e["resource_id"].split("/")[0] != pid for e in client.get("/api/v1/audit-events", headers=headers(tokens(), "alpha")).json())
+    admin.dispose()
