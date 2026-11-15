@@ -55,7 +55,7 @@ export function formatPence(pence: number): string {
 }
 
 export const canApprove = (role: string | undefined) => role === "owner" || role === "admin";
-export const canEdit = (role: string | undefined) => canApprove(role) || role === "editor";
+export const canEdit = (role: string | undefined) => canApprove(role) || role === "editor" || role === "media_editor";
 
 /** Providers that are enabled and can make this kind of media, mock last. */
 export function providersFor(caps: MediaCapabilities | null, kind: MediaKind): string[] {

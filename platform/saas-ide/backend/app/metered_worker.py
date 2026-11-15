@@ -193,6 +193,9 @@ def execute_next_metered(tenant_id: str, *, owner: str | None = None, call=gener
         if not isinstance(receipt, dict) or not isinstance(receipt.get("text"), str):
             raise ValueError("Provider output must be text")
         output, success = receipt["text"] or "(The model returned an empty answer.)", True
+        # ADLC Validate: static checks on the produced code, shown to the approver.
+        from .validation import report
+        output += report(output)
     except Exception:
         output, success = "The agent could not finish this run (provider error or timeout). Try again.", False
     finally:

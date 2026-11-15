@@ -33,7 +33,7 @@ from . import social
 from .main import Base, Principal, WorkspaceFile, db_session, principal, project_or_404, safe_path
 
 router = APIRouter()
-EDITORS = ("owner", "admin", "editor")
+EDITORS = ("owner", "admin", "editor", "media_editor")
 APPROVERS = ("owner", "admin")
 STORYBOARD_PATH = "media/storyboard.json"
 MAX_DATA_URI_BYTES = 5 * 1024 * 1024

@@ -18,6 +18,7 @@ import PlanBanner from "./PlanBanner";
 import ModuleLauncher from "./ModuleLauncher";
 import FileHistory from "./FileHistory";
 import TeamPanel from "./TeamPanel";
+import ModuleEditor, { hasVisualEditor } from "./ModuleEditors";
 import { moduleLabel, moduleTasks } from "../lib/modules";
 import { QUICK_TASKS } from "../lib/agentResult";
 
@@ -50,6 +51,9 @@ export default function Workspace() {
   const [launcher, setLauncher] = useState(false);
   const [launchModule, setLaunchModule] = useState<string | undefined>(undefined);
   const [historyFor, setHistoryFor] = useState("");
+  // Files with a visual editor (music, audio, storyboard, animation, OpenAPI, catalogue) open in it;
+  // the Code view shows the same file as text.
+  const [codeView, setCodeView] = useState<Set<string>>(new Set());
   const configured = oidcConfigured;
 
   const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token, tenant]);
@@ -257,12 +261,19 @@ export default function Workspace() {
             </div>)}
           </nav>
           <span className="spacer" />
+          {current && hasVisualEditor(current.path) && <div className="seg" role="group" aria-label="View">
+            <button aria-pressed={!codeView.has(current.path)} onClick={() => setCodeView(v => { const n = new Set(v); n.delete(current.path); return n; })}>Visual</button>
+            <button aria-pressed={codeView.has(current.path)} onClick={() => setCodeView(v => new Set(v).add(current.path))}>Code</button>
+          </div>}
           {current && <button onClick={() => setHistoryFor(h => h === current.path ? "" : current.path)}
             aria-pressed={historyFor === current.path}>History</button>}
           {current && <button onClick={() => void deleteFile(current.path)}>Delete</button>}
           <button className="primary" disabled={!current || !isDirty(current)} onClick={() => void save()}>Save</button>
         </div>
-        {current ? <div className="editor-host"><Editor height="100%" theme="aepx-dark" path={current.path}
+        {current && hasVisualEditor(current.path) && !codeView.has(current.path)
+          ? <div className="editor-host visual"><ModuleEditor path={current.path} content={current.content}
+              onChange={text => setTabs(t => updateTab(t, current.path, text))} onStatus={status} onSaveFile={saveAgentFile} /></div>
+          : current ? <div className="editor-host"><Editor height="100%" theme="aepx-dark" path={current.path}
           beforeMount={monaco => monaco.editor.defineTheme("aepx-dark", {
             base: "vs-dark", inherit: true, colors: {},
             // vs-dark comments (#608B4E) are 4.2:1 on #1E1E1E; WCAG AA needs 4.5:1.

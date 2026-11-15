@@ -288,3 +288,99 @@ describe("universal IDE modules", () => {
     expect(JSON.parse(fetchMock.mock.calls[2][1].body)).toEqual({ name: "Film", description: "", module: "film" });
   });
 });
+
+describe("module editors", () => {
+  it("routes module files to their visual editor", async () => {
+    const { editorFor } = await import("./editors");
+    expect(editorFor("music/song.json")).toBe("music");
+    expect(editorFor("audio/session.json")).toBe("sound");
+    expect(editorFor("film/storyboard.md")).toBe("storyboard");
+    expect(editorFor("social/calendar.md")).toBe("calendar");
+    expect(editorFor("animation/scene.json")).toBe("animation");
+    expect(editorFor("openapi.yaml")).toBe("openapi");
+    expect(editorFor("assets/catalog.json")).toBe("catalog");
+    expect(editorFor("src/app.py")).toBeNull();
+  });
+
+  it("normalises songs and writes a valid MIDI file", async () => {
+    const { normaliseSong, encodeMidi, midiToHz } = await import("./editors");
+    const song = normaliseSong('{"title":"T","tempo_bpm":120,"key":"C","sections":[]}');
+    expect(song.tracks.length).toBe(5);
+    expect(song.tracks[0].steps.length).toBe(16);
+    const midi = encodeMidi(song, 2);
+    expect(String.fromCharCode(...midi.slice(0, 4))).toBe("MThd");
+    expect(midi[11]).toBe(song.tracks.length + 1); // tempo track + one per instrument
+    expect(String.fromCharCode(...midi.slice(14, 18))).toBe("MTrk");
+    expect(midiToHz(69)).toBe(440);
+    expect(normaliseSong("not json").tempo_bpm).toBe(120);
+  });
+
+  it("trims, applies gain and fades, and encodes WAV", async () => {
+    const { renderClip, encodeWav, peaks } = await import("./editors");
+    const tone = new Float32Array(1000).fill(0.5);
+    const out = renderClip(tone, 100, { start: 1, end: 5, gain_db: 6, fade_in: 1, fade_out: 0 });
+    expect(out.length).toBe(400);
+    expect(out[0]).toBe(0);
+    expect(out[399]).toBeCloseTo(0.5 * Math.pow(10, 6 / 20), 3);
+    const wav = encodeWav([out], 100);
+    expect(String.fromCharCode(...wav.slice(0, 4))).toBe("RIFF");
+    expect(wav.length).toBe(44 + 400 * 2);
+    expect(peaks(tone, 4)).toEqual([0.5, 0.5, 0.5, 0.5]);
+  });
+
+  it("round-trips markdown tables and exports SRT and EDL", async () => {
+    const { parseMdTable, serializeMdTable, shotsFrom, toSrt, toEdl, parseDuration } = await import("./editors");
+    const md = "# Storyboard\n\n| Shot | Time | Description | Camera |\n|---|---|---|---|\n| 1 | 0:02 | Logo a\\|b | Wide |\n| 2 | 3s | Product | Close |\n";
+    const t = parseMdTable(md, []);
+    expect(t.rows).toEqual([["1", "0:02", "Logo a|b", "Wide"], ["2", "3s", "Product", "Close"]]);
+    expect(parseMdTable(serializeMdTable(t), []).rows).toEqual(t.rows);
+    expect(serializeMdTable(t).startsWith("# Storyboard")).toBe(true);
+    const shots = shotsFrom(t);
+    expect(shots.map(s => s.duration)).toEqual([2, 3]);
+    expect(toSrt(shots)).toContain("00:00:02,000 --> 00:00:05,000");
+    expect(toEdl(shots, "Film", 25)).toContain("002  AX       V     C        00:00:00:00 00:00:03:00 00:00:02:00 00:00:05:00");
+    expect(parseDuration("1:00:00")).toBe(3600);
+    expect(parseMdTable("no table", ["A", "B"]).headers).toEqual(["A", "B"]);
+  });
+
+  it("interpolates keyframes and exports a self-playing page", async () => {
+    const { normaliseScene, upsertKeyframe, stateAt, sceneToHtml } = await import("./editors");
+    let s = normaliseScene('{"fps":24,"frames":48,"objects":[{"id":"a","shape":"rect","color":"#000"}],"keyframes":[]}');
+    s = upsertKeyframe(s, { object: "a", frame: 0, x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 });
+    s = upsertKeyframe(s, { object: "a", frame: 10, x: 100, y: 0, scale: 1, rotation: 0, opacity: 1 });
+    s = upsertKeyframe(s, { object: "a", frame: 10, x: 200, y: 0, scale: 1, rotation: 0, opacity: 1 });
+    expect(s.keyframes.length).toBe(2);
+    expect(stateAt(s, "a", 5).x).toBe(100);
+    expect(stateAt(s, "a", 40).x).toBe(200);
+    expect(stateAt(s, "missing", 3).x).toBe(320);
+    const html = sceneToHtml({ ...s, objects: [{ id: "</script>", shape: "text", color: "#000" }] }, "<x>");
+    expect(html.match(/<\/script>/g)?.length).toBe(1); // only the page's own closing tag
+    expect(html).toContain("\\u003c/script>");
+    expect(html).toContain("<canvas");
+  });
+
+  it("reads OpenAPI, adds operations and generates clients", async () => {
+    const { parseSpec, operations, addOperation, typescriptClient, pythonClient } = await import("./editors");
+    let text = "openapi: 3.1.0\ninfo:\n  title: Books\n  version: 1.0.0\npaths:\n  /books/{id}:\n    get:\n      operationId: getBook\n      summary: Get a book\n";
+    text = addOperation(text, { method: "POST", path: "/books", summary: "Add a book" });
+    const { spec, error } = parseSpec(text);
+    expect(error).toBeNull();
+    expect(operations(spec).map(o => o.operationId)).toEqual(["getBook", "postBooks"]);
+    const ts = typescriptClient(spec);
+    expect(ts).toContain("getBook(id: string)");
+    expect(ts).toContain("${encodeURIComponent(id)}");
+    expect(ts).toContain('postBooks(body?: unknown)');
+    expect(pythonClient(spec)).toContain("def get_book(self, id):");
+    expect(parseSpec("a: [unclosed").error).not.toBeNull();
+    expect(() => addOperation(text, { method: "TRACE", path: "/x", summary: "" })).toThrow();
+  });
+
+  it("normalises and searches the asset catalogue", async () => {
+    const { normaliseCatalog, searchAssets } = await import("./editors");
+    const { assets, rest } = normaliseCatalog('{"deliverables":[1],"assets":[{"id":"a1","title":"Logo","tags":["brand"]},{"title":"Song","type":"music"}]}');
+    expect(rest).toEqual({ deliverables: [1] });
+    expect(assets.map(a => a.id)).toEqual(["a1", "asset-2"]);
+    expect(searchAssets(assets, "BRAND").map(a => a.id)).toEqual(["a1"]);
+    expect(searchAssets(assets, "").length).toBe(2);
+  });
+});
