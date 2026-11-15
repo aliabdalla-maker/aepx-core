@@ -1,47 +1,61 @@
 {
-  "name": "aepx-hybrid-ide-desktop",
-  "version": "0.1.0",
+  "name": "aepx-agentic-ide-desktop",
+  "version": "0.2.0",
   "private": true,
-  "description": "AEP-X Hybrid IDE secure desktop client",
+  "description": "AEP-X Agentic IDE desktop client",
+  "author": { "name": "Equality Software Ltd", "email": "support@softwareequality.com" },
+  "homepage": "https://www.softwareequality.com/aepx",
+  "license": "UNLICENSED",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
+    "test": "node --test policy.test.cjs",
     "dist": "electron-builder --publish never"
   },
+  "aepx": {
+    "ideUrl": "https://ide.softwareequality.com",
+    "idpOrigins": []
+  },
   "devDependencies": {
-    "electron": "^33.4.0",
-    "electron-builder": "^25.1.8"
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8"
   },
   "build": {
     "appId": "com.softwareequality.aepx",
-    "productName": "AEP-X Hybrid IDE",
-    "files": [
-      "main.cjs",
-      "package.json"
-    ],
-    "directories": {
-      "output": "dist"
+    "productName": "AEP-X Agentic IDE",
+    "copyright": "Copyright © Equality Software Ltd",
+    "artifactName": "AEP-X-IDE-${version}-${os}-${arch}.${ext}",
+    "files": ["main.cjs", "policy.cjs", "package.json"],
+    "directories": { "output": "dist" },
+    "asar": true,
+    "electronFuses": {
+      "runAsNode": false,
+      "enableCookieEncryption": true,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true
     },
     "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ]
+      "target": [{ "target": "nsis", "arch": ["x64", "arm64"] }, { "target": "portable", "arch": ["x64"] }]
     },
+    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "category": "public.app-category.developer-tools"
+      "target": [{ "target": "dmg", "arch": ["universal"] }, { "target": "zip", "arch": ["universal"] }],
+      "category": "public.app-category.developer-tools",
+      "hardenedRuntime": true,
+      "notarize": false
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb",
-        "rpm"
+        { "target": "AppImage", "arch": ["x64", "arm64"] },
+        { "target": "deb", "arch": ["x64", "arm64"] },
+        { "target": "rpm", "arch": ["x64"] },
+        { "target": "tar.gz", "arch": ["x64", "arm64"] }
       ],
-      "category": "Development"
+      "category": "Development",
+      "maintainer": "Equality Software Ltd <support@softwareequality.com>",
+      "synopsis": "Governed agentic development workspace"
     },
     "publish": null
   }

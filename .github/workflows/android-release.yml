@@ -1,0 +1,142 @@
+name: Android companion release (signed AAB + APK, Play internal draft)
+# Manual only. Runs in the protected "play-release" environment so an owner must approve each run.
+# Builds a signed AAB (Google Play) and a signed universal APK (website download), and -- only when
+# upload_to_play is ticked -- uploads the AAB to Play as a DRAFT on the INTERNAL track. Rolling the
+# draft out to testers or production stays a manual Play Console action.
+on:
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: 'Android versionCode (must exceed every previous upload)'
+        required: true
+      version_name:
+        description: 'versionName, e.g. 0.2.0'
+        required: true
+      upload_to_play:
+        description: 'Upload the AAB to Play internal testing as a draft'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: play-release
+    defaults:
+      run:
+        working-directory: platform/saas-ide/android-companion
+    env:
+      VERSION_CODE: ${{ inputs.version_code }}
+      VERSION_NAME: ${{ inputs.version_name }}
+    steps:
+      - name: Validate inputs
+        shell: bash
+        working-directory: .
+        run: |
+          set -euo pipefail
+          [[ "$VERSION_CODE" =~ ^[1-9][0-9]{0,8}$ ]] || { echo 'version_code must be a positive integer' >&2; exit 1; }
+          [[ "$VERSION_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'version_name must be MAJOR.MINOR.PATCH' >&2; exit 1; }
+      - name: Require signing secrets and release configuration
+        shell: bash
+        working-directory: .
+        env:
+          KEYSTORE_B64: ${{ secrets.AEPX_UPLOAD_KEYSTORE_B64 }}
+          STORE_PW: ${{ secrets.AEPX_UPLOAD_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.AEPX_UPLOAD_KEY_ALIAS }}
+          KEY_PW: ${{ secrets.AEPX_UPLOAD_KEY_PASSWORD }}
+          API_BASE: ${{ vars.AEPX_API_BASE_URL }}
+          TENANT: ${{ vars.AEPX_TENANT }}
+          ISSUER: ${{ vars.AEPX_OIDC_ISSUER }}
+          CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID }}
+        run: |
+          set -euo pipefail
+          missing=()
+          for v in KEYSTORE_B64 STORE_PW KEY_ALIAS KEY_PW API_BASE TENANT ISSUER CLIENT; do
+            [ -n "${!v}" ] || missing+=("$v")
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "Release blocked; owner must configure: ${missing[*]}" >&2; exit 1
+          fi
+          case "$API_BASE" in https://*) ;; *) echo 'AEPX_API_BASE_URL must be https' >&2; exit 1;; esac
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Decode upload key (runner temp only)
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.AEPX_UPLOAD_KEYSTORE_B64 }}
+        run: |
+          set -euo pipefail
+          umask 077
+          printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          echo "AEPX_UPLOAD_KEYSTORE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+      - name: Unit tests
+        run: gradle --no-daemon testReleaseUnitTest
+      - name: Build signed AAB and APK
+        env:
+          AEPX_UPLOAD_STORE_PASSWORD: ${{ secrets.AEPX_UPLOAD_STORE_PASSWORD }}
+          AEPX_UPLOAD_KEY_ALIAS: ${{ secrets.AEPX_UPLOAD_KEY_ALIAS }}
+          AEPX_UPLOAD_KEY_PASSWORD: ${{ secrets.AEPX_UPLOAD_KEY_PASSWORD }}
+          P_API: ${{ vars.AEPX_API_BASE_URL }}
+          P_TENANT: ${{ vars.AEPX_TENANT }}
+          P_ISSUER: ${{ vars.AEPX_OIDC_ISSUER }}
+          P_CLIENT: ${{ vars.AEPX_ANDROID_OIDC_CLIENT_ID }}
+        run: >-
+          gradle --no-daemon bundleRelease assembleRelease
+          -Paepx.versionCode="$VERSION_CODE" -Paepx.versionName="$VERSION_NAME"
+          -Paepx.apiBaseUrl="$P_API" -Paepx.tenant="$P_TENANT"
+          -Paepx.oidcIssuer="$P_ISSUER" -Paepx.oidcClientId="$P_CLIENT"
+      - name: Verify signatures, AdMob app ID and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          tools=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          aab=app/build/outputs/bundle/release/app-release.aab
+          apk=app/build/outputs/apk/release/app-release.apk
+          [ -f "$aab" ] && [ -f "$apk" ] || { echo 'Signed outputs missing (is signing configured?)' >&2; exit 1; }
+          jarsigner -verify "$aab" > /dev/null
+          "$tools/apksigner" verify --print-certs "$apk" | grep -i 'SHA-256' | head -1
+          "$tools/aapt2" dump xmltree "$apk" --file AndroidManifest.xml | grep -q 'ca-app-pub-2980680946304710~2617421798'
+          mkdir -p "$RUNNER_TEMP/out"
+          cp "$aab" "$RUNNER_TEMP/out/aepx-companion-$VERSION_NAME.aab"
+          cp "$apk" "$RUNNER_TEMP/out/aepx-companion-$VERSION_NAME.apk"
+          (cd "$RUNNER_TEMP/out" && sha256sum -- *.aab *.apk | tee SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-release-${{ inputs.version_name }}
+          path: ${{ runner.temp }}/out/
+          retention-days: 30
+      - name: Upload AAB to Play (internal track, draft)
+        if: ${{ inputs.upload_to_play }}
+        shell: bash
+        working-directory: platform/saas-ide/distribution
+        env:
+          PLAY_SA_JSON: ${{ secrets.AEPX_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          [ -n "$PLAY_SA_JSON" ] || { echo 'AEPX_PLAY_SERVICE_ACCOUNT_JSON not configured' >&2; exit 1; }
+          umask 077
+          printf '%s' "$PLAY_SA_JSON" > "$RUNNER_TEMP/play.json"
+          python3 -m pip install --quiet 'google-auth==2.36.0' 'requests==2.32.3'
+          python3 play_upload.py --aab "$RUNNER_TEMP/out/aepx-companion-$VERSION_NAME.aab" \
+            --version-code "$VERSION_CODE" --release-name "$VERSION_NAME ($VERSION_CODE)" \
+            --service-account-file "$RUNNER_TEMP/play.json" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Remove key material
+        if: always()
+        shell: bash
+        working-directory: .
+        run: rm -f "$RUNNER_TEMP/upload.jks" "$RUNNER_TEMP/play.json"
