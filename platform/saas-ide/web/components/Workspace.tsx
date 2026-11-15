@@ -48,6 +48,7 @@ export default function Workspace() {
   const [tenant, setTenant] = useState(fixedTenant);
   const [modules, setModules] = useState<IdeModule[]>([]);
   const [launcher, setLauncher] = useState(false);
+  const [launchModule, setLaunchModule] = useState<string | undefined>(undefined);
   const [historyFor, setHistoryFor] = useState("");
   const configured = oidcConfigured;
 
@@ -66,6 +67,22 @@ export default function Workspace() {
     return () => { cancelled = true; };
   }, [token]);
 
+  // Deep link from the VS Code / JetBrains plugins: /?new=<module> opens the new-project dialog.
+  // Kept in sessionStorage so it survives the sign-in redirect.
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("new");
+    if (wanted && /^[a-z0-9-]{1,32}$/.test(wanted)) {
+      try { window.sessionStorage.setItem("aepx.new", wanted); } catch { /* storage unavailable */ }
+      const url = new URL(window.location.href); url.searchParams.delete("new");
+      window.history.replaceState(null, "", url.pathname + url.search);
+    }
+  }, []);
+  useEffect(() => {
+    if (!api) return;
+    let wanted: string | null = null;
+    try { wanted = window.sessionStorage.getItem("aepx.new"); window.sessionStorage.removeItem("aepx.new"); } catch { /* ignore */ }
+    if (wanted) { setLaunchModule(wanted); setLauncher(true); }
+  }, [api]);
   useEffect(() => { setConsent(readConsent(typeof window === "undefined" ? undefined : window.localStorage)); }, []);
   useEffect(() => {
     if (!configured) { setMessage("Set NEXT_PUBLIC_OIDC_AUTHORITY and NEXT_PUBLIC_OIDC_CLIENT_ID to sign in."); return; }
@@ -119,7 +136,7 @@ export default function Workspace() {
     setTabs(t => openTab(t, path, content)); setActive(path);
   }
 
-  function createProject() { if (api) setLauncher(true); }
+  function createProject() { if (api) { setLaunchModule(undefined); setLauncher(true); } }
 
   async function projectCreated(p: Project) {
     setLauncher(false); setProjects(x => [...x, p]);
@@ -284,7 +301,7 @@ export default function Workspace() {
       </aside>
     </div>
     <ConsentBanner consent={consent} onChoose={chooseConsent} />
-    {launcher && api && <ModuleLauncher api={api} onCreated={p => void projectCreated(p)}
+    {launcher && api && <ModuleLauncher api={api} initial={launchModule} onCreated={p => void projectCreated(p)}
       onClose={() => setLauncher(false)} onStatus={status} />}
   </main>;
 }
