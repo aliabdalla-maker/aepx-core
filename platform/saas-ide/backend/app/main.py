@@ -653,3 +653,7 @@ def ai_usage(p: Principal = Depends(principal), db: Session = Depends(db_session
 # Universal IDE platform: modules, ACL matrix, members, CRUD lifecycle and audit chain.
 from .universal import router as universal_router  # noqa: E402
 app.include_router(universal_router)
+
+# Sandboxed code execution (off unless IDE_CODE_EXECUTION_ENABLED=true and the runner is configured).
+from .execution import router as execution_router  # noqa: E402
+app.include_router(execution_router)

@@ -119,7 +119,7 @@ export default function Assistant(p: Props) {
                 {m.topics.length
                   ? m.topics.map(t => <details key={t.module + t.title} open={t === m.topics[0]}>
                       <summary>{t.title} <span className="muted small">· {t.moduleTitle}</span></summary>
-                      <p className="help-body">{t.body}</p></details>)
+                      <p className="help-body">{t.body.split(/\*\*(.+?)\*\*/g).map((part, i) => i % 2 ? <strong key={i}>{part}</strong> : part)}</p></details>)
                   : <p>No help page matches that yet.</p>}
                 {ai.ok
                   ? <button disabled={busy} onClick={() => void askAi(m.question, m.topics)}>Ask AI instead</button>

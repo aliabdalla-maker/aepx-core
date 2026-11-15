@@ -64,6 +64,12 @@ label.button{display:inline-block;border:1px solid var(--line);border-radius:6px
 label.button:focus-within{outline:2px solid #8ab4f8}
 .import-list{max-height:180px;overflow:auto;font-size:12px}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.run-output{border-top:1px solid var(--line);max-height:35%;display:flex;flex-direction:column;background:#0b1220}
+.run-output header{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--line)}
+.run-output header .icon{margin-left:auto}
+.run-output pre{margin:0;padding:8px 10px;overflow:auto;white-space:pre-wrap;font-size:13px}
+.run-output .stderr{color:#f28b82}
+button.run:not(:disabled){border-color:#3fb950;color:#7ee787}
 .welcome a,.account-links a{color:#8ab4f8}.welcome a:hover,.account-links a:hover{color:#bcd6ff}
 .statusbar{height:26px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:12px;background:#0e2440;color:#b9cbe6;border-top:1px solid var(--line);white-space:nowrap;overflow:hidden}
 .side-panel{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
