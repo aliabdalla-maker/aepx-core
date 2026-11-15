@@ -1,5 +1,6 @@
 name: AEP-X IDE release (desktop + APK downloads)
-# Pushing a tag ide-vX.Y.Z builds the desktop apps (Windows, macOS, Linux) and, when the
+# Pushing a tag ide-vX.Y.Z (or a branch release/ide-vX.Y.Z, which then creates that tag)
+# builds the desktop apps (Windows, macOS, Linux) and, when the
 # upload-key secrets exist, the signed Android APK, then publishes them on a GitHub Release
 # under fixed file names. softwareequality.com/aepx-ide links straight to
 #   https://github.com/aliabdalla-maker/aepx-core/releases/download/<tag>/<fixed name>
@@ -8,6 +9,7 @@ name: AEP-X IDE release (desktop + APK downloads)
 on:
   push:
     tags: ['ide-v*.*.*']
+    branches: ['release/ide-v*.*.*']
 permissions:
   contents: read
 concurrency:
@@ -44,7 +46,7 @@ jobs:
       - name: Version from tag
         run: |
           set -euo pipefail
-          v="${GITHUB_REF_NAME#ide-v}"
+          v="${GITHUB_REF_NAME#release/}"; v="${v#ide-v}"
           [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Tag must be ide-vMAJOR.MINOR.PATCH" >&2; exit 1; }
           npm pkg set version="$v"
       - run: npm ci --no-audit --no-fund
@@ -125,7 +127,7 @@ jobs:
           umask 077
           printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
           export AEPX_UPLOAD_KEYSTORE="$RUNNER_TEMP/upload.jks"
-          v="${GITHUB_REF_NAME#ide-v}"
+          v="${GITHUB_REF_NAME#release/}"; v="${v#ide-v}"
           IFS=. read -r a b c <<< "$v"
           code=$(( a * 1000000 + b * 1000 + c ))
           trap 'rm -f "$RUNNER_TEMP/upload.jks"' EXIT
@@ -169,6 +171,7 @@ jobs:
         run: |
           set -euo pipefail
           signing=$(tr '\n' ' ' < SIGNING.txt)
-          gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --latest=false \
-            --title "AEP-X Agentic IDE ${GITHUB_REF_NAME#ide-v}" \
+          tag="${GITHUB_REF_NAME#release/}"
+          gh release create "$tag" out/* --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --latest=false \
+            --title "AEP-X Agentic IDE ${tag#ide-v}" \
             --notes "Desktop apps for Windows, macOS and Linux, and the Android APK when its signing key is configured, for https://ide.softwareequality.com. Download page: https://softwareequality.com/aepx-ide. Code signing: ${signing}. Checksums: SHA256SUMS.txt."
