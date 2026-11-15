@@ -1335,6 +1335,87 @@ def test_subscription_trial_webhook_idempotency_and_ordering(prepared_db, tokens
     assert client.get("/api/v1/entitlement").status_code == 401
 
 
+def test_media_studio_governance_rls_and_single_use(prepared_db, tokens, monkeypatch):
+    """Media jobs and social posts: role gates, digest-bound approval, single-use run/publish,
+    edit voids approval, tenant isolation, append-only audit (runtime role cannot rewrite history)."""
+    monkeypatch.setenv("IDE_MEDIA_PROVIDERS_ENABLED", "mock")
+    monkeypatch.setenv("IDE_SOCIAL_PLATFORMS_ENABLED", "mock,youtube")
+    admin = create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    with admin.begin() as db:
+        db.execute(text("INSERT INTO ide_memberships (tenant_id, subject, role) VALUES "
+                        "('alpha','media-editor','editor') ON CONFLICT DO NOTHING"))
+    client = TestClient(main.app)
+    owner, editor, other = headers(tokens(), "alpha"), headers(tokens("media-editor"), "alpha"), headers(tokens(), "beta")
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "studio"}).json()["id"]
+
+    # templates never overwrite existing files
+    first = client.post(f"/api/v1/projects/{project}/media-templates/film-pipeline", headers=editor).json()
+    assert "media/storyboard.json" in first["created"]
+    again = client.post(f"/api/v1/projects/{project}/media-templates/film-pipeline", headers=editor).json()
+    assert again["created"] == [] and "media/storyboard.json" in again["skipped"]
+    edl = client.get(f"/api/v1/projects/{project}/storyboard/export?format=edl", headers=editor)
+    assert edl.status_code == 200 and "FROM CLIP NAME: s1-wide.mp4" in edl.text
+
+    # disabled provider is refused; editor proposes; editor cannot approve; owner approves once
+    assert client.post(f"/api/v1/projects/{project}/media-jobs", headers=editor,
+                       json={"kind": "image", "provider": "openai", "prompt": "poster"}).status_code == 409
+    job = client.post(f"/api/v1/projects/{project}/media-jobs", headers=editor,
+                      json={"kind": "image", "provider": "mock", "prompt": "launch poster"}).json()
+    assert job["state"] == "proposed"
+    assert client.post(f"/api/v1/media-jobs/{job['id']}/run", headers=editor).status_code == 409
+    assert client.post(f"/api/v1/media-jobs/{job['id']}/decision?approved=true", headers=editor).status_code == 403
+    assert client.post(f"/api/v1/media-jobs/{job['id']}/decision?approved=true", headers=owner).json()["state"] == "approved"
+    assert client.post(f"/api/v1/media-jobs/{job['id']}/decision?approved=true", headers=owner).status_code == 409
+    done = client.post(f"/api/v1/media-jobs/{job['id']}/run", headers=editor).json()
+    assert done["state"] == "succeeded" and done["has_asset"]
+    assert client.post(f"/api/v1/media-jobs/{job['id']}/run", headers=editor).status_code == 409  # single use
+    asset = client.get(f"/api/v1/media-jobs/{job['id']}/asset", headers=editor)
+    assert asset.headers["content-type"] == "image/svg+xml" and "sandbox" in asset.headers["content-security-policy"]
+
+    # image -> video chain uses the finished image as the starting frame
+    video = client.post(f"/api/v1/projects/{project}/media-jobs", headers=editor, json={
+        "kind": "video", "provider": "mock", "prompt": "slow push-in", "params": {"image_job_id": job["id"]}}).json()
+    assert video["params"]["image_job_id"] == job["id"]
+
+    # social: edit after approval voids it; publish is single-use; export platform packages
+    post = client.post(f"/api/v1/projects/{project}/social-posts", headers=editor,
+                       json={"platform": "mock", "body": "We launched!", "media_job_ids": [job["id"]]}).json()
+    assert client.post(f"/api/v1/social-posts/{post['id']}/decision?approved=true", headers=owner).json()["state"] == "approved"
+    edited = client.put(f"/api/v1/social-posts/{post['id']}", headers=editor, json={"body": "We launched today!"}).json()
+    assert edited["state"] == "draft" and edited["digest"] != post["digest"]
+    assert client.post(f"/api/v1/social-posts/{post['id']}/publish", headers=editor).status_code == 409
+    client.post(f"/api/v1/social-posts/{post['id']}/decision?approved=true", headers=owner)
+    published = client.post(f"/api/v1/social-posts/{post['id']}/publish", headers=editor).json()
+    assert published["state"] == "published" and published["external_id"].startswith("mock-")
+    assert client.post(f"/api/v1/social-posts/{post['id']}/publish", headers=editor).status_code == 409
+    assert client.put(f"/api/v1/social-posts/{post['id']}", headers=editor, json={"body": "rewrite"}).status_code == 409
+    yt = client.post(f"/api/v1/projects/{project}/social-posts", headers=editor,
+                     json={"platform": "youtube", "body": "Launch film"}).json()
+    client.post(f"/api/v1/social-posts/{yt['id']}/decision?approved=true", headers=owner)
+    assert client.post(f"/api/v1/social-posts/{yt['id']}/publish", headers=editor).json()["state"] == "exported"
+
+    # tenant isolation through the API and directly under RLS
+    assert client.get(f"/api/v1/media-jobs/{job['id']}", headers=other).status_code in (403, 404)
+    assert client.get(f"/api/v1/projects/{project}/social-posts", headers=other).status_code in (403, 404)
+    actions = [a["action"] for a in client.get(f"/api/v1/media-audit/{post['id']}", headers=owner).json()]
+    assert actions == ["drafted", "approved", "edited", "approved", "publishing", "published"]
+    with main.engine.connect() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id', 'beta', true)"))
+        assert db.execute(text("SELECT count(*) FROM ide_media_jobs")).scalar() == 0
+        assert db.execute(text("SELECT count(*) FROM ide_social_posts")).scalar() == 0
+        db.rollback()
+        db.execute(text("SELECT set_config('ide.tenant_id', 'alpha', true)"))
+        with pytest.raises(Exception):
+            db.execute(text("UPDATE ide_media_audit SET action = 'forged'"))
+        db.rollback()
+        db.execute(text("SELECT set_config('ide.tenant_id', 'alpha', true)"))
+        with pytest.raises(Exception):  # approval must match the digest (CHECK constraint)
+            db.execute(text("UPDATE ide_social_posts SET state = 'approved', approved_by = 'x', "
+                            "approved_digest = repeat('0', 64) WHERE id = :id"), {"id": yt["id"]})
+        db.rollback()
+    admin.dispose()
+
+
 def test_personal_workspace_signup_is_private_and_idempotent(prepared_db, tokens):
     client = TestClient(main.app)
     first = client.post("/api/v1/workspace", headers={"Authorization": f"Bearer {tokens('new-user-1')}"})

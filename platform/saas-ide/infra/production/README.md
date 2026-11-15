@@ -29,7 +29,7 @@ Keycloak admin console: https://auth.softwareequality.com/admin. The user is
 
 - Email and password sign-up is on from the start. Each new user gets a private
   workspace on first sign-in (`POST /api/v1/workspace`, migration
-  `010_personal_workspaces.sql`) and a 30-day trial.
+  `011_personal_workspaces.sql`) and a 30-day trial.
 - Google and GitHub buttons appear once their OAuth client details are in the
   server's `.env`, and `keycloak-setup` runs on the next deploy:
   - `AEPX_GOOGLE_CLIENT_ID` / `AEPX_GOOGLE_CLIENT_SECRET`. Google Cloud console:

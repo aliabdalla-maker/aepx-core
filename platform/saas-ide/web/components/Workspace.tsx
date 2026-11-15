@@ -3,13 +3,14 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { oidcConfigured, oidcManager } from "../lib/auth";
 import type { Capabilities, Entitlement, FileEntry, IdeApi, Project } from "../lib/api";
-import { ensureWorkspace, ideApi, isSafeRelativePath, makeRequester } from "../lib/api";
+import { ensureWorkspace, ideApi, isSafeRelativePath, makeBlobFetcher, makeRequester } from "../lib/api";
 import type { Consent } from "../lib/ads";
 import { readConsent, writeConsent } from "../lib/ads";
 import { buildTree, closeTab, isDirty, languageFor, markSaved, openTab, updateTab, type Tab } from "../lib/workspace";
 import AgentPanel from "./AgentPanel";
 import KnowledgePanel from "./KnowledgePanel";
 import McpOperations from "./McpOperations";
+import StudioPanel from "./StudioPanel";
 import InstallApp from "./InstallApp";
 import FileTree from "./FileTree";
 import { AdSlot, ConsentBanner } from "./Ads";
@@ -25,7 +26,7 @@ const apiBase = process.env.NEXT_PUBLIC_IDE_API_URL || "http://localhost:8090";
 // A fixed tenant is optional. Without one, each user gets a personal workspace on first sign-in.
 const fixedTenant = process.env.NEXT_PUBLIC_IDE_TENANT || "";
 const manager = oidcManager;
-type Panel = "agent" | "knowledge" | "ops";
+type Panel = "agent" | "studio" | "knowledge" | "ops";
 
 export default function Workspace() {
   const [token, setToken] = useState("");
@@ -43,6 +44,8 @@ export default function Workspace() {
   const configured = oidcConfigured;
 
   const requester = useMemo(() => makeRequester(apiBase, token, tenant), [token, tenant]);
+  const fetchAsset = useMemo(() => makeBlobFetcher(apiBase, token, tenant), [token, tenant]);
+  const [role, setRole] = useState<string | undefined>(undefined);
   const api: IdeApi | null = useMemo(() => (token && tenant ? ideApi(requester) : null), [token, tenant, requester]);
   const status = useCallback((m: string) => setMessage(m), []);
 
@@ -79,6 +82,7 @@ export default function Workspace() {
     api.projects().then(p => { setProjects(p); setMessage(p.length ? "Select a project" : "Create your first project"); })
       .catch(e => setMessage(String(e.message ?? e)));
     api.capabilities().then(setCapabilities).catch(() => setCapabilities(null));
+    api.me().then(m => setRole(m.role)).catch(() => setRole(undefined));
     // Server-side plan: trial (100% ads) -> Pro £4.99/month (5% ads) -> free (100% ads).
     api.entitlement().then(setEntitlement).catch(() => setEntitlement(null));
     const billing = new URLSearchParams(window.location.search).get("billing");
@@ -217,12 +221,13 @@ export default function Workspace() {
 
       <aside className="side-panel" aria-label="Agent tools">
         <div className="panel-tabs" role="tablist">
-          {(["agent", "knowledge", "ops"] as Panel[]).map(p => <button key={p} role="tab" aria-selected={panel === p}
+          {(["agent", "studio", "knowledge", "ops"] as Panel[]).map(p => <button key={p} role="tab" aria-selected={panel === p}
             className={panel === p ? "active" : ""} onClick={() => setPanel(p)}>
-            {p === "agent" ? "Agents" : p === "knowledge" ? "Knowledge" : "Operations"}</button>)}
+            {{ agent: "Agents", studio: "Studio", knowledge: "Knowledge", ops: "Operations" }[p]}</button>)}
         </div>
         <div className="panel-body">
           {panel === "agent" && <AgentPanel api={api} project={project} capabilities={capabilities} onStatus={status} />}
+          {panel === "studio" && <StudioPanel request={requester} fetchAsset={fetchAsset} project={project} role={role} onStatus={status} />}
           {panel === "knowledge" && <KnowledgePanel api={api} project={project} onStatus={status} />}
           {panel === "ops" && <McpOperations request={requester} enabled={Boolean(token)} />}
         </div>

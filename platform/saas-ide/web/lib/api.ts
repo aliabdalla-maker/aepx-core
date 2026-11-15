@@ -66,6 +66,18 @@ export function makeRequester(base: string, token: string, tenant: string,
   };
 }
 
+/** Authenticated binary download (generated media previews); returns an object URL the caller must revoke. */
+export function makeBlobFetcher(base: string, token: string, tenant: string, fetchImpl: typeof fetch = fetch) {
+  return async (url: string): Promise<{ objectUrl: string; type: string }> => {
+    if (!token) throw new ApiError(401, "Sign in first");
+    const response = await fetchImpl(base + url, {
+      headers: { Authorization: "Bearer " + token, "X-Tenant-ID": tenant }, cache: "no-store" });
+    if (!response.ok) throw new ApiError(response.status, `API error ${response.status}`);
+    const blob = await response.blob();
+    return { objectUrl: URL.createObjectURL(blob), type: blob.type };
+  };
+}
+
 /** Encodes a validated relative workspace path segment by segment. */
 export function encodePath(path: string): string {
   return path.split("/").map(encodeURIComponent).join("/");

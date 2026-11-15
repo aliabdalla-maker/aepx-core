@@ -12,6 +12,12 @@ class DispatcherTests(unittest.TestCase):
         self.tenant=uuid4()
         self.conn=MagicMock()
         self.args={"tenant_id":self.tenant,"worker_id":"trusted-worker"}
+        # The dispatcher reaps exhausted rows and re-checks the fenced lease before every
+        # callback; stub both DB preflights so tests isolate dispatch behaviour.
+        reap=patch("app.hitl_dispatcher.reap_exhausted",return_value=[])
+        lease=patch("app.hitl_dispatcher.lease_is_current",return_value=True)
+        self.reap=reap.start(); self.lease=lease.start()
+        self.addCleanup(reap.stop); self.addCleanup(lease.stop)
     def test_disabled_does_not_claim(self):
         with patch("app.hitl_dispatcher.claim") as claim:
             result=dispatch_batch(self.conn,**self.args)
@@ -50,8 +56,17 @@ class DispatcherTests(unittest.TestCase):
             result=dispatch_batch(self.conn,**self.args,enabled=True,deliver=adapter)
         self.assertEqual(result["failed"],1)
         adapter.assert_not_called()
-    def test_settlement_failure_propagates(self):
+    def test_lost_lease_at_settlement_counts_stale_not_delivered(self):
+        # settle() raises PermissionError when the fenced lease was lost; the old worker must
+        # not report success and must not crash the batch (recovery re-leases the row).
         with patch.dict(os.environ,{"HITL_DISPATCH_ENABLED":"yes"}),patch("app.hitl_dispatcher.claim",return_value=[(uuid4(),"hitl.approval.consumed",{},1)]),patch("app.hitl_dispatcher.settle",side_effect=PermissionError("expired")):
-            with self.assertRaises(PermissionError):
-                dispatch_batch(self.conn,**self.args,enabled=True,deliver=MagicMock())
+            result=dispatch_batch(self.conn,**self.args,enabled=True,deliver=MagicMock())
+        self.assertEqual((result["stale"],result["delivered"],result["failed"]),(1,0,0))
+    def test_stale_lease_preflight_never_calls_adapter(self):
+        adapter=MagicMock()
+        self.lease.return_value=False
+        with patch.dict(os.environ,{"HITL_DISPATCH_ENABLED":"yes"}),patch("app.hitl_dispatcher.claim",return_value=[(uuid4(),"hitl.approval.consumed",{},1)]),patch("app.hitl_dispatcher.settle") as settle:
+            result=dispatch_batch(self.conn,**self.args,enabled=True,deliver=adapter)
+        adapter.assert_not_called(); settle.assert_not_called()
+        self.assertEqual(result["stale"],1)
 if __name__=="__main__":unittest.main()

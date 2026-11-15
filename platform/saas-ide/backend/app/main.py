@@ -538,6 +538,12 @@ def app_store_verify(body: AppStorePurchase, subject: str = Depends(verified_sub
     return get_entitlement(subject)
 
 
+# Media Studio: agentic music, video, film, multimedia and social publishing (all approval-gated).
+from .media import router as media_router  # noqa: E402
+
+app.include_router(media_router)
+
+
 # --------------------------------------------------------------------------- personal workspaces
 # Self-service sign-up: the first time a verified user opens the IDE they get a private,
 # single-member workspace. The id is derived from the verified issuer and subject, so it is
