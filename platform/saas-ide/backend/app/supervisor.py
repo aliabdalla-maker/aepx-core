@@ -1,5 +1,6 @@
 """Phase 2 governed supervisor. Planning is deterministic; external actions are approval gated."""
 import os
+import re
 import uuid
 from datetime import datetime, timezone
 from typing import Literal
@@ -81,11 +82,34 @@ def route_model(preferred: str | None = None) -> str:
     return next((p for p in priority if p in enabled), enabled[0])
 
 
+# Media crew: added only when the task is about media, so other plans are unchanged.
+MEDIA_ROLES = (
+    (("music", "song", "soundtrack", "audio", "podcast", "voice"),
+     {"agent": "composer", "action": "compose", "goal": "Propose music/voice jobs (prompt, length, provider, cost estimate) for approval"}),
+    (("video", "film", "movie", "trailer", "storyboard", "shot", "animation"),
+     {"agent": "director", "action": "storyboard", "goal": "Draft script and storyboard; propose key-frame and clip jobs per shot"}),
+    (("video", "film", "movie", "trailer", "edit", "timeline"),
+     {"agent": "editor", "action": "assemble", "goal": "Arrange approved clips on the timeline; export EDL/ffmpeg render script"}),
+    (("social", "post", "campaign", "tiktok", "youtube", "instagram", "linkedin", "twitter", "mastodon"),
+     {"agent": "social-manager", "action": "draft", "goal": "Draft platform-specific posts and schedule; each post needs owner/admin approval"}),
+)
+
+
+def media_steps(task: str) -> list[dict]:
+    words = set(re.findall(r"[a-z]+", task.lower()))
+    steps = [step for keywords, step in MEDIA_ROLES if words & set(keywords)]
+    if steps:
+        steps.insert(0, {"agent": "producer", "action": "budget",
+                         "goal": "List media jobs with cost estimates; nothing is generated or posted before approval"})
+    return steps
+
+
 def plan_steps(task: str) -> list[dict]:
     return [
         {"agent": "requirements", "action": "analyse", "goal": task},
         {"agent": "architect", "action": "design", "goal": "Produce architecture and security boundaries"},
         {"agent": "developer", "action": "propose", "goal": "Prepare proposed changes without executing code"},
+        *media_steps(task),
         {"agent": "verifier", "action": "review", "goal": "Review risks, tests and approval requirements"},
     ]
 
