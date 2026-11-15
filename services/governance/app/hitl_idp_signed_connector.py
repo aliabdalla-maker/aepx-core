@@ -41,7 +41,7 @@ def validate_pinned_snapshot_url(url, *, expected_host):
         if (not isinstance(url,str) or not isinstance(expected_host,str)
             or not expected_host or expected_host!=expected_host.lower()
             or len(expected_host)>253
-            or not re.fullmatch(r"[a-z0-9-]+(?:\\.[a-z0-9-]+)+",expected_host)
+            or not re.fullmatch(r"[a-z0-9-]+(?:\.[a-z0-9-]+)+",expected_host)
             or any(label.startswith("-") or label.endswith("-") or len(label)>63
                    for label in expected_host.split("."))
             or any(ch.isspace() for ch in expected_host)

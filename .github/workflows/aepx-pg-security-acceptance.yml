@@ -1,0 +1,87 @@
+name: AEP-X PostgreSQL security acceptance (disposable)
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/backend/sql/**'
+      - 'tests/sql/**'
+      - 'scripts/test_aepx_pg_*'
+      - '.github/workflows/aepx-pg-security-acceptance.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'platform/saas-ide/backend/sql/**'
+      - 'tests/sql/**'
+      - 'scripts/test_aepx_pg_*'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          # Disposable job-local database; trust auth never leaves this runner.
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: aepx_test_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d aepx_test_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: '5432'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Apply schema exactly as shipped (fails on any SQL error)
+        run: |
+          set -euo pipefail
+          for f in aepx_iteration_fenced aepx_iteration_approval_nonce aepx_budget_transactional; do
+            PGUSER=postgres psql -X -q -v ON_ERROR_STOP=1 -d aepx_test_ci -f "platform/saas-ide/backend/sql/$f.sql"
+          done
+          PGUSER=postgres psql -X -q -v ON_ERROR_STOP=1 -d aepx_test_ci -f tests/sql/aepx_ci_roles.sql
+          PGUSER=postgres psql -X -At -d aepx_test_ci -c "SELECT string_agg(p.proname, ' ' ORDER BY p.proname) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname LIKE 'aepx_%'" | tee functions.txt
+          grep -qx 'advance claim consume_approval renew reserve settle' functions.txt
+      - name: Untrusted runtime role audits (FORCE RLS, no DML, no sensitive EXECUTE, definer)
+        run: |
+          set -euo pipefail
+          unset PGHOST
+          PGUSER=aepx_ci_runtime bash scripts/test_aepx_pg_runtime_privileges.sh --execute aepx_test_ci
+          PGUSER=aepx_ci_runtime bash scripts/test_aepx_pg_function_grants.sh --execute aepx_test_ci
+          PGUSER=aepx_ci_runtime bash scripts/test_aepx_pg_security_definer.sh --execute aepx_test_ci
+      - name: Negative controls (audits must DENY privileged roles)
+        shell: bash
+        run: |
+          set -uo pipefail
+          unset PGHOST
+          if PGUSER=aepx_ci_controller bash scripts/test_aepx_pg_function_grants.sh --execute aepx_test_ci; then
+            echo 'Function-grant audit failed to deny a role that can execute sensitive functions' >&2; exit 1; fi
+          if PGUSER=postgres bash scripts/test_aepx_pg_runtime_privileges.sh --execute aepx_test_ci; then
+            echo 'Privilege audit failed to deny a superuser' >&2; exit 1; fi
+          echo 'Both audits correctly denied privileged roles.'
+      - name: Approval nonce acceptance and two-session replay race (x5)
+        run: |
+          set -euo pipefail
+          unset PGHOST
+          PGUSER=aepx_ci_controller bash scripts/test_aepx_pg_approval_nonce_acceptance.sh --execute aepx_test_ci
+          for i in 1 2 3 4 5; do
+            PGUSER=aepx_ci_controller python scripts/test_aepx_pg_approval_concurrency.py --execute aepx_test_ci
+          done
+          {
+            echo '## PostgreSQL security acceptance (disposable)'
+            echo '- Schema applied cleanly; 6 authorization functions present'
+            echo '- Runtime role: FORCE RLS, no direct DML, no sensitive EXECUTE — PASS'
+            echo '- Negative controls: privileged roles DENIED'
+            echo '- Approval nonce single-use + 5x two-session replay race — PASS'
+            echo 'Independent production acceptance: NOT ESTABLISHED'
+          } >> "$GITHUB_STEP_SUMMARY"
