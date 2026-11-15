@@ -14,7 +14,7 @@ if "aepx_dev_only" in s:errors.append("development credentials forbidden")
 if "latest" in s:errors.append("unpinned latest image forbidden")
 services=("postgres","redis","identity","trust","registry","memory","cache","governance","gateway")
 for service in services:
-    block=re.search(rf"^  {service}:\\n(.*?)(?=^  [a-z][\\w-]*:|^volumes:|\\Z)",s,re.M|re.S)
+    block=re.search(rf"^  {service}:\n(.*?)(?=^  [a-z][\w-]*:|^volumes:|\Z)",s,re.M|re.S)
     if not block:
         errors.append("missing service: "+service)
     elif "mem_limit:" not in block.group(1) or "cpus:" not in block.group(1):
