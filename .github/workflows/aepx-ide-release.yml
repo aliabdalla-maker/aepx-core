@@ -147,8 +147,74 @@ jobs:
           path: ${{ runner.temp }}/out/
           retention-days: 7
 
+  plugins:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: VS Code extension
+        working-directory: platform/saas-ide/marketplace/vscode
+        run: npm ci --no-audit --no-fund && npm test && npm run package
+      - name: JetBrains plugin
+        working-directory: platform/saas-ide/marketplace/jetbrains
+        run: gradle --no-daemon test buildPlugin verifyPlugin
+      - name: Fixed download names
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/out"
+          cp platform/saas-ide/marketplace/vscode/aepx-agentic-ide.vsix "$RUNNER_TEMP/out/AEP-X-IDE-VSCode.vsix"
+          zips=(platform/saas-ide/marketplace/jetbrains/build/distributions/*.zip)
+          [ "${#zips[@]}" -eq 1 ] || { echo "expected one JetBrains plugin zip" >&2; exit 1; }
+          cp "${zips[0]}" "$RUNNER_TEMP/out/AEP-X-IDE-JetBrains.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ide-plugins
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+          if-no-files-found: error
+
+  sdk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test and package the Python Agentic SDK
+        working-directory: sdk/python
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet -r requirements.txt pytest
+          python -m pytest -q tests
+          mkdir -p "$RUNNER_TEMP/out"
+          # A source archive installs with: pip install <url-of-zip>
+          git archive --format=zip --prefix=aepx-sdk/ -o "$RUNNER_TEMP/out/AEP-X-Agentic-SDK-Python.zip" HEAD .
+          python -m pip install --quiet "$RUNNER_TEMP/out/AEP-X-Agentic-SDK-Python.zip"
+          python -c "import aepx; print('SDK import ok')"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ide-sdk
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+          if-no-files-found: error
+
   publish:
-    needs: [desktop, android]
+    needs: [desktop, android, plugins, sdk]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -174,4 +240,4 @@ jobs:
           tag="${GITHUB_REF_NAME#release/}"
           gh release create "$tag" out/* --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --latest=false \
             --title "AEP-X Agentic IDE ${tag#ide-v}" \
-            --notes "Desktop apps for Windows, macOS and Linux, and the Android APK when its signing key is configured, for https://ide.softwareequality.com. Download page: https://softwareequality.com/aepx-ide. Code signing: ${signing}. Checksums: SHA256SUMS.txt."
+            --notes "Desktop apps for Windows, macOS and Linux, the Android APK when its signing key is configured, the VS Code and JetBrains plugins and the Python Agentic SDK, for https://ide.softwareequality.com. Download page: https://softwareequality.com/aepx-ide. Code signing: ${signing}. Checksums: SHA256SUMS.txt."
