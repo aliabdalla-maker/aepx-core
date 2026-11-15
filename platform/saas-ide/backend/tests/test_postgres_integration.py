@@ -1429,3 +1429,96 @@ def test_personal_workspace_signup_is_private_and_idempotent(prepared_db, tokens
     other = client.post("/api/v1/workspace", headers={"Authorization": f"Bearer {tokens('new-user-2')}"}).json()["tenant_id"]
     assert other != tenant
     assert client.get("/api/v1/projects", headers=headers(tokens("new-user-2"), tenant)).status_code == 403
+
+
+def _metered_env(monkeypatch, cap):
+    for key in ("IDE_EXTERNAL_EXECUTION_ENABLED", "IDE_GOVERNED_WORKER_ENABLED",
+                "IDE_EGRESS_GATEWAY_VERIFIED", "IDE_PROVIDER_USAGE_RECONCILIATION_ENABLED"):
+        monkeypatch.setenv(key, "true")
+    monkeypatch.setenv("IDE_WORKER_MAX_TOKENS", "1500")
+    monkeypatch.setenv("IDE_WORKER_MAX_MICROUSD", "20000")
+    monkeypatch.setenv("IDE_WORKER_TIMEOUT_SECONDS", "30")
+    monkeypatch.setenv("IDE_AI_MONTHLY_CAP_MICROUSD", str(cap))
+    monkeypatch.setenv("IDE_LLM_OPENROUTER_ENABLED", "true")
+
+
+def _approved_run(client, owner, task):
+    project = client.post("/api/v1/projects", headers=owner, json={"name": "metered"}).json()
+    run = client.post("/api/v1/agent-runs", headers=owner,
+                      json={"project_id": project["id"], "task": task}).json()
+    assert run["model_route"] == "openrouter"
+    assert client.post(f"/api/v1/agent-runs/{run['id']}/decision?approved=true", headers=owner).status_code == 200
+    assert client.post(f"/api/v1/agent-runs/{run['id']}/enqueue", headers=owner).status_code == 200
+    return run["id"]
+
+
+def test_metered_agent_run_reconciles_provider_cost_and_caps(prepared_db, tokens, monkeypatch):
+    from app import metered_worker
+    admin = create_engine(os.environ["IDE_TEST_ADMIN_DATABASE_URL"])
+    with admin.begin() as db:
+        db.execute(text("""INSERT INTO ide_memberships (tenant_id, subject, role)
+            VALUES ('gamma','user-gamma','owner') ON CONFLICT DO NOTHING"""))
+        db.execute(text("DELETE FROM ide_ai_monthly_spend"))
+    _metered_env(monkeypatch, cap=30000)
+    # The provider call runs in a spawned subprocess in production; call it inline here.
+    monkeypatch.setattr(metered_worker, "hard_deadline",
+                        lambda fn, *a, seconds, **kw: fn(*a, **kw))
+    calls = []
+
+    def provider(route, prompt, max_tokens, system):
+        calls.append((route, prompt, max_tokens, system))
+        return {"text": "Here is your plan", "model": "openai/gpt-4o-mini", "request_id": "gen-1",
+                "prompt_tokens": 120, "completion_tokens": 300, "cost_microusd": 4200}
+
+    client = TestClient(main.app)
+    owner = headers(tokens("user-gamma"), "gamma")
+    first = _approved_run(client, owner, "Write a soundtrack brief and a TikTok post")
+    assert metered_worker.execute_next_metered("gamma", call=provider) == "completed"
+    assert calls[0][0] == "openrouter" and calls[0][1].startswith("Write a soundtrack")
+    assert "composer" in calls[0][3]  # media crew plan reaches the model
+    detail = client.get(f"/api/v1/agent-runs/{first}", headers=owner).json()
+    assert detail["status"] == "completed" and detail["result"] == "Here is your plan"
+    usage = client.get("/api/v1/ai-usage", headers=owner).json()
+    assert usage["used_today_microusd"] == 4200 and usage["plan"] == "trial"
+    with admin.begin() as db:
+        month = db.execute(text("SELECT reserved_microusd, spent_microusd, runs FROM ide_ai_monthly_spend")).one()
+        assert tuple(month) == (0, 4200, 1)
+        receipt = db.execute(text("SELECT state, actual_microusd, provider_request_id FROM ide_ai_usage WHERE run_id=:r"),
+                             {"r": first}).one()
+        assert tuple(receipt) == ("settled", 4200, "gen-1")
+        spend = db.execute(text("SELECT spent_microusd FROM ide_agent_budgets WHERE tenant_id='gamma'")).scalar()
+        assert spend == 4200
+
+    # No cost reported: the whole reservation is charged, never less.
+    second = _approved_run(client, owner, "Draft a film storyboard")
+    assert metered_worker.execute_next_metered(
+        "gamma", call=lambda *a, **k: {"text": "ok", "cost_microusd": None}) == "completed"
+    with admin.begin() as db:
+        assert db.execute(text("SELECT state, actual_microusd FROM ide_ai_usage WHERE run_id=:r"),
+                          {"r": second}).one() == ("charged_max", 20000)
+        assert db.execute(text("SELECT spent_microusd FROM ide_ai_monthly_spend")).scalar() == 24200
+
+    # The monthly cap (30000) cannot fit another 20000 reservation: no provider call is made.
+    third = _approved_run(client, owner, "Another task")
+    called = []
+    assert metered_worker.execute_next_metered(
+        "gamma", call=lambda *a, **k: called.append(1)) == "monthly_cap_reached"
+    assert called == []
+    assert client.get(f"/api/v1/agent-runs/{third}", headers=owner).json()["status"] == "failed"
+
+    # Daily allowance: a trial user's 200000/day is enforced before the monthly cap.
+    monkeypatch.setenv("IDE_AI_MONTHLY_CAP_MICROUSD", "100000000")
+    monkeypatch.setenv("IDE_AI_DAILY_MICROUSD_TRIAL", "30000")
+    _approved_run(client, owner, "One more")
+    assert metered_worker.execute_next_metered(
+        "gamma", call=lambda *a, **k: called.append(1)) == "allowance_exhausted"
+    assert called == []
+    # Tenant isolation: another tenant never sees gamma's usage.
+    with main.SessionLocal() as db:
+        db.execute(text("SELECT set_config('ide.tenant_id','alpha',true)"))
+        assert db.execute(text("SELECT count(*) FROM ide_ai_usage")).scalar() == 0
+        db.rollback()
+    with main.SessionLocal() as db:
+        assert [r[0] for r in db.execute(text("SELECT tenant_id FROM ide_dispatchable_tenants(20)"))].count("gamma") == 0
+        db.rollback()
+    admin.dispose()

@@ -239,7 +239,9 @@ def query_knowledge(project_id: str, body: SearchIn, p: Principal = Depends(prin
 @app.get("/api/v1/agent-capabilities")
 def agent_capabilities(p: Principal = Depends(principal)):
     return {"providers": {name: os.getenv("IDE_LLM_" + name.upper() + "_ENABLED") == "true"
-                            for name in ("oci", "openai", "anthropic", "gemini")},
+                            for name in ("oci", "openai", "anthropic", "gemini", "openrouter")},
+            # True when the isolated agent worker is deployed and paid AI is switched on.
+            "agents_live": os.getenv("IDE_AGENTS_LIVE") == "true",
             "crewai_execution_enabled": False,
             "mcp_allowlisted_servers": ["knowledge", "github-readonly"],
             "mcp_execution_enabled": False,
@@ -563,3 +565,27 @@ def open_personal_workspace(subject: str = Depends(verified_subject)):
                    {"tenant": tenant_id, "subject": subject})
         db.commit()
     return {"tenant_id": tenant_id, "role": "owner"}
+
+
+# --------------------------------------------------------------------------- AI usage
+@app.get("/api/v1/ai-usage")
+def ai_usage(p: Principal = Depends(principal), db: Session = Depends(db_session)):
+    """The caller's AI allowance today and whether the platform still has monthly budget."""
+    from .metered_worker import daily_allowance, month_key
+    state = subs.ensure_entitlement(db, p.subject)
+    plan = subs.entitlement_state(state["trial_started_at"], state["status"],
+                                  state["current_period_end"])["plan"]
+    # ensure_entitlement commits, which ends the transaction-local tenant scope.
+    db.execute(text("SELECT set_config('ide.tenant_id', :tenant, true)"), {"tenant": p.tenant_id})
+    used = db.execute(text("""SELECT COALESCE(SUM(COALESCE(actual_microusd, reserved_microusd)),0)
+        FROM ide_ai_usage WHERE tenant_id=:t AND subject=:s
+          AND created_at >= date_trunc('day', now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'"""),
+        {"t": p.tenant_id, "s": p.subject}).scalar() or 0
+    cap = int(os.getenv("IDE_AI_MONTHLY_CAP_MICROUSD", "0") or 0)
+    month = db.execute(text("""SELECT spent_microusd + reserved_microusd FROM ide_ai_monthly_spend
+        WHERE month=:m"""), {"m": month_key()}).scalar() or 0
+    allowance = daily_allowance(plan)
+    return {"plan": plan, "agents_live": os.getenv("IDE_AGENTS_LIVE") == "true",
+            "used_today_microusd": int(used), "daily_allowance_microusd": allowance,
+            "used_today_percent": min(100, round(100 * int(used) / allowance)) if allowance else 100,
+            "platform_budget_available": cap > 0 and int(month) < cap}

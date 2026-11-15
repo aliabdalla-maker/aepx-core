@@ -52,5 +52,7 @@ GRANT SELECT, INSERT, UPDATE ON ide_mcp_executions, ide_entitlements TO ide_runt
 GRANT SELECT, INSERT, UPDATE ON ide_media_jobs, ide_media_assets, ide_social_posts TO ide_runtime;
 GRANT SELECT, INSERT ON ide_media_audit TO ide_runtime;
 GRANT EXECUTE ON FUNCTION ide_open_personal_workspace(VARCHAR, VARCHAR) TO ide_runtime;
+GRANT SELECT, INSERT, UPDATE ON ide_ai_monthly_spend, ide_ai_usage TO ide_runtime;
+GRANT EXECUTE ON FUNCTION ide_dispatchable_tenants(INTEGER), ide_ensure_agent_budget(VARCHAR, BIGINT) TO ide_runtime;
 SQL
 echo "IDE database ready"
