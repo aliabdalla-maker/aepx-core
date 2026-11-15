@@ -25,10 +25,20 @@ export type Capabilities = {
   mcp_execution_enabled: boolean;
   knowledge_retrieval: string;
   approval_required: boolean;
+  /** True when the isolated agent worker is deployed and paid AI is switched on. */
+  agents_live?: boolean;
+};
+export type AiUsage = {
+  plan: "free" | "trial" | "pro" | string;
+  agents_live: boolean;
+  used_today_microusd: number;
+  daily_allowance_microusd: number;
+  used_today_percent: number;
+  platform_budget_available: boolean;
 };
 export type LexicalMatch = { id: string; title: string; excerpt: string; score: number };
 export type VectorMatch = { document_id: string; excerpt: string; score: number };
-export type Provider = "oci" | "openai" | "anthropic" | "gemini";
+export type Provider = "oci" | "openai" | "anthropic" | "gemini" | "openrouter";
 export type Entitlement = {
   plan: "trial" | "pro" | "free"; ad_rate: number; subscribed: boolean; trial_days_left: number;
   trial_ends_at: string; renews_at: string | null; will_renew: boolean; price: string;
@@ -98,6 +108,7 @@ export const ideApi = (r: Requester) => ({
     r<Entitlement>("/api/v1/billing/app-store/verify", "POST",
       { original_transaction_id: originalTransactionId, ...(bundleId ? { bundle_id: bundleId } : {}) }),
   capabilities: () => r<Capabilities>("/api/v1/agent-capabilities"),
+  aiUsage: () => r<AiUsage>("/api/v1/ai-usage"),
   projects: () => r<Project[]>("/api/v1/projects"),
   createProject: (name: string, description = "") =>
     r<Project>("/api/v1/projects", "POST", { name, description }),
@@ -140,6 +151,7 @@ export type IdeApi = ReturnType<typeof ideApi>;
 export function runActions(status: RunStatus, attempts: number) {
   return {
     decide: status === "awaiting_approval",
+    approveAndRun: status === "awaiting_approval",
     enqueue: status === "approved",
     cancel: ["awaiting_approval", "approved", "running", "failed"].includes(status),
     retry: status === "failed" && attempts < 2,

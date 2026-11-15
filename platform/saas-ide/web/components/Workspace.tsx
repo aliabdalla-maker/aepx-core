@@ -135,6 +135,16 @@ export default function Workspace() {
     } catch (e) { setMessage(String((e as Error).message ?? e)); }
   }, [api, project, current]);
 
+  // Agent answers can propose whole files: save them into the project and open them.
+  const saveAgentFile = useCallback(async (path: string, content: string) => {
+    if (!api || !project) throw new Error("Open a project first");
+    if (!isSafeRelativePath(path)) throw new Error("Invalid file path");
+    await api.saveFile(project, path, content);
+    setFiles(f => [...f.filter(x => x.path !== path), { path, content }]);
+    setTabs(t => markSaved(openTab(t.filter(x => x.path !== path), path, content), path));
+    setActive(path);
+  }, [api, project]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); void save(); }
@@ -226,7 +236,7 @@ export default function Workspace() {
             {{ agent: "Agents", studio: "Studio", knowledge: "Knowledge", ops: "Operations" }[p]}</button>)}
         </div>
         <div className="panel-body">
-          {panel === "agent" && <AgentPanel api={api} project={project} capabilities={capabilities} onStatus={status} />}
+          {panel === "agent" && <AgentPanel api={api} project={project} capabilities={capabilities} onStatus={status} onSaveFile={saveAgentFile} />}
           {panel === "studio" && <StudioPanel request={requester} fetchAsset={fetchAsset} project={project} role={role} onStatus={status} />}
           {panel === "knowledge" && <KnowledgePanel api={api} project={project} onStatus={status} />}
           {panel === "ops" && <McpOperations request={requester} enabled={Boolean(token)} />}

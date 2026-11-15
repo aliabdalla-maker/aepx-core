@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { ApiError, encodePath, ensureWorkspace, ideApi, isSafeRelativePath, makeRequester, runActions } from "./api";
 import { adsenseSettings, impressionAllowed, readConsent, shouldRenderAd, writeConsent } from "./ads";
+import { QUICK_TASKS, splitResult, usageWidth } from "./agentResult";
 import { buildTree, closeTab, isDirty, languageFor, markSaved, openTab, parsePlan, updateTab } from "./workspace";
 
 const json = (status: number, body: unknown) =>
@@ -45,7 +46,8 @@ describe("api client", () => {
     expect(runActions("approved", 0)).toMatchObject({ decide: false, enqueue: true, requestTool: true });
     expect(runActions("failed", 1).retry).toBe(true);
     expect(runActions("failed", 2).retry).toBe(false);
-    expect(runActions("succeeded", 0)).toEqual({ decide: false, enqueue: false, cancel: false, retry: false, requestTool: false });
+    expect(runActions("succeeded", 0)).toEqual({ decide: false, approveAndRun: false, enqueue: false, cancel: false, retry: false, requestTool: false });
+    expect(runActions("awaiting_approval", 0).approveAndRun).toBe(true);
   });
 });
 
@@ -211,5 +213,40 @@ describe("ensureWorkspace", () => {
   it("surfaces API errors", async () => {
     const denied = (async () => new Response("{}", { status: 401 })) as unknown as typeof fetch;
     await expect(ensureWorkspace("https://ide.test", "tok", denied)).rejects.toThrow("401");
+  });
+});
+
+
+describe("agent assistant", () => {
+  it("splits answers into prose and file-tagged code blocks", () => {
+    const answer = "Here is the API.\n\n`src/app.py`:\n```python\nprint('hi')\n```\nThen run it.\n```bash\nuvicorn app:app\n```\n```ts web/x.ts\nexport {};\n```";
+    expect(splitResult(answer)).toEqual([
+      { kind: "text", text: "Here is the API." },
+      { kind: "code", lang: "python", code: "print('hi')", file: "src/app.py" },
+      { kind: "text", text: "Then run it." },
+      { kind: "code", lang: "bash", code: "uvicorn app:app" },
+      { kind: "code", lang: "ts", code: "export {};", file: "web/x.ts" },
+    ]);
+  });
+
+  it("never attaches unsafe paths and tolerates unclosed fences", () => {
+    const blocks = splitResult("`../etc/passwd`:\n```\nx\n```\n```js /abs/y.js\nopen");
+    expect(blocks.filter(b => b.kind === "code").every(b => !("file" in b))).toBe(true);
+    expect(blocks[blocks.length - 1]).toMatchObject({ kind: "code", code: "open" });
+  });
+
+  it("clamps the usage bar and offers media and code quick tasks", () => {
+    expect(usageWidth(140)).toBe("100%");
+    expect(usageWidth(-5)).toBe("0%");
+    expect(usageWidth(Number.NaN)).toBe("0%");
+    const labels = QUICK_TASKS.map(q => q.label);
+    expect(labels).toEqual(expect.arrayContaining(["REST API", "Soundtrack", "Film storyboard", "Social campaign"]));
+  });
+
+  it("calls the AI usage endpoint", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(json(200, { plan: "trial", agents_live: true }));
+    const api = ideApi(makeRequester("https://api.test", "tok", "alpha", fetchMock as unknown as typeof fetch));
+    await expect(api.aiUsage()).resolves.toMatchObject({ plan: "trial" });
+    expect(fetchMock.mock.calls[0][0]).toBe("https://api.test/api/v1/ai-usage");
   });
 });
