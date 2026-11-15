@@ -1,6 +1,6 @@
 # AEP-X progression dashboard
 
-_Updated 2026-11-15 22:20 UTC. Live release: `5c8c8ae` (ide.softwareequality.com). Open draft PRs: #389, #412, #414; good-hour #24._
+_Updated 2026-11-15 22:20 UTC. Live release: `5c8c8ae` (ide.softwareequality.com). Open draft PRs: #412, #414; good-hour #24. #389 merged 22:04._
 
 **Formula (unweighted, as no weights were approved):**
 verified % = 100 × criteria verified on the deployed system ÷ applicable criteria.
@@ -11,8 +11,8 @@ verified % = 100 × criteria verified on the deployed system ÷ applicable crite
 | Indicator | Count | % |
 |---|---|---|
 | **Verified on the live system** | 4 | **11.8 %** |
-| Verified locally or in CI (real tests, not yet on the live system) | 14 | 41.2 % |
-| Implemented, not yet verified | 3 | 8.8 % |
+| Verified locally or in CI (real tests, not yet on the live system) | 15 | 44.1 % |
+| Implemented, not yet verified | 2 | 5.9 % |
 | Blocked on owner action | 5 | 14.7 % |
 | Not implemented | 8 | 23.5 % |
 
@@ -20,8 +20,8 @@ verified % = 100 × criteria verified on the deployed system ÷ applicable crite
 pie showData
   title Acceptance criteria by evidence (34)
   "Verified live" : 4
-  "Verified locally / CI" : 14
-  "Implemented, unverified" : 3
+  "Verified locally / CI" : 15
+  "Implemented, unverified" : 2
   "Blocked on owner" : 5
   "Not implemented" : 8
 ```
@@ -37,12 +37,12 @@ pie showData
 | MCP security | 1 | 0 | 1 | 0 | 0 | 0 |
 | RAG | 1 | 0 | 1 | 0 | 0 | 0 |
 | PostgreSQL / RLS / HITL | 1 | 0 | 1 | 0 | 0 | 0 |
-| CI/CD and acceptance | 2 | 0 | 1 | 1 | 0 | 0 |
+| CI/CD and acceptance | 2 | 0 | 2 | 0 | 0 | 0 |
 | Build and deploy | 2 | 0 | 0 | 0 | 0 | 2 |
 | Marketplace | 1 | 0 | 0 | 0 | 0 | 1 |
 | Distribution | 2 | 0 | 1 | 0 | 1 | 0 |
 | Specialist IDEs | 1 | 0 | 1 | 0 | 0 | 0 |
-| **Total** | **34** | **4** | **14** | **3** | **5** | **8** |
+| **Total** | **34** | **4** | **15** | **2** | **5** | **8** |
 
 ```mermaid
 xychart-beta
@@ -50,7 +50,7 @@ xychart-beta
   x-axis [IDE, Exec, Auth, Agents, MCP, RAG, RLS, CI, Build, Mkt, Dist, Media]
   y-axis "criteria" 0 --> 10
   bar [9, 3, 8, 3, 1, 1, 1, 2, 2, 1, 2, 1]
-  bar [7, 1, 4, 0, 1, 1, 1, 1, 0, 0, 1, 1]
+  bar [7, 1, 4, 0, 1, 1, 1, 2, 0, 0, 1, 1]
 ```
 
 ## Criteria and evidence
@@ -84,7 +84,7 @@ xychart-beta
 | 25 | RAG | Tenant-scoped retrieval | Local/CI | existing pgvector tests in CI |
 | 26 | RLS/HITL | Atomic approvals, replay prevention, fenced leases | Local/CI | existing HITL acceptance workflows green |
 | 27 | CI | GitHub Actions jobs schedule and run (#370) | Local/CI | runs execute today (e.g. 136/136 on #412) |
-| 28 | CI | 50 × 2 acceptance on current master | Implemented | **fails on master** (3 test defects); fixed in #389 (unmerged); passes locally with #389 |
+| 28 | CI | 50 × 2 acceptance on current master | Local/CI | #389 merged; run 43767204040 on `ccd0a27`: batch 1 50/50, batch 2 50/50, aggregate verified (artifact 14182976309, sha256:d1f5b375…); smoke 43767206838 passed. Verifier: "independent acceptance NOT ESTABLISHED" — offline evidence only |
 | 29 | Build | Downloadable build artifact from a project | Not implemented | — |
 | 30 | Deploy | Deploy a project with health verification | Not implemented | — |
 | 31 | Marketplace | Install/enable/disable/uninstall plugins in the IDE | Not implemented | — |
@@ -93,6 +93,5 @@ xychart-beta
 | 34 | Media | Specialist editors with export (MIDI, WAV, SRT, EDL, HTML, clients) | Local/CI | vitest; deployed, not exercised signed-in live |
 
 ## Next (in order)
-1. Owner merges #389 → dispatch 50 × 2 on master (criterion 28).
-2. Owner approves #412/#414 merge + deploy; owner signs in once on production so 1–4, 9, 13, 19, 21–22 and 34 can be verified live.
-3. Run cancellation and diagnostics (5, 11); then build artifacts via GitHub Actions (29).
+1. Owner approves #412/#414 merge + deploy; owner signs in once on production so 1–4, 9, 13, 19, 21–22 and 34 can be verified live.
+2. Run cancellation and diagnostics (5, 11); then build artifacts via GitHub Actions (29).
