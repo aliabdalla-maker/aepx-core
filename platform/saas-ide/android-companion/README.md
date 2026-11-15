@@ -10,26 +10,21 @@ Trusted Web Activity).
 `../monetization/ads-config.json` is the single source of truth. The build copies it into the APK
 (`copyAdsConfig` task); the web IDE's tests read the same file.
 
-| AdMob item | Value |
-|---|---|
-| App ID (release manifest) | `ca-app-pub-2980680946304710~2617421798` |
-| Units | `…/1032845563`, `…/2172884450`, `…/3668921616`, `…/5953999752`, `…/6184281650`, `…/6514576804` |
+Publisher `pub-2980680946304710`; app ID (release manifest) `ca-app-pub-2980680946304710~2617421798`.
+Live since 0.3.0 (`admob.enabled: true`):
 
-Each unit has `format` and `placement`, both `null` today, so **no unit is ever requested**. To turn a unit on:
+| Unit | format | placement | where |
+|---|---|---|---|
+| `ca-app-pub-2980680946304710/1032845563` | banner | `project_list_banner` | bottom of the projects list |
+| `ca-app-pub-2980680946304710/2172884450` | banner | `runs_list_banner` | bottom of a project's runs list |
+| `ca-app-pub-2980680946304710/3668921616` | interstitial | `run_completed_interstitial` | when leaving a finished run (max 3/session, ≥3 min apart) |
+| `ca-app-pub-2980680946304710/5953999752` | native | `native_feed` | end of the projects list, labelled "Ad" |
+| `ca-app-pub-2980680946304710/6184281650` | app_open | `app_open` | once per 4 h after consent |
+| `ca-app-pub-2980680946304710/6514576804` | rewarded | `rewarded_ad_break` | opt-in only: "watch an ad" earns 30 ad-free minutes |
 
-1. In the AdMob console, read the unit's format (banner, interstitial, rewarded, rewarded interstitial, native, app open).
-2. Set `format` to that value and `placement` to one of:
-
-   | placement | format | where |
-   |---|---|---|
-   | `project_list_banner` | banner | bottom of the projects list |
-   | `runs_list_banner` | banner | bottom of a project's runs list |
-   | `native_feed` | native | end of the projects list, labelled "Ad" |
-   | `run_completed_interstitial` | interstitial | when leaving a finished run (max 3/session, ≥3 min apart) |
-   | `app_open` | app_open | once per 4 h after consent |
-
-   Rewarded formats are accepted in the config but have no placement until there is a product reason to reward users.
-3. Debug builds then show Google **test** ads for that placement. Set `admob.enabled: true` only for a release you intend to ship.
+If the AdMob console shows a different format for a unit, change only that unit's `format`/`placement`;
+a mismatch makes the config invalid and no ads are requested. Debug builds always use Google **test** units.
+`app-ads.txt` (`../monetization/ads.txt`) must be served at the root of the developer website listed in Play.
 
 Hard rules enforced in code (`ads/AdPolicy.kt`, unit-tested):
 - A unit is requested only when its declared format matches the placement; mismatches, unknown values,
