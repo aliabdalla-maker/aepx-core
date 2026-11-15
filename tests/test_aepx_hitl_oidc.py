@@ -13,7 +13,7 @@ spec=importlib.util.spec_from_file_location("hitl_oidc",path)
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 ENV={"HITL_OIDC_ISSUER":"https://id.example.test","HITL_OIDC_AUDIENCE":"aepx-hitl",
      "HITL_OIDC_JWKS_URL":"https://id.example.test/.well-known/jwks.json"}
-CLAIMS={"sub":"alice","tenant_id":"11111111-1111-4111-8111-111111111111",
+CLAIMS={"sub":"8f2c1e4a-1d50-4cd3-9947-2b9925684ac1","tenant_id":"11111111-1111-4111-8111-111111111111",
         "roles":["hitl:approve"]}
 class VerifierTests(unittest.TestCase):
     def test_valid_verified_claims(self):
@@ -22,9 +22,9 @@ class VerifierTests(unittest.TestCase):
         key=MagicMock()
         key.get_signing_key_from_jwt.return_value.key="key"
         principal=m.verify_bearer("Bearer signed.token.value",env=ENV,key_client=key,jwt_module=jwt)
-        self.assertEqual(principal.subject,"alice")
+        self.assertEqual(principal.subject,"8f2c1e4a-1d50-4cd3-9947-2b9925684ac1")
         self.assertIn("hitl:approve",principal.roles)
-        self.assertEqual(jwt.decode.call_args.kwargs["algorithms"],["RS256","ES256"])
+        self.assertEqual(jwt.decode.call_args.kwargs["algorithms"],["RS256"])
     def test_missing_config_denied(self):
         with self.assertRaises(m.AuthenticationDenied):
             m.verify_bearer("Bearer token",env={})
