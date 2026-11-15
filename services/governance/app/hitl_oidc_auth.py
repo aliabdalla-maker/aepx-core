@@ -6,8 +6,6 @@ This module never accepts unsigned tokens, caller-supplied keys or algorithms.
 import time
 from urllib.parse import urlparse
 from uuid import UUID
-import jwt
-from jwt import PyJWKClient
 from .hitl_operator_identity import VerifiedOperator
 
 class IdentityVerificationError(PermissionError):
