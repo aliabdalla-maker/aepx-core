@@ -26,7 +26,9 @@ def main():
     env=os.environ.copy()
     env["PGHOST"]="127.0.0.1"
     env["PGCONNECT_TIMEOUT"]="5"
-    cmd=["psql","-X","-A","-t","-v","ON_ERROR_STOP=1","--dbname",args.database]
+    # -q suppresses command tags (SET/BEGIN/COMMIT); without it the readiness line and the
+    # final count are preceded by tags and the acceptance can never pass on real PostgreSQL.
+    cmd=["psql","-X","-q","-A","-t","-v","ON_ERROR_STOP=1","--dbname",args.database]
     def run(sql,check=True):
         return subprocess.run(cmd,input=sql,text=True,capture_output=True,env=env,check=check,timeout=30)
     nonce=str(uuid.uuid4())
