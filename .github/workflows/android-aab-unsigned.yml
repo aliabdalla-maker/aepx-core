@@ -1,7 +1,7 @@
 name: Android companion AAB (unsigned, for owner signing)
 # Pushing a branch build/android-aab-vX.Y.Z builds the production Play bundle (live AdMob app
 # ID, ide.softwareequality.com, auth.softwareequality.com sign-in) WITHOUT signing it, and keeps
-# it as a workflow artifact for 7 days. The owner signs it with the upload key off GitHub
+# it as a workflow artifact for 7 days and on a DRAFT release (visible only to repo owners). The owner signs it with the upload key off GitHub
 # (jarsigner) and uploads it in Play Console. Used while the AEPX_UPLOAD_* secrets are not set;
 # once they are, android-release.yml builds and signs the bundle itself.
 on:
@@ -13,6 +13,8 @@ jobs:
   aab:
     runs-on: ubuntu-24.04
     timeout-minutes: 40
+    permissions:
+      contents: write
     defaults:
       run:
         shell: bash
@@ -49,3 +51,14 @@ jobs:
           path: ${{ runner.temp }}/out/
           retention-days: 7
           if-no-files-found: error
+      - name: Attach to a draft release (owners only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          v="${GITHUB_REF_NAME#build/android-aab-v}"
+          tag="android-aab-v$v"
+          gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          gh release create "$tag" "$RUNNER_TEMP"/out/* --repo "$GITHUB_REPOSITORY" --draft --target "$GITHUB_SHA" \
+            --title "Android AAB $v (unsigned, for signing)" \
+            --notes "Unsigned production Play bundle for owner signing. Draft: not public."
