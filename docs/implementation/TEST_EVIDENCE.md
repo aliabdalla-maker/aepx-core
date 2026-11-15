@@ -40,3 +40,13 @@ Not verified: anything in production; any signed-in flow; real e-mail delivery; 
 | Password policy | `keycloak-setup.sh` on Keycloak 26.0.7 with the production realm, then admin API | 7-char and no-upper-case passwords rejected; reuse of the last password rejected; compliant password accepted. Note: `notUsername` blocks a password equal to the username, not one containing it (help text says so). |
 | End-to-end, local stack (Keycloak HTTPS + API on PostgreSQL 16 + production web build, headless Chrome) | `/tmp/e2e.py` | **14/14**: assistant answers from help signed out; Create an account opens registration; weak password rejected at registration; e-mail sign-in; project created; existing README not overwritten by default; .zip import (2 text files, binary + node_modules skipped); saved; reload + reopen keeps the edit; footer build; assistant uses module context; AI-off reason shown |
 | Ask AI end-to-end | — | **not verified**: needs the isolated metered worker (not run locally). It uses the existing create/decide/enqueue/run endpoints unchanged. |
+
+## Sandboxed code execution (branch feat/sandbox-runner) — not enabled in production
+| Check | Method | Result |
+|---|---|---|
+| Runner validation, flags, HMAC, replay | `pytest runner/tests` (no Docker part) | pass |
+| Real containers (runc, local) | `pytest runner/tests` with a local image built from the workspace's own Python/Node (Docker Hub is blocked in this workspace) | 12/12: Python + Node output and exit codes, multi-file imports, **no network**, **read-only project and root**, **uid 65534**, **10 s timeout kills the container**, **memory limit**, **process limit**, output cap. Two real bugs found and fixed: `-I` broke multi-file imports; `/tmp` was not writable by the sandbox user. |
+| API endpoint | `pytest tests/test_execution.py` on PostgreSQL 16 | 9/9: off by default with reason; misconfigured runner stays off; runs saved files and audits `code.run`; unsaved/unsupported/path-traversal refused; viewer refused; other tenant refused; rate limit; honest runner errors; runner URL must be HTTPS or explicitly allowed private HTTP |
+| Full chain | API -> HMAC-signed request -> runner app -> real container | Python with local import printed 42 with exit code 5; Node printed `node 42`; forged signature refused (401) |
+| gVisor | CI job `runner` on GitHub runners (gVisor download blocked here) | see PR checks |
+| Production | — | **not enabled**: `IDE_CODE_EXECUTION_ENABLED` stays false until a gVisor host passes the setup self-test and the acceptance run |

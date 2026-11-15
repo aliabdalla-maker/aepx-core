@@ -56,6 +56,9 @@ A new Software project starts with README.md. Add files with **New file** or bri
 ## Using the agent crew
 The architect, developer and tester agents plan and write code. Good tasks: "Build a FastAPI REST API with tests", "Add a GitHub Actions CI pipeline". Save the proposed files to the project, then review them in the editor.
 
+## Running code
+Open a Python (.py) or JavaScript (.js) file and choose **Run**. Unsaved changes are saved first, then the project's files run in an isolated sandbox with no network access, a read-only copy of the project, and limits of 10 seconds, 256 MB of memory and 64 processes. The output, the exit code and the time taken appear under the editor. If Run is greyed out, hover it to see why; on some workspaces running code has not been switched on yet.
+
 ## Checks on generated code
 AI answers include an automatic validation report (syntax and common mistakes) under the code so you can review before saving.
 

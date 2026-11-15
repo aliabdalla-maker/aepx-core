@@ -5,6 +5,7 @@ import { oidcAuthority, oidcClientId, oidcConfigured, oidcManager, oidcRegistrat
 import { DEFAULT_AUTH_OPTIONS, fetchAuthOptions, forgotPasswordUrl, releaseLabel, saveHint, signinArgs, type AuthOptions } from "../lib/signin";
 import SignedOutWelcome from "./SignedOutWelcome";
 import Assistant from "./Assistant";
+import { isRunnable, runHint, runSucceeded, runSummary, type ExecutionStatus, type RunOutput } from "../lib/run";
 import ImportDialog from "./ImportDialog";
 import type { Capabilities, Entitlement, FileEntry, IdeApi, IdeModule, Project } from "../lib/api";
 import { ensureWorkspace, ideApi, isSafeRelativePath, makeBlobFetcher, makeRequester } from "../lib/api";
@@ -126,6 +127,8 @@ export default function Workspace() {
     api.projects().then(p => { setProjects(p); setMessage(p.length ? "Select a project" : "Create your first project"); })
       .catch(e => setMessage(String(e.message ?? e)));
     api.capabilities().then(setCapabilities).catch(() => setCapabilities(null));
+    api.executionStatus().then(setExecStatus)
+      .catch(() => setExecStatus({ enabled: false, languages: [], reason: "Could not check whether code can run here." }));
     api.modules().then(setModules).catch(() => setModules([]));
     api.me().then(m => setRole(m.role)).catch(() => setRole(undefined));
     // Server-side plan: trial (100% ads) -> Pro £4.99/month (5% ads) -> free (100% ads).
@@ -188,6 +191,24 @@ export default function Workspace() {
   const currentProject = projects.find(p => p.id === project);
   const agentTasks = useMemo(() => moduleTasks(modules, currentProject?.module, QUICK_TASKS), [modules, currentProject]);
   const [importOpen, setImportOpen] = useState(false);
+  const [execStatus, setExecStatus] = useState<ExecutionStatus | null>(null);
+  const [running, setRunning] = useState(false);
+  const [runResult, setRunResult] = useState<{ path: string; out?: RunOutput; error?: string } | null>(null);
+  async function runCurrent() {
+    if (!api || !project || !current || runHint({ signedIn: Boolean(token), status: execStatus, path: current.path, running })) return;
+    setRunning(true); setRunResult({ path: current.path });
+    try {
+      if (isDirty(current)) {
+        await api.saveFile(project, current.path, current.content);
+        setTabs(t => markSaved(t, current.path));
+        setFiles(f => [...f.filter(x => x.path !== current.path), { path: current.path, content: current.content }]);
+      }
+      const out = await api.runFile(project, current.path);
+      setRunResult({ path: current.path, out }); setMessage(`Ran ${current.path}: ${runSummary(out)}`);
+    } catch (e) {
+      setRunResult({ path: current.path, error: e instanceof Error ? e.message : String(e) });
+    } finally { setRunning(false); }
+  }
   const readOnly = role === "viewer" || role === "reviewer";
   const assistantModule = currentProject ? (currentProject.module || "software") : "general";
   const assistantModuleName = currentProject ? moduleLabel(modules, currentProject.module) : "AEP-X IDE";
@@ -287,6 +308,10 @@ export default function Workspace() {
             <button aria-pressed={!codeView.has(current.path)} onClick={() => setCodeView(v => { const n = new Set(v); n.delete(current.path); return n; })}>Visual</button>
             <button aria-pressed={codeView.has(current.path)} onClick={() => setCodeView(v => new Set(v).add(current.path))}>Code</button>
           </div>}
+          {current && isRunnable(current.path) && (() => {
+            const hint = runHint({ signedIn: Boolean(token), status: execStatus, path: current.path, running });
+            return <button className="run" disabled={Boolean(hint)} title={hint || "Run this file in an isolated sandbox"}
+              aria-description={hint || undefined} onClick={() => void runCurrent()}>{running ? "Running…" : "▶ Run"}</button>; })()}
           {current && <button onClick={() => setHistoryFor(h => h === current.path ? "" : current.path)}
             aria-pressed={historyFor === current.path}>History</button>}
           {current && <button onClick={() => void deleteFile(current.path)}>Delete</button>}
@@ -315,6 +340,15 @@ export default function Workspace() {
                   {!project && <button className="primary" onClick={() => void createProject()}>New project</button>}</>}
               <AdSlot surface="projectHome" consent={consent} rate={entitlement?.ad_rate ?? 1} />
             </div>}
+        {runResult && <section className="run-output" aria-label="Run output" aria-live="polite">
+          <header><strong>Output</strong> <span className="muted small">{runResult.path}</span>
+            {runResult.out && <span className={"small " + (runSucceeded(runResult.out) ? "muted" : "warn")}> · {runSummary(runResult.out)}</span>}
+            <button className="icon" aria-label="Close output" onClick={() => setRunResult(null)}>×</button></header>
+          {!runResult.out && !runResult.error && <p className="muted small">Running in the sandbox…</p>}
+          {runResult.error && <p className="warn" role="alert">{runResult.error}</p>}
+          {runResult.out && <pre>{runResult.out.stdout}{runResult.out.stderr && <span className="stderr">{runResult.out.stderr}</span>}
+            {!runResult.out.stdout && !runResult.out.stderr && <span className="muted">(no output)</span>}</pre>}
+        </section>}
         {api && project && historyFor && <FileHistory api={api} project={project} path={historyFor}
           onRestored={restored} onStatus={status} onClose={() => setHistoryFor("")} />}
         <footer className="statusbar" role="status">
