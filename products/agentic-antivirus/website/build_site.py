@@ -112,6 +112,8 @@ def main():
     (static / "privacy.html").write_text(page("Privacy | Agentic Antivirus", privacy_body(), "Privacy notice for Agentic Antivirus."))
     shutil.copy(HERE / "assets" / "agentic-antivirus-icon.svg", static / "icon.svg")
     shutil.copy(HERE / "assets" / "agentic-antivirus-icon.png", OUT / "static" / "agentic-antivirus-icon.png")
+    for icon in (HERE / "assets" / "product-icons").glob("*-icon.png"):
+        shutil.copy(icon, OUT / "static" / icon.name)
     wp = OUT / "wordpress"
     wp.mkdir()
     (wp / "agentic-antivirus-block.html").write_text(f'<style>{CSS}</style><div class="aav">{product_body(m)}</div>')
