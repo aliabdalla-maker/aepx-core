@@ -9,7 +9,7 @@ targets:
     type: application
     platform: iOS
     sources: [AgenticAntivirus, Assets.xcassets]
-    dependencies: [{ package: GoogleMobileAds }, { package: UserMessagingPlatform }]
+    dependencies: [{ package: GoogleMobileAds }, { package: UserMessagingPlatform, product: GoogleUserMessagingPlatform }]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.equalitysoftware.agenticantivirus

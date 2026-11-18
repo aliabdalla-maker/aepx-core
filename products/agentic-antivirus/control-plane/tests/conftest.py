@@ -73,7 +73,7 @@ def database():
 @pytest.fixture(scope="session", autouse=True)
 def aepx_governance():
     env = dict(os.environ, DATABASE_URL="postgresql://nobody@127.0.0.1:1/none")
-    proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "app.main:app", "--port", str(GOV_PORT)],
+    proc = subprocess.Popen([os.environ.get("AAV_GOVERNANCE_PYTHON", sys.executable), "-m", "uvicorn", "app.main:app", "--port", str(GOV_PORT)],
                             cwd=REPO / "services" / "governance", env=env, stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL)
     import httpx
