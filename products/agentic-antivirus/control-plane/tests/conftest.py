@@ -25,6 +25,7 @@ PRODUCT = HERE.parents[2]
 REPO = HERE.parents[4]
 ADMIN_DSN = os.getenv("AAV_TEST_PG_ADMIN_DSN", "postgresql://postgres@/postgres?host=/tmp/pg&port=55432")
 DB_NAME = f"aav_t_{uuid.uuid4().hex[:8]}"
+APP_PASSWORD = uuid.uuid4().hex  # servers that require passwords (CI) need one for the aav_app role
 
 
 def _free_port() -> int:
@@ -50,6 +51,8 @@ def _dsn_for(dbname: str, user: str | None = None) -> str:
     base["dbname"] = dbname
     if user:
         base["user"] = user
+        if user == "aav_app":
+            base["password"] = APP_PASSWORD
     return psycopg.conninfo.make_conninfo(**base)
 
 
@@ -61,6 +64,7 @@ def database():
     with psycopg.connect(admin, autocommit=True) as c:
         for f in sorted((CP / "migrations").glob("*.sql")):
             c.execute(f.read_text())
+        c.execute(f"ALTER ROLE aav_app PASSWORD '{APP_PASSWORD}'")
     from app import crypto, db
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
     db.set_dsn(_dsn_for(DB_NAME, "aav_app"))

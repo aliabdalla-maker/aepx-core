@@ -121,7 +121,6 @@ jobs:
           - { os: ubuntu-24.04-arm, target: linux-arm64 }
           - { os: windows-latest, target: windows-x64 }
           - { os: macos-latest, target: macos-arm64 }
-          - { os: macos-15-intel, target: macos-x64 }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -201,7 +200,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.AEPX_APPLE_TEAM_ID }}
         run: |
           cd $P/clients/desktop && npm ci && npm test
-          if [ -z "$CSC_LINK" ]; then export CSC_IDENTITY_AUTO_DISCOVERY=false; echo "Desktop ${{ matrix.os }}: UNSIGNED" >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -z "$CSC_LINK" ]; then unset CSC_LINK CSC_KEY_PASSWORD; export CSC_IDENTITY_AUTO_DISCOVERY=false; echo "Desktop ${{ matrix.os }}: UNSIGNED" >> "$GITHUB_STEP_SUMMARY"; fi
           npx electron-builder --publish never
           cd dist && for f in agentic-antivirus-*; do [ -f "$f" ] && (sha256sum "$f" 2>/dev/null || shasum -a 256 "$f"); done > SHA256SUMS-${{ matrix.os }}.txt
       - uses: actions/upload-artifact@v7
