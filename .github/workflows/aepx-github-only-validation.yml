@@ -97,10 +97,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Install actionlint (version-pinned)
@@ -218,7 +218,7 @@ jobs:
           cat "$RUNNER_TEMP/aepx-progress.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload milestone report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aepx-github-only-progress
           path: ${{ runner.temp }}/aepx-progress.md
@@ -229,7 +229,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Inspect queue with validated evidence parser
@@ -249,7 +249,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload queue evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aepx-queue-evidence
           path: ${{ runner.temp }}/aepx-queue-evidence.json

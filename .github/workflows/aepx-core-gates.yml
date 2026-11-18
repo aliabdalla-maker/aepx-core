@@ -51,7 +51,7 @@ jobs:
   static:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Validate Python syntax
         run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py scripts/aepx-hitl-store.py scripts/aepx-local-outbox.py scripts/aepx-hitl-migration-check.py
       - name: Run core acceptance regression tests
@@ -99,7 +99,7 @@ jobs:
       - name: Inspect resolved Compose port exposure (development informational)
         run: python3 scripts/aepx-compose-exposure.py
       - name: Upload security evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aepx-core-static-evidence
           path: |

@@ -31,10 +31,10 @@ jobs:
         shell: bash
         working-directory: platform/saas-ide/desktop
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - run: npm ci --no-audit --no-fund
@@ -73,7 +73,7 @@ jobs:
           cat SHA256SUMS-${{ matrix.target }}.txt
           echo "${{ matrix.target }}: ${#files[@]} installers, signed=$SIGNED" >> "$GITHUB_STEP_SUMMARY"
           [ "$SIGNED" = true ] || echo '::warning::Unsigned build: OK for QA, not for the public downloads page.'
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: aepx-desktop-${{ matrix.target }}
           path: |

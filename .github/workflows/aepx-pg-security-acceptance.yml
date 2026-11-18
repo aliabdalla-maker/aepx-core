@@ -37,10 +37,10 @@ jobs:
       PGHOST: 127.0.0.1
       PGPORT: '5432'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
       - name: Apply schema exactly as shipped (fails on any SQL error)
