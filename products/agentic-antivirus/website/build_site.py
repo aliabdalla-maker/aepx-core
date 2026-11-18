@@ -110,7 +110,8 @@ def main():
     desc = "Antivirus, behaviour detection and AI-assisted incident response with human approval. Early access."
     (static / "index.html").write_text(page("Agentic Antivirus | Equality Software", product_body(m), desc))
     (static / "privacy.html").write_text(page("Privacy | Agentic Antivirus", privacy_body(), "Privacy notice for Agentic Antivirus."))
-    shutil.copy(P / "web" / "public" / "icons" / "icon.svg", static / "icon.svg")
+    shutil.copy(HERE / "assets" / "agentic-antivirus-icon.svg", static / "icon.svg")
+    shutil.copy(HERE / "assets" / "agentic-antivirus-icon.png", OUT / "static" / "agentic-antivirus-icon.png")
     wp = OUT / "wordpress"
     wp.mkdir()
     (wp / "agentic-antivirus-block.html").write_text(f'<style>{CSS}</style><div class="aav">{product_body(m)}</div>')
