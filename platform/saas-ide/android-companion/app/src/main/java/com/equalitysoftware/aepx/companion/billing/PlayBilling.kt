@@ -7,11 +7,11 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PendingPurchasesParams
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
-import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchasesAsync
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -47,6 +47,20 @@ class PlayBilling(
         }
     }
 
+    /** Billing Library 8: the listener receives a QueryProductDetailsResult (unfetched products are listed separately). */
+    private suspend fun productDetails(query: QueryProductDetailsParams): ProductDetails? =
+        suspendCancellableCoroutine { cont ->
+            client.queryProductDetailsAsync(query) { result, detailsResult ->
+                val found = if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    detailsResult.productDetailsList.firstOrNull()
+                } else {
+                    Log.i(TAG, "Product details unavailable: ${result.responseCode}")
+                    null
+                }
+                if (cont.isActive) cont.resume(found)
+            }
+        }
+
     /** Starts the Play purchase sheet. Returns a user-facing error, or null when the sheet opened. */
     suspend fun subscribe(accountId: String): String? {
         if (!connected()) return "Google Play billing is unavailable"
@@ -54,8 +68,7 @@ class PlayBilling(
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(productId).setProductType(BillingClient.ProductType.SUBS).build()
         )).build()
-        val details = client.queryProductDetails(query).productDetailsList?.firstOrNull()
-            ?: return "Subscription is not available in this store yet"
+        val details = productDetails(query) ?: return "Subscription is not available in this store yet"
         val offers = details.subscriptionOfferDetails.orEmpty().map { Offer(it.basePlanId, it.offerId, it.offerToken) }
         val offer = OfferPolicy.choose(offers) ?: return "Subscription has no base plan"
         val params = BillingFlowParams.newBuilder()

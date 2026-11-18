@@ -110,7 +110,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         if: steps.key.outputs.ready == 'true'
         with:
-          gradle-version: '8.10.2'
+          gradle-version: '8.11.1'
       - name: Build signed APK
         if: steps.key.outputs.ready == 'true'
         env:
@@ -163,7 +163,7 @@ jobs:
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.10.2'
+          gradle-version: '8.11.1'
       - name: Version from tag
         run: |
           set -euo pipefail
@@ -285,7 +285,7 @@ jobs:
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.10.2'
+          gradle-version: '8.11.1'
       - name: JetBrains Marketplace
         working-directory: platform/saas-ide/marketplace/jetbrains
         env:

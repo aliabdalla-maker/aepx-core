@@ -49,12 +49,12 @@ val copyAdsConfig = tasks.register<CopyAdsConfig>("copyAdsConfig") {
 
 android {
     namespace = "com.equalitysoftware.aepx.companion"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.equalitysoftware.aepx.companion"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = providers.gradleProperty("aepx.versionCode").orNull?.toInt() ?: 1
         versionName = providers.gradleProperty("aepx.versionName").orNull ?: "0.1.0"
         buildConfigField("String", "API_BASE_URL", quoted(prop("aepx.apiBaseUrl")))
@@ -120,7 +120,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:23.6.0")
     implementation("com.google.android.ump:user-messaging-platform:3.1.0")
     implementation("net.openid:appauth:0.11.1")
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.android.billingclient:billing-ktx:8.0.0")
 
     testImplementation("junit:junit:4.13.2")
     // Real org.json for JVM unit tests (android.jar only ships stubs).
