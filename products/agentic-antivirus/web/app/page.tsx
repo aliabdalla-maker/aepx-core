@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { Shell } from "../components/Shell";
 import { AdSlot, Freshness, Sev, Status, useApi } from "../components/ui";
 import { DecisionCard, type ActionRequest } from "../components/Decision";
@@ -42,7 +43,7 @@ export default function Dashboard() {
 
       <h2>Open incidents</h2>
       {openInc.length ? <table><thead><tr><th>Incident</th><th>{t("alerts.severity")}</th><th>Alerts</th><th>Updated</th></tr></thead>
-        <tbody>{openInc.map((i) => <tr key={i.id}><td><a href={`/incident?id=${i.id}`}>{i.title}</a></td><td><Sev s={i.severity} /></td>
+        <tbody>{openInc.map((i) => <tr key={i.id}><td><Link href={`/incident?id=${i.id}`}>{i.title}</Link></td><td><Sev s={i.severity} /></td>
           <td>{i.alert_count}</td><td>{formatRelative(i.updated_at, locale)}</td></tr>)}</tbody></table>
         : <p>No open incidents.</p>}
 

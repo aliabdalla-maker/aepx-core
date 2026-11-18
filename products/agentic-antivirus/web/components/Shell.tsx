@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { api, describeError, session } from "../lib/api";
@@ -50,16 +51,16 @@ export function Shell({ children, pending }: { children: ReactNode; pending?: nu
   };
 
   const link = ([href, key]: [string, string]) => (
-    <a key={href} href={href} aria-current={path === href ? "page" : undefined}>
+    <Link key={href} href={href} aria-current={path === href ? "page" : undefined}>
       {t(key)}{href === "/approvals" && pending ? <span className="count" aria-label={`${pending} waiting`}>{pending}</span> : null}
-    </a>);
+    </Link>);
 
   return (
     <>
       <a className="skip" href="#main">{t("a11y.skip")}</a>
       <div className="frame">
         <nav className="rail" aria-label="Primary">
-          <div className="brand"><img src="/icons/icon.svg" alt="" width={28} height={28} />{t("app.name")}</div>
+          <div className="brand"><img src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icons/icon.svg`} alt="" width={28} height={28} />{t("app.name")}</div>
           {NAV.map(link)}
           <div className="group" />
           {NAV2.map(link)}
@@ -85,9 +86,9 @@ export function Shell({ children, pending }: { children: ReactNode; pending?: nu
               {me && <span>{me.email}</span>}
               <button onClick={logout}>{t("auth.logout")}</button>
             </div>
-            {ent?.state === "trial" && <p className="banner">{t("billing.trial", { days: ent.trial_days_left })} <a href="/billing">{t("billing.subscribe")}</a></p>}
+            {ent?.state === "trial" && <p className="banner">{t("billing.trial", { days: ent.trial_days_left })} <Link href="/billing">{t("billing.subscribe")}</Link></p>}
             {ent?.state === "paid" && ent.paid_until && <p className="banner">{t("billing.paid", { date: formatDateTime(ent.paid_until, locale) })}</p>}
-            {ent?.state === "expired" && <p className="banner warn">{t("billing.expired")} <a href="/billing">{t("billing.subscribe")}</a></p>}
+            {ent?.state === "expired" && <p className="banner warn">{t("billing.expired")} <Link href="/billing">{t("billing.subscribe")}</Link></p>}
             {err && <p className="banner warn" role="alert">{err}</p>}
             {children}
           </main>

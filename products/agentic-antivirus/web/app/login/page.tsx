@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api, session } from "../../lib/api";
@@ -24,7 +25,7 @@ export default function Login() {
         <label>{t("auth.password")}<input type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
         {s.view}
         <div className="row"><button className="primary" disabled={s.busy}>{t("auth.login")}</button>
-          <a href="/forgot">{t("auth.forgot")}</a><a href="/register">{t("auth.register")}</a></div>
+          <Link href="/forgot">{t("auth.forgot")}</Link><Link href="/register">{t("auth.register")}</Link></div>
       </form>
     </AuthPage>);
 }

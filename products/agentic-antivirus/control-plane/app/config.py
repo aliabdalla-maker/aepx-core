@@ -24,7 +24,7 @@ class Settings:
     approval_ttl_minutes: int = field(default_factory=lambda: _int("AAV_APPROVAL_TTL_MINUTES", 60))
     command_ttl_minutes: int = field(default_factory=lambda: _int("AAV_COMMAND_TTL_MINUTES", 60))
     public_base_url: str = field(default_factory=lambda: os.getenv(
-        "AAV_PUBLIC_BASE_URL", "https://softwareequality.com/apps/agentic-antivirus"))
+        "AAV_PUBLIC_BASE_URL", "https://api.softwareequality.com/apps/agentic-antivirus"))
     oidc_issuer: str = field(default_factory=lambda: os.getenv("AAV_OIDC_ISSUER", ""))
     oidc_client_id: str = field(default_factory=lambda: os.getenv("AAV_OIDC_CLIENT_ID", ""))
     oidc_jwks_url: str = field(default_factory=lambda: os.getenv("AAV_OIDC_JWKS_URL", ""))

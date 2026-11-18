@@ -16,7 +16,7 @@
 4. Generate the Ed25519 key: `openssl genpkey -algorithm ed25519 -out /etc/aav/signing.pem && chmod 600 /etc/aav/signing.pem`.
 5. Add `deploy/nginx-host-location.conf` to the existing TLS server block, then run `nginx -t && systemctl reload nginx`.
 6. Run the GitHub workflow `agentic-antivirus` with `deploy_sha`. The protected environment asks for approval, and the job runs `deploy/deploy.sh SHA` (guard → backup → up → readiness → automatic rollback).
-7. Verify independently (RA-11): `curl https://softwareequality.com/apps/agentic-antivirus/api/health`. Compare the running image digest with the CI summary.
+7. Verify independently (RA-11): `curl https://api.softwareequality.com/apps/agentic-antivirus/api/health`. Compare the running image digest with the CI summary.
 8. Publish the signed baseline detections, signed in by the operator tenant admin: `POST /v1/updates` with `detection/rules/baseline.json`.
 
 ## 2. Rollback
@@ -63,6 +63,13 @@
 
 ## 5. Agent installation
 
-- **Linux:** copy `aav-agent-linux-<arch>` to `/opt/aav-agent/aav-agent`, then run `aav-agent enrol --url https://softwareequality.com/apps/agentic-antivirus/api --token TOKEN --state /var/lib/aav-agent`. Install `agent/packaging/aav-agent.service` and run `systemctl enable --now aav-agent`.
+- **Linux:** copy `aav-agent-linux-<arch>` to `/opt/aav-agent/aav-agent`, then run `aav-agent enrol --url https://api.softwareequality.com/apps/agentic-antivirus/api --token TOKEN --state /var/lib/aav-agent`. Install `agent/packaging/aav-agent.service` and run `systemctl enable --now aav-agent`.
 - **macOS:** copy the binary to `/Library/Application Support/AgenticAntivirus/`, enrol, then load `com.equalitysoftware.aav-agent.plist` with `launchctl bootstrap system`.
 - **Windows:** as Administrator, run `aav-agent-windows-<arch>.exe --state C:\ProgramData\AgenticAntivirus enrol …`, then `aav-agent-service-windows-<arch>.exe --startup auto install` and `sc start AgenticAntivirus`.
+
+## Co-hosted deployment (shared VM)
+For a VM that already runs another product behind Caddy (the OCI "ai4business" VM with Business AI Manager):
+1. `git clone https://github.com/aliabdalla-maker/aepx-core /opt/aepx-core` (or `git -C /opt/aepx-core pull`) and check out the verified commit.
+2. `sudo -E /opt/aepx-core/products/agentic-antivirus/deploy/cohost-install.sh`. It adds 2 GB swap if none exists, creates `/etc/aav/aav.env` and the Ed25519 signing key (mode 600/400, never in git), starts the stack with `compose.cohost.yml` (about 1.1 GB memory in total), waits for readiness, then adds the `/apps/agentic-antivirus/` route to the existing Caddyfile. The Caddyfile is backed up first, validated, and restored if Caddy rejects it.
+3. Console: `https://api.softwareequality.com/apps/agentic-antivirus/`. Health: `.../api/health`.
+Images are also published to GitHub Container Registry by CI: `ghcr.io/aliabdalla-maker/agentic-antivirus-control-plane` and `ghcr.io/aliabdalla-maker/agentic-antivirus-web` (tags: commit SHA, `edge` for the feature branch, `latest` for master, version for `aav-v*` tags).

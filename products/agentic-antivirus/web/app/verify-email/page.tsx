@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect } from "react";
 import { api } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
@@ -10,5 +11,5 @@ export default function Verify() {
   useEffect(() => { s.run(async () => { await api("/v1/auth/verify-email", { body: { token: tokenParam() } }); return t("auth.verified"); }); },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
-  return <AuthPage title="Verify email">{s.view}<a href="/login">{t("auth.login")}</a></AuthPage>;
+  return <AuthPage title="Verify email">{s.view}<Link href="/login">{t("auth.login")}</Link></AuthPage>;
 }

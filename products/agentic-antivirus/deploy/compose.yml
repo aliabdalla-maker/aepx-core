@@ -34,7 +34,7 @@ services:
       AAV_DATABASE_URL: postgresql://aav_app:${AAV_APP_DB_PASSWORD}@postgres:5432/aav
       AAV_SIGNING_KEY_FILE: /run/secrets/aav_signing_key
       AAV_GOVERNANCE_URL: http://governance:8000
-      AAV_PUBLIC_BASE_URL: https://softwareequality.com/apps/agentic-antivirus
+      AAV_PUBLIC_BASE_URL: https://api.softwareequality.com/apps/agentic-antivirus
       AAV_EGRESS_ALLOWLIST: ${AAV_EGRESS_ALLOWLIST:-}
       AAV_OPEN_REGISTRATION: ${AAV_OPEN_REGISTRATION:-true}
       AAV_PLAY_SERVICE_ACCOUNT_FILE: ${AAV_PLAY_SERVICE_ACCOUNT_FILE:-}

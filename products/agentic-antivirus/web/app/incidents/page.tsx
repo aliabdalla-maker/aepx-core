@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { Shell } from "../../components/Shell";
 import { AdSlot, Freshness, Sev, Status, useApi } from "../../components/ui";
@@ -25,7 +26,7 @@ export default function Incidents() {
       </div>
       <Status error={d.error} loading={!d.data} />
       <table><thead><tr><th>Incident</th><th>{t("alerts.severity")}</th><th>Status</th><th>Category</th><th>Alerts</th><th>Updated</th></tr></thead>
-        <tbody>{rows.map((i) => <tr key={i.id}><td><a href={`/incident?id=${i.id}`}>{i.title}</a></td><td><Sev s={i.severity} /></td>
+        <tbody>{rows.map((i) => <tr key={i.id}><td><Link href={`/incident?id=${i.id}`}>{i.title}</Link></td><td><Sev s={i.severity} /></td>
           <td>{i.status}</td><td>{i.category}</td><td>{i.alert_count}</td><td>{formatRelative(i.updated_at, locale)}</td></tr>)}</tbody></table>
       <div className="row"><button disabled={page === 0} onClick={() => setPage(page - 1)}>{t("common.previous")}</button>
         <button disabled={(d.data?.length ?? 0) < 50} onClick={() => setPage(page + 1)}>{t("common.next")}</button></div>

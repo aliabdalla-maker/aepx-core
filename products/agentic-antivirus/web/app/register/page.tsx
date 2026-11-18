@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { api } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
@@ -22,7 +23,7 @@ export default function Register() {
         <label>{t("auth.password")} <span className="hint">{t("auth.password_rules")}</span>
           <input type="password" minLength={12} required value={f.password} onChange={set("password")} autoComplete="new-password" /></label>
         {s.view}
-        <div className="row"><button className="primary" disabled={s.busy}>{t("auth.register")}</button><a href="/login">{t("auth.login")}</a></div>
+        <div className="row"><button className="primary" disabled={s.busy}>{t("auth.register")}</button><Link href="/login">{t("auth.login")}</Link></div>
       </form>
     </AuthPage>);
 }

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { Shell } from "../../components/Shell";
 import { Act, Dictate, Freshness, Sev, Status, useApi } from "../../components/ui";
@@ -23,7 +24,7 @@ export default function Alerts() {
       <table><thead><tr><th>{t("alerts.title")}</th><th>{t("alerts.severity")}</th><th>{t("devices.hostname")}</th><th>{t("alerts.rule")}</th>
         <th>Response</th><th>{t("alerts.detected")}</th><th>Status</th></tr></thead>
         <tbody>{(d.data ?? []).map((a) => <tr key={a.id}>
-          <td>{a.incident_id ? <a href={`/incident?id=${a.incident_id}`}>{a.title}</a> : a.title}</td><td><Sev s={a.severity} /></td>
+          <td>{a.incident_id ? <Link href={`/incident?id=${a.incident_id}`}>{a.title}</Link> : a.title}</td><td><Sev s={a.severity} /></td>
           <td>{a.hostname ?? "—"}</td><td>{a.rule_id} v{a.rule_version}</td><td>{a.action_taken ?? "alert only"}</td>
           <td>{formatDateTime(a.detected_at, locale)}</td>
           <td>{a.status === "new" ? <Act label="Mark false positive" run={() => api(`/v1/alerts/${a.id}`, { method: "PATCH", body: { status: "false_positive" } })} onDone={d.reload} /> : a.status}</td>

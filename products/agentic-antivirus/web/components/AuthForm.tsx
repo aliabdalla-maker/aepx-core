@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { describeError } from "../lib/api";
 import { useI18n } from "../lib/i18n";
@@ -7,10 +8,10 @@ export function AuthPage({ title, children }: { title: string; children: ReactNo
   const { t } = useI18n();
   return (
     <main id="main" className="main" style={{ maxWidth: "32rem", margin: "4rem auto" }}>
-      <p className="brand"><img src="/icons/icon.svg" alt="" width={32} height={32} /> {t("app.name")}</p>
+      <p className="brand"><img src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icons/icon.svg`} alt="" width={32} height={32} /> {t("app.name")}</p>
       <h1>{title}</h1>
       {children}
-      <p className="lede" style={{ marginTop: "2rem" }}><a href="/help">{t("nav.help")}</a>{" "}<a href="/privacy">{t("nav.privacy")}</a></p>
+      <p className="lede" style={{ marginTop: "2rem" }}><Link href="/help">{t("nav.help")}</Link>{" "}<Link href="/privacy">{t("nav.privacy")}</Link></p>
     </main>);
 }
 

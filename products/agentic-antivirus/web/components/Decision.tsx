@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api, session } from "../lib/api";
 import { useI18n } from "../lib/i18n";
@@ -46,7 +47,7 @@ export function DecisionCard({ a, names, onChange }: { a: ActionRequest; names: 
         {a.status === "approved" && <Act className="decide" label={t("actions.dispatch")}
           run={() => api(`/v1/actions/${a.id}/dispatch`, { method: "POST" })} onDone={onChange} />}
         <Act label={t("actions.deny")} run={() => api(`/v1/actions/${a.id}/deny`, { body: { reason: "" } })} onDone={onChange} />
-        {a.incident_id && <a href={`/incident?id=${a.incident_id}`}>Open incident</a>}
+        {a.incident_id && <Link href={`/incident?id=${a.incident_id}`}>Open incident</Link>}
       </div>
     </article>);
 }

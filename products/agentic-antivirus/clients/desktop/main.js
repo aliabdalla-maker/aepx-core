@@ -4,7 +4,7 @@ const { app, BrowserWindow, shell, session } = require("electron");
 const path = require("node:path");
 const { allowedInWindow } = require("./policy");
 
-const CONSOLE_URL = process.env.AAV_CONSOLE_URL || "https://softwareequality.com/apps/agentic-antivirus/";
+const CONSOLE_URL = process.env.AAV_CONSOLE_URL || "https://api.softwareequality.com/apps/agentic-antivirus/";
 const API_ORIGIN = new URL(CONSOLE_URL).origin;
 
 function createWindow() {

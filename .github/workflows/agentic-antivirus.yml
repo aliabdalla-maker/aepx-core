@@ -118,7 +118,7 @@ jobs:
           - { os: windows-latest, target: windows-x64 }
           - { os: windows-11-arm, target: windows-arm64 }
           - { os: macos-latest, target: macos-arm64 }
-          - { os: macos-13, target: macos-x64 }
+          - { os: macos-15-intel, target: macos-x64 }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -205,11 +205,14 @@ jobs:
   images:
     needs: [backend, console, security]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write          # publish to GitHub Container Registry on pushes (never on pull requests)
     steps:
       - uses: actions/checkout@v7
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v4.4.1
-      - name: Build multi-arch images (amd64 + arm64 for OCI A1), no push
+      - name: Build multi-arch images (amd64 + arm64 for OCI A1)
         run: |
           for c in control-plane web; do
             docker buildx build --platform linux/amd64,linux/arm64 -f $P/$c/Dockerfile -t aav-$c:${GITHUB_SHA} $P \
@@ -218,6 +221,51 @@ jobs:
           done
       - uses: actions/upload-artifact@v7
         with: { name: aav-images, path: /tmp/aav-*.oci.tar, retention-days: 14 }
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feat/agentic-antivirus' || startsWith(github.ref, 'refs/tags/aav-v'))
+        uses: docker/login-action@v3
+        with: { registry: ghcr.io, username: "${{ github.actor }}", password: "${{ secrets.GITHUB_TOKEN }}" }
+      - name: Publish images (docker pull ghcr.io/<owner>/agentic-antivirus-<component>)
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feat/agentic-antivirus' || startsWith(github.ref, 'refs/tags/aav-v'))
+        run: |
+          OWNER=$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
+          case "$GITHUB_REF" in refs/heads/master) TAG=latest;; refs/tags/*) TAG=${GITHUB_REF_NAME#aav-v};; *) TAG=edge;; esac
+          for c in control-plane web; do
+            IMG=ghcr.io/$OWNER/agentic-antivirus-$c
+            docker buildx build --platform linux/amd64,linux/arm64 -f $P/$c/Dockerfile $P --provenance=true --sbom=true \
+              --label org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY} \
+              --label org.opencontainers.image.description="Agentic Antivirus $c" \
+              -t $IMG:${GITHUB_SHA} -t $IMG:$TAG --push
+            echo "published \`$IMG:${GITHUB_SHA}\` and \`$IMG:$TAG\`" >> $GITHUB_STEP_SUMMARY
+          done
+
+  release:
+    # GitHub Release for a tag aav-v<version>. Pre-release until the agents are code-signed: the notes say plainly
+    # whether each binary is signed, and SHA256SUMS lets users verify downloads.
+    if: startsWith(github.ref, 'refs/tags/aav-v')
+    needs: [agent, desktop, images]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with: { path: rel, pattern: "aav-{agent,desktop}-*", merge-multiple: true }
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SIGNED: ${{ secrets.AEPX_WIN_CSC_LINK != '' }}
+        run: |
+          cd rel && cat SHA256SUMS-* > SHA256SUMS.txt 2>/dev/null || true
+          OWNER=$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
+          {
+            echo "Agentic Antivirus ${GITHUB_REF_NAME#aav-} (early access)."
+            echo
+            if [ "$SIGNED" = true ]; then echo "The Windows desktop app is code-signed. **The agent binaries are not code-signed yet.**"; else echo "**None of these binaries are code-signed yet.**"; fi; echo "Verify every download against SHA256SUMS.txt before installing."
+            echo
+            echo "Server: \`docker pull ghcr.io/$OWNER/agentic-antivirus-control-plane:${GITHUB_SHA}\` and \`ghcr.io/$OWNER/agentic-antivirus-web:${GITHUB_SHA}\`."
+          } > notes.md
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --prerelease --title "Agentic Antivirus ${GITHUB_REF_NAME#aav-}" \
+            --notes-file notes.md $(ls | grep -v '^notes.md$')
 
   deploy-production:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_sha != ''

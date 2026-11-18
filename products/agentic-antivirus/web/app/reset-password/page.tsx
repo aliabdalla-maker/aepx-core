@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { api } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
@@ -16,7 +17,7 @@ export default function Reset() {
       }); }}>
         <label>{t("auth.new_password")} <span className="hint">{t("auth.password_rules")}</span>
           <input type="password" minLength={12} required value={pw} onChange={(e) => setPw(e.target.value)} autoComplete="new-password" /></label>
-        {s.view}<div className="row"><button className="primary" disabled={s.busy}>{t("auth.reset")}</button><a href="/login">{t("auth.login")}</a></div>
+        {s.view}<div className="row"><button className="primary" disabled={s.busy}>{t("auth.reset")}</button><Link href="/login">{t("auth.login")}</Link></div>
       </form>
     </AuthPage>);
 }

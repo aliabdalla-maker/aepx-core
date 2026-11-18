@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "../../components/Shell";
 import { Act, ReadAloud, Sev, Status, useApi } from "../../components/ui";
@@ -46,7 +47,7 @@ export default function Incident() {
           <h2>{t("incident.recommendations")}</h2>
           <table><thead><tr><th>Action</th><th>Why</th><th>Status</th></tr></thead>
             <tbody>{f.recommendations.map((r: any, i: number) => <tr key={i}><td>{r.action_type}</td><td>{r.rationale}</td>
-              <td>{r.status === "proposed" ? <a href="/approvals">waiting for approval</a> : r.status}</td></tr>)}</tbody></table>
+              <td>{r.status === "proposed" ? <Link href="/approvals">waiting for approval</Link> : r.status}</td></tr>)}</tbody></table>
           <p className="lede">Engine: {inv.engine}{f.model_status ? `. Model: ${f.model_status}` : ""}.</p>
         </>}
 
