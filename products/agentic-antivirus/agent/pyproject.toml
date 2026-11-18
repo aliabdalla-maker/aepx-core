@@ -1,0 +1,17 @@
+[project]
+name = "aav-agent"
+version = "0.1.0"
+description = "Agentic Antivirus endpoint agent (user mode)"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.28", "psutil>=7.0", "cryptography>=44"]
+
+[project.scripts]
+aav-agent = "aav_agent.__main__:run"
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["aav_agent", "aav_detection"]
+package-dir = { "aav_detection" = "../detection/aav_detection" }

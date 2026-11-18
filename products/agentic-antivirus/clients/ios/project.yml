@@ -1,0 +1,22 @@
+# XcodeGen spec (xcodegen generate) -> AgenticAntivirus.xcodeproj. Universal iPhone + iPad.
+name: AgenticAntivirus
+options: { bundleIdPrefix: com.equalitysoftware, deploymentTarget: { iOS: "16.0" } }
+packages:
+  GoogleMobileAds: { url: https://github.com/googleads/swift-package-manager-google-mobile-ads, from: 11.13.0 }
+  UserMessagingPlatform: { url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform, from: 2.7.0 }
+targets:
+  AgenticAntivirus:
+    type: application
+    platform: iOS
+    sources: [AgenticAntivirus, Assets.xcassets]
+    dependencies: [{ package: GoogleMobileAds }, { package: UserMessagingPlatform }]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.equalitysoftware.agenticantivirus
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_FILE: AgenticAntivirus/Info.plist
+        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: $(AEPX_APPLE_TEAM_ID)

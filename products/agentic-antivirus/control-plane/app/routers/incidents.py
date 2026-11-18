@@ -180,7 +180,7 @@ def timeline_rows(cur, incident_id) -> list[dict]:
                 "FROM aav.action_requests WHERE incident_id = %s", (incident_id,))
     for r in cur.fetchall():
         items.append({"at": r["created_at"], "type": "action", "ref": f"action:{r['id']}",
-                      "summary": f"{r['action_type']} -> {r['status']}", "targets": r["targets"],
+                      "summary": f"{r['action_type']}: {r['status']}", "targets": r["targets"],
                       "proposed_by": r["proposed_by"], "decision": r["policy_decision"]})
     items.sort(key=lambda i: i["at"])
     return items

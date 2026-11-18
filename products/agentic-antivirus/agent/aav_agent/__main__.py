@@ -43,5 +43,13 @@ def main(argv=None) -> int:
     return 0
 
 
+def run() -> int:
+    try:
+        return main()
+    except RuntimeError as exc:
+        print(f"aav-agent: {exc}. Run 'aav-agent enrol --url URL --token TOKEN' first.", file=sys.stderr)
+        return 2
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run())
