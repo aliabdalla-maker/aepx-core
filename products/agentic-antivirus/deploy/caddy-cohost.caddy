@@ -1,0 +1,9 @@
+# Paste inside the existing `api.softwareequality.com { ... }` site block of the host's Caddyfile, before any
+# catch-all handler. The console container joins the proxy's Docker network as `aav-web` (compose.cohost.yml).
+redir /apps/agentic-antivirus /apps/agentic-antivirus/ 308
+handle_path /apps/agentic-antivirus/* {
+	request_body {
+		max_size 110MB
+	}
+	reverse_proxy aav-web:8080
+}

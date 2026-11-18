@@ -1,0 +1,31 @@
+# Overlay for running Agentic Antivirus beside another product on one small VM (the "ai4business" OCI
+# A1.Flex VM: 1 OCPU, 6 GB, shared with Business AI Manager). Use with compose.yml:
+#   docker compose -f compose.yml -f compose.cohost.yml up -d --build
+# - Lower memory/CPU caps (about 1.1 GB in total) so this stack cannot starve the other product.
+# - No published port: the console joins the existing reverse proxy's Docker network (AAV_PROXY_NETWORK)
+#   and the proxy routes /apps/agentic-antivirus/* to aav-web:8080 (see caddy-cohost.caddy).
+services:
+  postgres:
+    mem_limit: 384m
+    cpus: "0.5"
+    command: ["postgres", "-c", "shared_buffers=64MB", "-c", "max_connections=40", "-c", "work_mem=2MB"]
+  governance:
+    mem_limit: 160m
+    cpus: "0.15"
+  control-plane:
+    mem_limit: 448m
+    cpus: "0.5"
+    environment:
+      AAV_PUBLIC_BASE_URL: https://api.softwareequality.com/apps/agentic-antivirus
+  web:
+    mem_limit: 64m
+    cpus: "0.15"
+    ports: !reset []
+    networks:
+      default: {}
+      proxy:
+        aliases: [aav-web]
+networks:
+  proxy:
+    name: ${AAV_PROXY_NETWORK:?set AAV_PROXY_NETWORK to the reverse proxy's Docker network}
+    external: true

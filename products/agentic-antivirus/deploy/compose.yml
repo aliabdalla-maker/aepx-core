@@ -1,0 +1,57 @@
+# Agentic Antivirus on one OCI Always Free VM.Standard.A1.Flex (arm64). Staging/production overlay is
+# manual and approval-gated. Only the console listener is published, on loopback; the host's existing
+# TLS reverse proxy forwards /apps/agentic-antivirus/ to it. Totals: <= 2.6 GB RAM, <= 2.1 OCPU.
+name: agentic-antivirus
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    mem_limit: 768m
+    cpus: "0.75"
+    environment:
+      POSTGRES_DB: aav
+      POSTGRES_USER: aav_owner
+      POSTGRES_PASSWORD: ${AAV_POSTGRES_PASSWORD:?set AAV_POSTGRES_PASSWORD}
+      AAV_APP_DB_PASSWORD: ${AAV_APP_DB_PASSWORD:?set AAV_APP_DB_PASSWORD}
+    volumes:
+      - aavdata:/var/lib/postgresql/data
+      - ../control-plane/migrations:/migrations:ro
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U aav_owner -d aav"], interval: 10s, retries: 8 }
+  governance:
+    build: ../../../services/governance
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: "0.25"
+    environment:
+      DATABASE_URL: postgresql://unused@127.0.0.1:1/none   # policy evaluation only; audit lives in aav.audit_log
+  control-plane:
+    build: { context: .., dockerfile: control-plane/Dockerfile }
+    restart: unless-stopped
+    mem_limit: 768m
+    cpus: "0.75"
+    environment:
+      AAV_DATABASE_URL: postgresql://aav_app:${AAV_APP_DB_PASSWORD}@postgres:5432/aav
+      AAV_SIGNING_KEY_FILE: /run/secrets/aav_signing_key
+      AAV_GOVERNANCE_URL: http://governance:8000
+      AAV_PUBLIC_BASE_URL: https://api.softwareequality.com/apps/agentic-antivirus
+      AAV_EGRESS_ALLOWLIST: ${AAV_EGRESS_ALLOWLIST:-}
+      AAV_OPEN_REGISTRATION: ${AAV_OPEN_REGISTRATION:-true}
+      AAV_PLAY_SERVICE_ACCOUNT_FILE: ${AAV_PLAY_SERVICE_ACCOUNT_FILE:-}
+    secrets: [aav_signing_key]
+    volumes: [aavfiles:/var/lib/aav/files]
+    depends_on: { postgres: { condition: service_healthy }, governance: { condition: service_started } }
+    healthcheck: { test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/ready')"], interval: 30s, retries: 3 }
+  web:
+    build: { context: .., dockerfile: web/Dockerfile }
+    restart: unless-stopped
+    mem_limit: 128m
+    cpus: "0.25"
+    ports: ["127.0.0.1:18480:8080"]
+    depends_on: [control-plane]
+secrets:
+  aav_signing_key:
+    file: "${AAV_SIGNING_KEY_PATH:?set AAV_SIGNING_KEY_PATH}"
+volumes:
+  aavdata: {}
+  aavfiles: {}
