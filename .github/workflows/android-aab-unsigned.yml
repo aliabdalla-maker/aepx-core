@@ -20,14 +20,14 @@ jobs:
         shell: bash
         working-directory: platform/saas-ide/android-companion
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.10.2'
       - name: Build the production bundle (unsigned)
@@ -45,7 +45,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/out"
           cp app/build/outputs/bundle/release/app-release.aab "$RUNNER_TEMP/out/AEP-X-IDE-$v-unsigned.aab"
           echo "versionCode=$code versionName=$v" > "$RUNNER_TEMP/out/VERSION.txt"
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           name: android-aab-unsigned
           path: ${{ runner.temp }}/out/

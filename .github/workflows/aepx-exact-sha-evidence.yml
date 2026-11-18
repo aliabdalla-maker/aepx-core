@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Verify evidence gate logic offline
@@ -37,7 +37,7 @@ jobs:
           python scripts/github-release-evidence.py --repo "$GH_REPO" --sha "$TARGET_SHA" --output "$RUNNER_TEMP/release-evidence.json"
       - name: Upload read-only evidence
         if: always() && github.event_name == 'workflow_dispatch'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aepx-exact-sha-release-evidence
           path: ${{ runner.temp }}/release-evidence.json

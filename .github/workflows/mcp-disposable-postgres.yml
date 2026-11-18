@@ -64,10 +64,10 @@ jobs:
       AEPX_TEST_PG_DSN: 'postgresql://postgres:disposable-only@127.0.0.1:5432/aepx_mcp_test'
       AEPX_TEST_PG_RUNTIME_DSN: 'postgresql://aepx_runtime:disposable-runtime@127.0.0.1:5432/aepx_mcp_test'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Install isolated database test driver

@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Validate milestones JSON
         run: |
           python3 -m json.tool docs/AEPX-Milestones.json >/dev/null
@@ -37,7 +37,7 @@ jobs:
         run: python3 scripts/aepx-progress.py --output artifacts/aepx-progress.md
       - name: Upload audit artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aepx-release-readiness
           path: |
