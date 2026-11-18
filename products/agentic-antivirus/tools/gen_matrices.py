@@ -1,6 +1,5 @@
 """Generates docs/matrices/*.md from the code so the matrices cannot drift from what is implemented
 (DLV-17..20, DLV-10). Run: python tools/gen_matrices.py"""
-import json
 import sys
 from pathlib import Path
 
