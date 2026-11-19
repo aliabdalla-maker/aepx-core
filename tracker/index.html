@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AEP-X Ecosystem Tracker — CRM · ERP · TMS · FDE · EDU · SEC</title>
+  <meta name="description" content="Live agentic ecosystem tracker for aepx-core: CRM, ERP, TMS, Forward Development Engineering, Educational Servers Supply Management and Cybersecurity portals." />
+  <meta name="google-adsense-account" content="ca-pub-2980680946304710" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2980680946304710" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5' fill='none' stroke='%237dd3fc' stroke-width='3'/><circle cx='16' cy='16' r='4' fill='%237dd3fc'/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true"><polygon points="16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5" /><circle cx="16" cy="16" r="4" /></svg>
+      <div>
+        <div class="brand-name">AEP-X <span>//</span> ECOSYSTEM TRACKER</div>
+        <div class="brand-sub">aepx-core · agentic interoperability layer</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="sync" id="sync"><i></i><b>connecting…</b></span>
+      <span class="clock mono" id="clock"></span>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis" aria-label="Ecosystem metrics"></section>
+
+  <main class="layout">
+    <section class="panel topo-panel">
+      <div class="panel-head">
+        <h2>Ecosystem topology</h2>
+        <div class="legend">
+          <span><i class="dot online"></i>online / connected</span>
+          <span><i class="dot degraded"></i>degraded</span>
+          <span><i class="dot offline"></i>offline</span>
+          <span><i class="dot planned"></i>planned / unknown</span>
+        </div>
+      </div>
+      <svg id="topology" viewBox="0 0 900 600" role="img" aria-label="AEP-X core with six connected portals"></svg>
+    </section>
+
+    <section class="panel portals-panel">
+      <div class="panel-head"><h2>Portals</h2><span class="hint">select to inspect</span></div>
+      <div id="portal-list" class="portal-list"></div>
+    </section>
+  </main>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="board" class="active">Tracker board</button>
+    <button role="tab" data-tab="matrix">Connection matrix</button>
+    <button role="tab" data-tab="agents">Agents</button>
+    <button role="tab" data-tab="activity">Activity</button>
+    <div class="tab-tools">
+      <select id="filter-portal" aria-label="Filter by portal"><option value="">All portals</option></select>
+      <button class="btn primary" id="new-task">+ New item</button>
+    </div>
+  </nav>
+
+  <section class="tab-body" id="tab-board"><div class="board" id="board"></div></section>
+  <section class="tab-body hidden" id="tab-matrix"><div class="matrix-wrap" id="matrix"></div></section>
+  <section class="tab-body hidden" id="tab-agents"><div class="agents" id="agents"></div></section>
+  <section class="tab-body hidden" id="tab-activity"><ol class="feed" id="feed"></ol></section>
+
+  <footer class="footer">
+    <span>Source: <a href="https://github.com/aliabdalla-maker/aepx-core" target="_blank" rel="noopener">aliabdalla-maker/aepx-core</a></span>
+    <span class="mono">state persisted in Netlify Database · endpoints re-probed every 15 min</span>
+  </footer>
+
+  <!-- Portal drawer -->
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-inner" id="drawer-body"></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- Task dialog -->
+  <dialog id="task-dialog">
+    <form method="dialog" id="task-form">
+      <h3 id="task-dialog-title">New tracker item</h3>
+      <label>Title<input name="title" required maxlength="160" /></label>
+      <div class="row">
+        <label>Portal<select name="portalSlug" required></select></label>
+        <label>Type
+          <select name="kind">
+            <option value="integration">Integration</option>
+            <option value="feature">Feature</option>
+            <option value="incident">Incident</option>
+            <option value="agent-task">Agent task</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>Status
+          <select name="status">
+            <option value="backlog">Backlog</option>
+            <option value="in_progress">In progress</option>
+            <option value="review">Review</option>
+            <option value="blocked">Blocked</option>
+            <option value="done">Done</option>
+          </select>
+        </label>
+        <label>Priority
+          <select name="priority">
+            <option>P0</option><option>P1</option><option selected>P2</option><option>P3</option>
+          </select>
+        </label>
+      </div>
+      <label>Assigned agent<input name="agent" maxlength="60" list="agent-names" placeholder="optional" /></label>
+      <datalist id="agent-names"></datalist>
+      <p class="form-error" id="task-error"></p>
+      <menu>
+        <button type="button" class="btn danger hidden" id="task-delete">Delete</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" value="cancel" id="task-cancel">Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

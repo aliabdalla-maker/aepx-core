@@ -33,3 +33,6 @@ console/uploads_dev/
 /artifacts/
 *.dump
 *.dump.sha256
+
+# Local Netlify folder
+.netlify
