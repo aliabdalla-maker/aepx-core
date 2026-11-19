@@ -65,6 +65,9 @@ class AcceptInviteIn(BaseModel):
 
 class OidcIn(BaseModel):
     id_token: str
+    # Used only when this sign-in creates the account (open registration); defaults to the person's name.
+    organisation: str = Field(default="", max_length=200)
+    locale: str = Field(default="en", max_length=20)
 
 
 def _now() -> datetime:
@@ -175,14 +178,23 @@ def login(body: LoginIn):
     return sess
 
 
+_JWKS: dict[str, jwt.PyJWKClient] = {}
+
+
+def _jwks(url: str) -> jwt.PyJWKClient:
+    # One client per URL so Google's signing keys are cached between sign-ins instead of fetched every time.
+    if url not in _JWKS:
+        _JWKS[url] = jwt.PyJWKClient(url, cache_keys=True, lifespan=3600)
+    return _JWKS[url]
+
+
 @router.post("/oidc")
 def oidc_login(body: OidcIn):
     """Exchange a verified OIDC ID token (e.g. Google) for a session. Requires AAV_OIDC_* config."""
     if not (settings.oidc_issuer and settings.oidc_client_id and settings.oidc_jwks_url):
         raise HTTPException(503, "OIDC not configured")
     try:
-        jwks = jwt.PyJWKClient(settings.oidc_jwks_url)
-        key = jwks.get_signing_key_from_jwt(body.id_token).key
+        key = _jwks(settings.oidc_jwks_url).get_signing_key_from_jwt(body.id_token).key
         claims = jwt.decode(body.id_token, key, algorithms=["RS256", "ES256"], audience=settings.oidc_client_id,
                             issuer=settings.oidc_issuer)
     except (jwt.PyJWTError, httpx.HTTPError) as exc:
@@ -194,13 +206,35 @@ def oidc_login(body: OidcIn):
         cur.execute("SELECT id FROM aav.users WHERE (oidc_subject = %s OR email = %s) AND deleted_at IS NULL",
                     (f"{claims['iss']}|{claims['sub']}", email))
         row = cur.fetchone()
+        subject = f"{claims['iss']}|{claims['sub']}"
+        created_tid = None
         if not row:
-            raise HTTPException(404, "no account for this identity; register or accept an invitation first")
-        cur.execute("UPDATE aav.users SET oidc_subject = %s, email_verified = true WHERE id = %s",
-                    (f"{claims['iss']}|{claims['sub']}", row["id"]))
+            if not settings.allow_open_registration:
+                raise HTTPException(404, "no account for this identity; register or accept an invitation first")
+            # First sign-in with Google creates the account. The provider has already verified the address.
+            name = str(claims.get("name") or "")[:200]
+            cur.execute("INSERT INTO aav.users (email, password_hash, display_name, locale, oidc_subject, email_verified) "
+                        "VALUES (%s, NULL, %s, %s, %s, true) RETURNING id", (email, name, body.locale, subject))
+            row = cur.fetchone()
+            org = body.organisation.strip() or (f"{name}'s organisation" if name else email.split("@", 1)[1])
+            cur.execute("SELECT aav.bootstrap_tenant(%s, %s, NULL) AS tid", (org[:200], row["id"]))
+            created_tid = cur.fetchone()["tid"]
+            audit.record(cur, tenant_id=None, actor=f"user:{row['id']}", action="account.register_oidc", target=str(row["id"]))
+        else:
+            cur.execute("UPDATE aav.users SET oidc_subject = %s, email_verified = true WHERE id = %s", (subject, row["id"]))
         sess = _new_session(cur, row["id"])
         audit.record(cur, tenant_id=None, actor=f"user:{row['id']}", action="auth.login_oidc", target=str(row["id"]))
-    return sess
+    if created_tid:
+        with db.tenant_tx(created_tid) as cur:
+            audit.record(cur, tenant_id=created_tid, actor=f"user:{row['id']}", action="tenant.create", target=str(created_tid))
+    return {**sess, "created": bool(created_tid)}
+
+
+@router.get("/providers")
+def providers():
+    """Sign-in options the console should offer. Only public values: an OAuth client ID is not a secret."""
+    google = settings.oidc_issuer in ("https://accounts.google.com", "accounts.google.com") and settings.oidc_client_id
+    return {"password": True, "google": {"client_id": settings.oidc_client_id} if google else None}
 
 
 @router.post("/logout")
