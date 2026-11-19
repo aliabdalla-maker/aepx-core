@@ -46,8 +46,11 @@ def _password() -> str:
 
 
 def configured() -> bool:
-    return bool(settings.smtp_host and settings.mail_from and (settings.smtp_password_file
-                                                              or os.getenv("AAV_SMTP_PASSWORD")))
+    # A relay that trusts the server's IP address (Google Workspace SMTP relay) needs no login: leave
+    # AAV_SMTP_USER empty. With a username, a password is required.
+    if not (settings.smtp_host and settings.mail_from):
+        return False
+    return not settings.smtp_user or bool(settings.smtp_password_file or os.getenv("AAV_SMTP_PASSWORD"))
 
 
 def render(to: str, template: str, payload: dict) -> EmailMessage:
