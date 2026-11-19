@@ -1,0 +1,180 @@
+schema_version: '1.0'
+template:
+  name: Universal Agentic Application Factory with AEP-X
+  description: Reusable application factory using AEP-X as mandatory governed AI interoperability layer
+  implementation_status: specification_only
+  read_only_audit_first: true
+
+developer_input:
+  application_name: '<APPLICATION_NAME>'
+  summary: '<WHAT_THE_APPLICATION_MUST_DO>'
+  domain: '<INDUSTRY_OR_DOMAIN>'
+  stakeholders: []
+  functional_requirements: []
+  nonfunctional_requirements: []
+  integrations: []
+  acceptance_criteria: []
+  operating_systems: [web, android, ios, windows, macos, linux]
+  accessibility_target: WCAG_2_2_AA
+  deployment_domain: '<APPLICATION_DOMAIN>'
+  legal_privacy_requirements: []
+
+source_control:
+  aepx_upstream: https://github.com/aliabdalla-maker/aepx-core
+  aepx_reference_branch: master
+  app_repository: '<APP_REPOSITORY_URL_OR_MONOREPO_PATH>'
+  integration_model: pinned_submodule_or_versioned_package_or_monorepo
+  pin_aepx_commit_sha: true
+  feature_branch_only: true
+  no_merge_without_approval: true
+  no_deploy_without_approval: true
+  upstream_code_changes_require_separate_review: true
+
+requirements_to_delivery:
+  pipeline:
+    - ingest_and_normalize_requirements
+    - analyze_existing_code_and_connector_maturity
+    - produce_traceable_prd_and_acceptance_criteria
+    - generate_architecture_threat_model_api_and_data_contracts
+    - generate_accessible_ui_ux_and_icons
+    - implement_real_frontend_backend_and_persistence
+    - integrate_aepx_governed_agent_actions
+    - generate_unit_integration_contract_e2e_security_and_accessibility_tests
+    - validate_multiplatform_builds_and_signing
+    - stage_with_sanitized_data
+    - collect_verifiable_acceptance_evidence
+    - await_release_approval
+  completion_rule: feature_requires_operational_api_ui_persistence_authorization_and_tests
+  prohibited: [unlabelled_mocks_in_production, fictitious_kpis, fabricated_test_results]
+
+architecture:
+  clients:
+    web: responsive_pwa
+    android: signed_app_bundle
+    ios: signed_archive_subject_to_apple_credentials
+    windows: signed_installer
+    macos: signed_notarized_distribution_if_applicable
+    linux: package_or_appimage
+  frontend: configurable
+  backend: configurable_rest_or_graphql
+  authentication: oidc
+  authorization: rbac_and_policy_based
+  database: postgres_with_migrations_and_tenant_isolation
+  application_api:
+    accepts_end_user_requests: true
+    validates_identity_and_tenant: true
+    delegates_governed_actions_to_aepx: true
+    prevents_direct_agent_to_provider_bypass: true
+
+aepx:
+  role: mandatory_governed_interoperability_plane_for_agent_actions
+  repo: https://github.com/aliabdalla-maker/aepx-core
+  reuse_existing_implementation_first: true
+  services_to_inspect_and_integrate:
+    - gateway
+    - registry
+    - discovery
+    - identity
+    - trust
+    - governance
+    - safety
+    - workflow
+    - knowledge
+    - memory
+    - cache
+    - verification
+    - cost-optimiser
+    - ml-integration
+  connector_bus: connector-bus
+  connector_registry: connectors/catalogue.json
+  sdk: sdk/python/aepx
+  conformance: sdk/python/aepx/conformance
+  call_path:
+    - authenticate_principal_and_tenant
+    - validate_input_and_schema
+    - check_agent_and_tool_identity
+    - evaluate_risk_trust_and_governance_policy
+    - require_human_approval_for_restricted_actions
+    - reserve_time_token_and_spend_budget
+    - route_through_aepx_gateway_and_connector_bus
+    - invoke_allowlisted_verified_adapter
+    - verify_response_and_data_provenance
+    - record_immutable_identifiers_and_audit_evidence
+    - settle_budget_and_return_result
+  connector_maturity:
+    classification: [verified_live, test_only, stub, unavailable]
+    default: unavailable
+    deny_stub_in_production: true
+    verify_real_adapter_credential_sandbox_contract_and_policy: true
+  controls:
+    tenant_isolation: true
+    allowlisted_tools_only: true
+    least_privilege_permissions: true
+    human_in_the_loop: true
+    bounded_durable_execution: true
+    idempotency_replay_protection: true
+    outbound_egress_enforcement: true
+    tamper_evident_auditing: true
+    fail_closed_on_policy_or_gateway_failure: true
+    no_ungoverned_direct_agent_tool_access: true
+    max_task_duration_seconds: 300
+    max_agent_iterations: 5
+    cost_budget_usd_per_task: 1.0
+
+agents:
+  orchestrator: supervisor
+  roles: [analyst, architect, designer, implementer, tester, security_reviewer, release_reviewer, operations_monitor]
+  memory:
+    retrieval_augmented: true
+    source_attribution: true
+    consent_and_retention_rules: true
+    tenant_separation: true
+  self_correction:
+    enabled: true
+    max_repair_attempts_per_defect: 5
+    cycle: [observe, diagnose, propose_patch, generate_regression_test, sandbox_test, evaluate, submit_pr, human_review, approved_release, evaluate_outcome]
+    disallowed: [self_authorized_production_merges, unbounded_retry, autonomous_permission_escalation, silent_model_retraining]
+
+observability:
+  dashboard: true
+  source: live_metrics_and_audit_events
+  metrics:
+    - service_availability
+    - p95_latency
+    - agent_success_rate
+    - policy_denial_rate
+    - tool_execution_failure_rate
+    - approval_queue_time
+    - token_and_cost_budget_consumption
+    - connector_health_and_maturity
+    - deployment_status
+    - security_incidents
+    - requirements_verified
+    - platform_build_matrix
+  no_synthetic_numbers_presented_as_real: true
+
+cicd:
+  provider: github_actions
+  container_engine: docker
+  required_gates: [lint, unit_tests, integration_tests, api_contract_tests, aepx_conformance, policy_deny_tests, tenant_isolation_tests, egress_bypass_tests, security_scans, sbom, ui_e2e, mobile_and_desktop_build_checks]
+  signing_keys: external_secret_or_hsm_only
+  pull_request_required: true
+  production_environment_approval: true
+
+infrastructure:
+  provider: oci
+  region: uk-london-1
+  always_free_only: true
+  allow_billable_resources: false
+  validate_current_tenancy_quotas_and_shapes_before_plan: true
+  terraform_plan_review: true
+  no_apply_without_explicit_approval: true
+  no_paid_fallback: true
+  use_existing_eligible_resources_when_approved: true
+  provisioning_failure: stop_and_report
+  enforce_tls_secrets_backup_and_restore_test: true
+
+delivery:
+  required_artifacts: [requirements_traceability, prd, architecture, threat_model, ui_ux_assets, application_source, aepx_integration_tests, connector_maturity_report, build_matrix, test_and_security_evidence, release_manifest, rollback_runbook, monitoring_dashboard]
+  release_checks: [all_mandatory_requirements_verified, no_critical_security_gaps, no_production_connector_stubs, human_approval, staging_acceptance_evidence]
+  no_automatic_publish: true
