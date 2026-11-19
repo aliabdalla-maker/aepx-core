@@ -648,6 +648,34 @@ class Agent:
         except httpx.HTTPError:
             return None
 
+    def probe(self, kind: str, args: dict):
+        """Read-only observations used to verify an action independently of its command receipt (§3C)."""
+        if kind == "isolation_active":
+            return platform_ops.isolation_active()
+        if kind == "pid_absent":
+            pid = args.get("pid")
+            return None if not isinstance(pid, int) else not psutil.pid_exists(pid)
+        if kind == "path_absent":
+            path = args.get("path")
+            return None if not isinstance(path, str) else not os.path.exists(path)
+        if kind == "vault_contains":
+            return any(i["local_id"] == args.get("local_id") for i in self.vault.items())
+        if kind == "vault_absent":
+            return not any(i["local_id"] == args.get("local_id") for i in self.vault.items())
+        return None
+
+    def answer_probes(self, probes: list[dict]) -> int:
+        answers = [{"id": p["id"], "value": self.probe(p.get("probe", ""), p.get("args") or {})}
+                   for p in probes[:20] if isinstance(p, dict) and p.get("id")]
+        answers = [a for a in answers if a["value"] is not None]   # unreadable state stays unverified, never guessed
+        if not answers:
+            return 0
+        try:
+            self.http.post("/v1/agent/observations", headers=self._h(), json={"observations": answers})
+        except httpx.HTTPError:
+            return 0
+        return len(answers)
+
     def posture(self) -> dict:
         """SEC-05: refreshed at most hourly (the probes start OS tools)."""
         cached = self.state.get("posture") or {}
@@ -681,6 +709,8 @@ class Agent:
         self.expire_isolation()
         cmds = self.handle_commands() if online else []
         hb = self.heartbeat()
+        if hb and hb.get("probes"):
+            self.answer_probes(hb["probes"])
         fl = self.flush()
         return {"online": online and hb is not None, "commands": len(cmds), "flushed": fl, "protection": protect}
 

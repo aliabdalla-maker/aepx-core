@@ -55,6 +55,8 @@ if [ -n "${AAV_LLM_LOCAL_MODEL:-}" ]; then
   fi
 fi
 DC="docker compose $FILES"
+AAV_BUILD_SHA=$(git rev-parse --short=12 HEAD 2>/dev/null || echo unknown); export AAV_BUILD_SHA
+echo "building $AAV_BUILD_SHA"
 $DC up -d postgres
 for i in $(seq 1 30); do $DC exec -T postgres pg_isready -U aav_owner -d aav >/dev/null 2>&1 && break; sleep 2; done
 if [ -n "${AAV_BACKUP_PASSPHRASE_FILE:-}" ] && [ -f "${AAV_BACKUP_PASSPHRASE_FILE}" ]; then

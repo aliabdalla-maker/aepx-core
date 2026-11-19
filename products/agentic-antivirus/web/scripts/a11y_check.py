@@ -6,7 +6,7 @@ import sys
 
 from playwright.sync_api import sync_playwright
 
-ROUTES = ["/", "/approvals/", "/incidents/", "/alerts/", "/security/", "/devices/", "/quarantine/", "/policies/", "/ddos/",
+ROUTES = ["/", "/?assistant", "/approvals/", "/response/", "/incidents/", "/alerts/", "/security/", "/devices/", "/quarantine/", "/policies/", "/ddos/",
           "/integrations/", "/files/", "/settings/", "/billing/", "/audit/", "/help/", "/privacy/", "/login/",
           "/register/", "/forgot/", "/reset-password/", "/verify-email/", "/accept-invite/"]
 VARIANTS = [("light", "en"), ("dark", "en"), ("high_contrast", "en"), ("light", "ar")]
@@ -24,8 +24,11 @@ def main(base, axe_path, token="", tenant=""):
                                 f"localStorage.setItem('aav.theme','{theme}');localStorage.setItem('aav.locale','{locale}');")
             for route in ROUTES:
                 pg = ctx.new_page()
-                pg.goto(base + route, wait_until="networkidle")
+                pg.goto(base + route.replace("?assistant", ""), wait_until="networkidle")
                 pg.wait_for_timeout(300)
+                if route.endswith("?assistant"):   # the assistant drawer open, with its attachment controls
+                    pg.click("button.assistant-fab")
+                    pg.wait_for_timeout(200)
                 pg.add_script_tag(content=axe)
                 res = pg.evaluate("""() => axe.run(document, {runOnly: {type: 'tag',
                     values: ['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}})""")

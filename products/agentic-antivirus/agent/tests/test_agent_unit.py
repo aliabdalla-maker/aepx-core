@@ -159,3 +159,24 @@ def test_posture_probe_is_read_only_and_reports_unknown_as_none():
     p = platform_ops.posture()
     assert set(p) >= {"disk_encryption", "firewall", "os_updates_pending", "os_build"}
     assert all(v is None or isinstance(v, (bool, int, str)) for v in p.values())
+
+
+def test_verification_probes_are_read_only_and_never_guessed(tmp_path, monkeypatch):
+    """§3C: probes observe state after an action; unreadable state is not reported as a pass."""
+    import os
+    from aav_agent import agent as agent_mod
+    a, sent = _scan_agent(tmp_path, lambda b, n: False)
+    victim = tmp_path / "eicar.com"
+    victim.write_bytes(EICAR)
+    from aav_detection import Detection
+    meta = a.vault.quarantine(str(victim), "x" * 64, Detection("t", "1", "t", "low"))
+    monkeypatch.setattr(agent_mod.platform_ops, "isolation_active", lambda: None)
+    probes = [{"id": "1", "probe": "path_absent", "args": {"path": str(victim)}},
+              {"id": "2", "probe": "vault_contains", "args": {"local_id": meta["local_id"]}},
+              {"id": "3", "probe": "pid_absent", "args": {"pid": os.getpid()}},
+              {"id": "4", "probe": "isolation_active", "args": {}},
+              {"id": "5", "probe": "vault_absent", "args": {"local_id": "missing"}}]
+    assert a.answer_probes(probes) == 4
+    answers = {o["id"]: o["value"] for o in sent[-1]["observations"]}
+    assert answers == {"1": True, "2": True, "3": False, "5": True}   # isolation unreadable -> not answered
+    assert victim.exists() is False   # probing changed nothing on disk

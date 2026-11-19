@@ -91,9 +91,13 @@ def patch_alert(alert_id: UUID, body: AlertPatch, p: Principal = Depends(need("a
     if body.status not in ("new", "triaged", "false_positive", "closed"):
         raise HTTPException(422, "invalid status")
     with db.tenant_tx(p.tenant_id) as cur:
-        cur.execute("UPDATE aav.alerts SET status = %s WHERE id = %s RETURNING id", (body.status, alert_id))
-        if not cur.fetchone():
+        cur.execute("UPDATE aav.alerts SET status = %s WHERE id = %s RETURNING id, incident_id", (body.status, alert_id))
+        row = cur.fetchone()
+        if not row:
             raise HTTPException(404, "not found")
+        if row["incident_id"] and body.status != "new":
+            cur.execute("UPDATE aav.incidents SET triaged_at = now() WHERE id = %s AND triaged_at IS NULL",
+                        (row["incident_id"],))
         audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="alert.update", target=str(alert_id),
                      detail={"status": body.status})
     return {"id": str(alert_id), "status": body.status}
@@ -139,8 +143,9 @@ def patch_incident(incident_id: UUID, body: IncidentPatch, p: Principal = Depend
             if cur.fetchone()["n"]:
                 raise HTTPException(409, "return to service not yet approved")
         cur.execute("UPDATE aav.incidents SET status = COALESCE(%s, status), severity = COALESCE(%s, severity), "
-                    "assignee = COALESCE(%s, assignee), updated_at = now() WHERE id = %s RETURNING id",
-                    (body.status, body.severity, body.assignee, incident_id))
+                    "assignee = COALESCE(%s, assignee), updated_at = now(), triaged_at = CASE WHEN triaged_at IS NULL "
+                    "AND COALESCE(%s, status) <> 'open' THEN now() ELSE triaged_at END WHERE id = %s RETURNING id",
+                    (body.status, body.severity, body.assignee, body.status, incident_id))
         if not cur.fetchone():
             raise HTTPException(404, "not found")
         audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="incident.update", target=str(incident_id),

@@ -17,7 +17,10 @@ import hashlib
 import json
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+import base64
+import unicodedata
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
 from app import audit, db, i18n, llm
@@ -34,8 +37,10 @@ PLAYBOOKS = {
                "tools": [], "budget_tokens": 900, "may_write": False},
     "remediation": {"version": "1.0.0", "actor": "ai:remediation", "sources": ["incident timeline (sanitised)",
                     "action catalogue"], "tools": ["actions.propose"], "budget_tokens": 1200, "may_write": "proposals only"},
-    "assistant": {"version": "1.0.0", "actor": "ai:assistant", "sources": ["device posture counts", "open incidents",
-                  "open security gaps", "help topics"], "tools": [], "budget_tokens": 900, "may_write": False},
+    "assistant": {"version": "1.1.0", "actor": "ai:assistant", "sources": ["device posture counts", "open incidents",
+                  "open security gaps", "help topics", "files, folders, images and camera captures the user attaches "
+                  "(scanned first, never stored)"], "tools": ["detection engine scan"], "budget_tokens": 900,
+                  "may_write": False},
     "translator": {"version": "1.0.0", "actor": "ai:translator", "sources": ["shared/i18n/en.json"], "tools": [],
                    "budget_tokens": 4000, "may_write": "aav.translations (labelled machine:llm)"},
 }
@@ -126,6 +131,7 @@ def triage(incident_id: UUID, body: AgentIn, p: Principal = Depends(need("incide
                "unsupported_points_dropped": sum(1 for k in points if not k["evidence_refs"])}
     out["playbook"] = {"role": "triage", **PLAYBOOKS["triage"]}
     with db.tenant_tx(p.tenant_id) as cur:
+        cur.execute("UPDATE aav.incidents SET triaged_at = now() WHERE id = %s AND triaged_at IS NULL", (incident_id,))
         audit.record(cur, tenant_id=p.tenant_id, actor=PLAYBOOKS["triage"]["actor"], action="ai.triage",
                      target=str(incident_id), detail={"engine": out["engine"], "requested_by": p.actor})
     return out
@@ -190,6 +196,125 @@ def _device_ids(cur, targets: list[str]) -> set[str]:
         return set()
     cur.execute("SELECT id::text AS id FROM aav.devices WHERE id = ANY(%s::uuid[])", (ids,))
     return {r["id"] for r in cur.fetchall()}
+
+
+MAX_ATTACHMENTS = 20
+MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
+MAX_TOTAL_BYTES = 25 * 1024 * 1024
+MAX_IMAGE_BYTES = 3_750_000   # provider limit for one image
+TEXT_EXCERPT = 4000
+_MAGIC = [(b"\x89PNG\r\n\x1a\n", "image/png"), (b"\xff\xd8\xff", "image/jpeg"), (b"GIF8", "image/gif"),
+          (b"PK\x03\x04", "application/zip"), (b"%PDF", "application/pdf"), (b"MZ", "application/x-msdownload"),
+          (b"\x7fELF", "application/x-elf")]
+
+
+def _sniff(data: bytes) -> str:
+    """Type from content, never from the name or the browser's claim."""
+    for magic, kind in _MAGIC:
+        if data.startswith(magic):
+            return kind
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "image/webp"
+    head = data[:8192]
+    if b"\x00" not in head:
+        try:
+            head.decode("utf-8")
+            return "text/plain"
+        except UnicodeDecodeError:
+            pass
+    return "application/octet-stream"
+
+
+def _clean_name(name: str) -> str:
+    name = unicodedata.normalize("NFC", name or "file").replace("\\", "/")
+    parts = [x for x in name.split("/") if x not in ("", ".", "..")]
+    return "/".join(parts)[-300:] or "file"
+
+
+def inspect_attachments(items: list[tuple[str, bytes]]) -> tuple[list[dict], list[dict], list[dict]]:
+    """Scan every attachment with the detection engine. Returns (report, text excerpts, images for the model)."""
+    from app.detections import current_engine
+    import hashlib
+    eng = current_engine()
+    report, excerpts, images = [], [], []
+    for name, data in items:
+        kind = _sniff(data)
+        sha = hashlib.sha256(data).hexdigest()
+        verdict = eng.scan_bytes(data, sha) if eng else None
+        row = {"name": name, "size": len(data), "sha256": sha, "type": kind,
+               "verdict": ("malicious" if verdict else "clean") if eng else "not_scanned",
+               "detection": {"rule_id": verdict.rule_id, "title": verdict.title, "severity": verdict.severity}
+               if verdict else None, "engine_version": eng.version if eng else None}
+        report.append(row)
+        if verdict:
+            continue   # malicious content never reaches a model; only its metadata does
+        if kind == "text/plain":
+            excerpts.append({"name": name, "excerpt": llm.redact(data[:TEXT_EXCERPT * 4].decode("utf-8", "replace")
+                                                                 [:TEXT_EXCERPT])})
+        elif kind in llm.IMAGE_TYPES and len(data) <= MAX_IMAGE_BYTES:
+            images.append({"name": name, "media_type": kind, "data": base64.b64encode(data).decode()})
+    return report, excerpts, images
+
+
+def _rules_attachment_answer(report: list[dict]) -> str:
+    bad = [r for r in report if r["verdict"] == "malicious"]
+    unscanned = [r for r in report if r["verdict"] == "not_scanned"]
+    parts = [f"Scanned {len(report)} attachment(s)."]
+    if bad:
+        parts.append("Malicious: " + "; ".join(f"{r['name']} ({r['detection']['title']})" for r in bad) +
+                     ". Do not open these files. If they came from one of your devices, run a full scan of that device "
+                     "from Devices; detections there are quarantined.")
+    elif unscanned:
+        parts.append("No detection rules are published yet, so the files could not be scanned.")
+    else:
+        parts.append("No known malware was found. A clean result means no rule matched; it is not a guarantee.")
+    return " ".join(parts)
+
+
+@router.post("/assistant/ask-with-files")
+async def assistant_with_files(question: str = Form(default="", max_length=2000), language: str = Form(default="en"),
+                               paths: list[str] = Form(default=[]), files: list[UploadFile] = File(default=[]),
+                               p: Principal = Depends(need("kpi.read"))):
+    """Ask the assistant about files, a folder, images or a camera capture. Every attachment is scanned with the
+    detection engine; nothing is stored; content reaches a model only as untrusted data and malicious files never do."""
+    if not files:
+        raise HTTPException(422, "attach at least one file")
+    if len(files) > MAX_ATTACHMENTS:
+        raise HTTPException(413, f"at most {MAX_ATTACHMENTS} attachments per question")
+    items, total = [], 0
+    for i, f in enumerate(files):
+        data = await f.read(MAX_ATTACHMENT_BYTES + 1)
+        if len(data) > MAX_ATTACHMENT_BYTES:
+            raise HTTPException(413, f"{f.filename}: larger than {MAX_ATTACHMENT_BYTES // (1024 * 1024)} MB")
+        total += len(data)
+        if total > MAX_TOTAL_BYTES:
+            raise HTTPException(413, f"attachments larger than {MAX_TOTAL_BYTES // (1024 * 1024)} MB in total")
+        items.append((_clean_name(paths[i] if i < len(paths) and paths[i] else f.filename or "file"), data))
+    report, excerpts, images = inspect_attachments(items)
+    with db.tenant_tx(p.tenant_id) as cur:
+        enabled = _enabled(cur)
+    q = question.strip() or "What are these files, and are they safe?"
+    out = {"engine": "rules", "answer": _rules_attachment_answer(report), "citations": []}
+    res = llm.complete("assistant", "The user attached files. data.files is the engine scan report (authoritative "
+                       "verdicts); data.text_excerpts are excerpts of clean text files; images are attached. Answer "
+                       "data.question about them. Never contradict a scan verdict, never call a file safe beyond "
+                       "'no rule matched'. Return JSON {\"answer\": str}.",
+                       {"question": q, "files": report, "text_excerpts": excerpts,
+                        "images": [i["name"] for i in images]},
+                       tenant_id=p.tenant_id, language=_lang(language), images=images,
+                       max_tokens=PLAYBOOKS["assistant"]["budget_tokens"]) if enabled else None
+    data = res.json() if res else None
+    images_used = 0
+    if isinstance(data, dict) and isinstance(data.get("answer"), str):
+        images_used = res.images_used
+        out = {"engine": f"llm:{res.provider}:{res.model}", "answer": data["answer"][:3000], "citations": []}
+    with db.tenant_tx(p.tenant_id) as cur:
+        audit.record(cur, tenant_id=p.tenant_id, actor=PLAYBOOKS["assistant"]["actor"], action="ai.assistant.files",
+                     target="", detail={"engine": out["engine"], "requested_by": p.actor, "images_to_model": images_used,
+                                        "files": [{k: r[k] for k in ("name", "sha256", "size", "type", "verdict")}
+                                                  for r in report]})
+    return {**out, "files": report, "images_sent_to_model": images_used,
+            "playbook": {"role": "assistant", **PLAYBOOKS["assistant"]}}
 
 
 @router.post("/assistant/ask")

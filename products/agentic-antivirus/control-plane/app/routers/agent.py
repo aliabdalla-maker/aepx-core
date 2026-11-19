@@ -14,7 +14,7 @@ from uuid import UUID
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, Field
 
-from app import audit, crypto, db
+from app import audit, crypto, db, harness
 from app.routers.incidents import attach_alert_to_incident, notify
 
 router = APIRouter(prefix="/v1/agent", tags=["agent"])
@@ -37,6 +37,7 @@ class HeartbeatIn(BaseModel):
     protection_status: str = "unknown"
     sensor_health: dict = Field(default_factory=dict)
     posture: dict | None = None   # SEC-05: disk_encryption, firewall, os_updates_pending, ... (null = unknown)
+    observations: list[dict] = Field(default_factory=list, max_length=50)   # §3C probe answers
 
 
 POSTURE_KEYS = {"disk_encryption": (bool, type(None)), "firewall": (bool, type(None)),
@@ -167,7 +168,30 @@ def heartbeat(body: HeartbeatIn, x_device_key: str | None = Header(default=None)
         cur.execute("SELECT count(*) AS n FROM aav.commands WHERE device_id = %s AND status = 'pending' "
                     "AND expires_at > now()", (d["device_id"],))
         pending = cur.fetchone()["n"]
-    return {"ok": True, "pending_commands": pending}
+        if body.observations:
+            harness.record_observations(cur, d["tenant_id"], d["device_id"], body.observations)
+        cur.execute("SELECT DISTINCT action_request_id FROM aav.action_verifications WHERE device_id = %s "
+                    "AND status = 'pending' AND probe IN ('scan_job_complete', 'definitions_version', "
+                    "'metadata_received')", (d["device_id"],))
+        for r in cur.fetchall():
+            harness.settle(cur, r["action_request_id"])
+        probes = harness.pending_probes(cur, d["device_id"])
+    return {"ok": True, "pending_commands": pending, "probes": probes}
+
+
+class ObservationsIn(BaseModel):
+    observations: list[dict] = Field(min_length=1, max_length=50)
+
+
+@router.post("/observations")
+def observations(body: ObservationsIn, x_device_key: str | None = Header(default=None)):
+    """Answers to read-only verification probes (§3C verification and audit), taken after the action."""
+    d = _device(x_device_key)
+    with db.tenant_tx(d["tenant_id"]) as cur:
+        n = harness.record_observations(cur, d["tenant_id"], d["device_id"], body.observations)
+        audit.record(cur, tenant_id=d["tenant_id"], actor=f"device:{d['device_id']}", action="verification.observed",
+                     target=str(d["device_id"]), detail={"answered": n})
+    return {"recorded": n}
 
 
 def _create_alert(cur, tenant_id, device_id, ev: EventIn, event_id: int) -> str:
@@ -194,6 +218,21 @@ def _create_alert(cur, tenant_id, device_id, ev: EventIn, event_id: int) -> str:
     return str(alert_id)
 
 
+MAX_CLOCK_SKEW_S = 300
+
+
+def normalise_time(occurred_at: datetime, data: dict) -> tuple[datetime, dict]:
+    """§3C ingestion: timestamps in UTC; a device clock far in the future is clamped and the skew recorded."""
+    if occurred_at.tzinfo is None:
+        occurred_at = occurred_at.replace(tzinfo=timezone.utc)
+    occurred_at = occurred_at.astimezone(timezone.utc)
+    skew = (occurred_at - datetime.now(timezone.utc)).total_seconds()
+    if skew > MAX_CLOCK_SKEW_S:
+        return datetime.now(timezone.utc), {**data, "clock_skew_seconds": int(skew), "occurred_at_reported":
+                                            occurred_at.isoformat()}
+    return occurred_at, data
+
+
 @router.post("/events")
 def ingest(batch: EventBatch, x_device_key: str | None = Header(default=None)):
     if len(batch.events) > MAX_BATCH:
@@ -204,6 +243,7 @@ def ingest(batch: EventBatch, x_device_key: str | None = Header(default=None)):
         # non-detection events first so detections can link to evidence in the same batch
         ordered = sorted(batch.events, key=lambda e: e.kind == "detection")
         for ev in ordered:
+            ev.occurred_at, ev.data = normalise_time(ev.occurred_at, ev.data)
             cur.execute("INSERT INTO aav.events (tenant_id, device_id, event_uid, kind, occurred_at, data) "
                         "VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT (device_id, event_uid) DO NOTHING RETURNING id",
                         (d["tenant_id"], d["device_id"], ev.event_uid, ev.kind, ev.occurred_at, json.dumps(ev.data)))
@@ -272,6 +312,12 @@ def ack(command_id: UUID, body: AckIn, x_device_key: str | None = Header(default
                         "AND local_id = %s", ("restored" if restored else "quarantined", json.dumps(scan),
                                               d["device_id"], local_id))
         if cmd["action_request_id"]:
+            if ok:
+                # A receipt is not proof: plan read-only checks the agent answers later, or server-side checks.
+                cur.execute("SELECT id, device_id, command_type, params, issued_at FROM aav.commands WHERE id = %s",
+                            (command_id,))
+                harness.plan_endpoint_verifications(cur, d["tenant_id"], cmd["action_request_id"], cur.fetchone(),
+                                                    body.result)
             cur.execute("SELECT count(*) FILTER (WHERE status IN ('pending','delivered')) AS open, "
                         "count(*) FILTER (WHERE status = 'failed') AS failed FROM aav.commands "
                         "WHERE action_request_id = %s", (cmd["action_request_id"],))
@@ -279,6 +325,12 @@ def ack(command_id: UUID, body: AckIn, x_device_key: str | None = Header(default
             if c["open"] == 0:
                 cur.execute("UPDATE aav.action_requests SET status = %s, updated_at = now() WHERE id = %s",
                             ("failed" if c["failed"] else "completed", cmd["action_request_id"]))
+                if c["failed"]:
+                    harness.set_lifecycle(cur, cmd["action_request_id"], "failed",
+                                          f"{c['failed']} device(s) reported failure")
+                else:
+                    harness.set_lifecycle(cur, cmd["action_request_id"], "verification_pending")
+                    harness.settle(cur, cmd["action_request_id"])
         audit.record(cur, tenant_id=d["tenant_id"], actor=f"device:{d['device_id']}", action="command.ack",
                      target=str(command_id), detail={"type": cmd["command_type"], "status": body.status,
                                                      "result": body.result})

@@ -36,7 +36,8 @@ CATALOGUE: dict[str, ActionType] = {a.name: a for a in [
     ActionType("release_isolation", "S1", "device", "approval", {}, (), "release_isolation"),
     # RSP-04: authorised administrator + recorded reason
     ActionType("restore_file", "S2", "quarantine_item", "admin_reason", {}, (), "restore"),
-    ActionType("add_exclusion", "S2", "tenant", "admin_reason", {"kind": str, "value": str}, ("kind", "value")),
+    ActionType("add_exclusion", "S2", "tenant", "admin_reason", {"kind": str, "value": str, "expires_days": int},
+               ("kind", "value")),
     # THR-01: scoped approval for account suspension or session revocation
     ActionType("suspend_account", "S2", "account", "approval", {"integration_id": str}, ("integration_id",)),
     ActionType("revoke_sessions", "S2", "session", "approval", {"integration_id": str}, ("integration_id",)),
@@ -70,5 +71,7 @@ def validate_params(action: ActionType, params: dict) -> None:
         raise ValueError("scan_type must be quick, full or custom")
     if action.name == "add_exclusion" and params["kind"] not in ("path", "sha256"):
         raise ValueError("kind must be path or sha256")
+    if action.name == "add_exclusion" and not (1 <= params.get("expires_days", 90) <= 365):
+        raise ValueError("expires_days must be between 1 and 365")
     if action.name == "rollback_update" and params["kind"] not in ("detections", "agent"):
         raise ValueError("kind must be detections or agent")

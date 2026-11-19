@@ -169,3 +169,65 @@ def test_translation_labels_validation_and_review(new_account, admin_sql):
     assert key not in admin.get("/v1/i18n/messages/sw").json()["machine_translated"]
     assert admin.post("/v1/i18n/translate", json={"locale": "xx"}).status_code == 422
     admin_sql("DELETE FROM aav.translations WHERE locale = 'sw'")
+
+
+PNG = (b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89"
+       b"\x00\x00\x00\rIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xa7\x35\x81\x84\x00\x00\x00\x00IEND\xaeB`\x82")
+
+
+def _files(*items):
+    return [("files", (name, data, "application/octet-stream")) for name, data in items]
+
+
+def test_assistant_scans_files_folders_and_images_and_stores_nothing(incident, admin_sql):
+    from conftest import eicar
+    admin = incident[0]
+    files = _files(("notes.txt", b"password = hunter2\nquarterly plan"), ("evil.com", eicar()), ("cam.png", PNG))
+    paths = [("paths", "project/docs/notes.txt"), ("paths", "project/../bin/evil.com"), ("paths", "camera.png")]
+    r = admin.post("/v1/assistant/ask-with-files", data={"question": "are these safe?"}, files=files + [])
+    assert r.status_code == 200, r.text
+    rep = {f["name"]: f for f in r.json()["files"]}
+    assert rep["evil.com"]["verdict"] == "malicious" and rep["notes.txt"]["verdict"] == "clean"
+    assert rep["cam.png"]["type"] == "image/png" and rep["evil.com"]["type"] != "image/png"
+    assert r.json()["engine"] == "rules" and "Do not open" in r.json()["answer"]
+    # folder paths are kept but can never climb out of the folder
+    r = admin.client.post("/v1/assistant/ask-with-files", headers=admin.h,
+                          data={"question": "x", "paths": [p for _, p in paths]}, files=files)
+    names = [f["name"] for f in r.json()["files"]]
+    assert names == ["project/docs/notes.txt", "project/bin/evil.com", "camera.png"]
+    rows = admin_sql("SELECT detail FROM aav.audit_log WHERE action = 'ai.assistant.files' ORDER BY id DESC LIMIT 1")
+    assert "hunter2" not in str(rows[0]["detail"]) and rows[0]["detail"]["files"][1]["verdict"] == "malicious"
+
+
+def test_assistant_sends_clean_images_and_redacted_text_to_claude_only(incident):
+    from conftest import eicar
+    admin = incident[0]
+    seen = {}
+
+    def reply(request):
+        body = json.loads(request.content)
+        seen["content"] = body["messages"][0]["content"]
+        return httpx.Response(200, json={"content": [{"type": "text", "text": '{"answer": "A one-pixel image."}'}],
+                                         "usage": {"input_tokens": 50, "output_tokens": 5}})
+    llm.configure(api_key="k", cap=10, tenant_cap=10)
+    llm.set_transport("anthropic", httpx.MockTransport(reply))
+    try:
+        r = admin.post("/v1/assistant/ask-with-files", data={"question": "what is this?"},
+                       files=_files(("cam.png", PNG), ("notes.txt", b"api_key: sk-ant-abcdefghijklmnop"),
+                                    ("evil.com", eicar())))
+    finally:
+        llm.configure()
+        llm.set_transport("anthropic", None)
+    assert r.json()["engine"].startswith("llm:anthropic") and r.json()["images_sent_to_model"] == 1
+    blocks = seen["content"]
+    assert blocks[0]["type"] == "image" and blocks[0]["source"]["media_type"] == "image/png"
+    text = blocks[-1]["text"]
+    assert "sk-ant-abcdefghijklmnop" not in text and "[redacted]" in text
+    assert "STANDARD-ANTIVIRUS-TEST-FILE" not in text   # malicious content never reaches a model, only its verdict
+
+
+def test_assistant_attachment_limits(incident):
+    admin = incident[0]
+    assert admin.post("/v1/assistant/ask-with-files", data={"question": "x"}).status_code == 422
+    many = _files(*[(f"f{i}.txt", b"x") for i in range(21)])
+    assert admin.post("/v1/assistant/ask-with-files", data={"question": "x"}, files=many).status_code == 413

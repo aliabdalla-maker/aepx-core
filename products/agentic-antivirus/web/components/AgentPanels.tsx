@@ -2,42 +2,12 @@
 import { useState } from "react";
 import { api, describeError } from "../lib/api";
 import { useI18n } from "../lib/i18n";
-import { Dictate, ReadAloud } from "./ui";
 
 /** Engine label: which provider answered (Claude, self-hosted model or rules) — shown on every agent output. */
 export function EngineChip({ engine }: { engine: string }) {
   const { t } = useI18n();
   const kind = engine.startsWith("llm:anthropic") ? "claude" : engine.startsWith("llm:ollama") ? "local" : "rules";
   return <span className="chip" title={engine}>{t(`ai.engine.${kind}`)}</span>;
-}
-
-/** Assistant (playbook "assistant" 1.0.0): read-only answers from the tenant's posture, incidents and gaps. */
-export function Assistant() {
-  const { t, locale } = useI18n();
-  const [q, setQ] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [a, setA] = useState<{ answer: string; engine: string; citations: string[] } | null>(null);
-  const [err, setErr] = useState<string | null>(null);
-  const ask = async () => {
-    setBusy(true); setErr(null);
-    try { setA(await api("/v1/assistant/ask", { body: { question: q, language: locale } })); }
-    catch (e) { setErr(describeError(e)); }
-    finally { setBusy(false); }
-  };
-  return (
-    <section aria-labelledby="assistant-h" className="card">
-      <h2 id="assistant-h">{t("ai.assistant")}</h2>
-      <p className="hint">{t("ai.assistantHint")}</p>
-      <div className="row">
-        <input aria-label={t("ai.question")} placeholder={t("ai.questionPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter" && q.trim().length > 1) ask(); }} />
-        <Dictate onText={(s) => setQ(s)} />
-        <button className="primary" disabled={busy || q.trim().length < 2} onClick={ask}>{busy ? t("common.working") : t("ai.ask")}</button>
-      </div>
-      {err && <p className="banner bad" role="alert">{err}</p>}
-      {a && <div aria-live="polite"><p>{a.answer} <EngineChip engine={a.engine} /></p><ReadAloud text={a.answer} />
-        {a.citations.length > 0 && <p className="hint">{t("ai.citations")}: {a.citations.join(", ")}</p>}</div>}
-    </section>);
 }
 
 /** Triage + remediation plan for one incident. The plan only files proposals that wait for approval. */
@@ -65,5 +35,27 @@ export function IncidentAgents({ id, onChange }: { id: string; onChange: () => v
         <table><thead><tr><th>{t("ai.action")}</th><th>{t("ai.targets")}</th><th>{t("ai.why")}</th><th>{t("common.status")}</th></tr></thead>
           <tbody>{plan.steps.map((s: any, i: number) => <tr key={i}><td>{s.action_type}</td><td>{s.targets.join(", ")}</td>
             <td>{s.rationale}</td><td>{s.status}</td></tr>)}</tbody></table></div>}
+    </section>);
+}
+
+/** §3C playbook catalogue: which playbooks apply to this incident and whether each completion criterion is met. */
+export function IncidentPlaybooks({ id }: { id: string }) {
+  const { t } = useI18n();
+  const [d, setD] = useState<any>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const load = () => api(`/v1/harness/incidents/${id}/playbooks`).then(setD).catch((e) => setErr(describeError(e)));
+  return (
+    <section aria-labelledby="pb-h">
+      <h2 id="pb-h">{t("response.playbooks")}</h2>
+      <button onClick={load}>{d ? t("common.refresh") : t("response.checkPlaybooks")}</button>
+      {err && <p className="banner bad" role="alert">{err}</p>}
+      {d && d.playbooks.map((pb: any) => (
+        <div key={pb.playbook} className="card">
+          <h3>{t(`response.pb.${pb.playbook}`)} <span className="hint">v{pb.version}</span>{" "}
+            <span className={`chip ${pb.complete ? "ok" : "warn"}`}>{pb.complete ? t("response.complete") : t("response.incomplete")}</span></h3>
+          <ul>{pb.criteria.map((c: any) => <li key={c.criterion}>
+            <span className={`chip ${c.status === "PASS" ? "ok" : c.status === "FAIL" ? "bad" : "muted"}`}>{c.status}</span> {c.criterion}
+            <div className="hint">{c.evidence}</div></li>)}</ul>
+        </div>))}
     </section>);
 }

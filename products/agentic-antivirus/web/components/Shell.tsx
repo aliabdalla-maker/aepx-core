@@ -5,8 +5,10 @@ import { useEffect, useState, type ReactNode } from "react";
 import { api, describeError, session } from "../lib/api";
 import { LOCALES, localeName, useI18n } from "../lib/i18n";
 import { formatDateTime } from "../lib/format";
+import { AssistantDrawer } from "./AssistantDrawer";
 
-const NAV: [string, string][] = [["/", "nav.dashboard"], ["/approvals", "nav.actions"], ["/incidents", "nav.incidents"],
+const NAV: [string, string][] = [["/", "nav.dashboard"], ["/approvals", "nav.actions"], ["/response", "nav.response"],
+  ["/incidents", "nav.incidents"],
   ["/alerts", "nav.alerts"], ["/security", "nav.security"], ["/devices", "nav.devices"], ["/quarantine", "nav.quarantine"], ["/policies", "nav.policies"],
   ["/ddos", "nav.ddos"], ["/integrations", "nav.integrations"], ["/files", "nav.files"]];
 const NAV2: [string, string][] = [["/settings", "nav.settings"], ["/billing", "nav.billing"], ["/audit", "nav.audit"],
@@ -94,6 +96,7 @@ export function Shell({ children, pending }: { children: ReactNode; pending?: nu
             {err && <p className="banner warn" role="alert">{err}</p>}
             {children}
           </main>
+          {me && <AssistantDrawer />}
         </div>
       </div>
     </>

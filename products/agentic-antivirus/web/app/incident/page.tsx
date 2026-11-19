@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "../../components/Shell";
 import { Act, ReadAloud, Sev, Status, useApi } from "../../components/ui";
-import { IncidentAgents } from "../../components/AgentPanels";
+import { IncidentAgents, IncidentPlaybooks } from "../../components/AgentPanels";
 import { api } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
 import { formatDateTime } from "../../lib/format";
@@ -32,6 +32,7 @@ export default function Incident() {
           <Act className="primary" label={t("incident.investigate")} run={() => api(`/v1/incidents/${id}/investigate`, { body: { use_llm: useLlm, language: locale } })} onDone={d.reload} />
         </div>
         {id && <IncidentAgents id={id} onChange={d.reload} />}
+        {id && <IncidentPlaybooks id={id} />}
 
         {f && <>
           <h2>{t("incident.facts")}</h2>
