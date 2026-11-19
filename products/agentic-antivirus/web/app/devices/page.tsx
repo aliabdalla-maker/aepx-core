@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { Shell } from "../../components/Shell";
 import { Act, AdSlot, Freshness, Status, useApi } from "../../components/ui";
-import { api } from "../../lib/api";
+import { api, apiUrl } from "../../lib/api";
+import { ThisComputer } from "../../components/ThisComputer";
 import { useI18n } from "../../lib/i18n";
 import { formatRelative, localeIncludes } from "../../lib/format";
 
@@ -17,6 +18,7 @@ export default function Devices() {
   return (
     <Shell>
       <h1>{t("nav.devices")}</h1>
+      <ThisComputer onChange={d.reload} />
       <Freshness at={d.at} />
       <div className="row">
         <label style={{ margin: 0 }}>{t("common.search")}<input value={q} onChange={(e) => setQ(e.target.value)} /></label>
@@ -24,7 +26,8 @@ export default function Devices() {
           onDone={(r: any) => setToken(r.token)} />
       </div>
       {token && <div className="banner" role="status"><p>Run on the device within 24 hours (one use):</p>
-        <code style={{ overflowWrap: "anywhere" }}>aav-agent enrol --url {location.origin}/api --token {token}</code></div>}
+        <code style={{ overflowWrap: "anywhere" }}>aav-agent enrol --url {apiUrl()} --token {token}</code>
+          <p>Get the agent for Windows, Mac or Linux from the <a href="https://softwareequality.com/agentic-antivirus-download#dl-agent">download page</a>.</p></div>}
       <Status error={d.error} loading={!d.data} />
       <table><thead><tr><th>{t("devices.hostname")}</th><th>{t("devices.os")}</th><th>{t("devices.status")}</th><th>Definitions</th>
         <th>{t("devices.policy")}</th><th>{t("devices.last_seen")}</th><th>{t("devices.issues")}</th><th>Scan</th></tr></thead>
