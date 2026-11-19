@@ -1,0 +1,381 @@
+Section,Section name,ID,Title,Evidence status,Release 1 disposition,Who acts,Proposal / note,Evidence / gap
+3,Project parameters and placeholders,PRJ-01,Organisation,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-02,Application name,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-03,Slug,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-04,Summary / business,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-05,Domain / industry,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-06,Initial customers,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-07,Target users /,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-08,Requirements input,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-09,Constraints,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-10,Success criteria,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-11,Data classification,Owner decision open,Accept proposed decision,you (approve),Classify telemetry as Confidential; UK GDPR; privacy page live; no voice recording stored,Data classification and legal/privacy review open (D-04)
+3,Project parameters and placeholders,PRJ-12,Operating budget,Verified live,Met,,,Running on existing OCI Always Free VM (uk-london-1); no billable resources added
+3,Project parameters and placeholders,PRJ-13,Product owner,Owner decision open,Remaining work,you,Name product owner and release approver; sign §22,Product owner / release approver not named (D-02)
+3,Project parameters and placeholders,PRJ-14,Release approval,Owner decision open,Remaining work,you,Name product owner and release approver; sign §22,Product owner / release approver not named (D-02)
+3,Project parameters and placeholders,PRJ-15,AEP-X repository /,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-16,AEP-X dependency,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-17,Integration model,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-18,Target product,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-19,Website /,Verified live,Met,,,softwareequality.com/agentic-antivirus and /agentic-antivirus-download live
+3,Project parameters and placeholders,PRJ-20,Proposed,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-21,Google Play,Blocked (external),Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,Google Play listing blocked (B-05)
+3,Project parameters and placeholders,PRJ-22,Operating systems,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-23,Accessibility target,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-24,Legal / privacy,Owner decision open,Accept proposed decision,you (approve),Classify telemetry as Confidential; UK GDPR; privacy page live; no voice recording stored,Data classification and legal/privacy review open (D-04)
+3,Project parameters and placeholders,PRJ-25,Integrations list,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-26,Source rule,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-27,Source control rules,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-28,Template status,Complied / delivered,Met,,,Recorded in register and applied in code/config
+3,Project parameters and placeholders,PRJ-29,Approved token,Complied / delivered,Met,,,Default USD 1.00/task enforced (C-06) in tools/self_correct.py
+3,Project parameters and placeholders,PRJ-30,Measurable KPI,Owner decision open,Accept proposed decision,you (approve),"R1 targets = PRD proposed values (OBJ-03 <0.5%, OBJ-04 30 s, OBJ-05 3 pp, DDL-02 60 s)",Measurable KPI targets not agreed (D-06)
+3,Project parameters and placeholders,PRJ-31,OCI tenancy and,Verified live,Met,,,Running on existing OCI Always Free VM (uk-london-1); no billable resources added
+4,"Delivery phases, gates and pipeline",DEL-01,01 Discovery,Complied / delivered,Met,,,"Phases complete: PRD, design, ARCHITECTURE.md, working code merged (#428–#430)"
+4,"Delivery phases, gates and pipeline",DEL-02,02 Design,Complied / delivered,Met,,,"Phases complete: PRD, design, ARCHITECTURE.md, working code merged (#428–#430)"
+4,"Delivery phases, gates and pipeline",DEL-03,03 Architecture,Complied / delivered,Met,,,"Phases complete: PRD, design, ARCHITECTURE.md, working code merged (#428–#430)"
+4,"Delivery phases, gates and pipeline",DEL-04,Generate working,Complied / delivered,Met,,,"Phases complete: PRD, design, ARCHITECTURE.md, working code merged (#428–#430)"
+4,"Delivery phases, gates and pipeline",DEL-05,05 Validation,Partial,Remaining work,"me, with your deploy approval","Staging stack (second compose project, sanitised data) on the same Always Free VM + acceptance run",Automated validation done (112 tests); staging validation not done
+4,"Delivery phases, gates and pipeline",DEL-06,06 Delivery,Partial,Accept proposed decision,you (approve),R1 delivery channels = OCI + GitHub + Docker (stores R2),Live on OCI + GitHub release aav-v0.1.1; store channels blocked
+4,"Delivery phases, gates and pipeline",DEL-07,07 Operations,Partial,Accept proposed decision,you (approve),Operator = product owner; critical alerts via console + email notifications,Runbooks + health checks live; no on-call/alerting rota recorded
+4,"Delivery phases, gates and pipeline",DEL-08,"Accept requirements input as plain text,",Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-09,Mandatory traceability chain: requirement_id →,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-10,No requirement without acceptance criteria,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-11,S4 pipeline: ingest and normalise requirements →,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-12,"A feature is complete only with an operational API,",Partial,Accept proposed decision,you (approve),R1 corpus = EICAR + benign OS/office corpus; equal-weight acceptance criteria,Evidence reported per feature; percent-complete weighting not agreed (D-05)
+4,"Delivery phases, gates and pipeline",DEL-13,Prohibited: unlabelled mocks in production;,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-14,"Implement actually connected behaviour, not a",Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-15,Inspect current aepx-core and avoid replacing,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-16,"Generate a PRD, user stories, functional and non-",Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-17,Mark each feature planned / implemented / tested /,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-18,"Report measurable progress, evidence, blockers",Partial,Accept proposed decision,you (approve),R1 corpus = EICAR + benign OS/office corpus; equal-weight acceptance criteria,Evidence reported per feature; percent-complete weighting not agreed (D-05)
+4,"Delivery phases, gates and pipeline",DEL-19,Never assert production readiness without,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-20,"Do not merge, provision, deploy or publish without",Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-21,Template usage order: edit the application spec →,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-22,Agent derives a concrete implementation plan,Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+4,"Delivery phases, gates and pipeline",DEL-23,"Act in the roles of principal software architect, full-",Complied / delivered,Met,,,"Complied: STATUS.md traceability, no unlabelled mocks, human merges/approvals only"
+5,"Product vision, objectives and users",VIS-01,"Protect against viruses, worms, trojans,",Partial,Accept proposed decision,you (approve),User-mode agent for R1 (scan on access/execute/download/demand + quarantine),User-mode scan/quarantine tested; kernel pre-execution blocking blocked (B-01/B-04)
+5,"Product vision, objectives and users",VIS-02,"Protect against stolen credentials, compromised",Partial,Accept proposed decision,you (approve),R1 accepted on tested ingest/approval flows with test signals; live feeds in R2 (D-03),Identity/phishing paths tested with test signals; live provider feeds blocked (B-06)
+5,"Product vision, objectives and users",VIS-03,"Three parts: endpoint protection engine, central",Tested,Met,,,Agent + control plane + investigation + policy engine tested end-to-end
+5,"Product vision, objectives and users",VIS-04,"Endpoint agent enforces local protection policies,",Tested,Met,,,Agent + control plane + investigation + policy engine tested end-to-end
+5,"Product vision, objectives and users",VIS-05,"AI assistant correlates evidence, explains what",Tested,Met,,,Agent + control plane + investigation + policy engine tested end-to-end
+5,"Product vision, objectives and users",VIS-06,A policy engine authorises and audits each,Tested,Met,,,Agent + control plane + investigation + policy engine tested end-to-end
+5,"Product vision, objectives and users",OBJ-01,Protect endpoints from known,Tested,Met,,,"test_endpoint_e2e.py, test_governed_actions.py"
+5,"Product vision, objectives and users",OBJ-02,Detect suspicious endpoint,Tested,Met,,,"test_endpoint_e2e.py, test_governed_actions.py"
+5,"Product vision, objectives and users",OBJ-03,Reduce false positives,Tested,Met,,,"0 false positives on 60,001 benign files (4.3 GB) + test_register_r1.py::test_false_positive_rate_below_half_percent_on_benign_corpus; EICAR positive control detected"
+5,"Product vision, objectives and users",OBJ-04,Alert security teams quickly,Tested,Met,,,"test_endpoint_e2e.py, test_governed_actions.py"
+5,"Product vision, objectives and users",OBJ-05,Keep endpoint overhead low,Tested,Met,,,test_register_r1.py::test_agent_cpu_overhead_below_3_points_during_office_workload: 0.136 pp (27 ms CPU per 10 s cycle)
+5,"Product vision, objectives and users",OBJ-06,Preserve local protection during,Tested,Met,,,"test_endpoint_e2e.py, test_governed_actions.py"
+5,"Product vision, objectives and users",OBJ-07,Maintain control of automated,Tested,Met,,,"test_endpoint_e2e.py, test_governed_actions.py"
+5,"Product vision, objectives and users",OBJ-08,Publication,Partial,Defer to R2,you (approve),"R1 publication channels = website, GitHub release, Docker/GHCR; stores in R2","Website, GitHub release, Docker images live; app stores blocked"
+5,"Product vision, objectives and users",USR-01,Endpoint user,Tested,Met,,,Roles + MSP child tenant + auditor read-only tested (test_auth_tenancy.py)
+5,"Product vision, objectives and users",USR-02,IT administrator,Tested,Met,,,Roles + MSP child tenant + auditor read-only tested (test_auth_tenancy.py)
+5,"Product vision, objectives and users",USR-03,Security analyst,Tested,Met,,,Roles + MSP child tenant + auditor read-only tested (test_auth_tenancy.py)
+5,"Product vision, objectives and users",USR-04,Managed service provider,Tested,Met,,,Roles + MSP child tenant + auditor read-only tested (test_auth_tenancy.py)
+5,"Product vision, objectives and users",USR-05,Auditor,Tested,Met,,,Roles + MSP child tenant + auditor read-only tested (test_auth_tenancy.py)
+6,Product functional requirements and response permissions,AV-01,Malware prevention,Partial,Remaining work,"you, then me","Merge PR #431; I redeploy, publish definitions, cut aav-v0.1.2 and smoke-test the installers",On-demand/quick/full/scheduled scans tested; EICAR quarantined in e2e; live definitions not yet published (fix in PR #431); pre-open blocking blocked B-01
+6,Product functional requirements and response permissions,AV-02,Quarantine and,Tested,Met,,,See STATUS.md test references
+6,Product functional requirements and response permissions,EDR-01,Behaviour monitoring,Tested,Met,,,See STATUS.md test references
+6,Product functional requirements and response permissions,EDR-02,Incident containment,Tested,Met,,,See STATUS.md test references
+6,Product functional requirements and response permissions,AI-01,Agentic investigation,Tested,Met,,,See STATUS.md test references
+6,Product functional requirements and response permissions,AI-02,Governed response,Tested,Met,,,See STATUS.md test references
+6,Product functional requirements and response permissions,OPS-01,Management console,Verified live,Met,,,Console live at api.softwareequality.com/apps/agentic-antivirus; inventory flags tested
+6,Product functional requirements and response permissions,OPS-02,Offline operation and,Tested,Met,,,See STATUS.md test references
+6,Product functional requirements and response permissions,SEC-01,Identity and network,Partial,Accept proposed decision,you (approve),R1 accepted on tested ingest/approval flows with test signals; live feeds in R2 (D-03),Tested with test-only signals; live providers blocked (B-06)
+6,Product functional requirements and response permissions,SEC-02,Phishing and web,Partial,Accept proposed decision,you (approve),R1 accepted on tested ingest/approval flows with test signals; live feeds in R2 (D-03),Tested with test-only signals; live providers blocked (B-06)
+6,Product functional requirements and response permissions,REC-01,Recovery coordination,Partial,Accept proposed decision,you (approve),R1 accepted on tested ingest/approval flows with test signals; live feeds in R2 (D-03),Tested with test-only signals; live providers blocked (B-06)
+6,Product functional requirements and response permissions,RSP-01,Collect allowlisted metadata and,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-02,Quarantine a confirmed known-,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-03,Act on a suspicious behavioural alert,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-04,Restore a file or add a persistent,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-05,Act across multiple endpoints,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-06,Contain a critical device,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-07,Approval binding,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-08,Command integrity,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-09,AI tool boundary,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+6,Product functional requirements and response permissions,RSP-10,Untrusted evidence,Tested,Met,,,"test_governed_actions.py, Ed25519 signed commands"
+7,"Product architecture, non-functional requirements and release",ARC-01,Endpoint agent,Tested,Met,,,Agent binaries in release; detection + investigation tested
+7,"Product architecture, non-functional requirements and release",ARC-02,Central control plane,Verified live,Met,,,Control plane live; /api/ready true
+7,"Product architecture, non-functional requirements and release",ARC-03,Detection engine,Tested,Met,,,Agent binaries in release; detection + investigation tested
+7,"Product architecture, non-functional requirements and release",ARC-04,Investigation service,Tested,Met,,,Agent binaries in release; detection + investigation tested
+7,"Product architecture, non-functional requirements and release",NFR-01,Security and privacy,"Implemented, not verified",Remaining work,"me, in Cloud Shell","Run deploy/preflight.sh (read-only) and record shape, quotas, boot-volume encryption","TLS, secrets in /etc/aav/aav.env, RBAC; encryption-at-rest not verified on VM"
+7,"Product architecture, non-functional requirements and release",NFR-02,Reliability and scale,Not started,Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested","1,000-endpoint load test not run (B-09)"
+7,"Product architecture, non-functional requirements and release",REL-01,1. Endpoint,Partial,Remaining work,"you, then me","Merge PR #431; I redeploy, publish definitions, cut aav-v0.1.2 and smoke-test the installers",Endpoint release aav-v0.1.1 published (unsigned Windows installer)
+7,"Product architecture, non-functional requirements and release",REL-02,2. Managed,Not started,Defer to R2,you (approve),Later release stages / optional platforms are R2+ by definition,Later release stages not started
+7,"Product architecture, non-functional requirements and release",REL-03,3. Agentic,Not started,Defer to R2,you (approve),Later release stages / optional platforms are R2+ by definition,Later release stages not started
+7,"Product architecture, non-functional requirements and release",REL-04,4. Expanded,Not started,Defer to R2,you (approve),Later release stages / optional platforms are R2+ by definition,Later release stages not started
+7,"Product architecture, non-functional requirements and release",REL-05,Release,Not started,Defer to R2,you (approve),Later release stages / optional platforms are R2+ by definition,Later release stages not started
+7,"Product architecture, non-functional requirements and release",ASM-01,Conventional attacks cover traditional malware,Complied / delivered,Met,,,Assumptions recorded and reflected in scope
+7,"Product architecture, non-functional requirements and release",ASM-02,"Broader cyberattacks include behaviour-based,",Complied / delivered,Met,,,Assumptions recorded and reflected in scope
+7,"Product architecture, non-functional requirements and release",ASM-03,Windows 11 is the proposed first platform; macOS,Complied / delivered,Met,,,Assumptions recorded and reflected in scope
+7,"Product architecture, non-functional requirements and release",ASM-04,Upstream integrations handle volumetric DDoS,Complied / delivered,Met,,,Assumptions recorded and reflected in scope
+7,"Product architecture, non-functional requirements and release",ASM-05,Physical threats are covered through endpoint,Complied / delivered,Met,,,Assumptions recorded and reflected in scope
+8,DDoS and additional threat coverage,DDOS-01,Volumetric floods,Partial,Accept proposed decision,you (approve),R1 accepted on tested ingest/approval flows with test signals; live feeds in R2 (D-03),Flow tested with test signals; provider apply blocked (B-06/B-08)
+8,DDoS and additional threat coverage,DDOS-02,Protocol exhaustion,"Implemented, not verified",Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested",Signal ingest/objectives implemented; exercises blocked (B-08)
+8,DDoS and additional threat coverage,DDOS-03,Application-layer,Partial,Accept proposed decision,you (approve),R1 accepted on tested ingest/approval flows with test signals; live feeds in R2 (D-03),Flow tested with test signals; provider apply blocked (B-06/B-08)
+8,DDoS and additional threat coverage,DDOS-04,DNS and origin,"Implemented, not verified",Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested",Signal ingest/objectives implemented; exercises blocked (B-08)
+8,DDoS and additional threat coverage,DDOS-05,Multi-vector incidents,Tested,Met,,,test_threats_integrations.py
+8,DDoS and additional threat coverage,DDL-01,Coverage,Tested,Met,,,test_threats_integrations.py
+8,DDoS and additional threat coverage,DDL-02,Detection and notification,Tested,Met,,,test_threats_integrations.py
+8,DDoS and additional threat coverage,DDL-03,Service continuity,"Implemented, not verified",Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested",Signal ingest/objectives implemented; exercises blocked (B-08)
+8,DDoS and additional threat coverage,DDL-04,Change control and,Tested,Met,,,test_threats_integrations.py
+8,DDoS and additional threat coverage,THR-01,Credential theft and account,Tested,Met,,,Tested with test-only signals
+8,DDoS and additional threat coverage,THR-02,Phishing and social engineering,Tested,Met,,,Tested with test-only signals
+8,DDoS and additional threat coverage,THR-03,Web and API abuse,Tested,Met,,,Tested with test-only signals
+8,DDoS and additional threat coverage,THR-04,Network compromise and lateral,Tested,Met,,,Tested with test-only signals
+8,DDoS and additional threat coverage,THR-05,Cloud and workload,Tested,Met,,,test_register_r1.py::test_cloud_and_insider_findings_owned_and_remediation_needs_authorisation
+8,DDoS and additional threat coverage,THR-06,Supply-chain compromise and,Tested,Met,,,test_endpoint_e2e.py signed-update rejection (THR-06) and behaviour detection of unknown samples (THR-09)
+8,DDoS and additional threat coverage,THR-07,Insider threats and data,Tested,Met,,,test_register_r1.py::test_cloud_and_insider_findings_owned_and_remediation_needs_authorisation
+8,DDoS and additional threat coverage,THR-08,Physical and removable-media,Tested,Met,,,Tested with test-only signals
+8,DDoS and additional threat coverage,THR-09,Advanced and previously,Tested,Met,,,test_endpoint_e2e.py signed-update rejection (THR-06) and behaviour detection of unknown samples (THR-09)
+8,DDoS and additional threat coverage,THR-10,AI and control-plane abuse,Tested,Met,,,test_threats_integrations.py
+9,Platform architecture and AEP-X integration,UI-01,"Web: Next.js/React, responsive, accessible; PWA",Verified live,Met,,,"Next.js console live; login, register, verify, reset, Google sign-in live"
+9,Platform architecture and AEP-X integration,UI-02,Mobile: Android Kotlin/Compose or verified,"Implemented, not verified",Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,Android/iOS clients implemented; not published
+9,Platform architecture and AEP-X integration,UI-03,"Desktop: Tauri/Electron or native shell, chosen by",Verified live,Met,,,Electron desktop installers downloadable (Win/macOS/Linux)
+9,Platform architecture and AEP-X integration,UI-04,"Themes: light, dark, high contrast",Tested,Met,,,"a11y gate 84 checks, 0 serious; themes/RTL/responsive"
+9,Platform architecture and AEP-X integration,UI-05,"Layouts: desktop, tablet, phone; TV if requested",Tested,Met,,,"a11y gate 84 checks, 0 serious; themes/RTL/responsive"
+9,Platform architecture and AEP-X integration,UI-06,Internationalisation configurable (detailed in §11),Tested,Met,,,"a11y gate 84 checks, 0 serious; themes/RTL/responsive"
+9,Platform architecture and AEP-X integration,UI-07,Accessibility target WCAG 2.2 AA,Tested,Met,,,"a11y gate 84 checks, 0 serious; themes/RTL/responsive"
+9,Platform architecture and AEP-X integration,UI-08,"Icon assets: SVG, adaptive Android icons, iOS app","Implemented, not verified",Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,Android/iOS clients implemented; not published
+9,Platform architecture and AEP-X integration,UI-09,"Mandatory pages: login, registration, password",Verified live,Met,,,"Next.js console live; login, register, verify, reset, Google sign-in live"
+9,Platform architecture and AEP-X integration,UI-10,Cross-platform UI,"Implemented, not verified",Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,Android/iOS clients implemented; not published
+9,Platform architecture and AEP-X integration,BE-01,"API: FastAPI recommended, versioned OpenAPI",Verified live,Met,,,FastAPI + PostgreSQL live; secrets in runtime store
+9,Platform architecture and AEP-X integration,BE-02,Database: PostgreSQL with migrations and tenant,Verified live,Met,,,FastAPI + PostgreSQL live; secrets in runtime store
+9,Platform architecture and AEP-X integration,BE-03,Multi-tenancy enforced by PostgreSQL RLS and,Tested,Met,,,RLS + RBAC tests
+9,Platform architecture and AEP-X integration,BE-04,Async jobs: durable queue with fenced leases and,Verified live,Met,,,Durable mail worker queue live (re-queued mails delivered)
+9,Platform architecture and AEP-X integration,BE-05,Object storage: verified OCI Always Free-eligible,Not started,Defer to R2,you (approve),"Object storage, OTel collector, RAG memory, business-KPI analytics move to R2",OCI Object Storage not used; local volume store
+9,Platform architecture and AEP-X integration,BE-06,Telemetry: OpenTelemetry where feasible,"Implemented, not verified",Defer to R2,you (approve),"Object storage, OTel collector, RAG memory, business-KPI analytics move to R2",Telemetry hooks implemented; no OTel collector deployed
+9,Platform architecture and AEP-X integration,BE-07,"Authentication: OIDC, optional Google login,",Verified live,Met,,,"Password + email verification (relay, 8 mails sent 19 Nov) + Google OIDC live"
+9,Platform architecture and AEP-X integration,BE-08,Authorisation: RBAC and policy-based,Tested,Met,,,RLS + RBAC tests
+9,Platform architecture and AEP-X integration,BE-09,"Secrets in a runtime secret store, never in git",Verified live,Met,,,FastAPI + PostgreSQL live; secrets in runtime store
+9,Platform architecture and AEP-X integration,BE-10,"Application API accepts end-user requests,",Verified live,Met,,,FastAPI + PostgreSQL live; secrets in runtime store
+9,Platform architecture and AEP-X integration,BE-11,Services: auth and tenant; application API; AEP-X,Verified live,Met,,,FastAPI + PostgreSQL live; secrets in runtime store
+9,Platform architecture and AEP-X integration,AX-01,Role: mandatory governed interoperability plane,Verified live,Met,,,/api/ready aepx_governance true in production
+9,Platform architecture and AEP-X integration,AX-02,Integration mode: pinned verified SDK or service,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-03,Reuse existing implementation first: agent,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-04,Inspect at pinned SHA and verify maturity of:,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-05,Do not treat stubs as live adapters,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-06,Governed call path: authenticate principal and,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-07,"Fail closed on missing governance, policy or",Verified live,Met,,,/api/ready aepx_governance true in production
+9,Platform architecture and AEP-X integration,AX-08,No direct or ungoverned agent-to-external access,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-09,"Connector maturity: verified_live, test_only, stub,",Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-10,Controls: tenant isolation; allowlisted tools only;,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-11,Limits: max task duration 300 s; max 5 agent,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-12,Must test: cross-tenant isolation; approval single,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-13,"Agent roles: requirements analyst, UX designer,",Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-14,LLM provider configurable and opt-in,Owner decision open,Accept proposed decision,you (approve),No LLM provider in R1; rules-based investigation with LLM opt-in off,LLM provider opt-in implemented; provider choice open (D-07)
+9,Platform architecture and AEP-X integration,AX-15,Never embed credentials or tokens,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-16,Tools policy allowlisted and least privilege; egress,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+9,Platform architecture and AEP-X integration,AX-17,High-risk actions require human approval,Tested,Met,,,"Governed path, fail-closed, limits tested; governance check live"
+10,Baseline application functions,FN-01,Account,Verified live,Met,,,Accounts live incl. email confirmation and Google sign-in
+10,Baseline application functions,FN-02,Authorisation,Tested,Met,,,Router CRUD/validation/export tests
+10,Baseline application functions,FN-03,Application data,Tested,Met,,,Router CRUD/validation/export tests
+10,Baseline application functions,FN-04,Dashboards,Tested,Met,,,Router CRUD/validation/export tests
+10,Baseline application functions,FN-05,Integration,Tested,Met,,,Router CRUD/validation/export tests
+10,Baseline application functions,FN-06,Production data,Partial,Remaining work,"you, then me","Merge PR #431; I redeploy, publish definitions, cut aav-v0.1.2 and smoke-test the installers",Real production data path live; definitions bundle missing until PR #431 deploy
+10,Baseline application functions,FN-07,Simulation labelling,Tested,Met,,,Router CRUD/validation/export tests
+10,Baseline application functions,FN-08,Core platform,Tested,Met,,,Router CRUD/validation/export tests
+10,Baseline application functions,FN-09,Modification rights,Tested,Met,,,Router CRUD/validation/export tests
+11,Localisation and voice,L10N-01,100 selectable locales from the catalogue below (a,Partial,Defer to R2,you (approve),R1 ships English with the 100-locale catalogue and fallback; translations + per-locale QA move to R2 (D-11),Catalogue of 100 locales; 1/100 translated
+11,Localisation and voice,L10N-02,BCP 47 language tags,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-03,Translation management,Complied / delivered,Met,,,Delivered as implemented; accepted as R1 deliverable
+11,Localisation and voice,L10N-04,Tested text localisation,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-05,ICU plural rules / pluralisation,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-06,"Localised date, time, number and currency formats",Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-07,Fallback chains; fallback locale en,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-08,Bidirectional text and RTL layout,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-09,Locale-specific search,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-10,Locale-specific accessibility,Partial,Defer to R2,you (approve),R1 ships English with the 100-locale catalogue and fallback; translations + per-locale QA move to R2 (D-11),a11y checks run on en + RTL sample only
+11,Localisation and voice,L10N-11,Per-locale QA required; each locale individually,Not started,Defer to R2,you (approve),R1 ships English with the 100-locale catalogue and fallback; translations + per-locale QA move to R2 (D-11),Per-locale QA not done
+11,Localisation and voice,L10N-12,Report unavailable translations; do not claim all,Tested,Met,,,i18n unit tests + RTL a11y checks
+11,Localisation and voice,L10N-13,Localised design system,Complied / delivered,Met,,,Delivered as implemented; accepted as R1 deliverable
+11,Localisation and voice,VOC-01,Text-to-speech read-aloud,Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-02,"Optional speech-to-text, with microphone consent",Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-03,Language and voice selection; per-locale voice,Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-04,Pause and resume,Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-05,Speed control (S2); speed and pitch controls (S3),Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-06,Audio output device selection,Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-07,Downloadable / exported audio only where,Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-08,Accessible alternatives; screen-reader,Tested,Met,,,web/tests/voice.test.ts (8 tests); device voices not claimed (VOC-10)
+11,Localisation and voice,VOC-09,Privacy and retention policy required for voice data,Owner decision open,Accept proposed decision,you (approve),Classify telemetry as Confidential; UK GDPR; privacy page live; no voice recording stored,Voice privacy/retention policy needs D-04
+11,Localisation and voice,VOC-10,Do not claim all voices work without coverage,Complied / delivered,Met,,,Coverage matrix makes no all-voices claim
+12,File manager (virtual file system),VFS-01,"GUI file CRUD: create, read, update, delete, copy,",Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-02,Folder CRUD and directory traversal,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-03,Bulk import/export; recursive folder transfer,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-04,"Archive formats: zip, tar, tar.gz",Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-05,Secure uploads; streaming downloads,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-06,Opaque storage of any file type; unsupported,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-07,Preview/edit/convert capability-gated behind a,Partial,Defer to R2,you (approve),Office/media file handlers and non-REST transports move to R2,Office/media handlers planned (file-handlers matrix)
+12,File manager (virtual file system),VFS-08,"Format handlers required: text, CSV, JSON, XML,",Partial,Defer to R2,you (approve),Office/media file handlers and non-REST transports move to R2,Office/media handlers planned (file-handlers matrix)
+12,File manager (virtual file system),VFS-09,File versioning,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-10,Retention,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-11,Checksums and checksum verification,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-12,Malware checks / scanning,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-13,MIME sniffing and validation,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-14,Path traversal and symlink defences,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-15,Size limits and quota enforcement,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-16,Tenant ACLs,Tested,Met,,,test_files.py
+12,File manager (virtual file system),VFS-17,Audit of file operations,Tested,Met,,,test_files.py
+13,System settings and integration ports,SET-01,"Settings categories: general, localisation, voice,",Tested,Met,,,test_platform.py settings tests
+13,System settings and integration ports,SET-02,GUI CRUD for settings,Tested,Met,,,test_platform.py settings tests
+13,System settings and integration ports,SET-03,Settings schema validation,Tested,Met,,,test_platform.py settings tests
+13,System settings and integration ports,SET-04,RBAC on settings,Tested,Met,,,test_platform.py settings tests
+13,System settings and integration ports,SET-05,Secrets never stored in plaintext,Tested,Met,,,test_platform.py settings tests
+13,System settings and integration ports,SET-06,Settings audit and rollback,Tested,Met,,,test_platform.py settings tests
+13,System settings and integration ports,INT-01,Scope: logical endpoints and approved network,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-02,"Protocols: REST, OpenAPI, GraphQL, gRPC, MCP,",Partial,Defer to R2,you (approve),Office/media file handlers and non-REST transports move to R2,Only REST/webhook/SMTP transports live; GraphQL/gRPC/etc planned
+13,System settings and integration ports,INT-03,"Ecosystems: in-house, existing enterprise, cloud,",Partial,Defer to R2,you (approve),Office/media file handlers and non-REST transports move to R2,Only REST/webhook/SMTP transports live; GraphQL/gRPC/etc planned
+13,System settings and integration ports,INT-04,Integration catalogue with health checks,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-05,Allowlist; least privilege,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-06,TLS,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-07,Credential vault; approved credentials only,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-08,Network egress policy; private network controls,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-09,SSRF defence,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-10,No public port without approval,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+13,System settings and integration ports,INT-11,Stubs are not production,Tested,Met,,,"Registry, egress/SSRF, maturity gate tests"
+14,"KPIs, dashboards and observability",KPI-01,Business,Not started,Defer to R2,you (approve),"Object storage, OTel collector, RAG memory, business-KPI analytics move to R2",Business KPIs (activation/conversion/retention) not instrumented
+14,"KPIs, dashboards and observability",KPI-02,System,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",KPI-03,Agents,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",KPI-04,Delivery,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",KPI-05,Security,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",KPI-06,Integrations,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",KPI-07,Localisation and,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",KPI-08,Files and audit,Tested,Met,,,test_platform.py::test_kpis_live_and_exports
+14,"KPIs, dashboards and observability",DSH-01,"Source: actual events, trace IDs, live metrics and",Tested,Met,,,"Live queries, freshness, CSV/JSON/PDF export tested"
+14,"KPIs, dashboards and observability",DSH-02,Freshness indicator on every metric,Tested,Met,,,"Live queries, freshness, CSV/JSON/PDF export tested"
+14,"KPIs, dashboards and observability",DSH-03,Never present synthetic numbers as real or live,Tested,Met,,,"Live queries, freshness, CSV/JSON/PDF export tested"
+14,"KPIs, dashboards and observability",DSH-04,Measurable targets defined per project (PRJ-30),Owner decision open,Accept proposed decision,you (approve),"R1 targets = PRD proposed values (OBJ-03 <0.5%, OBJ-04 30 s, OBJ-05 3 pp, DDL-02 60 s)",Targets need D-06
+14,"KPIs, dashboards and observability",DSH-05,Role-based dashboards,Tested,Met,,,"Live queries, freshness, CSV/JSON/PDF export tested"
+14,"KPIs, dashboards and observability",DSH-06,"Export as CSV, PDF and JSON",Tested,Met,,,"Live queries, freshness, CSV/JSON/PDF export tested"
+14,"KPIs, dashboards and observability",DSH-07,Administrator KPI dashboard,Tested,Met,,,"Live queries, freshness, CSV/JSON/PDF export tested"
+15,Platform targets and distribution,PLT-01,Web,Verified live,Met,,,Web console live; desktop builds on release page
+15,Platform targets and distribution,PLT-02,Desktop,Verified live,Met,,,Web console live; desktop builds on release page
+15,Platform targets and distribution,PLT-03,Mobile,Partial,Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,"Android/iOS built in CI only, not published"
+15,Platform targets and distribution,PLT-04,Optional,Not started,Defer to R2,you (approve),Later release stages / optional platforms are R2+ by definition,Optional platforms not started
+15,Platform targets and distribution,PLT-05,Build rules,Verified live,Met,,,Builds from CI on GitHub Actions
+15,Platform targets and distribution,DST-01,Website landing,Verified live,Met,,,Download page links to aav-v0.1.1 assets (14 links verified); ghcr images public
+15,Platform targets and distribution,DST-02,Android,Blocked (external),Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,"Play (B-05), App Store (B-03), signing keys (B-02)"
+15,Platform targets and distribution,DST-03,iOS,Blocked (external),Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,"Play (B-05), App Store (B-03), signing keys (B-02)"
+15,Platform targets and distribution,DST-04,Windows,Verified live,Met,,,Download page links to aav-v0.1.1 assets (14 links verified); ghcr images public
+15,Platform targets and distribution,DST-05,macOS,Verified live,Met,,,Download page links to aav-v0.1.1 assets (14 links verified); ghcr images public
+15,Platform targets and distribution,DST-06,Linux,Verified live,Met,,,Download page links to aav-v0.1.1 assets (14 links verified); ghcr images public
+15,Platform targets and distribution,DST-07,Desktop channels,Verified live,Met,,,Download page links to aav-v0.1.1 assets (14 links verified); ghcr images public
+15,Platform targets and distribution,DST-08,Signing keys,Blocked (external),Defer to R2,you (approve),Code-signed installers move to R2; R1 ships as an unsigned beta with published SHA-256 sums,"Play (B-05), App Store (B-03), signing keys (B-02)"
+15,Platform targets and distribution,DST-09,Publication,Partial,Defer to R2,you (approve),"R1 publication channels = website, GitHub release, Docker/GHCR; stores in R2",Website + GitHub + Docker published; stores blocked
+16,CI/CD,CI-01,Provider GitHub Actions; GitHub branches; pull,Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-02,"Containers: Docker, buildx multi-architecture",Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-03,"Stages: lint, typecheck, unit, integration, e2e,",Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-04,"Required gates: lint, unit, integration, API contract,",Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-05,"Test types: unit, integration, contract, end-to-end,",Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-06,Dependency scans,Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-07,SBOM,Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-08,Metrics and traceable evidence from every run,Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-09,Immutable artifacts; provenance and digest,Verified live,Met,,,agentic-antivirus.yml ran; release with SHA256SUMS + SPDX SBOM
+16,CI/CD,CI-10,Signed packages when credentials are available;,Blocked (external),Defer to R2,you (approve),Code-signed installers move to R2; R1 ships as an unsigned beta with published SHA-256 sums,No code-signing secrets (B-02)
+16,CI/CD,CI-11,Protected production environment; separate,Partial,Remaining work,you,Create GitHub environment 'production' with you as required reviewer,No separate protected production environment in GitHub
+16,CI/CD,CI-12,No self-hosted runner for untrusted public PRs,Complied / delivered,Met,,,GitHub-hosted runners; human merges only
+16,CI/CD,CI-13,No auto-merge of AI-generated changes,Complied / delivered,Met,,,GitHub-hosted runners; human merges only
+16,CI/CD,CI-14,Deploy only from a verified commit SHA,Verified live,Met,,,Deployed from verified SHA 4e5c8ea
+16,CI/CD,CI-15,Rollback to the last verified immutable release,"Implemented, not verified",Remaining work,"me, with your deploy approval",Rollback rehearsal 0.1.2 -> 0.1.1 and backup/restore rehearsal on the VM,Rollback in cohost-install.sh; not exercised in production
+17,OCI infrastructure,OCI-01,Region uk-london-1; existing approved,Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-02,Pricing mode Always Free only; no billable resource,Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-03,"Compute preference VM.Standard.A1.Flex, arm64,","Implemented, not verified",Remaining work,"me, in Cloud Shell","Run deploy/preflight.sh (read-only) and record shape, quotas, boot-volume encryption",Shape/IaC/backup/zero-downtime implemented; backup restore not rehearsed on VM
+17,OCI infrastructure,OCI-04,Preflight: authenticate and verify region and,Partial,Remaining work,"me, in Cloud Shell","Run deploy/preflight.sh (read-only) and record shape, quotas, boot-volume encryption",Preflight script exists; not run against tenancy
+17,OCI infrastructure,OCI-05,"Stop if any resource can incur charges, or if quota",Complied / delivered,Met,,,No chargeable resources; deploys only after your approval
+17,OCI infrastructure,OCI-06,Infrastructure as code: use existing deploy OCI,Complied / delivered,Met,,,Delivered as implemented; accepted as R1 deliverable
+17,OCI infrastructure,OCI-07,Use existing eligible resources when approved,Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-08,Runtime: Docker Compose on a verified Always,Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-09,Ingress: reverse proxy with TLS on an existing or,Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-10,Data backup compatible with verified free quotas;,"Implemented, not verified",Remaining work,"me, with your deploy approval",Rollback rehearsal 0.1.2 -> 0.1.1 and backup/restore rehearsal on the VM,Shape/IaC/backup/zero-downtime implemented; backup restore not rehearsed on VM
+17,OCI infrastructure,OCI-11,Secrets enforced,Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-12,"Zero downtime best-effort only, if capacity and","Implemented, not verified",Remaining work,"me, with your deploy approval",Rollback rehearsal 0.1.2 -> 0.1.1 and backup/restore rehearsal on the VM,Shape/IaC/backup/zero-downtime implemented; backup restore not rehearsed on VM
+17,OCI infrastructure,OCI-13,"Health gates: readiness, liveness, database, agent",Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-14,"No chargeable load balancer, registry or database",Verified live,Met,,,"Existing Always Free VM, Docker Compose, TLS proxy, health gates live"
+17,OCI infrastructure,OCI-15,Do not touch production without approval,Complied / delivered,Met,,,No chargeable resources; deploys only after your approval
+17,OCI infrastructure,OCI-16,Stage with sanitised data,Not started,Remaining work,"me, with your deploy approval","Staging stack (second compose project, sanitised data) on the same Always Free VM + acceptance run",No staging environment
+18,"Agents, self-correction and learning",AGT-01,Orchestrator: supervisor,Complied / delivered,Met,,,Delivered as implemented; accepted as R1 deliverable
+18,"Agents, self-correction and learning",AGT-02,"Roles: analyst, architect, designer, implementer,",Complied / delivered,Met,,,Delivered as implemented; accepted as R1 deliverable
+18,"Agents, self-correction and learning",AGT-03,"Memory: retrieval-augmented, source attribution,",Partial,Defer to R2,you (approve),"Object storage, OTel collector, RAG memory, business-KPI analytics move to R2",RAG memory not deployed
+18,"Agents, self-correction and learning",AGT-04,Retrieval: access-controlled RAG,Partial,Defer to R2,you (approve),"Object storage, OTel collector, RAG memory, business-KPI analytics move to R2",RAG memory not deployed
+18,"Agents, self-correction and learning",SC-01,"Goal: evidence-based quality improvement, not",Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-02,Loop: observe logged failure or drift → correlate,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-03,Max 5 attempts per defect / issue,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-04,Max tokens and cost: approved cap (PRJ-29),Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-05,No secrets in model context,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-06,Prevent recursive infinite loops; no unbounded,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-07,Isolated branch; tests before review; human-,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-08,No automatic production merge or deploy; no self-,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-09,No autonomous permission escalation,Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-10,"Learning sources: approved feedback, resolved",Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-11,"Model training only with explicit data rights,",Tested,Met,,,test_self_correct.py
+18,"Agents, self-correction and learning",SC-12,"Prohibited: learning secrets, cross-tenant data",Tested,Met,,,test_self_correct.py
+19,Release acceptance and evidence,RA-01,All P0 and P1 defects resolved,Partial,Remaining work,"you, then me","Merge PR #431; I redeploy, publish definitions, cut aav-v0.1.2 and smoke-test the installers","Known P0 defects (menu, desktop open, in-app scan, definitions) fixed in PR #431, not yet merged"
+19,Release acceptance and evidence,RA-02,All committed / mandatory requirements have,Partial,Remaining work,derived,Met when every other R1 item is met,See coverage KPIs: not all mandatory requirements met
+19,Release acceptance and evidence,RA-03,Functional web and target-platform smoke tests,Partial,Remaining work,"you, then me","Merge PR #431; I redeploy, publish definitions, cut aav-v0.1.2 and smoke-test the installers",Web smoke live; mobile not smoke-tested
+19,Release acceptance and evidence,RA-04,Verified real authentication and data persistence,Verified live,Met,,,Real auth + real email delivery verified 19 Nov
+19,Release acceptance and evidence,RA-05,No placeholder backend actions presented as live;,Tested,Met,,,No placeholder actions; tenant isolation tests
+19,Release acceptance and evidence,RA-06,Approved accessibility and security tests; no,Partial,Accept proposed decision,you (approve),Automated security tests (DLV-07) accepted for the R1 beta; independent penetration test before general availability,Accessibility gate passed; independent security test not done
+19,Release acceptance and evidence,RA-07,Signed release artifacts and correct ownership,Blocked (external),Defer to R2,you (approve),Code-signed installers move to R2; R1 ships as an unsigned beta with published SHA-256 sums,Unsigned artifacts (B-02)
+19,Release acceptance and evidence,RA-08,Tenant isolation and MCP approval tests,Tested,Met,,,No placeholder actions; tenant isolation tests
+19,Release acceptance and evidence,RA-09,Cost and resource preflight passed,Partial,Remaining work,"me, in Cloud Shell","Run deploy/preflight.sh (read-only) and record shape, quotas, boot-volume encryption",Always Free by construction; formal preflight not run
+19,Release acceptance and evidence,RA-10,Deployment approval recorded; human approval,Partial,Remaining work,you,Name product owner and release approver; sign §22,Approvals given in chat; no formal record
+19,Release acceptance and evidence,RA-11,Live URL and build SHA independently verified,Verified live,Met,,,Live URL + build SHA verified
+19,Release acceptance and evidence,RA-12,Rollback procedure tested,Not started,Remaining work,"me, with your deploy approval",Rollback rehearsal 0.1.2 -> 0.1.1 and backup/restore rehearsal on the VM,Rollback not tested
+19,Release acceptance and evidence,RA-13,Staging acceptance evidence,Not started,Remaining work,"me, with your deploy approval","Staging stack (second compose project, sanitised data) on the same Always Free VM + acceptance run",No staging acceptance
+19,Release acceptance and evidence,RA-14,"Evidence record fields: requirement_id, test_id,",Complied / delivered,Met,,,"docs/evidence/evidence-r1.json: requirement_id, test_id, status, evidence, verified_at per item"
+19,Release acceptance and evidence,RA-15,"Dashboard status values: not_started, in_progress,",Complied / delivered,Met,,,"docs/evidence/evidence-r1.json: requirement_id, test_id, status, evidence, verified_at per item"
+19,Release acceptance and evidence,RA-16,Percent complete = weighted passed acceptance,Blocked (external),Accept proposed decision,you (approve),R1 corpus = EICAR + benign OS/office corpus; equal-weight acceptance criteria,Weighted criteria not agreed (D-05)
+19,Release acceptance and evidence,RA-17,No invented progress or metrics,Complied / delivered,Met,,,No invented metrics
+20,Deliverables,DLV-01,Validated PRD and acceptance matrix;,Partial,Remaining work,you,Name product owner and release approver; sign §22,This sign-off report; no security review/formal manifest
+20,Deliverables,DLV-02,Architecture diagrams and threat model,Complied / delivered,Met,,,"docs/ARCHITECTURE.md: architecture, data flow and STRIDE threat model"
+20,Deliverables,DLV-03,"Design system, UI/UX assets and accessible screen",Complied / delivered,Met,,,Design tokens in web/app/globals.css; 23 accessible routes (a11y gate 0 serious)
+20,Deliverables,DLV-04,"Working frontend, backend, database and agents",Verified live,Met,,,Working stack live; reproducible Docker + CI; release matrix
+20,Deliverables,DLV-05,Documented OpenAPI and SDKs,Complied / delivered,Met,,,OpenAPI served by FastAPI; typed client web/lib/api.ts
+20,Deliverables,DLV-06,AEP-X integration tests,Tested,Met,,,AEP-X tests; KPI dashboard; coverage endpoint
+20,Deliverables,DLV-07,Test reports with evidence; security report,Complied / delivered,Met,,,"docs/SECURITY-REPORT-R1.md: bandit (0 high), pip-audit and npm audit (0 vulnerabilities), 126 tests"
+20,Deliverables,DLV-08,Reproducible Docker builds and CI/CD pipelines,Verified live,Met,,,Working stack live; reproducible Docker + CI; release matrix
+20,Deliverables,DLV-09,OCI Always Free preflight and deployment,Partial,Remaining work,"me, in Cloud Shell","Run deploy/preflight.sh (read-only) and record shape, quotas, boot-volume encryption",This sign-off report; no security review/formal manifest
+20,Deliverables,DLV-10,Platform build matrix and build artifacts,Verified live,Met,,,Working stack live; reproducible Docker + CI; release matrix
+20,Deliverables,DLV-11,"Signed platform builds / packages where possible,",Blocked (external),Defer to R2,you (approve),Code-signed installers move to R2; R1 ships as an unsigned beta with published SHA-256 sums,Signing (B-02)
+20,Deliverables,DLV-12,Store publication checklists,Not started,Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,"Store checklists, test corpus, per-platform coverage not published"
+20,Deliverables,DLV-13,Administrator KPI / monitoring dashboard,Tested,Met,,,AEP-X tests; KPI dashboard; coverage endpoint
+20,Deliverables,DLV-14,"Incident playbooks, runbooks and rollback steps /",Complied / delivered,Met,,,docs/RUNBOOKS.md incident playbooks and rollback steps
+20,Deliverables,DLV-15,Release manifest and release evidence,Complied / delivered,Met,,,"docs/RELEASE-MANIFEST-0.1.1.md: assets, SHA-256, SBOM, build SHA 4e5c8ea"
+20,Deliverables,DLV-16,Traceability and actual live-verification report,Complied / delivered,Met,,,"docs/evidence/evidence-r1.json: requirement_id, test_id, status, evidence, verified_at per item"
+20,Deliverables,DLV-17,Locale coverage matrix,Complied / delivered,Met,,,docs/matrices/*.md and docs/STATUS.md
+20,Deliverables,DLV-18,Voice coverage matrix,Complied / delivered,Met,,,docs/matrices/*.md and docs/STATUS.md
+20,Deliverables,DLV-19,File-handler capability matrix,Complied / delivered,Met,,,docs/matrices/*.md and docs/STATUS.md
+20,Deliverables,DLV-20,Connector maturity matrix / report,Complied / delivered,Met,,,docs/matrices/*.md and docs/STATUS.md
+20,Deliverables,DLV-21,Per-feature status: planned / implemented / tested,Complied / delivered,Met,,,docs/matrices/*.md and docs/STATUS.md
+20,Deliverables,DLV-22,"Per-release publication of test corpus, workload,",Complied / delivered,Met,,,docs/REBASELINE-R1.md publishes the R1 test corpus and per-platform coverage
+20,Deliverables,DLV-23,"Per-tenant record of supported assets, available",Tested,Met,,,AEP-X tests; KPI dashboard; coverage endpoint
+20,Deliverables,DLV-24,Platform-specific coverage publication (stage 4),Complied / delivered,Met,,,docs/REBASELINE-R1.md publishes the R1 test corpus and per-platform coverage
+21,"Conflicts, open decisions and blocked items",C-01,S5a puts physical intrusion and upstream,Complied / delivered,Met,,,Resolved by proposed default
+21,"Conflicts, open decisions and blocked items",C-02,S1 names Next.js/React and FastAPI; S4,Complied / delivered,Met,,,Resolved by proposed default
+21,"Conflicts, open decisions and blocked items",C-03,The templates' generic modules (self-,Owner decision open,Accept proposed decision,you (approve),Template generic modules apply as implemented; translations deferred,Needs your decision
+21,"Conflicts, open decisions and blocked items",C-04,The locale catalogue lists both fil (Filipino),Owner decision open,Accept proposed decision,you (approve),Keep both fil and tl as listed,Needs your decision
+21,"Conflicts, open decisions and blocked items",C-05,"OCI Always Free only, with no chargeable",Owner decision open,Accept proposed decision,you (approve),No external providers in R1 (all R2),Needs your decision
+21,"Conflicts, open decisions and blocked items",C-06,S4 caps each agent task at USD 1.00; S1,Complied / delivered,Met,,,Resolved by proposed default
+21,"Conflicts, open decisions and blocked items",C-07,"PRD targets are ""proposed""; templates",Owner decision open,Accept proposed decision,you (approve),R1 corpus = EICAR + benign OS/office corpus; equal-weight acceptance criteria,Needs your decision
+21,"Conflicts, open decisions and blocked items",D-01,Confirm slug agentic-antivirus,Complied / delivered,Met,,,Slug agentic-antivirus in live use
+21,"Conflicts, open decisions and blocked items",D-02,Product owner and release approval owner,Owner decision open,Remaining work,you,Name product owner and release approver; sign §22,Open decision
+21,"Conflicts, open decisions and blocked items",D-03,"Providers for: identity provider, DNS, firewall,",Owner decision open,Accept proposed decision,you (approve),No external providers in R1 (all R2),Open decision
+21,"Conflicts, open decisions and blocked items",D-04,Data classification and legal/privacy,Owner decision open,Accept proposed decision,you (approve),Classify telemetry as Confidential; UK GDPR; privacy page live; no voice recording stored,Open decision
+21,"Conflicts, open decisions and blocked items",D-05,Test corpora and environment: must-block,Owner decision open,Accept proposed decision,you (approve),R1 corpus = EICAR + benign OS/office corpus; equal-weight acceptance criteria,Open decision
+21,"Conflicts, open decisions and blocked items",D-06,Measurable KPI targets and per-service DDoS,Owner decision open,Accept proposed decision,you (approve),"R1 targets = PRD proposed values (OBJ-03 <0.5%, OBJ-04 30 s, OBJ-05 3 pp, DDL-02 60 s)",Open decision
+21,"Conflicts, open decisions and blocked items",D-07,LLM provider for the investigation assistant,Owner decision open,Accept proposed decision,you (approve),No LLM provider in R1; rules-based investigation with LLM opt-in off,Open decision
+21,"Conflicts, open decisions and blocked items",D-08,OCI compartment OCID,Owner decision open,Accept proposed decision,you (approve),Use the existing compartment that hosts the ai4business VM,Open decision
+21,"Conflicts, open decisions and blocked items",D-09,Token and cost cap for self-correction,Owner decision open,Accept proposed decision,you (approve),USD 1.00 per self-correction task (S4),Open decision
+21,"Conflicts, open decisions and blocked items",D-10,Windows endpoint agent approach: user-mode,Owner decision open,Accept proposed decision,you (approve),User-mode agent for R1 (scan on access/execute/download/demand + quarantine),Open decision
+21,"Conflicts, open decisions and blocked items",D-11,Which template generic modules apply (C-03),Owner decision open,Accept proposed decision,you (approve),Template generic modules apply as implemented; translations deferred,Open decision
+21,"Conflicts, open decisions and blocked items",D-12,Account model for a B2B tenant product: open,Owner decision open,Accept proposed decision,you (approve),B2B tenants with open self-registration and invitations,Open decision
+21,"Conflicts, open decisions and blocked items",D-13,Locale catalogue fil/tl,Owner decision open,Accept proposed decision,you (approve),Keep both fil and tl as listed,Open decision
+21,"Conflicts, open decisions and blocked items",B-01,AV-01 scanning on access and,Blocked (external),Defer to R2,you (approve),"Kernel pre-execution blocking (Windows minifilter, macOS Endpoint Security) moves to R2; R1 is user-mode (D-10)",Open blocker
+21,"Conflicts, open decisions and blocked items",B-02,Signed Windows and macOS installers,Blocked (external),Defer to R2,you (approve),Code-signed installers move to R2; R1 ships as an unsigned beta with published SHA-256 sums,Open blocker
+21,"Conflicts, open decisions and blocked items",B-03,iOS / iPadOS builds and App Store,Blocked (external),Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,Open blocker
+21,"Conflicts, open decisions and blocked items",B-04,macOS endpoint telemetry and,Blocked (external),Defer to R2,you (approve),"Kernel pre-execution blocking (Windows minifilter, macOS Endpoint Security) moves to R2; R1 is user-mode (D-10)",Open blocker
+21,"Conflicts, open decisions and blocked items",B-05,Android Play publication,Blocked (external),Defer to R2,you (approve),Mobile store publication (Android/iOS) moves to R2,Open blocker
+21,"Conflicts, open decisions and blocked items",B-06,Live provider integrations,Blocked (external),Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested",Open blocker
+21,"Conflicts, open decisions and blocked items",B-07,OCI provisioning and deployment,Complied / delivered,Met,,,Resolved: deployed on Always Free VM; website landing + download live
+21,"Conflicts, open decisions and blocked items",B-08,DDoS and load exercises,Blocked (external),Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested",Open blocker
+21,"Conflicts, open decisions and blocked items",B-09,"1,000-endpoint scale validation",Blocked (external),Defer to R2,you (approve),"Live provider adapters, DDoS capacity exercises and 1,000-endpoint load test move to R2; R1 monitoring is tested",Open blocker
+21,"Conflicts, open decisions and blocked items",B-10,Website /apps/<slug> landing page and,Complied / delivered,Met,,,Resolved: deployed on Always Free VM; website landing + download live
