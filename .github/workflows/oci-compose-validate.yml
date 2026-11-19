@@ -184,7 +184,7 @@ jobs:
           assert 'hmac.compare_digest' in identity
           assert 'AEPX_REQUIRE_DATABASE' in registry and 'AEPX_REQUIRE_DATABASE' in trust
           assert compose.count('AEPX_REQUIRE_DATABASE: "true"') == 2
-          assert compose.count("AEPX_INTERNAL_SERVICE_KEY:") == 3
+          assert compose.count("AEPX_INTERNAL_SERVICE_KEY: ") == 3  # key lines only, not the ${...:?} references
           assert 'AEPX_IDENTITY_JWT_SECRET:?' in compose
           print("PASS: secure staging configuration assertions")
           PY
