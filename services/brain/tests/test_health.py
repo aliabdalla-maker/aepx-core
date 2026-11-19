@@ -95,3 +95,17 @@ def test_reliability_endpoint_lists_connectors(monkeypatch):
     }
     body = client.get("/brain/reliability").json()
     assert any(c["connector"] == "some-connector" for c in body)
+
+
+def test_import_does_not_start_background_monitor():
+    # The monitor must start only from app startup; an import-time thread raced the
+    # circuit tests (~10% flake) by recomputing state concurrently.
+    import threading
+    assert not any(t.name == "brain-monitor" for t in threading.enumerate())
+    assert not main._monitor_started.is_set()
+
+
+def test_monitor_can_be_disabled(monkeypatch):
+    monkeypatch.setenv("BRAIN_MONITOR_ENABLED", "false")
+    main.start_monitor()
+    assert not main._monitor_started.is_set()

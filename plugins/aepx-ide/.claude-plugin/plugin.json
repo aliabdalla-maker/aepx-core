@@ -1,0 +1,10 @@
+{
+  "name": "aepx-ide",
+  "version": "0.3.0",
+  "description": "Work with the AEP-X Universal Agentic IDE from Claude Code: create software, sound, music, film, animation, SDK, social and media projects, run approval-gated agent crews, and manage files, versions, members and the audit trail through the IDE's API.",
+  "author": { "name": "Equality Software Ltd", "email": "ali.abdalla@softwareequality.com" },
+  "homepage": "https://ide.softwareequality.com",
+  "repository": "https://github.com/aliabdalla-maker/aepx-core",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "keywords": ["aepx", "agentic-ide", "agents", "music", "film", "animation", "sdk", "social-media"]
+}

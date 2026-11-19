@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel
 import httpx
 import os
 import uuid
+import hmac
 
 app = FastAPI(title="AEP-X Registry Service", version="0.1.0")
 
@@ -23,10 +24,14 @@ _AGENTS: dict[str, dict] = {}
 
 def _get_conn():
     if not _PG_AVAILABLE:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise RuntimeError("PostgreSQL driver unavailable in secure staging")
         return None
     try:
         return psycopg.connect(DATABASE_URL, connect_timeout=3)
-    except Exception:
+    except Exception as exc:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise RuntimeError("PostgreSQL connection unavailable in secure staging") from exc
         return None
 
 
@@ -43,15 +48,16 @@ class Agent(AgentIn):
 
 
 def _mint_did() -> str | None:
-    # RFC-0006 — Law 1 (Identity Before Interaction): every agent gets a
-    # did:key if one isn't supplied. Best-effort and fail-open: Identity
-    # being unreachable must never block agent registration, same as the
-    # Connector Bus's circuit-breaker check (connector-bus/app/main.py).
+    # Secure staging requires an authenticated Identity request and fails closed.
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(os.getenv("AEPX_REGISTRY_IDENTITY_KEY", "")) < 32:
+        raise HTTPException(503, "Scoped Identity credential not configured")
     try:
-        resp = httpx.post(f"{IDENTITY_URL}/did", timeout=3.0)
+        resp = httpx.post(f"{IDENTITY_URL}/did", headers={"X-AEPX-Service-Key": (os.getenv("AEPX_REGISTRY_IDENTITY_KEY") or os.getenv("AEPX_INTERNAL_SERVICE_KEY", ""))} if os.getenv("AEPX_REQUIRE_DATABASE") == "true" else {}, timeout=3.0)
         resp.raise_for_status()
         return resp.json().get("did")
-    except Exception:
+    except Exception as exc:
+        if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+            raise HTTPException(503, "Identity service unavailable") from exc
         return None
 
 
@@ -65,8 +71,19 @@ def health():
 
 
 @app.post("/agents", response_model=Agent)
-def create_agent(payload: AgentIn):
+def create_agent(payload: AgentIn, x_aepx_service_key: str | None = Header(default=None)):
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+        scoped = os.getenv("AEPX_REGISTRY_WRITE_KEY", "")
+        if os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(scoped) < 32:
+            raise HTTPException(503, "Scoped service credential not configured")
+        expected = scoped or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
+            raise HTTPException(403, "Service authentication required")
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and payload.did is not None:
+        raise HTTPException(403, "Externally supplied DIDs require verified ownership")
     did = payload.did or _mint_did()
+    if os.getenv("AEPX_REQUIRE_DATABASE") == "true" and not did:
+        raise HTTPException(503, "Identity service unavailable; registration blocked")
     conn = _get_conn()
     if conn:
         try:
@@ -80,6 +97,8 @@ def create_agent(payload: AgentIn):
             return Agent(id=str(row[0]), name=row[1], organisation_id=str(row[2]) if row[2] else None,
                          version=row[3], trust_score=row[4], did=row[5])
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             pass
         finally:
             conn.close()
@@ -92,6 +111,10 @@ def create_agent(payload: AgentIn):
 
 @app.get("/agents/{agent_id}", response_model=Agent)
 def get_agent(agent_id: str):
+    try:
+        uuid.UUID(agent_id)
+    except (ValueError, AttributeError):
+        raise HTTPException(404, "agent not found")
     conn = _get_conn()
     if conn:
         try:
@@ -108,6 +131,8 @@ def get_agent(agent_id: str):
         except HTTPException:
             raise
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             # e.g. agent_id isn't a valid UUID — no such agent, not a 500.
             raise HTTPException(404, "agent not found")
         finally:
@@ -137,6 +162,8 @@ def list_agents():
                 for r in rows
             ]
         except Exception:
+            if os.getenv("AEPX_REQUIRE_DATABASE") == "true":
+                raise
             pass
         finally:
             conn.close()

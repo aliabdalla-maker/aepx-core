@@ -1,0 +1,130 @@
+{
+  "name": "aepx-agentic-ide-desktop",
+  "version": "0.2.0",
+  "private": true,
+  "description": "AEP-X Agentic IDE desktop client",
+  "author": {
+    "name": "Equality Software Ltd",
+    "email": "support@softwareequality.com"
+  },
+  "homepage": "https://www.softwareequality.com/aepx",
+  "license": "UNLICENSED",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test policy.test.cjs",
+    "dist": "electron-builder --publish never"
+  },
+  "aepx": {
+    "ideUrl": "https://ide.softwareequality.com",
+    "idpOrigins": [
+      "https://auth.softwareequality.com",
+      "https://github.com",
+      "https://accounts.google.com"
+    ]
+  },
+  "devDependencies": {
+    "electron": "42.11.16",
+    "electron-builder": "26.18.0",
+    "@electron/fuses": "1.8.0"
+  },
+  "build": {
+    "appId": "com.softwareequality.aepx",
+    "productName": "AEP-X Agentic IDE",
+    "copyright": "Copyright \u00a9 Equality Software Ltd",
+    "artifactName": "AEP-X-IDE-${version}-${os}-${arch}.${ext}",
+    "files": [
+      "main.cjs",
+      "policy.cjs",
+      "offline.html",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "AEP-X-IDE-Setup-${version}.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.developer-tools",
+      "hardenedRuntime": true,
+      "notarize": false
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "Development",
+      "maintainer": "Equality Software Ltd <support@softwareequality.com>",
+      "synopsis": "Governed agentic development workspace"
+    },
+    "publish": null,
+    "afterPack": "./fuses.cjs",
+    "portable": {
+      "artifactName": "AEP-X-IDE-Portable-${version}.${ext}"
+    }
+  }
+}

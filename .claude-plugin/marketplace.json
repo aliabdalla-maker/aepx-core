@@ -5,9 +5,32 @@
     "email": "ali.abdalla@softwareequality.com"
   },
   "metadata": {
-    "description": "AEP-X platform skills for working on the aepx-core monorepo"
+    "description": "AEP-X plugins: the AEP-X Universal Agentic IDE, and skills for working on the aepx-core monorepo"
   },
   "plugins": [
+    {
+      "name": "aepx-ide",
+      "source": "./plugins/aepx-ide",
+      "description": "AEP-X Universal Agentic IDE: create software, sound, music, film, animation, SDK, social and media projects, run approval-gated agent crews, and manage versions, members and the audit trail.",
+      "version": "0.3.0",
+      "author": {
+        "name": "Equality Software Ltd",
+        "email": "ali.abdalla@softwareequality.com"
+      },
+      "homepage": "https://ide.softwareequality.com",
+      "repository": "https://github.com/aliabdalla-maker/aepx-core",
+      "category": "development",
+      "keywords": [
+        "aepx",
+        "agentic-ide",
+        "agents",
+        "music",
+        "film",
+        "animation",
+        "sdk",
+        "social-media"
+      ]
+    },
     {
       "name": "aepx-core",
       "source": "./",

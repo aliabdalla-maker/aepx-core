@@ -1,0 +1,6 @@
+# Overlay for the existing full docker-compose.yml.
+# Joins the core stack to the lightweight console's network.
+networks:
+  default:
+    external: true
+    name: aepx-dev-shared

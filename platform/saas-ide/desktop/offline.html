@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:">
+<title>AEP-X Agentic IDE</title>
+<style>
+  html,body{height:100%;margin:0}
+  body{background:#0b1020;color:#e2e8f0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;align-items:center;justify-content:center}
+  main{max-width:560px;padding:2rem;text-align:center}
+  .mark{width:72px;height:72px;margin:0 auto 1.25rem;border-radius:18px;background:linear-gradient(135deg,#6366f1,#22d3ee);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:#0b1020}
+  h1{font-size:1.6rem;margin:0 0 .25rem}
+  .by{color:#94a3b8;margin:0 0 1.5rem}
+  p{color:#cbd5e1}
+  button{margin-top:1rem;padding:.7rem 1.4rem;border:0;border-radius:10px;background:#4f46e5;color:#fff;font-weight:600;font-size:1rem;cursor:pointer}
+  button:focus-visible{outline:3px solid #22d3ee;outline-offset:2px}
+  .small{font-size:.85rem;color:#94a3b8;margin-top:1.5rem}
+</style>
+</head>
+<body>
+<main>
+  <div class="mark" aria-hidden="true">A</div>
+  <h1>AEP-X Agentic IDE</h1>
+  <p class="by">by Equality Software</p>
+  <p id="msg">The AEP-X service can't be reached right now. If you're offline, reconnect to the internet; otherwise the service may be starting up or under maintenance.</p>
+  <button id="retry" type="button">Try again</button>
+  <p class="small" id="auto" role="status" aria-live="polite"></p>
+  <p class="small">Status and downloads: softwareequality.com/aepx-ide-download</p>
+</main>
+<script>
+(function () {
+  // The target comes from the app (package.json ideUrl); only https URLs are followed.
+  var target = new URLSearchParams(location.search).get("target") || "";
+  if (!/^https:\/\/[^\s]+$/.test(target)) target = "";
+  var left = 20, auto = document.getElementById("auto");
+  function go() { if (target) location.href = target; }
+  document.getElementById("retry").addEventListener("click", go);
+  if (!target) return;
+  setInterval(function () {
+    left -= 1;
+    if (left <= 0) { go(); return; }
+    auto.textContent = "Trying again automatically in " + left + "s.";
+  }, 1000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+name: Deploy AEP-X GUI to OCI
+
+# Production deployments require an explicit manual dispatch and environment approval.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aepx-oci-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux, x64]
+    environment: production
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Validate OCI runner and static app
+        run: |
+          set -euo pipefail
+          echo "runner=$(hostname) user=$(id -un) arch=$(uname -m)"
+          test -f platform/ecosystem-tracker/index.html
+          test -f platform/ecosystem-tracker/data/portals.json
+          test -x /usr/local/sbin/deploy-aepx
+          command -v curl >/dev/null
+
+      - name: Publish constrained versioned release on OCI
+        run: |
+          set -euo pipefail
+          sudo /usr/local/sbin/deploy-aepx \
+            "$GITHUB_WORKSPACE/platform/ecosystem-tracker" \
+            "$GITHUB_SHA"
+
+      - name: Verify release on disk
+        run: |
+          set -euo pipefail
+          test -f /srv/aepx/current/index.html
+          test -f /srv/aepx/current/data/portals.json
+
+      - name: Verify production URLs
+        run: |
+          set -euo pipefail
+          for url in \
+            https://softwareequality.com/aep-x/ \
+            https://www.softwareequality.com/aep-x/; do
+            ok=0
+            for i in 1 2 3 4 5 6; do
+              if curl --fail --silent --show-error --location \
+                --max-time 10 "$url" | grep -q 'AEP-X'; then
+                ok=1
+                break
+              fi
+              sleep 5
+            done
+            test "$ok" -eq 1
+          done

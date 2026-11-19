@@ -1,5 +1,11 @@
 name: CI
 on: [push, pull_request]
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -25,14 +31,14 @@ jobs:
           - marketplace
           - billing
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.11" }
-      # httpx2 is a soft dependency of starlette.testclient (newer starlette
+      # httpx is a dependency of starlette.testclient (newer starlette
       # versions warn-and-fallback to httpx if absent, but services that don't
       # pull httpx transitively via another pin need it installed explicitly
       # or TestClient import fails outright).
-      - run: pip install -r services/${{ matrix.service }}/requirements.txt pytest httpx2 ruff==0.16.0
+      - run: pip install -r services/${{ matrix.service }}/requirements.txt pytest httpx ruff==0.16.0
       - run: pip install fakeredis==2.37.0
         if: matrix.service == 'cache' || matrix.service == 'discovery'
       - run: ruff check services/${{ matrix.service }}
@@ -64,10 +70,10 @@ jobs:
           - platform/aepx-console
           - console
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.11" }
-      - run: pip install -r ${{ matrix.connector }}/requirements.txt pytest httpx2 ruff==0.16.0
+      - run: pip install -r ${{ matrix.connector }}/requirements.txt pytest httpx ruff==0.16.0
       # the SDK's own tests and both platform services import `aepx`
       - run: pip install -e sdk/python
         if: matrix.connector == 'sdk/python' || startsWith(matrix.connector, 'platform/')
@@ -84,8 +90,8 @@ jobs:
   contracts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.11" }
       - run: pip install -r tests/requirements.txt
       - run: python -m pytest tests/test_contracts.py -v
@@ -95,7 +101,7 @@ jobs:
   catalogue:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.11" }
       - run: python scripts/gen_connector_catalogue.py --check

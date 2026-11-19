@@ -1,0 +1,51 @@
+name: AEP-X exact-SHA release evidence gate
+on:
+  workflow_dispatch:
+    inputs:
+      target_sha:
+        description: 'Full 40-character commit SHA to assess'
+        required: true
+        type: string
+  pull_request:
+    paths:
+      - 'scripts/github-release-evidence.py'
+      - 'tests/test_github_release_evidence.py'
+      - '.github/workflows/aepx-exact-sha-evidence.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify evidence gate logic offline
+        run: python -m unittest discover -s tests -p 'test_github_release_evidence.py' -v
+      - name: Assess required workflow evidence at exact commit
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ inputs.target_sha }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python scripts/github-release-evidence.py --repo "$GH_REPO" --sha "$TARGET_SHA" --output "$RUNNER_TEMP/release-evidence.json"
+      - name: Upload read-only evidence
+        if: always() && github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v7
+        with:
+          name: aepx-exact-sha-release-evidence
+          path: ${{ runner.temp }}/release-evidence.json
+          if-no-files-found: warn
+          retention-days: 7

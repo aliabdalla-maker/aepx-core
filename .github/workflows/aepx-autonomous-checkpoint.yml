@@ -1,0 +1,29 @@
+name: AEP-X autonomous checkpoint security
+on:
+  pull_request:
+    paths:
+      - 'scripts/aepx_autonomous_checkpoint.py'
+      - 'tests/test_aepx_autonomous_checkpoint.py'
+      - '.github/workflows/aepx-autonomous-checkpoint.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  offline-checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify offline checkpoint security
+        run: python -m unittest discover -s tests -p 'test_aepx_autonomous_checkpoint.py' -v

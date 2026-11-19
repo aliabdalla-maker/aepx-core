@@ -1,0 +1,9 @@
+# Phase 2.3 — Fenced leases, tenant budget reservations, MCP HITL and execution isolation
+
+This PR adds PostgreSQL migration 005, a monotonically increasing fencing token on each lease claim, heartbeat and fenced completion, tenant-level atomic token/cost reservations and settlement, a subprocess hard-deadline utility, MCP exact single-use approval consumption, and an explicit HTTPS egress-proxy requirement.
+
+**Critical boundaries:** The existing `worker.execute_one` is NOT rewired to the new fenced queue and subprocess runner. The budget ledger is not yet called by the provider SDK adapters, so live spend is not metered or guaranteed capped. Provider APIs may charge for timed-out or failed requests. A fenced completion prevents stale database completion but cannot undo external side effects. The MCP adapter consumes approval before remote invocation, preventing duplicate local dispatch but not guaranteeing delivery; a failure after consumption requires a new approval. The egress proxy URL is only a configuration requirement; this repository does not deploy or validate an actual egress gateway. Docker Compose reference remains network-disabled.
+
+The next required work is integrating the fenced job runner with reservation/settlement and subprocess deadline, adding an actual egress gateway with pinned DNS resolution and destination IP enforcement, configuring per-tenant budgets via privileged administration, and verifying real provider usage reporting. Do not enable `IDE_EXTERNAL_EXECUTION_ENABLED` or deploy until these are independently validated.
+
+Migrate 001 through 005 with a privileged role. Grant the restricted runtime role SELECT/INSERT/UPDATE on `ide_agent_spend` and SELECT/UPDATE on `ide_agent_budgets` only if the corresponding authenticated execution service requires it. Keep all external flags false. PR #25 stays draft.

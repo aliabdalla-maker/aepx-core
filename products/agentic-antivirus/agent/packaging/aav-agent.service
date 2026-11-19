@@ -1,0 +1,18 @@
+[Unit]
+Description=Agentic Antivirus endpoint agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/opt/aav-agent/aav-agent run --state /var/lib/aav-agent
+Restart=always
+RestartSec=5
+Nice=10
+CPUQuota=25%
+StateDirectory=aav-agent
+StateDirectoryMode=0700
+ProtectHome=read-only
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target

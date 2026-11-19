@@ -1,0 +1,52 @@
+name: iOS apps (companion + IDE wrapper) checks
+# Unsigned simulator builds only. App Store signing/upload is an owner action (see platform/saas-ide/ios/README.md).
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/ios/**'
+      - '.github/workflows/ios-apps.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: platform/saas-ide/ios
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Select Xcode 16
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app | sort -V | tail -1)" && xcodebuild -version
+      - name: Core policy tests (ad rate, entitlement, navigation, plan parsing)
+        working-directory: platform/saas-ide/ios/AEPXKit
+        run: swift test
+      - name: Generate Xcode project
+        run: brew install xcodegen && xcodegen generate
+      - name: Build both apps for the iOS Simulator (unsigned)
+        run: |
+          set -euo pipefail
+          for scheme in AEPXCompanion AEPXIDE; do
+            xcodebuild -project AEPX.xcodeproj -scheme "$scheme" -configuration Release \
+              -destination 'generic/platform=iOS Simulator' -derivedDataPath DerivedData \
+              CODE_SIGNING_ALLOWED=NO build | tail -20
+          done
+      - name: Check built apps carry the expected configuration
+        run: |
+          set -euo pipefail
+          for app in "AEP-X" "AEP-X IDE"; do
+            plist="DerivedData/Build/Products/Release-iphonesimulator/$app.app/Info.plist"
+            /usr/libexec/PlistBuddy -c 'Print :GADApplicationIdentifier' "$plist"
+            /usr/libexec/PlistBuddy -c 'Print :AEPXAppStoreProductID' "$plist"
+            /usr/libexec/PlistBuddy -c 'Print :AEPXIDEURL' "$plist" | grep -q '^https://ide.softwareequality.com$'
+          done
+          echo 'Unsigned simulator builds of AEP-X and AEP-X IDE succeeded.' >> "$GITHUB_STEP_SUMMARY"

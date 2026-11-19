@@ -324,4 +324,20 @@ def incidents(limit: int = 100):
     return list(reversed(_incidents_fallback))[:limit]
 
 
-threading.Thread(target=_monitor_loop, daemon=True).start()
+_monitor_started = threading.Event()
+
+
+def start_monitor():
+    """Start the self-healing loop once, on app startup (never at import time).
+
+    Starting at import raced unit tests and any tooling that imports this module:
+    a concurrent recompute could move a circuit HALF_OPEN -> OPEN mid-test.
+    Set BRAIN_MONITOR_ENABLED=false to disable (e.g. one-off scripts).
+    """
+    if os.getenv("BRAIN_MONITOR_ENABLED", "true").lower() != "true" or _monitor_started.is_set():
+        return
+    _monitor_started.set()
+    threading.Thread(target=_monitor_loop, daemon=True, name="brain-monitor").start()
+
+
+app.add_event_handler("startup", start_monitor)

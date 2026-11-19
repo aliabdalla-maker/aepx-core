@@ -1,0 +1,6 @@
+staging.env
+secrets/
+*.tfstate
+*.tfvars
+*.tfplan
+.terraform/

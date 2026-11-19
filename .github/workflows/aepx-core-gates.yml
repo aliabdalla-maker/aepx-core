@@ -1,0 +1,113 @@
+name: AEP-X core integration gates
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/aepx-core-integration.py'
+      - 'scripts/aepx-agentic-acceptance.py'
+      - 'tests/test_aepx_agentic_acceptance.py'
+      - 'services/workflow/app/main.py'
+      - 'tests/test_aepx_workflow_guards.py'
+      - 'scripts/aepx-agentic-contracts.py'
+      - 'scripts/aepx-hitl-store.py'
+      - 'scripts/aepx-local-outbox.py'
+      - 'tests/test_aepx_local_outbox.py'
+      - 'db/migrations/20261113_hitl_staging.sql'
+      - 'services/governance/app/hitl_postgres.py'
+      - 'services/governance/app/hitl_outbox.py'
+      - 'services/governance/app/hitl_authz.py'
+      - 'services/governance/app/hitl_oidc.py'
+      - 'tests/test_aepx_hitl_oidc.py'
+      - 'tests/test_aepx_hitl_authz.py'
+      - 'tests/test_aepx_hitl_outbox.py'
+      - 'scripts/aepx-hitl-outbox-guard.py'
+      - 'db/migrations/20261113_hitl_outbox_lease.sql'
+      - 'tests/test_aepx_hitl_postgres.py'
+      - 'scripts/aepx-hitl-migration-check.py'
+      - 'tests/test_aepx_hitl_migration_check.py'
+      - 'tests/test_aepx_hitl_store.py'
+      - 'tests/test_aepx_agentic_contracts.py'
+      - 'docs/AEPX-Agentic-Next-Implementation.md'
+      - 'docs/AEPX-Agentic-Acceptance.md'
+      - 'tests/test_aepx_core_integration.py'
+      - 'scripts/aepx-compose-exposure.py'
+      - 'scripts/aepx-backup-postgres.sh'
+      - 'scripts/aepx-release-evidence.sh'
+      - 'docs/AEPX-Production-Readiness.md'
+      - 'scripts/aepx-dev-acceptance.sh'
+      - 'scripts/aepx-static-security.py'
+      - 'docs/AEPX-Core-Integration-Runbook.md'
+      - '.github/workflows/aepx-core-gates.yml'
+      - 'deploy/oci-always-free/**'
+      - 'scripts/aepx-oci-compose-guard.py'
+      - 'scripts/aepx-oci-staging-smoke.py'
+      - 'tests/test_aepx_oci_staging_smoke.py'
+      - 'docs/AEPX-OCI-Always-Free-Staging.md'
+  push:
+    branches: [master]
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate Python syntax
+        run: python3 -m py_compile scripts/aepx-core-integration.py scripts/aepx-static-security.py scripts/aepx-progress.py scripts/aepx-compose-exposure.py scripts/aepx-agentic-acceptance.py services/workflow/app/main.py scripts/aepx-agentic-contracts.py scripts/aepx-hitl-store.py scripts/aepx-local-outbox.py scripts/aepx-hitl-migration-check.py
+      - name: Run core acceptance regression tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_core_integration.py' -v
+      - name: Run agentic acceptance contract tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_agentic_acceptance.py' -v
+      - name: Install workflow test dependencies
+        run: python3 -m pip install -r services/workflow/requirements.txt
+      - name: Run workflow security tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_workflow_guards.py' -v
+      - name: Run offline MCP RAG HITL security contracts
+        run: python3 -m unittest discover -s tests -p 'test_aepx_agentic_contracts.py' -v
+      - name: Run durable local HITL tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_store.py' -v
+      - name: Run local outbox tests
+        run: python3 -m unittest discover -s tests -p 'test_aepx_local_outbox.py' -v
+      - name: Validate HITL outbox lease fencing
+        run: python3 scripts/aepx-hitl-outbox-guard.py
+      - name: Test HITL OIDC verifier contracts
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_oidc.py' -v
+      - name: Test HITL authorization boundary
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_authz.py' -v
+      - name: Test HITL outbox lease contracts
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_outbox.py' -v
+      - name: Test PostgreSQL HITL transaction contracts
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_postgres.py' -v
+      - name: Validate HITL migration security invariants
+        run: python3 scripts/aepx-hitl-migration-check.py
+      - name: Test HITL migration security invariants
+        run: python3 -m unittest discover -s tests -p 'test_aepx_hitl_migration_check.py' -v
+      - name: Validate OCI Always Free staging guard
+        run: python3 scripts/aepx-oci-compose-guard.py
+      - name: Test OCI staging smoke checks offline
+        run: python3 -m unittest discover -s tests -p 'test_aepx_oci_staging_smoke.py' -v
+      - name: Validate OCI staging Compose rendering
+        env:
+          AEPX_POSTGRES_PASSWORD: ci-only-placeholder-not-a-real-secret-123
+        run: docker compose -f deploy/oci-always-free/compose.yml config --quiet
+      - name: Validate shell syntax
+        run: bash -n scripts/aepx-dev-acceptance.sh scripts/aepx-backup-postgres.sh scripts/aepx-release-evidence.sh deploy/oci-always-free/preflight.sh
+      - name: Check static security blockers (informational for development)
+        run: python3 scripts/aepx-static-security.py
+      - name: Validate milestone tracking
+        run: python3 scripts/aepx-progress.py --validate
+      - name: Inspect resolved Compose port exposure (development informational)
+        run: python3 scripts/aepx-compose-exposure.py
+      - name: Upload security evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: aepx-core-static-evidence
+          path: |
+            artifacts/aepx-static-security.json
+            artifacts/aepx-compose-exposure.json

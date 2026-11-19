@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "id": "com.softwareequality.aepx.hybrid-ide",
+  "name": "AEP-X Universal Agentic IDE",
+  "version": "0.3.0",
+  "publisher": "Equality Software Ltd",
+  "description": "Universal governed agentic IDE: software, sound, music, film, animation, SDK, social, multimedia and media projects with approval-gated AI agents and a tamper-evident audit trail",
+  "homepage": "https://softwareequality.com",
+  "privacy_policy_url": "https://softwareequality.com/privacy",
+  "capabilities": [
+    "agent.plan",
+    "audit.read",
+    "mcp.status.read",
+    "modules.read",
+    "projects.version",
+    "workspace.read",
+    "workspace.write"
+  ],
+  "permissions": {
+    "default": [
+      "workspace.read",
+      "mcp.status.read"
+    ],
+    "elevated": [
+      "workspace.write",
+      "agent.plan"
+    ],
+    "never_automatic": [
+      "mcp.dispatch",
+      "mcp.reconcile"
+    ]
+  },
+  "authentication": {
+    "type": "oidc",
+    "tenant_scoped": true
+  },
+  "distribution": {
+    "status": "ready_to_publish",
+    "published": false,
+    "marketplace_ids": [
+      "vscode:softwareequality.aepx-agentic-ide",
+      "open-vsx:softwareequality.aepx-agentic-ide",
+      "jetbrains:com.softwareequality.aepx",
+      "claude-code:aepx/aepx-ide"
+    ],
+    "note": "published flips to true per store only after the listing is live"
+  }
+}

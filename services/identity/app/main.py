@@ -1,12 +1,18 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 import jwt
 import time
 import uuid
 import os
+import hmac
 
 from app.did import create_did, resolve_did
 
-SECRET = os.getenv("IDENTITY_JWT_SECRET", "dev-only-change-me")  # replace with Vault before any pilot
+SECRET = os.getenv("IDENTITY_JWT_SECRET", "dev-only-change-me")
+if os.getenv("AEPX_SECURE_MODE") == "true":
+    if len(SECRET) < 32 or SECRET == "dev-only-change-me":
+        raise RuntimeError("IDENTITY_JWT_SECRET must be a strong secret in secure mode")
+if os.getenv("AEPX_SECURE_MODE") == "true" and os.getenv("AEPX_REQUIRE_SCOPED_KEYS") != "true" and len(os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")) < 32:
+    raise RuntimeError("AEPX_INTERNAL_SERVICE_KEY must be configured in secure mode")
 app = FastAPI(title="AEP-X Identity Service", version="0.0.1")
 
 
@@ -17,16 +23,30 @@ def health():
 
 @app.post("/token")
 def issue_token(subject: str):
+    if os.getenv("AEPX_SECURE_MODE") == "true":
+        raise HTTPException(status_code=403, detail="Token issuance disabled until scoped authorisation is implemented")
     payload = {"sub": subject, "iat": int(time.time()), "jti": str(uuid.uuid4())}
     return {"access_token": jwt.encode(payload, SECRET, algorithm="HS256"), "token_type": "bearer"}
 
 
 @app.post("/did")
-def issue_did():
+def issue_did(x_aepx_service_key: str | None = Header(default=None)):
+    if os.getenv("AEPX_SECURE_MODE") == "true":
+        scoped = os.getenv("AEPX_REGISTRY_IDENTITY_KEY", "")
+        if os.getenv("AEPX_REQUIRE_SCOPED_KEYS") == "true" and len(scoped) < 32:
+            raise HTTPException(503, "Scoped service credential not configured")
+        expected = scoped or os.getenv("AEPX_INTERNAL_SERVICE_KEY", "")
+        if len(expected) < 32 or not hmac.compare_digest(x_aepx_service_key or "", expected):
+            raise HTTPException(status_code=403, detail="Service authentication required")
     # RFC-0006 — did:key: self-certifying, no chain or registry needed to
     # resolve it (see app/did.py). Returns the private key once; it is
     # never persisted server-side.
-    return create_did()
+    result = create_did()
+    if os.getenv("AEPX_SECURE_MODE") == "true":
+        # The Registry currently stores only the DID, not the signing key.
+        # Never disclose an orphaned private key to an intermediary.
+        return {"did": result["did"], "did_document": result["did_document"]}
+    return result
 
 
 @app.get("/did/{did}")
