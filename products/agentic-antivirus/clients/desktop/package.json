@@ -1,11 +1,11 @@
 {
   "name": "agentic-antivirus-desktop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Agentic Antivirus console for Windows, macOS and Linux",
   "main": "main.js",
   "author": {
     "name": "Equality Software Ltd",
-    "email": "admin@softwareequality.com"
+    "email": "ali.abdalla@softwareequality.com"
   },
   "license": "UNLICENSED",
   "scripts": {
@@ -74,7 +74,7 @@
       ],
       "icon": "build/icon.png",
       "category": "System",
-      "maintainer": "Equality Software Ltd <admin@softwareequality.com>"
+      "maintainer": "Equality Software Ltd <ali.abdalla@softwareequality.com>"
     }
   },
   "homepage": "https://softwareequality.com/agentic-antivirus"
