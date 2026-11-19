@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Agentic Antivirus</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<style>body{font:16px system-ui,sans-serif;background:#eef1f4;color:#17212b;display:grid;place-items:center;min-height:100vh;margin:0}
+main{max-width:28rem;padding:2rem;background:#fff;border:1px solid #d5dce3;border-radius:12px}
+button{font:inherit;padding:.6rem 1.2rem;border-radius:8px;border:0;background:#17212b;color:#fff;cursor:pointer}
+p{color:#556270}</style></head><body><main>
+<h1>Can't reach Agentic Antivirus</h1>
+<p>Check your internet connection, then try again. Protection on this computer keeps running while you're offline.</p>
+<p id="why"></p><button id="retry" autofocus>Try again</button></main>
+<script>
+const q = new URLSearchParams(location.search);
+if (q.get("reason")) document.getElementById("why").textContent = "Details: " + q.get("reason");
+document.getElementById("retry").onclick = () => window.aavDesktop && window.aavDesktop.retry();
+</script></body></html>
