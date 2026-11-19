@@ -2,8 +2,8 @@
 name: AgenticAntivirus
 options: { bundleIdPrefix: com.equalitysoftware, deploymentTarget: { iOS: "16.0" } }
 packages:
-  GoogleMobileAds: { url: https://github.com/googleads/swift-package-manager-google-mobile-ads, from: 11.13.0 }
-  UserMessagingPlatform: { url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform, from: 2.7.0 }
+  GoogleMobileAds: { url: https://github.com/googleads/swift-package-manager-google-mobile-ads, from: 12.0.0 }  # App.swift uses the v12 API (BannerView, MobileAds, Request)
+  UserMessagingPlatform: { url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform, from: 3.0.0 }  # App.swift uses the v3 Swift names (ConsentInformation, ConsentForm, RequestParameters)
 targets:
   AgenticAntivirus:
     type: application
