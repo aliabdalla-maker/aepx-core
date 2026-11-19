@@ -113,7 +113,8 @@ jobs:
       - name: Compose guard (loopback-only, no privileged, Always Free totals)
         run: python $P/deploy/guard.py
       - uses: anchore/sbom-action@v0
-        with: { path: "${{ env.P }}", format: spdx-json, artifact-name: aav-sbom.spdx.json }
+        # The release job attaches the SBOM; this job has no permission to write to releases.
+        with: { path: "${{ env.P }}", format: spdx-json, artifact-name: aav-sbom.spdx.json, upload-release-assets: false }
 
   agent:
     strategy:
@@ -256,7 +257,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/download-artifact@v7
-        with: { path: rel, pattern: "aav-{agent,desktop}-*", merge-multiple: true }
+        with: { path: rel, pattern: "aav-{agent,desktop,sbom}*", merge-multiple: true }
       - name: Create the release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
