@@ -242,6 +242,12 @@ def test_approval_replay_and_duplicate_dispatch_do_not_repeat(org, client, admin
     assert admin.get("/v1/harness/kpis").json()["duplicate_side_effects"]["count"] == 0
 
 
+class WorkerKilled(Exception):
+    """Simulates the worker process dying after the provider was called (a plain exception, not
+    KeyboardInterrupt: KeyboardInterrupt shuts down the test client's thread pool in CI and surfaces
+    as CancelledError)."""
+
+
 class Provider(harness.ExternalAdapter):
     """In-memory identity provider used as the sandbox adapter in CI."""
     name = "sandbox-identity"
@@ -255,7 +261,7 @@ class Provider(harness.ExternalAdapter):
         self.calls += 1
         self.records[provider_request_id.rsplit(":", 1)[0]] = {"id": provider_request_id, "revoked": target}
         if self.crash:
-            raise KeyboardInterrupt("worker killed after dispatch")
+            raise WorkerKilled("worker killed after dispatch")
         return {"target": target, "status": "completed", "provider_request_id": provider_request_id}
 
     def lookup(self, provider_request_id):
@@ -308,7 +314,7 @@ def test_crash_after_dispatch_reconciles_before_retry(identity_request, admin_sq
     prov = Provider(crash=True)
     harness.set_adapter("revoke_sessions", prov)
     rid = make()
-    with pytest.raises(KeyboardInterrupt):
+    with pytest.raises(WorkerKilled):
         analyst.post(f"/v1/actions/{rid}/dispatch")
     att = admin_sql("SELECT state FROM aav.action_dispatches WHERE action_request_id = %s", rid)
     assert [a["state"] for a in att] == ["running"]
@@ -324,7 +330,7 @@ def test_crash_after_dispatch_reconciles_before_retry(identity_request, admin_sq
     # a crash before the provider received anything: reconciliation finds nothing, and a fresh approval is required
     rid2 = make()
     prov.crash, prov.records_before = True, dict(prov.records)
-    with pytest.raises(KeyboardInterrupt):
+    with pytest.raises(WorkerKilled):
         analyst.post(f"/v1/actions/{rid2}/dispatch")
     prov.records = prov.records_before   # the provider never stored it
     admin_sql("UPDATE aav.action_dispatches SET lease_expires_at = now() - interval '1 second' "
@@ -338,7 +344,7 @@ def test_unqueryable_provider_goes_to_manual_reconciliation(identity_request, ad
     prov = Provider(crash=True, queryable=False)
     harness.set_adapter("revoke_sessions", prov)
     rid = make()
-    with pytest.raises(KeyboardInterrupt):
+    with pytest.raises(WorkerKilled):
         analyst.post(f"/v1/actions/{rid}/dispatch")
     admin_sql("UPDATE aav.action_dispatches SET lease_expires_at = now() - interval '1 second' "
               "WHERE action_request_id = %s", rid)
