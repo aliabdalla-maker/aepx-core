@@ -1,18 +1,21 @@
+"use client";
+import { useI18n } from "../../lib/i18n";
 import { StaticPage } from "../../components/StaticPage";
 
 export default function Privacy() {
+  const { t } = useI18n();
   return (
-    <StaticPage title="Privacy">
-      <p>Equality Software Ltd operates Agentic Antivirus. This page describes what the service collects. It must be reviewed by the product owner before publication.</p>
-      <h2>What devices send</h2>
-      <p>By default the agent sends security telemetry and file hashes: process names and command lines, file paths, network connection metadata, and detections. File contents are collected only if your organisation turns that on.</p>
-      <h2>Voice</h2>
-      <p>Read-aloud and dictation use your browser's built-in speech features. We do not record or store audio.</p>
-      <h2>Advertising</h2>
-      <p>During the free trial, and on unpaid plans, the console shows Google AdSense adverts and the mobile apps show Google AdMob adverts, after asking for your consent. Subscribers see 95% fewer adverts. Adverts never appear on approval, containment, threat warning, quarantine review, sign-in, payment or audit screens.</p>
-      <h2>Retention</h2>
-      <p>Your organisation sets how long telemetry and evidence are kept. Audit records cannot be edited or deleted.</p>
-      <h2>Your rights</h2>
-      <p>You can delete your account from your profile. Contact <a href="mailto:privacy@softwareequality.com">privacy@softwareequality.com</a> for access or correction requests.</p>
+    <StaticPage title={t("privacy.title")}>
+      <p>{t("ui.equality_software_ltd_operates_agentic_antivirus")}</p>
+      <h2>{t("ui.what_devices_send")}</h2>
+      <p>{t("ui.by_default_the_agent_sends_security")}</p>
+      <h2>{t("voice.voice")}</h2>
+      <p>{t("ui.read_aloud_and_dictation_use_your")}</p>
+      <h2>{t("ui.advertising")}</h2>
+      <p>{t("ui.during_the_free_trial_and_on")}</p>
+      <h2>{t("ui.retention")}</h2>
+      <p>{t("ui.your_organisation_sets_how_long_telemetry")}</p>
+      <h2>{t("ui.your_rights")}</h2>
+      <p>{t("ui.you_can_delete_your_account_from")} <a href="mailto:privacy@softwareequality.com">{t("ui.privacy_softwareequality_com")}</a> {t("ui.for_access_or_correction_requests")}</p>
     </StaticPage>);
 }

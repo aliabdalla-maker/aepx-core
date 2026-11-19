@@ -6,7 +6,7 @@ import sys
 
 from playwright.sync_api import sync_playwright
 
-ROUTES = ["/", "/approvals/", "/incidents/", "/alerts/", "/devices/", "/quarantine/", "/policies/", "/ddos/",
+ROUTES = ["/", "/approvals/", "/incidents/", "/alerts/", "/security/", "/devices/", "/quarantine/", "/policies/", "/ddos/",
           "/integrations/", "/files/", "/settings/", "/billing/", "/audit/", "/help/", "/privacy/", "/login/",
           "/register/", "/forgot/", "/reset-password/", "/verify-email/", "/accept-invite/"]
 VARIANTS = [("light", "en"), ("dark", "en"), ("high_contrast", "en"), ("light", "ar")]

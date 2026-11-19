@@ -13,14 +13,14 @@ export default function Register() {
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
   return (
     <AuthPage title={t("auth.register")}>
-      <p className="lede">Your organisation gets a 30-day free trial. After that it costs £4.99 per month for each user or device.</p>
+      <p className="lede">{t("ui.your_organisation_gets_a_30_day")}</p>
       <GoogleSignIn organisation={f.organisation} text="signup_with" />
       <form className="form" onSubmit={(e) => { e.preventDefault(); s.run(async () => {
         await api("/v1/auth/register", { body: { ...f, locale } });
         return t("auth.verify_sent");
       }); }}>
         <label>{t("auth.organisation")}<input required value={f.organisation} onChange={set("organisation")} /></label>
-        <label>Your name<input value={f.display_name} onChange={set("display_name")} autoComplete="name" /></label>
+        <label>{t("ui.your_name")}<input value={f.display_name} onChange={set("display_name")} autoComplete="name" /></label>
         <label>{t("auth.email")}<input type="email" required value={f.email} onChange={set("email")} autoComplete="email" /></label>
         <label>{t("auth.password")} <span className="hint">{t("auth.password_rules")}</span>
           <input type="password" minLength={12} required value={f.password} onChange={set("password")} autoComplete="new-password" /></label>

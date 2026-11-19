@@ -49,6 +49,13 @@ services:
       AAV_SMTP_PASSWORD: ${AAV_SMTP_PASSWORD:-}
       AAV_MAIL_FROM: ${AAV_MAIL_FROM:-}
       AAV_MAIL_DAILY_CAP: ${AAV_MAIL_DAILY_CAP:-90}
+      # LLM provider chain (Claude API -> self-hosted Ollama -> rules). Key and caps live in /etc/aav/aav.env.
+      AAV_ANTHROPIC_API_KEY: ${AAV_ANTHROPIC_API_KEY:-}
+      AAV_ANTHROPIC_MODEL: ${AAV_ANTHROPIC_MODEL:-claude-sonnet-5-5}
+      AAV_LLM_MONTHLY_CAP_USD: ${AAV_LLM_MONTHLY_CAP_USD:-0}
+      AAV_LLM_TENANT_MONTHLY_CAP_USD: ${AAV_LLM_TENANT_MONTHLY_CAP_USD:-5}
+      AAV_OLLAMA_URL: ${AAV_OLLAMA_URL:-}
+      AAV_LLM_LOCAL_MODEL: ${AAV_LLM_LOCAL_MODEL:-}
     secrets: [aav_signing_key]
     volumes: [aavfiles:/var/lib/aav/files]
     depends_on: { postgres: { condition: service_healthy }, governance: { condition: service_started } }

@@ -7,6 +7,7 @@ import { formatDateTime } from "../../lib/format";
 import { API_BASE, session } from "../../lib/api";
 
 export default function Audit() {
+  const { t } = useI18n();
   const { locale } = useI18n();
   const [action, setAction] = useState("");
   const [page, setPage] = useState(0);
@@ -18,18 +19,18 @@ export default function Audit() {
   };
   return (
     <Shell>
-      <h1>Audit trail</h1>
+      <h1>{t("ui.audit_trail")}</h1>
       {v.data && <p className={v.data.valid ? "banner" : "banner warn"} role="status">
-        {v.data.valid ? `The audit chain is intact: ${v.data.entries} entries verified.` : `The audit chain is broken at entry ${v.data.first_break_id}.`}</p>}
+        {v.data.valid ? t("audit.intact", { n: v.data.entries }) : t("audit.broken", { id: v.data.first_break_id })}</p>}
       <div className="row">
-        <label style={{ margin: 0 }}>Action<input value={action} onChange={(e) => { setAction(e.target.value); setPage(0); }} placeholder="action.approve" /></label>
+        <label style={{ margin: 0 }}>{t("ui.action")}<input value={action} onChange={(e) => { setAction(e.target.value); setPage(0); }} placeholder={t("ui.action_approve")} /></label>
         {["csv", "json", "pdf"].map((f) => <button key={f} onClick={() => exportKpis(f)}>Export KPIs as {f.toUpperCase()}</button>)}
       </div>
       <Status error={d.error} loading={!d.data} />
-      <table><thead><tr><th>When</th><th>Who</th><th>Action</th><th>Target</th><th>Detail</th></tr></thead>
+      <table><thead><tr><th>{t("ui.when")}</th><th>{t("ui.who")}</th><th>{t("ui.action")}</th><th>{t("ui.target")}</th><th>{t("ui.detail")}</th></tr></thead>
         <tbody>{(d.data ?? []).map((e) => <tr key={e.id}><td>{formatDateTime(e.at, locale)}</td><td>{e.actor}</td><td>{e.action}</td>
           <td><code>{e.target}</code></td><td><code style={{ overflowWrap: "anywhere" }}>{JSON.stringify(e.detail).slice(0, 240)}</code></td></tr>)}</tbody></table>
-      <div className="row"><button disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</button>
-        <button disabled={(d.data?.length ?? 0) < 100} onClick={() => setPage(page + 1)}>Next</button></div>
+      <div className="row"><button disabled={page === 0} onClick={() => setPage(page - 1)}>{t("common.previous")}</button>
+        <button disabled={(d.data?.length ?? 0) < 100} onClick={() => setPage(page + 1)}>{t("common.next")}</button></div>
     </Shell>);
 }

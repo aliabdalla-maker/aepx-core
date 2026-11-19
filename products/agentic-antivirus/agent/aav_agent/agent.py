@@ -12,6 +12,7 @@ permission events (Linux), which are not part of this package.
 from __future__ import annotations
 
 import fnmatch
+import hashlib
 import json
 import os
 import platform
@@ -30,6 +31,19 @@ from aav_agent.trust import Verifier, not_expired
 
 AGENT_VERSION = "0.1.0"
 SCAN_SKIP_BYTES = 256 * 1024 * 1024
+ARCHIVE_MAX_MEMBERS = 10_000
+ARCHIVE_MAX_BYTES = 512 * 1024 * 1024
+ARCHIVE_MAX_DEPTH = 2
+PROGRESS_SECONDS = 5.0
+ARCHIVE_SUFFIXES = (".zip", ".jar", ".docx", ".xlsx", ".pptx", ".apk", ".tar", ".tgz", ".tar.gz", ".tbz2", ".tar.bz2",
+                    ".tar.xz", ".txz")
+
+
+def _archive_kind(name: str, data: bytes | None) -> bool:
+    n = name.lower()
+    if data is not None:
+        return data[:4] == b"PK\x03\x04" or (len(data) > 262 and data[257:262] == b"ustar")
+    return n.endswith(ARCHIVE_SUFFIXES)
 
 
 def _now_iso() -> str:
@@ -235,31 +249,152 @@ class Agent:
                                            "action_taken": action, **{k: v for k, v in d.matched.items()
                                                                       if k not in ("sha256",)}})
 
-    def scan_paths(self, paths: list[str], trigger: str = "on_demand") -> dict:
+    def _report_progress(self, job_group: str | None, status: str, c: dict, gaps: dict, eng) -> bool:
+        """Reports to the console; returns True when the console asks the scan to stop (cancellation)."""
+        if not job_group:
+            return False
+        try:
+            r = self.http.post("/v1/agent/scan-progress", headers=self._h(), json={
+                "job_group": job_group, "status": status, "files_scanned": c["scanned"],
+                "archives_scanned": c["archives"], "detections": c["found"], "gaps": gaps,
+                "engine_version": eng.version if eng else None})
+            return bool(r.status_code == 200 and r.json().get("cancel"))
+        except (httpx.HTTPError, ValueError):
+            return False  # offline: keep scanning; the final result is reported on the next attempt
+
+    def _scan_archive(self, path: Path, eng, c: dict, gaps: dict, depth: int = 0) -> list[tuple[str, object]]:
+        """SEC-01 bounded archive scanning: zip/tar members up to ARCHIVE_* limits; encrypted members and
+        limits reached are reported as coverage gaps, never as clean."""
+        import io
+        import tarfile
+        import zipfile
+        hits: list[tuple[str, object]] = []
+        budget = {"members": 0, "bytes": 0}
+
+        def scan_member(name: str, data: bytes) -> None:
+            budget["members"] += 1
+            budget["bytes"] += len(data)
+            sha = hashlib.sha256(data).hexdigest()
+            d = eng.scan_bytes(data, sha)
+            c["scanned"] += 1
+            if d:
+                hits.append((f"{path}!{name}", d, sha))
+            if depth < ARCHIVE_MAX_DEPTH and _archive_kind(name, data):
+                inner = Path(f"{path}!{name}")
+                hits.extend(self._scan_bytes_archive(inner, data, eng, c, gaps, depth + 1))
+
+        try:
+            if zipfile.is_zipfile(path):
+                with zipfile.ZipFile(path) as z:
+                    for info in z.infolist():
+                        if info.is_dir():
+                            continue
+                        if budget["members"] >= ARCHIVE_MAX_MEMBERS or budget["bytes"] + info.file_size > ARCHIVE_MAX_BYTES:
+                            gaps["archive_limit"] = gaps.get("archive_limit", 0) + 1
+                            break
+                        if info.flag_bits & 0x1:
+                            gaps["encrypted_archive"] = gaps.get("encrypted_archive", 0) + 1
+                            continue
+                        scan_member(info.filename, z.read(info))
+            elif tarfile.is_tarfile(path):
+                with tarfile.open(path) as t:
+                    for m in t:
+                        if not m.isfile():
+                            continue
+                        if budget["members"] >= ARCHIVE_MAX_MEMBERS or budget["bytes"] + m.size > ARCHIVE_MAX_BYTES:
+                            gaps["archive_limit"] = gaps.get("archive_limit", 0) + 1
+                            break
+                        f = t.extractfile(m)
+                        if f:
+                            scan_member(m.name, f.read())
+            else:
+                return hits
+            c["archives"] += 1
+        except (OSError, EOFError, RuntimeError, ValueError, tarfile.TarError, zipfile.BadZipFile):
+            gaps["unsupported"] = gaps.get("unsupported", 0) + 1
+        _ = io
+        return hits
+
+    def _scan_bytes_archive(self, label: Path, data: bytes, eng, c: dict, gaps: dict, depth: int):
+        import tempfile
+        with tempfile.NamedTemporaryFile(delete=False, dir=str(self.state.root)) as tmp:
+            tmp.write(data)
+            name = tmp.name
+        try:
+            hits = self._scan_archive(Path(name), eng, c, gaps, depth)
+            return [(h[0].replace(name, str(label)), h[1], h[2]) for h in hits]
+        finally:
+            os.unlink(name)
+
+    def scan_paths(self, paths: list[str], trigger: str = "on_demand", job_group: str | None = None,
+                   max_seconds: float | None = None) -> dict:
         eng = self.engine
+        c = {"scanned": 0, "found": 0, "archives": 0}
+        gaps: dict[str, int] = {}
         if eng is None:
-            return {"ok": False, "reason": "no verified detection bundle"}
-        scanned, found, errors = 0, 0, 0
+            self._report_progress(job_group, "failed", c, {"unsupported": 0}, None)
+            return {"ok": False, "reason": "no verified detection bundle", "status": "failed"}
+        started, last_report = time.monotonic(), time.monotonic()
+        status = "running"
+        self._report_progress(job_group, "running", c, gaps, eng)
         for root in paths:
             rp = Path(root)
+            if not rp.exists():
+                gaps["inaccessible"] = gaps.get("inaccessible", 0) + 1
+                continue
             targets = [rp] if rp.is_file() else (p for p in rp.rglob("*") if p.is_file() and not p.is_symlink())
-            for p in targets:
-                sp = str(p)
-                if sp.startswith(str(self.state.root)):
-                    continue
-                try:
-                    if p.stat().st_size > SCAN_SKIP_BYTES or self.excluded(sp):
+            try:
+                for p in targets:
+                    sp = str(p)
+                    if sp.startswith(str(self.state.root)):
                         continue
-                    sha, d = eng.scan_file(sp)
-                    scanned += 1
-                    if d and not self.excluded(sp, sha):
-                        found += 1
-                        self._respond_to_file(sp, sha, d, trigger)
-                except (OSError, PermissionError):
-                    errors += 1
-        self.state.add_event("scan_completed", {"trigger": trigger, "scanned": scanned, "detections": found,
-                                                "errors": errors, "engine_version": eng.version})
-        return {"ok": True, "scanned": scanned, "detections": found, "errors": errors}
+                    # >= rather than >: on Windows the monotonic clock ticks every ~15 ms, so two
+                    # readings in a fast loop are often equal and a strict comparison never fires.
+                    if max_seconds and time.monotonic() - started >= max_seconds:
+                        status = "timed_out"
+                        gaps["timeout"] = gaps.get("timeout", 0) + 1
+                        break
+                    if job_group and time.monotonic() - last_report >= PROGRESS_SECONDS:
+                        last_report = time.monotonic()
+                        if self._report_progress(job_group, "running", c, gaps, eng):
+                            status = "cancelled"
+                            break
+                    try:
+                        if self.excluded(sp):
+                            gaps["excluded"] = gaps.get("excluded", 0) + 1
+                            continue
+                        if p.stat().st_size > SCAN_SKIP_BYTES:
+                            gaps["too_large"] = gaps.get("too_large", 0) + 1
+                            continue
+                        sha, d = eng.scan_file(sp)
+                        c["scanned"] += 1
+                        if d and not self.excluded(sp, sha):
+                            c["found"] += 1
+                            self._respond_to_file(sp, sha, d, trigger)
+                            continue
+                        if _archive_kind(sp, None):
+                            for label, ad, asha in self._scan_archive(p, eng, c, gaps):
+                                c["found"] += 1
+                                # The containing archive is what can be quarantined on disk.
+                                self.state.add_event("archive_member_detected", {"member": label, "sha256": asha,
+                                                                                 "title": ad.title})
+                                self._respond_to_file(sp, sha, ad, trigger)
+                                break
+                    except (OSError, PermissionError):
+                        gaps["inaccessible"] = gaps.get("inaccessible", 0) + 1
+            except (OSError, PermissionError):
+                gaps["inaccessible"] = gaps.get("inaccessible", 0) + 1
+            if status != "running":
+                break
+        if status == "running":
+            status = "partial" if gaps.get("inaccessible") or gaps.get("archive_limit") else "complete"
+        self.state.add_event("scan_completed", {"trigger": trigger, "scanned": c["scanned"], "detections": c["found"],
+                                                "errors": gaps.get("inaccessible", 0), "engine_version": eng.version,
+                                                "status": status, "gaps": gaps, "archives": c["archives"],
+                                                "job_group": job_group})
+        self._report_progress(job_group, status, c, gaps, eng)
+        return {"ok": True, "status": status, "scanned": c["scanned"], "detections": c["found"],
+                "errors": gaps.get("inaccessible", 0), "archives": c["archives"], "gaps": gaps}
 
     @staticmethod
     def default_scan_paths(scan_type: str) -> list[str]:
@@ -442,7 +577,8 @@ class Agent:
     def execute(self, ctype: str, params: dict) -> dict:
         if ctype == "scan":
             paths = params.get("paths") or self.default_scan_paths(params.get("scan_type", "quick"))
-            return self.scan_paths(paths, trigger=f"{params.get('scan_type', 'quick')}_scan")
+            return self.scan_paths(paths, trigger=f"{params.get('scan_type', 'quick')}_scan",
+                                   job_group=params.get("job_group"), max_seconds=params.get("max_seconds"))
         if ctype == "collect_metadata":
             out = {"ok": True, "hostname": platform.node(), "os": platform.platform(),
                    "process_count": len(psutil.pids()), "agent_version": AGENT_VERSION,
@@ -506,11 +642,22 @@ class Agent:
             r = self.http.post("/v1/agent/heartbeat", headers=self._h(), json={
                 "agent_version": AGENT_VERSION, "definitions_version": self.state.get("active:detections"),
                 "applied_policy_version": (self.state.get("policy") or {}).get("bundle", {}).get("version"),
-                "protection_status": status, "sensor_health": sensors})
+                "protection_status": status, "sensor_health": sensors, "posture": self.posture()})
             r.raise_for_status()
             return r.json()
         except httpx.HTTPError:
             return None
+
+    def posture(self) -> dict:
+        """SEC-05: refreshed at most hourly (the probes start OS tools)."""
+        cached = self.state.get("posture") or {}
+        if cached and time.time() - cached.get("_at", 0) < 3600:
+            return {k: v for k, v in cached.items() if k != "_at"}
+        p = platform_ops.posture()
+        p["removable_media_blocked"] = bool(self.policy.get("block_removable_media", False))
+        p["tamper_protection"] = bool(self.policy.get("tamper_protection", False))
+        self.state.put("posture", {**p, "_at": time.time()})
+        return p
 
     def expire_isolation(self) -> None:
         iso = self.state.get("isolation")

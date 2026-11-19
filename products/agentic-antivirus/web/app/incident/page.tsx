@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "../../components/Shell";
 import { Act, ReadAloud, Sev, Status, useApi } from "../../components/ui";
+import { IncidentAgents } from "../../components/AgentPanels";
 import { api } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
 import { formatDateTime } from "../../lib/format";
@@ -17,8 +18,8 @@ export default function Incident() {
   const f = inv?.findings;
   const summary = f ? [
     ...f.facts.map((x: any) => x.statement),
-    ...f.hypotheses.map((x: any) => `Hypothesis, ${x.confidence} confidence: ${x.statement}`),
-    ...f.missing_evidence.map((x: string) => `Missing: ${x}`)].join(". ") : "";
+    ...f.hypotheses.map((x: any) => t("incident.hypothesisLine", { confidence: x.confidence, statement: x.statement })),
+    ...f.missing_evidence.map((x: string) => t("incident.missingLine", { item: x }))].join(". ") : "";
   return (
     <Shell>
       <Status error={d.error} loading={!d.data} />
@@ -27,9 +28,10 @@ export default function Incident() {
         <p className="lede"><Sev s={d.data.incident.severity} /> {d.data.incident.status}, opened {formatDateTime(d.data.incident.created_at, locale)}</p>
         <div className="row">
           <label style={{ margin: 0, display: "flex", gap: ".4rem" }}><input type="checkbox" checked={useLlm} onChange={(e) => setUseLlm(e.target.checked)} />
-            Include the language model (if your organisation enabled one)</label>
-          <Act className="primary" label={t("incident.investigate")} run={() => api(`/v1/incidents/${id}/investigate`, { body: { use_llm: useLlm } })} onDone={d.reload} />
+            {t("ui.include_the_language_model_if_your")}</label>
+          <Act className="primary" label={t("incident.investigate")} run={() => api(`/v1/incidents/${id}/investigate`, { body: { use_llm: useLlm, language: locale } })} onDone={d.reload} />
         </div>
+        {id && <IncidentAgents id={id} onChange={d.reload} />}
 
         {f && <>
           <h2>{t("incident.facts")}</h2>
@@ -38,16 +40,16 @@ export default function Incident() {
           <h2>{t("incident.hypotheses")}</h2>
           {f.hypotheses.length ? <ul className="hyps">{f.hypotheses.map((x: any, i: number) => <li key={i} className="finding-h">
             {x.statement} <span className="chip">{x.confidence} confidence</span>
-            {x.evidence_refs.length > 0 && <span className="ref"> ({x.evidence_refs.join(", ")})</span>}</li>)}</ul> : <p>None.</p>}
+            {x.evidence_refs.length > 0 && <span className="ref"> ({x.evidence_refs.join(", ")})</span>}</li>)}</ul> : <p>{t("ui.none")}</p>}
           <h2>{t("incident.missing")}</h2>
-          {f.missing_evidence.length ? <ul>{f.missing_evidence.map((x: string, i: number) => <li key={i}>{x}</li>)}</ul> : <p>None reported.</p>}
+          {f.missing_evidence.length ? <ul>{f.missing_evidence.map((x: string, i: number) => <li key={i}>{x}</li>)}</ul> : <p>{t("ui.none_reported")}</p>}
           {f.impact && (f.impact.confirmed.length + f.impact.suspected.length > 0) && <>
-            <h2>Affected services</h2>
+            <h2>{t("ui.affected_services")}</h2>
             <p>Confirmed: {f.impact.confirmed.join(", ") || "none"}. Suspected: {f.impact.suspected.join(", ") || "none"}.</p></>}
           <h2>{t("incident.recommendations")}</h2>
-          <table><thead><tr><th>Action</th><th>Why</th><th>Status</th></tr></thead>
+          <table><thead><tr><th>{t("ui.action")}</th><th>{t("ui.why")}</th><th>{t("ui.status")}</th></tr></thead>
             <tbody>{f.recommendations.map((r: any, i: number) => <tr key={i}><td>{r.action_type}</td><td>{r.rationale}</td>
-              <td>{r.status === "proposed" ? <Link href="/approvals">waiting for approval</Link> : r.status}</td></tr>)}</tbody></table>
+              <td>{r.status === "proposed" ? <Link href="/approvals">{t("ui.waiting_for_approval")}</Link> : r.status}</td></tr>)}</tbody></table>
           <p className="lede">Engine: {inv.engine}{f.model_status ? `. Model: ${f.model_status}` : ""}.</p>
         </>}
 
@@ -61,12 +63,12 @@ export default function Incident() {
           </li>))}</ol>
 
         {d.data.recovery.length > 0 && <>
-          <h2>Recovery</h2>
-          <table><thead><tr><th>Step</th><th>Status</th><th>Backup verified</th><th>Return to service</th></tr></thead>
+          <h2>{t("ui.recovery")}</h2>
+          <table><thead><tr><th>{t("ui.step")}</th><th>{t("ui.status")}</th><th>{t("ui.backup_verified")}</th><th>{t("ui.return_to_service")}</th></tr></thead>
             <tbody>{d.data.recovery.map((r: any) => <tr key={r.id}><td>{r.step}</td><td>{r.status}</td>
-              <td>{r.backup_verified === null ? "unknown" : r.backup_verified ? "yes" : "no"}</td>
-              <td>{r.step === "return_to_service" ? (r.return_to_service_approved_by ? "approved" :
-                <Act label="Approve return to service" run={() => api(`/v1/recovery/${r.id}/approve-return`, { method: "POST" })} onDone={d.reload} />) : ""}</td></tr>)}</tbody></table>
+              <td>{r.backup_verified === null ? t("common.unknown") : r.backup_verified ? t("common.yes") : t("common.no")}</td>
+              <td>{r.step === "return_to_service" ? (r.return_to_service_approved_by ? t("incident.approved") :
+                <Act label={t("ui.approve_return_to_service")} run={() => api(`/v1/recovery/${r.id}/approve-return`, { method: "POST" })} onDone={d.reload} />) : ""}</td></tr>)}</tbody></table>
         </>}
       </>}
     </Shell>);

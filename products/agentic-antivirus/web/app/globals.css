@@ -31,8 +31,10 @@ a { color: inherit; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
-.skip { position: absolute; inset-inline-start: -999px; top: 0; background: var(--surface); padding: .5rem 1rem; z-index: 10; }
-.skip:focus { inset-inline-start: 1rem; }
+/* Keyboard-only: shown for :focus-visible so focus moved by the router after a mouse click does not leave the
+   link covering the first menu items (it made Dashboard and Approvals unclickable on narrow screens). */
+.skip { position: fixed; inset-inline-start: -999px; top: 0; background: var(--surface); padding: .5rem 1rem; z-index: 10; }
+.skip:focus-visible { inset-inline-start: 50%; transform: translateX(-50%); top: .5rem; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
 
 .frame { display: grid; grid-template-columns: 15rem 1fr; min-height: 100vh; }
 .rail { background: var(--surface); border-inline-end: 1px solid var(--line); padding: 1.25rem .75rem; display: flex;

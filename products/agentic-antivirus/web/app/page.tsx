@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Shell } from "../components/Shell";
 import { AdSlot, Freshness, Sev, Status, useApi } from "../components/ui";
 import { DecisionCard, type ActionRequest } from "../components/Decision";
+import { ThisComputer } from "../components/ThisComputer";
+import { Assistant } from "../components/AgentPanels";
 import { useI18n } from "../lib/i18n";
 import { formatRelative } from "../lib/format";
 
@@ -24,31 +26,33 @@ export default function Dashboard() {
   return (
     <Shell pending={decisions.length}>
       <h1>{decisions.length ? t("dash.pending_approvals", { count: decisions.length }) : "Nothing is waiting for you"}</h1>
-      <p className="lede">Automatic protection keeps running on every device. These are the actions that need a person to decide.</p>
+      <p className="lede">{t("ui.automatic_protection_keeps_running_on_every")}</p>
+      <ThisComputer onChange={() => { dev.reload(); k.reload(); }} />
+      <Assistant />
       <Status error={pending.error} loading={!pending.data} />
-      <section className="decisions" aria-label="Decisions waiting">
+      <section className="decisions" aria-label={t("ui.decisions_waiting")}>
         {decisions.map((a) => <DecisionCard key={a.id} a={a} names={names} onChange={reload} />)}
       </section>
 
-      <h2>Right now</h2>
+      <h2>{t("ui.right_now")}</h2>
       <Freshness at={k.at} />
       {k.data && <div className="stats">
-        <div><strong>{k.data.devices.protected}/{k.data.devices.enrolled}</strong><span>devices fully protected</span></div>
-        <div><strong>{k.data.alerts_24h.total}</strong><span>alerts in the last 24 hours</span></div>
-        <div><strong>{k.data.incidents.open}</strong><span>open incidents</span></div>
-        <div><strong>{k.data.devices.isolated}</strong><span>devices isolated</span></div>
+        <div><strong>{k.data.devices.protected}/{k.data.devices.enrolled}</strong><span>{t("ui.devices_fully_protected")}</span></div>
+        <div><strong>{k.data.alerts_24h.total}</strong><span>{t("ui.alerts_in_the_last_24_hours")}</span></div>
+        <div><strong>{k.data.incidents.open}</strong><span>{t("ui.open_incidents")}</span></div>
+        <div><strong>{k.data.devices.isolated}</strong><span>{t("ui.devices_isolated")}</span></div>
         <div><strong>{k.data.critical_alert_publication_seconds.p95 == null ? "—" :
-          `${Math.round(k.data.critical_alert_publication_seconds.p95)} s`}</strong><span>critical alert delivery (p95, 30 days)</span></div>
+          `${Math.round(k.data.critical_alert_publication_seconds.p95)} s`}</strong><span>{t("ui.critical_alert_delivery_p95_30_days")}</span></div>
       </div>}
 
-      <h2>Open incidents</h2>
-      {openInc.length ? <table><thead><tr><th>Incident</th><th>{t("alerts.severity")}</th><th>Alerts</th><th>Updated</th></tr></thead>
+      <h2>{t("ui.open_incidents_2")}</h2>
+      {openInc.length ? <table><thead><tr><th>{t("ui.incident")}</th><th>{t("alerts.severity")}</th><th>{t("nav.alerts")}</th><th>{t("ui.updated")}</th></tr></thead>
         <tbody>{openInc.map((i) => <tr key={i.id}><td><Link href={`/incident?id=${i.id}`}>{i.title}</Link></td><td><Sev s={i.severity} /></td>
           <td>{i.alert_count}</td><td>{formatRelative(i.updated_at, locale)}</td></tr>)}</tbody></table>
-        : <p>No open incidents.</p>}
+        : <p>{t("ui.no_open_incidents")}</p>}
 
       {issues.length > 0 && <>
-        <h2>Devices that need attention</h2>
+        <h2>{t("ui.devices_that_need_attention")}</h2>
         <table><thead><tr><th>{t("devices.hostname")}</th><th>{t("devices.issues")}</th></tr></thead>
           <tbody>{issues.map((d) => <tr key={d.id}><td>{d.hostname}</td>
             <td>{d.issues.map((x: string) => <span key={x} className="chip">{t(`devices.issue.${x}`)}</span>)}</td></tr>)}</tbody></table>

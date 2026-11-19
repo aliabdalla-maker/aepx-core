@@ -45,3 +45,34 @@ def coverage() -> list[dict]:
                     "status": "complete" if keys and present == keys else ("partial" if present else "unavailable"),
                     "fallback_chain": fallback_chain(loc)})
     return out
+
+
+def _load(locale: str) -> dict:
+    f = MESSAGES_DIR / f"{locale}.json"
+    if not f.exists():
+        return {}
+    return {k: v for k, v in json.loads(f.read_text(encoding="utf-8")).items() if isinstance(v, str) and v.strip()}
+
+
+def base_messages() -> dict:
+    return _load(FALLBACK)
+
+
+def file_messages(locale: str) -> dict:
+    """Catalogue file of a locale without its metadata keys (keys starting with '_')."""
+    return {k: v for k, v in _load(locale).items() if not k.startswith("_")}
+
+
+def file_meta(locale: str) -> dict:
+    f = MESSAGES_DIR / f"{locale}.json"
+    if not f.exists():
+        return {}
+    meta = json.loads(f.read_text(encoding="utf-8")).get("_meta")
+    return meta if isinstance(meta, dict) else {}
+
+
+_PH = __import__("re").compile(r"\{\s*([A-Za-z_][A-Za-z0-9_]*)")
+
+
+def placeholders(text: str) -> list[str]:
+    return sorted(set(_PH.findall(text)))

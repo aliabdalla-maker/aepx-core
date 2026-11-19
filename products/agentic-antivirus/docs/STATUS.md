@@ -15,6 +15,14 @@ percentage would be invented (RA-17).
 
 Test paths below are relative to `control-plane/tests/` unless shown otherwise.
 
+## Update 19 Nov 2026 — sign-off assessment and Release 1 re-baseline
+
+Tests: 126 passed, 0 failed (control plane 98, agent 6, console 17, desktop 5). Production (build 4e5c8ea) verified live:
+/api/ready true, Google sign-in, email confirmation via the Workspace relay. New evidence: OBJ-03 (0 false positives on
+60,001 benign files), OBJ-05 (0.136 percentage points agent CPU), THR-05/07, DDOS-02/04 monitoring, DDL-03, VOC-01..08.
+Item-by-item status: `docs/evidence/evidence-r1.json`. Proposed scope change for Release 1 (needs owner approval):
+`docs/REBASELINE-R1.md`. Release evidence: `docs/RELEASE-MANIFEST-0.1.1.md`, `docs/SECURITY-REPORT-R1.md`.
+
 ## Product requirements (PRD)
 
 | ID | Status | Evidence / gap |

@@ -142,21 +142,68 @@ def rollback_setting(category: str, key: str, version: int, p: Principal = Depen
     return put_setting(category, key, SettingIn(value=row["value"]), p)
 
 
+def _db_translations(locale: str | None = None) -> list[dict]:
+    with db.global_tx() as cur:
+        cur.execute("SELECT locale, msg_key, source_hash, text, origin FROM aav.translations "
+                    "WHERE %s::text IS NULL OR locale = %s", (locale, locale))
+        return cur.fetchall()
+
+
+def _src_hash(text: str) -> str:
+    import hashlib
+    return hashlib.sha256(text.encode()).hexdigest()[:16]
+
+
 @router.get("/i18n/locales")
 def locales():
-    return i18n.coverage()
+    """Per-locale coverage with provenance: human (reviewed) vs machine translated (L10N-11/12)."""
+    base = i18n.base_messages()
+    rows: dict = {}
+    for t in _db_translations():
+        if t["msg_key"] in base and t["source_hash"] == _src_hash(base[t["msg_key"]]):
+            rows.setdefault(t["locale"], {})[t["msg_key"]] = t["origin"]
+    out = []
+    for c in i18n.coverage():
+        loc = c["locale"]
+        meta = i18n.file_meta(loc)
+        file_keys = set(i18n.file_messages(loc)) & set(base)
+        machine_file = set() if loc == i18n.FALLBACK or meta.get("origin", "human") == "human" else \
+            file_keys - set(meta.get("reviewed_keys", []))
+        db_keys = rows.get(loc, {})
+        keys = file_keys | set(db_keys)
+        machine = machine_file | {k for k, o in db_keys.items() if o != "human" and k not in file_keys}
+        total = len(base)
+        out.append({**c, "keys_translated": len(keys), "keys_machine": len(machine),
+                    "keys_reviewed": len(keys - machine),
+                    "coverage_pct": round(100 * len(keys) / total, 1) if total else 0.0,
+                    "reviewed_pct": round(100 * len(keys - machine) / total, 1) if total else 0.0,
+                    "status": "complete" if total and len(keys) == total else ("partial" if keys else "unavailable"),
+                    "label": "machine translated, not yet reviewed" if machine else None})
+    return out
 
 
 @router.get("/i18n/messages/{locale}")
 def messages(locale: str):
     if locale not in i18n.LOCALES:
         raise HTTPException(404, "unsupported locale")
+    base = i18n.base_messages()
     merged: dict = {}
+    machine: set = set()
     for loc in reversed(i18n.fallback_chain(locale)):
-        f = i18n.MESSAGES_DIR / f"{loc}.json"
-        if f.exists():
-            merged.update({k: v for k, v in json.loads(f.read_text(encoding="utf-8")).items() if isinstance(v, str) and v})
-    return {"locale": locale, "direction": "rtl" if locale in i18n.RTL else "ltr", "messages": merged}
+        msgs = i18n.file_messages(loc)
+        merged.update(msgs)
+        meta = i18n.file_meta(loc)
+        if loc != i18n.FALLBACK and meta.get("origin", "human") != "human":
+            machine |= set(msgs) - set(meta.get("reviewed_keys", []))
+        for t in _db_translations(loc):
+            if t["msg_key"] in base and t["msg_key"] not in msgs and t["source_hash"] == _src_hash(base[t["msg_key"]]):
+                merged[t["msg_key"]] = t["text"]
+                if t["origin"] != "human":
+                    machine.add(t["msg_key"])
+    machine &= set(merged)
+    return {"locale": locale, "direction": "rtl" if locale in i18n.RTL else "ltr", "messages": merged,
+            "machine_translated": sorted(machine),
+            "label": "machine translated, not yet reviewed" if machine else None}
 
 
 @router.get("/audit")

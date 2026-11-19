@@ -2,6 +2,11 @@
 // storage access is wrapped because it can throw in privacy modes and embedded shells.
 export const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "/api";
 
+/** Absolute control-plane address, for agents enrolling against this console. */
+export function apiUrl(): string {
+  return new URL(API_BASE, typeof location === "undefined" ? "https://localhost" : location.origin).href.replace(/\/$/, "");
+}
+
 const TOKEN = "aav.token";
 const TENANT = "aav.tenant";
 

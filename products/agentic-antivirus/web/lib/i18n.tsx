@@ -15,10 +15,13 @@ const KEY = "aav.locale";
 
 type Messages = Record<string, string>;
 type Ctx = { locale: string; dir: "ltr" | "rtl"; t: (k: string, v?: Record<string, unknown>) => string;
-  setLocale: (l: string) => void; available: boolean };
+  setLocale: (l: string) => void; available: boolean; machine: number };
 
 const I18nCtx = createContext<Ctx>({ locale: "en", dir: "ltr", t: (k) => (en as Messages)[k] ?? k,
-  setLocale: () => {}, available: true });
+  setLocale: () => {}, available: true, machine: 0 });
+
+/** Number of machine-translated, not yet reviewed strings travels in this reserved key (L10N-11/12). */
+export const MACHINE_KEY = "__machine_translated";
 
 export function localeName(code: string, display: string): string {
   try {
@@ -37,6 +40,7 @@ export function I18nProvider({ children, fetchMessages }: { children: ReactNode;
   const [locale, setLocaleState] = useState("en");
   const [messages, setMessages] = useState<Messages | null>(en as Messages);
   const [available, setAvailable] = useState(true);
+  const [machine, setMachine] = useState(0);
 
   useEffect(() => {
     try {
@@ -52,12 +56,14 @@ export function I18nProvider({ children, fetchMessages }: { children: ReactNode;
 
   useEffect(() => {
     let cancelled = false;
-    if (locale === "en") { setMessages(en as Messages); setAvailable(true); return; }
+    if (locale === "en") { setMessages(en as Messages); setAvailable(true); setMachine(0); return; }
     (fetchMessages ?? defaultFetch)(locale).then((m) => {
       if (cancelled) return;
-      setMessages({ ...(en as Messages), ...m });
-      setAvailable(Object.keys(m).length > 0);
-    }).catch(() => { if (!cancelled) { setMessages(en as Messages); setAvailable(false); } });
+      const { [MACHINE_KEY]: mt, ...own } = m;
+      setMessages({ ...(en as Messages), ...own });
+      setAvailable(Object.keys(own).length > 0);
+      setMachine(Number(mt ?? 0));
+    }).catch(() => { if (!cancelled) { setMessages(en as Messages); setAvailable(false); setMachine(0); } });
     return () => { cancelled = true; };
   }, [locale, fetchMessages]);
 
@@ -73,15 +79,17 @@ export function I18nProvider({ children, fetchMessages }: { children: ReactNode;
   }, []);
   const t = useCallback((k: string, v?: Record<string, unknown>) => formatMessage(resolve(messages, k), locale, v),
     [messages, locale]);
-  const value = useMemo(() => ({ locale, dir, t, setLocale, available }), [locale, dir, t, setLocale, available]) as Ctx;
+  const value = useMemo(() => ({ locale, dir, t, setLocale, available, machine }),
+    [locale, dir, t, setLocale, available, machine]) as Ctx;
   return <I18nCtx.Provider value={value}>{children}</I18nCtx.Provider>;
 }
 
 async function defaultFetch(l: string): Promise<Messages> {
   const { api } = await import("./api");
-  const r = await api<{ messages: Messages }>(`/v1/i18n/messages/${encodeURIComponent(l)}`);
+  const r = await api<{ messages: Messages; machine_translated?: string[] }>(`/v1/i18n/messages/${encodeURIComponent(l)}`);
   const own: Messages = {};
   for (const [k, v] of Object.entries(r.messages)) if (v !== (en as Messages)[k]) own[k] = v;
+  if (r.machine_translated?.length) own[MACHINE_KEY] = String(r.machine_translated.length);
   return own;
 }
 

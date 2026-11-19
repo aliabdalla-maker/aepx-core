@@ -98,3 +98,40 @@ def test_operator_cli_verifies_and_audits(client, admin_sql):
     audit = admin_sql("SELECT actor FROM aav.audit_log WHERE action = 'account.email_verified_by_operator' "
                       "AND target = %s", body["user_id"])
     assert audit and audit[0]["actor"] == "operator:cli"
+
+
+
+def test_publish_baseline_is_idempotent(admin_sql, tmp_path):
+    import json
+    from app import admin as adm
+    revoked = admin_sql("UPDATE aav.update_bundles SET revoked_at = now() WHERE kind = 'detections' "
+                        "AND revoked_at IS NULL RETURNING id")
+    try:
+        doc = json.loads(adm.BASELINE.read_text())
+        doc["version"] = f"test-{uuid.uuid4().hex[:8]}"
+        f = tmp_path / "baseline.json"
+        f.write_text(json.dumps(doc))
+        assert adm.publish_baseline(f) == 0
+        active = "SELECT version FROM aav.update_bundles WHERE kind = 'detections' AND revoked_at IS NULL"
+        assert [r["version"] for r in admin_sql(active)] == [doc["version"]]
+        assert adm.publish_baseline(f) == 0          # already published: no second bundle
+        assert len(admin_sql(active)) == 1
+    finally:
+        admin_sql("UPDATE aav.update_bundles SET revoked_at = now() WHERE version LIKE 'test-%%'")
+        for r in revoked:
+            admin_sql("UPDATE aav.update_bundles SET revoked_at = NULL WHERE id = %s", r["id"])
+
+
+def test_ip_relay_needs_no_password(monkeypatch):
+    monkeypatch.delenv("AAV_SMTP_PASSWORD", raising=False)
+    monkeypatch.setattr(mailer, "settings", dataclasses.replace(
+        mailer.settings, smtp_host="smtp-relay.gmail.com", mail_from="admin@example.test", smtp_user=""))
+    assert mailer.configured() is True
+    monkeypatch.setattr(mailer, "settings", dataclasses.replace(mailer.settings, smtp_user="admin@example.test"))
+    assert mailer.configured() is False
+
+
+def test_helo_uses_public_host_name(monkeypatch):
+    monkeypatch.setattr(mailer, "settings", dataclasses.replace(
+        mailer.settings, public_base_url="https://api.softwareequality.com/apps/agentic-antivirus"))
+    assert mailer._helo_name() == "api.softwareequality.com"

@@ -15,6 +15,7 @@ import smtplib
 import ssl
 import threading
 from email.message import EmailMessage
+from urllib.parse import urlparse
 
 from app import db
 from app.config import settings
@@ -46,8 +47,11 @@ def _password() -> str:
 
 
 def configured() -> bool:
-    return bool(settings.smtp_host and settings.mail_from and (settings.smtp_password_file
-                                                              or os.getenv("AAV_SMTP_PASSWORD")))
+    # A relay that trusts the server's IP address (Google Workspace SMTP relay) needs no login: leave
+    # AAV_SMTP_USER empty. With a username, a password is required.
+    if not (settings.smtp_host and settings.mail_from):
+        return False
+    return not settings.smtp_user or bool(settings.smtp_password_file or os.getenv("AAV_SMTP_PASSWORD"))
 
 
 def render(to: str, template: str, payload: dict) -> EmailMessage:
@@ -65,12 +69,18 @@ def render(to: str, template: str, payload: dict) -> EmailMessage:
     return msg
 
 
+def _helo_name() -> str | None:
+    # Greet with the public host name (relays such as Google's reject container ids and "localhost").
+    return urlparse(settings.public_base_url).hostname or None
+
+
 def _connect() -> smtplib.SMTP:
     ctx = ssl.create_default_context()
     if settings.smtp_port == 465:
-        smtp: smtplib.SMTP = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=20, context=ctx)
+        smtp: smtplib.SMTP = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=20, context=ctx,
+                                              local_hostname=_helo_name())
     else:
-        smtp = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=20)
+        smtp = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=20, local_hostname=_helo_name())
         smtp.starttls(context=ctx)
     if settings.smtp_user:
         smtp.login(settings.smtp_user, _password())

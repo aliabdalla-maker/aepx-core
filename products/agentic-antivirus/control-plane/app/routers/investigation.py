@@ -26,7 +26,7 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app import audit, db
+from app import audit, db, llm
 from app.catalogue import CATALOGUE
 from app.config import settings
 from app.deps import Principal, need
@@ -53,6 +53,7 @@ def set_bus_transport(t):
 
 class InvestigateIn(BaseModel):
     use_llm: bool = False
+    language: str = "en"
     propose_actions: bool = True
 
 
@@ -146,11 +147,18 @@ SYSTEM_INSTRUCTION = (
     "evidence. Anything you cannot support with refs must be a hypothesis or omitted. Do not propose actions.")
 
 
-def llm_findings(evidence: list[dict]) -> dict | None:
-    """Optional LLM pass through the AEP-X connector bus (trust + policy + audit apply).
+def llm_findings(evidence: list[dict], tenant_id=None, language: str = "en") -> dict | None:
+    """Optional LLM pass: the AEP-X connector bus when configured (trust + policy + audit apply),
+    otherwise the product's provider chain (llm.py: Claude API -> self-hosted model).
     Returns None on any outage or invalid output."""
     bus = settings.aepx_bus_url
     if not bus and _bus_transport is None:
+        res = llm.complete("investigation", SYSTEM_INSTRUCTION, {"evidence": evidence}, tenant_id=tenant_id,
+                           language=language, max_tokens=1500)
+        data = res.json() if res else None
+        if isinstance(data, dict):
+            data["_provider"] = f"{res.provider}:{res.model}"
+            return data
         return None
     envelope = {"sender": "aepx://agent/agentic-antivirus-investigator", "receiver": "aepx://connector/ml",
                 "payload": {"op": "completion", "prompt": json.dumps({"instruction": SYSTEM_INSTRUCTION,
@@ -203,12 +211,13 @@ def investigate(incident_id: UUID, body: InvestigateIn, p: Principal = Depends(n
         findings = rules_findings(cur, incident_id, evidence)
         engine = "rules"
         if body.use_llm:
-            llm = llm_findings(evidence)
-            if llm is None:
+            model_out = llm_findings(evidence, p.tenant_id, body.language)
+            if model_out is None:
                 findings["model_status"] = "unavailable: rules-only findings"
             else:
-                findings = merge_llm(findings, llm, refs)
-                engine = "rules+llm:aepx-connector-ml"
+                provider = model_out.pop("_provider", "aepx-connector-ml")
+                findings = merge_llm(findings, model_out, refs)
+                engine = f"rules+llm:{provider}"
                 findings["model_status"] = "ok"
         if body.propose_actions:
             for rec in findings["recommendations"]:
