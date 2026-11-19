@@ -129,3 +129,9 @@ def test_ip_relay_needs_no_password(monkeypatch):
     assert mailer.configured() is True
     monkeypatch.setattr(mailer, "settings", dataclasses.replace(mailer.settings, smtp_user="admin@example.test"))
     assert mailer.configured() is False
+
+
+def test_helo_uses_public_host_name(monkeypatch):
+    monkeypatch.setattr(mailer, "settings", dataclasses.replace(
+        mailer.settings, public_base_url="https://api.softwareequality.com/apps/agentic-antivirus"))
+    assert mailer._helo_name() == "api.softwareequality.com"
