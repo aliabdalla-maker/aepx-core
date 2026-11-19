@@ -1,0 +1,94 @@
+name: Android screenshots (emulator capture)
+# Boots an Android emulator, installs each app's debug build, launches it, and captures REAL
+# screenshots as downloadable artifacts for the Play listings. Run it from the Actions tab
+# (workflow_dispatch) and pick the app. These are genuine captures of the running app — the
+# launch/first screens. Reaching deeper feature screens (scan, detection, approval) reliably
+# needs instrumented UI navigation; add an androidTest that drives those screens and calls
+# `device.takeScreenshot(...)`, then capture from its artifacts the same way.
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: Which app to capture
+        type: choice
+        options: [agentic-antivirus, aepx-ide, both]
+        default: both
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  shots:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          - app: agentic-antivirus
+            dir: products/agentic-antivirus/clients/android
+            pkg: com.equalitysoftware.agenticantivirus
+          - app: aepx-ide
+            dir: platform/saas-ide/android-companion
+            pkg: com.equalitysoftware.aepx.companion
+    steps:
+      - name: Skip apps not requested
+        id: want
+        run: |
+          case "${{ github.event.inputs.app }}" in
+            both) echo run=true >> "$GITHUB_OUTPUT" ;;
+            ${{ matrix.app }}) echo run=true >> "$GITHUB_OUTPUT" ;;
+            *) echo run=false >> "$GITHUB_OUTPUT" ;;
+          esac
+      - uses: actions/checkout@v7
+        if: steps.want.outputs.run == 'true'
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        if: steps.want.outputs.run == 'true'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v6
+        if: steps.want.outputs.run == 'true'
+        with:
+          gradle-version: '8.11.1'
+      - name: Build debug APK
+        if: steps.want.outputs.run == 'true'
+        working-directory: ${{ matrix.dir }}
+        run: gradle --no-daemon assembleDebug
+      - name: Enable KVM
+        if: steps.want.outputs.run == 'true'
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - name: Capture on emulator
+        if: steps.want.outputs.run == 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          working-directory: ${{ matrix.dir }}
+          script: |
+            set -eux
+            out="$GITHUB_WORKSPACE/shots/${{ matrix.app }}"; mkdir -p "$out"
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb shell settings put global sysui_demo_allowed 1
+            adb shell am broadcast -a com.android.systemui.demo -e command enter || true
+            adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 0900 || true
+            adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false || true
+            adb shell monkey -p ${{ matrix.pkg }} -c android.intent.category.LAUNCHER 1
+            sleep 8
+            adb exec-out screencap -p > "$out/01-launch.png"
+            # one generic forward interaction, then capture again (best-effort; harmless if nothing changes)
+            adb shell input tap 540 1600; sleep 4; adb exec-out screencap -p > "$out/02-screen.png"
+            adb shell input keyevent KEYCODE_BACK; sleep 2; adb exec-out screencap -p > "$out/03-screen.png"
+      - uses: actions/upload-artifact@v7
+        if: steps.want.outputs.run == 'true'
+        with:
+          name: screenshots-${{ matrix.app }}
+          path: shots/${{ matrix.app }}/
+          if-no-files-found: error
+          retention-days: 14
