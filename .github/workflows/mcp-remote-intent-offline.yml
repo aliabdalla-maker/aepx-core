@@ -1,0 +1,31 @@
+name: MCP remote intent offline acceptance
+on:
+  pull_request:
+    paths:
+      - 'platform/saas-ide/backend/app/mcp_remote_intent_*.py'
+      - 'tests/test_mcp_remote_intent_ledger.py'
+      - '.github/workflows/mcp-remote-intent-offline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  intent-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Compile and test offline remote intent policy
+        run: |
+          python -m py_compile platform/saas-ide/backend/app/mcp_remote_intent_schema.py platform/saas-ide/backend/app/mcp_remote_intent_state.py
+          python -m unittest discover -s tests -p 'test_mcp_remote_intent_ledger.py' -v

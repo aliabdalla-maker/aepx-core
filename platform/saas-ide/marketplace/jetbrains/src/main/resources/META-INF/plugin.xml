@@ -1,0 +1,42 @@
+<idea-plugin>
+    <id>com.softwareequality.aepx</id>
+    <name>AEP-X Agentic IDE</name>
+    <vendor email="support@softwareequality.com" url="https://www.softwareequality.com">Equality Software Ltd</vendor>
+    <description><![CDATA[
+      Opens the <b>AEP-X Agentic IDE</b>: a universal, governed workspace where an AI agent crew plans and
+      produces your work, you approve each step, and every decision is audited. Nine IDEs share one platform:
+      Software, Sound, Music, Movie &amp; Film, Animation, SDK, Social Media, Multimedia and Media.
+      <ul>
+        <li><b>Tools | AEP-X | Open Agentic IDE</b></li>
+        <li><b>Tools | AEP-X | New Project</b>: start a project in any of the nine IDEs</li>
+        <li><b>Tools | AEP-X | Plans and Pricing</b>: 30-day free trial with ads, then £4.99/month for 95% fewer ads,
+            or the free ad-supported plan.</li>
+      </ul>
+      The plugin reads no project files, stores no credentials and makes no network requests itself.
+    ]]></description>
+    <change-notes><![CDATA[
+      <b>0.3.0</b>: nine IDE modules (software, sound, music, film, animation, SDK, social, multimedia, media),
+      real AI agents with human approval, roles and a tamper-evident audit trail.
+    ]]></change-notes>
+    <depends>com.intellij.modules.platform</depends>
+    <actions>
+        <group id="aepx.ToolsGroup" text="AEP-X" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="aepx.OpenIde" class="com.softwareequality.aepx.OpenIdeAction" text="Open Agentic IDE"
+                    description="Open the AEP-X Agentic IDE in your browser"/>
+            <group id="aepx.NewProjectGroup" text="New Project" popup="true">
+                <action id="aepx.NewSoftware" class="com.softwareequality.aepx.NewSoftwareProject" text="Software IDE"/>
+                <action id="aepx.NewSound" class="com.softwareequality.aepx.NewSoundProject" text="Sound IDE"/>
+                <action id="aepx.NewMusic" class="com.softwareequality.aepx.NewMusicProject" text="Music IDE"/>
+                <action id="aepx.NewFilm" class="com.softwareequality.aepx.NewFilmProject" text="Movie &amp; Film IDE"/>
+                <action id="aepx.NewAnimation" class="com.softwareequality.aepx.NewAnimationProject" text="Animation IDE"/>
+                <action id="aepx.NewSdk" class="com.softwareequality.aepx.NewSdkProject" text="SDK IDE"/>
+                <action id="aepx.NewSocial" class="com.softwareequality.aepx.NewSocialProject" text="Social Media IDE"/>
+                <action id="aepx.NewMultimedia" class="com.softwareequality.aepx.NewMultimediaProject" text="Multimedia IDE"/>
+                <action id="aepx.NewMedia" class="com.softwareequality.aepx.NewMediaProject" text="Media IDE"/>
+            </group>
+            <action id="aepx.OpenPricing" class="com.softwareequality.aepx.OpenPricingAction" text="Plans and Pricing"
+                    description="AEP-X plans: 30-day trial, £4.99/month Pro, free tier"/>
+        </group>
+    </actions>
+</idea-plugin>

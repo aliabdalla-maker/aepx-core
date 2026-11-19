@@ -1,0 +1,8 @@
+# Optional dependencies for explicitly enabled external integrations.
+-r requirements.txt
+openai>=1.70,<3
+anthropic>=0.50,<1
+google-genai>=1,<2
+oci>=2.130,<3
+crewai[litellm]>=0.120,<2
+mcp>=1.10,<3

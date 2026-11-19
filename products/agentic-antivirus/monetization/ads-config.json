@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "_note": "Identifiers, not secrets. Live serving stays disabled until the owner actions in README.md are done. Units with format=null are never requested.",
+  "publisher_id": "pub-2980680946304710",
+  "adsense": {
+    "client": "ca-pub-2980680946304710",
+    "enabled": false,
+    "slots": []
+  },
+  "admob": {
+    "enabled": false,
+    "apps": [
+      {
+        "app_id": "ca-app-pub-2980680946304710~3427805116",
+        "platform": null,
+        "store_package": null,
+        "units": [
+          {"id": "ca-app-pub-2980680946304710/6357220784", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/7811958596", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/3898578402", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/8550325196", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/2665387781", "format": null, "placement": null}
+        ]
+      },
+      {
+        "app_id": "ca-app-pub-2980680946304710~2617421798",
+        "platform": null,
+        "store_package": null,
+        "also_used_by": "platform/saas-ide/android-companion (com.equalitysoftware.aepx.companion)",
+        "units": [
+          {"id": "ca-app-pub-2980680946304710/1032845563", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/2172884450", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/3668921616", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/5953999752", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/6184281650", "format": null, "placement": null},
+          {"id": "ca-app-pub-2980680946304710/6514576804", "format": null, "placement": null}
+        ]
+      }
+    ]
+  },
+  "ad_rate": {
+    "trial": 1.0,
+    "expired": 1.0,
+    "paid": 0.05
+  },
+  "placements": {
+    "allowed": ["dashboard_banner", "device_list_banner", "incident_list_banner", "settings_banner", "help_banner",
+                "app_open", "list_native", "session_end_interstitial"],
+    "never": ["approval_screens", "containment_screens", "threat_warning_dialogs", "quarantine_review", "login",
+              "payment_screens", "audit_views"]
+  },
+  "pricing": {
+    "amount": "4.99",
+    "currency": "GBP",
+    "period": "P1M",
+    "licence_units": ["per_user", "per_device"],
+    "trial_days": 30,
+    "store_product_id": "aav_protection_monthly"
+  }
+}

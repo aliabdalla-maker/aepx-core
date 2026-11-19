@@ -1,0 +1,81 @@
+# Agentic Antivirus on one OCI Always Free VM.Standard.A1.Flex (arm64). Staging/production overlay is
+# manual and approval-gated. Only the console listener is published, on loopback; the host's existing
+# TLS reverse proxy forwards /apps/agentic-antivirus/ to it. Totals: <= 2.6 GB RAM, <= 2.1 OCPU.
+name: agentic-antivirus
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    mem_limit: 768m
+    cpus: "0.75"
+    environment:
+      POSTGRES_DB: aav
+      POSTGRES_USER: aav_owner
+      POSTGRES_PASSWORD: ${AAV_POSTGRES_PASSWORD:?set AAV_POSTGRES_PASSWORD}
+      AAV_APP_DB_PASSWORD: ${AAV_APP_DB_PASSWORD:?set AAV_APP_DB_PASSWORD}
+    volumes:
+      - aavdata:/var/lib/postgresql/data
+      - ../control-plane/migrations:/migrations:ro
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U aav_owner -d aav"], interval: 10s, retries: 8 }
+  governance:
+    build: ../../../services/governance
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: "0.25"
+    environment:
+      DATABASE_URL: postgresql://unused@127.0.0.1:1/none   # policy evaluation only; audit lives in aav.audit_log
+  control-plane:
+    build: { context: .., dockerfile: control-plane/Dockerfile }
+    restart: unless-stopped
+    mem_limit: 768m
+    cpus: "0.75"
+    environment:
+      AAV_DATABASE_URL: postgresql://aav_app:${AAV_APP_DB_PASSWORD}@postgres:5432/aav
+      AAV_SIGNING_KEY_FILE: /run/secrets/aav_signing_key
+      AAV_GOVERNANCE_URL: http://governance:8000
+      AAV_PUBLIC_BASE_URL: https://api.softwareequality.com/apps/agentic-antivirus
+      AAV_EGRESS_ALLOWLIST: ${AAV_EGRESS_ALLOWLIST:-}
+      AAV_OPEN_REGISTRATION: ${AAV_OPEN_REGISTRATION:-true}
+      AAV_PLAY_SERVICE_ACCOUNT_FILE: ${AAV_PLAY_SERVICE_ACCOUNT_FILE:-}
+      # Email delivery (verification, password reset, invitations). Values live in /etc/aav/aav.env, never git.
+      # Sign in with Google: public OAuth client ID only (Google Identity Services ID tokens; no client secret).
+      AAV_OIDC_ISSUER: ${AAV_OIDC_ISSUER:-}
+      AAV_OIDC_CLIENT_ID: ${AAV_OIDC_CLIENT_ID:-}
+      AAV_OIDC_JWKS_URL: ${AAV_OIDC_JWKS_URL:-}
+      AAV_SMTP_HOST: ${AAV_SMTP_HOST:-}
+      AAV_SMTP_PORT: ${AAV_SMTP_PORT:-587}
+      AAV_SMTP_USER: ${AAV_SMTP_USER:-}
+      AAV_SMTP_PASSWORD: ${AAV_SMTP_PASSWORD:-}
+      AAV_MAIL_FROM: ${AAV_MAIL_FROM:-}
+      AAV_MAIL_DAILY_CAP: ${AAV_MAIL_DAILY_CAP:-90}
+      # LLM provider chain (Claude API -> self-hosted Ollama -> rules). Key and caps live in /etc/aav/aav.env.
+      AAV_ANTHROPIC_API_KEY: ${AAV_ANTHROPIC_API_KEY:-}
+      AAV_ANTHROPIC_MODEL: ${AAV_ANTHROPIC_MODEL:-claude-sonnet-5-5}
+      AAV_LLM_MONTHLY_CAP_USD: ${AAV_LLM_MONTHLY_CAP_USD:-0}
+      AAV_LLM_TENANT_MONTHLY_CAP_USD: ${AAV_LLM_TENANT_MONTHLY_CAP_USD:-5}
+      AAV_OLLAMA_URL: ${AAV_OLLAMA_URL:-}
+      AAV_LLM_LOCAL_MODEL: ${AAV_LLM_LOCAL_MODEL:-}
+      # Defensive harness (§3C/§3D): production starts in OBSERVE; RESPOND is enabled per tenant and pilot cohort
+      # from the Response page. AAV_HARNESS_KILL_SWITCH=true stops every new response dispatch for all tenants.
+      AAV_HARNESS_DEFAULT_MODE: ${AAV_HARNESS_DEFAULT_MODE:-observe}
+      AAV_HARNESS_KILL_SWITCH: ${AAV_HARNESS_KILL_SWITCH:-false}
+      AAV_ENVIRONMENT: ${AAV_ENVIRONMENT:-production}
+      AAV_BUILD_SHA: ${AAV_BUILD_SHA:-unknown}
+    secrets: [aav_signing_key]
+    volumes: [aavfiles:/var/lib/aav/files]
+    depends_on: { postgres: { condition: service_healthy }, governance: { condition: service_started } }
+    healthcheck: { test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/ready')"], interval: 30s, retries: 3 }
+  web:
+    build: { context: .., dockerfile: web/Dockerfile }
+    restart: unless-stopped
+    mem_limit: 128m
+    cpus: "0.25"
+    ports: ["127.0.0.1:18480:8080"]
+    depends_on: [control-plane]
+secrets:
+  aav_signing_key:
+    file: "${AAV_SIGNING_KEY_PATH:?set AAV_SIGNING_KEY_PATH}"
+volumes:
+  aavdata: {}
+  aavfiles: {}

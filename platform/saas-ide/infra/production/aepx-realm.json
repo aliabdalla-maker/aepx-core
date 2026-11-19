@@ -1,0 +1,72 @@
+{
+  "realm": "aepx",
+  "enabled": true,
+  "displayName": "AEP-X Agentic IDE",
+  "displayNameHtml": "<strong>AEP-X</strong> Agentic IDE <small>by Equality Software</small>",
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "rememberMe": true,
+  "verifyEmail": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "failureFactor": 10,
+  "passwordPolicy": "length(10) and notUsername and notEmail",
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 86400,
+  "internationalizationEnabled": false,
+  "clients": [
+    {
+      "clientId": "aepx-ide-browser",
+      "name": "AEP-X Agentic IDE",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": true,
+      "rootUrl": "https://ide.softwareequality.com",
+      "baseUrl": "/",
+      "redirectUris": [
+        "https://ide.softwareequality.com/*",
+        "com.equalitysoftware.aepx.companion:/oauth2redirect"
+      ],
+      "webOrigins": [
+        "https://ide.softwareequality.com"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "https://ide.softwareequality.com/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "ide-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "aepx-ide-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "browserSecurityHeaders": {
+    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self' https://ide.softwareequality.com; object-src 'none';",
+    "xFrameOptions": "",
+    "xContentTypeOptions": "nosniff",
+    "xRobotsTag": "none",
+    "xXSSProtection": "1; mode=block",
+    "strictTransportSecurity": "max-age=31536000; includeSubDomains",
+    "referrerPolicy": "no-referrer"
+  }
+}

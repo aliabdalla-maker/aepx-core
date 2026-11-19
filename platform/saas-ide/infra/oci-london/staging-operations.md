@@ -1,0 +1,11 @@
+# Staging operations design (not yet deployed)
+- Access: private VM via approved OCI Bastion session; never expose SSH publicly.
+- Egress: create a reviewed service gateway for supported OCI services and NAT only if patching/registries require it; no unrestricted outbound MCP traffic.
+- Secrets: OCI Vault / protected GitHub environment; never in Terraform state or user data.
+- Deployment: use immutable image or pinned container digest, deploy to staging via protected environment after successful tests.
+- Health: readiness endpoint, synthetic login, database migration status, OIDC/JWKS refresh, and MCP dispatch disabled.
+- Backup: encrypted PostgreSQL snapshots and restoration exercise; define RPO/RTO before approval.
+- Monitoring: CPU, RAM, disk, error rates, auth failures, worker health, OCI budget alerts; route notifications to approved team.
+- Rollback: retain prior image digest and DB migration compatibility; test rollback before release.
+- Costs: operator must retrieve actual OCI London rates and tenancy discounts. VM, boot volume, storage, networking, logging, backups and taxes can all incur charges.
+- **No claim is made that OCI has been accessed, priced, provisioned, or deployed.**

@@ -1,0 +1,28 @@
+name: AEP-X HITL dispatcher safety regression
+on:
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per
+  # workflow/event/ref; superseded branch and PR runs are cancelled.
+  # master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Compile changed modules
+        run: python -m py_compile services/governance/app/hitl_dispatcher.py services/governance/app/hitl_outbox.py
+      - name: Dispatcher and lease unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_aepx_hitl_dispatcher.py' -v
+          python -m unittest discover -s tests -p 'test_aepx_hitl_outbox.py' -v

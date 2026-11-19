@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>CFBundleName</key><string>Agentic Antivirus</string>
+  <key>CFBundleDisplayName</key><string>Agentic Antivirus</string>
+  <key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+  <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
+  <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>UILaunchScreen</key><dict/>
+  <key>UISupportedInterfaceOrientations~ipad</key><array><string>UIInterfaceOrientationPortrait</string><string>UIInterfaceOrientationLandscapeLeft</string><string>UIInterfaceOrientationLandscapeRight</string><string>UIInterfaceOrientationPortraitUpsideDown</string></array>
+  <!-- Live AdMob app ID; must be the iOS app registered in AdMob (confirm which of the two supplied IDs). Debug uses Google's sample ID. -->
+  <key>GADApplicationIdentifier</key><string>$(AAV_ADMOB_APP_ID)</string>
+  <key>AAVConsoleURL</key><string>https://api.softwareequality.com/apps/agentic-antivirus/</string>
+  <key>NSUserTrackingUsageDescription</key><string>Allows more relevant adverts during the free trial. You can decline and still use the app.</string>
+  <key>SKAdNetworkItems</key><array><dict><key>SKAdNetworkIdentifier</key><string>cstr6suwn9.skadnetwork</string></dict></array>
+</dict></plist>

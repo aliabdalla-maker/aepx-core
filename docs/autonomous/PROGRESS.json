@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "iteration": 1,
+  "max_iterations": 10000,
+  "baseline_date": "2026-11-13",
+  "status": "baseline-recorded",
+  "release_ready": false,
+  "verified": {
+    "merged_prs": [
+      217,
+      219,
+      220
+    ],
+    "mcp_disposable_pg_ci": "queued-at-last-check"
+  },
+  "metrics": {
+    "requirements_completed": null,
+    "requirements_total": null,
+    "tests_passed": null,
+    "tests_failed": null,
+    "remaining_hours": null
+  },
+  "safety": {
+    "auto_merge": false,
+    "auto_deploy": false,
+    "external_mcp_execution": false,
+    "chargeable_oci": false
+  },
+  "next_action": "Verify current CI results and run offline test suites in an isolated environment",
+  "note": "This is a repository audit/checkpoint, not a claim of full code validation."
+}

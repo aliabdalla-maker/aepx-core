@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "milestones": {
+    "architecture": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "core_application": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "security": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "postgres_execution": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "docker_oci": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "autonomous_engineering": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "ci_observability": {
+      "status": "not_started",
+      "evidence": []
+    },
+    "scale_recovery": {
+      "status": "not_started",
+      "evidence": []
+    }
+  }
+}

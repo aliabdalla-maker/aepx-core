@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Agentic Antivirus">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#162449"/><stop offset="1" stop-color="#0b1121"/>
+    </linearGradient>
+    <linearGradient id="stroke" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" fill="url(#bg)"/>
+  <path d="M96 40 L144 58 V92 C144 122 124 144 96 154 C68 144 48 122 48 92 V58 Z"
+        fill="none" stroke="url(#stroke)" stroke-width="11" stroke-linejoin="round"/>
+  <circle cx="96" cy="40" r="12" fill="#5eead4" stroke="#0b1121" stroke-width="4"/>
+  <circle cx="48" cy="60" r="10" fill="#3b82f6" stroke="#0b1121" stroke-width="4"/>
+  <circle cx="144" cy="60" r="10" fill="#3b82f6" stroke="#0b1121" stroke-width="4"/>
+  <path d="M73 97 L90 114 L121 81" fill="none" stroke="#fbbf24" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

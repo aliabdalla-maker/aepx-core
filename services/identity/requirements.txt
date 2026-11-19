@@ -1,6 +1,6 @@
 fastapi==0.141.1
 uvicorn[standard]==0.52.4
 pydantic==2.13.5
-pyjwt==2.13.0
+pyjwt==2.15.0
 cryptography==50.0.1
 base58==2.1.1

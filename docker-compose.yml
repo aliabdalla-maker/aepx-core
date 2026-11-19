@@ -311,12 +311,21 @@ services:
     restart: unless-stopped
     ports: ["8023:8000"]
     volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+    environment:
+      # Optional tokens for the github/gitlab adapters. Unset: public data
+      # only, unauthenticated rate limits (see their adapters.py).
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - GITLAB_TOKEN=${GITLAB_TOKEN:-}
 
   connector-productivity:
     build: ./connectors/productivity
     restart: unless-stopped
     ports: ["8024:8000"]
     volumes: ["./connectors/catalogue.json:/app/catalogue.json:ro"]
+    environment:
+      # Optional Slack bot token for the 'slack' specialized adapter.
+      # Unset: the adapter degrades to a clean fallback response.
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN:-}
 
   connector-data:
     build: ./connectors/data
@@ -365,6 +374,9 @@ services:
       # (see governance/contracts/README.md). Unset by default: the adapter
       # degrades to a clean stub response, never a 5xx (see its adapters.py).
       - EVM_RPC_URL=${EVM_RPC_URL:-http://localhost:8545}
+      # Optional signer for 'ethereum' contract_write. Unset: writes are
+      # refused cleanly; reads still work. Never commit a real key.
+      - EVM_PRIVATE_KEY=${EVM_PRIVATE_KEY:-}
 
   # ---- Console: the LLM / machine-learning box (web GUI) ----
   # Chat routes through the Connector Bus (trust + policy + audit);

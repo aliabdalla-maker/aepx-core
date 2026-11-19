@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Full-bleed square (iOS masks its own corners; Play applies its own shape) -->
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16254a"/><stop offset="1" stop-color="#0b1020"/></linearGradient></defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <defs>
+    <linearGradient id="stroke" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M262 796 L512 252 L762 796" stroke="url(#stroke)" stroke-width="104"/>
+    <path d="M376 610 L468 700 L664 500" stroke="#fbbf24" stroke-width="88"/>
+  </g>
+  <circle cx="512" cy="252" r="70" fill="#5eead4" stroke="#0b1020" stroke-width="22"/>
+  <circle cx="262" cy="796" r="60" fill="#3b82f6" stroke="#0b1020" stroke-width="20"/>
+  <circle cx="762" cy="796" r="60" fill="#3b82f6" stroke="#0b1020" stroke-width="20"/>
+</svg>

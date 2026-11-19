@@ -305,7 +305,7 @@
       <div class="cards">
         <div class="card p"><div class="cap"><div class="k">ML fabric</div><h2>Models &amp; prediction</h2><p>Native ML, per the Machine Learning Native RFC.</p></div>
           <div class="body"><button id="mdlGo" class="btn ghost">List models</button>
-            <div class="row"><select id="predKind"><option>cost</option><option>demand</option><option>failure</option></select>
+            <div class="row"><select id="predKind"><option value="cost_prediction">cost</option><option value="demand_prediction">demand</option><option value="workflow_recommendation">workflow</option></select>
               <button id="predGo" class="btn pri" style="flex:0 0 auto;background:linear-gradient(135deg,var(--purple),#4f4370)">Predict</button></div>
             <div id="mlRes" class="res"></div></div></div>
         <div class="card"><div class="cap"><div class="k">Brain</div><h2>Self-healing status</h2><p>Circuit-breaker reliability per connector, learned from Governance.</p></div>
@@ -456,7 +456,7 @@ $("#billGo").onclick=async()=>{const b=$("#billGo");load(b,true);
 
 // intelligence
 $("#mdlGo").onclick=async()=>{const {ok,body}=await api("/api/models");showJSON($("#mlRes"),ok,body);};
-$("#predGo").onclick=async()=>{const b=$("#predGo");load(b,true);const {ok,body}=await api("/api/predict",{method:"POST",body:JSON.stringify({kind:$("#predKind").value,features:{}})});showJSON($("#mlRes"),ok,body);load(b,false);};
+$("#predGo").onclick=async()=>{const b=$("#predGo");load(b,true);const {ok,body}=await api("/api/predict",{method:"POST",body:JSON.stringify({model:$("#predKind").value,features:{}})});showJSON($("#mlRes"),ok,body);load(b,false);};
 $("#brainGo").onclick=async()=>{const {ok,body}=await api("/api/brain/status");showJSON($("#brainRes"),ok,body);};
 $("#relGo").onclick=async()=>{const {ok,body}=await api("/api/brain/reliability");showJSON($("#brainRes"),ok,body);};
 

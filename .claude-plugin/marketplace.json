@@ -1,0 +1,55 @@
+{
+  "name": "aepx",
+  "owner": {
+    "name": "Equality Software Ltd",
+    "email": "ali.abdalla@softwareequality.com"
+  },
+  "metadata": {
+    "description": "AEP-X plugins: the AEP-X Universal Agentic IDE, and skills for working on the aepx-core monorepo"
+  },
+  "plugins": [
+    {
+      "name": "aepx-ide",
+      "source": "./plugins/aepx-ide",
+      "description": "AEP-X Universal Agentic IDE: create software, sound, music, film, animation, SDK, social and media projects, run approval-gated agent crews, and manage versions, members and the audit trail.",
+      "version": "0.3.0",
+      "author": {
+        "name": "Equality Software Ltd",
+        "email": "ali.abdalla@softwareequality.com"
+      },
+      "homepage": "https://ide.softwareequality.com",
+      "repository": "https://github.com/aliabdalla-maker/aepx-core",
+      "category": "development",
+      "keywords": [
+        "aepx",
+        "agentic-ide",
+        "agents",
+        "music",
+        "film",
+        "animation",
+        "sdk",
+        "social-media"
+      ]
+    },
+    {
+      "name": "aepx-core",
+      "source": "./",
+      "description": "Complete AEP-X skill set for aepx-core: one skill per service, the connector bus and each connector category, plus SDK, CLI, consoles, blockchain, governance, RFCs/conformance, database, CI/Jenkins, docs and architecture.",
+      "version": "0.2.2",
+      "author": {
+        "name": "Equality Software Ltd",
+        "email": "ali.abdalla@softwareequality.com"
+      },
+      "repository": "https://github.com/aliabdalla-maker/aepx-core",
+      "category": "development",
+      "keywords": [
+        "aepx",
+        "microservices",
+        "soa",
+        "connectors",
+        "fastapi",
+        "ci"
+      ]
+    }
+  ]
+}

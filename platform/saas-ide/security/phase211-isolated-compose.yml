@@ -1,0 +1,36 @@
+# Offline integration topology. No external provider execution.
+# The worker has no external network; gateway owns a separate egress interface.
+# This example proves container routing boundaries, not a production TLS proxy.
+services:
+  worker:
+    image: python:3.12-slim
+    command: ["python","-c","import socket; s=socket.socket(); s.settimeout(2); assert s.connect_ex(('1.1.1.1',443))!=0; assert s.connect_ex(('169.254.169.254',80))!=0; print('direct internet and metadata denied')"]
+    networks: [isolated]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    environment:
+      IDE_EXTERNAL_EXECUTION_ENABLED: "false"
+      IDE_MCP_EXECUTION_ENABLED: "false"
+      IDE_GOVERNED_WORKER_ENABLED: "false"
+  gateway:
+    image: python:3.12-slim
+    command: ["python","/opt/gateway/egress_gateway.py"]
+    volumes:
+      - ./egress_gateway.py:/opt/gateway/egress_gateway.py:ro
+      - ./test-certs:/opt/gateway/certs:ro
+    environment:
+      IDE_GATEWAY_LISTEN_ENABLED: "true"
+      IDE_GATEWAY_TLS_CERT_FILE: "/opt/gateway/certs/gateway.crt"
+      IDE_GATEWAY_TLS_KEY_FILE: "/opt/gateway/certs/gateway.key"
+      IDE_GATEWAY_FORWARD_ENABLED: "false"
+      IDE_GATEWAY_ALLOWED_HOSTS: ""
+      IDE_EXTERNAL_EXECUTION_ENABLED: "false"
+    networks: [isolated, external]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+networks:
+  isolated:
+    internal: true
+  external: {}

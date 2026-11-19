@@ -1,0 +1,30 @@
+# Security reference: OS-enforced network-denied worker, test/staging only.
+# This container cannot call providers, MCP or any internet destination.
+# Production requires an independently audited egress gateway with its own
+# network namespace and policies. Do NOT enable live execution with this file.
+services:
+  isolated-worker:
+    image: python:3.12-slim
+    network_mode: none
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    environment:
+      IDE_EXTERNAL_EXECUTION_ENABLED: "false"
+      IDE_MCP_EXECUTION_ENABLED: "false"
+      IDE_GOVERNED_WORKER_ENABLED: "false"
+    command:
+      - python
+      - -c
+      - |
+        import socket
+        for host,port in [('1.1.1.1',443),('169.254.169.254',80),('127.0.0.1',443)]:
+            s=socket.socket()
+            s.settimeout(1)
+            assert s.connect_ex((host,port))!=0, (host,port)
+            s.close()
+        print('network namespace blocks direct provider/MCP socket egress')
