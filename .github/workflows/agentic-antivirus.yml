@@ -271,8 +271,14 @@ jobs:
             echo
             echo "Server: \`docker pull ghcr.io/$OWNER/agentic-antivirus-control-plane:${GITHUB_SHA}\` and \`ghcr.io/$OWNER/agentic-antivirus-web:${GITHUB_SHA}\`."
           } > notes.md
-          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --prerelease --title "Agentic Antivirus ${GITHUB_REF_NAME#aav-}" \
-            --notes-file notes.md $(ls | grep -v '^notes.md$')
+          # A release made from the GitHub web page creates the tag and the release together; add the files to it.
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --clobber $(ls | grep -v '^notes.md$')
+            gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --prerelease --notes-file notes.md
+          else
+            gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --prerelease --title "Agentic Antivirus ${GITHUB_REF_NAME#aav-}" \
+              --notes-file notes.md $(ls | grep -v '^notes.md$')
+          fi
 
   deploy-production:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_sha != ''
