@@ -172,3 +172,52 @@ def removable_mounts() -> set[str]:
         if "removable" in opts or part.mountpoint.startswith(("/media/", "/run/media/", "/Volumes/")):
             out.add(part.mountpoint)
     return out
+
+
+def _probe(cmd: list[str], timeout: float = 15) -> str | None:
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        return r.stdout if r.returncode == 0 else None
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def posture() -> dict:
+    """SEC-05 device posture from platform tools. None means not observable here (shown as Unknown),
+    never a guess. Read-only probes; nothing is changed."""
+    system = platform.system()
+    out: dict = {"disk_encryption": None, "firewall": None, "os_updates_pending": None,
+                 "os_build": platform.platform()[:120]}
+    if system == "Windows":  # pragma: no cover - Windows only
+        bl = _probe(["manage-bde", "-status", os.environ.get("SystemDrive", "C:")])
+        if bl is not None:
+            out["disk_encryption"] = "Protection On" in bl
+        fw = _probe(["netsh", "advfirewall", "show", "allprofiles", "state"])
+        if fw is not None:
+            states = [ln.split()[-1].upper() for ln in fw.splitlines() if ln.strip().lower().startswith("state")]
+            out["firewall"] = bool(states) and all(v == "ON" for v in states)
+    elif system == "Darwin":  # pragma: no cover - macOS only
+        fv = _probe(["fdesetup", "status"])
+        if fv is not None:
+            out["disk_encryption"] = "FileVault is On" in fv
+        fw = _probe(["/usr/libexec/ApplicationFirewall/socketfilterfw", "--getglobalstate"])
+        if fw is not None:
+            out["firewall"] = "enabled" in fw.lower()
+        sw = _probe(["softwareupdate", "-l"], timeout=60)
+        if sw is not None:
+            out["os_updates_pending"] = sw.count("* Label:")
+    elif system == "Linux":
+        lsblk = _probe(["lsblk", "-o", "TYPE", "-n"])
+        if lsblk is not None:
+            out["disk_encryption"] = "crypt" in lsblk.split()
+        ufw = _probe(["ufw", "status"])
+        if ufw is not None:
+            out["firewall"] = "Status: active" in ufw
+        else:
+            nft = _probe(["nft", "list", "ruleset"])
+            if nft is not None:
+                out["firewall"] = bool(nft.strip())
+        apt = _probe(["apt-get", "-s", "-q", "upgrade"], timeout=60)
+        if apt is not None:
+            out["os_updates_pending"] = sum(1 for line in apt.splitlines() if line.startswith("Inst "))
+    return out

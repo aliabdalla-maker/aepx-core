@@ -41,18 +41,39 @@ AAV_PROXY_NETWORK=$(docker inspect "$PROXY" -f '{{range $k, $v := .NetworkSettin
 export AAV_PROXY_NETWORK
 echo "proxy $PROXY on network $AAV_PROXY_NETWORK"
 
-say "4/6 build and start (memory capped at about 1.1 GB in total)"
+say "4/6 back up, migrate, build and start (memory capped at about 1.1 GB, plus the optional local model)"
 python3 guard.py >/dev/null 2>&1 || echo "note: guard.py needs docker compose; continuing with explicit caps from compose.cohost.yml"
-docker compose -f compose.yml -f compose.cohost.yml up -d --build
+# Optional self-hosted LLM (AAV_LLM_LOCAL_MODEL, e.g. qwen2.5:1.5b) only when the VM has the memory for it.
+FILES="-f compose.yml -f compose.cohost.yml"
+if [ -n "${AAV_LLM_LOCAL_MODEL:-}" ]; then
+  AVAIL_MB=$(awk '/MemAvailable/ {print int($2/1024)}' /proc/meminfo)
+  if [ "$AVAIL_MB" -ge "${AAV_LLM_LOCAL_MIN_FREE_MB:-2500}" ]; then
+    FILES="$FILES -f compose.llm.yml"; export AAV_OLLAMA_URL=http://ollama:11434
+    echo "local model ${AAV_LLM_LOCAL_MODEL} enabled (${AVAIL_MB} MB available)"
+  else
+    echo "local model skipped: ${AVAIL_MB} MB available, need ${AAV_LLM_LOCAL_MIN_FREE_MB:-2500} MB (resize the VM within Always Free or unset AAV_LLM_LOCAL_MODEL)"
+  fi
+fi
+DC="docker compose $FILES"
+$DC up -d postgres
+for i in $(seq 1 30); do $DC exec -T postgres pg_isready -U aav_owner -d aav >/dev/null 2>&1 && break; sleep 2; done
+if [ -n "${AAV_BACKUP_PASSPHRASE_FILE:-}" ] && [ -f "${AAV_BACKUP_PASSPHRASE_FILE}" ]; then
+  ./backup.sh || { echo "pre-migration backup failed; stopping before any schema change" >&2; exit 1; }
+else echo "note: AAV_BACKUP_PASSPHRASE_FILE not set; no pre-migration backup taken"; fi
+$DC exec -T postgres sh -s < migrate.sh
+$DC up -d --build
+if [ -n "${AAV_OLLAMA_URL:-}" ]; then
+  $DC exec -T ollama ollama pull "$AAV_LLM_LOCAL_MODEL" || echo "model pull failed; the control plane falls back to the next provider"
+fi
 for i in $(seq 1 60); do
-  docker compose -f compose.yml -f compose.cohost.yml exec -T web wget -qO- http://127.0.0.1:8080/api/ready 2>/dev/null | grep -q '"ready":true' && break
+  $DC exec -T web wget -qO- http://127.0.0.1:8080/api/ready 2>/dev/null | grep -q '"ready":true' && break
   sleep 5
 done
-docker compose -f compose.yml -f compose.cohost.yml exec -T web wget -qO- http://127.0.0.1:8080/api/ready | grep -q '"ready":true' \
-  || { echo "control plane did not become ready; proxy left unchanged" >&2; docker compose -f compose.yml -f compose.cohost.yml logs --tail 40 control-plane >&2; exit 1; }
+$DC exec -T web wget -qO- http://127.0.0.1:8080/api/ready | grep -q '"ready":true' \
+  || { echo "control plane did not become ready; proxy left unchanged" >&2; $DC logs --tail 40 control-plane >&2; exit 1; }
 echo "stack ready"
 # Ship the baseline detection rules if nothing is published yet, so newly enrolled devices can scan.
-docker compose -f compose.yml -f compose.cohost.yml exec -T control-plane python -m app.admin publish-baseline || true
+$DC exec -T control-plane python -m app.admin publish-baseline || true
 
 say "5/6 route $URL/ through $PROXY (backup, validate, roll back on failure)"
 CF_HOST=$(docker inspect "$PROXY" -f '{{range .Mounts}}{{if eq .Destination "/etc/caddy/Caddyfile"}}{{.Source}}{{end}}{{end}}')

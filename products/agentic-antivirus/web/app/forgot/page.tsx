@@ -12,10 +12,10 @@ export default function Forgot() {
     <AuthPage title={t("auth.reset")}>
       <form className="form" onSubmit={(e) => { e.preventDefault(); s.run(async () => {
         await api("/v1/auth/password-reset/request", { body: { email } });
-        return "If an account uses that address, we have sent a reset link. It works for one hour.";
+        return t("auth.resetSent");
       }); }}>
         <label>{t("auth.email")}<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-        {s.view}<button className="primary" disabled={s.busy}>Send reset link</button>
+        {s.view}<button className="primary" disabled={s.busy}>{t("ui.send_reset_link")}</button>
       </form>
     </AuthPage>);
 }

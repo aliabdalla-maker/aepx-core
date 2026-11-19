@@ -13,7 +13,7 @@ export default function Reset() {
     <AuthPage title={t("auth.reset")}>
       <form className="form" onSubmit={(e) => { e.preventDefault(); s.run(async () => {
         await api("/v1/auth/password-reset/confirm", { body: { token: tokenParam(), new_password: pw } });
-        return "Password changed. Sign in with your new password.";
+        return t("auth.passwordChanged");
       }); }}>
         <label>{t("auth.new_password")} <span className="hint">{t("auth.password_rules")}</span>
           <input type="password" minLength={12} required value={pw} onChange={(e) => setPw(e.target.value)} autoComplete="new-password" /></label>

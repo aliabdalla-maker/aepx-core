@@ -292,7 +292,13 @@ def patch_recovery(item_id: UUID, body: RecoveryPatch, p: Principal = Depends(ne
 
 @router.post("/recovery/{item_id}/approve-return")
 def approve_return(item_id: UUID, p: Principal = Depends(need("recovery.approve_return"))):
+    from app.routers.security import return_gates
     with db.tenant_tx(p.tenant_id) as cur:
+        cur.execute("SELECT r2.* FROM aav.recovery_items r JOIN aav.recovery_items r2 ON r2.incident_id = r.incident_id "
+                    "WHERE r.id = %s", (item_id,))
+        missing = sorted({m for it in cur.fetchall() for m in return_gates(cur, it)})
+        if missing:
+            raise HTTPException(409, {"message": "return-to-service gates are open", "missing": missing})
         cur.execute("UPDATE aav.recovery_items SET return_to_service_approved_by = %s, status = 'done', "
                     "updated_at = now() WHERE id = %s AND step = 'return_to_service' RETURNING id", (p.user_id, item_id))
         if not cur.fetchone():

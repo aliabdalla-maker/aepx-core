@@ -7,14 +7,15 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app import db, governance, licensing, mailer
-from app.routers import (actions, agent, auth, billing, endpoints, files, incidents, integrations, investigation,
-                         platform, threats)
+from app.routers import (actions, agent, ai, auth, billing, endpoints, files, incidents, integrations, investigation,
+                         platform, security, threats)
 
 app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.0", openapi_url="/v1/openapi.json",
               docs_url="/v1/docs")
 
 for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
-          integrations.router, threats.router, billing.router, files.router, platform.router):
+          integrations.router, threats.router, billing.router, files.router, platform.router, security.router,
+          ai.router):
     app.include_router(r)
 
 @app.on_event("startup")

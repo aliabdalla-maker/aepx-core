@@ -40,6 +40,20 @@ class Settings:
     mail_from: str = field(default_factory=lambda: os.getenv("AAV_MAIL_FROM", ""))
     mail_daily_cap: int = field(default_factory=lambda: _int("AAV_MAIL_DAILY_CAP", 90))
     mail_poll_seconds: int = field(default_factory=lambda: _int("AAV_MAIL_POLL_SECONDS", 15))
+    # LLM provider chain (llm.py): Claude API when a key and a monthly cap > 0 exist, then a self-hosted
+    # Ollama model, then the deterministic rules engine. A zero cap keeps the paid provider off.
+    anthropic_api_key: str = field(default_factory=lambda: os.getenv("AAV_ANTHROPIC_API_KEY", ""))
+    anthropic_api_key_file: str = field(default_factory=lambda: os.getenv("AAV_ANTHROPIC_API_KEY_FILE", ""))
+    anthropic_model: str = field(default_factory=lambda: os.getenv("AAV_ANTHROPIC_MODEL", "claude-sonnet-5-5"))
+    anthropic_base_url: str = field(default_factory=lambda: os.getenv("AAV_ANTHROPIC_BASE_URL", "https://api.anthropic.com"))
+    # USD per million tokens; set from the provider's current price list (assumption until configured).
+    anthropic_price_in: float = field(default_factory=lambda: float(os.getenv("AAV_ANTHROPIC_PRICE_IN_PER_MTOK", "3")))
+    anthropic_price_out: float = field(default_factory=lambda: float(os.getenv("AAV_ANTHROPIC_PRICE_OUT_PER_MTOK", "15")))
+    llm_monthly_cap_usd: float = field(default_factory=lambda: float(os.getenv("AAV_LLM_MONTHLY_CAP_USD", "0")))
+    llm_tenant_monthly_cap_usd: float = field(default_factory=lambda: float(os.getenv("AAV_LLM_TENANT_MONTHLY_CAP_USD", "5")))
+    llm_timeout_s: float = field(default_factory=lambda: float(os.getenv("AAV_LLM_TIMEOUT_S", "45")))
+    ollama_url: str = field(default_factory=lambda: os.getenv("AAV_OLLAMA_URL", ""))
+    ollama_model: str = field(default_factory=lambda: os.getenv("AAV_LLM_LOCAL_MODEL", ""))
     play_package_name: str = field(default_factory=lambda: os.getenv("AAV_PLAY_PACKAGE", "com.equalitysoftware.agenticantivirus"))
 
 

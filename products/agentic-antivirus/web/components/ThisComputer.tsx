@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "../lib/i18n";
 import { useEffect, useState } from "react";
 import { api, apiUrl } from "../lib/api";
 
@@ -12,6 +13,7 @@ function desktop(): Desktop | undefined {
 
 /** In the desktop app: protect and scan this computer with the bundled agent, no command line needed. */
 export function ThisComputer({ onChange }: { onChange?: () => void }) {
+  const { t } = useI18n();
   const [state, setState] = useState<AgentResult | null>(null);
   const [busy, setBusy] = useState<"" | "enrol" | "quick" | "full">("");
   const [msg, setMsg] = useState("");
@@ -23,38 +25,38 @@ export function ThisComputer({ onChange }: { onChange?: () => void }) {
   const protect = async () => {
     setBusy("enrol"); setMsg("");
     try {
-      const t = await api<{ token: string }>("/v1/enrollment-tokens", { body: { max_uses: 1, expires_hours: 1 } });
-      const r = await agent({ op: "enrol", url: apiUrl(), token: t.token });
+      const tok = await api<{ token: string }>("/v1/enrollment-tokens", { body: { max_uses: 1, expires_hours: 1 } });
+      const r = await agent({ op: "enrol", url: apiUrl(), token: tok.token });
       if (!r.ok) throw new Error(r.error || "enrolment failed");
       setState(await agent({ op: "status" }));
-      setMsg("This computer is protected. Real-time scanning runs while Agentic Antivirus is open.");
+      setMsg(t("thisComputer.protected"));
       onChange?.();
-    } catch (e) { setMsg(`Could not protect this computer: ${(e as Error).message}`); }
+    } catch (e) { setMsg(t("thisComputer.protectFailed", { error: (e as Error).message })); }
     finally { setBusy(""); }
   };
   const scan = async (type: "quick" | "full") => {
-    setBusy(type); setMsg(type === "full" ? "Scanning every drive. This can take a long time." : "Scanning Downloads, Desktop and temporary files…");
+    setBusy(type); setMsg(type === "full" ? t("thisComputer.scanningFull") : t("thisComputer.scanningQuick"));
     const r = await agent({ op: "scan", type });
     setBusy("");
-    if (!r.ok) { setMsg(`The scan did not finish: ${r.result?.reason || r.error || "unknown error"}`); return; }
+    if (!r.ok) { setMsg(t("thisComputer.scanFailed", { error: r.result?.reason || r.error || t("common.unknown") })); return; }
     const x = r.result!;
     setMsg(x.detections
-      ? `${x.detections} threat${x.detections > 1 ? "s" : ""} found in ${x.scanned} files. See Alerts and Approvals to review them.`
-      : `No new threats found in ${x.scanned} files.${x.errors ? ` ${x.errors} files could not be read.` : ""}`);
+      ? t("thisComputer.found", { n: x.detections, files: x.scanned })
+      : t("thisComputer.clean", { files: x.scanned }) + (x.errors ? " " + t("thisComputer.unreadable", { n: x.errors }) : ""));
     onChange?.();
   };
 
   return (
     <section className="banner" aria-labelledby="this-computer">
-      <h2 id="this-computer" style={{ marginTop: 0 }}>This computer</h2>
+      <h2 id="this-computer" style={{ marginTop: 0 }}>{t("ui.this_computer")}</h2>
       {state.enrolled ? (
         <div className="row">
           <button className="primary" disabled={!!busy} onClick={() => scan("quick")}>{busy === "quick" ? "Scanning…" : "Scan this computer"}</button>
-          <button disabled={!!busy} onClick={() => scan("full")}>{busy === "full" ? "Scanning…" : "Full scan"}</button>
+          <button disabled={!!busy} onClick={() => scan("full")}>{busy === "full" ? t("thisComputer.scanning") : t("thisComputer.fullScan")}</button>
         </div>
       ) : (
         <>
-          <p>Turn on protection to scan files on this computer and watch for ransomware and credential theft.</p>
+          <p>{t("ui.turn_on_protection_to_scan_files")}</p>
           <button className="primary" disabled={!!busy} onClick={protect}>{busy === "enrol" ? "Turning on…" : "Protect this computer"}</button>
         </>
       )}

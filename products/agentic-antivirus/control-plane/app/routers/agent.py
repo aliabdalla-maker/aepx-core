@@ -36,6 +36,12 @@ class HeartbeatIn(BaseModel):
     applied_policy_version: int | None = None
     protection_status: str = "unknown"
     sensor_health: dict = Field(default_factory=dict)
+    posture: dict | None = None   # SEC-05: disk_encryption, firewall, os_updates_pending, ... (null = unknown)
+
+
+POSTURE_KEYS = {"disk_encryption": (bool, type(None)), "firewall": (bool, type(None)),
+                "os_updates_pending": (int, type(None)), "removable_media_blocked": (bool, type(None)),
+                "tamper_protection": (bool, type(None)), "os_build": (str, type(None))}
 
 
 class EventIn(BaseModel):
@@ -147,6 +153,11 @@ def heartbeat(body: HeartbeatIn, x_device_key: str | None = Header(default=None)
                     "THEN 'none' ELSE isolation_state END WHERE id = %s",
                     (body.agent_version, body.definitions_version, body.applied_policy_version,
                      body.protection_status, json.dumps(body.sensor_health), d["device_id"]))
+        if body.posture is not None:
+            posture = {k: v for k, v in body.posture.items() if k in POSTURE_KEYS and isinstance(v, POSTURE_KEYS[k])
+                       and not (isinstance(v, bool) and POSTURE_KEYS[k][0] is int)}
+            cur.execute("UPDATE aav.devices SET posture = %s, posture_at = now() WHERE id = %s",
+                        (json.dumps(posture), d["device_id"]))
         if before != body.protection_status and body.protection_status in ("degraded", "disabled"):
             notify(cur, d["tenant_id"], "device.degraded", f"Protection {body.protection_status}",
                    {"device_id": str(d["device_id"]), "sensor_health": body.sensor_health})

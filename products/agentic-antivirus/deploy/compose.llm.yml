@@ -1,0 +1,21 @@
+# Optional self-hosted LLM (Ollama, arm64 + amd64). Enabled by cohost-install.sh only when
+# AAV_LLM_LOCAL_MODEL is set and the VM has enough free memory. No published port: only the control
+# plane reaches it on the stack network. Model weights stay on the VM (aavllm volume).
+services:
+  ollama:
+    image: ollama/ollama:0.5.7
+    restart: unless-stopped
+    mem_limit: ${AAV_LLM_LOCAL_MEM:-2g}
+    cpus: "${AAV_LLM_LOCAL_CPUS:-0.75}"
+    environment:
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_KEEP_ALIVE: "10m"
+    volumes:
+      - aavllm:/root/.ollama
+  control-plane:
+    environment:
+      AAV_OLLAMA_URL: http://ollama:11434
+      AAV_LLM_LOCAL_MODEL: ${AAV_LLM_LOCAL_MODEL}
+volumes:
+  aavllm: {}

@@ -142,11 +142,11 @@ export function AdSlot({ placement, rate }: { placement: string; rate: number })
   }, [ok]);
   if (!inApp && cfg && consent === "unknown" && cfg.adsense.enabled) {
     return (
-      <div className="banner" role="region" aria-label="Advertising consent">
-        <p>We show adverts from Google AdSense on some pages. Allow personalised adverts?</p>
+      <div className="banner" role="region" aria-label={t("ui.advertising_consent")}>
+        <p>{t("ui.we_show_adverts_from_google_adsense")}</p>
         <div className="row">
-          <button onClick={() => { try { window.localStorage.setItem(CONSENT_KEY, "granted"); } catch {} setConsent("granted"); }}>Allow</button>
-          <button onClick={() => { try { window.localStorage.setItem(CONSENT_KEY, "denied"); } catch {} setConsent("denied"); }}>Decline</button>
+          <button onClick={() => { try { window.localStorage.setItem(CONSENT_KEY, "granted"); } catch {} setConsent("granted"); }}>{t("ui.allow")}</button>
+          <button onClick={() => { try { window.localStorage.setItem(CONSENT_KEY, "denied"); } catch {} setConsent("denied"); }}>{t("ui.decline")}</button>
         </div>
       </div>);
   }

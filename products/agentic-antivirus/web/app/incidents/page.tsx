@@ -20,12 +20,12 @@ export default function Incidents() {
       <Freshness at={d.at} />
       <div className="row">
         <label style={{ margin: 0 }}>{t("common.search")}<input value={q} onChange={(e) => setQ(e.target.value)} /></label>
-        <label style={{ margin: 0 }}>Status<select value={status} onChange={(e) => { setStatus(e.target.value); setPage(0); }}>
-          <option value="">All</option>{["open", "investigating", "contained", "recovering", "resolved"].map((s) => <option key={s}>{s}</option>)}
+        <label style={{ margin: 0 }}>{t("ui.status")}<select value={status} onChange={(e) => { setStatus(e.target.value); setPage(0); }}>
+          <option value="">{t("ui.all")}</option>{["open", "investigating", "contained", "recovering", "resolved"].map((s) => <option key={s}>{s}</option>)}
         </select></label>
       </div>
       <Status error={d.error} loading={!d.data} />
-      <table><thead><tr><th>Incident</th><th>{t("alerts.severity")}</th><th>Status</th><th>Category</th><th>Alerts</th><th>Updated</th></tr></thead>
+      <table><thead><tr><th>{t("ui.incident")}</th><th>{t("alerts.severity")}</th><th>{t("ui.status")}</th><th>{t("ui.category")}</th><th>{t("nav.alerts")}</th><th>{t("ui.updated")}</th></tr></thead>
         <tbody>{rows.map((i) => <tr key={i.id}><td><Link href={`/incident?id=${i.id}`}>{i.title}</Link></td><td><Sev s={i.severity} /></td>
           <td>{i.status}</td><td>{i.category}</td><td>{i.alert_count}</td><td>{formatRelative(i.updated_at, locale)}</td></tr>)}</tbody></table>
       <div className="row"><button disabled={page === 0} onClick={() => setPage(page - 1)}>{t("common.previous")}</button>

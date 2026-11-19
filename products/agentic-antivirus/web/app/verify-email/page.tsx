@@ -14,5 +14,5 @@ export default function Verify() {
     return t("auth.verified"); }); },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
-  return <AuthPage title="Verify email">{s.view}<Link href="/login">{t("auth.login")}</Link></AuthPage>;
+  return <AuthPage title={t("ui.verify_email")}>{s.view}<Link href="/login">{t("auth.login")}</Link></AuthPage>;
 }

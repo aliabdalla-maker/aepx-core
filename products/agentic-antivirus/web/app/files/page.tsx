@@ -36,21 +36,21 @@ export default function Files() {
   return (
     <Shell>
       <h1>{t("nav.files")}</h1>
-      <nav aria-label="Folder path" className="row">{trail.map((c, i) =>
+      <nav aria-label={t("ui.folder_path")} className="row">{trail.map((c, i) =>
         <button key={i} onClick={() => setTrail(trail.slice(0, i + 1))} aria-current={i === trail.length - 1 ? "page" : undefined}>{c.name}</button>)}</nav>
       <div className="row" style={{ margin: "1rem 0" }}>
         <button onClick={() => input.current?.click()}>{t("files.upload")}</button>
         <input ref={input} type="file" multiple hidden onChange={(e) => upload(e.target.files)} />
-        <button onClick={() => archive.current?.click()}>Import zip or tar</button>
+        <button onClick={() => archive.current?.click()}>{t("ui.import_zip_or_tar")}</button>
         <input ref={archive} type="file" accept=".zip,.tar,.gz,.tgz" hidden onChange={(e) => upload(e.target.files, "/v1/files/import")} />
         <Act label={t("files.new_folder")} run={async () => { const name = window.prompt("Folder name"); if (name) await api("/v1/files/folders", { body: { name, parent_id: cur } }); }} onDone={d.reload} />
         <label style={{ margin: 0 }}>{t("common.search")}<input value={q} onChange={(e) => setQ(e.target.value)} /></label>
-        <label style={{ margin: 0 }}>Sort<select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="name">Name</option><option value="updated_at">Last changed</option><option value="size_bytes">Size</option></select></label>
-        <label style={{ margin: 0, display: "flex", gap: ".4rem" }}><input type="checkbox" checked={trashed} onChange={(e) => setTrashed(e.target.checked)} />Trash</label>
+        <label style={{ margin: 0 }}>{t("ui.sort")}<select value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="name">{t("ui.name")}</option><option value="updated_at">{t("ui.last_changed")}</option><option value="size_bytes">{t("ui.size")}</option></select></label>
+        <label style={{ margin: 0, display: "flex", gap: ".4rem" }}><input type="checkbox" checked={trashed} onChange={(e) => setTrashed(e.target.checked)} />{t("ui.trash")}</label>
       </div>
       <Status error={d.error} loading={!d.data} />
-      <table><thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Changed</th><th>Actions</th></tr></thead>
+      <table><thead><tr><th>{t("ui.name")}</th><th>{t("ui.type")}</th><th>{t("ui.size")}</th><th>{t("ui.changed")}</th><th>{t("ui.actions")}</th></tr></thead>
         <tbody>{(d.data ?? []).map((n) => <tr key={n.id}>
           <td>{n.kind === "dir" && !trashed ? <button onClick={() => setTrail([...trail, { id: n.id, name: n.name }])}>{n.name}/</button> : n.name}</td>
           <td>{n.kind === "dir" ? "Folder" : n.mime}</td><td>{n.size_bytes != null ? `${formatNumber(n.size_bytes, locale)} B` : ""}</td>
@@ -63,15 +63,15 @@ export default function Files() {
                 const r = await fetch(`${API_BASE}/v1/files/${n.id}/preview`, { headers: { Authorization: `Bearer ${session.token()}`, "X-Tenant-Id": session.tenant() ?? "" } });
                 setPreview({ name: n.name, img: URL.createObjectURL(await r.blob()) });
               } else setPreview({ name: n.name, text: (await api(`/v1/files/${n.id}/preview`)).text });
-            }}>Preview</button>}
+            }}>{t("ui.preview")}</button>}
             <Act label={t("files.rename")} run={async () => { const name = window.prompt("New name", n.name); if (name) await api(`/v1/files/${n.id}`, { method: "PATCH", body: { name } }); }} onDone={d.reload} />
             <Act label={t("files.copy")} run={() => api(`/v1/files/${n.id}/copy`, { body: { target_parent_id: cur } })} onDone={d.reload} />
             <Act label={t("files.trash")} run={() => api(`/v1/files/${n.id}`, { method: "DELETE" })} onDone={d.reload} />
           </>}</td></tr>)}</tbody></table>
       {preview && <section aria-label={`Preview of ${preview.name}`} className="banner">
-        <div className="row"><strong>{preview.name}</strong><button onClick={() => setPreview(null)}>Close</button></div>
+        <div className="row"><strong>{preview.name}</strong><button onClick={() => setPreview(null)}>{t("ui.close")}</button></div>
         {preview.img ? <img src={preview.img} alt={preview.name} style={{ maxWidth: "100%" }} /> : <pre style={{ whiteSpace: "pre-wrap" }}>{preview.text}</pre>}
       </section>}
-      <p className="lede">Every upload is checked for malware and its real type. Files without a verified viewer are stored and downloadable but not previewed.</p>
+      <p className="lede">{t("ui.every_upload_is_checked_for_malware")}</p>
     </Shell>);
 }

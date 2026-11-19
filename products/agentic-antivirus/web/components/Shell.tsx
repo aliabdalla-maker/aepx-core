@@ -7,7 +7,7 @@ import { LOCALES, localeName, useI18n } from "../lib/i18n";
 import { formatDateTime } from "../lib/format";
 
 const NAV: [string, string][] = [["/", "nav.dashboard"], ["/approvals", "nav.actions"], ["/incidents", "nav.incidents"],
-  ["/alerts", "nav.alerts"], ["/devices", "nav.devices"], ["/quarantine", "nav.quarantine"], ["/policies", "nav.policies"],
+  ["/alerts", "nav.alerts"], ["/security", "nav.security"], ["/devices", "nav.devices"], ["/quarantine", "nav.quarantine"], ["/policies", "nav.policies"],
   ["/ddos", "nav.ddos"], ["/integrations", "nav.integrations"], ["/files", "nav.files"]];
 const NAV2: [string, string][] = [["/settings", "nav.settings"], ["/billing", "nav.billing"], ["/audit", "nav.audit"],
   ["/help", "nav.help"], ["/privacy", "nav.privacy"]];
@@ -27,7 +27,7 @@ export type Entitlement = { state: "trial" | "paid" | "expired"; trial_days_left
   ad_rate: number; console_access: boolean; protection_enabled: boolean };
 
 export function Shell({ children, pending }: { children: ReactNode; pending?: number }) {
-  const { t, locale, setLocale } = useI18n();
+  const { t, locale, setLocale, machine, available } = useI18n();
   const [theme, setTheme] = useTheme();
   const path = usePathname();
   const router = useRouter();
@@ -59,7 +59,7 @@ export function Shell({ children, pending }: { children: ReactNode; pending?: nu
     <>
       <a className="skip" href="#main">{t("a11y.skip")}</a>
       <div className="frame">
-        <nav className="rail" aria-label="Primary">
+        <nav className="rail" aria-label={t("ui.primary")}>
           <div className="brand"><img src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icons/icon.svg`} alt="" width={28} height={28} />{t("app.name")}</div>
           {NAV.map(link)}
           <div className="group" />
@@ -67,9 +67,11 @@ export function Shell({ children, pending }: { children: ReactNode; pending?: nu
         </nav>
         <div>
           <main id="main" className="main" tabIndex={-1}>
+            {locale !== "en" && machine > 0 && <p className="banner info">{t("i18n.machineBanner", { n: machine })}</p>}
+            {locale !== "en" && !available && <p className="banner info">{t("i18n.notTranslated")}</p>}
             <div className="topbar">
               {me && me.tenants.length > 1 && (
-                <label style={{ margin: 0 }}><span className="hint">Organisation</span>
+                <label style={{ margin: 0 }}><span className="hint">{t("auth.organisation")}</span>
                   <select value={session.tenant() ?? ""} onChange={(e) => { session.setTenant(e.target.value); location.reload(); }}>
                     {me.tenants.map((x: any) => <option key={x.tenant_id} value={x.tenant_id}>{x.name}</option>)}
                   </select></label>)}
@@ -79,7 +81,7 @@ export function Shell({ children, pending }: { children: ReactNode; pending?: nu
                 </select></label>
               <label style={{ margin: 0 }}><span className="hint">{t("settings.theme")}</span>
                 <select value={theme} onChange={(e) => setTheme(e.target.value)}>
-                  <option value="system">System</option><option value="light">{t("settings.theme.light")}</option>
+                  <option value="system">{t("ui.system")}</option><option value="light">{t("settings.theme.light")}</option>
                   <option value="dark">{t("settings.theme.dark")}</option>
                   <option value="high_contrast">{t("settings.theme.high_contrast")}</option>
                 </select></label>

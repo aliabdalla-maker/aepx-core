@@ -23,7 +23,8 @@ class ActionType:
 CATALOGUE: dict[str, ActionType] = {a.name: a for a in [
     # RSP-01: automatic within tenant policy
     ActionType("collect_metadata", "S0", "device", "auto", {"fields": list}, ("fields",), "collect_metadata"),
-    ActionType("run_scan", "S0", "device", "auto", {"scan_type": str, "paths": list}, ("scan_type",), "scan"),
+    ActionType("run_scan", "S0", "device", "auto", {"scan_type": str, "paths": list, "job_group": str,
+                                                    "max_seconds": int}, ("scan_type",), "scan"),
     # RSP-02: automatic when enabled by policy for a confirmed known-malware match
     ActionType("quarantine_file", "S1", "device", "auto_if_known_malware",
                {"path": str, "sha256": str, "known_malware": bool}, ("path", "sha256"), "quarantine"),

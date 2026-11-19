@@ -8,12 +8,10 @@ import { formatDateTime } from "../../lib/format";
 
 const BOOL = ["on_access", "on_execute", "on_download", "auto_quarantine_known", "behaviour_rules", "block_suspicious_scripts",
   "isolation_allowed", "tamper_protection", "url_protection", "collect_file_contents"] as const;
-const LABEL: Record<string, string> = { on_access: "Scan files when they are opened or written", on_execute: "Scan programs when they start",
-  on_download: "Scan downloads", auto_quarantine_known: "Quarantine known malware automatically", behaviour_rules: "Watch for suspicious behaviour",
-  block_suspicious_scripts: "Block suspicious scripts", isolation_allowed: "Allow network isolation", tamper_protection: "Protect the agent from changes",
-  url_protection: "Warn about known malicious links", collect_file_contents: "Collect file contents for investigation (off by default)" };
+const LABEL: Record<string, string> = { on_access: "policy.option.on_access", on_execute: "policy.option.on_execute", on_download: "policy.option.on_download", auto_quarantine_known: "policy.option.auto_quarantine_known", behaviour_rules: "policy.option.behaviour_rules", block_suspicious_scripts: "policy.option.block_suspicious_scripts", isolation_allowed: "policy.option.isolation_allowed", tamper_protection: "policy.option.tamper_protection", url_protection: "policy.option.url_protection", collect_file_contents: "policy.option.collect_file_contents" };
 
 export default function Policies() {
+  const { t } = useI18n();
   const { locale } = useI18n();
   const d = useApi<any[]>("/v1/policies");
   const sch = useApi<any[]>("/v1/scan-schedules");
@@ -27,40 +25,40 @@ export default function Policies() {
   const [exReason, setExReason] = useState("");
   return (
     <Shell>
-      <h1>Policies</h1>
-      <p className="lede">Each publish creates a new signed version. Devices keep enforcing the last verified version while offline.</p>
+      <h1>{t("nav.policies")}</h1>
+      <p className="lede">{t("ui.each_publish_creates_a_new_signed")}</p>
       <Status error={d.error} loading={!d.data} />
-      <table><thead><tr><th>Name</th><th>Version</th><th>Published</th></tr></thead>
+      <table><thead><tr><th>{t("ui.name")}</th><th>{t("ui.version")}</th><th>{t("ui.published")}</th></tr></thead>
         <tbody>{(d.data ?? []).map((p) => <tr key={p.id}><td>{p.name}</td><td>{p.version}</td><td>{formatDateTime(p.created_at, locale)}</td></tr>)}</tbody></table>
 
-      <h2>Publish a policy version</h2>
+      <h2>{t("ui.publish_a_policy_version")}</h2>
       <div className="form">
-        <label>Name<input value={name} pattern="[a-z0-9_-]+" onChange={(e) => setName(e.target.value)} /></label>
+        <label>{t("ui.name")}<input value={name} pattern="[a-z0-9_-]+" onChange={(e) => setName(e.target.value)} /></label>
         {BOOL.map((k) => <label key={k} style={{ display: "flex", gap: ".5rem", fontWeight: 400 }}>
-          <input type="checkbox" checked={!!body[k]} onChange={(e) => setBody({ ...body, [k]: e.target.checked })} />{LABEL[k]}</label>)}
-        <label>Removable media<select value={body.removable_media} onChange={(e) => setBody({ ...body, removable_media: e.target.value })}>
-          <option value="allow">Allow</option><option value="audit">Allow and scan</option><option value="block">Block</option></select></label>
-        <label>Offline event buffer (MB)<input type="number" min={1} max={4096} value={body.event_buffer_mb}
+          <input type="checkbox" checked={!!body[k]} onChange={(e) => setBody({ ...body, [k]: e.target.checked })} />{t(LABEL[k])}</label>)}
+        <label>{t("ui.removable_media")}<select value={body.removable_media} onChange={(e) => setBody({ ...body, removable_media: e.target.value })}>
+          <option value="allow">{t("ui.allow")}</option><option value="audit">{t("ui.allow_and_scan")}</option><option value="block">{t("ui.block")}</option></select></label>
+        <label>{t("ui.offline_event_buffer_mb")}<input type="number" min={1} max={4096} value={body.event_buffer_mb}
           onChange={(e) => setBody({ ...body, event_buffer_mb: Number(e.target.value) })} /></label>
-        <label>Management hosts kept reachable during isolation <span className="hint">Comma separated</span>
+        <label>{t("ui.management_hosts_kept_reachable_during_isolation")} <span className="hint">{t("ui.comma_separated")}</span>
           <input value={body.allowed_management_hosts.join(",")} onChange={(e) => setBody({ ...body,
             allowed_management_hosts: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></label>
-        <Act className="primary" label="Publish signed version" run={() => api("/v1/policies", { body: { name, body } })} onDone={d.reload} />
+        <Act className="primary" label={t("ui.publish_signed_version")} run={() => api("/v1/policies", { body: { name, body } })} onDone={d.reload} />
       </div>
 
-      <h2>Scheduled scans</h2>
+      <h2>{t("ui.scheduled_scans")}</h2>
       <ul>{(sch.data ?? []).map((s) => <li key={s.id}>{s.scan_type} scan for {s.policy_name}: <code>{s.cron}</code>{" "}
-        <Act label="Remove" run={() => api(`/v1/scan-schedules/${s.id}`, { method: "DELETE" })} onDone={sch.reload} /></li>)}</ul>
-      <div className="row"><label style={{ margin: 0 }}>Schedule (cron)<input value={cron} onChange={(e) => setCron(e.target.value)} /></label>
-        <Act label="Add weekly full scan" run={() => api("/v1/scan-schedules", { body: { policy_name: name, scan_type: "full", cron } })} onDone={sch.reload} /></div>
+        <Act label={t("ui.remove")} run={() => api(`/v1/scan-schedules/${s.id}`, { method: "DELETE" })} onDone={sch.reload} /></li>)}</ul>
+      <div className="row"><label style={{ margin: 0 }}>{t("ui.schedule_cron")}<input value={cron} onChange={(e) => setCron(e.target.value)} /></label>
+        <Act label={t("ui.add_weekly_full_scan")} run={() => api("/v1/scan-schedules", { body: { policy_name: name, scan_type: "full", cron } })} onDone={sch.reload} /></div>
 
-      <h2>Exclusions</h2>
-      <p className="lede">An administrator must give a reason. The exclusion is recorded in the audit trail.</p>
+      <h2>{t("ui.exclusions")}</h2>
+      <p className="lede">{t("ui.an_administrator_must_give_a_reason")}</p>
       <ul>{(ex.data ?? []).map((x) => <li key={x.id}>{x.kind}: <code>{x.value}</code> — {x.reason}{" "}
-        <Act label="Remove" run={() => api(`/v1/exclusions/${x.id}`, { method: "DELETE" })} onDone={ex.reload} /></li>)}</ul>
-      <div className="row"><label style={{ margin: 0 }}>Path pattern<input value={exVal} onChange={(e) => setExVal(e.target.value)} /></label>
-        <label style={{ margin: 0 }}>Reason<input value={exReason} onChange={(e) => setExReason(e.target.value)} /></label>
-        <Act label="Add exclusion" run={() => api("/v1/actions", { body: { action_type: "add_exclusion", targets: ["tenant"],
+        <Act label={t("ui.remove")} run={() => api(`/v1/exclusions/${x.id}`, { method: "DELETE" })} onDone={ex.reload} /></li>)}</ul>
+      <div className="row"><label style={{ margin: 0 }}>{t("ui.path_pattern")}<input value={exVal} onChange={(e) => setExVal(e.target.value)} /></label>
+        <label style={{ margin: 0 }}>{t("quarantine.reason")}<input value={exReason} onChange={(e) => setExReason(e.target.value)} /></label>
+        <Act label={t("ui.add_exclusion")} run={() => api("/v1/actions", { body: { action_type: "add_exclusion", targets: ["tenant"],
           params: { kind: "path", value: exVal }, reason: exReason } })} onDone={ex.reload} /></div>
     </Shell>);
 }
