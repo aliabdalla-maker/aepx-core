@@ -4,7 +4,6 @@ import { Shell } from "../components/Shell";
 import { AdSlot, Freshness, Sev, Status, useApi } from "../components/ui";
 import { DecisionCard, type ActionRequest } from "../components/Decision";
 import { ThisComputer } from "../components/ThisComputer";
-import { Assistant } from "../components/AgentPanels";
 import { useI18n } from "../lib/i18n";
 import { formatRelative } from "../lib/format";
 
@@ -28,7 +27,6 @@ export default function Dashboard() {
       <h1>{decisions.length ? t("dash.pending_approvals", { count: decisions.length }) : "Nothing is waiting for you"}</h1>
       <p className="lede">{t("ui.automatic_protection_keeps_running_on_every")}</p>
       <ThisComputer onChange={() => { dev.reload(); k.reload(); }} />
-      <Assistant />
       <Status error={pending.error} loading={!pending.data} />
       <section className="decisions" aria-label={t("ui.decisions_waiting")}>
         {decisions.map((a) => <DecisionCard key={a.id} a={a} names={names} onChange={reload} />)}

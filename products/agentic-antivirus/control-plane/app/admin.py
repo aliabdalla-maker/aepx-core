@@ -65,6 +65,12 @@ def publish_baseline(path: Path = BASELINE) -> int:
 def main(argv: list[str]) -> int:
     if len(argv) == 2 and argv[0] == "verify-email":
         return verify_email(argv[1])
+    if argv == ["retention"]:
+        from app import db
+        with db.global_tx() as cur:
+            cur.execute("SELECT aav.apply_telemetry_retention() AS n")
+            print(f"deleted {cur.fetchone()['n']} expired telemetry events")
+        return 0
     if argv == ["publish-baseline"]:
         return publish_baseline()
     if argv == ["send-mail"]:

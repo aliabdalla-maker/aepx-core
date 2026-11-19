@@ -74,6 +74,30 @@ def release_commands(system: str) -> list[list[str]]:
     raise RuntimeError(f"isolation not supported on {system}")
 
 
+def isolation_active() -> bool | None:
+    """Read-only check of the live firewall state (§3C independent verification). None when it cannot be read."""
+    system = platform.system()
+    try:
+        if system == "Linux":
+            r = subprocess.run(["nft", "list", "table", "inet", NFT_TABLE], capture_output=True, text=True, timeout=10)
+            return r.returncode == 0
+        if system == "Windows":
+            r = subprocess.run(["netsh", "advfirewall", "show", "currentprofile", "firewallpolicy"],
+                               capture_output=True, text=True, timeout=10)
+            if r.returncode != 0:
+                return None
+            return "blockoutbound" in r.stdout.replace(" ", "").lower()
+        if system == "Darwin":
+            r = subprocess.run(["pfctl", "-a", "aav_isolation", "-s", "rules"], capture_output=True, text=True,
+                               timeout=10)
+            if r.returncode != 0:
+                return None
+            return "block drop" in r.stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return None
+
+
 def is_privileged() -> bool:
     if os.name == "nt":
         try:

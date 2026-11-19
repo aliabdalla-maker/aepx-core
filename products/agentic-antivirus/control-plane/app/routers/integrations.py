@@ -194,6 +194,8 @@ def ingest(iid: UUID, body: IngestIn, x_aav_webhook_secret: str | None = Header(
         raise HTTPException(422, "invalid severity")
     tid = integ["tenant_id"]
     simulation = integ["maturity"] != "verified_live"
+    from app.routers.agent import normalise_time
+    body.observed_at, body.data = normalise_time(body.observed_at, body.data)
     with db.tenant_tx(tid) as cur:
         device_id = _attribute_device(cur, body.device_hostname, body.device_ip)
         data = dict(body.data, simulation=simulation)

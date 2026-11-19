@@ -54,6 +54,15 @@ class Settings:
     llm_timeout_s: float = field(default_factory=lambda: float(os.getenv("AAV_LLM_TIMEOUT_S", "45")))
     ollama_url: str = field(default_factory=lambda: os.getenv("AAV_OLLAMA_URL", ""))
     ollama_model: str = field(default_factory=lambda: os.getenv("AAV_LLM_LOCAL_MODEL", ""))
+    # Defensive harness (§3C): runtime mode for tenants that have not chosen one. A new environment starts in
+    # SIMULATION; production sets OBSERVE and enables RESPOND per tenant and cohort. The platform kill switch
+    # stops every new response dispatch for all tenants.
+    harness_default_mode: str = field(default_factory=lambda: os.getenv("AAV_HARNESS_DEFAULT_MODE", "simulation"))
+    harness_kill_switch: bool = field(default_factory=lambda: os.getenv("AAV_HARNESS_KILL_SWITCH", "false") == "true")
+    harness_lease_seconds: int = field(default_factory=lambda: _int("AAV_HARNESS_LEASE_SECONDS", 120))
+    action_request_ttl_minutes: int = field(default_factory=lambda: _int("AAV_ACTION_REQUEST_TTL_MINUTES", 24 * 60))
+    environment: str = field(default_factory=lambda: os.getenv("AAV_ENVIRONMENT", "development"))
+    build_sha: str = field(default_factory=lambda: os.getenv("AAV_BUILD_SHA", "unknown"))
     play_package_name: str = field(default_factory=lambda: os.getenv("AAV_PLAY_PACKAGE", "com.equalitysoftware.agenticantivirus"))
 
 

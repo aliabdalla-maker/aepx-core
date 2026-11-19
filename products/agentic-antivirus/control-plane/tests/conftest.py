@@ -42,6 +42,8 @@ os.environ["AAV_FILE_STORE_DIR"] = tempfile.mkdtemp(prefix="aav-files-")
 os.environ["AAV_MAX_UPLOAD_BYTES"] = str(2 * 1024 * 1024)
 os.environ["AAV_TENANT_QUOTA_BYTES"] = str(5 * 1024 * 1024)
 os.environ["AAV_EGRESS_ALLOWLIST"] = "example.com,localhost"
+# Existing end-to-end tests exercise real response paths; harness tests set SIMULATION/OBSERVE per tenant.
+os.environ["AAV_HARNESS_DEFAULT_MODE"] = "respond"
 sys.path.insert(0, str(PRODUCT / "detection"))
 sys.path.insert(0, str(CP))
 

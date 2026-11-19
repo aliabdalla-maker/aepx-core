@@ -9,6 +9,7 @@ test "$(git rev-parse HEAD)" = "$SHA" || { echo "checkout is not $SHA" >&2; exit
 PREV=$(cat .last-verified-sha 2>/dev/null || true)
 set -a; . /etc/aav/aav.env; set +a        # secrets live on the host (mode 600), never in git
 python3 guard.py >/dev/null
+export AAV_BUILD_SHA=${SHA:0:12}
 ./backup.sh
 docker compose up -d --build
 for i in $(seq 1 30); do

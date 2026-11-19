@@ -56,6 +56,12 @@ services:
       AAV_LLM_TENANT_MONTHLY_CAP_USD: ${AAV_LLM_TENANT_MONTHLY_CAP_USD:-5}
       AAV_OLLAMA_URL: ${AAV_OLLAMA_URL:-}
       AAV_LLM_LOCAL_MODEL: ${AAV_LLM_LOCAL_MODEL:-}
+      # Defensive harness (§3C/§3D): production starts in OBSERVE; RESPOND is enabled per tenant and pilot cohort
+      # from the Response page. AAV_HARNESS_KILL_SWITCH=true stops every new response dispatch for all tenants.
+      AAV_HARNESS_DEFAULT_MODE: ${AAV_HARNESS_DEFAULT_MODE:-observe}
+      AAV_HARNESS_KILL_SWITCH: ${AAV_HARNESS_KILL_SWITCH:-false}
+      AAV_ENVIRONMENT: ${AAV_ENVIRONMENT:-production}
+      AAV_BUILD_SHA: ${AAV_BUILD_SHA:-unknown}
     secrets: [aav_signing_key]
     volumes: [aavfiles:/var/lib/aav/files]
     depends_on: { postgres: { condition: service_healthy }, governance: { condition: service_started } }
