@@ -51,6 +51,8 @@ done
 docker compose -f compose.yml -f compose.cohost.yml exec -T web wget -qO- http://127.0.0.1:8080/api/ready | grep -q '"ready":true' \
   || { echo "control plane did not become ready; proxy left unchanged" >&2; docker compose -f compose.yml -f compose.cohost.yml logs --tail 40 control-plane >&2; exit 1; }
 echo "stack ready"
+# Ship the baseline detection rules if nothing is published yet, so newly enrolled devices can scan.
+docker compose -f compose.yml -f compose.cohost.yml exec -T control-plane python -m app.admin publish-baseline || true
 
 say "5/6 route $URL/ through $PROXY (backup, validate, roll back on failure)"
 CF_HOST=$(docker inspect "$PROXY" -f '{{range .Mounts}}{{if eq .Destination "/etc/caddy/Caddyfile"}}{{.Source}}{{end}}{{end}}')
