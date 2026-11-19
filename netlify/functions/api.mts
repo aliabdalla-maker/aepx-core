@@ -1,4 +1,5 @@
 import type { Config } from "@netlify/functions";
+import { timingSafeEqual } from "node:crypto";
 import { desc, eq } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { portals, connections, tasks, agents, events } from "../../db/schema.js";
@@ -56,6 +57,20 @@ const publicUrl = (v: unknown) => {
   }
   return url.toString();
 };
+
+// Reading the tracker is public; every change needs the admin token. Set TRACKER_ADMIN_TOKEN in the
+// Netlify site's environment variables (a long random value). Without it, changes are turned off.
+const adminToken = (): string =>
+  ((globalThis as any).Netlify?.env?.get("TRACKER_ADMIN_TOKEN") ?? process.env.TRACKER_ADMIN_TOKEN ?? "").trim();
+
+function requireWriter(req: Request) {
+  const expected = adminToken();
+  if (!expected) throw new HttpError(503, "Editing is turned off: TRACKER_ADMIN_TOKEN is not configured");
+  const given = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !timingSafeEqual(a, b)) throw new HttpError(401, "A valid admin token is required to make changes");
+}
 
 const log = (portalSlug: string | null, kind: string, message: string) =>
   db.insert(events).values({ portalSlug, kind, message });
@@ -214,6 +229,7 @@ async function route(req: Request, parts: string[]) {
 export default async (req: Request) => {
   const parts = new URL(req.url).pathname.replace(/^\/api\/?/, "").split("/").filter(Boolean);
   try {
+    if (req.method !== "GET" && req.method !== "HEAD") requireWriter(req);
     await ensureSeeded();
     return Response.json(await route(req, parts), { headers: { "cache-control": "no-store" } });
   } catch (err) {
