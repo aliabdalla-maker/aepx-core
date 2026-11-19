@@ -38,6 +38,13 @@ services:
       AAV_EGRESS_ALLOWLIST: ${AAV_EGRESS_ALLOWLIST:-}
       AAV_OPEN_REGISTRATION: ${AAV_OPEN_REGISTRATION:-true}
       AAV_PLAY_SERVICE_ACCOUNT_FILE: ${AAV_PLAY_SERVICE_ACCOUNT_FILE:-}
+      # Email delivery (verification, password reset, invitations). Values live in /etc/aav/aav.env, never git.
+      AAV_SMTP_HOST: ${AAV_SMTP_HOST:-}
+      AAV_SMTP_PORT: ${AAV_SMTP_PORT:-587}
+      AAV_SMTP_USER: ${AAV_SMTP_USER:-}
+      AAV_SMTP_PASSWORD: ${AAV_SMTP_PASSWORD:-}
+      AAV_MAIL_FROM: ${AAV_MAIL_FROM:-}
+      AAV_MAIL_DAILY_CAP: ${AAV_MAIL_DAILY_CAP:-90}
     secrets: [aav_signing_key]
     volumes: [aavfiles:/var/lib/aav/files]
     depends_on: { postgres: { condition: service_healthy }, governance: { condition: service_started } }
