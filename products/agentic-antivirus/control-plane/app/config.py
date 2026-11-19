@@ -31,6 +31,15 @@ class Settings:
     allow_open_registration: bool = field(default_factory=lambda: os.getenv("AAV_OPEN_REGISTRATION", "true") == "true")
     egress_allowlist: tuple = field(default_factory=lambda: tuple(
         d.strip().lower() for d in os.getenv("AAV_EGRESS_ALLOWLIST", "").split(",") if d.strip()))
+    # Outbound mail (verification, password reset, invitations). Empty host = delivery off; mail stays queued.
+    # OCI Email Delivery's free allowance is 100 emails a day, so the default daily cap stays under it.
+    smtp_host: str = field(default_factory=lambda: os.getenv("AAV_SMTP_HOST", ""))
+    smtp_port: int = field(default_factory=lambda: _int("AAV_SMTP_PORT", 587))
+    smtp_user: str = field(default_factory=lambda: os.getenv("AAV_SMTP_USER", ""))
+    smtp_password_file: str = field(default_factory=lambda: os.getenv("AAV_SMTP_PASSWORD_FILE", ""))
+    mail_from: str = field(default_factory=lambda: os.getenv("AAV_MAIL_FROM", ""))
+    mail_daily_cap: int = field(default_factory=lambda: _int("AAV_MAIL_DAILY_CAP", 90))
+    mail_poll_seconds: int = field(default_factory=lambda: _int("AAV_MAIL_POLL_SECONDS", 15))
     play_package_name: str = field(default_factory=lambda: os.getenv("AAV_PLAY_PACKAGE", "com.equalitysoftware.agenticantivirus"))
 
 

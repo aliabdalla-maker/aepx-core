@@ -6,7 +6,7 @@ import uuid
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app import db, governance, licensing
+from app import db, governance, licensing, mailer
 from app.routers import (actions, agent, auth, billing, endpoints, files, incidents, integrations, investigation,
                          platform, threats)
 
@@ -16,6 +16,16 @@ app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.0", openapi_
 for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
           integrations.router, threats.router, billing.router, files.router, platform.router):
     app.include_router(r)
+
+@app.on_event("startup")
+def _start_mailer() -> None:
+    mailer.start()
+
+
+@app.on_event("shutdown")
+def _stop_mailer() -> None:
+    mailer.stop()
+
 
 # Paths that stay reachable when the console is paywalled (post-trial policy) so users can
 # sign in, read help/privacy, see their licence, and pay.
@@ -74,5 +84,6 @@ def ready():
         checks["detection_bundle"] = eng.version if eng else "none published"
     except Exception as exc:  # pragma: no cover
         checks["detection_bundle"] = f"error: {type(exc).__name__}"
+    checks["email_delivery"] = mailer.configured()  # informational: sign-up needs it, readiness does not
     ok = checks["database"] is True and checks["aepx_governance"] is True and checks["signing_key"] is True
     return JSONResponse({"ready": ok, "checks": checks}, status_code=200 if ok else 503)

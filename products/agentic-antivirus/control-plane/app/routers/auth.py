@@ -10,7 +10,7 @@ import jwt
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, EmailStr, Field
 
-from app import audit, crypto, db
+from app import audit, crypto, db, mailer
 from app.config import settings
 from app.deps import Principal, current_user, need
 
@@ -120,7 +120,8 @@ def register(body: RegisterIn):
         audit.record(cur, tenant_id=None, actor=f"user:{uid}", action="account.register", target=str(uid))
     with db.tenant_tx(tid) as cur:
         audit.record(cur, tenant_id=tid, actor=f"user:{uid}", action="tenant.create", target=str(tid))
-    return {"user_id": str(uid), "tenant_id": str(tid), "email_verification": "queued"}
+    return {"user_id": str(uid), "tenant_id": str(tid),
+            "email_verification": "queued" if mailer.configured() else "delivery_not_configured"}
 
 
 @router.post("/verify-email")
@@ -139,7 +140,12 @@ def resend_verification(body: EmailIn):
                     (body.email.lower(),))
         row = cur.fetchone()
         if row:
-            _queue_mail(cur, body.email.lower(), "verify-email", _issue_token(cur, row["id"], "email_verify", 48))
+            # One verification email per address every 5 minutes, so this public endpoint cannot be used to
+            # flood an inbox or use up the daily sending allowance.
+            cur.execute("SELECT 1 FROM aav.outbound_mail WHERE to_email = %s AND template = 'verify-email' "
+                        "AND created_at > now() - interval '5 minutes'", (body.email.lower(),))
+            if not cur.fetchone():
+                _queue_mail(cur, body.email.lower(), "verify-email", _issue_token(cur, row["id"], "email_verify", 48))
     return {"status": "queued_if_account_exists"}
 
 

@@ -73,3 +73,38 @@ For a VM that already runs another product behind Caddy (the OCI "ai4business" V
 2. `sudo -E /opt/aepx-core/products/agentic-antivirus/deploy/cohost-install.sh`. It adds 2 GB swap if none exists, creates `/etc/aav/aav.env` and the Ed25519 signing key (mode 600/400, never in git), starts the stack with `compose.cohost.yml` (about 1.1 GB memory in total), waits for readiness, then adds the `/apps/agentic-antivirus/` route to the existing Caddyfile. The Caddyfile is backed up first, validated, and restored if Caddy rejects it.
 3. Console: `https://api.softwareequality.com/apps/agentic-antivirus/`. Health: `.../api/health`.
 Images are also published to GitHub Container Registry by CI: `ghcr.io/aliabdalla-maker/agentic-antivirus-control-plane` and `ghcr.io/aliabdalla-maker/agentic-antivirus-web` (tags: commit SHA, `edge` for the feature branch, `latest` for master, version for `aav-v*` tags).
+
+## Email delivery (verification, password reset, invitations)
+
+Every console page needs a confirmed email address. The control plane queues mail in `aav.outbound_mail`
+and a worker sends it over SMTP once these are set in `/etc/aav/aav.env` (root-only; never in git):
+
+```
+AAV_SMTP_HOST=smtp.email.<region>.oci.oraclecloud.com
+AAV_SMTP_PORT=587
+AAV_SMTP_USER=<OCI SMTP credential username>
+AAV_SMTP_PASSWORD=<OCI SMTP credential password>
+AAV_MAIL_FROM=no-reply@softwareequality.com
+AAV_MAIL_DAILY_CAP=90
+```
+
+OCI Email Delivery is free for up to 100 emails a day (3,000 a month); `AAV_MAIL_DAILY_CAP` keeps the
+worker under that, so it cannot create a bill. Setup, in the OCI console (needs approval as a change):
+
+1. Email Delivery > Email Domains: add `softwareequality.com`, then publish its DKIM CNAME and the SPF
+   TXT record (`include:<region>.rp.oracleemaildelivery.com`) in DNS.
+2. Email Delivery > Approved Senders: add the `AAV_MAIL_FROM` address.
+3. Identity > your user > SMTP Credentials: generate one; copy the username and password into the env file.
+4. Rerun `deploy/cohost-install.sh`. `/api/ready` then reports `"email_delivery": true`, and mail that
+   was queued before is sent on the first pass.
+
+Operator commands (server access required; each is audited as `operator:cli`):
+
+```
+cd /opt/aepx-core/products/agentic-antivirus/deploy
+docker compose -f compose.yml -f compose.cohost.yml exec control-plane python -m app.admin send-mail
+docker compose -f compose.yml -f compose.cohost.yml exec control-plane python -m app.admin verify-email you@example.com
+```
+
+`verify-email` is for the operator's own first account or for a support case while delivery is down. It
+only confirms an existing account; it never creates one.

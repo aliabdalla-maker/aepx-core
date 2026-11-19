@@ -65,6 +65,8 @@ export function describeError(e: unknown): string {
   if (e instanceof ApiError) {
     if (e.status === 401) return "Your session has ended. Sign in again.";
     if (e.status === 402) return "Your trial has ended. Subscribe to keep using the console.";
+    if (e.status === 403 && e.detail === "email not verified")
+      return "Confirm your email address first: open the link we sent you, or sign out and sign in again to get a new link.";
     if (e.status === 403) return typeof e.detail === "string" ? `Not allowed: ${e.detail}` : "You do not have permission for this.";
     if (typeof e.detail === "string") return e.detail;
     return JSON.stringify(e.detail);
