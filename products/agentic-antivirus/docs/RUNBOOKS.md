@@ -88,6 +88,11 @@ AAV_MAIL_FROM=no-reply@softwareequality.com
 AAV_MAIL_DAILY_CAP=90
 ```
 
+**Google Workspace instead (softwareequality.com mail is on Google):** with 2-Step Verification on the sending
+account, create an app password at https://myaccount.google.com/apppasswords and set
+`AAV_SMTP_HOST=smtp.gmail.com`, `AAV_SMTP_PORT=587`, `AAV_SMTP_USER` and `AAV_MAIL_FROM` to that address, and
+`AAV_SMTP_PASSWORD` to the app password. The domain's SPF record already covers Google, so no DNS change is needed.
+
 OCI Email Delivery is free for up to 100 emails a day (3,000 a month); `AAV_MAIL_DAILY_CAP` keeps the
 worker under that, so it cannot create a bill. Setup, in the OCI console (needs approval as a change):
 
@@ -108,3 +113,22 @@ docker compose -f compose.yml -f compose.cohost.yml exec control-plane python -m
 
 `verify-email` is for the operator's own first account or for a support case while delivery is down. It
 only confirms an existing account; it never creates one.
+
+## Sign in with Google
+
+The console shows "Continue with Google" when the control plane has a Google OAuth client ID. Google confirms the
+email address, so these accounts need no verification email; a first sign-in creates the account and organisation.
+
+1. Google Cloud console > APIs & Services > Credentials > Create credentials > OAuth client ID > Web application.
+2. Authorised JavaScript origins: `https://api.softwareequality.com`. No redirect URI and no client secret are used:
+   the console receives a Google ID token and the control plane checks its signature, audience and issuer.
+3. Add to `/etc/aav/aav.env`, then rerun `deploy/cohost-install.sh`:
+
+```
+AAV_OIDC_ISSUER=https://accounts.google.com
+AAV_OIDC_CLIENT_ID=<client id>.apps.googleusercontent.com
+AAV_OIDC_JWKS_URL=https://www.googleapis.com/oauth2/v3/certs
+```
+
+The desktop and mobile apps wrap the web console; Google blocks its sign-in inside embedded web views, so in those
+apps people use email and password (or sign in once in the browser console).
