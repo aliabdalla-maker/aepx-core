@@ -1,0 +1,67 @@
+name: Agentic Antivirus AAB (unsigned, for owner signing)
+# Pushing a branch build/aav-aab-vX.Y.Z builds the production Play bundle for the Agentic Antivirus
+# Android client (com.equalitysoftware.agenticantivirus, live AdMob app ID ...~3427805116, console
+# at api.softwareequality.com/apps/agentic-antivirus/) WITHOUT signing it, and keeps it as a workflow
+# artifact for 7 days and on a DRAFT release (visible only to repo owners). The owner signs it with the
+# upload key off GitHub (jarsigner) and uploads it in Play Console. consoleUrl, playSubscriptionId and
+# the AdMob app ID come from the project's gradle.properties; only the version is passed here.
+on:
+  push:
+    branches: ['build/aav-aab-v*.*.*']
+permissions:
+  contents: read
+concurrency:
+  # Issue #370: bound queue fan-out. One running + one pending run per workflow/event/ref;
+  # superseded branch and PR runs are cancelled. master never cancels an in-progress run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+jobs:
+  aab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+        working-directory: products/agentic-antivirus/clients/android
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.11.1'
+      - name: Build the production bundle (unsigned)
+        run: |
+          set -euo pipefail
+          v="${GITHUB_REF_NAME#build/aav-aab-v}"
+          [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "branch must be build/aav-aab-vMAJOR.MINOR.PATCH" >&2; exit 1; }
+          IFS=. read -r a b c <<< "$v"
+          code=$(( a * 1000000 + b * 1000 + c ))
+          gradle --no-daemon testReleaseUnitTest bundleRelease \
+            -Paav.versionCode="$code" -Paav.versionName="$v"
+          mkdir -p "$RUNNER_TEMP/out"
+          cp app/build/outputs/bundle/release/app-release.aab "$RUNNER_TEMP/out/AgenticAntivirus-$v-unsigned.aab"
+          echo "versionCode=$code versionName=$v" > "$RUNNER_TEMP/out/VERSION.txt"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: aav-aab-unsigned
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Attach to a draft release (owners only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          v="${GITHUB_REF_NAME#build/aav-aab-v}"
+          tag="aav-aab-v$v"
+          gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          gh release create "$tag" "$RUNNER_TEMP"/out/* --repo "$GITHUB_REPOSITORY" --draft --target "$GITHUB_SHA" \
+            --title "Agentic Antivirus AAB $v (unsigned, for signing)" \
+            --notes "Unsigned production Play bundle for owner signing. Draft: not public."
