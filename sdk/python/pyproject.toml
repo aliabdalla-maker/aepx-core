@@ -3,7 +3,7 @@ name = "aepx"
 version = "0.1.0"
 description = "AEP-X Python SDK — protocol client, plugin architecture, and conformance suite (RFC-0007)"
 requires-python = ">=3.11"
-dependencies = ["httpx==0.27.0"]
+dependencies = ["httpx==0.28.1"]
 
 # The built-in plugins are published through the same entry point group
 # third parties use — the discovery mechanism is dogfooded, not special-cased.
