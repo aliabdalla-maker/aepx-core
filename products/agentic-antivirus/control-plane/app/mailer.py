@@ -15,6 +15,7 @@ import smtplib
 import ssl
 import threading
 from email.message import EmailMessage
+from urllib.parse import urlparse
 
 from app import db
 from app.config import settings
@@ -68,12 +69,18 @@ def render(to: str, template: str, payload: dict) -> EmailMessage:
     return msg
 
 
+def _helo_name() -> str | None:
+    # Greet with the public host name (relays such as Google's reject container ids and "localhost").
+    return urlparse(settings.public_base_url).hostname or None
+
+
 def _connect() -> smtplib.SMTP:
     ctx = ssl.create_default_context()
     if settings.smtp_port == 465:
-        smtp: smtplib.SMTP = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=20, context=ctx)
+        smtp: smtplib.SMTP = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=20, context=ctx,
+                                              local_hostname=_helo_name())
     else:
-        smtp = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=20)
+        smtp = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=20, local_hostname=_helo_name())
         smtp.starttls(context=ctx)
     if settings.smtp_user:
         smtp.login(settings.smtp_user, _password())
