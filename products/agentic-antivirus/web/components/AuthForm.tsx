@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import { describeError } from "../lib/api";
+import { ApiError, describeError } from "../lib/api";
 import { useI18n } from "../lib/i18n";
 
 export function AuthPage({ title, children }: { title: string; children: ReactNode }) {
@@ -21,7 +21,7 @@ export function useSubmit() {
   const [ok, setOk] = useState<string | null>(null);
   const run = async (f: () => Promise<string | void>) => {
     setBusy(true); setErr(null); setOk(null);
-    try { const m = await f(); if (m) setOk(m); } catch (e) { setErr(describeError(e)); } finally { setBusy(false); }
+    try { const m = await f(); if (m) setOk(m); } catch (e) { setErr(e instanceof Error && !(e instanceof ApiError) && !(e instanceof TypeError) && e.message ? e.message : describeError(e)); } finally { setBusy(false); }
   };
   const view = <>{err && <p className="error" role="alert">{err}</p>}{ok && <p className="banner" role="status">{ok}</p>}</>;
   return { busy, run, view };
