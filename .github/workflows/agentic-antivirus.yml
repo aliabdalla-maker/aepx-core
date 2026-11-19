@@ -193,6 +193,21 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with: { node-version: "22" }
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Bundle the endpoint agent for this runner's architecture (powers "Protect / Scan this computer")
+        shell: bash
+        run: |
+          pip install -q -r $P/agent/requirements.txt pyinstaller
+          if [ "${{ runner.os }}" = "Windows" ]; then pip install -q pywin32; fi
+          python $P/agent/packaging/build.py "$RUNNER_TEMP/agent"
+          ARCH=$(echo "${{ runner.arch }}" | tr '[:upper:]' '[:lower:]'); [ "$ARCH" = "x64" ] || ARCH=arm64
+          mkdir -p $P/clients/desktop/agent-bin/$ARCH
+          BIN=$(ls "$RUNNER_TEMP"/agent/aav-agent-* | grep -v -e service -e SHA256SUMS | head -1)
+          EXT=""; [ "${{ runner.os }}" = "Windows" ] && EXT=".exe"
+          cp "$BIN" "$P/clients/desktop/agent-bin/$ARCH/aav-agent$EXT"
+          "$P/clients/desktop/agent-bin/$ARCH/aav-agent$EXT" --help >/dev/null
+          echo "Agent bundled for $ARCH: $(basename "$BIN")" >> "$GITHUB_STEP_SUMMARY"
       - name: Test and package
         shell: bash
         env:
