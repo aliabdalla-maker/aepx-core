@@ -146,7 +146,10 @@ def test_scan_cancelled_by_console_and_time_limit(tmp_path, monkeypatch):
     r = a.scan_paths([str(d)], job_group="g2")
     assert r["status"] == "cancelled" and r["scanned"] < 30 and sent[-1]["status"] == "cancelled"
     a2, _ = _scan_agent(tmp_path / "b", lambda b, n: False)
-    r2 = a2.scan_paths([str(d)], job_group="g3", max_seconds=1e-9)
+    ticks = iter(range(10_000))   # a clock that advances 1 s per reading, so the limit trips on any OS
+    with monkeypatch.context() as m:
+        m.setattr(agent_mod.time, "monotonic", lambda: float(next(ticks)))
+        r2 = a2.scan_paths([str(d)], job_group="g3", max_seconds=0.5)
     assert r2["status"] == "timed_out" and r2["gaps"]["timeout"] == 1
     r3 = a2.scan_paths([str(d / "missing")], job_group="g4")
     assert r3["gaps"]["inaccessible"] == 1

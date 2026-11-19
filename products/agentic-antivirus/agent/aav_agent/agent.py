@@ -348,11 +348,13 @@ class Agent:
                     sp = str(p)
                     if sp.startswith(str(self.state.root)):
                         continue
-                    if max_seconds and time.monotonic() - started > max_seconds:
+                    # >= rather than >: on Windows the monotonic clock ticks every ~15 ms, so two
+                    # readings in a fast loop are often equal and a strict comparison never fires.
+                    if max_seconds and time.monotonic() - started >= max_seconds:
                         status = "timed_out"
                         gaps["timeout"] = gaps.get("timeout", 0) + 1
                         break
-                    if job_group and time.monotonic() - last_report > PROGRESS_SECONDS:
+                    if job_group and time.monotonic() - last_report >= PROGRESS_SECONDS:
                         last_report = time.monotonic()
                         if self._report_progress(job_group, "running", c, gaps, eng):
                             status = "cancelled"
