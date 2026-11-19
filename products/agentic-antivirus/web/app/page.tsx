@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Shell } from "../components/Shell";
 import { AdSlot, Freshness, Sev, Status, useApi } from "../components/ui";
 import { DecisionCard, type ActionRequest } from "../components/Decision";
+import { ThisComputer } from "../components/ThisComputer";
 import { useI18n } from "../lib/i18n";
 import { formatRelative } from "../lib/format";
 
@@ -25,6 +26,7 @@ export default function Dashboard() {
     <Shell pending={decisions.length}>
       <h1>{decisions.length ? t("dash.pending_approvals", { count: decisions.length }) : "Nothing is waiting for you"}</h1>
       <p className="lede">Automatic protection keeps running on every device. These are the actions that need a person to decide.</p>
+      <ThisComputer onChange={() => { dev.reload(); k.reload(); }} />
       <Status error={pending.error} loading={!pending.data} />
       <section className="decisions" aria-label="Decisions waiting">
         {decisions.map((a) => <DecisionCard key={a.id} a={a} names={names} onChange={reload} />)}
