@@ -17,7 +17,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: aav-i18n
+  group: aav-i18n-${{ github.ref }}
   cancel-in-progress: false
 env:
   P: products/agentic-antivirus
