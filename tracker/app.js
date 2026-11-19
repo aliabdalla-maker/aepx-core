@@ -33,13 +33,28 @@ const ago = (iso) => {
 };
 
 // ---------- API ----------
-async function api(path, opts = {}) {
+// Changes need the admin token (TRACKER_ADMIN_TOKEN on the server). It is asked for once and kept
+// only for this browser tab's session.
+const TOKEN_KEY = "aepx-tracker-admin-token";
+const savedToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || ""; } catch { return ""; } };
+
+async function api(path, opts = {}, retried = false) {
+  const write = Boolean(opts.method) && opts.method !== "GET";
+  const headers = { "content-type": "application/json" };
+  if (write && savedToken()) headers.authorization = `Bearer ${savedToken()}`;
   const res = await fetch(`/api/${path}`, {
     ...opts,
-    headers: { "content-type": "application/json" },
+    headers,
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
   const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && write && !retried) {
+    const entered = window.prompt("Enter the tracker admin token to make changes");
+    if (entered && entered.trim()) {
+      try { sessionStorage.setItem(TOKEN_KEY, entered.trim()); } catch { /* storage unavailable: token is not kept */ }
+      return api(path, opts, true);
+    }
+  }
   if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
   return data;
 }
