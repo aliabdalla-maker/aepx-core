@@ -5,6 +5,7 @@ import { useState } from "react";
 import { api, session } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
 import { AuthPage, useSubmit } from "../../components/AuthForm";
+import { GoogleSignIn } from "../../components/GoogleSignIn";
 
 export default function Login() {
   const { t } = useI18n();
@@ -16,6 +17,7 @@ export default function Login() {
   const resend = useSubmit();
   return (
     <AuthPage title={t("auth.login")}>
+      <GoogleSignIn />
       <form className="form" onSubmit={(e) => { e.preventDefault(); setUnverified(null); s.run(async () => {
         const r = await api<{ access_token: string }>("/v1/auth/login", { body: { email, password } });
         session.set(r.access_token);
