@@ -110,3 +110,7 @@ ul.hyps { list-style: none; padding: 0; }
   table { display: block; overflow-x: auto; }
 }
 @media (min-width: 120rem) { .main { max-width: 100rem; font-size: 1.125rem; } }
+
+.google-signin { margin-bottom: 1rem; }
+.divider { display: flex; align-items: center; gap: .75rem; color: var(--muted, #64748b); font-size: .9rem; margin: 1rem 0 0; }
+.divider::before, .divider::after { content: ""; flex: 1; border-top: 1px solid var(--line); }

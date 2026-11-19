@@ -39,6 +39,10 @@ services:
       AAV_OPEN_REGISTRATION: ${AAV_OPEN_REGISTRATION:-true}
       AAV_PLAY_SERVICE_ACCOUNT_FILE: ${AAV_PLAY_SERVICE_ACCOUNT_FILE:-}
       # Email delivery (verification, password reset, invitations). Values live in /etc/aav/aav.env, never git.
+      # Sign in with Google: public OAuth client ID only (Google Identity Services ID tokens; no client secret).
+      AAV_OIDC_ISSUER: ${AAV_OIDC_ISSUER:-}
+      AAV_OIDC_CLIENT_ID: ${AAV_OIDC_CLIENT_ID:-}
+      AAV_OIDC_JWKS_URL: ${AAV_OIDC_JWKS_URL:-}
       AAV_SMTP_HOST: ${AAV_SMTP_HOST:-}
       AAV_SMTP_PORT: ${AAV_SMTP_PORT:-587}
       AAV_SMTP_USER: ${AAV_SMTP_USER:-}

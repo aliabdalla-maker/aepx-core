@@ -117,5 +117,7 @@
   "help.title": "Help",
   "privacy.title": "Privacy",
   "ads.label": "Advertisement",
-  "a11y.skip": "Skip to main content"
+  "a11y.skip": "Skip to main content",
+  "auth.google_failed": "Google sign-in did not work. Try again, or use your email and password.",
+  "auth.or": "or"
 }

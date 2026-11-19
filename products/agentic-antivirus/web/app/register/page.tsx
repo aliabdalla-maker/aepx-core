@@ -4,6 +4,7 @@ import { useState } from "react";
 import { api } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
 import { AuthPage, useSubmit } from "../../components/AuthForm";
+import { GoogleSignIn } from "../../components/GoogleSignIn";
 
 export default function Register() {
   const { t, locale } = useI18n();
@@ -13,6 +14,7 @@ export default function Register() {
   return (
     <AuthPage title={t("auth.register")}>
       <p className="lede">Your organisation gets a 30-day free trial. After that it costs £4.99 per month for each user or device.</p>
+      <GoogleSignIn organisation={f.organisation} text="signup_with" />
       <form className="form" onSubmit={(e) => { e.preventDefault(); s.run(async () => {
         await api("/v1/auth/register", { body: { ...f, locale } });
         return t("auth.verify_sent");
