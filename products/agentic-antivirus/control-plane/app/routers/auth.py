@@ -7,7 +7,8 @@ from uuid import UUID
 
 import httpx
 import jwt
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Cookie, Depends, Form, Header, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, EmailStr, Field
 
 from app import audit, crypto, db, mailer
@@ -188,14 +189,14 @@ def _jwks(url: str) -> jwt.PyJWKClient:
     return _JWKS[url]
 
 
-@router.post("/oidc")
-def oidc_login(body: OidcIn):
-    """Exchange a verified OIDC ID token (e.g. Google) for a session. Requires AAV_OIDC_* config."""
+def _oidc_exchange(id_token: str, organisation: str, locale: str) -> dict:
+    """Verify a Google/OIDC ID token and return a new session. Shared by the JSON endpoint and the
+    redirect (login_uri) callback so both verify identically. Raises HTTPException on any failure."""
     if not (settings.oidc_issuer and settings.oidc_client_id and settings.oidc_jwks_url):
         raise HTTPException(503, "OIDC not configured")
     try:
-        key = _jwks(settings.oidc_jwks_url).get_signing_key_from_jwt(body.id_token).key
-        claims = jwt.decode(body.id_token, key, algorithms=["RS256", "ES256"], audience=settings.oidc_client_id,
+        key = _jwks(settings.oidc_jwks_url).get_signing_key_from_jwt(id_token).key
+        claims = jwt.decode(id_token, key, algorithms=["RS256", "ES256"], audience=settings.oidc_client_id,
                             issuer=settings.oidc_issuer)
     except (jwt.PyJWTError, httpx.HTTPError) as exc:
         raise HTTPException(401, f"invalid id token: {type(exc).__name__}")
@@ -214,9 +215,9 @@ def oidc_login(body: OidcIn):
             # First sign-in with Google creates the account. The provider has already verified the address.
             name = str(claims.get("name") or "")[:200]
             cur.execute("INSERT INTO aav.users (email, password_hash, display_name, locale, oidc_subject, email_verified) "
-                        "VALUES (%s, NULL, %s, %s, %s, true) RETURNING id", (email, name, body.locale, subject))
+                        "VALUES (%s, NULL, %s, %s, %s, true) RETURNING id", (email, name, locale, subject))
             row = cur.fetchone()
-            org = body.organisation.strip() or (f"{name}'s organisation" if name else email.split("@", 1)[1])
+            org = organisation.strip() or (f"{name}'s organisation" if name else email.split("@", 1)[1])
             cur.execute("SELECT aav.bootstrap_tenant(%s, %s, NULL) AS tid", (org[:200], row["id"]))
             created_tid = cur.fetchone()["tid"]
             audit.record(cur, tenant_id=None, actor=f"user:{row['id']}", action="account.register_oidc", target=str(row["id"]))
@@ -228,6 +229,45 @@ def oidc_login(body: OidcIn):
         with db.tenant_tx(created_tid) as cur:
             audit.record(cur, tenant_id=created_tid, actor=f"user:{row['id']}", action="tenant.create", target=str(created_tid))
     return {**sess, "created": bool(created_tid)}
+
+
+@router.post("/oidc")
+def oidc_login(body: OidcIn):
+    """Exchange a verified OIDC ID token (e.g. Google) for a session. Requires AAV_OIDC_* config."""
+    return _oidc_exchange(body.id_token, body.organisation, body.locale)
+
+
+# Minimal page returned after a redirect-mode (ux_mode=redirect) Google sign-in: it stores the bearer
+# token in sessionStorage (where lib/api.ts reads it), picks the first tenant, then lands on the console.
+# No token is ever placed in a URL. Its own CSP allows just this inline script and same-origin fetch.
+_HANDOFF_CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; base-uri 'none'"
+_HANDOFF_HTML = """<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Signing in…</title></head>
+<body><p>Signing you in…</p><script>
+(async function(){{
+  var t = {token};
+  try{{ sessionStorage.setItem("aav.token", t); }}catch(e){{}}
+  try{{
+    var me = await fetch("/api/v1/auth/me", {{headers:{{Authorization:"Bearer "+t}}}}).then(function(r){{return r.json();}});
+    if(me && me.tenants && me.tenants[0]) try{{ sessionStorage.setItem("aav.tenant", me.tenants[0].tenant_id); }}catch(e){{}}
+  }}catch(e){{}}
+  location.replace("/");
+}})();
+</script></body></html>"""
+
+
+@router.post("/oidc/callback")
+def oidc_redirect_callback(credential: str = Form(...), g_csrf_token: str = Form(default=""),
+                           csrf_cookie: str | None = Cookie(default=None, alias="g_csrf_token")):
+    """login_uri target for Google Identity Services ux_mode=redirect. Google POSTs the ID token as
+    `credential` plus a double-submit `g_csrf_token` (form field and cookie, which must match). Using a
+    full-page redirect instead of a popup avoids the third-party-cookie / blocked-popup hangs on desktop."""
+    if not g_csrf_token or not csrf_cookie or g_csrf_token != csrf_cookie:
+        raise HTTPException(400, "missing or mismatched CSRF token")
+    sess = _oidc_exchange(credential, organisation="", locale="en")
+    page = _HANDOFF_HTML.format(token=json.dumps(sess["access_token"]).replace("<", "\\u003c"))
+    return HTMLResponse(page, headers={"Content-Security-Policy": _HANDOFF_CSP,
+                                       "Cache-Control": "no-store", "X-Frame-Options": "DENY"})
 
 
 @router.get("/providers")

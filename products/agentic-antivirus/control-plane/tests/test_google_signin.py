@@ -62,6 +62,35 @@ def test_google_signin_confirms_existing_password_account(client, google, admin_
     assert admin_sql("SELECT email_verified FROM aav.users WHERE email = %s", email)[0]["email_verified"] is True
 
 
+def test_oidc_redirect_callback_establishes_session(client, google):
+    """ux_mode=redirect: Google POSTs the ID token as `credential` with a matching g_csrf_token
+    (form field and cookie). The handoff page carries a working bearer token, no token in any URL."""
+    import re
+    email = f"gr-{uuid.uuid4().hex[:8]}@gmail.com"
+    r = client.post("/v1/auth/oidc/callback",
+                    data={"credential": token(email), "g_csrf_token": "csrf-abc"},
+                    headers={"Cookie": "g_csrf_token=csrf-abc"})
+    assert r.status_code == 200, r.text
+    assert "text/html" in r.headers["content-type"]
+    assert "Content-Security-Policy" in r.headers and "no-store" in r.headers.get("cache-control", "")
+    m = re.search(r'var t = "([^"]+)"', r.text)
+    assert m, r.text
+    me = client.get("/v1/auth/me", headers={"Authorization": f"Bearer {m.group(1)}"}).json()
+    assert me["email"] == email and me["email_verified"] is True
+
+
+def test_oidc_redirect_callback_rejects_csrf_mismatch(client, google):
+    r = client.post("/v1/auth/oidc/callback",
+                    data={"credential": token("c@gmail.com"), "g_csrf_token": "one"},
+                    headers={"Cookie": "g_csrf_token=two"})
+    assert r.status_code == 400
+
+
+def test_oidc_redirect_callback_requires_csrf_cookie(client, google):
+    r = client.post("/v1/auth/oidc/callback", data={"credential": token("c2@gmail.com"), "g_csrf_token": "one"})
+    assert r.status_code == 400
+
+
 def test_unverified_google_email_is_refused(client, google):
     r = client.post("/v1/auth/oidc", json={"id_token": token("u@example.com", verified=False)})
     assert r.status_code == 403
