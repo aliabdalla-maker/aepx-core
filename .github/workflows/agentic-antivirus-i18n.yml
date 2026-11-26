@@ -41,8 +41,8 @@ jobs:
           - uz,yo,zu,xh,so,rw,mg,ny,sn,st
           - tn,ts,wo,yi,ceb,hmn,bho,mai,sat
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Install (CPU-only torch)
         run: |
@@ -64,7 +64,7 @@ jobs:
               print(f"| {r['locale']} | {r.get('engine', r.get('skipped'))} | {r.get('translated', 0)} | "
                     f"{r.get('dropped_placeholder_mismatch', 0)} | {r.get('keys_present', 0)} / {r.get('keys_total', 0)} |")
           EOF
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: i18n-${{ strategy.job-index }}
           path: ${{ env.P }}/shared/i18n/*.json
@@ -77,8 +77,8 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with: { path: "${{ runner.temp }}/i18n", pattern: "i18n-*" }
       - name: Collect locale files (en.json stays as committed)
         run: |
@@ -86,7 +86,7 @@ jobs:
             for f in "$d"/*.json; do [ "$(basename "$f")" = en.json ] || cp "$f" "$P/shared/i18n/"; done
           done
           ls "$P/shared/i18n" | wc -l
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@v8
         with:
           branch: aav/i18n-machine-translations
           title: "AAV: machine translations for 99 locales (labelled, not yet reviewed)"
