@@ -343,9 +343,11 @@ jobs:
           git merge-base --is-ancestor HEAD origin/master || { echo "deploy_sha is not on master" >&2; exit 1; }
       - name: Deploy over SSH (fails closed without the host secrets)
         env:
-          HOST: ${{ secrets.AAV_OCI_HOST }}
-          KEY: ${{ secrets.AAV_OCI_SSH_KEY }}
+          HOST: ${{ secrets.OCI_HOST }}
+          SSH_USER: ${{ secrets.OCI_USER }}
+          KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
         run: |
-          test -n "$HOST" && test -n "$KEY" || { echo "AAV_OCI_HOST / AAV_OCI_SSH_KEY not configured; nothing deployed" >&2; exit 1; }
+          test -n "$HOST" && test -n "$KEY" && test -n "$SSH_USER" || { echo "OCI_HOST / OCI_USER / OCI_SSH_PRIVATE_KEY not configured; nothing deployed" >&2; exit 1; }
           echo "$KEY" > k && chmod 600 k
-          ssh -i k -o StrictHostKeyChecking=yes "$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }}"
+          mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }}"
