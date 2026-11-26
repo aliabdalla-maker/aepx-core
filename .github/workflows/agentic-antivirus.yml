@@ -113,7 +113,6 @@ jobs:
       - name: Compose guard (loopback-only, no privileged, Always Free totals)
         run: python $P/deploy/guard.py
       - uses: anchore/sbom-action@v0
-        # The release job attaches the SBOM; this job has no permission to write to releases.
         with: { path: "${{ env.P }}", format: spdx-json, artifact-name: aav-sbom.spdx.json, upload-release-assets: false }
 
   agent:
@@ -212,13 +211,11 @@ jobs:
         shell: bash
         env:
           AAV_CHANNEL: ${{ inputs.channel || 'beta' }}
-          # macOS: Developer ID signing + notarization (electron-builder native). CSC only on macOS now.
           CSC_LINK: ${{ runner.os == 'macOS' && secrets.AEPX_MAC_CSC_LINK || '' }}
           CSC_KEY_PASSWORD: ${{ runner.os == 'macOS' && secrets.AEPX_MAC_CSC_KEY_PASSWORD || '' }}
           APPLE_ID: ${{ secrets.AEPX_APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.AEPX_APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.AEPX_APPLE_TEAM_ID }}
-          # Windows: Azure Artifact Signing (Trusted Signing). Service-principal auth via AZURE_* env.
           AZURE_TENANT_ID: ${{ secrets.AAV_AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AAV_AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AAV_AZURE_CLIENT_SECRET }}
@@ -228,8 +225,6 @@ jobs:
           AAV_AZ_PUBLISHER: ${{ secrets.AAV_AZURE_SIGN_PUBLISHER }}
         run: |
           cd $P/clients/desktop && npm ci && npm test
-          # Signing is injected only when the relevant secrets exist; otherwise the build is unsigned
-          # exactly as before (zero regression). Switches on automatically once secrets are added.
           ARGS="--publish never"
           case "${{ runner.os }}" in
             Windows)
@@ -265,7 +260,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write          # publish to GitHub Container Registry on pushes (never on pull requests)
+      packages: write
     steps:
       - uses: actions/checkout@v7
       - uses: docker/setup-qemu-action@v4
@@ -298,8 +293,6 @@ jobs:
           done
 
   release:
-    # GitHub Release for a tag aav-v<version>. Pre-release until the agents are code-signed: the notes say plainly
-    # whether each binary is signed, and SHA256SUMS lets users verify downloads.
     if: startsWith(github.ref, 'refs/tags/aav-v')
     needs: [agent, desktop, images]
     runs-on: ubuntu-latest
@@ -322,7 +315,6 @@ jobs:
             echo
             echo "Server: \`docker pull ghcr.io/$OWNER/agentic-antivirus-control-plane:${GITHUB_SHA}\` and \`ghcr.io/$OWNER/agentic-antivirus-web:${GITHUB_SHA}\`."
           } > notes.md
-          # A release made from the GitHub web page creates the tag and the release together; add the files to it.
           if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --clobber $(ls | grep -v '^notes.md$')
             gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --prerelease --notes-file notes.md
@@ -338,11 +330,12 @@ jobs:
     environment: agentic-antivirus-production
     steps:
       - uses: actions/checkout@v7
-        with: { ref: "${{ inputs.deploy_sha }}" }
+        with: { ref: "${{ inputs.deploy_sha }}", fetch-depth: 0 }
       - name: Refuse unverified commits
         run: |
           test "$(git rev-parse HEAD)" = "${{ inputs.deploy_sha }}"
-          git merge-base --is-ancestor HEAD origin/master || { echo "deploy_sha is not on master" >&2; exit 1; }
+          git fetch --no-tags origin master
+          git merge-base --is-ancestor HEAD FETCH_HEAD || { echo "deploy_sha is not on master" >&2; exit 1; }
       - name: Deploy over SSH (fails closed without the host secrets)
         env:
           HOST: ${{ secrets.OCI_HOST }}
@@ -353,3 +346,39 @@ jobs:
           echo "$KEY" > k && chmod 600 k
           mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
           ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }}"
+
+  auto-deploy:
+    # Continuous deployment: every green master commit ships itself, hands-free.
+    # Dormant until you opt in by setting repository variable AAV_AUTO_DEPLOY = true
+    # (Settings > Secrets and variables > Actions > Variables). The VM's deploy.sh takes an
+    # encrypted backup, verifies readiness + smoke, and rolls back to the last verified SHA on
+    # failure (CI-14/15, RA-11/12) -- so a bad commit self-heals. The protected environment still
+    # applies: keep required reviewers for one-click gated CD, or remove them for fully hands-off.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && vars.AAV_AUTO_DEPLOY == 'true'
+    needs: [backend, images, agent, android, desktop]
+    runs-on: ubuntu-latest
+    environment: agentic-antivirus-production
+    concurrency:
+      group: aav-deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+      - name: Deploy this commit (self-verifying; deploy.sh backs up and rolls back on failure)
+        env:
+          HOST: ${{ secrets.OCI_HOST }}
+          SSH_USER: ${{ secrets.OCI_USER }}
+          KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+        run: |
+          test -n "$HOST" && test -n "$KEY" && test -n "$SSH_USER" || { echo "OCI_HOST / OCI_USER / OCI_SSH_PRIVATE_KEY not configured; nothing deployed" >&2; exit 1; }
+          echo "$KEY" > k && chmod 600 k
+          mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${GITHUB_SHA} && products/agentic-antivirus/deploy/deploy.sh ${GITHUB_SHA}"
+      - name: Verify the public endpoint is live and ready
+        run: |
+          for i in $(seq 1 24); do
+            if curl -fsS https://api.softwareequality.com/apps/agentic-antivirus/api/ready | grep -q '"ready":true'; then
+              echo "Live: $GITHUB_SHA is ready in production" >> "$GITHUB_STEP_SUMMARY"; exit 0
+            fi
+            sleep 10
+          done
+          echo "Public readiness did not go true within 4 min (VM may have rolled back)" >&2; exit 1
