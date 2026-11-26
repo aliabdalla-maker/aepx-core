@@ -327,7 +327,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_sha != ''
     needs: [images, agent, android, desktop]
     runs-on: ubuntu-latest
-    environment: agentic-antivirus-production
+    environment: production
     steps:
       - uses: actions/checkout@v7
         with: { ref: "${{ inputs.deploy_sha }}", fetch-depth: 0 }
@@ -357,7 +357,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master' && vars.AAV_AUTO_DEPLOY == 'true'
     needs: [backend, images, agent, android, desktop]
     runs-on: ubuntu-latest
-    environment: agentic-antivirus-production
+    environment: production
     concurrency:
       group: aav-deploy-production
       cancel-in-progress: false
