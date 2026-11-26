@@ -247,7 +247,9 @@ jobs:
                 ARGS="$ARGS -c.mac.hardenedRuntime=true -c.mac.entitlements=build/entitlements.mac.plist -c.mac.entitlementsInherit=build/entitlements.mac.plist -c.mac.notarize=true"
                 echo "Desktop macOS: SIGNED + notarized (Developer ID)" >> "$GITHUB_STEP_SUMMARY"
               else
+                unset CSC_LINK CSC_KEY_PASSWORD
                 export CSC_IDENTITY_AUTO_DISCOVERY=false
+                ARGS="$ARGS -c.mac.identity=null"
                 echo "Desktop macOS: UNSIGNED (set AEPX_MAC_CSC_LINK + APPLE_* to enable)" >> "$GITHUB_STEP_SUMMARY"
               fi ;;
             *)
