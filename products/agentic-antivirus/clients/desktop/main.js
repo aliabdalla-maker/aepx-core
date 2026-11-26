@@ -34,7 +34,25 @@ function createWindow() {
   });
   win.once("ready-to-show", () => win.show());
   setTimeout(() => { if (win && !win.isVisible()) win.show(); }, 4000); // never stay invisible
-  win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: "deny" }; });
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    // "Continue with Google" opens Google Identity Services as a popup that posts the credential
+    // back to its opener via postMessage. Shoving it to the external browser severs that channel,
+    // so sign-in never completes in the desktop app. Keep Google's own auth popups in-app as child
+    // windows (opener preserved); send everything else to the system browser.
+    let host = "";
+    try { host = new URL(url).host; } catch { /* malformed url -> treat as external */ }
+    if (host === "accounts.google.com" || host.endsWith(".accounts.google.com")) {
+      return {
+        action: "allow",
+        overrideBrowserWindowOptions: {
+          width: 500, height: 650, title: "Sign in with Google", autoHideMenuBar: true,
+          webPreferences: { contextIsolation: true, sandbox: true, nodeIntegration: false },
+        },
+      };
+    }
+    shell.openExternal(url);
+    return { action: "deny" };
+  });
   win.webContents.on("will-navigate", (e, url) => { if (!allowedInWindow(url, API_ORIGIN)) { e.preventDefault(); shell.openExternal(url); } });
   // No connection (offline, firewall, captive portal): show a page with a retry button instead of a blank window.
   win.webContents.on("did-fail-load", (_e, code, desc, url, isMain) => {
