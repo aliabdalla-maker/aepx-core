@@ -55,7 +55,8 @@ class ScheduleIn(BaseModel):
 
 
 class ScanIn(BaseModel):
-    device_ids: list[str] = Field(min_length=1)
+    # Empty list means "all active devices in the tenant" (resolved in run_scan).
+    device_ids: list[str] = Field(default_factory=list, max_length=500)
     scan_type: str = "quick"
 
 
@@ -231,7 +232,16 @@ def delete_schedule(sid: UUID, p: Principal = Depends(need("scans.schedule"))):
 def run_scan(body: ScanIn, p: Principal = Depends(need("scans.run"))):
     """On-demand scan through the action catalogue (auto for one device, approval for many)."""
     with db.tenant_tx(p.tenant_id) as cur:
-        res = propose(cur, tenant_id=p.tenant_id, body=ProposeIn(action_type="run_scan", targets=body.device_ids,
+        targets = [str(d) for d in body.device_ids]
+        if not targets:
+            # Empty device_ids means "all active devices in the tenant".
+            cur.execute("SELECT id FROM aav.devices WHERE retired_at IS NULL ORDER BY id LIMIT 501")
+            targets = [str(r["id"]) for r in cur.fetchall()]
+            if not targets:
+                raise HTTPException(422, "no active devices to scan")
+            if len(targets) > 500:
+                raise HTTPException(422, "more than 500 active devices; specify device_ids explicitly")
+        res = propose(cur, tenant_id=p.tenant_id, body=ProposeIn(action_type="run_scan", targets=targets,
                                                                  params={"scan_type": body.scan_type}),
                       proposed_by=p.actor, proposer_roles=p.roles, approver_id=p.user_id)
     if res["status"] == "approved":

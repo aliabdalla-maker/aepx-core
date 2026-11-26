@@ -55,8 +55,7 @@
       ],
       "icon": "build/icon.png",
       "hardenedRuntime": false,
-      "category": "public.app-category.utilities",
-      "identity": "-"
+      "category": "public.app-category.utilities"
     },
     "linux": {
       "target": [

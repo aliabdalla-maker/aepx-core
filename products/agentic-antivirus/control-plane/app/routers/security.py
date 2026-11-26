@@ -56,7 +56,8 @@ def _pctl(values: list[float], q: float):
 
 # --------------------------------------------------------------------------------------------- scans
 class ScanJobIn(BaseModel):
-    device_ids: list[UUID] = Field(min_length=1, max_length=500)
+    # Empty list means "all active devices in the tenant" (resolved in create_scan_jobs).
+    device_ids: list[UUID] = Field(default_factory=list, max_length=500)
     scan_type: str = "quick"
     paths: list[str] = Field(default_factory=list, max_length=50)
     max_seconds: int = Field(default=3600, ge=10, le=86400)
@@ -69,10 +70,19 @@ def create_scan_jobs(cur, p_tenant, body: ScanJobIn, requested_by: str, roles: s
     if body.scan_type == "targeted" and not body.paths:
         raise HTTPException(422, "a targeted scan needs paths")
     group = str(uuid4())
-    ids = [str(d) for d in body.device_ids]
-    cur.execute("SELECT id FROM aav.devices WHERE id = ANY(%s::uuid[]) AND retired_at IS NULL", (ids,))
-    if len(cur.fetchall()) != len(set(ids)):
-        raise HTTPException(404, "device not found")
+    if body.device_ids:
+        ids = [str(d) for d in body.device_ids]
+        cur.execute("SELECT id FROM aav.devices WHERE id = ANY(%s::uuid[]) AND retired_at IS NULL", (ids,))
+        if len(cur.fetchall()) != len(set(ids)):
+            raise HTTPException(404, "device not found")
+    else:
+        # Empty device_ids means "all active devices in the tenant".
+        cur.execute("SELECT id FROM aav.devices WHERE retired_at IS NULL ORDER BY id LIMIT 501")
+        ids = [str(r["id"]) for r in cur.fetchall()]
+        if not ids:
+            raise HTTPException(422, "no active devices to scan")
+        if len(ids) > 500:
+            raise HTTPException(422, "more than 500 active devices; specify device_ids explicitly")
     jobs = []
     for d in ids:
         cur.execute("INSERT INTO aav.scan_jobs (tenant_id, device_id, scan_type, scope, max_seconds, incident_id, "

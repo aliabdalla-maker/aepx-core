@@ -222,3 +222,19 @@ def test_recurrence_reopens_incident_and_kpis(org, client, admin_sql):
     k = admin.get("/v1/recovery/kpis").json()
     assert k["recurrence_rate"]["numerator"] == 1 and k["verified_removal_rate"]["numerator"] == 0
     assert any(n["kind"] == "recovery.recurrence" for n in admin.get("/v1/notifications").json())
+
+
+def test_empty_device_ids_scans_all_active_devices(org, client):
+    """Empty device_ids means 'all active devices in the tenant' (fixes the min_length=0 422)."""
+    admin, analyst, enrol, bundle = org
+    a = enrol(admin, "all-1")
+    b = enrol(admin, "all-2")
+
+    # /v1/scan-jobs with an empty list targets every active device.
+    out = admin.post("/v1/scan-jobs", json={"device_ids": [], "scan_type": "quick"})
+    assert out.status_code == 201, out.text
+    jobs = out.json()["jobs"]
+    assert {j["device_id"] for j in jobs} == {a["device_id"], b["device_id"]}
+
+    # The action-catalogue path (/v1/scans) also accepts an empty list now.
+    assert admin.post("/v1/scans", json={"device_ids": []}).status_code in (201, 403)
