@@ -212,15 +212,48 @@ jobs:
         shell: bash
         env:
           AAV_CHANNEL: ${{ inputs.channel || 'beta' }}
-          CSC_LINK: ${{ runner.os == 'Windows' && secrets.AEPX_WIN_CSC_LINK || secrets.AEPX_MAC_CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ runner.os == 'Windows' && secrets.AEPX_WIN_CSC_KEY_PASSWORD || secrets.AEPX_MAC_CSC_KEY_PASSWORD }}
+          # macOS: Developer ID signing + notarization (electron-builder native). CSC only on macOS now.
+          CSC_LINK: ${{ runner.os == 'macOS' && secrets.AEPX_MAC_CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ runner.os == 'macOS' && secrets.AEPX_MAC_CSC_KEY_PASSWORD || '' }}
           APPLE_ID: ${{ secrets.AEPX_APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.AEPX_APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.AEPX_APPLE_TEAM_ID }}
+          # Windows: Azure Artifact Signing (Trusted Signing). Service-principal auth via AZURE_* env.
+          AZURE_TENANT_ID: ${{ secrets.AAV_AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AAV_AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AAV_AZURE_CLIENT_SECRET }}
+          AAV_AZ_ENDPOINT: ${{ secrets.AAV_AZURE_SIGN_ENDPOINT }}
+          AAV_AZ_ACCOUNT: ${{ secrets.AAV_AZURE_SIGN_ACCOUNT }}
+          AAV_AZ_PROFILE: ${{ secrets.AAV_AZURE_SIGN_PROFILE }}
+          AAV_AZ_PUBLISHER: ${{ secrets.AAV_AZURE_SIGN_PUBLISHER }}
         run: |
           cd $P/clients/desktop && npm ci && npm test
-          if [ -z "$CSC_LINK" ]; then unset CSC_LINK CSC_KEY_PASSWORD; export CSC_IDENTITY_AUTO_DISCOVERY=false; echo "Desktop ${{ matrix.os }}: UNSIGNED" >> "$GITHUB_STEP_SUMMARY"; fi
-          npx electron-builder --publish never
+          # Signing is injected only when the relevant secrets exist; otherwise the build is unsigned
+          # exactly as before (zero regression). Switches on automatically once secrets are added.
+          ARGS="--publish never"
+          case "${{ runner.os }}" in
+            Windows)
+              if [ -n "$AZURE_CLIENT_ID" ] && [ -n "$AAV_AZ_ACCOUNT" ]; then
+                ARGS="$ARGS -c.win.azureSignOptions.endpoint=$AAV_AZ_ENDPOINT"
+                ARGS="$ARGS -c.win.azureSignOptions.codeSigningAccountName=$AAV_AZ_ACCOUNT"
+                ARGS="$ARGS -c.win.azureSignOptions.certificateProfileName=$AAV_AZ_PROFILE"
+                ARGS="$ARGS -c.win.azureSignOptions.publisherName=$AAV_AZ_PUBLISHER"
+                echo "Desktop Windows: SIGNED (Azure Artifact Signing)" >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "Desktop Windows: UNSIGNED (set AAV_AZURE_* secrets to enable)" >> "$GITHUB_STEP_SUMMARY"
+              fi ;;
+            macOS)
+              if [ -n "$CSC_LINK" ]; then
+                ARGS="$ARGS -c.mac.hardenedRuntime=true -c.mac.entitlements=build/entitlements.mac.plist -c.mac.entitlementsInherit=build/entitlements.mac.plist -c.mac.notarize=true"
+                echo "Desktop macOS: SIGNED + notarized (Developer ID)" >> "$GITHUB_STEP_SUMMARY"
+              else
+                export CSC_IDENTITY_AUTO_DISCOVERY=false
+                echo "Desktop macOS: UNSIGNED (set AEPX_MAC_CSC_LINK + APPLE_* to enable)" >> "$GITHUB_STEP_SUMMARY"
+              fi ;;
+            *)
+              echo "Desktop Linux: unsigned by design (AppImage/deb; checksum-verified)" >> "$GITHUB_STEP_SUMMARY" ;;
+          esac
+          npx electron-builder $ARGS
           cd dist && for f in agentic-antivirus-*; do [ -f "$f" ] && (sha256sum "$f" 2>/dev/null || shasum -a 256 "$f"); done > SHA256SUMS-${{ matrix.os }}.txt
       - uses: actions/upload-artifact@v7
         with: { name: "aav-desktop-${{ matrix.os }}", path: "${{ env.P }}/clients/desktop/dist/agentic-antivirus-*\n${{ env.P }}/clients/desktop/dist/SHA256SUMS-*" }
