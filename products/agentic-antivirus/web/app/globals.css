@@ -105,7 +105,7 @@ ul.hyps { list-style: none; padding: 0; }
 
 @media (max-width: 52rem) {
   .frame { grid-template-columns: 1fr; }
-  .rail { flex-direction: row; overflow-x: auto; padding: .5rem; border-inline-end: 0; border-bottom: 1px solid var(--line); }
+  .rail { flex-direction: row; flex-wrap: wrap; gap: .25rem .5rem; padding: .5rem; border-inline-end: 0; border-bottom: 1px solid var(--line); }
   .rail .brand, .rail .group { display: none; }
   .main { padding: 1rem; }
   .decision { grid-template-columns: 1fr; }

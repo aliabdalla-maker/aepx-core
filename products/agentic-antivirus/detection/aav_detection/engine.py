@@ -14,6 +14,7 @@ Bundle format (validated by validate_bundle):
 from __future__ import annotations
 
 import hashlib
+import os
 import re
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
@@ -114,6 +115,30 @@ class Engine:
             return sha, verdict
         with open(path, "rb") as fh:
             return sha, self._byte_verdict_chunks(iter(lambda: fh.read(READ_CHUNK), b""), sha)
+
+    def scan_fd(self, fd: int, max_bytes: int | None = None) -> tuple[str | None, Detection | None]:
+        """Scan an already-open file descriptor with pread (never re-opens the path). Used by the real-time guards,
+        whose event descriptors must not trigger new open events. Returns (None, None) past max_bytes."""
+        size = os.fstat(fd).st_size
+        if max_bytes is not None and size > max_bytes:
+            return None, None
+
+        def chunks():
+            off = 0
+            while True:
+                b = os.pread(fd, READ_CHUNK, off)
+                if not b:
+                    return
+                off += len(b)
+                yield b
+        h = hashlib.sha256()
+        for c in chunks():
+            h.update(c)
+        sha = h.hexdigest()
+        verdict = self._hash_verdict(sha)
+        if verdict or sha in self.trusted:
+            return sha, verdict
+        return sha, self._byte_verdict_chunks(chunks(), sha)
 
     def _hash_verdict(self, sha256: str) -> Detection | None:
         if sha256 in self.trusted:

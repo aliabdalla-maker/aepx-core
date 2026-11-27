@@ -23,7 +23,7 @@ export function useApi<T = any>(path: string | null, query?: Record<string, any>
 
 export function Freshness({ at }: { at: string | null }) {
   const { t, locale } = useI18n();
-  return at ? <p className="lede" aria-live="polite">{t("dash.freshness", { time: formatDateTime(at, locale) })}</p> : null;
+  return at ? <p className="lede" aria-live="polite">{t("dash.freshness", { time: "\u2068" + formatDateTime(at, locale) + "\u2069" })}</p> : null;
 }
 
 export function Status({ error, loading }: { error: string | null; loading: boolean }) {

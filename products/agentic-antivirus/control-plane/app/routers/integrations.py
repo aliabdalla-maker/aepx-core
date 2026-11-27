@@ -4,10 +4,11 @@ Trace: INT-01..11, AX-09 (maturity: verified_live / test_only / stub / unavailab
 unavailable, no stubs in production), FN-07 (simulation labelled), SEC-01, SEC-02, THR-01..10,
 DDOS-01..05 (provider alerts), DDL-02 (notify within 60 s of receipt), REC-01 (backup checks).
 
-Provider-specific adapters are not bundled: until an adapter for a named provider has passed
-its sandbox contract test, its integration can be at most `test_only`, and executing actions
-against it (suspend account, revoke sessions, apply traffic policy, backup check) returns a
-failed outcome with the reason rather than pretending to succeed.
+Provider adapters (app/providers, B-06) talk to the providers' real APIs. An integration becomes verified_live only
+when its adapter exists, its own stored credential passed a live check (verify-credentials) in the last 24 hours,
+and sandbox-contract and policy-review evidence is recorded. Until then actions against it (suspend account,
+revoke sessions, apply traffic policy, backup check) return a failed outcome with the reason; provider refusals
+are reported as failures too, never as success.
 """
 from __future__ import annotations
 
@@ -18,16 +19,48 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
-from app import audit, crypto, db
+from app import audit, crypto, db, providers
 from app.deps import Principal, need
 from app.netpolicy import EgressDenied, check_endpoint
 from app.routers.incidents import notify
 
 router = APIRouter(prefix="/v1", tags=["integrations"])
 
-# Adapters that have passed a sandbox contract test, keyed by (signal_kind, provider).
-# Empty in this release: see docs/STATUS.md and register item B-06.
-VERIFIED_ADAPTERS: dict[tuple[str, str], object] = {}
+# Adapters whose provider contract is covered by tests, keyed by (signal_kind, provider) — app/providers.
+VERIFIED_ADAPTERS = providers.REGISTRY
+CREDENTIAL_CHECK_MAX_AGE_S = 24 * 3600
+OUTBOUND_KINDS = ("messaging", "crm", "itsm")
+TEST_TRANSPORT = None          # tests only: an httpx transport standing in for the providers' APIs
+
+
+_SECRET_PREFIXES = ("sk-", "sk_", "pk_", "rk_", "ghp_", "gho_", "github_pat_", "xox", "AKIA", "ASIA", "AIza", "ya29.",
+                    "eyJ", "glpat-", "-----BEGIN")
+
+
+def looks_like_secret(value: str) -> bool:
+    """A secret reference is a short name (e.g. "cloudflare-prod"); tokens and keys are long and high-entropy."""
+    v = value.strip()
+    if v.startswith(_SECRET_PREFIXES):
+        return True
+    if len(v) >= 32 and " " not in v:
+        classes = sum(any(f(c) for c in v) for f in (str.islower, str.isupper, str.isdigit))
+        return classes >= 2 and len(set(v)) >= 16
+    return False
+
+
+def build_adapter(cur, integ: dict):
+    """Instantiate the adapter for an integration row (needs id, tenant_id, signal_kind, endpoint, config)."""
+    cls = VERIFIED_ADAPTERS.get((integ["signal_kind"], (integ.get("config") or {}).get("provider", "")))
+    if cls is None:
+        raise providers.ProviderError(f"no adapter for {integ['signal_kind']}/{(integ.get('config') or {}).get('provider')}")
+    cur.execute("SELECT nonce, ciphertext FROM aav.integration_secrets WHERE integration_id = %s", (integ["id"],))
+    row = cur.fetchone()
+    secret = crypto.open_secret(bytes(row["nonce"]), bytes(row["ciphertext"]),
+                                f"{integ['tenant_id']}:{integ['id']}") if row else ""
+    kw = {"http": __import__("httpx").Client(transport=TEST_TRANSPORT), "check_egress": False} if TEST_TRANSPORT else {}
+    if cls is providers.REGISTRY[("backup", "s3")] or integ["signal_kind"] in OUTBOUND_KINDS:
+        return cls(integ.get("config") or {}, secret, **kw)
+    return cls(integ.get("config") or {}, secret, endpoint=integ.get("endpoint") or "", **kw)
 
 INGEST_CATEGORIES = {
     "identity": {"unusual_sign_in", "repeated_failures", "privilege_change", "suspicious_session"},
@@ -59,6 +92,10 @@ class IntegrationIn(BaseModel):
     secret_ref: str | None = Field(default=None, max_length=200)
 
 
+class SecretIn(BaseModel):
+    value: str = Field(min_length=1, max_length=20000)
+
+
 class PromoteIn(BaseModel):
     maturity: str
     provider: str = Field(min_length=1, max_length=100)
@@ -88,10 +125,23 @@ def list_integrations(p: Principal = Depends(need("integrations.read"))):
 
 @router.post("/integrations", status_code=201)
 def create_integration(body: IntegrationIn, p: Principal = Depends(need("integrations.write"))):
-    if body.signal_kind not in INGEST_CATEGORIES and body.signal_kind not in ("smtp", "other"):
+    if body.signal_kind not in INGEST_CATEGORIES and body.signal_kind not in ("smtp", "other") + OUTBOUND_KINDS:
         raise HTTPException(422, "unknown signal_kind")
     if "password" in json.dumps(body.config).lower() or "secret" in json.dumps(body.config).lower():
         raise HTTPException(422, "credentials belong in the secret store; pass secret_ref instead")
+    if body.secret_ref and looks_like_secret(body.secret_ref):
+        # Audit 27 Nov 2026: an API key was typed into "Secret reference" and stored in clear text.
+        raise HTTPException(422, "This looks like a real credential, not a reference to one. Leave Secret reference "
+                                 "empty, create the integration, then store the credential with "
+                                 "PUT /v1/integrations/{id}/secret (it is encrypted and never shown again). "
+                                 "If you pasted a live key, revoke it with the provider.")
+    if body.endpoint:
+        from urllib.parse import urlparse
+        u = urlparse(body.endpoint)
+        from app.netpolicy import ALLOWED_SCHEMES
+        if u.scheme not in ALLOWED_SCHEMES | {"mqtt"} or not (u.hostname or (u.scheme == "postgresql" and "host=" in u.query)):
+            raise HTTPException(422, "Endpoint must be a full address with a TLS scheme, e.g. https://api.example.com "
+                                     f"(allowed: {', '.join(sorted(ALLOWED_SCHEMES))}); leave it empty for inbound webhooks")
     webhook_secret = crypto.new_token()
     with db.tenant_tx(p.tenant_id) as cur:
         cur.execute("INSERT INTO aav.integrations (tenant_id, name, signal_kind, protocol, endpoint, config, secret_ref, "
@@ -127,6 +177,45 @@ def health_check(iid: UUID, p: Principal = Depends(need("integrations.write"))):
     return result
 
 
+@router.put("/integrations/{iid}/secret", status_code=204)
+def store_secret(iid: UUID, body: SecretIn, p: Principal = Depends(need("integrations.write"))):
+    """Write-only: the credential is encrypted at rest and never returned by any endpoint."""
+    with db.tenant_tx(p.tenant_id) as cur:
+        cur.execute("SELECT id FROM aav.integrations WHERE id = %s", (iid,))
+        if not cur.fetchone():
+            raise HTTPException(404, "not found")
+        nonce, ct = crypto.seal_secret(body.value, f"{p.tenant_id}:{iid}")
+        cur.execute("INSERT INTO aav.integration_secrets (integration_id, tenant_id, nonce, ciphertext, updated_by) "
+                    "VALUES (%s,%s,%s,%s,%s) ON CONFLICT (integration_id) DO UPDATE SET nonce = excluded.nonce, "
+                    "ciphertext = excluded.ciphertext, updated_by = excluded.updated_by, updated_at = now()",
+                    (iid, p.tenant_id, nonce, ct, p.actor))
+        cur.execute("UPDATE aav.integrations SET secret_ref = %s, config = config - 'credential_check' WHERE id = %s",
+                    (f"sealed:{iid}", iid))
+        audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="integration.secret_stored", target=str(iid),
+                     detail={"bytes": len(body.value)})
+
+
+@router.post("/integrations/{iid}/verify-credentials")
+def verify_credentials(iid: UUID, p: Principal = Depends(need("integrations.write"))):
+    """Live check of the stored credential against the provider's API (read-only call)."""
+    with db.tenant_tx(p.tenant_id) as cur:
+        cur.execute("SELECT * FROM aav.integrations WHERE id = %s", (iid,))
+        integ = cur.fetchone()
+        if not integ:
+            raise HTTPException(404, "not found")
+        now = datetime.now(timezone.utc)
+        try:
+            result = {**build_adapter(cur, integ).health(), "checked_at": now.isoformat()}
+        except providers.ProviderError as exc:
+            result = {"ok": False, "reason": str(exc), "checked_at": now.isoformat()}
+        cur.execute("UPDATE aav.integrations SET last_health = %s, config = config || %s WHERE id = %s",
+                    (json.dumps(result), json.dumps({"credential_check": {"ok": result["ok"], "at": now.timestamp()}}),
+                     iid))
+        audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="integration.verify_credentials",
+                     target=str(iid), detail=result)
+    return result
+
+
 @router.post("/integrations/{iid}/maturity")
 def set_maturity(iid: UUID, body: PromoteIn, p: Principal = Depends(need("integrations.write"))):
     """Raise or lower maturity. verified_live requires a registered verified adapter for the
@@ -134,16 +223,22 @@ def set_maturity(iid: UUID, body: PromoteIn, p: Principal = Depends(need("integr
     if body.maturity not in ("verified_live", "test_only", "stub", "unavailable"):
         raise HTTPException(422, "invalid maturity")
     with db.tenant_tx(p.tenant_id) as cur:
-        cur.execute("SELECT signal_kind, secret_ref FROM aav.integrations WHERE id = %s", (iid,))
+        cur.execute("SELECT signal_kind, secret_ref, config FROM aav.integrations WHERE id = %s", (iid,))
         row = cur.fetchone()
         if not row:
             raise HTTPException(404, "not found")
         if body.maturity == "verified_live":
-            needed = {"sandbox_contract_passed", "credential_verified", "policy_reviewed"}
+            needed = {"sandbox_contract_passed", "policy_reviewed"}
             if (row["signal_kind"], body.provider) not in VERIFIED_ADAPTERS:
                 raise HTTPException(409, f"no verified adapter for {row['signal_kind']}/{body.provider}")
+            if row["config"].get("provider") not in (None, body.provider):
+                raise HTTPException(409, "provider differs from the one whose credential was checked")
             if not row["secret_ref"] or not all(body.evidence.get(k) is True for k in needed):
-                raise HTTPException(409, f"evidence required: {sorted(needed)} and a secret_ref")
+                raise HTTPException(409, f"evidence required: {sorted(needed)} and a stored credential")
+            chk = row["config"].get("credential_check") or {}
+            if not chk.get("ok") or datetime.now(timezone.utc).timestamp() - chk.get("at", 0) > CREDENTIAL_CHECK_MAX_AGE_S:
+                raise HTTPException(409, "credential not verified live in the last 24 h: "
+                                         "POST /v1/integrations/{id}/verify-credentials")
         cur.execute("UPDATE aav.integrations SET maturity = %s, enabled = %s, config = config || %s WHERE id = %s",
                     (body.maturity, body.maturity in ("verified_live", "test_only"),
                      json.dumps({"provider": body.provider}), iid))
@@ -185,6 +280,21 @@ def ingest(iid: UUID, body: IngestIn, x_aav_webhook_secret: str | None = Header(
         integ = cur.fetchone()
     if not integ or not x_aav_webhook_secret or not crypto.hmac_ok(integ["webhook_secret_hash"], x_aav_webhook_secret):
         raise HTTPException(401, "unknown integration or bad secret")
+    return ingest_signal(iid, integ, body)
+
+
+def authenticate_ingest(iid: UUID, presented_secret: str | None) -> dict:
+    """Shared by the webhook, gRPC and other push transports: returns the integration row or raises 401."""
+    with db.global_tx() as cur:
+        cur.execute("SELECT * FROM aav.integration_for_webhook(%s)", (iid,))
+        integ = cur.fetchone()
+    if not integ or not presented_secret or not crypto.hmac_ok(integ["webhook_secret_hash"], presented_secret):
+        raise HTTPException(401, "unknown integration or bad secret")
+    return integ
+
+
+def ingest_signal(iid: UUID, integ: dict, body: IngestIn) -> dict:
+    """Canonical signal ingestion for every transport (webhook, gRPC, SQL and IMAP pollers)."""
     if not integ["enabled"] or integ["maturity"] not in ("verified_live", "test_only"):
         raise HTTPException(409, f"integration not enabled (maturity {integ['maturity']})")
     kind = integ["signal_kind"]
@@ -245,7 +355,7 @@ def ingest(iid: UUID, body: IngestIn, x_aav_webhook_secret: str | None = Header(
 
 
 def execute_identity_action(cur, tenant_id, integration_id: str, action: str, target: str) -> dict:
-    cur.execute("SELECT signal_kind, maturity, enabled, config FROM aav.integrations WHERE id = %s", (integration_id,))
+    cur.execute("SELECT * FROM aav.integrations WHERE id = %s", (integration_id,))
     integ = cur.fetchone()
     if not integ or integ["signal_kind"] != "identity":
         return {"target": target, "status": "failed", "reason": "identity integration not found in tenant"}
@@ -253,7 +363,10 @@ def execute_identity_action(cur, tenant_id, integration_id: str, action: str, ta
     if integ["maturity"] != "verified_live" or not integ["enabled"] or adapter is None:
         return {"target": target, "status": "failed",
                 "reason": f"no verified_live identity adapter (maturity {integ['maturity']}); nothing was changed"}
-    return adapter.execute(action, target)  # pragma: no cover - no verified adapters ship yet
+    try:
+        return build_adapter(cur, integ).execute(action, target)
+    except providers.ProviderError as exc:
+        return {"target": target, "status": "failed", "reason": str(exc)}
 
 
 class BackupCheckIn(BaseModel):
@@ -263,15 +376,17 @@ class BackupCheckIn(BaseModel):
 @router.post("/recovery/{item_id}/verify-backup")
 def verify_backup(item_id: UUID, body: BackupCheckIn, p: Principal = Depends(need("recovery.write"))):
     with db.tenant_tx(p.tenant_id) as cur:
-        cur.execute("SELECT signal_kind, maturity, enabled, config FROM aav.integrations WHERE id = %s",
-                    (body.integration_id,))
+        cur.execute("SELECT * FROM aav.integrations WHERE id = %s", (body.integration_id,))
         integ = cur.fetchone()
         adapter = VERIFIED_ADAPTERS.get(("backup", (integ or {}).get("config", {}).get("provider", "")))
         if not integ or integ["signal_kind"] != "backup" or integ["maturity"] != "verified_live" or adapter is None:
             evidence = {"verified": None, "reason": "no verified_live backup adapter; availability unknown",
                         "checked_at": datetime.now(timezone.utc).isoformat()}
-        else:  # pragma: no cover - no verified adapters ship yet
-            evidence = adapter.verify_backup(item_id)
+        else:
+            try:
+                evidence = build_adapter(cur, integ).verify_backup(item_id)
+            except providers.ProviderError as exc:
+                evidence = {"verified": False, "reason": str(exc), "checked_at": datetime.now(timezone.utc).isoformat()}
         cur.execute("UPDATE aav.recovery_items SET backup_verified = %s, backup_evidence = %s, updated_at = now() "
                     "WHERE id = %s RETURNING id", (evidence["verified"], json.dumps(evidence), item_id))
         if not cur.fetchone():
@@ -279,3 +394,50 @@ def verify_backup(item_id: UUID, body: BackupCheckIn, p: Principal = Depends(nee
         audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="recovery.verify_backup", target=str(item_id),
                      detail=evidence)
     return evidence
+
+
+class UrlCheckIn(BaseModel):
+    url: str = Field(min_length=4, max_length=4000)
+
+
+@router.post("/url-reputation")
+def url_reputation(body: UrlCheckIn, p: Principal = Depends(need("alerts.read"))):
+    """SEC-02: the signed detection bundle's reputation list plus every verified_live url_reputation provider."""
+    from app.detections import current_engine
+    eng = current_engine()
+    det = eng.check_url(body.url) if eng else None
+    results = [{"source": f"detection_bundle:{eng.version}" if eng else "detection_bundle:none",
+                "malicious": bool(det) if eng else None, "threat": det.title if det else None}]
+    with db.tenant_tx(p.tenant_id) as cur:
+        cur.execute("SELECT * FROM aav.integrations WHERE signal_kind = 'url_reputation' AND maturity = 'verified_live' "
+                    "AND enabled")
+        for integ in cur.fetchall():
+            try:
+                results.append(build_adapter(cur, integ).lookup(body.url))
+            except providers.ProviderError as exc:
+                results.append({"source": integ["config"].get("provider"), "malicious": None, "error": str(exc)})
+        answered = [r for r in results if r.get("malicious") is not None]
+        verdict = "malicious" if any(r.get("malicious") for r in results) else ("not_listed" if answered else "unknown")
+        audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="url.reputation_check", target=body.url[:200],
+                     detail={"verdict": verdict, "sources": [r.get("source") for r in results]})
+    return {"url": body.url, "verdict": verdict, "results": results}
+
+
+def deliver_outbound(tenant_id, kind: str, title: str, body: dict) -> list[dict]:
+    """INT-03: send one notification to every verified_live messaging/CRM/ITSM integration of the tenant.
+    Called after commit (see incidents.notify); failures are recorded on the integration, never raised."""
+    out = []
+    with db.tenant_tx(tenant_id) as cur:
+        cur.execute("SELECT * FROM aav.integrations WHERE signal_kind = ANY(%s) AND maturity = 'verified_live' "
+                    "AND enabled", (list(OUTBOUND_KINDS),))
+        for integ in cur.fetchall():
+            if kind not in (integ["config"].get("kinds") or [kind]):      # optional per-integration filter
+                continue
+            try:
+                res = {"ok": True, **build_adapter(cur, integ).send(kind, title, body)}
+            except providers.ProviderError as exc:
+                res = {"ok": False, "reason": str(exc)[:300]}
+            res["checked_at"] = datetime.now(timezone.utc).isoformat()
+            cur.execute("UPDATE aav.integrations SET last_health = %s WHERE id = %s", (json.dumps(res), integ["id"]))
+            out.append({"integration_id": str(integ["id"]), **res})
+    return out

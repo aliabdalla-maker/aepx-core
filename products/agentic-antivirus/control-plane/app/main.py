@@ -31,11 +31,20 @@ async def lifespan(_app: FastAPI):
     """Start the mail outbox worker and retention loop; stop them on shutdown (replaces on_event, L-3)."""
     mailer.start()
     threading.Thread(target=_retention_loop, name="aav-retention", daemon=True).start()
+    import os
+    from app import transports
+    grpc_server = transports.start_grpc(int(os.environ["AAV_GRPC_PORT"]),
+                                                      os.getenv("AAV_GRPC_HOST", "127.0.0.1"))[0] if os.getenv("AAV_GRPC_PORT") else None
+    poll_stop = transports.start_poller(int(os.environ["AAV_POLL_SECONDS"])) if os.getenv("AAV_POLL_SECONDS") else None
     try:
         yield
     finally:
         mailer.stop()
         _retention_stop.set()
+        if grpc_server:
+            grpc_server.stop(grace=5)
+        if poll_stop:
+            poll_stop.set()
 
 
 app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.2", openapi_url="/v1/openapi.json",

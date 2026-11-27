@@ -1,0 +1,637 @@
+0	Asosiy kontentga oʻtish
+1	Doimiy istisno qoʻshish
+2	Trafik cheklovini qoʻllash
+3	Qurilma metamaʼlumotlarini yigʻish
+4	Qurilmani tarmoqdan izolyatsiya qilish
+5	Faylni karantinga oʻtkazish
+6	Qurilmani izolyatsiyadan chiqarish
+7	Karantindagi faylni tiklash
+8	Foydalanuvchini barcha joydan chiqarish
+9	Trafik cheklovini bekor qilish
+10	Yangilanishni orqaga qaytarish
+11	Qurilmalarni skanerlash
+12	Foydalanuvchi hisobini toʻxtatib turish
+13	Jarayonni toʻxtatish
+14	Tasdiqlash
+15	Rad etish
+16	Qurilmalarga yuborish
+17	Tasdiq muddati tugaydi: [0]
+18	SI yordamchisi taklif qilgan
+19	Reklama
+20	Amal
+21	Agentlar
+22	Soʻrash
+23	Xavfsizlik yordamchisidan soʻrash
+24	Javoblar qurilmalaringiz, ochiq insidentlar va boʻshliqlardan olinadi. Yordamchi hech narsani oʻzgartira olmaydi.
+25	Asosida
+26	Dalilsiz [0] ta daʼvo olib tashlandi
+27	Dalilsiz [0] ta daʼvo olib tashlandi
+29	Oʻz serveringizdagi model
+30	Qoidalar (modelsiz)
+31	Bartaraf etish rejasi loyihasini tuzish
+32	Har bir qadam — taklif. Kimdir tasdiqlamaguncha hech narsa ishga tushmaydi.
+33	Savol
+34	Masalan: qaysi qurilmalar eʼtibor talab qiladi?
+35	Taklif etilgan jiddiylik
+36	Xulosa
+37	Nishonlar
+38	Ushbu insidentni xulosalash
+39	Nima uchun
+40	Aniqlandi
+41	Shubhali narsa haqida xabar berish
+42	Qoida
+43	Jiddiylik
+44	Ogohlantirish
+46	Fayl qoʻshish
+47	Jild qoʻshish
+48	Rasm qoʻshish
+49	[0] ta biriktirma
+50	[0] ta biriktirma
+51	Biriktirmalar
+52	Suratga olish
+53	Kameraga ruxsat berilmadi. Brauzeringizda ruxsat bering yoki qurilmangizning kamera ilovasidan foydalaning.
+54	Kamera koʻrinishi
+55	Bu brauzer bu yerda kamerani ocha olmaydi.
+56	Suratga olish
+57	Yordamchini yopish
+58	Bu qanday fayllar va ular xavfsizmi?
+59	Fayl
+60	Xavfsizligingiz haqida soʻrang yoki fayl, jild, rasm yoxud kamera suratini biriktiring. Har bir biriktirma avval skanerlanadi va hech narsa saqlanmaydi.
+61	[0] ta rasm
+62	[0] ta rasm
+63	 model tomonidan tavsiflandi.
+64	Masalan: bu yuklab olingan fayl xavfsizmi?
+65	Toza matn va rasmlar tashkilotingiz yoqqan SI modeliga yuborilishi mumkin. Zararli fayllar hech qachon yuborilmaydi.
+66	[0] ta fayl qoʻshilmadi
+67	[0] ta fayl qoʻshilmadi
+68	: koʻpi bilan [0] ta fayl, har biri [1] MB va jami [2] MB.
+69	[0] ni olib tashlash
+70	Skanerlash va soʻrash
+71	Skanerlash natijalari
+72	Turi
+73	Qurilma kamerasidan foydalanish
+74	Natija
+75	Maʼlum zararli dastur yoʻq
+76	Zararli
+77	Skanerlanmagan
+78	Audit zanjiri [0]-yozuvda uzilgan.
+79	Audit zanjiri butun: [0] ta yozuv tekshirildi.
+80	E-pochta
+81	Parolni unutdingizmi?
+82	Google orqali kirish
+83	Google orqali kirib boʻlmadi. Qayta urining yoki e-pochta va parolingizdan foydalaning.
+84	Kirish
+85	Chiqish
+86	Yangi parol
+87	yoki
+88	Tashkilot
+89	Parol
+90	Parol oʻzgartirildi. Yangi parolingiz bilan kiring.
+91	Kamida 12 ta belgi.
+92	Hisob yaratish
+93	Havolani qayta yuborish
+94	Agar bu hisob hali tasdiqlanishi kerak boʻlsa, yangi havola yoʻlda. Spam jildini ham tekshiring.
+95	Parolni tiklash
+96	Agar bu manzildan foydalanadigan hisob boʻlsa, tiklash havolasini yubordik. U bir soat amal qiladi.
+97	Kirishdan oldin e-pochta manzilingizni tasdiqlang. [0] manziliga yuborgan havolamizni oching.
+98	E-pochta tasdiqlandi. Endi kirishingiz mumkin.
+99	Bu havolaning muddati tugagan yoki u allaqachon ishlatilgan. Yangisini olish uchun kiring.
+100	Manzilingizni tasdiqlash uchun e-pochtangizni tekshiring.
+101	Obuna reklamani 95% ga kamaytiradi.
+102	Sinov muddatingiz tugadi.
+103	[0] gacha obuna
+104	Hamma narsani bepul va toʻliq reklama bilan qoldirish
+105	Kimdir toʻlamaguncha qurilma himoyasi bilan birga hammasini toʻxtatish
+106	Konsol uchun obuna kerak; qurilmalar himoyada qoladi
+107	Oyiga 4,99 £
+108	Obuna boʻlish
+109	Bepul sinov:
+110	[0] kun qoldi
+111	[0] kun qoldi
+112	Bekor qilish
+113	Oʻchirish
+114	Xatolik yuz berdi.
+115	Eksport
+116	Yuklanmoqda…
+117	Mavjud emas
+118	Hech qachon
+119	Keyingi
+120	yoʻq
+121	Koʻrsatish uchun hech narsa yoʻq.
+122	oʻchiq
+123	yoniq
+124	Oldingi
+125	Yangilash
+126	Saqlash
+127	Qidirish
+128	Simulyatsiya (test maʼlumotlari)
+129	Holat
+130	Mavjud emas
+131	Nomaʼlum
+132	Yangilandi: [0]
+133	Bajarilmoqda…
+134	ha
+135	24 soatda [0] ta ogohlantirish
+136	24 soatda [0] ta ogohlantirish
+137	[0] ta qurilma
+138	[0] ta qurilma
+139	Maʼlumotlar holati: [0]
+140	[0] ta ochiq insident
+141	[0] ta ochiq insident
+142	[0] ta tasdiq kutilmoqda
+143	[0] ta tasdiq kutilmoqda
+144	tasdiqlangan
+145	shubhali
+146	Qurilmani roʻyxatdan oʻtkazish
+147	Qurilma
+148	Hisobot yubormayapti
+149	Eskirgan siyosat
+150	Sensor oʻchirilgan
+151	Eskirgan taʼriflar
+152	Muammolar
+153	Oxirgi faollik
+154	Operatsion tizim
+155	Siyosat
+156	24 soat ichida qurilmada ishga tushiring (bir martalik):
+157	Himoya
+158	Nusxalash
+159	Yuklab olish
+160	Koʻchirish
+161	Yangi jild
+162	Nomini oʻzgartirish
+163	Tiklash
+164	Savatga oʻtkazish
+165	Yuklash
+166	Yordam
+167	Ushbu sahifadagi [0] ta matn mashina tarjimasi va hali tekshirilmagan.
+168	Bu tildagi [0] ta matn mashina tarjimasi va hali tekshirilmagan.
+169	Bu til hali tarjima qilinmagan, shuning uchun inglizcha koʻrsatilmoqda.
+170	tasdiqlangan
+171	Kuzatilgan faktlar
+172	Gipotezalar (tasdiqlanmagan)
+173	Gipoteza, [0] ishonch: [1]
+174	Tekshiruvni boshlash
+175	Yetishmayotgan dalillar
+176	Yetishmaydi: [0]
+177	Ovoz chiqarib oʻqish
+178	Tavsiya etilgan amallar
+179	Dalillar xronologiyasi
+180	kiruvchi webhook
+181	Identifikatsiya provayderingiz, DNS, xavfsizlik devorlari va boshqa vositalardan keladigan signallar. Yangi integratsiyalar mavjud emas holatida boshlanadi; faqat shartnoma testidan oʻtgan provayder adapteri jonli deb belgilanishi mumkin. Test maʼlumotlari qayerda koʻrinmasin, simulyatsiya deb belgilanadi.
+182	Ulanmagan (stub)
+183	Faqat test maʼlumotlari
+184	Mavjud emas
+185	Jonli (tekshirilgan)
+186	Maxfiy kalit (bir marta koʻrsatiladi):
+187	Tasdiqlar
+188	Ogohlantirishlar
+189	Audit
+190	Obuna
+191	Boshqaruv paneli
+192	DDoS va mavjudlik
+193	Qurilmalar
+194	Fayllar
+195	Insidentlar
+196	Integratsiyalar
+197	Siyosatlar
+198	Maxfiylik
+199	Karantin
+200	Javob choralari
+201	Xavfsizlik
+202	Sozlamalar
+203	Maʼlum zararli dasturlarni avtomatik karantinga oʻtkazish
+204	Shubhali xatti-harakatlarni kuzatish
+205	Shubhali skriptlarni bloklash
+206	Tekshiruv uchun fayl tarkibini yigʻish (standart holatda oʻchiq)
+207	Tarmoq izolyatsiyasiga ruxsat berish
+208	Fayllarni ochilganda yoki yozilganda skanerlash
+209	Yuklab olinganlarni skanerlash
+210	Dasturlarni ishga tushganda skanerlash
+211	Agentni oʻzgarishlardan himoyalash
+212	Maʼlum zararli havolalar haqida ogohlantirish
+213	Sabab
+214	Koʻrib chiqishni soʻrash
+215	Yangi skanerlashdan keyin tiklash
+216	tasdiqlangan yoʻq qilishgacha mediana vaqt (n=[0], hal qilinmagan [1])
+217	qayta testdan oʻtgan tuzatishlar
+218	tiklashdan keyingi takrorlanish
+219	tasdiqlangan virusni yoʻq qilish
+220	xizmatga xavfsiz qaytish
+221	yakunlangan tiklash skanerlari
+222	Faqat karantin natijalari ([0]) va qayta oʻrnatilgan qurilmalar ([1]) alohida hisoblanadi; karantinning oʻzi hech qachon yoʻq qilish deb hisoblanmaydi.
+223	[0] soat
+224	[0] daq
+225	[0] s
+226	Tasdiq kutilmoqda
+227	Ishlab chiqarish dalillari
+228	Ishlab chiqarishda nima, qaysi aktivlarda va qaysi versiya bilan tekshirilganini qayd eting. Yozuvlarni tahrirlab boʻlmaydi.
+229	Versiya
+230	Rejimni oʻzgartirish
+231	dalil yoʻq
+232	muvaffaqiyatsiz
+233	oʻtdi
+234	kutilmoqda
+235	Playbook jarayonini tekshirish
+236	Javob bera oladigan qurilmalar
+237	Barcha qurilmalar
+238	[0] ta pilot qurilma
+239	[0] ta pilot qurilma
+240	Yakunlandi
+241	Yakunlanish sharti
+242	Mashq
+243	Kuzatish
+244	Javob berish
+245	Qamrov
+246	[0] ta kuzatilmoqda, [1] ta javob bera oladi
+247	Maʼlumotlar
+248	Maʼlumotlar yoshi
+249	Jonli
+250	Test maʼlumotlari
+251	bajarilmagan
+252	kvitansiya
+253	jarayonda
+254	nomaʼlum
+255	Joʻnatish
+256	Dalil
+257	Bajarildi
+258	Eskirgan
+259	Maʼlumot oqimlari
+260	Versiya yoki xesh
+261	Muhit
+262	Natija
+263	Egasi
+264	Talab
+265	Aktiv yoki guruh
+266	Koʻrsatish
+267	Hammasi
+268	Yakunlanmagan
+269	Butun xizmat uchun yoniq
+270	Ushbu tashkilot uchun yoniq
+271	Ushbu tashkilot uchun barcha yangi javob amallari toʻxtatilsinmi? Himoya va skanerlash ishlashda davom etadi.
+272	Javob amallariga yana ruxsat berish
+273	Barcha javob amallarini toʻxtatish
+274	Favqulodda toʻxtatish
+275	Turi
+276	Ochiq turish mediana vaqti, daq ([0] ta ochiq, eng eskisi [1] daq)
+277	Siyosat rad etishlari
+278	Mashqlar va simulyatsiyalar (yuqorida hisoblanmagan)
+279	Takroriy amallar (maqsad 0)
+280	Oqimning mediana kechikishi (p95 [0] s, n=[1])
+281	Muddati oʻtgan tasdiqlar ([0] ta kutmoqda, maqsad [1] daq)
+282	Signaldan dastlabki baholashgacha mediana vaqt (p95 [0] daq, n=[1], [2] ta baholanmagan)
+283	Mustaqil tekshirilgan amallar ([0]/[1])
+284	Davr: [0]. Kvitansiyaning oʻzi hech qachon tekshirilgan deb hisoblanmaydi. Yetishmayotgan maʼlumotlar mavjud emas deb koʻrsatiladi.
+285	Javob koʻrsatkichlari
+286	Oxirgi hodisa
+287	Agentlar taklif qiladi; nima bajarilishini qatʼiy siyosat hal qiladi. Har bir amal oʻz tasdigʻi, kvitansiyasi va mustaqil tekshiruvini koʻrsatadi.
+288	Bosqich
+289	Tasdiq kutilmoqda
+290	Rad etilgan
+291	Muddati tugagan
+292	Muvaffaqiyatsiz
+293	Qoʻlda muvofiqlashtirish kerak
+294	Taklif qilingan
+295	Navbatda
+296	Bajarilmoqda
+297	Tekshiruv kutilmoqda
+298	Tekshirilgan
+299	Jonli holat
+300	Rejim
+301	Simulyatsiya
+302	Skanerlash va maʼlumot yigʻish ishlaydi. Boshqa amallar taklif boʻlib qoladi.
+303	Tasdiqlangan amallar tanlangan qurilmalarda bajariladi.
+304	Amallar faqat test adapterlarida bajariladi. Qurilmalaringizda hech narsa oʻzgarmaydi.
+305	Hali amallar yoʻq.
+306	Tasdiq kutayotgan hech narsa yoʻq.
+307	Hali ishlab chiqarish dalillari qayd etilmagan.
+308	Hali hech bir qurilma yoki integratsiya maʼlumot yubormayapti.
+309	Bajarilmadi
+310	Kuzatildi
+311	Nima sodir boʻldi
+312	DDoS ga javob
+313	Notoʻgʻri ijobiy natija va tiklash
+314	Identifikatsiya, fishing va shubhali trafik
+315	Zararli dasturlar va shubhali yuklab olishlar
+316	Tarmoq koʻrinuvchanligi va qurilma holati
+317	Buzilishdan keyin tiklash
+318	Toʻlov talab qiluvchi dastur yoki shubhali buzilish
+319	Playbook
+320	Playbooklar
+321	Siyosat versiyasi
+322	Versiya oʻrnatildi
+323	Xavfsizlik devori izolyatsiyasi
+324	Maʼlumotlar qabul qilindi
+325	Fayl olib tashlandi
+326	Jarayon toʻxtatildi
+327	Provayder holati
+328	Qayd etildi
+329	Skanerlash yakunlandi
+330	Simulyatsiya qilindi
+331	Karantindan chiqarilgan
+332	Karantinda
+333	Amallar va kvitansiyalar
+334	Natijani qayd etish
+335	Qayd etish
+336	Javob bera oladi
+337	Manba
+338	qurilma
+339	konsol
+340	simulyatsiya
+341	Boshlanish sharti
+342	Yangilandi
+343	Mustaqil tekshiruv
+344	Kutilmoqda
+345	Arxiv cheklovi
+346	Shifrlangan arxiv
+347	Istisno qilingan
+348	Kirish imkonsiz
+349	Vaqt cheklovi
+350	Juda katta
+351	Qoʻllab-quvvatlanmaydigan format
+352	Bekor qilingan
+353	Oʻtkazib yuborilgan
+354	Qisman
+355	Vaqt tugadi
+356	Toʻliq
+357	Talab boʻyicha
+358	Tezkor
+359	Tiklash
+360	Rejalashtirilgan
+361	Maqsadli
+362	Segment qoʻshish
+363	arxivlar
+364	Aktivlar
+365	Bu skanerlash toʻxtatilsinmi? Hozirgacha olingan natijalar bekor qilingan skanerlash sifatida saqlanadi.
+366	Qamrab olinmagan
+367	Aniqlashlar
+368	Himoya holati boʻyicha qurilmalar
+369	Dvigatel
+370	Muddat
+371	Oxirgi dalil
+372	Kutilgan nazorat
+373	Taklif etilgan tuzatish
+374	Qayta test
+375	Aktiv yoki segment
+376	Ochiq boʻshliqlar
+377	30 kunlik skanerlash natijalari
+378	ogohlantirishdan tasdiqlangan cheklashgacha
+379	himoyalangan qurilmalar
+380	yuqori provayder himoyasidagi ommaviy nuqtalar
+381	hodisadan ogohlantirishgacha
+382	taʼriflari dolzarb qurilmalar
+383	7 kunda toʻliq skanerlangan qurilmalar
+384	ochiq boʻshliqlar ([0] ta muddati oʻtgan, 30 kunda [1] ta yopilgan)
+385	kuzatiladigan tarmoq segmentlari
+386	tasdiqlangan haqiqiy ijobiy natijalar
+387	yakunlangan skanerlashlar
+388	Qamrov va javob
+389	Oxirgi toʻliq skanerlash
+390	Oxirgi telemetriya
+391	Qamrovdagi har bir qurilma va tarmoq segmenti, u himoyalanganmi va keyin nimani tuzatish kerak.
+392	Tarmoq koʻrinuvchanligi
+393	Hali roʻyxatdan oʻtgan qurilma yoʻq. Qurilmalar boʻlimidan kompyuterni himoyalang.
+394	Ochiq boʻshliqlar yoʻq.
+395	[0] ta ochiq
+396	muddati oʻtgan
+397	p95 [0] s
+398	Jildlar
+399	Skanerlanadigan jildlar, vergul bilan ajratilgan
+400	Shifrlash va xavfsizlik devori
+401	Disk shifrlash [0], xavfsizlik devori [1]
+402	Insidentlardan keyin tiklash
+403	Hozir qayta tekshirish
+404	Qayta test qilinmagan
+405	Qayta test muvaffaqiyatsiz
+406	Tekshirilib yopilgan
+407	Skanerlash turi
+408	Skanerlashlar
+409	Segment
+410	Segment nomi
+411	Skanerlashni boshlash
+412	Boshlangan
+413	Holat
+414	Pasaygan
+415	Himoyalangan
+416	Himoyalanmagan
+417	Holat boʻyicha qurilmalar
+418	[0] ta nomaʼlum
+419	Koʻrinuvchanlik yoʻq
+420	Kuzatilmoqda
+421	Koʻrinuvchanlik
+422	Aniqlashlar yoʻqligi himoyani isbotlamaydi: qamrov va skanerlash natijalarini ham tekshiring.
+423	Til
+424	Tarjima qamrovi
+425	Oldingi versiya yoʻq
+426	Mavzu
+427	Qorongʻi
+428	Yuqori kontrast
+429	Yorugʻ
+430	[0] ta faylda yangi tahdid topilmadi.
+431	[0] ta tahdid
+432	[0] ta tahdid
+433	 [0] ta faylda topildi. Ularni koʻrib chiqish uchun Ogohlantirishlar va Tasdiqlar boʻlimlariga oʻting.
+434	Toʻliq skanerlash
+435	Bu kompyuterni himoyalab boʻlmadi: [0]
+436	Bu kompyuter himoyalangan. Agentic Antivirus ochiq ekan, real vaqtda skanerlash ishlaydi.
+437	Skanerlash yakunlanmadi: [0]
+438	Skanerlanmoqda…
+439	Barcha disklar skanerlanmoqda. Bu uzoq vaqt olishi mumkin.
+440	Yuklanmalar, Ish stoli va vaqtinchalik fayllar skanerlanmoqda…
+441	[0] ta faylni oʻqib boʻlmadi.
+442	Fayl
+443	Veb-sayt havolasi
+444	Test maʼlumotlarini qabul qilish
+446	Amallar
+447	Integratsiya qoʻshish
+448	Istisno qoʻshish
+449	Integratsiya qoʻshish
+450	Haftalik toʻliq skanerlash qoʻshish
+451	administrator
+452	Reklama
+453	Reklamaga rozilik
+454	Taʼsirlangan xizmatlar
+455	soʻnggi 24 soatdagi ogohlantirishlar
+456	Ruxsat berish
+457	Ruxsat berish va skanerlash
+458	Administrator sabab koʻrsatishi kerak. Istisno audit jurnaliga yoziladi.
+459	E-pochta
+460	Xizmatga qaytishni tasdiqlash
+461	Amallarni tasdiqlash
+462	Aktiv
+463	faol himoya ostidagi aktivlar
+464	24 soatda ogohlantirishi bor aktivlar
+465	Audit jurnali
+466	Avtomatik himoya har bir qurilmada ishlashda davom etadi. Bular inson qaror qabul qilishi kerak boʻlgan amallar.
+467	Mavjudlik
+468	Mavjud signallar
+469	Zaxira nusxa tekshirilgan
+470	Bloklash
+471	Standart holatda agent xavfsizlik telemetriyasi va fayl xeshlarini yuboradi: jarayon nomlari va buyruq satrlari, fayl yoʻllari, tarmoq ulanishi metamaʼlumotlari va aniqlashlar. Fayl tarkibi faqat tashkilotingiz buni yoqsa yigʻiladi.
+472	Sigʻim
+473	Turkum
+474	Oʻzgartirilgan
+475	Toʻlov
+476	Tekshirish
+477	tanlang
+478	Qurilmani tanlang
+480	Yopish
+481	Vergul bilan ajratilgan
+482	Aloqa
+483	Nazorat
+484	Himoya qatlamlari boʻyicha qamrov
+485	kritik
+486	kritik ogohlantirishlarni yetkazish (p95, 30 kun)
+487	Kutilayotgan qarorlar
+488	Rad etish
+489	Taʼriflar
+490	Nima sodir boʻlganini tasvirlang
+491	Tafsilot
+492	Tafsilotlar
+493	Aniqlash
+494	Litsenziyalanadigan qurilma
+495	toʻliq himoyalangan qurilmalar
+496	izolyatsiya qilingan qurilmalar
+497	Eʼtibor talab qiladigan qurilmalar
+498	Yoʻnalish
+499	DNS zonasi
+500	yuklab olish sahifasidan
+501	Bepul sinov davrida va pullik boʻlmagan tariflarda roziligingiz soʻralgach, konsol Google AdSense reklamalarini, mobil ilovalar esa Google AdMob reklamalarini koʻrsatadi. Obunachilar 95% kamroq reklama koʻradi. Reklamalar hech qachon tasdiq, cheklash, tahdid ogohlantirishi, karantinni koʻrib chiqish, kirish, toʻlov yoki audit ekranlarida chiqmaydi.
+502	Har bir nashr yangi imzolangan versiya yaratadi. Qurilmalar oflayn boʻlganda oxirgi tekshirilgan versiyani qoʻllashda davom etadi.
+503	Qoʻllab-quvvatlash e-pochtasi:
+504	Nuqta
+505	Agentic Antivirus xizmatini Equality Software Ltd boshqaradi. Bu sahifa xizmat nimalarni yigʻishini tavsiflaydi. Nashr qilinishidan oldin uni mahsulot egasi koʻrib chiqishi kerak.
+506	Qurilma, hisob yoki trafikni oʻzgartiradigan har bir amal siyosat dvigateli va AEP-X boshqaruvidan oʻtadi. Tasdiq bitta amalni, uning aniq nishonlarini, ushbu tashkilotni va belgilangan vaqtni qamrab oladi.
+507	Har bir yuklangan fayl zararli dasturga va haqiqiy turiga tekshiriladi. Tekshirilgan koʻruvchisi yoʻq fayllar saqlanadi va yuklab olinadi, lekin oldindan koʻrsatilmaydi.
+508	Istisno
+509	Istisnolar
+510	Jild yoʻli
+511	manziliga maʼlumotlarga kirish yoki tuzatish soʻrovlari uchun yozing.
+512	Boʻshliqlar
+513	Windows, Mac yoki Linux uchun agentni bu yerdan oling:
+514	Qurilmalar boʻlimiga oʻting, Qurilmani roʻyxatdan oʻtkazish ni tanlang va koʻrsatilgan buyruqni himoyalamoqchi boʻlgan kompyuterda bajaring. Agent imzolangan siyosatini olishi bilan skanerlashni boshlaydi.
+515	Salomatlik
+516	Tarix
+517	Xost nomi
+518	Sinov muddatidan keyin obuna toʻlanmaguncha qurilmalar skanerlash va tahdidlarni bloklashni toʻxtatishini tushunaman.
+519	Taʼsir
+520	zip yoki tar import qilish
+521	Insident
+522	Til modelini qoʻshish (tashkilotingiz yoqqan boʻlsa)
+523	IP manzil
+524	Qoʻshilish
+525	Tashkilotingizga qoʻshiling
+526	Maʼlum zararli dasturlar ishga tusha olmaydigan karantinga oʻtkaziladi. Agar fayl xato bilan bloklangan deb hisoblasangiz, Karantinni oching va koʻrib chiqishni soʻrang. Qarorni administrator qabul qiladi va fayl faqat yangi skanerlash uni toza deb topgandan keyin qaytadi.
+527	Toʻliq tarjimasi boʻlmagan tillar inglizchaga qaytadi. Qamrov taxmin qilinmaydi, oʻlchanadi.
+528	Oxirgi oʻzgarish
+529	Qatlam
+530	Qonuniy soʻrovlar muvaffaqiyati
+531	Litsenziyalash qoidalari
+532	Havola, agar boʻlsa
+533	Izolyatsiya vaqtida ochiq qoladigan boshqaruv xostlari
+534	Notoʻgʻri ijobiy deb belgilash
+535	Yetuklik
+536	Yumshatish
+537	Nomi
+538	Maxfiy kalitlar omboringizdagi kalit nomi, hech qachon kalitning oʻzi emas
+539	Kutilayotgan amallar yoʻq.
+540	Ochiq insidentlar yoʻq.
+541	Yoʻq.
+542	Hech narsa xabar qilinmagan.
+543	belgilanmagan
+544	Xabar berish vaqti
+545	koʻrsatilgan reklamalar ulushi
+546	Oflayn hodisalar buferi (MB)
+547	Androidʼda Agentic Antivirus ilovasida Google Play orqali obuna boʻling. iPhone va iPadʼda App Store obunalari hali mavjud emas. Vebda toʻlash hali mavjud emas.
+548	Insident ochish
+549	ochiq insidentlar
+550	Ochiq insidentlar
+551	p95 kechikish
+552	toʻlangan muddat
+553	Yoʻl shabloni
+554	Odamlar
+555	Har bir qurilma uchun
+556	Har bir foydalanuvchi uchun (uning barcha qurilmalarini qamraydi)
+557	Oldindan koʻrish
+558	Asosiy
+560	Qurilmani himoyalash
+561	Protokol
+562	Provayder
+563	Provayder ogohlantirishlari (24 soat)
+564	Ommaviy nuqtalar
+565	Siyosat versiyasini nashr qilish
+566	Imzolangan versiyani nashr qilish
+567	Nashr qilingan
+568	Tezkor skanerlash
+569	Ovoz chiqarib oʻqish va diktovka brauzeringizning oʻrnatilgan nutq funksiyalaridan foydalanadi. Biz audioni yozmaymiz va saqlamaymiz.
+570	Qabul qilingan
+571	Olinadigan tashuvchilar
+572	Olib tashlash
+573	Soʻralgan
+574	Soʻragan
+575	Saqlash muddati
+576	Xizmatga qaytish
+577	Hozir
+578	Xavf
+579	Rol
+580	Orqaga qaytarish
+581	Nuqtani saqlash
+582	Litsenziyalash qoidalarini saqlash
+583	Skanerlash
+584	Jadval (cron)
+585	Rejalashtirilgan skanerlashlar
+586	Maxfiy kalit havolasi
+587	Taklifnoma yuborish
+588	Hisobot yuborish
+589	Tiklash havolasini yuborish
+590	Xizmat
+591	Xizmat maqsadlari
+594	Signal
+595	Hajmi
+596	Boshqa narsa
+597	Saralash
+598	Qadam
+599	Jarayonlarni toʻxtatish, qurilmalarni izolyatsiya qilish, fayllarni tiklash, istisnolar qoʻshish va trafik qoidalarini oʻzgartirish inson tasdigʻini talab qiladi. Tasdiq bitta amalni, uning aniq nishonlarini va cheklangan vaqtni qamrab oladi. Biror narsa oʻzgarsa, qayta tasdiqlang.
+600	Ushbu qurilmaga Google Play orqali obuna boʻlish
+601	obuna holati
+603	Tizim
+604	Nishon
+605	SI yordamchisi
+606	Yordamchi bogʻliq ogohlantirishlarni guruhlaydi, kuzatilganlarni dalillarga havolalar bilan sanab oʻtadi va isbotlay olmaydigan har qanday narsani gipoteza deb belgilaydi. U amallarni taklif qila oladi, lekin tasdiqlay olmaydi. Model mavjud boʻlmasa, skanerlash, ogohlantirishlar va qoʻlda javob choralari ishlashda davom etadi.
+607	Bu kompyuter
+608	Faqat TLS, chiqish ruxsat roʻyxatida boʻlishi kerak
+609	Trafik toʻlqinlarini yuqori provayderingiz yutadi. Bu yerda har bir ommaviy nuqtani hisobga olasiz, provayder ogohlantirishlarini kuzatasiz va yangi trafik cheklovlarini tasdiqlaysiz.
+610	Trafik cheklovlari
+611	Tarjima qilingan
+612	Savat
+613	sinov kuni qoldi
+614	Bu kompyuterdagi fayllarni skanerlash hamda toʻlov talab qiluvchi dasturlar va hisob maʼlumotlari oʻgʻirlanishini kuzatish uchun himoyani yoqing.
+615	qamrab olinmagan
+616	Oxirgi oʻzgarishni bekor qilish
+617	Foydalanuvchi
+618	E-pochtani tasdiqlash
+619	tasdiq kutilmoqda
+620	Baʼzi sahifalarda Google AdSense reklamalarini koʻrsatamiz. Shaxsiylashtirilgan reklamalarga ruxsat berilsinmi?
+621	Webhook:
+622	Qurilmalar nima yuboradi
+623	Bu nima?
+624	Qachon
+625	Biror narsa bloklanganda
+626	Sinov toʻlovsiz tugaganda
+627	Kim
+628	Hisobingizni profilingizdan oʻchirishingiz mumkin. Aloqa:
+629	Ismingiz
+630	Tashkilotingiz 30 kunlik bepul sinovga ega boʻladi. Undan keyin har bir foydalanuvchi yoki qurilma uchun oyiga 4,99 £ turadi.
+631	Telemetriya va dalillar qancha saqlanishini tashkilotingiz belgilaydi. Audit yozuvlarini tahrirlab yoki oʻchirib boʻlmaydi.
+632	Huquqlaringiz
+633	Diktovka
+634	Diktovka uchun mikrofondan foydalanishga ruxsat berilsinmi? Audio brauzeringiz tomonidan qayta ishlanadi va biz uni saqlamaymiz.
+635	Audio chiqishi
+636	Pauza
+637	Ohang
+638	Davom ettirish
+639	Tezlik
+640	Toʻxtatish
+641	Bu til uchun ovoz mavjud emas.
+642	Ovoz
+643	Fayl karantinga oʻtkazildi va ishga tusha olmaydi.
+644	Bu qurilmada tahdid bloklandi.

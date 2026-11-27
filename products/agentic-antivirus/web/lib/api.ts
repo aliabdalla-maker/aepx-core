@@ -74,7 +74,34 @@ export function describeError(e: unknown): string {
       return "Confirm your email address first: open the link we sent you, or sign out and sign in again to get a new link.";
     if (e.status === 403) return typeof e.detail === "string" ? `Not allowed: ${e.detail}` : "You do not have permission for this.";
     if (typeof e.detail === "string") return e.detail;
-    return JSON.stringify(e.detail);
+    if (Array.isArray(e.detail)) return describeValidation(e.detail);
+    if (e.detail && typeof e.detail === "object" && typeof (e.detail as any).error === "string")
+      return (e.detail as any).error;
+    return `The request was refused (HTTP ${e.status}).`;
   }
   return "The server could not be reached. Check your connection and try again.";
+}
+
+const FIELD_NAMES: Record<string, string> = {
+  artefact_digest: "Version or digest", evidence: "Evidence", reason: "Reason", device_ids: "Devices",
+  name: "Name", endpoint: "Endpoint", secret_ref: "Secret reference", cron: "Schedule", value: "Value",
+  allowed_management_hosts: "Management hosts", email: "Email", password: "Password",
+};
+
+/** FastAPI/pydantic validation errors (422) as one readable sentence per field, never raw JSON. */
+export function describeValidation(items: unknown[]): string {
+  const lines = items.map((it: any) => {
+    const field = Array.isArray(it?.loc) ? String(it.loc[it.loc.length - 1]) : "";
+    const label = FIELD_NAMES[field] ?? field.replace(/_/g, " ");
+    const ctx = it?.ctx ?? {};
+    switch (it?.type) {
+      case "string_too_short": return `${label}: enter at least ${ctx.min_length} characters.`;
+      case "string_too_long": return `${label}: use at most ${ctx.max_length} characters.`;
+      case "too_short": return `${label}: choose at least ${ctx.min_length}.`;
+      case "missing": return `${label} is required.`;
+      case "string_pattern_mismatch": return `${label} is not in the expected format.`;
+      default: return `${label}: ${String(it?.msg ?? "invalid value").replace(/^Value error, /, "")}.`;
+    }
+  });
+  return lines.length ? lines.join(" ") : "Some values are not valid.";
 }

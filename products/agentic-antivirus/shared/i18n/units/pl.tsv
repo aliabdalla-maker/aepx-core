@@ -1,0 +1,637 @@
+0	Przejdź do treści głównej
+1	Dodaj stałe wykluczenie
+2	Zastosuj ograniczenie ruchu
+3	Zbierz metadane urządzenia
+4	Odizoluj urządzenie od sieci
+5	Przenieś plik do kwarantanny
+6	Zwolnij urządzenie z izolacji
+7	Przywróć plik z kwarantanny
+8	Wyloguj użytkownika ze wszystkich sesji
+9	Wycofaj ograniczenie ruchu
+10	Wycofaj aktualizację
+11	Skanuj urządzenia
+12	Zawieś konto użytkownika
+13	Zatrzymaj proces
+14	Zatwierdź
+15	Odrzuć
+16	Wyślij na urządzenia
+17	Zatwierdzenie wygasa [0]
+18	Zaproponowane przez asystenta AI
+19	Reklama
+20	Działanie
+21	Agenci
+22	Zapytaj
+23	Zapytaj asystenta bezpieczeństwa
+24	Odpowiedzi pochodzą z Twoich urządzeń, otwartych incydentów i luk. Asystent nie może niczego zmienić.
+25	Na podstawie
+26	Usunięto [0] twierdzenie bez dowodów
+27	Usunięto [0] twierdzeń bez dowodów
+29	Model hostowany samodzielnie
+30	Reguły (bez modelu)
+31	Przygotuj plan naprawczy
+32	Każdy krok to propozycja. Nic nie zostanie uruchomione bez zatwierdzenia.
+33	Pytanie
+34	Na przykład: które urządzenia wymagają uwagi?
+35	Sugerowana ważność
+36	Podsumowanie
+37	Cele
+38	Podsumuj ten incydent
+39	Dlaczego
+40	Wykryto
+41	Zgłoś coś podejrzanego
+42	Reguła
+43	Ważność
+44	Alert
+46	Dodaj pliki
+47	Dodaj folder
+48	Dodaj obrazy
+49	[0] załącznik
+50	[0] załączników
+51	Załączniki
+52	Zrób zdjęcie
+53	Nie zezwolono na dostęp do kamery. Zezwól na niego w przeglądarce lub użyj aplikacji aparatu na urządzeniu.
+54	Podgląd kamery
+55	Ta przeglądarka nie może tutaj otworzyć kamery.
+56	Przechwyć
+57	Zamknij asystenta
+58	Co to za pliki i czy są bezpieczne?
+59	Plik
+60	Zapytaj o swoje bezpieczeństwo lub załącz pliki, folder, obrazy albo zdjęcie z kamery. Każdy załącznik jest najpierw skanowany i nic nie jest przechowywane.
+61	Opisano [0] obraz
+62	Opisano [0] obrazów
+63	 przy użyciu modelu.
+64	Na przykład: czy ten pobrany plik jest bezpieczny?
+65	Czysty tekst i obrazy mogą być wysyłane do modelu AI włączonego przez Twoją organizację. Złośliwe pliki nigdy.
+66	Nie dodano [0] pliku
+67	Nie dodano [0] plików
+68	: maksymalnie [0] plików, po [1] MB każdy i łącznie [2] MB.
+69	Usuń [0]
+70	Skanuj i zapytaj
+71	Wyniki skanowania
+72	Typ
+73	Użyj kamery urządzenia
+74	Wynik
+75	Brak znanego złośliwego oprogramowania
+76	Złośliwy
+77	Nie przeskanowano
+78	Łańcuch audytu jest przerwany przy wpisie [0].
+79	Łańcuch audytu jest nienaruszony: zweryfikowane wpisy: [0].
+80	E-mail
+81	Nie pamiętasz hasła?
+82	Zaloguj się przez Google
+83	Logowanie przez Google nie powiodło się. Spróbuj ponownie lub użyj adresu e-mail i hasła.
+84	Zaloguj się
+85	Wyloguj się
+86	Nowe hasło
+87	lub
+88	Organizacja
+89	Hasło
+90	Hasło zostało zmienione. Zaloguj się nowym hasłem.
+91	Co najmniej 12 znaków.
+92	Utwórz konto
+93	Wyślij link ponownie
+94	Jeśli to konto nadal wymaga potwierdzenia, nowy link jest już w drodze. Sprawdź też folder spamu.
+95	Zresetuj hasło
+96	Jeśli z tego adresu korzysta jakieś konto, wysłaliśmy link do resetowania hasła. Jest ważny przez godzinę.
+97	Potwierdź adres e-mail przed zalogowaniem. Otwórz link wysłany na adres [0].
+98	Adres e-mail został zweryfikowany. Możesz się teraz zalogować.
+99	Ten link wygasł lub został już użyty. Zaloguj się, aby otrzymać nowy.
+100	Sprawdź pocztę, aby zweryfikować adres.
+101	Subskrypcja ogranicza liczbę reklam o 95%.
+102	Twój okres próbny się zakończył.
+103	Subskrypcja do [0]
+104	Wszystko bezpłatnie z pełnymi reklamami
+105	Zatrzymaj wszystko, łącznie z ochroną urządzeń, do czasu płatności
+106	Konsola wymaga subskrypcji; urządzenia pozostają chronione
+107	4,99 £ miesięcznie
+108	Subskrybuj
+109	Bezpłatny okres próbny:
+110	Pozostał [0] dzień
+111	Pozostało [0] dni
+112	Anuluj
+113	Usuń
+114	Coś poszło nie tak.
+115	Eksportuj
+116	Ładowanie…
+117	Nie dotyczy
+118	Nigdy
+119	Dalej
+120	nie
+121	Brak danych do wyświetlenia.
+122	wył.
+123	wł.
+124	Wstecz
+125	Odśwież
+126	Zapisz
+127	Szukaj
+128	Symulacja (dane testowe)
+129	Stan
+130	Niedostępne
+131	Nieznane
+132	Zaktualizowano [0]
+133	Przetwarzanie…
+134	tak
+135	[0] alert w ciągu 24 godzin
+136	[0] alertów w ciągu 24 godzin
+137	[0] urządzenie
+138	[0] urządzeń
+139	Dane z [0]
+140	[0] otwarty incydent
+141	[0] otwartych incydentów
+142	[0] zatwierdzenie oczekuje
+143	[0] zatwierdzeń oczekuje
+144	potwierdzony
+145	podejrzewany
+146	Zarejestruj urządzenie
+147	Urządzenie
+148	Nie raportuje
+149	Nieaktualna zasada
+150	Czujnik wyłączony
+151	Nieaktualne definicje
+152	Problemy
+153	Ostatnio widziane
+154	System operacyjny
+155	Zasada
+156	Uruchom na urządzeniu w ciągu 24 godzin (jednorazowo):
+157	Ochrona
+158	Kopiuj
+159	Pobierz
+160	Przenieś
+161	Nowy folder
+162	Zmień nazwę
+163	Przywróć
+164	Przenieś do kosza
+165	Prześlij
+166	Pomoc
+167	[0] tekst na tej stronie jest przetłumaczony maszynowo i jeszcze niesprawdzony.
+168	[0] tekstów w tym języku jest przetłumaczonych maszynowo i jeszcze niesprawdzonych.
+169	Ten język nie jest jeszcze przetłumaczony, dlatego wyświetlany jest angielski.
+170	zatwierdzone
+171	Zaobserwowane fakty
+172	Hipotezy (niepotwierdzone)
+173	Hipoteza, pewność [0]: [1]
+174	Przeprowadź dochodzenie
+175	Brakujące dowody
+176	Brak: [0]
+177	Czytaj na głos
+178	Zalecane działania
+179	Oś czasu dowodów
+180	przychodzący webhook
+181	Sygnały od dostawcy tożsamości, DNS, zapór sieciowych i innych narzędzi. Nowe integracje są początkowo niedostępne; jako aktywny można oznaczyć tylko adapter dostawcy, który przeszedł test kontraktowy. Dane testowe są wszędzie oznaczane jako symulacja.
+182	Niepołączone (zaślepka)
+183	Tylko dane testowe
+184	Niedostępne
+185	Aktywne (zweryfikowane)
+186	Sekret (wyświetlany raz):
+187	Zatwierdzenia
+188	Alerty
+189	Audyt
+190	Subskrypcja
+191	Pulpit
+192	DDoS i dostępność
+193	Urządzenia
+194	Pliki
+195	Incydenty
+196	Integracje
+197	Zasady
+198	Prywatność
+199	Kwarantanna
+200	Reagowanie
+201	Bezpieczeństwo
+202	Ustawienia
+203	Automatycznie przenoś znane złośliwe oprogramowanie do kwarantanny
+204	Monitoruj podejrzane zachowania
+205	Blokuj podejrzane skrypty
+206	Zbieraj zawartość plików do dochodzeń (domyślnie wyłączone)
+207	Zezwalaj na izolację sieciową
+208	Skanuj pliki przy otwieraniu lub zapisie
+209	Skanuj pobrane pliki
+210	Skanuj programy przy uruchamianiu
+211	Chroń agenta przed zmianami
+212	Ostrzegaj przed znanymi złośliwymi linkami
+213	Powód
+214	Poproś o weryfikację
+215	Przywróć po ponownym skanowaniu
+216	mediana czasu do zweryfikowanego usunięcia zagrożenia (n=[0], nierozwiązane: [1])
+217	poprawki z pozytywnym ponownym testem
+218	nawroty po odzyskaniu
+219	zweryfikowane usunięcie wirusa
+220	bezpieczny powrót do działania
+221	ukończone skanowania po odzyskaniu
+222	Wyniki obejmujące tylko kwarantannę ([0]) i urządzenia z ponownie zainstalowanym systemem ([1]) są liczone osobno; sama kwarantanna nigdy nie jest liczona jako usunięcie.
+223	[0] godz.
+224	[0] min
+225	[0] s
+226	Oczekuje na zatwierdzenie
+227	Dowody z produkcji
+228	Zapisz, co zweryfikowano w środowisku produkcyjnym, na jakich zasobach i w jakiej wersji. Wpisów nie można edytować.
+229	Wersja
+230	Zmień tryb
+231	brak dowodów
+232	niepowodzenie
+233	zaliczone
+234	oczekujące
+235	Sprawdź postęp playbooka
+236	Urządzenia zdolne do reagowania
+237	Wszystkie urządzenia
+238	[0] urządzenie pilotażowe
+239	[0] urządzeń pilotażowych
+240	Ukończone
+241	Ukończone, gdy
+242	Ćwiczenie
+243	Obserwuj
+244	Reaguj
+245	Pokrycie
+246	Obserwowane: [0], zdolne do reagowania: [1]
+247	Dane
+248	Wiek danych
+249	Na żywo
+250	Dane testowe
+251	nie wykonano
+252	potwierdzenie
+253	w toku
+254	nieznane
+255	Wysłanie
+256	Dowody
+257	Uruchomiono
+258	Nieaktualne
+259	Źródła danych
+260	Wersja lub skrót
+261	Środowisko
+262	Wynik
+263	Właściciel
+264	Wymaganie
+265	Zasób lub grupa
+266	Pokaż
+267	Wszystkie
+268	Nieukończone
+269	Włączone dla całej usługi
+270	Włączone dla tej organizacji
+271	Zatrzymać wszystkie nowe działania reagowania w tej organizacji? Ochrona i skanowanie będą działać dalej.
+272	Ponownie zezwól na działania reagowania
+273	Zatrzymaj wszystkie działania reagowania
+274	Wyłącznik awaryjny
+275	Rodzaj
+276	Mediana minut otwarcia (otwarte: [0], najstarsze: [1] min)
+277	Odmowy wynikające z zasad
+278	Ćwiczenia i symulacje (niewliczone powyżej)
+279	Powtórzone działania (cel: 0)
+280	Mediana opóźnienia źródeł danych (p95 [0] s, n=[1])
+281	Zaległe zatwierdzenia (oczekujące: [0], cel: [1] min)
+282	Mediana czasu od sygnału do selekcji (p95 [0] min, n=[1], bez selekcji: [2])
+283	Działania zweryfikowane niezależnie ([0]/[1])
+284	Okno: [0]. Samo potwierdzenie nigdy nie jest uznawane za weryfikację. Brakujące dane są wyświetlane jako niedostępne.
+285	Wskaźniki reagowania
+286	Ostatnie zdarzenie
+287	Agenci proponują; stała zasada decyduje, co zostanie uruchomione. Każde działanie pokazuje swoje zatwierdzenie, potwierdzenie i niezależną kontrolę.
+288	Etap
+289	Oczekuje na zatwierdzenie
+290	Odrzucone
+291	Wygasłe
+292	Niepowodzenie
+293	Wymaga ręcznego uzgodnienia
+294	Zaproponowane
+295	W kolejce
+296	Uruchomione
+297	Oczekuje na weryfikację
+298	Zweryfikowane
+299	Stan na żywo
+300	Tryb
+301	Symulacja
+302	Skanowanie i zbieranie danych są wykonywane. Inne działania pozostają propozycjami.
+303	Zatwierdzone działania są wykonywane na wybranych urządzeniach.
+304	Działania są wykonywane tylko na adapterach testowych. Na Twoich urządzeniach nic się nie zmienia.
+305	Brak działań.
+306	Nic nie oczekuje na zatwierdzenie.
+307	Nie zapisano jeszcze dowodów z produkcji.
+308	Żadne urządzenia ani integracje nie wysyłają jeszcze danych.
+309	Nie uruchomiono
+310	Zaobserwowano
+311	Co się stało
+312	Reagowanie na DDoS
+313	Fałszywe alarmy i przywracanie
+314	Tożsamość, phishing i podejrzany ruch
+315	Złośliwe oprogramowanie i podejrzane pobrania
+316	Widoczność sieci i stan urządzeń
+317	Odzyskiwanie po włamaniu
+318	Ransomware lub podejrzenie włamania
+319	Playbook
+320	Playbooki
+321	Wersja zasady
+322	Zainstalowana wersja
+323	Izolacja przez zaporę
+324	Odebrano dane
+325	Usunięto plik
+326	Zatrzymano proces
+327	Stan u dostawcy
+328	Zapisano
+329	Skanowanie ukończone
+330	Zasymulowano
+331	Poza kwarantanną
+332	W kwarantannie
+333	Działania i potwierdzenia
+334	Zapisz wynik
+335	Zapisz
+336	Może reagować
+337	Źródło
+338	urządzenie
+339	konsola
+340	symulacja
+341	Rozpoczyna się, gdy
+342	Zaktualizowano
+343	Niezależna kontrola
+344	Oczekuje
+345	Limit archiwum
+346	Zaszyfrowane archiwum
+347	Wykluczone
+348	Niedostępne
+349	Limit czasu
+350	Za duży
+351	Nieobsługiwany format
+352	Anulowano
+353	Pominięto
+354	Częściowe
+355	Przekroczono limit czasu
+356	Pełne
+357	Na żądanie
+358	Szybkie
+359	Odzyskiwanie
+360	Zaplanowane
+361	Ukierunkowane
+362	Dodaj segment
+363	archiwa
+364	Zasoby
+365	Zatrzymać to skanowanie? Dotychczasowe wyniki zostaną zachowane jako anulowane skanowanie.
+366	Nieobjęte
+367	Wykrycia
+368	Urządzenia według stanu ochrony
+369	Silnik
+370	Termin
+371	Ostatni dowód
+372	Oczekiwana kontrola
+373	Proponowana poprawka
+374	Ponowny test
+375	Zasób lub segment
+376	Otwarte luki
+377	Wyniki skanowania z 30 dni
+378	od alertu do zweryfikowanego powstrzymania
+379	chronione urządzenia
+380	publiczne punkty końcowe z ochroną u dostawcy nadrzędnego
+381	od zdarzenia do alertu
+382	urządzenia z aktualnymi definicjami
+383	urządzenia z pełnym skanowaniem w ciągu 7 dni
+384	otwarte luki (zaległe: [0], zamknięte w ciągu 30 dni: [1])
+385	monitorowane segmenty sieci
+386	potwierdzone prawdziwe alarmy
+387	ukończone skanowania
+388	Pokrycie i reagowanie
+389	Ostatnie pełne skanowanie
+390	Ostatnia telemetria
+391	Każde urządzenie i segment sieci w zakresie: czy jest chronione i co naprawić w następnej kolejności.
+392	Widoczność sieci
+393	Nie zarejestrowano jeszcze żadnych urządzeń. Ochroń komputer w sekcji Urządzenia.
+394	Brak otwartych luk.
+395	Otwarte: [0]
+396	zaległe
+397	p95 [0] s
+398	Foldery
+399	Foldery do przeskanowania, rozdzielone przecinkami
+400	Szyfrowanie i zapora
+401	Szyfrowanie dysku: [0], zapora: [1]
+402	Odzyskiwanie po incydentach
+403	Sprawdź ponownie teraz
+404	Nie przetestowano ponownie
+405	Ponowny test nieudany
+406	Zweryfikowano zamknięcie
+407	Typ skanowania
+408	Skanowania
+409	Segment
+410	Nazwa segmentu
+411	Rozpocznij skanowanie
+412	Rozpoczęto
+413	Stan
+414	Ograniczona
+415	Chronione
+416	Niechronione
+417	Urządzenia według stanu
+418	Nieznane: [0]
+419	Brak widoczności
+420	Monitorowane
+421	Widoczność
+422	Brak wykryć nie dowodzi ochrony: sprawdź również pokrycie i wyniki skanowania.
+423	Język
+424	Pokrycie tłumaczeniem
+425	Brak wcześniejszej wersji
+426	Motyw
+427	Ciemny
+428	Wysoki kontrast
+429	Jasny
+430	Nie znaleziono nowych zagrożeń w [0] plikach.
+431	Znaleziono [0] zagrożenie
+432	Znaleziono [0] zagrożeń
+433	 w [0] plikach. Przejrzyj je w sekcjach Alerty i Zatwierdzenia.
+434	Pełne skanowanie
+435	Nie udało się ochronić tego komputera: [0]
+436	Ten komputer jest chroniony. Skanowanie w czasie rzeczywistym działa, gdy Agentic Antivirus jest otwarty.
+437	Skanowanie nie zostało ukończone: [0]
+438	Skanowanie…
+439	Skanowanie wszystkich dysków. Może to potrwać długo.
+440	Skanowanie folderów Pobrane i Pulpit oraz plików tymczasowych…
+441	Nie można odczytać [0] plików.
+442	Plik
+443	Link do witryny
+444	Akceptuj dane testowe
+446	Działania
+447	Dodaj integrację
+448	Dodaj wykluczenie
+449	Dodaj integrację
+450	Dodaj cotygodniowe pełne skanowanie
+451	administrator
+452	Reklamy
+453	Zgoda na reklamy
+454	Usługi, których dotyczy
+455	alerty z ostatnich 24 godzin
+456	Zezwól
+457	Zezwól i skanuj
+458	Administrator musi podać powód. Wykluczenie jest zapisywane w dzienniku audytu.
+459	E-mail
+460	Zatwierdź powrót do działania
+461	Zatwierdzanie działań
+462	Zasób
+463	zasoby objęte aktywnym ograniczaniem ataku
+464	zasoby z alertami w ciągu 24 godzin
+465	Dziennik audytu
+466	Automatyczna ochrona działa na każdym urządzeniu. Oto działania, o których musi zdecydować człowiek.
+467	Dostępność
+468	Dostępne sygnały
+469	Kopia zapasowa zweryfikowana
+470	Blokuj
+471	Domyślnie agent wysyła telemetrię bezpieczeństwa i skróty plików: nazwy procesów i wiersze poleceń, ścieżki plików, metadane połączeń sieciowych oraz wykrycia. Zawartość plików jest zbierana tylko wtedy, gdy Twoja organizacja to włączy.
+472	Pojemność
+473	Kategoria
+474	Zmieniono
+475	Opłata
+476	Sprawdź
+477	wybierz
+478	Wybierz urządzenie
+480	Zamknij
+481	Rozdzielone przecinkami
+482	Kontakt
+483	Kontrola
+484	Pokrycie według warstwy ochrony
+485	krytyczny
+486	dostarczanie krytycznych alertów (p95, 30 dni)
+487	Oczekujące decyzje
+488	Odrzuć
+489	Definicje
+490	Opisz, co się stało
+491	Szczegół
+492	Szczegóły
+493	Wykrycie
+494	Urządzenie do licencjonowania
+495	w pełni chronione urządzenia
+496	izolowane urządzenia
+497	Urządzenia wymagające uwagi
+498	Kierunek
+499	Strefa DNS
+500	strony pobierania
+501	W okresie próbnym i w planach bez opłat konsola wyświetla reklamy Google AdSense, a aplikacje mobilne reklamy Google AdMob, po uzyskaniu Twojej zgody. Subskrybenci widzą o 95% mniej reklam. Reklamy nigdy nie pojawiają się na ekranach zatwierdzania, powstrzymywania, ostrzeżeń o zagrożeniach, przeglądu kwarantanny, logowania, płatności ani audytu.
+502	Każda publikacja tworzy nową podpisaną wersję. Urządzenia offline nadal egzekwują ostatnią zweryfikowaną wersję.
+503	Napisz do pomocy technicznej na adres
+504	Punkt końcowy
+505	Equality Software Ltd obsługuje Agentic Antivirus. Ta strona opisuje, jakie dane zbiera usługa. Przed publikacją musi ją sprawdzić właściciel produktu.
+506	Każde działanie, które zmienia urządzenie, konto lub ruch, przechodzi przez silnik zasad i nadzór AEP-X. Zatwierdzenie obejmuje jedno działanie, jego dokładne cele, tę organizację i określony czas.
+507	Każdy przesłany plik jest sprawdzany pod kątem złośliwego oprogramowania i rzeczywistego typu. Pliki bez zweryfikowanej przeglądarki są przechowywane i można je pobrać, ale nie mają podglądu.
+508	Wyjątek
+509	Wykluczenia
+510	Ścieżka folderu
+511	w sprawie wniosków o dostęp do danych lub ich sprostowanie.
+512	Luki
+513	Pobierz agenta dla systemu Windows, Mac lub Linux ze
+514	Przejdź do sekcji Urządzenia, wybierz Zarejestruj urządzenie i uruchom wyświetlone polecenie na komputerze, który chcesz chronić. Agent zaczyna skanowanie, gdy tylko otrzyma podpisaną zasadę.
+515	Kondycja
+516	Historia
+517	Nazwa hosta
+518	Rozumiem, że po okresie próbnym urządzenia przestaną skanować i blokować zagrożenia, dopóki subskrypcja nie zostanie opłacona.
+519	Wpływ
+520	Importuj zip lub tar
+521	Incydent
+522	Uwzględnij model językowy (jeśli Twoja organizacja go włączyła)
+523	Adres IP
+524	Dołącz
+525	Dołącz do swojej organizacji
+526	Znane złośliwe oprogramowanie jest przenoszone do kwarantanny, gdzie nie może zostać uruchomione. Jeśli uważasz, że plik został zablokowany przez pomyłkę, otwórz Kwarantannę i poproś o weryfikację. Decyzję podejmuje administrator, a plik wraca dopiero wtedy, gdy ponowne skanowanie wykaże, że jest czysty.
+527	Języki bez pełnego tłumaczenia są wyświetlane po angielsku. Pokrycie jest mierzone, a nie szacowane.
+528	Ostatnia zmiana
+529	Warstwa
+530	Skuteczność obsługi uprawnionych żądań
+531	Reguły licencjonowania
+532	Link, jeśli istnieje
+533	Hosty zarządzające dostępne podczas izolacji
+534	Oznacz jako fałszywy alarm
+535	Dojrzałość
+536	Ograniczanie ataku
+537	Nazwa
+538	Nazwa sekretu w magazynie sekretów, nigdy sam sekret
+539	Żadne działania nie oczekują.
+540	Brak otwartych incydentów.
+541	Brak.
+542	Nie zgłoszono.
+543	nie ustawiono
+544	Powiadomiono po
+545	wyświetlanych reklam
+546	Bufor zdarzeń offline (MB)
+547	Na Androidzie subskrybuj w aplikacji Agentic Antivirus przez Google Play. Na iPhonie i iPadzie subskrypcje App Store nie są jeszcze dostępne. Płatności przez internet nie są jeszcze dostępne.
+548	Otwórz incydent
+549	otwarte incydenty
+550	Otwarte incydenty
+551	Opóźnienie p95
+552	opłacono do
+553	Wzorzec ścieżki
+554	Osoby
+555	Na urządzenie
+556	Na użytkownika (obejmuje wszystkie jego urządzenia)
+557	Podgląd
+558	Podstawowy
+560	Ochroń urządzenie
+561	Protokół
+562	Dostawca
+563	Alerty dostawcy (24 godziny)
+564	Publiczne punkty końcowe
+565	Opublikuj wersję zasady
+566	Opublikuj podpisaną wersję
+567	Opublikowano
+568	Szybkie skanowanie
+569	Czytanie na głos i dyktowanie korzystają z wbudowanych funkcji mowy przeglądarki. Nie nagrywamy ani nie przechowujemy dźwięku.
+570	Odebrano
+571	Nośniki wymienne
+572	Usuń
+573	Zażądano
+574	Zgłaszający
+575	Przechowywanie
+576	Powrót do działania
+577	W tej chwili
+578	Ryzyko
+579	Rola
+580	Wycofaj
+581	Zapisz punkt końcowy
+582	Zapisz reguły licencjonowania
+583	Skanuj
+584	Harmonogram (cron)
+585	Zaplanowane skanowania
+586	Odwołanie do sekretu
+587	Wyślij zaproszenie
+588	Wyślij zgłoszenie
+589	Wyślij link do resetowania
+590	Usługa
+591	Cele poziomu usług
+594	Sygnał
+595	Rozmiar
+596	Coś innego
+597	Sortuj
+598	Krok
+599	Zatrzymywanie procesów, izolowanie urządzeń, przywracanie plików, dodawanie wykluczeń i zmiana reguł ruchu wymagają zatwierdzenia przez człowieka. Zatwierdzenie obejmuje jedno działanie, jego dokładne cele i ograniczony czas. Jeśli cokolwiek się zmieni, zatwierdź ponownie.
+600	Subskrybuj to urządzenie przez Google Play
+601	stan subskrypcji
+603	System
+604	Cel
+605	Asystent AI
+606	Asystent grupuje powiązane alerty, wymienia zaobserwowane fakty z linkami do dowodów i oznacza jako hipotezę wszystko, czego nie może udowodnić. Może sugerować działania, ale nie może ich zatwierdzać. Jeśli model jest niedostępny, skanowanie, alerty i ręczne reagowanie nadal działają.
+607	Ten komputer
+608	Tylko TLS, musi znajdować się na liście dozwolonych połączeń wychodzących
+609	Zalewy ruchu są pochłaniane przez dostawcę nadrzędnego. Tutaj ewidencjonujesz każdy publiczny punkt końcowy, obserwujesz alerty dostawcy i zatwierdzasz nowe ograniczenia ruchu.
+610	Ograniczenia ruchu
+611	Przetłumaczono
+612	Kosz
+613	pozostałe dni okresu próbnego
+614	Włącz ochronę, aby skanować pliki na tym komputerze i wykrywać ransomware oraz kradzież danych logowania.
+615	nieobjęte
+616	Cofnij ostatnią zmianę
+617	Użytkownik
+618	Zweryfikuj e-mail
+619	oczekuje na zatwierdzenie
+620	Na niektórych stronach wyświetlamy reklamy Google AdSense. Zezwolić na reklamy spersonalizowane?
+621	Webhook:
+622	Co wysyłają urządzenia
+623	Co to jest?
+624	Kiedy
+625	Gdy coś zostanie zablokowane
+626	Gdy okres próbny zakończy się bez płatności
+627	Kto
+628	Konto możesz usunąć w swoim profilu. Skontaktuj się z
+629	Twoje imię i nazwisko
+630	Twoja organizacja otrzymuje 30-dniowy bezpłatny okres próbny. Potem koszt wynosi 4,99 £ miesięcznie za każdego użytkownika lub urządzenie.
+631	Twoja organizacja określa, jak długo są przechowywane telemetria i dowody. Zapisów audytu nie można edytować ani usuwać.
+632	Twoje prawa
+633	Dyktuj
+634	Zezwolić na użycie mikrofonu do dyktowania? Dźwięk jest przetwarzany przez przeglądarkę i nie przechowujemy go.
+635	Wyjście audio
+636	Wstrzymaj
+637	Wysokość głosu
+638	Wznów
+639	Szybkość
+640	Zatrzymaj
+641	Brak głosu dla tego języka.
+642	Głos
+643	Plik został przeniesiony do kwarantanny i nie może zostać uruchomiony.
+644	Na tym urządzeniu zablokowano zagrożenie.

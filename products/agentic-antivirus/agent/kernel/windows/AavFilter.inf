@@ -1,0 +1,64 @@
+; AavFilter — Agentic Antivirus minifilter (FSFilter Anti-Virus load order group).
+; ALTITUDE: 328999 is a development placeholder. Request a production altitude from Microsoft
+; (https://learn.microsoft.com/windows-hardware/drivers/ifs/allocated-altitudes) before release.
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = "AntiVirus"
+ClassGuid   = {b1d1a169-c54f-4379-81db-bee7d88d7454}
+Provider    = %ManufacturerName%
+DriverVer   = 11/27/2026,0.1.2.0
+CatalogFile = AavFilter.cat
+PnpLockdown = 1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[DefaultInstall.NTamd64]
+OptionDesc = %ServiceDescription%
+CopyFiles  = AavFilter.DriverFiles
+
+[DefaultInstall.NTamd64.Services]
+AddService = %ServiceName%,,AavFilter.Service
+
+[DefaultUninstall.NTamd64]
+LegacyUninstall = 1
+DelFiles        = AavFilter.DriverFiles
+
+[DefaultUninstall.NTamd64.Services]
+DelService = %ServiceName%,0x200
+
+[AavFilter.Service]
+DisplayName      = %ServiceName%
+Description      = %ServiceDescription%
+ServiceBinary    = %13%\AavFilter.sys
+Dependencies     = "FltMgr"
+ServiceType      = 2
+StartType        = 1
+ErrorControl     = 1
+LoadOrderGroup   = "FSFilter Anti-Virus"
+AddReg           = AavFilter.AddRegistry
+
+[AavFilter.AddRegistry]
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+[AavFilter.DriverFiles]
+AavFilter.sys
+
+[SourceDisksFiles]
+AavFilter.sys = 1,,
+
+[SourceDisksNames]
+1 = %DiskId1%,,,
+
+[Strings]
+ManufacturerName    = "Equality Software LTD"
+ServiceDescription  = "Agentic Antivirus real-time file protection"
+ServiceName         = "AavFilter"
+DiskId1             = "Agentic Antivirus driver disk"
+DefaultInstance     = "AavFilter Instance"
+Instance1.Name      = "AavFilter Instance"
+Instance1.Altitude  = "328999"
+Instance1.Flags     = 0x0

@@ -1,0 +1,637 @@
+0	Fò sí àkóónú pàtàkì
+1	Ṣàfikún àyọkúrò títí láé
+2	Lo ìdíwọ́ ìrìnnà
+3	Kó dátà àpèjúwe ẹ̀rọ jọ
+4	Ya ẹ̀rọ sọ́tọ̀ kúrò lórí nẹ́tíwọ́ọ̀kì
+5	Fi fáìlì sí àhámọ́
+6	Tú ẹ̀rọ sílẹ̀ kúrò nínú ìyàsọ́tọ̀
+7	Dá fáìlì tó wà ní àhámọ́ padà
+8	Mú olùlò jáde níbi gbogbo
+9	Yí ìdíwọ́ ìrìnnà padà
+10	Yí ìmúdójúìwọ̀n padà
+11	Ṣàyẹ̀wò àwọn ẹ̀rọ
+12	Dá àkọọ́lẹ̀ olùlò dúró
+13	Dá ìlànà-iṣẹ́ kan dúró
+14	Fọwọ́sí
+15	Kọ̀
+16	Fi ránṣẹ́ sí àwọn ẹ̀rọ
+17	Ìfọwọ́sí yóò parí [0]
+18	Olùrànlọ́wọ́ AI ló dábàá
+19	Ìpolówó
+20	Ìgbésẹ̀
+21	Àwọn aṣojú
+22	Béèrè
+23	Béèrè lọ́wọ́ olùrànlọ́wọ́ ààbò
+24	Àwọn ìdáhùn wá láti inú àwọn ẹ̀rọ rẹ, àwọn ìṣẹ̀lẹ̀ tó ṣí sílẹ̀ àti àwọn àlàfo. Olùrànlọ́wọ́ kò lè yí ohunkóhun padà.
+25	Ó dá lórí
+26	A yọ ẹ̀sùn [0] tí kò ní ẹ̀rí kúrò
+27	A yọ àwọn ẹ̀sùn [0] tí kò ní ẹ̀rí kúrò
+29	Àwòṣe tí o gbàlejò fúnra rẹ
+30	Àwọn òfin (kò sí àwòṣe)
+31	Kọ ètò àtúnṣe sílẹ̀
+32	Ìgbésẹ̀ kọ̀ọ̀kan jẹ́ àbá. Kò sí ohun tí yóò ṣiṣẹ́ títí ẹnìkan yóò fi fọwọ́sí i.
+33	Ìbéèrè
+34	Àpẹẹrẹ: àwọn ẹ̀rọ wo ló nílò àkíyèsí?
+35	Ìwúwo tí a dábàá
+36	Àkópọ̀
+37	Àwọn ibi àfojúsùn
+38	Ṣe àkópọ̀ ìṣẹ̀lẹ̀ yìí
+39	Ìdí
+40	A ṣàwárí
+41	Jábọ̀ ohun tí ó fura
+42	Òfin
+43	Ìwúwo
+44	Ìkìlọ̀
+46	Ṣàfikún àwọn fáìlì
+47	Ṣàfikún fódà kan
+48	Ṣàfikún àwọn àwòrán
+49	Àsomọ́ [0]
+50	Àwọn àsomọ́ [0]
+51	Àwọn àsomọ́
+52	Ya fọ́tò
+53	A kò gba ààyè kámẹ́rà láàyè. Gbà á láàyè nínú aṣàwákiri rẹ, tàbí lo áàpù kámẹ́rà ẹ̀rọ rẹ.
+54	Àwòtẹ́lẹ̀ kámẹ́rà
+55	Aṣàwákiri yìí kò lè ṣí kámẹ́rà níbí.
+56	Yà á
+57	Pa olùrànlọ́wọ́ dé
+58	Kí ni àwọn fáìlì wọ̀nyí, ṣé wọ́n sì ní ààbò?
+59	Fáìlì
+60	Béèrè nípa ààbò rẹ, tàbí so àwọn fáìlì, fódà kan, àwọn àwòrán tàbí fọ́tò kámẹ́rà mọ́ ọn. A kọ́kọ́ ṣàyẹ̀wò àsomọ́ kọ̀ọ̀kan, a kò sì tọ́jú ohunkóhun pamọ́.
+61	Àwòrán [0] ni
+62	Àwọn àwòrán [0] ni
+63	 àwòṣe ṣàpèjúwe rẹ̀.
+64	Àpẹẹrẹ: ṣé ohun tí mo gbà sílẹ̀ yìí ní ààbò?
+65	A lè fi ọ̀rọ̀ àti àwòrán tó mọ́ ránṣẹ́ sí àwòṣe AI tí àjọ rẹ mú ṣiṣẹ́. A kò jẹ́ fi àwọn fáìlì aláàbọ̀ ránṣẹ́ láé.
+66	A kò ṣàfikún fáìlì [0]
+67	A kò ṣàfikún àwọn fáìlì [0]
+68	: tó fáìlì [0], [1] MB ọ̀kọ̀ọ̀kan àti [2] MB lápapọ̀.
+69	Yọ [0] kúrò
+70	Ṣàyẹ̀wò kí o béèrè
+71	Àbájáde àyẹ̀wò
+72	Irú
+73	Lo kámẹ́rà ẹ̀rọ
+74	Àbájáde
+75	Kò sí malware tí a mọ̀
+76	Aláàbọ̀
+77	A kò ṣàyẹ̀wò rẹ̀
+78	Ẹ̀wọ̀n àyẹ̀wò-ìṣirò ti já ní àkọsílẹ̀ [0].
+79	Ẹ̀wọ̀n àyẹ̀wò-ìṣirò wà ní pípé: a ti jẹ́rìísí àwọn àkọsílẹ̀ [0].
+80	Ímeèlì
+81	Ṣé o gbàgbé ọ̀rọ̀ aṣínà?
+82	Wọlé pẹ̀lú Google
+83	Wíwọlé pẹ̀lú Google kò ṣiṣẹ́. Gbìyànjú lẹ́ẹ̀kan sí i, tàbí lo ímeèlì àti ọ̀rọ̀ aṣínà rẹ.
+84	Wọlé
+85	Jáde
+86	Ọ̀rọ̀ aṣínà tuntun
+87	tàbí
+88	Àjọ
+89	Ọ̀rọ̀ aṣínà
+90	A ti yí ọ̀rọ̀ aṣínà padà. Wọlé pẹ̀lú ọ̀rọ̀ aṣínà tuntun rẹ.
+91	Ó kéré tán àmì-ìkọ 12.
+92	Ṣẹ̀dá àkọọ́lẹ̀
+93	Tún ìjápọ̀ náà fi ránṣẹ́
+94	Tí àkọọ́lẹ̀ yẹn bá ṣì nílò ìfìdímúlẹ̀, ìjápọ̀ tuntun ń bọ̀ lọ́nà. Ṣàyẹ̀wò fódà spam rẹ pẹ̀lú.
+95	Tún ọ̀rọ̀ aṣínà ṣe
+96	Tí àkọọ́lẹ̀ kan bá ń lo àdírẹ́sì yẹn, a ti fi ìjápọ̀ àtúnṣe ránṣẹ́. Ó ń ṣiṣẹ́ fún wákàtí kan.
+97	Fìdí àdírẹ́sì ímeèlì rẹ múlẹ̀ kí o tó wọlé. Ṣí ìjápọ̀ tí a fi ránṣẹ́ sí [0].
+98	A ti jẹ́rìísí ímeèlì. O lè wọlé báyìí.
+99	Ìjápọ̀ yìí ti parí tàbí a ti lò ó tẹ́lẹ̀. Wọlé láti gba òmíràn.
+100	Ṣàyẹ̀wò ímeèlì rẹ láti jẹ́rìísí àdírẹ́sì rẹ.
+101	Ṣíṣe àsansílẹ̀ ń dín ìpolówó kù ní 95%.
+102	Àkókò ìdánwò rẹ ti parí.
+103	A ti sanwó títí di [0]
+104	Jẹ́ kí gbogbo nǹkan wà lọ́fẹ̀ẹ́ pẹ̀lú ìpolówó kíkún
+105	Dá gbogbo nǹkan dúró, títí kan ààbò ẹ̀rọ, títí ẹnìkan yóò fi sanwó
+106	Kọ́ńsóòlù nílò àsansílẹ̀; àwọn ẹ̀rọ ṣì wà ní ààbò
+107	£4.99 lóṣù
+108	Ṣe àsansílẹ̀
+109	Ìdánwò ọ̀fẹ́: 
+110	Ọjọ́ [0] ló kù
+111	Ọjọ́ [0] ló kù
+112	Fagilé
+113	Pa rẹ́
+114	Nǹkan kan ṣàṣìṣe.
+115	Kó jáde
+116	Ó ń gbé e wọlé…
+117	Kò kàn án
+118	Láéláé
+119	Èyí tó kàn
+120	rárá
+121	Kò sí nǹkan láti fihàn.
+122	pa
+123	tàn
+124	Èyí tó ṣáájú
+125	Sọ di tuntun
+126	Fi pamọ́
+127	Wá
+128	Àfarawé (dátà ìdánwò)
+129	Ipò
+130	Kò sí
+131	A kò mọ̀
+132	A ṣe ìmúdójúìwọ̀n [0]
+133	Ó ń ṣiṣẹ́…
+134	bẹ́ẹ̀ni
+135	Ìkìlọ̀ [0] ní wákàtí 24
+136	Àwọn ìkìlọ̀ [0] ní wákàtí 24
+137	Ẹ̀rọ [0]
+138	Àwọn ẹ̀rọ [0]
+139	Dátà títí di [0]
+140	Ìṣẹ̀lẹ̀ [0] tó ṣí sílẹ̀
+141	Àwọn ìṣẹ̀lẹ̀ [0] tó ṣí sílẹ̀
+142	Ìfọwọ́sí [0] ń dúró
+143	Àwọn ìfọwọ́sí [0] ń dúró
+144	ó ti dájú
+145	a fura sí
+146	Forúkọ ẹ̀rọ sílẹ̀
+147	Ẹ̀rọ
+148	Kò jábọ̀
+149	Ìlànà tó ti gbó
+150	A ti pa sensọ̀ náà
+151	Àwọn àpèjúwe malware tó ti gbó
+152	Àwọn ìṣòro
+153	Ìgbà ìkẹyìn tí a rí i
+154	Ẹ̀rọ ìṣiṣẹ́
+155	Ìlànà
+156	Ṣiṣẹ́ lórí ẹ̀rọ náà láàrín wákàtí 24 (lílò kan ṣoṣo):
+157	Ààbò
+158	Dà kọ
+159	Gbà sílẹ̀
+160	Gbé lọ
+161	Fódà tuntun
+162	Tún sọ lórúkọ
+163	Dá padà
+164	Gbé lọ sí àpò ìdọ̀tí
+165	Gbé sókè
+166	Ìrànlọ́wọ́
+167	Ọ̀rọ̀ [0] lójú ìwé yìí jẹ́ ìtúmọ̀ ẹ̀rọ, a kò sì tíì ṣàtúnyẹ̀wò rẹ̀.
+168	Àwọn ọ̀rọ̀ [0] ní èdè yìí jẹ́ ìtúmọ̀ ẹ̀rọ, a kò sì tíì ṣàtúnyẹ̀wò wọn.
+169	A kò tíì túmọ̀ èdè yìí, nítorí náà a ń fi Gẹ̀ẹ́sì hàn.
+170	a ti fọwọ́sí
+171	Àwọn òkodoro tí a ṣàkíyèsí
+172	Àwọn àbá-èrò (kò tíì dájú)
+173	Àbá-èrò, ìgbẹ́kẹ̀lé [0]: [1]
+174	Ṣe ìwádìí
+175	Ẹ̀rí tó sọnù
+176	Ó sọnù: [0]
+177	Kà á sókè
+178	Àwọn ìgbésẹ̀ tí a dábàá
+179	Ìlà àkókò ẹ̀rí
+180	webhook tí ń wọlé
+181	Àwọn àmì láti ọ̀dọ̀ olùpèsè ìdánimọ̀ rẹ, DNS, ògiri iná àti àwọn irinṣẹ́ mìíràn. Àwọn ìsopọ̀ tuntun bẹ̀rẹ̀ gẹ́gẹ́ bí èyí tí kò sí; adáptà olùpèsè tí ó yege ìdánwò àdéhùn rẹ̀ nìkan ni a lè sàmì sí gẹ́gẹ́ bí èyí tó ń ṣiṣẹ́. A ń sàmì sí dátà ìdánwò gẹ́gẹ́ bí àfarawé níbikíbi tí ó bá ti farahàn.
+182	Kò so pọ̀ (stub)
+183	Dátà ìdánwò nìkan
+184	Kò sí
+185	Ń ṣiṣẹ́ (a ti jẹ́rìísí)
+186	Kọ́kọ́rọ́ àṣírí (a fihàn lẹ́ẹ̀kan):
+187	Àwọn ìfọwọ́sí
+188	Àwọn ìkìlọ̀
+189	Àyẹ̀wò-ìṣirò
+190	Àsansílẹ̀
+191	Pátákó ìṣàkóso
+192	DDoS àti wíwà-lárọ̀ọ́wọ́tó
+193	Àwọn ẹ̀rọ
+194	Àwọn fáìlì
+195	Àwọn ìṣẹ̀lẹ̀
+196	Àwọn ìsopọ̀
+197	Àwọn ìlànà
+198	Àṣírí
+199	Àhámọ́
+200	Ìdáhùn
+201	Ààbò
+202	Ètò
+203	Fi malware tí a mọ̀ sí àhámọ́ láìfọwọ́yí
+204	Ṣọ́ ìhùwàsí tí a fura sí
+205	Dí àwọn script tí a fura sí
+206	Kó àkóónú fáìlì jọ fún ìwádìí (ó wà ní pípa ní àìyípadà)
+207	Gba ìyàsọ́tọ̀ nẹ́tíwọ́ọ̀kì láàyè
+208	Ṣàyẹ̀wò àwọn fáìlì nígbà tí a bá ṣí wọn tàbí kọ wọ́n
+209	Ṣàyẹ̀wò àwọn ohun tí a gbà sílẹ̀
+210	Ṣàyẹ̀wò àwọn ètò nígbà tí wọ́n bá bẹ̀rẹ̀
+211	Dáàbò bo aṣojú náà lọ́wọ́ àyípadà
+212	Kìlọ̀ nípa àwọn ìjápọ̀ aláàbọ̀ tí a mọ̀
+213	Ìdí
+214	Béèrè fún àtúnyẹ̀wò
+215	Dá padà lẹ́yìn àyẹ̀wò tuntun
+216	àkókò àárín sí ìparun tí a jẹ́rìísí (n=[0], tí a kò yanjú [1])
+217	àwọn àtúnṣe tí ó yege àtúnyẹ̀wò
+218	ìpadàbọ̀ lẹ́yìn ìmúpadàbọ̀sípò
+219	yíyọ fáírọ́ọ̀sì tí a jẹ́rìísí
+220	ìpadàbọ̀ sí iṣẹ́ láìléwu
+221	àwọn àyẹ̀wò ìmúpadàbọ̀sípò ti parí
+222	A ń ka àwọn àbájáde àhámọ́ nìkan ([0]) àti àwọn ẹ̀rọ tí a tún fi sórí ẹ̀rọ ìṣiṣẹ́ ([1]) lọ́tọ̀; a kò ka àhámọ́ nìkan sí yíyọ kúrò láé.
+223	[0] wákàtí
+224	[0] ìṣẹ́jú
+225	[0] ìṣẹ́jú-àáyá
+226	Ń dúró de ìfọwọ́sí
+227	Ẹ̀rí ìṣiṣẹ́ gidi
+228	Kọ ohun tí a jẹ́rìísí ní ìṣiṣẹ́ gidi sílẹ̀, lórí àwọn dúkìá wo, pẹ̀lú ẹ̀yà wo. A kò lè ṣàtúnṣe àwọn àkọsílẹ̀.
+229	Ẹ̀yà
+230	Yí ipò padà
+231	kò sí ẹ̀rí
+232	kùnà
+233	yege
+234	ń dúró
+235	Ṣàyẹ̀wò ìlọsíwájú ìwé ìgbésẹ̀
+236	Àwọn ẹ̀rọ tí ó lè dáhùn
+237	Gbogbo àwọn ẹ̀rọ
+238	Ẹ̀rọ àwòkọ́ṣe [0]
+239	Àwọn ẹ̀rọ àwòkọ́ṣe [0]
+240	Ó ti parí
+241	Ó parí nígbà tí
+242	Ìdánrawò
+243	Ṣàkíyèsí
+244	Dáhùn
+245	Àgbègbè ààbò
+246	[0] tí a ṣàkíyèsí, [1] tí ó lè dáhùn
+247	Dátà
+248	Ọjọ́-orí dátà
+249	Láàyè
+250	Dátà ìdánwò
+251	a kò ṣe é
+252	rìsíìtì
+253	ó ń lọ lọ́wọ́
+254	a kò mọ̀
+255	Fífiránṣẹ́
+256	Ẹ̀rí
+257	Ó ṣiṣẹ́
+258	Ó ti gbó
+259	Àwọn orísun dátà
+260	Ẹ̀yà tàbí digest
+261	Àyíká
+262	Àbájáde
+263	Olùní
+264	Ohun tí a béèrè
+265	Dúkìá tàbí ẹgbẹ́
+266	Fihàn
+267	Gbogbo
+268	Kò tíì parí
+269	Ó tàn fún gbogbo iṣẹ́ náà
+270	Ó tàn fún àjọ yìí
+271	Dá gbogbo ìgbésẹ̀ ìdáhùn tuntun dúró fún àjọ yìí? Ààbò àti àyẹ̀wò ń bá iṣẹ́ lọ.
+272	Tún gba àwọn ìgbésẹ̀ ìdáhùn láàyè
+273	Dá gbogbo ìgbésẹ̀ ìdáhùn dúró
+274	Bọ́tìnì ìdádúró pàjáwìrì
+275	Oríṣi
+276	Ìṣẹ́jú àárín tí ó ṣí sílẹ̀ ([0] ṣí sílẹ̀, èyí tó pẹ́ jù [1] ìṣẹ́jú)
+277	Ìkọ̀ ìlànà
+278	Àwọn ìdánrawò àti àfarawé (a kò kà wọ́n lókè)
+279	Àwọn ìgbésẹ̀ àtúnṣe (àfojúsùn 0)
+280	Ìdádúró àárín dátà (p95 [0] ìṣẹ́jú-àáyá, n=[1])
+281	Àwọn ìfọwọ́sí tó ti pẹ́ ([0] ń dúró, àfojúsùn [1] ìṣẹ́jú)
+282	Àkókò àárín láti àmì sí ìpínsí (p95 [0] ìṣẹ́jú, n=[1], [2] tí a kò pín)
+283	Àwọn ìgbésẹ̀ tí a jẹ́rìísí láìdálé ([0]/[1])
+284	Fèrèsé àkókò: [0]. Rìsíìtì nìkan kò jẹ́ ìjẹ́rìísí láé. Dátà tó sọnù ń farahàn gẹ́gẹ́ bí èyí tí kò sí.
+285	Àwọn ìwọ̀n ìdáhùn
+286	Ìṣẹ̀lẹ̀ ìkẹyìn
+287	Àwọn aṣojú ń dábàá; ìlànà tí kò yí padà ló ń pinnu ohun tí yóò ṣiṣẹ́. Ìgbésẹ̀ kọ̀ọ̀kan ń fi ìfọwọ́sí rẹ̀, rìsíìtì rẹ̀ àti àyẹ̀wò òmìnira hàn.
+288	Ìpele
+289	Ń retí ìfọwọ́sí
+290	A kọ̀ ọ́
+291	Ó ti parí àkókò
+292	Ó kùnà
+293	Ó nílò ìbáramu ọwọ́
+294	A dábàá
+295	Wà nínú ìlà
+296	Ó ń ṣiṣẹ́
+297	Ìjẹ́rìísí ń dúró
+298	A ti jẹ́rìísí
+299	Ipò láàyè
+300	Ipò
+301	Àfarawé
+302	Àyẹ̀wò àti ìkójọ dátà ń ṣiṣẹ́. Àwọn ìgbésẹ̀ mìíràn ṣì jẹ́ àbá.
+303	Àwọn ìgbésẹ̀ tí a fọwọ́sí ń ṣiṣẹ́ lórí àwọn ẹ̀rọ tí a yàn.
+304	Àwọn ìgbésẹ̀ ń ṣiṣẹ́ lórí adáptà ìdánwò nìkan. Kò sí nǹkan tó ń yí padà lórí àwọn ẹ̀rọ rẹ.
+305	Kò tíì sí ìgbésẹ̀ kankan.
+306	Kò sí nǹkan tó ń dúró de ìfọwọ́sí.
+307	A kò tíì kọ ẹ̀rí ìṣiṣẹ́ gidi sílẹ̀.
+308	Kò tíì sí ẹ̀rọ tàbí ìsopọ̀ tó ń fi dátà ránṣẹ́.
+309	Kò ṣiṣẹ́
+310	A ṣàkíyèsí
+311	Ohun tó ṣẹlẹ̀
+312	Ìdáhùn sí DDoS
+313	Ìkìlọ̀ èké àti ìdápadà
+314	Ìdánimọ̀, phishing àti ìrìnnà tí a fura sí
+315	Malware àti àwọn ìgbàsílẹ̀ tí a fura sí
+316	Ìríran nẹ́tíwọ́ọ̀kì àti ipò ẹ̀rọ
+317	Ìmúpadàbọ̀sípò lẹ́yìn ìkọlù
+318	Ransomware tàbí ìkọlù tí a fura sí
+319	Ìwé ìgbésẹ̀
+320	Àwọn ìwé ìgbésẹ̀
+321	Ẹ̀yà ìlànà
+322	Ẹ̀yà tí a fi sórí ẹ̀rọ
+323	Ìyàsọ́tọ̀ ògiri iná
+324	A gba dátà
+325	A yọ fáìlì kúrò
+326	A dá ìlànà-iṣẹ́ dúró
+327	Ipò olùpèsè
+328	A ti kọ ọ́ sílẹ̀
+329	Àyẹ̀wò ti parí
+330	Àfarawé ni
+331	Ó ti jáde kúrò ní àhámọ́
+332	Ó wà ní àhámọ́
+333	Àwọn ìgbésẹ̀ àti rìsíìtì
+334	Kọ àbájáde sílẹ̀
+335	Kọ sílẹ̀
+336	Ó lè dáhùn
+337	Orísun
+338	ẹ̀rọ
+339	kọ́ńsóòlù
+340	àfarawé
+341	Ó bẹ̀rẹ̀ nígbà tí
+342	A ṣe ìmúdójúìwọ̀n
+343	Àyẹ̀wò òmìnira
+344	Ń dúró
+345	Òpin àkójọ fáìlì
+346	Àkójọ fáìlì tí a pàrokò
+347	A yọ ọ́ sílẹ̀
+348	Kò ṣeé dé
+349	Òpin àkókò
+350	Ó tóbi jù
+351	Fọ́ọ̀mátì tí a kò ṣàtìlẹ́yìn
+352	A fagilé
+353	A pàdánù rẹ̀
+354	Apá kan
+355	Àkókò ti tán
+356	Kíkún
+357	Nígbà tí a bá béèrè
+358	Kíákíá
+359	Ìmúpadàbọ̀sípò
+360	Tí a ṣètò
+361	Àfojúsùn
+362	Ṣàfikún apá nẹ́tíwọ́ọ̀kì
+363	àwọn àkójọ fáìlì
+364	Àwọn dúkìá
+365	Dá àyẹ̀wò yìí dúró? A ó tọ́jú àbájáde títí di ìsinsìnyí gẹ́gẹ́ bí àyẹ̀wò tí a fagilé.
+366	Kò ní ààbò
+367	Àwọn ìṣàwárí
+368	Àwọn ẹ̀rọ ní ìbámu pẹ̀lú ipò ààbò
+369	Ẹ̀rọ àyẹ̀wò
+370	Ọjọ́ ìparí
+371	Ẹ̀rí ìkẹyìn
+372	Ìṣàkóso tí a retí
+373	Àtúnṣe tí a dábàá
+374	Àtúnyẹ̀wò
+375	Dúkìá tàbí apá nẹ́tíwọ́ọ̀kì
+376	Àwọn àlàfo tó ṣí sílẹ̀
+377	Àbájáde àyẹ̀wò ní ọjọ́ 30
+378	ìkìlọ̀ sí ìkápá tí a jẹ́rìísí
+379	àwọn ẹ̀rọ tí ó ní ààbò
+380	àwọn ibùdó ìparí gbangba pẹ̀lú ìdènà láti ọ̀dọ̀ olùpèsè òkè
+381	ìṣẹ̀lẹ̀ sí ìkìlọ̀
+382	àwọn ẹ̀rọ pẹ̀lú àpèjúwe malware tuntun
+383	àwọn ẹ̀rọ pẹ̀lú àyẹ̀wò kíkún ní ọjọ́ 7
+384	àwọn àlàfo tó ṣí sílẹ̀ ([0] ti pẹ́, [1] tí a tì ní ọjọ́ 30)
+385	àwọn apá nẹ́tíwọ́ọ̀kì tí a ń ṣọ́
+386	àwọn ìṣàwárí tòótọ́ tí ó dájú
+387	àwọn àyẹ̀wò tí ó parí
+388	Àgbègbè ààbò àti ìdáhùn
+389	Àyẹ̀wò kíkún ìkẹyìn
+390	Tẹlẹmẹ́trì ìkẹyìn
+391	Gbogbo ẹ̀rọ àti apá nẹ́tíwọ́ọ̀kì tó wà nínú àgbègbè, bóyá ó ní ààbò, àti ohun tí a ó tún ṣe tẹ̀lé e.
+392	Ìríran nẹ́tíwọ́ọ̀kì
+393	A kò tíì forúkọ ẹ̀rọ kankan sílẹ̀. Dáàbò bo kọ̀ǹpútà kan láti Àwọn ẹ̀rọ.
+394	Kò sí àlàfo tó ṣí sílẹ̀.
+395	[0] ṣí sílẹ̀
+396	ó ti pẹ́
+397	p95 [0] ìṣẹ́jú-àáyá
+398	Àwọn fódà
+399	Àwọn fódà láti ṣàyẹ̀wò, tí a fi kọ́mà yà sọ́tọ̀
+400	Ìpàrokò àti ògiri iná
+401	Ìpàrokò díìsìkì [0], ògiri iná [1]
+402	Ìmúpadàbọ̀sípò lẹ́yìn ìṣẹ̀lẹ̀
+403	Tún ṣàyẹ̀wò báyìí
+404	A kò tíì tún dán an wò
+405	Àtúnyẹ̀wò kùnà
+406	A ti jẹ́rìísí pé ó ti tì
+407	Irú àyẹ̀wò
+408	Àwọn àyẹ̀wò
+409	Apá nẹ́tíwọ́ọ̀kì
+410	Orúkọ apá nẹ́tíwọ́ọ̀kì
+411	Bẹ̀rẹ̀ àyẹ̀wò
+412	Ó ti bẹ̀rẹ̀
+413	Ipò
+414	Ó ti dínkù
+415	Ó ní ààbò
+416	Kò ní ààbò
+417	Àwọn ẹ̀rọ ní ìbámu pẹ̀lú ipò
+418	[0] tí a kò mọ̀
+419	Kò sí ìríran
+420	A ń ṣọ́ ọ
+421	Ìríran
+422	Àìsí ìṣàwárí kò fi ààbò hàn: ṣàyẹ̀wò àgbègbè ààbò àti àbájáde àyẹ̀wò pẹ̀lú.
+423	Èdè
+424	Àgbègbè ìtúmọ̀
+425	Kò sí ẹ̀yà tó ṣáájú
+426	Àwọ̀ àkòrí
+427	Dúdú
+428	Ìyàtọ̀ gíga
+429	Ìmọ́lẹ̀
+430	A kò rí ewu tuntun kankan nínú àwọn fáìlì [0].
+431	Ewu [0]
+432	Àwọn ewu [0]
+433	 ni a rí nínú àwọn fáìlì [0]. Wo Àwọn ìkìlọ̀ àti Àwọn ìfọwọ́sí láti ṣàtúnyẹ̀wò wọn.
+434	Àyẹ̀wò kíkún
+435	A kò lè dáàbò bo kọ̀ǹpútà yìí: [0]
+436	Kọ̀ǹpútà yìí ní ààbò. Àyẹ̀wò lásìkò gidi ń ṣiṣẹ́ nígbà tí Agentic Antivirus bá ṣí sílẹ̀.
+437	Àyẹ̀wò náà kò parí: [0]
+438	Ó ń ṣàyẹ̀wò…
+439	Ó ń ṣàyẹ̀wò gbogbo díìsìkì. Èyí lè gba àkókò gígùn.
+440	Ó ń ṣàyẹ̀wò Àwọn ìgbàsílẹ̀, Ojú-iṣẹ́ àti àwọn fáìlì ìgbà díẹ̀…
+441	A kò lè ka àwọn fáìlì [0].
+442	Fáìlì kan
+443	Ìjápọ̀ ojú-òpó wẹ́ẹ̀bù
+444	Gba dátà ìdánwò
+446	Àwọn ìgbésẹ̀
+447	Ṣàfikún ìsopọ̀ kan
+448	Ṣàfikún àyọkúrò
+449	Ṣàfikún ìsopọ̀
+450	Ṣàfikún àyẹ̀wò kíkún ọlọ́sẹ̀ọ̀sẹ̀
+451	alábòójútó
+452	Ìpolówó
+453	Ìgbanilaaye ìpolówó
+454	Àwọn iṣẹ́ tí ọ̀rọ̀ kàn
+455	àwọn ìkìlọ̀ ní wákàtí 24 sẹ́yìn
+456	Gbà láàyè
+457	Gbà láàyè kí o ṣàyẹ̀wò
+458	Alábòójútó gbọ́dọ̀ fún ìdí. A kọ àyọkúrò náà sílẹ̀ nínú ìtọpa àyẹ̀wò-ìṣirò.
+459	Ímeèlì kan
+460	Fọwọ́sí ìpadàbọ̀ sí iṣẹ́
+461	Fífọwọ́sí àwọn ìgbésẹ̀
+462	Dúkìá
+463	àwọn dúkìá tí a ń dáàbò bò lọ́wọ́ ìkọlù báyìí
+464	àwọn dúkìá pẹ̀lú ìkìlọ̀ ní wákàtí 24
+465	Ìtọpa àyẹ̀wò-ìṣirò
+466	Ààbò aládàáṣe ń bá iṣẹ́ lọ lórí gbogbo ẹ̀rọ. Ìwọ̀nyí ni àwọn ìgbésẹ̀ tí ó nílò kí ènìyàn pinnu.
+467	Wíwà-lárọ̀ọ́wọ́tó
+468	Àwọn àmì tó wà
+469	A ti jẹ́rìísí ẹ̀dà ìpamọ́
+470	Dí i
+471	Ní àìyípadà, aṣojú náà ń fi tẹlẹmẹ́trì ààbò àti hash fáìlì ránṣẹ́: orúkọ ìlànà-iṣẹ́ àti ìlà àṣẹ, ipa ọ̀nà fáìlì, dátà àpèjúwe ìsopọ̀ nẹ́tíwọ́ọ̀kì, àti àwọn ìṣàwárí. A ń kó àkóónú fáìlì jọ kìkì tí àjọ rẹ bá tàn án.
+472	Agbára
+473	Ẹ̀ka
+474	Ó ti yí padà
+475	Owó
+476	Ṣàyẹ̀wò
+477	yàn
+478	Yan ẹ̀rọ kan
+480	Pa dé
+481	Tí a fi kọ́mà yà
+482	Kàn sí
+483	Ìṣàkóso
+484	Àgbègbè ààbò ní ìbámu pẹ̀lú ìpele ààbò
+485	lílekoko
+486	ìfijíṣẹ́ ìkìlọ̀ lílekoko (p95, ọjọ́ 30)
+487	Àwọn ìpinnu tí ń dúró
+488	Kọ̀
+489	Àwọn àpèjúwe malware
+490	Ṣàpèjúwe ohun tó ṣẹlẹ̀
+491	Àlàyé
+492	Àwọn àlàyé
+493	Ìṣàwárí
+494	Ẹ̀rọ tí a ó fún ní ìwé-àṣẹ
+495	àwọn ẹ̀rọ tí ó ní ààbò kíkún
+496	àwọn ẹ̀rọ tí a yà sọ́tọ̀
+497	Àwọn ẹ̀rọ tí ó nílò àkíyèsí
+498	Ìtọ́sọ́nà
+499	Agbègbè DNS
+500	ojú ìwé ìgbàsílẹ̀
+501	Nígbà ìdánwò ọ̀fẹ́, àti lórí àwọn ètò tí a kò sanwó fún, kọ́ńsóòlù ń fi ìpolówó Google AdSense hàn, àwọn áàpù alágbèéká sì ń fi ìpolówó Google AdMob hàn, lẹ́yìn tí a bá béèrè fún ìgbanilaaye rẹ. Àwọn tí ó ṣe àsansílẹ̀ ń rí ìpolówó tí ó dínkù ní 95%. Ìpolówó kò jẹ́ farahàn láé lórí ojú ìwé ìfọwọ́sí, ìkápá, ìkìlọ̀ ewu, àtúnyẹ̀wò àhámọ́, wíwọlé, ìsanwó tàbí àyẹ̀wò-ìṣirò.
+502	Ìtẹ̀jáde kọ̀ọ̀kan ń ṣẹ̀dá ẹ̀yà tuntun tí a fọwọ́ sí. Àwọn ẹ̀rọ ń bá ẹ̀yà ìkẹyìn tí a jẹ́rìísí lọ nígbà tí wọn kò sí lórí ayélujára.
+503	Fi ímeèlì ránṣẹ́ sí ìrànlọ́wọ́ ní
+504	Ibùdó ìparí
+505	Equality Software Ltd ló ń ṣiṣẹ́ Agentic Antivirus. Ojú ìwé yìí ṣàpèjúwe ohun tí iṣẹ́ náà ń kó jọ. Olùní ọjà gbọ́dọ̀ ṣàtúnyẹ̀wò rẹ̀ kí a tó tẹ̀ ẹ́ jáde.
+506	Gbogbo ìgbésẹ̀ tí ó ń yí ẹ̀rọ, àkọọ́lẹ̀ tàbí ìrìnnà padà ń kọjá nínú ẹ̀rọ ìlànà àti ìṣàkóso AEP-X. Ìfọwọ́sí kan bo ìgbésẹ̀ kan, àwọn ibi àfojúsùn rẹ̀ gan-an, àjọ yìí, àti àkókò kan pàtó.
+507	A ń ṣàyẹ̀wò gbogbo ohun tí a gbé sókè fún malware àti irú rẹ̀ gidi. A ń tọ́jú àwọn fáìlì tí kò ní olùfihàn tí a jẹ́rìísí, a sì lè gbà wọ́n sílẹ̀, ṣùgbọ́n a kò fi àwòtẹ́lẹ̀ wọn hàn.
+508	Ìyàtọ̀
+509	Àwọn àyọkúrò
+510	Ipa ọ̀nà fódà
+511	fún ìbéèrè láti wọlé sí tàbí àtúnṣe dátà.
+512	Àwọn àlàfo
+513	Gba aṣojú fún Windows, Mac tàbí Linux láti
+514	Lọ sí Àwọn ẹ̀rọ, yan Forúkọ ẹ̀rọ sílẹ̀, kí o sì ṣiṣẹ́ àṣẹ tí a fihàn lórí kọ̀ǹpútà tí o fẹ́ dáàbò bò. Aṣojú náà bẹ̀rẹ̀ àyẹ̀wò ní kété tí ó bá gba ìlànà rẹ̀ tí a fọwọ́ sí.
+515	Ìlera
+516	Ìtàn
+517	Orúkọ olùgbàlejò
+518	Mo yé mi pé àwọn ẹ̀rọ yóò dẹ́kun àyẹ̀wò àti dídí ewu lẹ́yìn ìdánwò títí a ó fi san àsansílẹ̀.
+519	Ipa
+520	Kó zip tàbí tar wọlé
+521	Ìṣẹ̀lẹ̀
+522	Fi àwòṣe èdè kún un (tí àjọ rẹ bá mú ọ̀kan ṣiṣẹ́)
+523	Àdírẹ́sì IP
+524	Darapọ̀
+525	Darapọ̀ mọ́ àjọ rẹ
+526	A ń gbé malware tí a mọ̀ lọ sí àhámọ́, níbi tí kò ti lè ṣiṣẹ́. Tí o bá rò pé a dí fáìlì kan ní àṣìṣe, ṣí Àhámọ́ kí o sì béèrè fún àtúnyẹ̀wò. Alábòójútó ló ń pinnu, fáìlì náà yóò sì padà kìkì lẹ́yìn tí àyẹ̀wò tuntun bá rí i pé ó mọ́.
+527	Àwọn èdè tí kò ní ìtúmọ̀ pípé ń padà sí Gẹ̀ẹ́sì. A ń wọn àgbègbè ìtúmọ̀, a kò fojú díwọ̀n rẹ̀.
+528	Àyípadà ìkẹyìn
+529	Ìpele
+530	Àṣeyọrí ìbéèrè tó bófin mu
+531	Àwọn òfin ìwé-àṣẹ
+532	Ìjápọ̀, tí ó bá wà
+533	Àwọn olùgbàlejò ìṣàkóso tí ó ṣì ṣeé dé nígbà ìyàsọ́tọ̀
+534	Sàmì sí gẹ́gẹ́ bí ìkìlọ̀ èké
+535	Ìdàgbàsókè
+536	Ìdènà ìkọlù
+537	Orúkọ
+538	Orúkọ kọ́kọ́rọ́ àṣírí nínú ibi ìpamọ́ àṣírí rẹ, kì í ṣe kọ́kọ́rọ́ àṣírí fúnra rẹ̀
+539	Kò sí ìgbésẹ̀ tí ń dúró.
+540	Kò sí ìṣẹ̀lẹ̀ tó ṣí sílẹ̀.
+541	Kò sí.
+542	A kò jábọ̀ nǹkan kan.
+543	a kò ṣètò rẹ̀
+544	A sọ fún lẹ́yìn
+545	nínú ìpolówó tí a fihàn
+546	Ibi ìpamọ́ ìṣẹ̀lẹ̀ láìsí ayélujára (MB)
+547	Lórí Android, ṣe àsansílẹ̀ nínú áàpù Agentic Antivirus nípasẹ̀ Google Play. Lórí iPhone àti iPad, àsansílẹ̀ App Store kò tíì sí. Sísanwó lórí wẹ́ẹ̀bù kò tíì sí.
+548	Ṣí ìṣẹ̀lẹ̀
+549	àwọn ìṣẹ̀lẹ̀ tó ṣí sílẹ̀
+550	Àwọn ìṣẹ̀lẹ̀ tó ṣí sílẹ̀
+551	Ìdádúró p95
+552	a ti sanwó títí di
+553	Àpẹẹrẹ ipa ọ̀nà
+554	Àwọn ènìyàn
+555	Fún ẹ̀rọ kọ̀ọ̀kan
+556	Fún olùlò kọ̀ọ̀kan (ó bo gbogbo ẹ̀rọ wọn)
+557	Àwòtẹ́lẹ̀
+558	Àkọ́kọ́
+560	Dáàbò bo ẹ̀rọ kan
+561	Ìlànà ìbánisọ̀rọ̀
+562	Olùpèsè
+563	Àwọn ìkìlọ̀ olùpèsè (wákàtí 24)
+564	Àwọn ibùdó ìparí gbangba
+565	Tẹ ẹ̀yà ìlànà kan jáde
+566	Tẹ ẹ̀yà tí a fọwọ́ sí jáde
+567	A ti tẹ̀ ẹ́ jáde
+568	Àyẹ̀wò kíákíá
+569	Kíkà sókè àti ìkọ̀wé-ohùn ń lo àwọn ẹ̀yà ọ̀rọ̀ sísọ tí ó wà nínú aṣàwákiri rẹ. A kò gba ohùn sílẹ̀ tàbí tọ́jú rẹ̀.
+570	A gbà á
+571	Àwọn ohun ìpamọ́ tí ó ṣeé yọ
+572	Yọ kúrò
+573	A béèrè
+574	Ẹni tí ó béèrè
+575	Ìpamọ́
+576	Ìpadàbọ̀ sí iṣẹ́
+577	Ní báyìí
+578	Ewu
+579	Ipa iṣẹ́
+580	Yí padà
+581	Fi ibùdó ìparí pamọ́
+582	Fi àwọn òfin ìwé-àṣẹ pamọ́
+583	Ṣàyẹ̀wò
+584	Ìṣètò àkókò (cron)
+585	Àwọn àyẹ̀wò tí a ṣètò
+586	Ìtọ́kasí kọ́kọ́rọ́ àṣírí
+587	Fi ìpè ránṣẹ́
+588	Fi ìròyìn ránṣẹ́
+589	Fi ìjápọ̀ àtúnṣe ránṣẹ́
+590	Iṣẹ́
+591	Àwọn àfojúsùn iṣẹ́
+594	Àmì
+595	Ìwọ̀n
+596	Nǹkan mìíràn
+597	Tò
+598	Ìgbésẹ̀
+599	Dídá ìlànà-iṣẹ́ dúró, yíya ẹ̀rọ sọ́tọ̀, dídá fáìlì padà, ṣíṣàfikún àyọkúrò àti yíyí òfin ìrìnnà padà nílò kí ènìyàn fọwọ́sí wọn. Ìfọwọ́sí kan bo ìgbésẹ̀ kan, àwọn ibi àfojúsùn rẹ̀ gan-an àti àkókò tí ó ní òpin. Tí nǹkan kan bá yí padà, tún fọwọ́sí.
+600	Ṣe àsansílẹ̀ fún ẹ̀rọ yìí pẹ̀lú Google Play
+601	ipò àsansílẹ̀
+603	Ẹ̀rọ
+604	Ibi àfojúsùn
+605	Olùrànlọ́wọ́ AI
+606	Olùrànlọ́wọ́ náà ń kó àwọn ìkìlọ̀ tí ó jọra jọ, ó ń to ohun tí a ṣàkíyèsí pẹ̀lú ìjápọ̀ sí ẹ̀rí, ó sì ń sàmì sí ohunkóhun tí kò lè fìdí rẹ̀ múlẹ̀ gẹ́gẹ́ bí àbá-èrò. Ó lè dábàá ìgbésẹ̀ ṣùgbọ́n kò lè fọwọ́sí wọn. Tí àwòṣe kò bá sí, àyẹ̀wò, ìkìlọ̀ àti ìdáhùn ọwọ́ ń bá iṣẹ́ lọ.
+607	Kọ̀ǹpútà yìí
+608	TLS nìkan, ó gbọ́dọ̀ wà nínú àkójọ ìgbàláàyè ìjáde
+609	Olùpèsè òkè rẹ ló ń gba ìkún-omi ìrìnnà mọ́ra. Níbí ni o ti ń ṣírò gbogbo ibùdó ìparí gbangba, tí o ń ṣọ́ ìkìlọ̀ olùpèsè, tí o sì ń fọwọ́sí àwọn ìdíwọ́ ìrìnnà tuntun.
+610	Àwọn ìdíwọ́ ìrìnnà
+611	A ti túmọ̀ rẹ̀
+612	Àpò ìdọ̀tí
+613	ọjọ́ ìdánwò tó kù
+614	Tan ààbò láti ṣàyẹ̀wò àwọn fáìlì lórí kọ̀ǹpútà yìí kí o sì ṣọ́ ransomware àti olè ìwé-ẹ̀rí wíwọlé.
+615	kò ní ààbò
+616	Yí àyípadà ìkẹyìn padà
+617	Olùlò
+618	Jẹ́rìísí ímeèlì
+619	ń dúró de ìfọwọ́sí
+620	A ń fi ìpolówó láti Google AdSense hàn lórí àwọn ojú ìwé kan. Gba ìpolówó tí a ṣe fún ọ láàyè?
+621	Webhook:
+622	Ohun tí àwọn ẹ̀rọ ń fi ránṣẹ́
+623	Kí ni èyí?
+624	Ìgbà wo
+625	Nígbà tí a bá dí nǹkan kan
+626	Nígbà tí ìdánwò bá parí láìsí ìsanwó
+627	Ta ni
+628	O lè pa àkọọ́lẹ̀ rẹ rẹ́ láti inú profaili rẹ. Kàn sí
+629	Orúkọ rẹ
+630	Àjọ rẹ ń gba ìdánwò ọ̀fẹ́ ọlọ́jọ́ 30. Lẹ́yìn náà, ó jẹ́ £4.99 lóṣù fún olùlò tàbí ẹ̀rọ kọ̀ọ̀kan.
+631	Àjọ rẹ ló ń pinnu bí a ó ti pẹ́ tó tí a ó fi tọ́jú tẹlẹmẹ́trì àti ẹ̀rí. A kò lè ṣàtúnṣe tàbí pa àwọn àkọsílẹ̀ àyẹ̀wò-ìṣirò rẹ́.
+632	Àwọn ẹ̀tọ́ rẹ
+633	Kọ̀wé pẹ̀lú ohùn
+634	Gba lílo gbohùngbohùn láàyè fún ìkọ̀wé-ohùn? Aṣàwákiri rẹ ló ń ṣe ìṣiṣẹ́ ohùn náà, a kò sì tọ́jú rẹ̀.
+635	Ìjáde ohùn
+636	Dánu dúró
+637	Ìwọ̀n ohùn
+638	Tẹ̀síwájú
+639	Ìyára
+640	Dúró
+641	Kò sí ohùn fún èdè yìí.
+642	Ohùn
+643	A ti gbé fáìlì náà lọ sí àhámọ́, kò sì lè ṣiṣẹ́.
+644	A dí ewu kan lórí ẹ̀rọ yìí.

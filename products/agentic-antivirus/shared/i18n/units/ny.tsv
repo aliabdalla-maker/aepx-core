@@ -1,0 +1,637 @@
+0	Pitani ku zomwe zili zazikulu
+1	Onjezani chosiyidwa chokhazikika
+2	Ikani choletsa pa kayendedwe ka deta
+3	Sonkhanitsani metadata ya chipangizo
+4	Patulani chipangizo pa netiweki
+5	Ikani fayilo kwaokha
+6	Masulani chipangizo pa kupatulidwa
+7	Bwezerani fayilo yomwe ili kwaokha
+8	Tulutsani wogwiritsa ntchito kulikonse
+9	Bwezerani choletsa pa kayendedwe ka deta
+10	Bwezerani zosintha
+11	Sikani zipangizo
+12	Imitsani kaye akaunti ya wogwiritsa ntchito
+13	Imitsani pulosesi
+14	Vomerezani
+15	Kanani
+16	Tumizani ku zipangizo
+17	Chivomerezo chimatha [0]
+18	Choperekedwa ndi wothandizira wa AI
+19	Malonda
+20	Chochita
+21	Ma ejenti
+22	Funsani
+23	Funsani wothandizira wa chitetezo
+24	Mayankho amachokera ku zipangizo zanu, zochitika zotseguka ndi mipata. Wothandizira sangasinthe chilichonse.
+25	Kutengera
+26	Chonena [0] chopanda umboni chachotsedwa
+27	Zonena [0] zopanda umboni zachotsedwa
+29	Mtundu wodzisungira wekha
+30	Malamulo (palibe mtundu)
+31	Lembani dongosolo lokonza
+32	Gawo lililonse ndi lingaliro. Palibe chomwe chimachitika mpaka wina avomereze.
+33	Funso
+34	Mwachitsanzo: ndi zipangizo ziti zomwe zikufunika chisamaliro?
+35	Kukula kwa vuto kopangidwa
+36	Chidule
+37	Zolinga
+38	Fotokozani mwachidule chochitikachi
+39	Chifukwa
+40	Zapezeka
+41	Nenani chinthu chokayikitsa
+42	Lamulo
+43	Kukula kwa vuto
+44	Chenjezo
+46	Onjezani mafayilo
+47	Onjezani foda
+48	Onjezani zithunzi
+49	Cholumikizidwa [0]
+50	Zolumikizidwa [0]
+51	Zolumikizidwa
+52	Jambulani chithunzi
+53	Kugwiritsa ntchito kamera sikunaloledwe. Kuloleni mu msakatuli wanu, kapena gwiritsani ntchito pulogalamu ya kamera ya chipangizo chanu.
+54	Chithunzithunzi cha kamera
+55	Msakatuli uyu sangathe kutsegula kamera pano.
+56	Jambulani
+57	Tsekani wothandizira
+58	Kodi mafayilo awa ndi chiyani, ndipo ali otetezeka?
+59	Fayilo
+60	Funsani za chitetezo chanu, kapena lumikizani mafayilo, foda, zithunzi kapena chithunzi cha kamera. Cholumikizidwa chilichonse chimasikidwa kaye ndipo palibe chomwe chimasungidwa.
+61	Chithunzi [0] chafotokozedwa
+62	Zithunzi [0] zafotokozedwa
+63	 ndi mtundu wa AI.
+64	Mwachitsanzo: kodi chotsitsidwachi ndi chotetezeka?
+65	Mawu ndi zithunzi zoyera zitha kutumizidwa ku mtundu wa AI womwe bungwe lanu layatsa. Mafayilo oyipa satumizidwa konse.
+66	Fayilo [0] sinawonjezedwe
+67	Mafayilo [0] sanawonjezedwe
+68	: mpaka mafayilo [0], [1] MB iliyonse ndi [2] MB zonse pamodzi.
+69	Chotsani [0]
+70	Sikani ndi kufunsa
+71	Zotsatira za sikani
+72	Mtundu
+73	Gwiritsani ntchito kamera ya chipangizo
+74	Zotsatira
+75	Palibe malware yodziwika
+76	Yoyipa
+77	Sinasikidwe
+78	Unyolo wa kafukufuku wasweka pa cholembedwa [0].
+79	Unyolo wa kafukufuku uli bwino: zolembedwa [0] zatsimikizika.
+80	Imelo
+81	Mwaiwala mawu achinsinsi?
+82	Lowani ndi Google
+83	Kulowa ndi Google sikunagwire ntchito. Yesaninso, kapena gwiritsani ntchito imelo ndi mawu achinsinsi anu.
+84	Lowani
+85	Tulukani
+86	Mawu achinsinsi atsopano
+87	kapena
+88	Bungwe
+89	Mawu achinsinsi
+90	Mawu achinsinsi asinthidwa. Lowani ndi mawu achinsinsi anu atsopano.
+91	Zilembo zosachepera 12.
+92	Pangani akaunti
+93	Tumizaninso ulalo
+94	Ngati akauntiyo ikufunikabe kutsimikizidwa, ulalo watsopano uli m'njira. Onaninso foda ya sipamu.
+95	Sinthani mawu achinsinsi
+96	Ngati pali akaunti yomwe imagwiritsa ntchito adilesi imeneyo, tatumiza ulalo wosintha. Umagwira ntchito kwa ola limodzi.
+97	Tsimikizirani adilesi yanu ya imelo musanalowe. Tsegulani ulalo womwe tatumiza ku [0].
+98	Imelo yatsimikizika. Mutha kulowa tsopano.
+99	Ulalo uwu watha nthawi kapena wagwiritsidwa ntchito kale. Lowani kuti mupeze watsopano.
+100	Onani imelo yanu kuti mutsimikizire adilesi yanu.
+101	Kulembetsa kumachepetsa malonda ndi 95%.
+102	Nthawi yanu yoyesera yatha.
+103	Mwalembetsa mpaka [0]
+104	Sungani zonse zaulere ndi malonda onse
+105	Imitsani zonse, kuphatikizapo chitetezo cha zipangizo, mpaka wina alipire
+106	Konsoli ikufunika kulembetsa; zipangizo zimakhalabe zotetezedwa
+107	£4.99 pamwezi
+108	Lembetsani
+109	Kuyesa kwaulere:
+110	Latsala tsiku [0]
+111	Atsala masiku [0]
+112	Letsani
+113	Fufutani
+114	Pali vuto linalake.
+115	Tumizani kunja
+116	Ikutsegula…
+117	Sizikugwira
+118	Ayi konse
+119	Chotsatira
+120	ayi
+121	Palibe choti chiwonetsedwe.
+122	yazimitsidwa
+123	yayatsidwa
+124	Cham'mbuyo
+125	Tsitsimutsani
+126	Sungani
+127	Sakani
+128	Kuyerekeza (deta yoyesera)
+129	Mkhalidwe
+130	Sichikupezeka
+131	Sichidziwika
+132	Zasinthidwa [0]
+133	Ikugwira ntchito…
+134	inde
+135	Chenjezo [0] m'maola 24
+136	Machenjezo [0] m'maola 24
+137	Chipangizo [0]
+138	Zipangizo [0]
+139	Deta ya pa [0]
+140	Chochitika [0] chotseguka
+141	Zochitika [0] zotseguka
+142	Chivomerezo [0] chikudikira
+143	Zivomerezo [0] zikudikira
+144	zatsimikizika
+145	zokayikiridwa
+146	Lembetsani chipangizo
+147	Chipangizo
+148	Sichikutumiza malipoti
+149	Ndondomeko yachikale
+150	Sensa yazimitsidwa
+151	Matanthauzo achikale
+152	Mavuto
+153	Chinawonedwa komaliza
+154	Makina ogwiritsira ntchito
+155	Ndondomeko
+156	Yendetsani pa chipangizo mkati mwa maola 24 (kamodzi kokha):
+157	Chitetezo
+158	Koperani
+159	Tsitsani
+160	Sunthani
+161	Foda yatsopano
+162	Sinthani dzina
+163	Bwezerani
+164	Sunthirani ku zinyalala
+165	Kwezani
+166	Thandizo
+167	Mawu [0] patsamba lino amasuliridwa ndi makina ndipo sanawunikidwe.
+168	Mawu [0] m'chilankhulo ichi amasuliridwa ndi makina ndipo sanawunikidwe.
+169	Chilankhulo ichi sichinamasuliridwe, choncho Chingerezi chikuwonetsedwa.
+170	zavomerezedwa
+171	Zowona zowonedwa
+172	Malingaliro (osatsimikizika)
+173	Lingaliro, chidaliro [0]: [1]
+174	Yambitsani kafukufuku
+175	Umboni wosowa
+176	Zikusowa: [0]
+177	Werengani mokweza
+178	Zochita zovomerezeka
+179	Ndandanda ya nthawi ya umboni
+180	webhook yobwera
+181	Zizindikiro zochokera kwa wopereka chizindikiritso chanu, DNS, ma firewall ndi zida zina. Zolumikizana zatsopano zimayamba ngati zosapezeka; adaputala ya wopereka yomwe yadutsa mayeso ake a mgwirizano ndiyo yokha yomwe ingadziwike ngati yamoyo. Deta yoyesera imalembedwa ngati kuyerekeza kulikonse komwe ikuwonekera.
+182	Sizinalumikizidwe (stub)
+183	Deta yoyesera yokha
+184	Sizikupezeka
+185	Yamoyo (yatsimikizika)
+186	Chinsinsi (chikuwonetsedwa kamodzi):
+187	Zivomerezo
+188	Machenjezo
+189	Kafukufuku
+190	Kulembetsa
+191	Dashibodi
+192	DDoS ndi kupezeka
+193	Zipangizo
+194	Mafayilo
+195	Zochitika
+196	Zolumikizana
+197	Ndondomeko
+198	Zachinsinsi
+199	Kwaokha
+200	Kuyankha
+201	Chitetezo
+202	Zokonda
+203	Ikani malware yodziwika kwaokha zokha
+204	Yang'anirani khalidwe lokayikitsa
+205	Letsani ma script okayikitsa
+206	Sonkhanitsani zomwe zili m'mafayilo kuti mufufuze (zozimitsidwa mwachisawawa)
+207	Lolani kupatula pa netiweki
+208	Sikani mafayilo akatsegulidwa kapena kulembedwa
+209	Sikani zotsitsidwa
+210	Sikani mapulogalamu akayamba
+211	Tetezani ejenti ku zosintha
+212	Chenjezani za maulalo oyipa odziwika
+213	Chifukwa
+214	Pemphani kuwunikanso
+215	Bwezerani mutasikanso kwatsopano
+216	nthawi yapakatikati mpaka kuchotsa kotsimikizika (n=[0], osathetsedwa [1])
+217	zokonza zomwe zadutsa mayeso obwereza
+218	kubweranso pambuyo pa kuchira
+219	kuchotsa kachilombo kotsimikizika
+220	kubwerera ku ntchito motetezeka
+221	ma sikani ochira atha
+222	Zotsatira za kwaokha kokha ([0]) ndi zipangizo zoyikidwanso makina ([1]) zimawerengedwa padera; kuika kwaokha kokha sikuwerengedwa ngati kuchotsa.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Ikudikira chivomerezo
+227	Umboni wa pa ntchito yeniyeni
+228	Lembani zomwe zatsimikizika pa ntchito yeniyeni, pa katundu uti, ndi mtundu uti. Zolembedwa sizingasinthidwe.
+229	Mtundu
+230	Sinthani njira
+231	palibe umboni
+232	zalephera
+233	zadutsa
+234	zikudikira
+235	Onani momwe buku la zochita likupitira
+236	Zipangizo zomwe zingayankhe
+237	Zipangizo zonse
+238	Chipangizo choyesera [0]
+239	Zipangizo zoyesera [0]
+240	Zatha
+241	Zimatha pamene
+242	Kuyeserera
+243	Yang'anirani
+244	Yankhani
+245	Kufikira
+246	[0] zowonedwa, [1] zokhoza kuyankha
+247	Deta
+248	Zaka za deta
+249	Pompano
+250	Deta yoyesera
+251	sizinachitike
+252	risiti
+253	zikuchitika
+254	sizikudziwika
+255	Kutumiza
+256	Umboni
+257	Zinachitika
+258	Zachikale
+259	Magwero a deta
+260	Mtundu kapena digest
+261	Malo
+262	Zotsatira
+263	Mwini
+264	Chofunikira
+265	Katundu kapena gulu
+266	Onetsani
+267	Zonse
+268	Sizinathe
+269	Yayatsidwa pa ntchito yonse
+270	Yayatsidwa pa bungwe ili
+271	Imitsani zochita zonse zatsopano zoyankha za bungwe ili? Chitetezo ndi sikani zikupitirirabe.
+272	Lolaninso zochita zoyankha
+273	Imitsani zochita zonse zoyankha
+274	Batani loyimitsa mwadzidzidzi
+275	Mtundu
+276	Mphindi zapakatikati zotseguka ([0] zotseguka, chakale kwambiri [1] min)
+277	Zokanidwa ndi ndondomeko
+278	Zoyeserera ndi zoyerekeza (sizinawerengedwe pamwambapa)
+279	Zochita zobwerezedwa (cholinga 0)
+280	Kuchedwa kwapakatikati kwa deta (p95 [0] s, n=[1])
+281	Zivomerezo zochedwa ([0] zikudikira, cholinga [1] min)
+282	Nthawi yapakatikati kuchokera ku chizindikiro kufika pakusanja (p95 [0] min, n=[1], [2] zosasanjidwa)
+283	Zochita zotsimikizidwa paokha ([0]/[1])
+284	Nthawi: [0]. Risiti yokha siiwerengedwa ngati yotsimikizika. Deta yosowa imawonetsedwa ngati yosapezeka.
+285	Miyeso ya kuyankha
+286	Chochitika chomaliza
+287	Ma ejenti amapereka malingaliro; ndondomeko yokhazikika ndiyo imasankha zomwe zimachitika. Chochita chilichonse chimawonetsa chivomerezo chake, risiti yake ndi kuwunika kodziyimira pawokha.
+288	Gawo
+289	Ikudikira chivomerezo
+290	Zakanidwa
+291	Zatha nthawi
+292	Zalephera
+293	Zikufunika kugwirizanitsa pamanja
+294	Zaperekedwa
+295	Zili pamzere
+296	Zikuchitika
+297	Kutsimikizira kukudikira
+298	Zatsimikizika
+299	Mkhalidwe wapompano
+300	Njira
+301	Kuyerekeza
+302	Ma sikani ndi kusonkhanitsa deta zimachitika. Zochita zina zimakhalabe malingaliro.
+303	Zochita zovomerezedwa zimachitika pa zipangizo zosankhidwa.
+304	Zochita zimachitika pa ma adaputala oyesera okha. Palibe chimene chimasintha pa zipangizo zanu.
+305	Palibe zochita pakadali pano.
+306	Palibe chomwe chikudikira chivomerezo.
+307	Palibe umboni wa ntchito yeniyeni womwe walembedwa pakadali pano.
+308	Palibe zipangizo kapena zolumikizana zomwe zikutumiza deta pakadali pano.
+309	Sizinachitike
+310	Zowonedwa
+311	Zomwe zinachitika
+312	Kuyankha kwa DDoS
+313	Chenjezo labodza ndi kubwezeretsa
+314	Chizindikiritso, chinyengo (phishing) ndi kayendedwe kokayikitsa ka deta
+315	Malware ndi zotsitsidwa zokayikitsa
+316	Kuwoneka kwa netiweki ndi mkhalidwe wa chipangizo
+317	Kuchira pambuyo pa kulowerera
+318	Ransomware kapena kulowerera kokayikiridwa
+319	Buku la zochita
+320	Mabuku a zochita
+321	Mtundu wa ndondomeko
+322	Mtundu woyikidwa
+323	Kupatula ndi firewall
+324	Deta yalandiridwa
+325	Fayilo yachotsedwa
+326	Pulosesi yaimitsidwa
+327	Mkhalidwe wa wopereka
+328	Zalembedwa
+329	Sikani yatha
+330	Zoyerekezedwa
+331	Yatuluka kwaokha
+332	Ili kwaokha
+333	Zochita ndi marisiti
+334	Lembani zotsatira
+335	Lembani
+336	Chingathe kuyankha
+337	Gwero
+338	chipangizo
+339	konsoli
+340	kuyerekeza
+341	Zimayamba pamene
+342	Zasinthidwa
+343	Kuwunika kodziyimira pawokha
+344	Zikudikira
+345	Malire a archive
+346	Archive yobisidwa
+347	Zosiyidwa
+348	Zosafikirika
+349	Malire a nthawi
+350	Zazikulu kwambiri
+351	Mtundu wosathandizidwa
+352	Zaletsedwa
+353	Zaphonya
+354	Pang'ono
+355	Nthawi yatha
+356	Yonse
+357	Pakufunika
+358	Yachangu
+359	Kuchira
+360	Yokonzedwa
+361	Yolunjika
+362	Onjezani gawo
+363	ma archive
+364	Katundu
+365	Imitsani sikani iyi? Zotsatira mpaka pano zimasungidwa ngati sikani yoletsedwa.
+366	Zosafikiridwa
+367	Zopezeka
+368	Zipangizo malinga ndi mkhalidwe wa chitetezo
+369	Injini
+370	Nthawi yomaliza
+371	Umboni womaliza
+372	Kuwongolera koyembekezeka
+373	Kukonza kopangidwa
+374	Yesaninso
+375	Katundu kapena gawo
+376	Mipata yotseguka
+377	Zotsatira za sikani m'masiku 30
+378	chenjezo kufika pa kuletsa kotsimikizika
+379	zipangizo zotetezedwa
+380	malo ofikira a anthu onse okhala ndi chitetezo cha wopereka wakumtunda
+381	chochitika kufika pa chenjezo
+382	zipangizo zokhala ndi matanthauzo atsopano
+383	zipangizo zosikidwa kwathunthu m'masiku 7
+384	mipata yotseguka ([0] yochedwa, [1] yotsekedwa m'masiku 30)
+385	magawo a netiweki oyang'aniridwa
+386	zopezeka zenizeni zotsimikizika
+387	ma sikani omalizidwa
+388	Kufikira ndi kuyankha
+389	Sikani yonse yomaliza
+390	Telemetry yomaliza
+391	Chipangizo chilichonse ndi gawo lililonse la netiweki lomwe likukhudzidwa, ngati ndi lotetezedwa, ndi chomwe chikuyenera kukonzedwa chotsatira.
+392	Kuwoneka kwa netiweki
+393	Palibe zipangizo zolembetsedwa pakadali pano. Tetezani kompyuta kuchokera ku Zipangizo.
+394	Palibe mipata yotseguka.
+395	[0] zotseguka
+396	zochedwa
+397	p95 [0] s
+398	Mafoda
+399	Mafoda oti asikidwe, olekanitsidwa ndi koma
+400	Kubisa ndi firewall
+401	Kubisa disiki [0], firewall [1]
+402	Kuchira pambuyo pa zochitika
+403	Onaninso tsopano
+404	Sizinayesedwenso
+405	Kuyesanso kwalephera
+406	Zatsimikizika kuti zatsekedwa
+407	Mtundu wa sikani
+408	Ma sikani
+409	Gawo
+410	Dzina la gawo
+411	Yambitsani sikani
+412	Zinayamba
+413	Mkhalidwe
+414	Zafooka
+415	Zotetezedwa
+416	Zosatetezedwa
+417	Zipangizo malinga ndi mkhalidwe
+418	[0] sizikudziwika
+419	Palibe kuwoneka
+420	Zoyang'aniridwa
+421	Kuwoneka
+422	Kusapezeka kwa zopezeka sikutsimikizira chitetezo: onaninso kufikira ndi zotsatira za sikani.
+423	Chilankhulo
+424	Kufikira kwa kumasulira
+425	Palibe mtundu wakale
+426	Mutu
+427	Mdima
+428	Kusiyana kwakukulu
+429	Kuwala
+430	Palibe ziwopsezo zatsopano zomwe zapezeka m'mafayilo [0].
+431	Chiwopsezo [0]
+432	Ziwopsezo [0]
+433	 zapezeka m'mafayilo [0]. Onani Machenjezo ndi Zivomerezo kuti muziwunike.
+434	Sikani yonse
+435	Sizinatheke kuteteza kompyuta iyi: [0]
+436	Kompyuta iyi ndi yotetezedwa. Sikani yanthawi yomweyo imachitika pamene Agentic Antivirus ili yotsegula.
+437	Sikani sinathe: [0]
+438	Ikusikani…
+439	Ikusikani dalaivu iliyonse. Izi zitha kutenga nthawi yayitali.
+440	Ikusikani Zotsitsidwa, Desktop ndi mafayilo osakhalitsa…
+441	Mafayilo [0] sanathe kuwerengedwa.
+442	Fayilo
+443	Ulalo wa webusaiti
+444	Landirani deta yoyesera
+446	Zochita
+447	Onjezani cholumikizana
+448	Onjezani chosiyidwa
+449	Onjezani cholumikizana
+450	Onjezani sikani yonse ya sabata iliyonse
+451	woyang'anira
+452	Kutsatsa
+453	Chilolezo cha malonda
+454	Ntchito zokhudzidwa
+455	machenjezo m'maola 24 apitawa
+456	Lolani
+457	Lolani ndi kusikani
+458	Woyang'anira ayenera kupereka chifukwa. Chosiyidwacho chimalembedwa m'mbiri ya kafukufuku.
+459	Imelo
+460	Vomerezani kubwerera ku ntchito
+461	Kuvomereza zochita
+462	Katundu
+463	katundu womwe uli pansi pa chitetezo chogwira ntchito
+464	katundu wokhala ndi machenjezo m'maola 24
+465	Mbiri ya kafukufuku
+466	Chitetezo chodzichitira chokha chikupitirira pa chipangizo chilichonse. Izi ndi zochita zomwe zikufunika munthu kuti asankhe.
+467	Kupezeka
+468	Zizindikiro zopezeka
+469	Zosunga zobwezera zatsimikizika
+470	Letsani
+471	Mwachisawawa ejenti imatumiza telemetry ya chitetezo ndi ma hash a mafayilo: mayina a ma pulosesi ndi mizere ya malamulo, njira za mafayilo, metadata ya kulumikizana kwa netiweki, ndi zopezeka. Zomwe zili m'mafayilo zimasonkhanitsidwa pokhapokha bungwe lanu litayatsa zimenezo.
+472	Kuchuluka
+473	Gulu
+474	Zasinthidwa
+475	Malipiro
+476	Onani
+477	sankhani
+478	Sankhani chipangizo
+480	Tsekani
+481	Olekanitsidwa ndi koma
+482	Lumikizanani
+483	Kuwongolera
+484	Kufikira malinga ndi mlingo wa chitetezo
+485	zovuta kwambiri
+486	kutumiza machenjezo ovuta kwambiri (p95, masiku 30)
+487	Zisankho zomwe zikudikira
+488	Kanani
+489	Matanthauzo
+490	Fotokozani zomwe zinachitika
+491	Tsatanetsatane
+492	Zambiri
+493	Chopezeka
+494	Chipangizo choti chipatsidwe laisensi
+495	zipangizo zotetezedwa kwathunthu
+496	zipangizo zopatulidwa
+497	Zipangizo zomwe zikufunika chisamaliro
+498	Njira yolowera
+499	Dera la DNS
+500	tsamba lotsitsira
+501	Pa nthawi yoyesera yaulere, ndi pa mapulani osalipiridwa, konsoli imawonetsa malonda a Google AdSense ndipo mapulogalamu a foni amawonetsa malonda a Google AdMob, atakupemphani chilolezo. Olembetsa amawona malonda ochepa ndi 95%. Malonda sawonekera konse pa masamba a zivomerezo, kuletsa, machenjezo a ziwopsezo, kuwunika kwaokha, kulowa, kulipira kapena kafukufuku.
+502	Kusindikiza kulikonse kumapanga mtundu watsopano wosainidwa. Zipangizo zimapitiriza kutsatira mtundu womaliza wotsimikizika zikakhala kuti sizili pa intaneti.
+503	Tumizani imelo ku thandizo pa
+504	Malo ofikira
+505	Equality Software Ltd ndiyo imayendetsa Agentic Antivirus. Tsamba ili likufotokoza zomwe ntchitoyi imasonkhanitsa. Liyenera kuwunikidwa ndi mwini malonda asanasindikizidwe.
+506	Chochita chilichonse chomwe chimasintha chipangizo, akaunti kapena kayendedwe ka deta chimadutsa mu injini ya ndondomeko ndi ulamuliro wa AEP-X. Chivomerezo chimakhudza chochita chimodzi, zolinga zake zenizeni, bungwe ili, ndi nthawi yokhazikika.
+507	Chilichonse chokwezedwa chimawunikidwa ngati chili ndi malware ndi mtundu wake weniweni. Mafayilo opanda chowonera chotsimikizika amasungidwa ndipo amatsitsidwa koma sawonetsedwa.
+508	Kupatula
+509	Zosiyidwa
+510	Njira ya foda
+511	pa zopempha zofikira kapena zokonza.
+512	Mipata
+513	Pezani ejenti ya Windows, Mac kapena Linux kuchokera ku
+514	Pitani ku Zipangizo, sankhani Lembetsani chipangizo, ndipo yendetsani lamulo lowonetsedwa pa kompyuta yomwe mukufuna kuteteza. Ejenti imayamba kusikani ikangolandira ndondomeko yake yosainidwa.
+515	Thanzi
+516	Mbiri
+517	Dzina la host
+518	Ndikumvetsa kuti zipangizo zisiya kusikani ndi kuletsa ziwopsezo pambuyo pa kuyesa mpaka kulembetsa kulipiridwe.
+519	Zotsatira zake
+520	Lowetsani zip kapena tar
+521	Chochitika
+522	Phatikizani mtundu wa chilankhulo (ngati bungwe lanu layatsa)
+523	Adilesi ya IP
+524	Lowani nawo
+525	Lowani nawo bungwe lanu
+526	Malware yodziwika imasunthidwa kwaokha, komwe singathe kuyenda. Ngati mukuganiza kuti fayilo yaletsedwa molakwika, tsegulani Kwaokha ndipo pemphani kuwunikanso. Woyang'anira amasankha, ndipo fayilo imabwerera pokhapokha sikani yatsopano itapeza kuti ndi yoyera.
+527	Zilankhulo zopanda kumasulira kwathunthu zimabwerera ku Chingerezi. Kufikira kumayezedwa, sikuyerekezeredwa.
+528	Zinasinthidwa komaliza
+529	Mlingo
+530	Kupambana kwa zopempha zovomerezeka
+531	Malamulo a laisensi
+532	Ulalo, ngati ulipo
+533	Ma host oyang'anira omwe amapezekabe pa nthawi yopatula
+534	Lembani ngati chenjezo labodza
+535	Kukhwima
+536	Kuchepetsa
+537	Dzina
+538	Dzina la chinsinsi m'malo anu osungira zinsinsi, osati chinsinsi chenichenicho
+539	Palibe zochita zomwe zikudikira.
+540	Palibe zochitika zotseguka.
+541	Palibe.
+542	Palibe zomwe zanenedwa.
+543	sizinakhazikitsidwe
+544	Adziwitsidwa pambuyo pa
+545	ya malonda owonetsedwa
+546	Chosungira zochitika popanda intaneti (MB)
+547	Pa Android, lembetsani mu pulogalamu ya Agentic Antivirus kudzera pa Google Play. Pa iPhone ndi iPad, kulembetsa kudzera pa App Store sikunapezeke. Kulipira pa webusaiti sikunapezeke.
+548	Tsegulani chochitika
+549	zochitika zotseguka
+550	Zochitika zotseguka
+551	Kuchedwa kwa p95
+552	zalipiridwa mpaka
+553	Kapangidwe ka njira
+554	Anthu
+555	Pa chipangizo chilichonse
+556	Pa wogwiritsa ntchito aliyense (zimakhudza zipangizo zake zonse)
+557	Chithunzithunzi
+558	Chachikulu
+560	Tetezani chipangizo
+561	Pulotokolo
+562	Wopereka
+563	Machenjezo a wopereka (maola 24)
+564	Malo ofikira a anthu onse
+565	Sindikizani mtundu wa ndondomeko
+566	Sindikizani mtundu wosainidwa
+567	Zasindikizidwa
+568	Sikani yachangu
+569	Kuwerenga mokweza ndi kulemba ndi mawu zimagwiritsa ntchito mawonekedwe a mawu omangidwa mu msakatuli wanu. Sitijambula kapena kusunga mawu.
+570	Zalandiridwa
+571	Zosungira zochotsedwa
+572	Chotsani
+573	Zapemphedwa
+574	Zapemphedwa ndi
+575	Kusunga
+576	Kubwerera ku ntchito
+577	Pakali pano
+578	Chiopsezo
+579	Udindo
+580	Bwezerani
+581	Sungani malo ofikira
+582	Sungani malamulo a laisensi
+583	Sikani
+584	Ndandanda (cron)
+585	Ma sikani okonzedwa
+586	Chizindikiro cha chinsinsi
+587	Tumizani kuitana
+588	Tumizani lipoti
+589	Tumizani ulalo wosintha
+590	Ntchito
+591	Zolinga za ntchito
+594	Chizindikiro
+595	Kukula
+596	China chake
+597	Sanjani
+598	Gawo
+599	Kuimitsa ma pulosesi, kupatula zipangizo, kubwezera mafayilo, kuwonjezera zosiyidwa ndi kusintha malamulo a kayendedwe ka deta zimafunika munthu kuti azivomereze. Chivomerezo chimakhudza chochita chimodzi, zolinga zake zenizeni ndi nthawi yochepa. Ngati chilichonse chisintha, vomerezaninso.
+600	Lembetsani chipangizo ichi ndi Google Play
+601	mkhalidwe wa kulembetsa
+603	Makina
+604	Cholinga
+605	Wothandizira wa AI
+606	Wothandizira amagawa machenjezo ogwirizana, amalemba zomwe zawonedwa ndi maulalo opita ku umboni, ndipo amalemba chilichonse chomwe sangatsimikizire ngati lingaliro. Atha kupereka zochita koma sangazivomereze. Ngati mtundu wa AI sukupezeka, sikani, machenjezo ndi mayankho apamanja zikupitirira kugwira ntchito.
+607	Kompyuta iyi
+608	TLS yokha, iyenera kukhala pa mndandanda wololedwa wotuluka
+609	Kusefukira kwa kayendedwe ka deta kumalandiridwa ndi wopereka wanu wakumtunda. Pano mumawerengera malo onse ofikira a anthu onse, kuyang'anira machenjezo a wopereka, ndi kuvomereza zoletsa zatsopano za kayendedwe ka deta.
+610	Zoletsa za kayendedwe ka deta
+611	Zamasuliridwa
+612	Zinyalala
+613	masiku oyesera otsala
+614	Yatsani chitetezo kuti musikani mafayilo pa kompyuta iyi ndi kuyang'anira ransomware ndi kubedwa kwa zizindikiro zolowera.
+615	zosafikiridwa
+616	Bwezerani kusintha komaliza
+617	Wogwiritsa ntchito
+618	Tsimikizirani imelo
+619	ikudikira chivomerezo
+620	Timawonetsa malonda ochokera ku Google AdSense pa masamba ena. Mulola malonda okonzedwera inu?
+621	Webhook:
+622	Zomwe zipangizo zimatumiza
+623	Ndi chiyani?
+624	Liti
+625	Chinthu chikaletsedwa
+626	Kuyesa kukatha popanda malipiro
+627	Ndani
+628	Mutha kufufuta akaunti yanu kuchokera pa mbiri yanu. Lumikizanani ndi
+629	Dzina lanu
+630	Bungwe lanu limalandira kuyesa kwaulere kwa masiku 30. Pambuyo pake mtengo ndi £4.99 pamwezi pa wogwiritsa ntchito aliyense kapena chipangizo chilichonse.
+631	Bungwe lanu limasankha kuti telemetry ndi umboni zisungidwe kwa nthawi yayitali bwanji. Zolemba za kafukufuku sizingasinthidwe kapena kufufutidwa.
+632	Ufulu wanu
+633	Lembani ndi mawu
+634	Lolani kugwiritsa ntchito maikolofoni polemba ndi mawu? Mawu amakonzedwa ndi msakatuli wanu ndipo sitiwasunga.
+635	Kutulutsa mawu
+636	Imitsani kaye
+637	Kamvekedwe
+638	Pitirizani
+639	Liwiro
+640	Imitsani
+641	Palibe mawu opezeka a chilankhulo ichi.
+642	Mawu
+643	Fayilo yasunthidwa kwaokha ndipo singathe kuyenda.
+644	Chiwopsezo chaletsedwa pa chipangizo ichi.

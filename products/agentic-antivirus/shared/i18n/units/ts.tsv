@@ -1,0 +1,637 @@
+0	Tlulela eka leswi nga endzeni lesi nkulu
+1	Engetela xihambanisi xa nkarhi hinkwawo
+2	Tirhisa ndzhiveto wa mpfumawulo wa data
+3	Hlengeleta vuxokoxoko bya xitirhisiwa
+4	Hambanisa xitirhisiwa na netiweke
+5	Veka fayili eka khwarantini
+6	Ntshunxa xitirhisiwa eka ku hambanisiwa
+7	Vuyisa fayili leyi a yi ri eka khwarantini
+8	Humesa mutirhisi hinkwako
+9	Tlherisela endzhaku ndzhiveto wa mpfumawulo wa data
+10	Tlherisela endzhaku ku pfuxetiwa
+11	Kambela switirhisiwa
+12	Yimisa akhawunti ya mutirhisi nkarhinyana
+13	Yimisa phurosese
+14	Pfumela
+15	Ala
+16	Rhumela eka switirhisiwa
+17	Mpfumelelo wu hela [0]
+18	Swi ringanyetiwe hi mupfuni wa AI
+19	Xitsundzuxo xa vuxavisi
+20	Goza
+21	Vaejente
+22	Vutisa
+23	Vutisa mupfuni wa vuhlayiseki
+24	Tinhlamulo ti huma eka switirhisiwa swa wena, swiendlakalo leswi pfulekeke na swivandza. Mupfuni a nga swi koti ku cinca nchumu.
+25	Swi seketeriwe eka
+26	[0] xivulavulo lexi nga riki na vumbhoni xi susiwile
+27	[0] swivulavulo leswi nga riki na vumbhoni swi susiwile
+29	Modele lowu tiyimeleke
+30	Milawu (handle ka modele)
+31	Tsala pulani ya ku lulamisa
+32	Goza rin'wana na rin'wana i xiringanyeto. Ku hava lexi tirhaka ku kondza munhu a xi pfumela.
+33	Xivutiso
+34	Xikombiso: hi swihi switirhisiwa leswi lavaka ku languteriwa?
+35	Vukulu lebyi ringanyetiweke
+36	Nkatsakanyo
+37	Swikongomelo
+38	Katsakanya xiendlakalo lexi
+39	Hikwalaho ka yini
+40	Swi kumiwile
+41	Vika nchumu lowu kanakanisaka
+42	Nawu
+43	Vukulu
+44	Xilemukiso
+46	Engetela tifayili
+47	Engetela folidara
+48	Engetela swifaniso
+49	[0] xinamarheto
+50	[0] swinamarheto
+51	Swinamarheto
+52	Teka xifaniso
+53	Ku nghena eka khamera a ku pfumeleriwanga. Ku pfumelela eka buraweza ya wena, kumbe u tirhisa app ya khamera ya xitirhisiwa xa wena.
+54	Ku languta khamera
+55	Buraweza leyi a yi swi koti ku pfula khamera laha.
+56	Teka
+57	Pfala mupfuni
+58	Xana tifayili leti i yini, naswona ti hlayisekile xana?
+59	Fayili
+60	Vutisa hi vuhlayiseki bya wena, kumbe u namarheta tifayili, folidara, swifaniso kumbe xifaniso xa khamera. Xinamarheto xin'wana na xin'wana xi kamberiwa ku sungula naswona ku hava lexi hlayisiwaka.
+61	[0] xifaniso xi hlamuseriwile
+62	[0] swifaniso swi hlamuseriwile
+63	 hi modele.
+64	Xikombiso: xana xilo lexi xi dawunilodiweke xi hlayisekile?
+65	Matsalwa na swifaniso leswi tengeke swi nga rhumeriwa eka modele wa AI lowu nhlangano wa wena wu wu pfuleke. Tifayili to biha a ti rhumeriwi nikatsongo.
+66	[0] fayili a yi engeteriwanga
+67	[0] tifayili a ti engeteriwanga
+68	: ku fika eka tifayili ta [0], [1] MB yin'wana na yin'wana na [2] MB hinkwato.
+69	Susa [0]
+70	Kambela u vutisa
+71	Mbuyelo wa ku kambela
+72	Muxaka
+73	Tirhisa khamera ya xitirhisiwa
+74	Mbuyelo
+75	Ku hava malware leyi tivekaka
+76	Yo biha
+77	A yi kamberiwanga
+78	Ketani ya ku kambela yi tshovekile eka nghenisa [0].
+79	Ketani ya ku kambela yi helerile: tinghenisa ta [0] ti tiyisisiwile.
+80	Imeyili
+81	U rivale phasiwedi?
+82	Nghena hi Google
+83	Ku nghena hi Google a ku tirhanga. Ringeta nakambe, kumbe u tirhisa imeyili na phasiwedi ya wena.
+84	Nghena
+85	Huma
+86	Phasiwedi leyintshwa
+87	kumbe
+88	Nhlangano
+89	Phasiwedi
+90	Phasiwedi yi cinciwile. Nghena hi phasiwedi ya wena leyintshwa.
+91	Kwalomu ka maletere ya 12.
+92	Endla akhawunti
+93	Rhumela xihlanganisi nakambe
+94	Loko akhawunti yoleyo ya ha lava ku tiyisisiwa, xihlanganisi lexintshwa xi le ndleleni. Languta ni le ka folidara ya spam.
+95	Seta phasiwedi hi vuntshwa
+96	Loko akhawunti yi tirhisa adiresi yoleyo, hi rhumele xihlanganisi xo seta hi vuntshwa. Xi tirha awara yin'we.
+97	Tiyisisa adiresi ya wena ya imeyili u nga si nghena. Pfula xihlanganisi lexi hi xi rhumeleke eka [0].
+98	Imeyili yi tiyisisiwile. U nga nghena sweswi.
+99	Xihlanganisi lexi xi hela nkarhi kumbe xi tirhisiwile khale. Nghena leswaku u kuma lexintshwa.
+100	Languta imeyili ya wena leswaku u tiyisisa adiresi ya wena.
+101	Ku tsarisa swi hunguta swikhangiso hi 95%.
+102	Nkarhi wa wena wa ndzingeto wu herile.
+103	U tsarisile ku fikela [0]
+104	Hlayisa hinkwaswo swi ri mahala hi swikhangiso leswi heleleke
+105	Yimisa hinkwaswo, ku katsa ni vusirheleri bya switirhisiwa, ku kondza munhu a hakela
+106	Khonsolo yi lava ku tsarisa; switirhisiwa swi tshama swi sirhelelekile
+107	£4,99 hi n'hweti
+108	Tsarisa
+109	Ndzingeto wa mahala:
+110	ku sale siku ra [0]
+111	ku sale masiku ya [0]
+112	Khansela
+113	Sula
+114	Ku na xihoxo lexi humeleleke.
+115	Rhumela ehandle
+116	Ku layicha…
+117	A swi tirhi
+118	Nikatsongo
+119	Leswi landzelaka
+120	e-e
+121	Ku hava leswi nga kombiwaka.
+122	ku timile
+123	ku pfurile
+124	Leswi hundzeke
+125	Pfuxeta
+126	Hlayisa
+127	Lava
+128	Xitekelelo (data ya ndzingeto)
+129	Xiyimo
+130	A swi kumeki
+131	A swi tiveki
+132	Swi pfuxetiwile [0]
+133	Ku tirha…
+134	ina
+135	[0] xilemukiso eka tiawara ta 24
+136	[0] swilemukiso eka tiawara ta 24
+137	[0] xitirhisiwa
+138	[0] switirhisiwa
+139	Data ku sukela [0]
+140	[0] xiendlakalo lexi pfulekeke
+141	[0] swiendlakalo leswi pfulekeke
+142	[0] mpfumelelo lowu yimeleke
+143	[0] mimpfumelelo leyi yimeleke
+144	swi tiyisisiwile
+145	swi ehleketeriwa
+146	Tsarisa xitirhisiwa
+147	Xitirhisiwa
+148	A xi vigi
+149	Pholisi leyi saleke
+150	Sensara yi timiwile
+151	Tinhlamuselo leti saleke
+152	Swiphiqo
+153	Xi voniwe ro hetelela
+154	Sisiteme yo tirhisa
+155	Pholisi
+156	Tirhisa eka xitirhisiwa endzeni ka tiawara ta 24 (ku tirhisiwa kan'we):
+157	Vusirheleri
+158	Kopa
+159	Dawunilodha
+160	Rhurhisa
+161	Folidara leyintshwa
+162	Cinca vito
+163	Vuyisa
+164	Yisa eka thyaka
+165	Khandziyisa
+166	Mpfuno
+167	[0] tsalwa eka tluka leri ri hundzuluxeriwile hi muchini naswona a ri si kamberiwa.
+168	[0] matsalwa eka ririmi leri ma hundzuluxeriwile hi muchini naswona a ma si kamberiwa.
+169	Ririmi leri a ri si hundzuluxeriwa, hikwalaho ku kombiwa Xinghezi.
+170	swi pfumeleriwile
+171	Mintiyiso leyi voniweke
+172	Swianakanyiwa (a swi tiyisisiwanga)
+173	Xianakanyiwa, ntshembo [0]: [1]
+174	Endla ndzavisiso
+175	Vumbhoni lebyi pfumalekaka
+176	Ku pfumaleka: [0]
+177	Hlaya hi rito
+178	Magoza lama bumabumeriwaka
+179	Nxaxamelo wa vumbhoni
+180	webhook leyi nghenaka
+181	Swikombiso ku suka eka muphakeri wa wena wa vutitivisi, DNS, tifirewall na switirho swin'wana. Mintirhisano leyintshwa yi sungula yi nga kumeki; i adaptara ya muphakeri ntsena leyi hundzeke ndzingeto wa yona wa kontiraka leyi nga fungiwaka tanihi leyi hanyaka. Data ya ndzingeto yi fungiwa tanihi xitekelelo hinkwako laha yi humelelaka kona.
+182	A yi hlanganisiwanga (stub)
+183	Data ya ndzingeto ntsena
+184	A swi kumeki
+185	Yi hanya (yi tiyisisiwile)
+186	Xihundla (xi kombiwa kan'we):
+187	Mimpfumelelo
+188	Swilemukiso
+189	Ku kambela
+190	Ku tsarisa
+191	Dexibodi
+192	DDoS na ku kumeka
+193	Switirhisiwa
+194	Tifayili
+195	Swiendlakalo
+196	Mintirhisano
+197	Tipholisi
+198	Xihundla
+199	Khwarantini
+200	Nhlamulo
+201	Vuhlayiseki
+202	Tisetingi
+203	Veka malware leyi tivekaka eka khwarantini hi yoxe
+204	Langutisa mahanyelo lama kanakanisaka
+205	Sivela swikiripiti leswi kanakanisaka
+206	Hlengeleta leswi nga endzeni ka tifayili ku endla ndzavisiso (swi timile hi ntolovelo)
+207	Pfumelela ku hambanisiwa ka netiweke
+208	Kambela tifayili loko ti pfuriwa kumbe ti tsariwa
+209	Kambela leswi dawunilodiweke
+210	Kambela tiphurogireme loko ti sungula
+211	Sirhelela ejente eka ku cinciwa
+212	Lemukisa hi swihlanganisi swo biha leswi tivekaka
+213	Xivangelo
+214	Kombela ku kambeleriwa
+215	Vuyisa endzhaku ka ku kambela lokuntshwa
+216	nkarhi wa le xikarhi ku fikela ku susiwa loku tiyisisiweke (n=[0], leswi nga tlhantlhiwangiki [1])
+217	ku lulamisa loku hundzeke ndzingeto lowuntshwa
+218	ku vuya ka xiphiqo endzhaku ka ku hola
+219	ku susiwa ka xitsongwatsongwana loku tiyisisiweke
+220	ku tlhelela entirhweni hi vuhlayiseki
+221	ku kambela ka ku hola ku herile
+222	Mimbuyelo ya khwarantini ntsena ([0]) na switirhisiwa leswi nghenisiweke sisiteme hi vuntshwa ([1]) swi hlayiwa hi ku hambana; khwarantini yi ri yoxe a yi hlayiwi tanihi ku susa.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Ku yimela mpfumelelo
+227	Vumbhoni bya ntirho wa xiviri
+228	Tsala leswi tiyisisiweke eka ntirho wa xiviri, eka swihi swilo, hi vuhundzuluxi byihi. Tinghenisa a ti cinciwi.
+229	Vuhundzuluxi
+230	Cinca ndlela
+231	ku hava vumbhoni
+232	swi tsandzekile
+233	swi hundzile
+234	swi yimerile
+235	Languta nhluvuko wa buku ya maendlelo
+236	Switirhisiwa leswi nga hlamulaka
+237	Switirhisiwa hinkwaswo
+238	[0] xitirhisiwa xa ndzingeto
+239	[0] switirhisiwa swa ndzingeto
+240	Swi helerile
+241	Swi helela loko
+242	Ndzetelelo
+243	Langutisa
+244	Hlamula
+245	Nkatso
+246	[0] swi langutisiwa, [1] swi nga hlamula
+247	Data
+248	Vukhale bya data
+249	Yi hanya
+250	Data ya ndzingeto
+251	a swi endliwanga
+252	rasiti
+253	swi le ku endliweni
+254	a swi tiveki
+255	Rhumela
+256	Vumbhoni
+257	Swi tirhile
+258	Swi sale endzhaku
+259	Swihlovo swa data
+260	Vuhundzuluxi kumbe digest
+261	Mbango
+262	Mbuyelo
+263	N'wini
+264	Xilaveko
+265	Nhundzu kumbe ntlawa
+266	Kombisa
+267	Hinkwaswo
+268	A swi helelanga
+269	Swi pfurile eka vukorhokeri hinkwabyo
+270	Swi pfurile eka nhlangano lowu
+271	Yimisa magoza hinkwawo lamantshwa ya nhlamulo ya nhlangano lowu? Vusirheleri na ku kambela swi ya emahlweni.
+272	Pfumelela magoza ya nhlamulo nakambe
+273	Yimisa magoza hinkwawo ya nhlamulo
+274	Xitimi xa xihatla
+275	Muxaka
+276	Timinete ta le xikarhi ti pfulekile ([0] ti pfulekile, ya khale [1] min)
+277	Ku aliwa hi pholisi
+278	Swindzetelelo na switekelelo (a swi hlayiwanga laha henhla)
+279	Magoza lama phindiweke (xikongomelo 0)
+280	Ku hlwela ka data ka le xikarhi (p95 [0] s, n=[1])
+281	Mimpfumelelo leyi hlweleke ([0] yi yimerile, xikongomelo [1] min)
+282	Nkarhi wa le xikarhi ku suka eka xikombiso ku ya eka ku hlela (p95 [0] min, n=[1], [2] leswi nga hleriwangiki)
+283	Magoza lama tiyisisiweke hi ku tiyimela ([0]/[1])
+284	Nkarhi: [0]. Rasiti yi ri yoxe a yi hlayiwi tanihi ku tiyisisiwa. Data leyi pfumalekaka yi kombiwa tanihi leyi nga kumekiki.
+285	Mipimo ya nhlamulo
+286	Xiendlakalo xo hetelela
+287	Vaejente va ringanyeta; pholisi leyi tiyeke yi teka xiboho xa leswi tirhaka. Goza rin'wana na rin'wana ri kombisa mpfumelelo wa rona, rasiti na ku kambela loku tiyimeleke.
+288	Xiyimo
+289	Ku yimela mpfumelelo
+290	Swi aliwile
+291	Swi hele nkarhi
+292	Swi tsandzekile
+293	Swi lava ku pimanisiwa hi voko
+294	Swi ringanyetiwile
+295	Swi le layinini
+296	Swi le ku tirheni
+297	Ku tiyisisa ku yimerile
+298	Swi tiyisisiwile
+299	Xiyimo xa sweswi
+300	Ndlela
+301	Xitekelelo
+302	Ku kambela na ku hlengeletiwa ka data swa tirha. Magoza man'wana ma tshama ma ri swiringanyeto.
+303	Magoza lama pfumeleriweke ma tirha eka switirhisiwa leswi hlawuriweke.
+304	Magoza ma tirha eka tiadaptara ta ndzingeto ntsena. Ku hava lexi cincaka eka switirhisiwa swa wena.
+305	Ku hava magoza sweswi.
+306	Ku hava lexi yimeleke mpfumelelo.
+307	Ku hava vumbhoni bya ntirho wa xiviri lebyi tsariweke sweswi.
+308	Ku hava switirhisiwa kumbe mintirhisano leyi rhumelaka data sweswi.
+309	A swi tirhanga
+310	Swi voniwile
+311	Leswi humeleleke
+312	Nhlamulo ya DDoS
+313	Xilemukiso xa mavunwa na ku vuyisa
+314	Vutitivisi, phishing na mpfumawulo wa data lowu kanakanisaka
+315	Malware na leswi dawunilodiweke leswi kanakanisaka
+316	Ku voneka ka netiweke na xiyimo xa switirhisiwa
+317	Ku hola endzhaku ka nhlaselo
+318	Ransomware kumbe nhlaselo lowu ehleketeriwaka
+319	Buku ya maendlelo
+320	Tibuku ta maendlelo
+321	Vuhundzuluxi bya pholisi
+322	Vuhundzuluxi lebyi nghenisiweke
+323	Ku hambanisiwa hi firewall
+324	Data yi amukeriwile
+325	Fayili yi susiwile
+326	Phurosese yi yimisiwile
+327	Xiyimo xa muphakeri
+328	Swi tsariwile
+329	Ku kambela ku herile
+330	Swi tekeleriwile
+331	Ehandle ka khwarantini
+332	Eka khwarantini
+333	Magoza na tirasiti
+334	Tsala mbuyelo
+335	Tsala
+336	Xi nga hlamula
+337	Xihlovo
+338	xitirhisiwa
+339	khonsolo
+340	xitekelelo
+341	Swi sungula loko
+342	Swi pfuxetiwile
+343	Ku kambela loku tiyimeleke
+344	Ku yimela
+345	Ndzilakano wa arikhayivi
+346	Arikhayivi leyi khodiweke
+347	Swi hambanisiwile
+348	A swi fikeleleki
+349	Ndzilakano wa nkarhi
+350	Swi kulu ngopfu
+351	Fomati leyi nga seketeriwiki
+352	Swi khanseriwile
+353	Swi hundziwile
+354	Xiphemu
+355	Nkarhi wu herile
+356	Hinkwaswo
+357	Loko swi laveka
+358	Hi xihatla
+359	Ku hola
+360	Swi hleriwile
+361	Swi kongomisiwile
+362	Engetela xiphemu
+363	tiarikhayivi
+364	Swilo
+365	Yimisa ku kambela loku? Mimbuyelo ku fikela sweswi yi hlayisiwa tanihi ku kambela loku khanseriweke.
+366	A swi katsiwanga
+367	Leswi kumiweke
+368	Switirhisiwa hi xiyimo xa vusirheleri
+369	Njhini
+370	Swi fanele
+371	Vumbhoni byo hetelela
+372	Vulawuri lebyi languteriweke
+373	Ku lulamisa loku ringanyetiweke
+374	Ringeta nakambe
+375	Nhundzu kumbe xiphemu
+376	Swivandza leswi pfulekeke
+377	Mimbuyelo ya ku kambela eka masiku ya 30
+378	xilemukiso ku fikela eka ku siveriwa loku tiyisisiweke
+379	switirhisiwa leswi sirheleriweke
+380	tindzhawu ta mani na mani leti nga na nsivelo wa muphakeri
+381	xiendlakalo ku fikela eka xilemukiso
+382	switirhisiwa leswi nga na tinhlamuselo ta sweswi
+383	switirhisiwa leswi kamberiweke hi ku helela eka masiku ya 7
+384	swivandza leswi pfulekeke ([0] swi hlwerile, [1] swi pfariwile eka masiku ya 30)
+385	swiphemu swa netiweke leswi langutisiwaka
+386	leswi tiyisisiweke tanihi ntiyiso
+387	ku kambela loku heleleke
+388	Nkatso na nhlamulo
+389	Ku kambela hinkwako ko hetelela
+390	Telemetry yo hetelela
+391	Xitirhisiwa xin'wana na xin'wana na xiphemu xa netiweke lexi katsiweke, loko xi sirhelelekile, na leswi u faneleke ku swi lulamisa endzhaku.
+392	Ku voneka ka netiweke
+393	Ku hava switirhisiwa leswi tsarisiweke sweswi. Sirhelela khompyuta ku suka eka Switirhisiwa.
+394	Ku hava swivandza leswi pfulekeke.
+395	[0] swi pfulekile
+396	swi hlwerile
+397	p95 [0] s
+398	Tifolidara
+399	Tifolidara leti faneleke ku kamberiwa, ti hambanisiwile hi tikhoma
+400	Ku khoda na firewall
+401	Ku khoda disiki [0], firewall [1]
+402	Ku hola endzhaku ka swiendlakalo
+403	Kambela nakambe sweswi
+404	A swi ringetiwanga nakambe
+405	Ndzingeto lowuntshwa wu tsandzekile
+406	Swi tiyisisiwile swi pfariwile
+407	Muxaka wa ku kambela
+408	Ku kambela
+409	Xiphemu
+410	Vito ra xiphemu
+411	Sungula ku kambela
+412	Swi sungurile
+413	Xiyimo
+414	Swi hungutekile
+415	Swi sirhelelekile
+416	A swi sirhelelekanga
+417	Switirhisiwa hi xiyimo
+418	[0] leswi nga tivekiki
+419	Ku hava ku voneka
+420	Swi langutisiwa
+421	Ku voneka
+422	Ku pfumaleka ka leswi kumiweke a swi kombisi vusirheleri: languta ni nkatso na mimbuyelo ya ku kambela.
+423	Ririmi
+424	Nkatso wa vuhundzuluxi
+425	Ku hava vuhundzuluxi bya khale
+426	Xivumbeko
+427	Munyama
+428	Ku hambana lokukulu
+429	Ku vonakala
+430	Ku hava minxungeto leyintshwa leyi kumiweke eka tifayili ta [0].
+431	[0] nxungeto wu kumiwile
+432	[0] minxungeto yi kumiwile
+433	 eka tifayili ta [0]. Vona Swilemukiso na Mimpfumelelo ku swi kambela.
+434	Ku kambela hinkwako
+435	A swi koteki ku sirhelela khompyuta leyi: [0]
+436	Khompyuta leyi yi sirhelelekile. Ku kambela ka nkarhi wa xiviri ku tirha loko Agentic Antivirus yi pfulekile.
+437	Ku kambela a ku helelanga: [0]
+438	Ku kambela…
+439	Ku kambela drayivhi yin'wana na yin'wana. Leswi swi nga teka nkarhi wo leha.
+440	Ku kambela Downloads, Desktop na tifayili ta nkarhinyana…
+441	Tifayili ta [0] a ti hlayeki.
+442	Fayili
+443	Xihlanganisi xa webusayiti
+444	Amukela data ya ndzingeto
+446	Magoza
+447	Engetela ntirhisano
+448	Engetela xihambanisi
+449	Engetela ntirhisano
+450	Engetela ku kambela hinkwako ka vhiki na vhiki
+451	mulawuri
+452	Vuxavisi
+453	Mpfumelelo wa swikhangiso
+454	Vukorhokeri lebyi khumbekeke
+455	swilemukiso eka tiawara ta 24 leti hundzeke
+456	Pfumelela
+457	Pfumelela u kambela
+458	Mulawuri u fanele ku nyika xivangelo. Xihambanisi xi tsariwa eka nxaxamelo wa ku kambela.
+459	Imeyili
+460	Pfumela ku tlhelela entirhweni
+461	Ku pfumela magoza
+462	Nhundzu
+463	swilo leswi nga ehansi ka nsivelo lowu tirhaka
+464	swilo leswi nga na swilemukiso eka tiawara ta 24
+465	Nxaxamelo wa ku kambela
+466	Vusirheleri byo tiendlekela byi ya emahlweni eka xitirhisiwa xin'wana na xin'wana. Lawa i magoza lama lavaka munhu ku teka xiboho.
+467	Ku kumeka
+468	Swikombiso leswi kumekaka
+469	Backup yi tiyisisiwile
+470	Sivela
+471	Hi ntolovelo ejente yi rhumela telemetry ya vuhlayiseki na tihashe ta tifayili: mavito ya tiphurosese na mintila ya swileriso, tindlela ta tifayili, vuxokoxoko bya mihlanganisi ya netiweke, na leswi kumiweke. Leswi nga endzeni ka tifayili swi hlengeletiwa ntsena loko nhlangano wa wena wu swi pfula.
+472	Vukoti
+473	Ntlawa
+474	Swi cinciwile
+475	Ntsengo
+476	Kambela
+477	hlawula
+478	Hlawula xitirhisiwa
+480	Pfala
+481	Swi hambanisiwile hi tikhoma
+482	Vulavurisana
+483	Vulawuri
+484	Nkatso hi lera ra vusirheleri
+485	swa nkoka ngopfu
+486	ku fika ka swilemukiso swa nkoka ngopfu (p95, masiku ya 30)
+487	Swiboho leswi yimeleke
+488	Ala
+489	Tinhlamuselo
+490	Hlamusela leswi humeleleke
+491	Vuxokoxoko
+492	Vuxokoxoko lebyi heleleke
+493	Ku kumiwa
+494	Xitirhisiwa xa layisense
+495	switirhisiwa leswi sirheleriweke hi ku helela
+496	switirhisiwa leswi hambanisiweke
+497	Switirhisiwa leswi lavaka ku languteriwa
+498	Nkongomo
+499	Ndzhawu ya DNS
+500	tluka ro dawunilodha
+501	Hi nkarhi wa ndzingeto wa mahala, na le ka tipulani leti nga hakeriwiki, khonsolo yi kombisa swikhangiso swa Google AdSense naswona tiapp ta riqingho ti kombisa swikhangiso swa Google AdMob, endzhaku ko kombela mpfumelelo wa wena. Lava tsariseke va vona swikhangiso swi hungutekile hi 95%. Swikhangiso a swi humeleli nikatsongo eka swikirini swa mpfumelelo, nsivelo, xilemukiso xa nxungeto, ku kambela ka khwarantini, ku nghena, ku hakela kumbe ku kambela.
+502	Ku kandziyisa kun'wana na kun'wana ku endla vuhundzuluxi lebyintshwa lebyi sayiniweke. Switirhisiwa swi ya emahlweni swi tirhisa vuhundzuluxi byo hetelela lebyi tiyisisiweke loko swi nga ri eka inthanete.
+503	Rhumela imeyili eka nseketelo eka
+504	Ndzhawu yo hlanganisa
+505	Equality Software Ltd yi fambisa Agentic Antivirus. Tluka leri ri hlamusela leswi vukorhokeri byi swi hlengeletaka. Ri fanele ku kamberiwa hi n'wini wa xitirho ri nga si kandziyisiwa.
+506	Goza rin'wana na rin'wana leri cincaka xitirhisiwa, akhawunti kumbe mpfumawulo wa data ri hundza eka njhini ya pholisi na vulawuri bya AEP-X. Mpfumelelo wu katsa goza rin'we, swikongomelo swa rona swo kongoma, nhlangano lowu, na nkarhi lowu vekiweke.
+507	Fayili yin'wana na yin'wana leyi khandziyisiweke yi kamberiwa malware na muxaka wa yona wa xiviri. Tifayili leti nga riki na xivoni lexi tiyisisiweke ti hlayisiwa naswona ti nga dawunilodiwa kambe a ti kombiwi.
+508	Xihambano
+509	Swihambanisi
+510	Ndlela ya folidara
+511	ku kombela ku fikelela kumbe ku lulamisa.
+512	Swivandza
+513	Kuma ejente ya Windows, Mac kumbe Linux ku suka eka
+514	Yana eka Switirhisiwa, hlawula Tsarisa xitirhisiwa, kutani u tirhisa xileriso lexi kombisiweke eka khompyuta leyi u lavaka ku yi sirhelela. Ejente yi sungula ku kambela hi ku hatlisa loko yi amukela pholisi ya yona leyi sayiniweke.
+515	Rihanyo
+516	Matimu
+517	Vito ra khompyuta
+518	Ndza swi twisisa leswaku switirhisiwa swi ta yima ku kambela na ku sivela minxungeto endzhaku ka ndzingeto ku kondza ku tsarisa ku hakeriwa.
+519	Vuyelo
+520	Nghenisa zip kumbe tar
+521	Xiendlakalo
+522	Katsa modele wa ririmi (loko nhlangano wa wena wu pfule wun'wana)
+523	Adiresi ya IP
+524	Nghena
+525	Nghena eka nhlangano wa wena
+526	Malware leyi tivekaka yi yisiwa eka khwarantini, laha yi nga swi kotiki ku tirha kona. Loko u ehleketa leswaku fayili yi siveriwe hi xihoxo, pfula Khwarantini u kombela ku kambeleriwa. Mulawuri u teka xiboho, naswona fayili yi vuya ntsena endzhaku ka loko ku kambela lokuntshwa ku yi kuma yi tengile.
+527	Tindzimi leti nga riki na vuhundzuluxi lebyi heleleke ti tlhelela eka Xinghezi. Nkatso wa pimiwa, a wu ringanyetiwi.
+528	Swi cinciwe ro hetelela
+529	Lera
+530	Ku humelela ka swikombelo swa xiviri
+531	Milawu ya tilayisense
+532	Xihlanganisi, loko xi ri kona
+533	Tihosta ta vulawuri leti tshamaka ti fikeleleka hi nkarhi wa ku hambanisiwa
+534	Funga tanihi xilemukiso xa mavunwa
+535	Ku kula
+536	Nsivelo
+537	Vito
+538	Vito ra xihundla eka vuhlayiselo bya wena bya swihundla, ku nga ri xihundla xa xona
+539	Ku hava magoza lama yimeleke.
+540	Ku hava swiendlakalo leswi pfulekeke.
+541	Ku hava.
+542	Ku hava leswi viikiweke.
+543	a swi vekiwanga
+544	Swi tivisiwile endzhaku ka
+545	ya swikhangiso leswi kombiweke
+546	Vuhlayiselo bya swiendlakalo handle ka inthanete (MB)
+547	Eka Android, tsarisa eka app ya Agentic Antivirus hi Google Play. Eka iPhone na iPad, ku tsarisa hi App Store a ku si kumeka. Ku hakela eka webu a ku si kumeka.
+548	Pfula xiendlakalo
+549	swiendlakalo leswi pfulekeke
+550	Swiendlakalo leswi pfulekeke
+551	Ku hlwela ka p95
+552	swi hakeriwile ku fikela
+553	Phatheni ya ndlela
+554	Vanhu
+555	Hi xitirhisiwa
+556	Hi mutirhisi (swi katsa switirhisiwa swa yena hinkwaswo)
+557	Ku languta ka ha ri emahlweni
+558	Nkulu
+560	Sirhelela xitirhisiwa
+561	Phurotokholo
+562	Muphakeri
+563	Swilemukiso swa muphakeri (tiawara ta 24)
+564	Tindzhawu ta mani na mani
+565	Kandziyisa vuhundzuluxi bya pholisi
+566	Kandziyisa vuhundzuluxi lebyi sayiniweke
+567	Swi kandziyisiwile
+568	Ku kambela hi xihatla
+569	Ku hlaya hi rito na ku tsala hi rito swi tirhisa swiyenge swa mavulavulelo leswi nga eka buraweza ya wena. A hi rhekhodi kumbe ku hlayisa mpfumawulo.
+570	Swi amukeriwile
+571	Swihlayiselo leswi susekaka
+572	Susa
+573	Swi kombeliwile
+574	Swi komberiwe hi
+575	Ku hlayisiwa
+576	Ku tlhelela entirhweni
+577	Sweswi
+578	Khombo
+579	Ntirho
+580	Tlherisela endzhaku
+581	Hlayisa ndzhawu yo hlanganisa
+582	Hlayisa milawu ya tilayisense
+583	Kambela
+584	Nxaxamelo wa nkarhi (cron)
+585	Ku kambela loku hleriweke
+586	Xikombo xa xihundla
+587	Rhumela xirhambo
+588	Rhumela xiviko
+589	Rhumela xihlanganisi xo seta hi vuntshwa
+590	Vukorhokeri
+591	Swikongomelo swa vukorhokeri
+594	Xikombiso
+595	Vukulu
+596	Nchumu wun'wana
+597	Hlela
+598	Goza
+599	Ku yimisa tiphurosese, ku hambanisa switirhisiwa, ku vuyisa tifayili, ku engetela swihambanisi na ku cinca milawu ya mpfumawulo wa data swi lava munhu ku swi pfumela. Mpfumelelo wu katsa goza rin'we, swikongomelo swa rona swo kongoma na nkarhi lowu pimiweke. Loko ku ri na lexi cincaka, pfumela nakambe.
+600	Tsarisa xitirhisiwa lexi hi Google Play
+601	xiyimo xa ku tsarisa
+603	Sisiteme
+604	Xikongomelo
+605	Mupfuni wa AI
+606	Mupfuni u hlengeleta swilemukiso leswi fambelanaka, u nxaxameta leswi voniweke hi swihlanganisi swa vumbhoni, naswona u funga xin'wana na xin'wana lexi a nga xi kotiki ku xi kombisa tanihi xianakanyiwa. U nga ringanyeta magoza kambe a nga swi koti ku ma pfumela. Loko modele wu nga kumeki, ku kambela, swilemukiso na tinhlamulo hi voko swi ya emahlweni swi tirha.
+607	Khompyuta leyi
+608	TLS ntsena, yi fanele ku va eka nxaxamelo wa leswi pfumeleriweke ku huma
+609	Ndhambi ya mpfumawulo wa data yi amukeriwa hi muphakeri wa wena wa le henhla. Laha u hlamula hi ndzhawu yin'wana na yin'wana ya mani na mani, u langutisa swilemukiso swa muphakeri, naswona u pfumela tindzhiveto letintshwa ta mpfumawulo wa data.
+610	Tindzhiveto ta mpfumawulo wa data
+611	Swi hundzuluxeriwile
+612	Thyaka
+613	masiku ya ndzingeto lama saleke
+614	Pfula vusirheleri ku kambela tifayili eka khompyuta leyi na ku langutisa ransomware na ku yiviwa ka swikombiso swa vutitivisi.
+615	leswi nga katsiwangiki
+616	Tlherisa ku cinca ko hetelela
+617	Mutirhisi
+618	Tiyisisa imeyili
+619	ku yimela mpfumelelo
+620	Hi kombisa swikhangiso swa Google AdSense eka matluka man'wana. Pfumelela swikhangiso leswi lunghiseleriweke wena?
+621	Webhook:
+622	Leswi switirhisiwa swi swi rhumelaka
+623	I yini?
+624	Rini
+625	Loko nchumu wu siveriwile
+626	Loko ndzingeto wu hela handle ka ku hakela
+627	Mani
+628	U nga sula akhawunti ya wena eka phurofayili ya wena. Vulavurisana na
+629	Vito ra wena
+630	Nhlangano wa wena wu kuma ndzingeto wa mahala wa masiku ya 30. Endzhaku ka sweswo swi durha £4,99 hi n'hweti eka mutirhisi kumbe xitirhisiwa xin'wana na xin'wana.
+631	Nhlangano wa wena wu veka leswaku telemetry na vumbhoni swi hlayisiwa nkarhi wo fika kwihi. Tirhekhodo ta ku kambela a ti cinciwi kumbe ku suriwa.
+632	Timfanelo ta wena
+633	Tsala hi rito
+634	Pfumelela ku tirhisiwa ka maykrofoni ku tsala hi rito? Mpfumawulo wu tirhisiwa hi buraweza ya wena naswona a hi wu hlayisi.
+635	Ku huma ka mpfumawulo
+636	Yimisa nkarhinyana
+637	Ku tlakuka ka rito
+638	Ya emahlweni
+639	Rivilo
+640	Yimisa
+641	Ku hava rito leri kumekaka eka ririmi leri.
+642	Rito
+643	Fayili yi yisiwile eka khwarantini naswona a yi swi koti ku tirha.
+644	Nxungeto wu siveriwile eka xitirhisiwa lexi.

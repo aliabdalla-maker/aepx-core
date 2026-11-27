@@ -1,0 +1,637 @@
+0	Əsas məzmuna keç
+1	Daimi istisna əlavə et
+2	Trafik məhdudiyyəti tətbiq et
+3	Cihazın metadatasını topla
+4	Cihazı şəbəkədən təcrid et
+5	Faylı karantinə göndər
+6	Cihazı təcriddən çıxar
+7	Karantindəki faylı bərpa et
+8	İstifadəçini hər yerdən çıxar
+9	Trafik məhdudiyyətini geri qaytar
+10	Yeniləməni geri qaytar
+11	Cihazları skan et
+12	İstifadəçi hesabını dayandır
+13	Prosesi dayandır
+14	Təsdiq et
+15	Rədd et
+16	Cihazlara göndər
+17	Təsdiqin müddəti bitir: [0]
+18	Süni intellekt köməkçisi tərəfindən təklif edilib
+19	Reklam
+20	Əməliyyat
+21	Agentlər
+22	Soruş
+23	Təhlükəsizlik köməkçisindən soruş
+24	Cavablar cihazlarınızdan, açıq insidentlərdən və boşluqlardan gəlir. Köməkçi heç nəyi dəyişə bilməz.
+25	Əsasında
+26	Sübutu olmayan [0] iddia silindi
+27	Sübutu olmayan [0] iddia silindi
+29	Öz serverində yerləşdirilən model
+30	Qaydalar (modelsiz)
+31	Aradan qaldırma planının layihəsini hazırla
+32	Hər addım bir təklifdir. Kimsə təsdiq etməyənə qədər heç nə işə düşmür.
+33	Sual
+34	Məsələn: hansı cihazlar diqqət tələb edir?
+35	Təklif edilən ciddilik
+36	Xülasə
+37	Hədəflər
+38	Bu insidenti ümumiləşdir
+39	Niyə
+40	Aşkarlanıb
+41	Şübhəli bir şey barədə məlumat ver
+42	Qayda
+43	Ciddilik
+44	Xəbərdarlıq
+46	Fayl əlavə et
+47	Qovluq əlavə et
+48	Şəkil əlavə et
+49	[0] qoşma
+50	[0] qoşma
+51	Qoşmalar
+52	Şəkil çək
+53	Kameraya giriş icazəsi verilmədi. Brauzerinizdə icazə verin və ya cihazınızın kamera tətbiqindən istifadə edin.
+54	Kamera önizləməsi
+55	Bu brauzer burada kameranı aça bilmir.
+56	Çək
+57	Köməkçini bağla
+58	Bu fayllar nədir və təhlükəsizdirmi?
+59	Fayl
+60	Təhlükəsizliyiniz barədə soruşun və ya fayl, qovluq, şəkil, yaxud kamera şəkli əlavə edin. Hər qoşma əvvəlcə skan edilir və heç nə saxlanmır.
+61	[0] şəkil
+62	[0] şəkil
+63	 model tərəfindən təsvir edildi.
+64	Məsələn: bu yükləmə təhlükəsizdirmi?
+65	Təmiz mətn və şəkillər təşkilatınızın aktivləşdirdiyi süni intellekt modelinə göndərilə bilər. Zərərli fayllar heç vaxt göndərilmir.
+66	[0] fayl əlavə edilmədi
+67	[0] fayl əlavə edilmədi
+68	: ən çox [0] fayl, hər biri [1] MB və cəmi [2] MB.
+69	[0] sil
+70	Skan et və soruş
+71	Skan nəticələri
+72	Növ
+73	Cihazın kamerasından istifadə et
+74	Nəticə
+75	Məlum zərərli proqram yoxdur
+76	Zərərli
+77	Skan edilməyib
+78	Audit zənciri [0] saylı qeyddə qırılıb.
+79	Audit zənciri tamdır: [0] qeyd yoxlanıldı.
+80	E-poçt
+81	Parolu unutmusunuz?
+82	Google ilə daxil ol
+83	Google ilə daxil olmaq alınmadı. Yenidən cəhd edin və ya e-poçt və parolunuzdan istifadə edin.
+84	Daxil ol
+85	Çıxış
+86	Yeni parol
+87	və ya
+88	Təşkilat
+89	Parol
+90	Parol dəyişdirildi. Yeni parolunuzla daxil olun.
+91	Ən azı 12 simvol.
+92	Hesab yarat
+93	Keçidi yenidən göndər
+94	Həmin hesabın hələ təsdiqlənməsi lazımdırsa, yeni keçid yoldadır. Spam qovluğunuzu da yoxlayın.
+95	Parolu sıfırla
+96	Bu ünvandan istifadə edən hesab varsa, sıfırlama keçidi göndərdik. Keçid bir saat etibarlıdır.
+97	Daxil olmazdan əvvəl e-poçt ünvanınızı təsdiqləyin. [0] ünvanına göndərdiyimiz keçidi açın.
+98	E-poçt təsdiqləndi. İndi daxil ola bilərsiniz.
+99	Bu keçidin müddəti bitib və ya artıq istifadə olunub. Yenisini almaq üçün daxil olun.
+100	Ünvanınızı təsdiqləmək üçün e-poçtunuzu yoxlayın.
+101	Abunəlik reklamları 95% azaldır.
+102	Sınaq müddətiniz başa çatdı.
+103	[0] tarixinədək abunə
+104	Hər şeyi pulsuz və tam reklamla saxla
+105	Kimsə ödəyənə qədər cihaz qorunması daxil hər şeyi dayandır
+106	Konsol abunəlik tələb edir; cihazlar qorunmaqda davam edir
+107	Ayda 4,99 £
+108	Abunə ol
+109	Pulsuz sınaq:
+110	[0] gün qalıb
+111	[0] gün qalıb
+112	Ləğv et
+113	Sil
+114	Xəta baş verdi.
+115	İxrac et
+116	Yüklənir…
+117	Yoxdur
+118	Heç vaxt
+119	Növbəti
+120	xeyr
+121	Göstəriləcək heç nə yoxdur.
+122	söndürülüb
+123	yandırılıb
+124	Əvvəlki
+125	Yenilə
+126	Yadda saxla
+127	Axtar
+128	Simulyasiya (test məlumatları)
+129	Status
+130	Əlçatan deyil
+131	Naməlum
+132	Yeniləndi: [0]
+133	İcra olunur…
+134	bəli
+135	24 saatda [0] xəbərdarlıq
+136	24 saatda [0] xəbərdarlıq
+137	[0] cihaz
+138	[0] cihaz
+139	Məlumatların tarixi: [0]
+140	[0] açıq insident
+141	[0] açıq insident
+142	[0] təsdiq gözləyir
+143	[0] təsdiq gözləyir
+144	təsdiqlənib
+145	şübhəli
+146	Cihazı qeydiyyata al
+147	Cihaz
+148	Hesabat göndərmir
+149	Köhnəlmiş siyasət
+150	Sensor deaktivdir
+151	Köhnəlmiş təriflər
+152	Problemlər
+153	Son görülmə
+154	Əməliyyat sistemi
+155	Siyasət
+156	24 saat ərzində cihazda işə salın (birdəfəlik):
+157	Qoruma
+158	Kopyala
+159	Endir
+160	Köçür
+161	Yeni qovluq
+162	Adını dəyiş
+163	Bərpa et
+164	Zibil qutusuna köçür
+165	Yüklə
+166	Kömək
+167	Bu səhifədəki [0] mətn maşın tərcüməsidir və hələ yoxlanılmayıb.
+168	Bu dildəki [0] mətn maşın tərcüməsidir və hələ yoxlanılmayıb.
+169	Bu dil hələ tərcümə edilməyib, ona görə ingiliscə göstərilir.
+170	təsdiqlənib
+171	Müşahidə edilən faktlar
+172	Fərziyyələr (təsdiqlənməyib)
+173	Fərziyyə, [0] etibarlılıq: [1]
+174	Araşdırmanı başlat
+175	Çatışmayan sübutlar
+176	Çatışmır: [0]
+177	Səsli oxu
+178	Tövsiyə olunan əməliyyatlar
+179	Sübutların xronologiyası
+180	daxil olan webhook
+181	Kimlik təminatçınızdan, DNS-dən, firewall-lardan və digər alətlərdən gələn siqnallar. Yeni inteqrasiyalar əlçatan deyil kimi başlayır; yalnız müqavilə testindən keçmiş təminatçı adapteri canlı kimi işarələnə bilər. Test məlumatları göründüyü hər yerdə simulyasiya kimi işarələnir.
+182	Qoşulmayıb (stub)
+183	Yalnız test məlumatları
+184	Əlçatan deyil
+185	Canlı (yoxlanılıb)
+186	Gizli açar (bir dəfə göstərilir):
+187	Təsdiqlər
+188	Xəbərdarlıqlar
+189	Audit
+190	Abunəlik
+191	İdarə paneli
+192	DDoS və əlçatanlıq
+193	Cihazlar
+194	Fayllar
+195	İnsidentlər
+196	İnteqrasiyalar
+197	Siyasətlər
+198	Məxfilik
+199	Karantin
+200	Cavab tədbirləri
+201	Təhlükəsizlik
+202	Parametrlər
+203	Məlum zərərli proqramları avtomatik karantinə göndər
+204	Şübhəli davranışı izlə
+205	Şübhəli skriptləri blokla
+206	Araşdırma üçün faylların məzmununu topla (defolt olaraq söndürülüb)
+207	Şəbəkə təcridinə icazə ver
+208	Faylları açılanda və ya yazılanda skan et
+209	Yükləmələri skan et
+210	Proqramları işə düşəndə skan et
+211	Agenti dəyişikliklərdən qoru
+212	Məlum zərərli keçidlər barədə xəbərdarlıq et
+213	Səbəb
+214	Yoxlama tələb et
+215	Yeni skandan sonra bərpa et
+216	təsdiqlənmiş aradan qaldırmaya qədər median vaxt (n=[0], həll olunmamış [1])
+217	təkrar testdən keçən düzəlişlər
+218	bərpadan sonra təkrarlanma
+219	təsdiqlənmiş virus təmizlənməsi
+220	xidmətə təhlükəsiz qayıdış
+221	tamamlanmış bərpa skanları
+222	Yalnız karantin nəticələri ([0]) və yenidən quraşdırılmış cihazlar ([1]) ayrıca sayılır; karantin özü heç vaxt təmizlənmə sayılmır.
+223	[0] saat
+224	[0] dəq
+225	[0] san
+226	Təsdiq gözlənilir
+227	İstehsal sübutu
+228	İstehsalda nəyin, hansı aktivlərdə və hansı versiya ilə yoxlanıldığını qeyd edin. Qeydlər redaktə edilə bilməz.
+229	Versiya
+230	Rejimi dəyiş
+231	sübut yoxdur
+232	uğursuz
+233	keçdi
+234	gözləmədə
+235	Playbook gedişatını yoxla
+236	Cavab verə bilən cihazlar
+237	Bütün cihazlar
+238	[0] pilot cihaz
+239	[0] pilot cihaz
+240	Tamamlandı
+241	Tamamlanma şərti
+242	Təlim
+243	Müşahidə et
+244	Cavab ver
+245	Əhatə
+246	[0] müşahidə olunur, [1] cavab verə bilir
+247	Məlumatlar
+248	Məlumatların yaşı
+249	Canlı
+250	Test məlumatları
+251	icra edilməyib
+252	qəbz
+253	davam edir
+254	naməlum
+255	Göndərmə
+256	Sübut
+257	İcra olundu
+258	Köhnəlmiş
+259	Məlumat axınları
+260	Versiya və ya həş
+261	Mühit
+262	Nəticə
+263	Sahibi
+264	Tələb
+265	Aktiv və ya qrup
+266	Göstər
+267	Hamısı
+268	Tamamlanmayıb
+269	Bütün xidmət üçün aktivdir
+270	Bu təşkilat üçün aktivdir
+271	Bu təşkilat üçün bütün yeni cavab əməliyyatları dayandırılsın? Qoruma və skan işləməyə davam edir.
+272	Cavab əməliyyatlarına yenidən icazə ver
+273	Bütün cavab əməliyyatlarını dayandır
+274	Təcili dayandırma
+275	Növ
+276	Açıq qalma median vaxtı, dəq ([0] açıq, ən köhnəsi [1] dəq)
+277	Siyasət imtinaları
+278	Təlimlər və simulyasiyalar (yuxarıda sayılmır)
+279	Təkrarlanan əməliyyatlar (hədəf 0)
+280	Axının median gecikməsi (p95 [0] san, n=[1])
+281	Gecikmiş təsdiqlər ([0] gözləyir, hədəf [1] dəq)
+282	Siqnaldan ilkin qiymətləndirməyə median vaxt (p95 [0] dəq, n=[1], [2] qiymətləndirilməyib)
+283	Müstəqil yoxlanılmış əməliyyatlar ([0]/[1])
+284	Dövr: [0]. Qəbz tək başına heç vaxt yoxlanılmış sayılmır. Çatışmayan məlumatlar əlçatan deyil kimi göstərilir.
+285	Cavab göstəriciləri
+286	Son hadisə
+287	Agentlər təklif edir; nəyin icra olunacağına sabit siyasət qərar verir. Hər əməliyyat öz təsdiqini, qəbzini və müstəqil yoxlamasını göstərir.
+288	Mərhələ
+289	Təsdiq gözləyir
+290	Rədd edilib
+291	Müddəti bitib
+292	Uğursuz
+293	Əl ilə uzlaşdırma tələb olunur
+294	Təklif edilib
+295	Növbədədir
+296	İcra olunur
+297	Yoxlama gözlənilir
+298	Yoxlanılıb
+299	Canlı vəziyyət
+300	Rejim
+301	Simulyasiya
+302	Skanlar və məlumat toplama işləyir. Digər əməliyyatlar təklif olaraq qalır.
+303	Təsdiqlənmiş əməliyyatlar seçilmiş cihazlarda icra olunur.
+304	Əməliyyatlar yalnız test adapterlərində icra olunur. Cihazlarınızda heç nə dəyişmir.
+305	Hələ əməliyyat yoxdur.
+306	Təsdiq gözləyən heç nə yoxdur.
+307	Hələ istehsal sübutu qeyd edilməyib.
+308	Hələ heç bir cihaz və ya inteqrasiya məlumat göndərmir.
+309	İcra olunmadı
+310	Müşahidə edilib
+311	Nə baş verdi
+312	DDoS-a cavab
+313	Yanlış pozitiv və bərpa
+314	Kimlik, fişinq və şübhəli trafik
+315	Zərərli proqramlar və şübhəli yükləmələr
+316	Şəbəkə görünürlüyü və cihazın vəziyyəti
+317	Kompromisdən sonra bərpa
+318	Fidyə proqramı və ya şübhəli kompromis
+319	Playbook
+320	Playbook-lar
+321	Siyasət versiyası
+322	Versiya quraşdırıldı
+323	Firewall təcridi
+324	Məlumatlar alındı
+325	Fayl silindi
+326	Proses dayandırıldı
+327	Təminatçının vəziyyəti
+328	Qeyd edildi
+329	Skan tamamlandı
+330	Simulyasiya edildi
+331	Karantindən çıxarılıb
+332	Karantindədir
+333	Əməliyyatlar və qəbzlər
+334	Nəticəni qeyd et
+335	Qeyd et
+336	Cavab verə bilir
+337	Mənbə
+338	cihaz
+339	konsol
+340	simulyasiya
+341	Başlama şərti
+342	Yeniləndi
+343	Müstəqil yoxlama
+344	Gözləyir
+345	Arxiv limiti
+346	Şifrələnmiş arxiv
+347	İstisna edilib
+348	Əlçatmazdır
+349	Vaxt limiti
+350	Çox böyükdür
+351	Dəstəklənməyən format
+352	Ləğv edilib
+353	Buraxılıb
+354	Qismən
+355	Vaxt bitdi
+356	Tam
+357	Tələb əsasında
+358	Sürətli
+359	Bərpa
+360	Planlaşdırılmış
+361	Hədəfli
+362	Seqment əlavə et
+363	arxivlər
+364	Aktivlər
+365	Bu skan dayandırılsın? İndiyədək olan nəticələr ləğv edilmiş skan kimi saxlanılır.
+366	Əhatə olunmayıb
+367	Aşkarlamalar
+368	Qoruma vəziyyətinə görə cihazlar
+369	Mühərrik
+370	Son tarix
+371	Son sübut
+372	Gözlənilən nəzarət
+373	Təklif edilən düzəliş
+374	Təkrar test
+375	Aktiv və ya seqment
+376	Açıq boşluqlar
+377	30 gündə skan nəticələri
+378	xəbərdarlıqdan təsdiqlənmiş lokallaşdırmaya
+379	qorunan cihazlar
+380	yuxarı təminatçı tərəfindən qorunan ictimai son nöqtələr
+381	hadisədən xəbərdarlığa
+382	tərifləri aktual olan cihazlar
+383	7 gündə tam skan edilmiş cihazlar
+384	açıq boşluqlar ([0] gecikmiş, 30 gündə [1] bağlanıb)
+385	izlənilən şəbəkə seqmentləri
+386	təsdiqlənmiş həqiqi pozitivlər
+387	tamamlanmış skanlar
+388	Əhatə və cavab
+389	Son tam skan
+390	Son telemetriya
+391	Əhatə dairəsindəki hər cihaz və şəbəkə seqmenti, qorunub-qorunmadığı və növbəti nəyin düzəldilməli olduğu.
+392	Şəbəkə görünürlüyü
+393	Hələ qeydiyyatdan keçmiş cihaz yoxdur. Cihazlar bölməsindən kompüteri qoruyun.
+394	Açıq boşluq yoxdur.
+395	[0] açıq
+396	gecikmiş
+397	p95 [0] san
+398	Qovluqlar
+399	Skan ediləcək qovluqlar, vergüllə ayrılmış
+400	Şifrələmə və firewall
+401	Disk şifrələməsi [0], firewall [1]
+402	İnsidentlərdən sonra bərpa
+403	İndi yenidən yoxla
+404	Təkrar test edilməyib
+405	Təkrar test uğursuz oldu
+406	Yoxlanılaraq bağlanıb
+407	Skan növü
+408	Skanlar
+409	Seqment
+410	Seqmentin adı
+411	Skanı başlat
+412	Başladı
+413	Vəziyyət
+414	Zəifləmiş
+415	Qorunur
+416	Qorunmur
+417	Vəziyyətə görə cihazlar
+418	[0] naməlum
+419	Görünürlük yoxdur
+420	İzlənilir
+421	Görünürlük
+422	Aşkarlamaların olmaması qorunmanı sübut etmir: əhatəni və skan nəticələrini də yoxlayın.
+423	Dil
+424	Tərcümə əhatəsi
+425	Əvvəlki versiya yoxdur
+426	Tema
+427	Tünd
+428	Yüksək kontrast
+429	Açıq
+430	[0] faylda yeni təhlükə tapılmadı.
+431	[0] təhlükə
+432	[0] təhlükə
+433	 [0] faylda tapıldı. Onları yoxlamaq üçün Xəbərdarlıqlar və Təsdiqlər bölmələrinə baxın.
+434	Tam skan
+435	Bu kompüteri qorumaq mümkün olmadı: [0]
+436	Bu kompüter qorunur. Agentic Antivirus açıq olduqca real vaxtda skan işləyir.
+437	Skan başa çatmadı: [0]
+438	Skan edilir…
+439	Bütün disklər skan edilir. Bu uzun çəkə bilər.
+440	Yükləmələr, İş masası və müvəqqəti fayllar skan edilir…
+441	[0] faylı oxumaq mümkün olmadı.
+442	Fayl
+443	Vebsayt keçidi
+444	Test məlumatlarını qəbul et
+446	Əməliyyatlar
+447	İnteqrasiya əlavə et
+448	İstisna əlavə et
+449	İnteqrasiya əlavə et
+450	Həftəlik tam skan əlavə et
+451	administrator
+452	Reklam
+453	Reklam razılığı
+454	Təsirlənən xidmətlər
+455	son 24 saatda xəbərdarlıqlar
+456	İcazə ver
+457	İcazə ver və skan et
+458	Administrator səbəb göstərməlidir. İstisna audit jurnalında qeyd olunur.
+459	E-poçt
+460	Xidmətə qayıdışı təsdiq et
+461	Əməliyyatların təsdiqi
+462	Aktiv
+463	aktiv mühafizə altında olan aktivlər
+464	24 saatda xəbərdarlığı olan aktivlər
+465	Audit jurnalı
+466	Avtomatik qoruma hər cihazda işləməyə davam edir. Bunlar insanın qərar verməli olduğu əməliyyatlardır.
+467	Əlçatanlıq
+468	Mövcud siqnallar
+469	Ehtiyat nüsxə yoxlanılıb
+470	Blokla
+471	Agent defolt olaraq təhlükəsizlik telemetriyası və fayl həşləri göndərir: proses adları və əmr sətirləri, fayl yolları, şəbəkə bağlantısı metadatası və aşkarlamalar. Faylların məzmunu yalnız təşkilatınız bunu aktivləşdirdikdə toplanır.
+472	Tutum
+473	Kateqoriya
+474	Dəyişdirilib
+475	Ödəniş
+476	Yoxla
+477	seçin
+478	Cihaz seçin
+480	Bağla
+481	Vergüllə ayrılmış
+482	Əlaqə
+483	Nəzarət
+484	Qoruma qatlarına görə əhatə
+485	kritik
+486	kritik xəbərdarlıqların çatdırılması (p95, 30 gün)
+487	Gözləyən qərarlar
+488	İmtina et
+489	Təriflər
+490	Nə baş verdiyini təsvir edin
+491	Təfərrüat
+492	Təfərrüatlar
+493	Aşkarlama
+494	Lisenziyalaşdırılacaq cihaz
+495	tam qorunan cihazlar
+496	təcrid edilmiş cihazlar
+497	Diqqət tələb edən cihazlar
+498	İstiqamət
+499	DNS zonası
+500	yükləmə səhifəsindən
+501	Pulsuz sınaq müddətində və ödənişsiz planlarda razılığınız soruşulduqdan sonra konsol Google AdSense reklamlarını, mobil tətbiqlər isə Google AdMob reklamlarını göstərir. Abunəçilər 95% az reklam görür. Reklamlar heç vaxt təsdiq, lokallaşdırma, təhlükə xəbərdarlığı, karantin yoxlaması, daxil olma, ödəniş və ya audit ekranlarında görünmür.
+502	Hər dərc yeni imzalanmış versiya yaradır. Cihazlar oflayn olanda son yoxlanılmış versiyanı tətbiq etməyə davam edir.
+503	Dəstək e-poçtu:
+504	Son nöqtə
+505	Agentic Antivirus xidmətini Equality Software Ltd idarə edir. Bu səhifə xidmətin nələri topladığını təsvir edir. Dərc edilməzdən əvvəl məhsul sahibi tərəfindən yoxlanılmalıdır.
+506	Cihazı, hesabı və ya trafiki dəyişən hər əməliyyat siyasət mühərrikindən və AEP-X idarəetməsindən keçir. Təsdiq bir əməliyyatı, onun dəqiq hədəflərini, bu təşkilatı və müəyyən vaxtı əhatə edir.
+507	Hər yükləmə zərərli proqram və real növünə görə yoxlanılır. Yoxlanılmış baxış vasitəsi olmayan fayllar saxlanılır və endirilə bilər, lakin önizlənmir.
+508	İstisna
+509	İstisnalar
+510	Qovluq yolu
+511	ünvanına giriş və ya düzəliş sorğuları üçün yazın.
+512	Boşluqlar
+513	Windows, Mac və ya Linux üçün agenti buradan əldə edin:
+514	Cihazlar bölməsinə keçin, Cihazı qeydiyyata al seçin və göstərilən əmri qorumaq istədiyiniz kompüterdə icra edin. Agent imzalanmış siyasətini alan kimi skana başlayır.
+515	Sağlamlıq
+516	Tarixçə
+517	Host adı
+518	Başa düşürəm ki, sınaq müddətindən sonra abunəlik ödənilənədək cihazlar skan etməyi və təhlükələri bloklamağı dayandıracaq.
+519	Təsir
+520	zip və ya tar idxal et
+521	İnsident
+522	Dil modelini daxil et (təşkilatınız aktivləşdiribsə)
+523	IP ünvanı
+524	Qoşul
+525	Təşkilatınıza qoşulun
+526	Məlum zərərli proqramlar işləyə bilməyəcəkləri karantinə köçürülür. Faylın səhvən bloklandığını düşünürsünüzsə, Karantin bölməsini açın və yoxlama tələb edin. Qərarı administrator verir və fayl yalnız yeni skan onu təmiz tapdıqdan sonra geri qayıdır.
+527	Tam tərcüməsi olmayan dillər ingiliscəyə keçir. Əhatə təxmin edilmir, ölçülür.
+528	Son dəyişiklik
+529	Qat
+530	Qanuni sorğuların uğuru
+531	Lisenziya qaydaları
+532	Keçid, əgər varsa
+533	Təcrid zamanı əlçatan saxlanılan idarəetmə hostları
+534	Yanlış pozitiv kimi işarələ
+535	Yetkinlik
+536	Yumşaltma
+537	Ad
+538	Gizli açar anbarınızdakı açarın adı, heç vaxt açarın özü deyil
+539	Gözləyən əməliyyat yoxdur.
+540	Açıq insident yoxdur.
+541	Yoxdur.
+542	Heç nə bildirilməyib.
+543	təyin edilməyib
+544	Bildiriş vaxtı
+545	göstərilən reklamların payı
+546	Oflayn hadisə buferi (MB)
+547	Android-də Agentic Antivirus tətbiqində Google Play vasitəsilə abunə olun. iPhone və iPad-də App Store abunəlikləri hələ mövcud deyil. Vebdə ödəniş hələ mövcud deyil.
+548	İnsident aç
+549	açıq insidentlər
+550	Açıq insidentlər
+551	p95 gecikmə
+552	ödənilib:
+553	Yol şablonu
+554	İnsanlar
+555	Cihaz başına
+556	İstifadəçi başına (bütün cihazlarını əhatə edir)
+557	Önizləmə
+558	Əsas
+560	Cihazı qoru
+561	Protokol
+562	Təminatçı
+563	Təminatçı xəbərdarlıqları (24 saat)
+564	İctimai son nöqtələr
+565	Siyasət versiyasını dərc et
+566	İmzalanmış versiyanı dərc et
+567	Dərc edilib
+568	Sürətli skan
+569	Səsli oxuma və diktə brauzerinizin daxili nitq funksiyalarından istifadə edir. Biz səsi yazmırıq və saxlamırıq.
+570	Alınıb
+571	Çıxarıla bilən daşıyıcılar
+572	Sil
+573	Tələb edilib
+574	Tələb edən
+575	Saxlama müddəti
+576	Xidmətə qayıdış
+577	Hazırda
+578	Risk
+579	Rol
+580	Geri qaytar
+581	Son nöqtəni yadda saxla
+582	Lisenziya qaydalarını yadda saxla
+583	Skan et
+584	Cədvəl (cron)
+585	Planlaşdırılmış skanlar
+586	Gizli açar istinadı
+587	Dəvət göndər
+588	Hesabat göndər
+589	Sıfırlama keçidi göndər
+590	Xidmət
+591	Xidmət hədəfləri
+594	Siqnal
+595	Ölçü
+596	Başqa bir şey
+597	Sırala
+598	Addım
+599	Prosesləri dayandırmaq, cihazları təcrid etmək, faylları bərpa etmək, istisnalar əlavə etmək və trafik qaydalarını dəyişmək insan təsdiqi tələb edir. Təsdiq bir əməliyyatı, onun dəqiq hədəflərini və məhdud vaxtı əhatə edir. Nəsə dəyişsə, yenidən təsdiq edin.
+600	Bu cihaz üçün Google Play ilə abunə ol
+601	abunəlik vəziyyəti
+603	Sistem
+604	Hədəf
+605	Süni intellekt köməkçisi
+606	Köməkçi əlaqəli xəbərdarlıqları qruplaşdırır, müşahidə edilənləri sübutlara keçidlərlə sadalayır və sübut edə bilmədiyi hər şeyi fərziyyə kimi işarələyir. Əməliyyat təklif edə bilər, lakin təsdiq edə bilməz. Model əlçatan olmadıqda skan, xəbərdarlıqlar və əl ilə cavab tədbirləri işləməyə davam edir.
+607	Bu kompüter
+608	Yalnız TLS, çıxış icazə siyahısında olmalıdır
+609	Trafik daşqınlarını yuxarı təminatçınız udur. Burada hər ictimai son nöqtəni uçota alır, təminatçı xəbərdarlıqlarını izləyir və yeni trafik məhdudiyyətlərini təsdiq edirsiniz.
+610	Trafik məhdudiyyətləri
+611	Tərcümə edilib
+612	Zibil qutusu
+613	sınaq günü qalıb
+614	Bu kompüterdəki faylları skan etmək və fidyə proqramları ilə etimadnamə oğurluğunu izləmək üçün qorumanı aktivləşdirin.
+615	əhatə olunmayıb
+616	Son dəyişikliyi geri al
+617	İstifadəçi
+618	E-poçtu təsdiqlə
+619	təsdiq gözləyir
+620	Bəzi səhifələrdə Google AdSense reklamları göstəririk. Fərdiləşdirilmiş reklamlara icazə verilsin?
+621	Webhook:
+622	Cihazların göndərdikləri
+623	Bu nədir?
+624	Nə vaxt
+625	Nəsə bloklananda
+626	Sınaq ödənişsiz başa çatanda
+627	Kim
+628	Hesabınızı profilinizdən silə bilərsiniz. Əlaqə:
+629	Adınız
+630	Təşkilatınız 30 günlük pulsuz sınaq alır. Bundan sonra hər istifadəçi və ya cihaz üçün ayda 4,99 £ ödənilir.
+631	Telemetriya və sübutların nə qədər saxlanılacağını təşkilatınız müəyyən edir. Audit qeydləri redaktə edilə və ya silinə bilməz.
+632	Hüquqlarınız
+633	Diktə et
+634	Diktə üçün mikrofondan istifadəyə icazə verilsin? Səs brauzeriniz tərəfindən emal olunur və bizdə saxlanılmır.
+635	Səs çıxışı
+636	Fasilə
+637	Ton
+638	Davam et
+639	Sürət
+640	Dayandır
+641	Bu dil üçün səs mövcud deyil.
+642	Səs
+643	Fayl karantinə köçürüldü və işləyə bilməz.
+644	Bu cihazda təhlükə bloklandı.

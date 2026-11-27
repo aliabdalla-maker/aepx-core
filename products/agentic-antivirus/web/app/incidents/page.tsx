@@ -27,7 +27,8 @@ export default function Incidents() {
       <Status error={d.error} loading={!d.data} />
       <table><thead><tr><th>{t("ui.incident")}</th><th>{t("alerts.severity")}</th><th>{t("ui.status")}</th><th>{t("ui.category")}</th><th>{t("nav.alerts")}</th><th>{t("ui.updated")}</th></tr></thead>
         <tbody>{rows.map((i) => <tr key={i.id}><td><Link href={`/incident?id=${i.id}`}>{i.title}</Link></td><td><Sev s={i.severity} /></td>
-          <td>{i.status}</td><td>{i.category}</td><td>{i.alert_count}</td><td>{formatRelative(i.updated_at, locale)}</td></tr>)}</tbody></table>
+          <td>{i.status}</td><td>{i.category}</td><td>{i.alert_count}</td><td>{formatRelative(i.updated_at, locale)}</td></tr>)}
+          {d.data && rows.length === 0 && <tr><td colSpan={6}>{t("common.none")}</td></tr>}</tbody></table>
       <div className="row"><button disabled={page === 0} onClick={() => setPage(page - 1)}>{t("common.previous")}</button>
         <button disabled={(d.data?.length ?? 0) < 50} onClick={() => setPage(page + 1)}>{t("common.next")}</button></div>
       {lic.data && <AdSlot placement="incident_list_banner" rate={lic.data.ad_rate} />}

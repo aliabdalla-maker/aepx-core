@@ -1,0 +1,637 @@
+0	Ana içeriğe atla
+1	Kalıcı istisna ekle
+2	Trafik kısıtlaması uygula
+3	Cihaz meta verilerini topla
+4	Cihazı ağdan yalıt
+5	Dosyayı karantinaya al
+6	Cihazı yalıtımdan çıkar
+7	Karantinadaki dosyayı geri yükle
+8	Kullanıcının tüm oturumlarını kapat
+9	Trafik kısıtlamasını geri al
+10	Güncellemeyi geri al
+11	Cihazları tara
+12	Kullanıcı hesabını askıya al
+13	İşlemi durdur
+14	Onayla
+15	Reddet
+16	Cihazlara gönder
+17	Onayın süresi doluyor: [0]
+18	Yapay zekâ asistanı tarafından önerildi
+19	Reklam
+20	Eylem
+21	Ajanlar
+22	Sor
+23	Güvenlik asistanına sor
+24	Yanıtlar cihazlarınızdan, açık olaylardan ve açıklardan gelir. Asistan hiçbir şeyi değiştiremez.
+25	Dayanak
+26	Kanıtsız [0] iddia kaldırıldı
+27	Kanıtsız [0] iddia kaldırıldı
+29	Şirket içi barındırılan model
+30	Kurallar (model yok)
+31	Düzeltme planı taslağı hazırla
+32	Her adım bir öneridir. Biri onaylamadan hiçbir şey çalışmaz.
+33	Soru
+34	Örneğin: hangi cihazlar ilgi gerektiriyor?
+35	Önerilen önem derecesi
+36	Özet
+37	Hedefler
+38	Bu olayı özetle
+39	Neden
+40	Algılandı
+41	Şüpheli bir şey bildir
+42	Kural
+43	Önem derecesi
+44	Uyarı
+46	Dosya ekle
+47	Klasör ekle
+48	Görsel ekle
+49	[0] ek
+50	[0] ek
+51	Ekler
+52	Fotoğraf çek
+53	Kamera erişimine izin verilmedi. Tarayıcınızda izin verin veya cihazınızın kamera uygulamasını kullanın.
+54	Kamera önizlemesi
+55	Bu tarayıcı kamerayı burada açamıyor.
+56	Çek
+57	Asistanı kapat
+58	Bu dosyalar nedir ve güvenli mi?
+59	Dosya
+60	Güvenliğiniz hakkında soru sorun veya dosya, klasör, görsel ya da kamera fotoğrafı ekleyin. Her ek önce taranır ve hiçbir şey saklanmaz.
+61	[0] görsel
+62	[0] görsel
+63	 model tarafından açıklandı.
+64	Örneğin: bu indirme güvenli mi?
+65	Temiz metin ve görseller kuruluşunuzun etkinleştirdiği yapay zekâ modeline gönderilebilir. Kötü amaçlı dosyalar asla gönderilmez.
+66	[0] dosya eklenmedi
+67	[0] dosya eklenmedi
+68	: en fazla [0] dosya, her biri [1] MB ve toplamda [2] MB.
+69	[0] öğesini kaldır
+70	Tara ve sor
+71	Tarama sonuçları
+72	Tür
+73	Cihaz kamerasını kullan
+74	Sonuç
+75	Bilinen kötü amaçlı yazılım yok
+76	Kötü amaçlı
+77	Taranmadı
+78	Denetim zinciri [0] numaralı kayıtta bozuk.
+79	Denetim zinciri sağlam: [0] kayıt doğrulandı.
+80	E-posta
+81	Parolanızı mı unuttunuz?
+82	Google ile oturum aç
+83	Google ile oturum açılamadı. Tekrar deneyin veya e-posta adresinizi ve parolanızı kullanın.
+84	Oturum aç
+85	Oturumu kapat
+86	Yeni parola
+87	veya
+88	Kuruluş
+89	Parola
+90	Parola değiştirildi. Yeni parolanızla oturum açın.
+91	En az 12 karakter.
+92	Hesap oluştur
+93	Bağlantıyı yeniden gönder
+94	Bu hesabın hâlâ onaylanması gerekiyorsa yeni bir bağlantı yolda. İstenmeyen e-posta klasörünüzü de kontrol edin.
+95	Parolayı sıfırla
+96	Bu adresi kullanan bir hesap varsa sıfırlama bağlantısı gönderdik. Bağlantı bir saat geçerlidir.
+97	Oturum açmadan önce e-posta adresinizi onaylayın. [0] adresine gönderdiğimiz bağlantıyı açın.
+98	E-posta doğrulandı. Artık oturum açabilirsiniz.
+99	Bu bağlantının süresi dolmuş veya bağlantı zaten kullanılmış. Yeni bir bağlantı almak için oturum açın.
+100	Adresinizi doğrulamak için e-postanızı kontrol edin.
+101	Abonelik reklamları %95 azaltır.
+102	Deneme süreniz sona erdi.
+103	[0] tarihine kadar abone
+104	Her şeyi ücretsiz ve tam reklamlı tut
+105	Biri ödeme yapana kadar cihaz koruması dahil her şeyi durdur
+106	Konsol abonelik gerektirir; cihazlar korunmaya devam eder
+107	Aylık 4,99 £
+108	Abone ol
+109	Ücretsiz deneme:
+110	[0] gün kaldı
+111	[0] gün kaldı
+112	İptal
+113	Sil
+114	Bir sorun oluştu.
+115	Dışa aktar
+116	Yükleniyor…
+117	Yok
+118	Hiçbir zaman
+119	İleri
+120	hayır
+121	Gösterilecek bir şey yok.
+122	kapalı
+123	açık
+124	Geri
+125	Yenile
+126	Kaydet
+127	Ara
+128	Simülasyon (test verisi)
+129	Durum
+130	Kullanılamıyor
+131	Bilinmiyor
+132	Güncellendi: [0]
+133	Çalışıyor…
+134	evet
+135	24 saatte [0] uyarı
+136	24 saatte [0] uyarı
+137	[0] cihaz
+138	[0] cihaz
+139	Veri tarihi: [0]
+140	[0] açık olay
+141	[0] açık olay
+142	[0] onay bekliyor
+143	[0] onay bekliyor
+144	doğrulandı
+145	şüpheli
+146	Cihaz kaydet
+147	Cihaz
+148	Rapor göndermiyor
+149	Güncel olmayan ilke
+150	Sensör devre dışı
+151	Eski tanımlar
+152	Sorunlar
+153	Son görülme
+154	İşletim sistemi
+155	İlke
+156	24 saat içinde cihazda çalıştırın (tek kullanımlık):
+157	Koruma
+158	Kopyala
+159	İndir
+160	Taşı
+161	Yeni klasör
+162	Yeniden adlandır
+163	Geri yükle
+164	Çöp kutusuna taşı
+165	Yükle
+166	Yardım
+167	Bu sayfadaki [0] metin makine çevirisidir ve henüz incelenmedi.
+168	Bu dildeki [0] metin makine çevirisidir ve henüz incelenmedi.
+169	Bu dil henüz çevrilmedi, bu nedenle İngilizce gösteriliyor.
+170	onaylandı
+171	Gözlemlenen olgular
+172	Hipotezler (doğrulanmadı)
+173	Hipotez, [0] güven: [1]
+174	İnceleme başlat
+175	Eksik kanıt
+176	Eksik: [0]
+177	Sesli oku
+178	Önerilen eylemler
+179	Kanıt zaman çizelgesi
+180	gelen webhook
+181	Kimlik sağlayıcınızdan, DNS'ten, güvenlik duvarlarından ve diğer araçlardan gelen sinyaller. Yeni entegrasyonlar kullanılamaz olarak başlar; yalnızca sözleşme testini geçen bir sağlayıcı bağdaştırıcısı canlı olarak işaretlenebilir. Test verileri göründüğü her yerde simülasyon olarak etiketlenir.
+182	Bağlı değil (taslak)
+183	Yalnızca test verisi
+184	Kullanılamıyor
+185	Canlı (doğrulandı)
+186	Gizli anahtar (bir kez gösterilir):
+187	Onaylar
+188	Uyarılar
+189	Denetim
+190	Abonelik
+191	Pano
+192	DDoS ve erişilebilirlik
+193	Cihazlar
+194	Dosyalar
+195	Olaylar
+196	Entegrasyonlar
+197	İlkeler
+198	Gizlilik
+199	Karantina
+200	Müdahale
+201	Güvenlik
+202	Ayarlar
+203	Bilinen kötü amaçlı yazılımları otomatik olarak karantinaya al
+204	Şüpheli davranışları izle
+205	Şüpheli betikleri engelle
+206	İnceleme için dosya içeriklerini topla (varsayılan olarak kapalı)
+207	Ağ yalıtımına izin ver
+208	Dosyaları açıldıklarında veya yazıldıklarında tara
+209	İndirmeleri tara
+210	Programları başlatıldıklarında tara
+211	Ajanı değişikliklere karşı koru
+212	Bilinen kötü amaçlı bağlantılar hakkında uyar
+213	Gerekçe
+214	İnceleme iste
+215	Yeni taramadan sonra geri yükle
+216	doğrulanmış temizlemeye kadar medyan süre (n=[0], çözülmemiş [1])
+217	yeniden testi geçen düzeltmeler
+218	kurtarma sonrası tekrarlama
+219	doğrulanmış virüs temizleme
+220	hizmete güvenli dönüş
+221	tamamlanan kurtarma taramaları
+222	Yalnızca karantina sonuçları ([0]) ve yeniden kurulan cihazlar ([1]) ayrı sayılır; karantina tek başına asla temizleme sayılmaz.
+223	[0] sa
+224	[0] dk
+225	[0] sn
+226	Onay bekleniyor
+227	Üretim kanıtı
+228	Üretimde neyin, hangi varlıklarda ve hangi sürümle doğrulandığını kaydedin. Kayıtlar düzenlenemez.
+229	Sürüm
+230	Mod değiştir
+231	kanıt yok
+232	başarısız
+233	geçti
+234	beklemede
+235	Playbook ilerlemesini kontrol et
+236	Müdahale edebilen cihazlar
+237	Tüm cihazlar
+238	[0] pilot cihaz
+239	[0] pilot cihaz
+240	Tamamlandı
+241	Tamamlanma koşulu
+242	Tatbikat
+243	Gözlemle
+244	Müdahale et
+245	Kapsam
+246	[0] gözlemleniyor, [1] müdahale edebiliyor
+247	Veri
+248	Veri yaşı
+249	Canlı
+250	Test verisi
+251	yürütülmedi
+252	makbuz
+253	devam ediyor
+254	bilinmiyor
+255	Gönderim
+256	Kanıt
+257	Çalıştı
+258	Eski
+259	Veri akışları
+260	Sürüm veya özet
+261	Ortam
+262	Sonuç
+263	Sahip
+264	Gereksinim
+265	Varlık veya grup
+266	Göster
+267	Tümü
+268	Tamamlanmadı
+269	Tüm hizmet için açık
+270	Bu kuruluş için açık
+271	Bu kuruluş için tüm yeni müdahale eylemleri durdurulsun mu? Koruma ve tarama çalışmaya devam eder.
+272	Müdahale eylemlerine yeniden izin ver
+273	Tüm müdahale eylemlerini durdur
+274	Acil durdurma
+275	Tür
+276	Medyan açık kalma süresi, dk ([0] açık, en eskisi [1] dk)
+277	İlke retleri
+278	Tatbikatlar ve simülasyonlar (yukarıda sayılmaz)
+279	Tekrarlanan eylemler (hedef 0)
+280	Medyan akış gecikmesi (p95 [0] sn, n=[1])
+281	Süresi geçen onaylar ([0] bekliyor, hedef [1] dk)
+282	Sinyalden ön değerlendirmeye medyan süre (p95 [0] dk, n=[1], [2] değerlendirilmemiş)
+283	Bağımsız olarak doğrulanan eylemler ([0]/[1])
+284	Zaman aralığı: [0]. Makbuz tek başına asla doğrulanmış sayılmaz. Eksik veriler kullanılamıyor olarak gösterilir.
+285	Müdahale ölçümleri
+286	Son olay
+287	Ajanlar önerir; neyin çalışacağına sabit bir ilke karar verir. Her eylem onayını, makbuzunu ve bağımsız denetimini gösterir.
+288	Aşama
+289	Onay bekliyor
+290	Reddedildi
+291	Süresi doldu
+292	Başarısız
+293	Elle uzlaştırma gerekiyor
+294	Önerildi
+295	Sırada
+296	Çalışıyor
+297	Doğrulama bekleniyor
+298	Doğrulandı
+299	Canlı durum
+300	Mod
+301	Simülasyon
+302	Taramalar ve veri toplama çalışır. Diğer eylemler öneri olarak kalır.
+303	Onaylanan eylemler seçilen cihazlarda çalışır.
+304	Eylemler yalnızca test bağdaştırıcılarında çalışır. Cihazlarınızda hiçbir şey değişmez.
+305	Henüz eylem yok.
+306	Onay bekleyen bir şey yok.
+307	Henüz üretim kanıtı kaydedilmedi.
+308	Henüz veri gönderen cihaz veya entegrasyon yok.
+309	Çalışmadı
+310	Gözlemlendi
+311	Ne oldu
+312	DDoS müdahalesi
+313	Hatalı pozitif ve geri yükleme
+314	Kimlik, kimlik avı ve şüpheli trafik
+315	Kötü amaçlı yazılım ve şüpheli indirmeler
+316	Ağ görünürlüğü ve cihaz durumu
+317	Saldırı sonrası kurtarma
+318	Fidye yazılımı veya şüpheli ele geçirme
+319	Playbook
+320	Playbook'lar
+321	İlke sürümü
+322	Sürüm yüklendi
+323	Güvenlik duvarı yalıtımı
+324	Veri alındı
+325	Dosya kaldırıldı
+326	İşlem durduruldu
+327	Sağlayıcı durumu
+328	Kaydedildi
+329	Tarama tamamlandı
+330	Simüle edildi
+331	Karantina dışında
+332	Karantinada
+333	Eylemler ve makbuzlar
+334	Sonucu kaydet
+335	Kaydet
+336	Müdahale edebilir
+337	Kaynak
+338	cihaz
+339	konsol
+340	simülasyon
+341	Başlama koşulu
+342	Güncellendi
+343	Bağımsız denetim
+344	Bekliyor
+345	Arşiv sınırı
+346	Şifreli arşiv
+347	Hariç tutuldu
+348	Erişilemiyor
+349	Süre sınırı
+350	Çok büyük
+351	Desteklenmeyen biçim
+352	İptal edildi
+353	Kaçırıldı
+354	Kısmi
+355	Zaman aşımı
+356	Tam
+357	İsteğe bağlı
+358	Hızlı
+359	Kurtarma
+360	Zamanlanmış
+361	Hedefli
+362	Segment ekle
+363	arşivler
+364	Varlıklar
+365	Bu tarama durdurulsun mu? Şimdiye kadarki sonuçlar iptal edilmiş tarama olarak saklanır.
+366	Kapsanmıyor
+367	Algılamalar
+368	Koruma durumuna göre cihazlar
+369	Motor
+370	Son tarih
+371	Son kanıt
+372	Beklenen denetim
+373	Önerilen düzeltme
+374	Yeniden test
+375	Varlık veya segment
+376	Açık boşluklar
+377	30 gündeki tarama sonuçları
+378	uyarıdan doğrulanmış kontrol altına almaya
+379	korunan cihazlar
+380	üst sağlayıcı korumalı genel uç noktalar
+381	olaydan uyarıya
+382	tanımları güncel cihazlar
+383	7 gün içinde tam tarama yapılan cihazlar
+384	açık boşluklar ([0] gecikmiş, 30 günde [1] kapatıldı)
+385	izlenen ağ segmentleri
+386	doğrulanmış gerçek pozitifler
+387	tamamlanan taramalar
+388	Kapsam ve müdahale
+389	Son tam tarama
+390	Son telemetri
+391	Kapsamdaki her cihaz ve ağ segmenti, korunup korunmadığı ve sırada ne düzeltilmesi gerektiği.
+392	Ağ görünürlüğü
+393	Henüz kayıtlı cihaz yok. Cihazlar bölümünden bir bilgisayarı koruyun.
+394	Açık boşluk yok.
+395	[0] açık
+396	gecikmiş
+397	p95 [0] sn
+398	Klasörler
+399	Taranacak klasörler, virgülle ayrılmış
+400	Şifreleme ve güvenlik duvarı
+401	Disk şifreleme [0], güvenlik duvarı [1]
+402	Olay sonrası kurtarma
+403	Şimdi yeniden kontrol et
+404	Yeniden test edilmedi
+405	Yeniden test başarısız
+406	Doğrulanarak kapatıldı
+407	Tarama türü
+408	Taramalar
+409	Segment
+410	Segment adı
+411	Taramayı başlat
+412	Başladı
+413	Durum
+414	Düşük performans
+415	Korunuyor
+416	Korunmuyor
+417	Duruma göre cihazlar
+418	[0] bilinmiyor
+419	Görünürlük yok
+420	İzleniyor
+421	Görünürlük
+422	Algılama olmaması korunduğunuzu kanıtlamaz: kapsamı ve tarama sonuçlarını da kontrol edin.
+423	Dil
+424	Çeviri kapsamı
+425	Önceki sürüm yok
+426	Tema
+427	Koyu
+428	Yüksek kontrast
+429	Açık
+430	[0] dosyada yeni tehdit bulunmadı.
+431	[0] tehdit
+432	[0] tehdit
+433	 [0] dosyada bulundu. İncelemek için Uyarılar ve Onaylar bölümlerine bakın.
+434	Tam tarama
+435	Bu bilgisayar korunamadı: [0]
+436	Bu bilgisayar korunuyor. Agentic Antivirus açıkken gerçek zamanlı tarama çalışır.
+437	Tarama tamamlanmadı: [0]
+438	Taranıyor…
+439	Tüm sürücüler taranıyor. Bu uzun sürebilir.
+440	İndirilenler, Masaüstü ve geçici dosyalar taranıyor…
+441	[0] dosya okunamadı.
+442	Bir dosya
+443	Bir web sitesi bağlantısı
+444	Test verisini kabul et
+446	Eylemler
+447	Entegrasyon ekle
+448	İstisna ekle
+449	Entegrasyon ekle
+450	Haftalık tam tarama ekle
+451	yönetici
+452	Reklamlar
+453	Reklam onayı
+454	Etkilenen hizmetler
+455	son 24 saatteki uyarılar
+456	İzin ver
+457	İzin ver ve tara
+458	Bir yöneticinin gerekçe belirtmesi gerekir. İstisna denetim kaydına işlenir.
+459	Bir e-posta
+460	Hizmete dönüşü onayla
+461	Eylemleri onaylama
+462	Varlık
+463	aktif koruma altındaki varlıklar
+464	24 saatte uyarı alan varlıklar
+465	Denetim kaydı
+466	Otomatik koruma her cihazda çalışmaya devam eder. Bunlar bir kişinin karar vermesi gereken eylemlerdir.
+467	Erişilebilirlik
+468	Kullanılabilir sinyaller
+469	Yedek doğrulandı
+470	Engelle
+471	Ajan varsayılan olarak güvenlik telemetrisi ve dosya karmaları gönderir: işlem adları ve komut satırları, dosya yolları, ağ bağlantısı meta verileri ve algılamalar. Dosya içerikleri yalnızca kuruluşunuz bunu açarsa toplanır.
+472	Kapasite
+473	Kategori
+474	Değiştirildi
+475	Ücret
+476	Kontrol et
+477	seçin
+478	Bir cihaz seçin
+480	Kapat
+481	Virgülle ayrılmış
+482	İletişim
+483	Denetim
+484	Koruma katmanına göre kapsam
+485	kritik
+486	kritik uyarı iletimi (p95, 30 gün)
+487	Bekleyen kararlar
+488	Reddet
+489	Tanımlar
+490	Ne olduğunu açıklayın
+491	Ayrıntı
+492	Ayrıntılar
+493	Algılama
+494	Lisanslanacak cihaz
+495	tamamen korunan cihazlar
+496	yalıtılmış cihazlar
+497	İlgi gerektiren cihazlar
+498	Yön
+499	DNS bölgesi
+500	indirme sayfasından
+501	Ücretsiz deneme süresince ve ücretsiz planlarda, onayınız istendikten sonra konsol Google AdSense reklamları, mobil uygulamalar ise Google AdMob reklamları gösterir. Aboneler %95 daha az reklam görür. Reklamlar onay, kontrol altına alma, tehdit uyarısı, karantina incelemesi, oturum açma, ödeme veya denetim ekranlarında asla görünmez.
+502	Her yayımlama yeni bir imzalı sürüm oluşturur. Cihazlar çevrimdışıyken son doğrulanmış sürümü uygulamaya devam eder.
+503	E-posta desteği:
+504	Uç nokta
+505	Agentic Antivirus hizmetini Equality Software Ltd işletir. Bu sayfa hizmetin neleri topladığını açıklar. Yayımlanmadan önce ürün sahibi tarafından incelenmelidir.
+506	Bir cihazı, hesabı veya trafiği değiştiren her eylem ilke motorundan ve AEP-X yönetişiminden geçer. Bir onay tek bir eylemi, tam hedeflerini, bu kuruluşu ve belirli bir süreyi kapsar.
+507	Her yükleme kötü amaçlı yazılım ve gerçek türü açısından kontrol edilir. Doğrulanmış görüntüleyicisi olmayan dosyalar saklanır ve indirilebilir ancak önizlenmez.
+508	İstisna
+509	İstisnalar
+510	Klasör yolu
+511	adresine erişim veya düzeltme talepleri için yazın.
+512	Boşluklar
+513	Windows, Mac veya Linux için ajanı şuradan edinin:
+514	Cihazlar bölümüne gidin, Cihaz kaydet'i seçin ve gösterilen komutu korumak istediğiniz bilgisayarda çalıştırın. Ajan imzalı ilkesini alır almaz taramaya başlar.
+515	Sağlık
+516	Geçmiş
+517	Ana bilgisayar adı
+518	Deneme süresinden sonra abonelik ödenene kadar cihazların taramayı ve tehditleri engellemeyi durduracağını anlıyorum.
+519	Etki
+520	zip veya tar içe aktar
+521	Olay
+522	Dil modelini dahil et (kuruluşunuz etkinleştirdiyse)
+523	IP adresi
+524	Katıl
+525	Kuruluşunuza katılın
+526	Bilinen kötü amaçlı yazılımlar, çalışamayacakları karantinaya taşınır. Bir dosyanın yanlışlıkla engellendiğini düşünüyorsanız Karantina'yı açın ve inceleme isteyin. Kararı bir yönetici verir ve dosya yalnızca yeni bir tarama temiz bulduktan sonra geri gelir.
+527	Çevirisi tamamlanmamış diller İngilizceye döner. Kapsam tahmin edilmez, ölçülür.
+528	Son değişiklik
+529	Katman
+530	Meşru istek başarısı
+531	Lisans kuralları
+532	Varsa bağlantı
+533	Yalıtım sırasında erişilebilir tutulan yönetim ana bilgisayarları
+534	Hatalı pozitif olarak işaretle
+535	Olgunluk
+536	Azaltma
+537	Ad
+538	Gizli anahtar deponuzdaki gizli anahtarın adı, asla anahtarın kendisi değil
+539	Bekleyen eylem yok.
+540	Açık olay yok.
+541	Yok.
+542	Bildirilen yok.
+543	ayarlanmadı
+544	Bildirim süresi
+545	gösterilen reklam oranı
+546	Çevrimdışı olay arabelleği (MB)
+547	Android'de Agentic Antivirus uygulamasından Google Play üzerinden abone olun. iPhone ve iPad'de App Store abonelikleri henüz kullanılamıyor. Web üzerinden ödeme henüz kullanılamıyor.
+548	Olay aç
+549	açık olaylar
+550	Açık olaylar
+551	p95 gecikme
+552	ödeme geçerlilik tarihi
+553	Yol kalıbı
+554	Kişiler
+555	Cihaz başına
+556	Kullanıcı başına (tüm cihazlarını kapsar)
+557	Önizleme
+558	Birincil
+560	Bir cihazı koru
+561	Protokol
+562	Sağlayıcı
+563	Sağlayıcı uyarıları (24 saat)
+564	Genel uç noktalar
+565	İlke sürümü yayımla
+566	İmzalı sürümü yayımla
+567	Yayımlandı
+568	Hızlı tarama
+569	Sesli okuma ve dikte, tarayıcınızın yerleşik konuşma özelliklerini kullanır. Ses kaydetmez veya saklamayız.
+570	Alındı
+571	Çıkarılabilir medya
+572	Kaldır
+573	İstendi
+574	İsteyen
+575	Saklama süresi
+576	Hizmete dönüş
+577	Şu anda
+578	Risk
+579	Rol
+580	Geri al
+581	Uç noktayı kaydet
+582	Lisans kurallarını kaydet
+583	Tara
+584	Zamanlama (cron)
+585	Zamanlanmış taramalar
+586	Gizli anahtar referansı
+587	Davet gönder
+588	Rapor gönder
+589	Sıfırlama bağlantısı gönder
+590	Hizmet
+591	Hizmet hedefleri
+594	Sinyal
+595	Boyut
+596	Başka bir şey
+597	Sırala
+598	Adım
+599	İşlemleri durdurmak, cihazları yalıtmak, dosyaları geri yüklemek, istisna eklemek ve trafik kurallarını değiştirmek bir kişinin onayını gerektirir. Bir onay tek bir eylemi, tam hedeflerini ve sınırlı bir süreyi kapsar. Bir şey değişirse yeniden onaylayın.
+600	Bu cihaza Google Play ile abone ol
+601	abonelik durumu
+603	Sistem
+604	Hedef
+605	Yapay zekâ asistanı
+606	Asistan ilgili uyarıları gruplar, gözlemlenenleri kanıt bağlantılarıyla listeler ve kanıtlayamadığı her şeyi hipotez olarak işaretler. Eylem önerebilir ancak onaylayamaz. Model kullanılamıyorsa tarama, uyarılar ve elle müdahaleler çalışmaya devam eder.
+607	Bu bilgisayar
+608	Yalnızca TLS, çıkış izin listesinde olmalı
+609	Trafik selleri üst sağlayıcınız tarafından karşılanır. Burada her genel uç noktayı hesaba katar, sağlayıcı uyarılarını izler ve yeni trafik kısıtlamalarını onaylarsınız.
+610	Trafik kısıtlamaları
+611	Çevrildi
+612	Çöp kutusu
+613	kalan deneme günü
+614	Bu bilgisayardaki dosyaları taramak ve fidye yazılımı ile kimlik bilgisi hırsızlığını izlemek için korumayı açın.
+615	kapsanmayan
+616	Son değişikliği geri al
+617	Kullanıcı
+618	E-postayı doğrula
+619	onay bekliyor
+620	Bazı sayfalarda Google AdSense reklamları gösteriyoruz. Kişiselleştirilmiş reklamlara izin verilsin mi?
+621	Webhook:
+622	Cihazların gönderdikleri
+623	Bu nedir?
+624	Ne zaman
+625	Bir şey engellendiğinde
+626	Deneme süresi ödeme yapılmadan bittiğinde
+627	Kim
+628	Hesabınızı profilinizden silebilirsiniz. İletişim:
+629	Adınız
+630	Kuruluşunuz 30 günlük ücretsiz deneme alır. Sonrasında her kullanıcı veya cihaz için aylık 4,99 £ ücretlendirilir.
+631	Telemetri ve kanıtların ne kadar süre saklanacağını kuruluşunuz belirler. Denetim kayıtları düzenlenemez veya silinemez.
+632	Haklarınız
+633	Dikte et
+634	Dikte için mikrofon kullanımına izin verilsin mi? Ses tarayıcınız tarafından işlenir ve tarafımızca saklanmaz.
+635	Ses çıkışı
+636	Duraklat
+637	Perde
+638	Devam et
+639	Hız
+640	Durdur
+641	Bu dil için kullanılabilir ses yok.
+642	Ses
+643	Dosya karantinaya taşındı ve çalışamaz.
+644	Bu cihazda bir tehdit engellendi.

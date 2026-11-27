@@ -1,0 +1,637 @@
+0	Simbukira ku bikubiyemo by'ingenzi
+1	Ongeraho ibisonerwa bihoraho
+2	Shyiraho umupaka w'urujya n'uruza
+3	Kusanya amakuru y'igikoresho
+4	Tandukanya igikoresho n'umuyoboro
+5	Shyira dosiye mu kato
+6	Kura igikoresho mu itandukanywa
+7	Garura dosiye iri mu kato
+8	Sohora umukoresha ahantu hose
+9	Kuraho umupaka w'urujya n'uruza
+10	Subiza inyuma ivugurura
+11	Suzuma ibikoresho
+12	Hagarika konti y'umukoresha by'agateganyo
+13	Hagarika igikorwa
+14	Emeza
+15	Anga
+16	Ohereza ku bikoresho
+17	Uruhushya rurangira [0]
+18	Byatanzwe n'umufasha wa AI
+19	Kwamamaza
+20	Igikorwa
+21	Intumwa
+22	Baza
+23	Baza umufasha w'umutekano
+24	Ibisubizo biva ku bikoresho byawe, ku byabaye bifunguye no ku byuho. Umufasha ntashobora guhindura ikintu na kimwe.
+25	Bishingiye kuri
+26	Ikivugwa [0] kidafite ibimenyetso cyakuweho
+27	Ibivugwa [0] bidafite ibimenyetso byakuweho
+29	Moderi yakiriwe n'ikigo ubwacyo
+30	Amategeko (nta moderi)
+31	Tegura igishushanyo cyo gukemura
+32	Buri ntambwe ni icyifuzo. Nta kintu gikorwa kugeza umuntu acyemeje.
+33	Ikibazo
+34	Urugero: ni ibihe bikoresho bikeneye kwitabwaho?
+35	Uburemere busabwa
+36	Incamake
+37	Ibigenderewe
+38	Kora incamake y'iki cyabaye
+39	Impamvu
+40	Byabonetse
+41	Tanga raporo y'ikintu giteye amakenga
+42	Itegeko
+43	Uburemere
+44	Integuza
+46	Ongeraho amadosiye
+47	Ongeraho ububiko
+48	Ongeraho amashusho
+49	Umugereka [0]
+50	Imigereka [0]
+51	Imigereka
+52	Fata ifoto
+53	Kugera kuri kamera ntibyemewe. Bikemerere muri mushakisha yawe, cyangwa ukoreshe porogaramu ya kamera y'igikoresho cyawe.
+54	Igaragaza rya kamera
+55	Iyi mushakisha ntishobora gufungura kamera hano.
+56	Fata
+57	Funga umufasha
+58	Aya madosiye ni ayahe, kandi afite umutekano?
+59	Dosiye
+60	Baza ku mutekano wawe, cyangwa womekeho amadosiye, ububiko, amashusho cyangwa ifoto ya kamera. Buri mugereka usuzumwa mbere kandi nta kintu kibikwa.
+61	Ishusho [0] yasobanuwe
+62	Amashusho [0] yasobanuwe
+63	 na moderi.
+64	Urugero: ese iki cyamanuwe gifite umutekano?
+65	Inyandiko n'amashusho bisukuye bishobora koherezwa kuri moderi ya AI ikigo cyawe cyafunguye. Amadosiye mabi ntiyoherezwa na rimwe.
+66	Dosiye [0] ntiyongewemo
+67	Amadosiye [0] ntiyongewemo
+68	: kugeza ku madosiye [0], MB [1] kuri buri imwe na MB [2] zose hamwe.
+69	Kuraho [0]
+70	Suzuma hanyuma ubaze
+71	Ibyavuye mu isuzuma
+72	Ubwoko
+73	Koresha kamera y'igikoresho
+74	Igisubizo
+75	Nta malware izwi
+76	Mbi
+77	Ntibyasuzumwe
+78	Urunigi rw'igenzura rwacitse ku nyandiko [0].
+79	Urunigi rw'igenzura ruri uko rwakabaye: inyandiko [0] zemejwe.
+80	Imeri
+81	Wibagiwe ijambo ry'ibanga?
+82	Injira ukoresheje Google
+83	Kwinjira ukoresheje Google ntibyakunze. Ongera ugerageze, cyangwa ukoreshe imeri n'ijambo ry'ibanga byawe.
+84	Injira
+85	Sohoka
+86	Ijambo ry'ibanga rishya
+87	cyangwa
+88	Ikigo
+89	Ijambo ry'ibanga
+90	Ijambo ry'ibanga ryahinduwe. Injira ukoresheje ijambo ry'ibanga rishya.
+91	Nibura inyuguti 12.
+92	Fungura konti
+93	Ongera wohereze ihuza
+94	Niba iyo konti igikeneye kwemezwa, ihuza rishya riri mu nzira. Reba no mu bubiko bwa spam.
+95	Hindura ijambo ry'ibanga
+96	Niba hari konti ikoresha iyo aderesi, twohereje ihuza ryo guhindura. Rikora mu isaha imwe.
+97	Emeza aderesi yawe ya imeri mbere yo kwinjira. Fungura ihuza twohereje kuri [0].
+98	Imeri yemejwe. Ubu ushobora kwinjira.
+99	Iri huza ryarangiye cyangwa ryamaze gukoreshwa. Injira kugira ngo ubone irindi.
+100	Reba imeri yawe kugira ngo wemeze aderesi yawe.
+101	Ifatabuguzi rigabanya kwamamaza ku kigero cya 95%.
+102	Igihe cyawe cy'igerageza cyarangiye.
+103	Ifatabuguzi kugeza [0]
+104	Komeza byose ku buntu hamwe no kwamamaza kwuzuye
+105	Hagarika byose, harimo n'uburinzi bw'ibikoresho, kugeza hari uwishyuye
+106	Konsole ikeneye ifatabuguzi; ibikoresho bikomeza kurindwa
+107	£4,99 ku kwezi
+108	Fata ifatabuguzi
+109	Igerageza ry'ubuntu:
+110	Hasigaye umunsi [0]
+111	Hasigaye iminsi [0]
+112	Hagarika
+113	Siba
+114	Hari ikitagenze neza.
+115	Ohereza hanze
+116	Birimo gufunguka…
+117	Ntibikoreshwa
+118	Nta na rimwe
+119	Ibikurikira
+120	oya
+121	Nta kintu cyo kwerekana.
+122	birafunze
+123	birafunguye
+124	Ibibanziriza
+125	Vugurura
+126	Bika
+127	Shakisha
+128	Igerageza (amakuru y'igerageza)
+129	Uko bihagaze
+130	Ntibiboneka
+131	Ntibizwi
+132	Byavuguruwe [0]
+133	Birakora…
+134	yego
+135	Integuza [0] mu masaha 24
+136	Integuza [0] mu masaha 24
+137	Igikoresho [0]
+138	Ibikoresho [0]
+139	Amakuru yo ku wa [0]
+140	Icyabaye [0] gifunguye
+141	Ibyabaye [0] bifunguye
+142	Icyemezo [0] gitegereje
+143	Ibyemezo [0] bitegereje
+144	byemejwe
+145	bikekwa
+146	Andikisha igikoresho
+147	Igikoresho
+148	Ntikiri gutanga amakuru
+149	Politiki ishaje
+150	Sensori yazimijwe
+151	Ibisobanuro bishaje
+152	Ibibazo
+153	Giheruka kuboneka
+154	Sisitemu y'imikorere
+155	Politiki
+156	Kora ku gikoresho mu masaha 24 (rimwe gusa):
+157	Uburinzi
+158	Kopororora
+159	Manura
+160	Imura
+161	Ububiko bushya
+162	Hindura izina
+163	Garura
+164	Shyira mu myanda
+165	Ohereza
+166	Ubufasha
+167	Inyandiko [0] kuri uru rupapuro yahinduwe n'imashini kandi ntirasuzumwa.
+168	Inyandiko [0] muri uru rurimi zahinduwe n'imashini kandi ntirasuzumwa.
+169	Uru rurimi ntiruhindurwa, bityo hagaragazwa Icyongereza.
+170	byemejwe
+171	Ibintu byagaragaye
+172	Ibitekerezo (bitaremezwa)
+173	Igitekerezo, icyizere [0]: [1]
+174	Tangiza iperereza
+175	Ibimenyetso bibura
+176	Bibura: [0]
+177	Soma mu ijwi riranguruye
+178	Ibikorwa bisabwa
+179	Umurongo w'igihe w'ibimenyetso
+180	webhook yinjira
+181	Ibimenyetso biva ku utanga serivisi y'umwirondoro, DNS, firewall n'ibindi bikoresho. Ihuzwa rishya ritangira ritaboneka; adaputeri y'utanga serivisi yatsinze isuzuma ry'amasezerano yayo ni yo yonyine ishobora kwitwa ko ikora. Amakuru y'igerageza yitwa igerageza aho agaragara hose.
+182	Ntibihujwe (stub)
+183	Amakuru y'igerageza gusa
+184	Ntibiboneka
+185	Birakora (byemejwe)
+186	Ibanga (rigaragazwa rimwe):
+187	Ibyemezo
+188	Integuza
+189	Igenzura
+190	Ifatabuguzi
+191	Ikibaho
+192	DDoS no kuboneka
+193	Ibikoresho
+194	Amadosiye
+195	Ibyabaye
+196	Ihuzwa
+197	Politiki
+198	Ibanga bwite
+199	Akato
+200	Igisubizo
+201	Umutekano
+202	Igenamiterere
+203	Shyira malware izwi mu kato mu buryo bwikora
+204	Genzura imyitwarire iteye amakenga
+205	Hagarika scripts ziteye amakenga
+206	Kusanya ibikubiye mu madosiye ku bw'iperereza (bifunze mu buryo busanzwe)
+207	Emera gutandukanya n'umuyoboro
+208	Suzuma amadosiye iyo afunguwe cyangwa yanditswe
+209	Suzuma ibyamanuwe
+210	Suzuma porogaramu iyo zitangira
+211	Rinda intumwa impinduka
+212	Buriza ku mahuza mabi azwi
+213	Impamvu
+214	Saba isuzuma
+215	Garura nyuma y'isuzuma rishya
+216	igihe giciriritse kugeza ku ikurwaho ryemejwe (n=[0], bitarakemuka [1])
+217	ikosora ryatsinze isuzuma rya kabiri
+218	kongera kubaho nyuma yo gusubirana
+219	ikurwaho rya virusi ryemejwe
+220	gusubira mu kazi mu mutekano
+221	isuzuma ryo gusubirana ryarangiye
+222	Ibyavuye mu kato gusa ([0]) n'ibikoresho byongeye gushyirwamo sisitemu ([1]) bibarwa ukwabyo; akato konyine ntikigera kibarwa nk'ikurwaho.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Bitegereje icyemezo
+227	Ibimenyetso byo mu mikorere nyayo
+228	Andika ibyemejwe mu mikorere nyayo, ku mutungo uwuhe, n'iyihe verisiyo. Inyandiko ntizishobora guhindurwa.
+229	Verisiyo
+230	Hindura uburyo
+231	nta bimenyetso
+232	byanze
+233	byatsinze
+234	bitegereje
+235	Reba aho igitabo cy'ibikorwa kigeze
+236	Ibikoresho bishobora gusubiza
+237	Ibikoresho byose
+238	Igikoresho [0] cy'igerageza
+239	Ibikoresho [0] by'igerageza
+240	Byarangiye
+241	Birangira iyo
+242	Imyitozo
+243	Genzura
+244	Subiza
+245	Aho bigera
+246	[0] byagaragaye, [1] bishobora gusubiza
+247	Amakuru
+248	Imyaka y'amakuru
+249	Bikora
+250	Amakuru y'igerageza
+251	ntibyakozwe
+252	inyemezabwishyu
+253	birakomeje
+254	ntibizwi
+255	Kohereza
+256	Ibimenyetso
+257	Byakozwe
+258	Bishaje
+259	Imiyoboro y'amakuru
+260	Verisiyo cyangwa digest
+261	Ibidukikije
+262	Igisubizo
+263	Nyirabyo
+264	Icyangombwa
+265	Umutungo cyangwa itsinda
+266	Erekana
+267	Byose
+268	Ntibirarangira
+269	Bifunguye kuri serivisi yose
+270	Bifunguye kuri iki kigo
+271	Hagarika ibikorwa byose bishya byo gusubiza kuri iki kigo? Uburinzi n'isuzuma bikomeza gukora.
+272	Ongera wemere ibikorwa byo gusubiza
+273	Hagarika ibikorwa byose byo gusubiza
+274	Buto yo guhagarika byihutirwa
+275	Ubwoko
+276	Iminota iciriritse bifunguye ([0] bifunguye, icya kera [1] min)
+277	Ibyanzwe na politiki
+278	Imyitozo n'igerageza (bitabariwe hejuru)
+279	Ibikorwa byasubiwemo (intego 0)
+280	Gutinda guciriritse kw'amakuru (p95 [0] s, n=[1])
+281	Ibyemezo byakererewe ([0] bitegereje, intego [1] min)
+282	Igihe giciriritse kuva ku kimenyetso kugeza ku isesengura (p95 [0] min, n=[1], [2] bitarasesengurwa)
+283	Ibikorwa byemejwe mu bwigenge ([0]/[1])
+284	Igihe: [0]. Inyemezabwishyu yonyine ntigera ibarwa nk'iyemejwe. Amakuru abura agaragazwa nk'ataboneka.
+285	Ibipimo byo gusubiza
+286	Ibyabaye biheruka
+287	Intumwa zitanga ibyifuzo; politiki ihamye ni yo ifata icyemezo cy'ibikorwa. Buri gikorwa cyerekana icyemezo cyacyo, inyemezabwishyu n'isuzuma ryigenga.
+288	Icyiciro
+289	Bitegereje icyemezo
+290	Byanzwe
+291	Byarangiye igihe
+292	Byanze
+293	Bikeneye guhuzwa n'intoki
+294	Byasabwe
+295	Biri ku murongo
+296	Birakora
+297	Igenzura ritegereje
+298	Byemejwe
+299	Uko bihagaze ubu
+300	Uburyo
+301	Igerageza
+302	Isuzuma n'ikusanyamakuru birakora. Ibindi bikorwa bikomeza kuba ibyifuzo.
+303	Ibikorwa byemejwe bikorerwa ku bikoresho byatoranyijwe.
+304	Ibikorwa bikorerwa kuri adaputeri z'igerageza gusa. Nta kintu gihinduka ku bikoresho byawe.
+305	Nta bikorwa biraba.
+306	Nta kintu gitegereje icyemezo.
+307	Nta bimenyetso byo mu mikorere nyayo biranditswe.
+308	Nta bikoresho cyangwa ihuzwa biratangira kohereza amakuru.
+309	Ntibyakozwe
+310	Byagaragaye
+311	Ibyabaye
+312	Igisubizo kuri DDoS
+313	Integuza y'ikinyoma no kugarura
+314	Umwirondoro, uburiganya (phishing) n'urujya n'uruza ruteye amakenga
+315	Malware n'ibyamanuwe biteye amakenga
+316	Kugaragara k'umuyoboro n'imiterere y'igikoresho
+317	Gusubirana nyuma yo kwinjirirwa
+318	Ransomware cyangwa kwinjirirwa gukekwa
+319	Igitabo cy'ibikorwa
+320	Ibitabo by'ibikorwa
+321	Verisiyo ya politiki
+322	Verisiyo yashyizweho
+323	Gutandukanya hakoreshejwe firewall
+324	Amakuru yakiriwe
+325	Dosiye yakuweho
+326	Igikorwa cyahagaritswe
+327	Uko utanga serivisi ahagaze
+328	Byanditswe
+329	Isuzuma ryarangiye
+330	Byigana
+331	Byavuye mu kato
+332	Biri mu kato
+333	Ibikorwa n'inyemezabwishyu
+334	Andika igisubizo
+335	Andika
+336	Gishobora gusubiza
+337	Inkomoko
+338	igikoresho
+339	konsole
+340	igerageza
+341	Bitangira iyo
+342	Byavuguruwe
+343	Isuzuma ryigenga
+344	Bitegereje
+345	Umupaka w'ububiko bwegeranye
+346	Ububiko bwegeranye bwahishwe
+347	Byasonewe
+348	Ntibigerwaho
+349	Umupaka w'igihe
+350	Ni binini cyane
+351	Imiterere idashyigikiwe
+352	Byahagaritswe
+353	Byacitswe
+354	Igice
+355	Igihe cyarangiye
+356	Ryuzuye
+357	Igihe bikenewe
+358	Ryihuse
+359	Gusubirana
+360	Ryateganyijwe
+361	Rigenewe
+362	Ongeraho igice
+363	ububiko bwegeranye
+364	Umutungo
+365	Hagarika iri suzuma? Ibyavuyemo kugeza ubu bibikwa nk'isuzuma ryahagaritswe.
+366	Ntibirinzwe
+367	Ibyabonetse
+368	Ibikoresho bikurikije uko birinzwe
+369	Moteri
+370	Igihe ntarengwa
+371	Ibimenyetso biheruka
+372	Igenzura ryitezwe
+373	Ikosora risabwa
+374	Ongera usuzume
+375	Umutungo cyangwa igice
+376	Ibyuho bifunguye
+377	Ibyavuye mu isuzuma mu minsi 30
+378	integuza kugeza ku ikumira ryemejwe
+379	ibikoresho birinzwe
+380	aho kugera rusange hafite ikumira ry'utanga serivisi wo hejuru
+381	ibyabaye kugeza ku integuza
+382	ibikoresho bifite ibisobanuro bigezweho
+383	ibikoresho byasuzumwe byuzuye mu minsi 7
+384	ibyuho bifunguye ([0] byakererewe, [1] byafunzwe mu minsi 30)
+385	ibice by'umuyoboro bigenzurwa
+386	ibyabonetse by'ukuri byemejwe
+387	isuzuma ryarangiye
+388	Aho bigera n'igisubizo
+389	Isuzuma ryuzuye riheruka
+390	Telemetry iheruka
+391	Buri gikoresho n'igice cy'umuyoboro birebwa, niba birinzwe, n'icyo gukosora gikurikiraho.
+392	Kugaragara k'umuyoboro
+393	Nta bikoresho biranditswe. Rinda mudasobwa uhereye kuri Ibikoresho.
+394	Nta byuho bifunguye.
+395	[0] bifunguye
+396	byakererewe
+397	p95 [0] s
+398	Ububiko
+399	Ububiko bwo gusuzuma, butandukanyijwe n'akitso
+400	Ihisha na firewall
+401	Ihisha rya disiki [0], firewall [1]
+402	Gusubirana nyuma y'ibyabaye
+403	Ongera urebe ubu
+404	Ntibyongeye gusuzumwa
+405	Isuzuma rya kabiri ryanze
+406	Byemejwe ko byafunzwe
+407	Ubwoko bw'isuzuma
+408	Isuzuma
+409	Igice
+410	Izina ry'igice
+411	Tangiza isuzuma
+412	Byatangiye
+413	Imiterere
+414	Byagabanutse
+415	Birinzwe
+416	Ntibirinzwe
+417	Ibikoresho bikurikije imiterere
+418	[0] bitazwi
+419	Nta kugaragara
+420	Bigenzurwa
+421	Kugaragara
+422	Kutagira ibyabonetse ntibihamya uburinzi: reba n'aho uburinzi bugera n'ibyavuye mu isuzuma.
+423	Ururimi
+424	Aho ubusemuzi bugeze
+425	Nta verisiyo ibanza
+426	Insanganyamatsiko
+427	Umwijima
+428	Itandukaniro rinini
+429	Urumuri
+430	Nta bitero bishya byabonetse mu madosiye [0].
+431	Igitero [0]
+432	Ibitero [0]
+433	 byabonetse mu madosiye [0]. Reba Integuza n'Ibyemezo kugira ngo ubisuzume.
+434	Isuzuma ryuzuye
+435	Ntibyashobotse kurinda iyi mudasobwa: [0]
+436	Iyi mudasobwa irarinzwe. Isuzuma ry'igihe nyacyo rikora igihe Agentic Antivirus ifunguye.
+437	Isuzuma ntiryarangiye: [0]
+438	Birasuzumwa…
+439	Birasuzuma buri disiki. Ibi bishobora gufata igihe kirekire.
+440	Birasuzuma Ibyamanuwe, Desktop n'amadosiye y'agateganyo…
+441	Amadosiye [0] ntiyashoboye gusomwa.
+442	Dosiye
+443	Ihuza ry'urubuga
+444	Emera amakuru y'igerageza
+446	Ibikorwa
+447	Ongeraho ihuzwa
+448	Ongeraho ibisonerwa
+449	Ongeraho ihuzwa
+450	Ongeraho isuzuma ryuzuye rya buri cyumweru
+451	umuyobozi
+452	Kwamamaza
+453	Uruhushya rwo kwamamaza
+454	Serivisi zagizweho ingaruka
+455	integuza mu masaha 24 ashize
+456	Emera
+457	Emera hanyuma usuzume
+458	Umuyobozi agomba gutanga impamvu. Ibisonerwa byandikwa mu mateka y'igenzura.
+459	Imeri
+460	Emeza gusubira mu kazi
+461	Kwemeza ibikorwa
+462	Umutungo
+463	umutungo uri mu ikumira rikora
+464	umutungo ufite integuza mu masaha 24
+465	Amateka y'igenzura
+466	Uburinzi bwikora bukomeza gukora kuri buri gikoresho. Ibi ni ibikorwa bikeneye ko umuntu afata icyemezo.
+467	Kuboneka
+468	Ibimenyetso biboneka
+469	Ububiko bw'inyongera bwemejwe
+470	Hagarika
+471	Mu buryo busanzwe intumwa yohereza telemetry y'umutekano na hash z'amadosiye: amazina y'ibikorwa n'imirongo y'amabwiriza, inzira z'amadosiye, amakuru y'ihuza ry'umuyoboro, n'ibyabonetse. Ibikubiye mu madosiye bikusanywa gusa iyo ikigo cyawe kibifunguye.
+472	Ubushobozi
+473	Icyiciro
+474	Byahinduwe
+475	Kwishyuza
+476	Reba
+477	hitamo
+478	Hitamo igikoresho
+480	Funga
+481	Bitandukanyijwe n'akitso
+482	Twandikire
+483	Igenzura
+484	Aho bigera bikurikije urwego rw'uburinzi
+485	bikomeye cyane
+486	igezwaho ry'integuza zikomeye (p95, iminsi 30)
+487	Ibyemezo bitegereje
+488	Anga
+489	Ibisobanuro
+490	Sobanura ibyabaye
+491	Ibisobanuro birambuye
+492	Ibisobanuro birambuye
+493	Ibyabonetse
+494	Igikoresho gihabwa uruhushya
+495	ibikoresho birinzwe byuzuye
+496	ibikoresho byatandukanyijwe
+497	Ibikoresho bikeneye kwitabwaho
+498	Icyerekezo
+499	Akarere ka DNS
+500	urupapuro rwo kumanura
+501	Mu gihe cy'igerageza ry'ubuntu, no ku migambi itishyuwe, konsole yerekana kwamamaza kwa Google AdSense naho porogaramu za telefone zigaragaza kwamamaza kwa Google AdMob, nyuma yo kugusaba uruhushya. Abafite ifatabuguzi babona kwamamaza kugabanutse ku kigero cya 95%. Kwamamaza ntikugera kugaragara ku mapaji y'ibyemezo, ikumira, integuza z'ibitero, isuzuma ry'akato, kwinjira, kwishyura cyangwa igenzura.
+502	Buri gutangaza bikora verisiyo nshya isinyiwe. Ibikoresho bikomeza gukurikiza verisiyo iheruka yemejwe igihe bitari kuri murandasi.
+503	Andikira ubufasha kuri
+504	Aho kugera
+505	Equality Software Ltd ni yo ikoresha Agentic Antivirus. Uru rupapuro rusobanura ibyo serivisi ikusanya. Rugomba gusuzumwa na nyir'igicuruzwa mbere yo gutangazwa.
+506	Buri gikorwa gihindura igikoresho, konti cyangwa urujya n'uruza kinyura muri moteri ya politiki n'imiyoborere ya AEP-X. Icyemezo kireba igikorwa kimwe, ibigenderewe byacyo nyabyo, iki kigo, n'igihe cyagenwe.
+507	Buri cyoherejwe gisuzumwa niba kirimo malware n'ubwoko bwacyo nyabwo. Amadosiye adafite igaragaza ryemejwe arabikwa kandi ashobora kumanurwa ariko ntagaragazwa mbere.
+508	Irengayobora
+509	Ibisonerwa
+510	Inzira y'ububiko
+511	ku busabe bwo kugera ku makuru cyangwa kuyakosora.
+512	Ibyuho
+513	Bona intumwa ya Windows, Mac cyangwa Linux kuri
+514	Jya kuri Ibikoresho, uhitemo Andikisha igikoresho, hanyuma ukore itegeko rigaragara kuri mudasobwa ushaka kurinda. Intumwa itangira gusuzuma ikimara kwakira politiki yayo isinyiwe.
+515	Ubuzima
+516	Amateka
+517	Izina rya host
+518	Ndumva ko ibikoresho bizahagarika gusuzuma no guhagarika ibitero nyuma y'igerageza kugeza ifatabuguzi ryishyuwe.
+519	Ingaruka
+520	Injiza zip cyangwa tar
+521	Icyabaye
+522	Shyiramo moderi y'ururimi (niba ikigo cyawe cyayifunguye)
+523	Aderesi ya IP
+524	Injira
+525	Injira mu kigo cyawe
+526	Malware izwi ijyanwa mu kato, aho idashobora gukora. Niba utekereza ko dosiye yahagaritswe ku bw'ikosa, fungura Akato hanyuma usabe isuzuma. Umuyobozi ni we ufata icyemezo, kandi dosiye igaruka gusa nyuma y'uko isuzuma rishya risanze isukuye.
+527	Indimi zidafite ubusemuzi bwuzuye zigaragaza Icyongereza. Aho ubusemuzi bugeze harapimwa, ntihakekwa.
+528	Byahinduwe bwa nyuma
+529	Urwego
+530	Intsinzi y'ubusabe bwemewe
+531	Amategeko y'uruhushya
+532	Ihuza, niba rihari
+533	Host z'ubuyobozi zikomeza kugerwaho mu gihe cy'itandukanywa
+534	Shyiraho ko ari integuza y'ikinyoma
+535	Urwego rw'ubukure
+536	Ikumira
+537	Izina
+538	Izina ry'ibanga mu bubiko bwawe bw'amabanga, si ibanga ubwaryo
+539	Nta bikorwa bitegereje.
+540	Nta byabaye bifunguye.
+541	Nta na kimwe.
+542	Nta byatangajwe.
+543	ntibyashyizweho
+544	Bimenyeshwa nyuma ya
+545	by'ukwamamaza kwerekanwa
+546	Ububiko bw'ibyabaye utari kuri murandasi (MB)
+547	Kuri Android, fata ifatabuguzi muri porogaramu ya Agentic Antivirus binyuze kuri Google Play. Kuri iPhone na iPad, ifatabuguzi rya App Store ntiriraboneka. Kwishyura kuri murandasi ntibiraboneka.
+548	Fungura icyabaye
+549	ibyabaye bifunguye
+550	Ibyabaye bifunguye
+551	Gutinda kwa p95
+552	byishyuwe kugeza
+553	Imiterere y'inzira
+554	Abantu
+555	Kuri buri gikoresho
+556	Kuri buri mukoresha (bireba ibikoresho bye byose)
+557	Igaragaza
+558	Iby'ibanze
+560	Rinda igikoresho
+561	Porotokole
+562	Utanga serivisi
+563	Integuza z'utanga serivisi (amasaha 24)
+564	Aho kugera rusange
+565	Tangaza verisiyo ya politiki
+566	Tangaza verisiyo isinyiwe
+567	Byatangajwe
+568	Isuzuma ryihuse
+569	Gusoma mu ijwi no kwandika ukoresheje ijwi bikoresha ibiranga imvugo byubatswe muri mushakisha yawe. Ntitwandika cyangwa ngo tubike amajwi.
+570	Byakiriwe
+571	Ibikoresho bibika bikurwamo
+572	Kuraho
+573	Byasabwe
+574	Byasabwe na
+575	Igihe cyo kubika
+576	Gusubira mu kazi
+577	Ubu nonaha
+578	Ibyago
+579	Inshingano
+580	Subiza inyuma
+581	Bika aho kugera
+582	Bika amategeko y'uruhushya
+583	Suzuma
+584	Gahunda (cron)
+585	Isuzuma ryateganyijwe
+586	Indango y'ibanga
+587	Ohereza ubutumire
+588	Ohereza raporo
+589	Ohereza ihuza ryo guhindura
+590	Serivisi
+591	Intego za serivisi
+594	Ikimenyetso
+595	Ingano
+596	Ikindi kintu
+597	Tondeka
+598	Intambwe
+599	Guhagarika ibikorwa, gutandukanya ibikoresho, kugarura amadosiye, kongeraho ibisonerwa no guhindura amategeko y'urujya n'uruza bikeneye ko umuntu abyemeza. Icyemezo kireba igikorwa kimwe, ibigenderewe byacyo nyabyo n'igihe gito cyagenwe. Niba hari ikintu gihindutse, ongera wemeze.
+600	Fata ifatabuguzi kuri iki gikoresho ukoresheje Google Play
+601	uko ifatabuguzi rihagaze
+603	Sisitemu
+604	Ikigenderewe
+605	Umufasha wa AI
+606	Umufasha ahuriza hamwe integuza zifitanye isano, agashyira ku rutonde ibyagaragaye n'amahuza ajya ku bimenyetso, kandi agashyira nk'igitekerezo icyo ari cyo cyose adashobora guhamya. Ashobora gusaba ibikorwa ariko ntashobora kubyemeza. Niba moderi itaboneka, isuzuma, integuza n'ibisubizo bikozwe n'intoki bikomeza gukora.
+607	Iyi mudasobwa
+608	TLS gusa, igomba kuba ku rutonde rwemewe rwo gusohoka
+609	Imyuzure y'urujya n'uruza yakirwa n'utanga serivisi wawe wo hejuru. Hano ubarura buri aho kugera rusange, ugenzura integuza z'utanga serivisi, kandi ukemeza imipaka mishya y'urujya n'uruza.
+610	Imipaka y'urujya n'uruza
+611	Byasemuwe
+612	Imyanda
+613	iminsi y'igerageza isigaye
+614	Fungura uburinzi kugira ngo usuzume amadosiye kuri iyi mudasobwa kandi ugenzure ransomware n'ubujura bw'ibyangombwa byo kwinjira.
+615	ntibirinzwe
+616	Kuraho impinduka iheruka
+617	Umukoresha
+618	Emeza imeri
+619	bitegereje icyemezo
+620	Twerekana kwamamaza kwa Google AdSense ku mapaji amwe. Wemera kwamamaza kugenewe wowe?
+621	Webhook:
+622	Ibyo ibikoresho byohereza
+623	Ni iki?
+624	Ryari
+625	Iyo hari igihagaritswe
+626	Iyo igerageza rirangiye nta kwishyura
+627	Nde
+628	Ushobora gusiba konti yawe uhereye ku mwirondoro wawe. Andikira
+629	Izina ryawe
+630	Ikigo cyawe kibona igerageza ry'ubuntu ry'iminsi 30. Nyuma y'aho bigura £4,99 ku kwezi kuri buri mukoresha cyangwa igikoresho.
+631	Ikigo cyawe ni cyo kigena igihe telemetry n'ibimenyetso bibikwa. Inyandiko z'igenzura ntizishobora guhindurwa cyangwa gusibwa.
+632	Uburenganzira bwawe
+633	Vuga wandike
+634	Wemera ikoreshwa rya mikoro kugira ngo wandike ukoresheje ijwi? Amajwi atunganywa na mushakisha yawe kandi ntitwayabika.
+635	Ijwi risohoka
+636	Hagarara gato
+637	Ubutumburuke bw'ijwi
+638	Komeza
+639	Umuvuduko
+640	Hagarika
+641	Nta jwi riboneka kuri uru rurimi.
+642	Ijwi
+643	Dosiye yajyanywe mu kato kandi ntishobora gukora.
+644	Igitero cyahagaritswe kuri iki gikoresho.

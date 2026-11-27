@@ -1,0 +1,637 @@
+0	Lumaktaw sa pangunahing nilalaman
+1	Magdagdag ng permanenteng pagbubukod
+2	Maglapat ng paghihigpit sa trapiko
+3	Mangalap ng metadata ng aparato
+4	Ihiwalay ang aparato sa network
+5	Ikuwarentenas ang talaksan
+6	Alisin ang aparato sa pagkakahiwalay
+7	Ibalik ang talaksang nakakuwarentenas
+8	Ilabas ang gumagamit sa lahat ng lugar
+9	Bawiin ang paghihigpit sa trapiko
+10	Bawiin ang pag-update
+11	Suriin ang mga aparato
+12	Suspindihin ang account ng gumagamit
+13	Ihinto ang proseso
+14	Aprubahan
+15	Tanggihan
+16	Ipadala sa mga aparato
+17	Mawawalan ng bisa ang pag-apruba [0]
+18	Iminungkahi ng AI na katuwang
+19	Patalastas
+20	Aksyon
+21	Mga ahente
+22	Magtanong
+23	Magtanong sa katuwang sa seguridad
+24	Ang mga sagot ay mula sa iyong mga aparato, mga bukas na insidente at mga kakulangan. Walang mababago ang katuwang.
+25	Batay sa
+26	Inalis ang [0] pahayag na walang katibayan
+27	Inalis ang [0] pahayag na walang katibayan
+29	Modelong sariling-host
+30	Mga tuntunin (walang modelo)
+31	Bumuo ng plano sa pag-aayos
+32	Ang bawat hakbang ay isang mungkahi. Walang tatakbo hangga't walang nag-aapruba.
+33	Tanong
+34	Halimbawa: aling mga aparato ang kailangang asikasuhin?
+35	Iminumungkahing kalubhaan
+36	Buod
+37	Mga puntirya
+38	Ibuod ang insidenteng ito
+39	Bakit
+40	Natuklasan
+41	Iulat ang kahina-hinalang bagay
+42	Tuntunin
+43	Kalubhaan
+44	Babala
+46	Magdagdag ng mga talaksan
+47	Magdagdag ng folder
+48	Magdagdag ng mga larawan
+49	[0] kalakip
+50	[0] kalakip
+51	Mga kalakip
+52	Kumuha ng litrato
+53	Hindi pinahintulutan ang paggamit ng kamera. Pahintulutan ito sa iyong browser, o gamitin ang app ng kamera ng iyong aparato.
+54	Silip ng kamera
+55	Hindi mabuksan ng browser na ito ang kamera dito.
+56	Kunan
+57	Isara ang katuwang
+58	Ano ang mga talaksang ito, at ligtas ba ang mga ito?
+59	Talaksan
+60	Magtanong tungkol sa iyong seguridad, o maglakip ng mga talaksan, folder, larawan o litrato mula sa kamera. Sinusuri muna ang bawat kalakip at walang iniimbak.
+61	[0] larawan ang
+62	[0] larawan ang
+63	 inilarawan ng modelo.
+64	Halimbawa: ligtas ba ang dina-download na ito?
+65	Ang malinis na teksto at mga larawan ay maaaring ipadala sa AI na modelong pinagana ng iyong organisasyon. Hindi kailanman ipinapadala ang mga mapaminsalang talaksan.
+66	Hindi naidagdag ang [0] talaksan
+67	Hindi naidagdag ang [0] talaksan
+68	: hanggang [0] talaksan, [1] MB bawat isa at [2] MB sa kabuuan.
+69	Alisin ang [0]
+70	Suriin at magtanong
+71	Mga resulta ng pagsusuri
+72	Uri
+73	Gamitin ang kamera ng aparato
+74	Resulta
+75	Walang kilalang malware
+76	Mapaminsala
+77	Hindi nasuri
+78	Sira ang kadena ng pag-audit sa tala [0].
+79	Buo ang kadena ng pag-audit: [0] tala ang napatunayan.
+80	Email address
+81	Nakalimutan ang password?
+82	Mag-sign in gamit ang Google
+83	Hindi gumana ang pag-sign in sa Google. Subukang muli, o gamitin ang iyong email at password.
+84	Mag-sign in
+85	Mag-sign out
+86	Bagong password
+87	o
+88	Organisasyon
+89	Lihim na salita
+90	Napalitan ang password. Mag-sign in gamit ang bago mong password.
+91	Hindi bababa sa 12 titik.
+92	Gumawa ng account
+93	Ipadala muli ang link
+94	Kung kailangan pang kumpirmahin ang account na iyon, may bagong link na papunta. Tingnan din ang iyong folder ng spam.
+95	I-reset ang password
+96	Kung may account na gumagamit ng address na iyon, nagpadala kami ng link para sa pag-reset. Gumagana ito nang isang oras.
+97	Kumpirmahin ang iyong email address bago ka mag-sign in. Buksan ang link na ipinadala namin sa [0].
+98	Napatunayan ang email. Maaari ka nang mag-sign in.
+99	Nawalan na ng bisa o nagamit na ang link na ito. Mag-sign in para makakuha ng bago.
+100	Tingnan ang iyong email para patunayan ang iyong address.
+101	Binabawasan ng suskripsyon ang mga patalastas nang 95%.
+102	Tapos na ang iyong panahon ng pagsubok.
+103	Naka-subscribe hanggang [0]
+104	Panatilihing libre ang lahat na may buong patalastas
+105	Ihinto ang lahat, kasama ang proteksyon ng aparato, hanggang may magbayad
+106	Kailangan ng suskripsyon ang konsol; mananatiling protektado ang mga aparato
+107	£4.99 bawat buwan
+108	Mag-subscribe
+109	Libreng pagsubok:
+110	[0] araw na lang
+111	[0] araw na lang
+112	Kanselahin
+113	Burahin
+114	May nangyaring mali.
+115	Iluwas
+116	Naglo-load…
+117	Wala
+118	Hindi kailanman
+119	Susunod
+120	hindi
+121	Walang maipapakita.
+122	nakapatay
+123	nakabukas
+124	Nakaraan
+125	I-refresh
+126	I-save
+127	Maghanap
+128	Simulasyon (pansubok na datos)
+129	Katayuan
+130	Hindi magagamit
+131	Hindi alam
+132	Na-update [0]
+133	Ginagawa…
+134	oo
+135	[0] babala sa loob ng 24 oras
+136	[0] babala sa loob ng 24 oras
+137	[0] aparato
+138	[0] aparato
+139	Datos hanggang [0]
+140	[0] bukas na insidente
+141	[0] bukas na insidente
+142	[0] pag-apruba ang naghihintay
+143	[0] pag-apruba ang naghihintay
+144	kumpirmado
+145	pinaghihinalaan
+146	Magpatala ng aparato
+147	Aparato
+148	Hindi nag-uulat
+149	Lumang patakaran
+150	Nakapatay ang sensor
+151	Lumang mga kahulugan
+152	Mga isyu
+153	Huling nakita
+154	Sistemang pang-operasyon
+155	Patakaran
+156	Patakbuhin sa aparato sa loob ng 24 oras (isang beses gamitin):
+157	Proteksyon
+158	Kopyahin
+159	I-download
+160	Ilipat
+161	Bagong folder
+162	Palitan ang pangalan
+163	Ibalik
+164	Ilipat sa basurahan
+165	I-upload
+166	Tulong
+167	[0] teksto sa pahinang ito ang isinalin ng makina at hindi pa nasusuri.
+168	[0] teksto sa wikang ito ang isinalin ng makina at hindi pa nasusuri.
+169	Hindi pa naisasalin ang wikang ito, kaya Ingles ang ipinapakita.
+170	inaprubahan
+171	Mga naobserbahang katotohanan
+172	Mga palagay (hindi kumpirmado)
+173	Palagay, [0] katiyakan: [1]
+174	Simulan ang pagsisiyasat
+175	Kulang na katibayan
+176	Kulang: [0]
+177	Basahin nang malakas
+178	Mga inirerekomendang aksyon
+179	Takdang-panahon ng katibayan
+180	papasok na webhook
+181	Mga hudyat mula sa iyong tagapagbigay ng pagkakakilanlan, DNS, firewall at iba pang kasangkapan. Ang mga bagong pagsasama ay nagsisimula bilang hindi magagamit; tanging ang adapter ng tagapagbigay na pumasa sa pagsubok ng kontrata nito ang maaaring markahang aktibo. Ang pansubok na datos ay may tatak na simulasyon saanman ito lumabas.
+182	Hindi nakakonekta (pansamantala)
+183	Pansubok na datos lamang
+184	Hindi magagamit
+185	Aktibo (napatunayan)
+186	Lihim (isang beses ipinapakita):
+187	Mga pag-apruba
+188	Mga babala
+189	Pag-audit
+190	Suskripsyon
+191	Pangunahing tanaw
+192	DDoS at pagiging magagamit
+193	Mga aparato
+194	Mga talaksan
+195	Mga insidente
+196	Mga pagsasama
+197	Mga patakaran
+198	Pagkapribado
+199	Kuwarentenas
+200	Pagtugon
+201	Seguridad
+202	Mga setting
+203	Awtomatikong ikuwarentenas ang kilalang malware
+204	Bantayan ang kahina-hinalang gawi
+205	Harangin ang mga kahina-hinalang script
+206	Kolektahin ang nilalaman ng talaksan para sa pagsisiyasat (nakapatay bilang default)
+207	Payagan ang paghihiwalay sa network
+208	Suriin ang mga talaksan kapag binuksan o isinulat
+209	Suriin ang mga dina-download
+210	Suriin ang mga programa kapag nagsimula
+211	Protektahan ang ahente mula sa mga pagbabago
+212	Magbabala tungkol sa kilalang mapaminsalang link
+213	Dahilan
+214	Humiling ng pagsusuri
+215	Ibalik pagkatapos ng bagong pagsusuri
+216	panggitnang oras hanggang sa napatunayang pag-alis (n=[0], hindi nalutas [1])
+217	mga pag-aayos na pumasa sa muling pagsubok
+218	pag-ulit pagkatapos ng pagbawi
+219	napatunayang pag-alis ng virus
+220	ligtas na pagbabalik sa serbisyo
+221	tapos na ang mga pagsusuri sa pagbawi
+222	Ang mga resultang kuwarentenas lamang ([0]) at mga aparatong muling inilagay ang imahe ([1]) ay hiwalay na binibilang; ang kuwarentenas lamang ay hindi kailanman binibilang bilang pag-alis.
+223	[0] oras
+224	[0] minuto
+225	[0] segundo
+226	Naghihintay ng pag-apruba
+227	Katibayan sa produksyon
+228	Itala kung ano ang napatunayan sa produksyon, sa aling mga ari-arian, at sa aling bersyon. Hindi mababago ang mga tala.
+229	Bersyon
+230	Palitan ang moda
+231	walang katibayan
+232	nabigo
+233	pumasa
+234	nakabinbin
+235	Tingnan ang pag-usad ng gabay sa pagtugon
+236	Mga aparatong kayang tumugon
+237	Lahat ng aparato
+238	[0] pansubok na aparato
+239	[0] pansubok na aparato
+240	Kumpleto
+241	Kumpleto kapag
+242	Pagsasanay
+243	Obserbahan
+244	Tumugon
+245	Saklaw
+246	[0] naobserbahan, [1] kayang tumugon
+247	Datos
+248	Edad ng datos
+249	Aktibo
+250	Pansubok na datos
+251	hindi naisagawa
+252	resibo
+253	isinasagawa
+254	hindi alam
+255	Ipadala
+256	Katibayan
+257	Tumakbo ito
+258	Luma na
+259	Mga daloy ng datos
+260	Bersyon o digest
+261	Kapaligiran
+262	Kinalabasan
+263	May-ari
+264	Kinakailangan
+265	Ari-arian o pangkat
+266	Ipakita
+267	Lahat
+268	Hindi kumpleto
+269	Nakabukas para sa buong serbisyo
+270	Nakabukas para sa organisasyong ito
+271	Ihinto ang bawat bagong aksyon sa pagtugon para sa organisasyong ito? Patuloy na gagana ang proteksyon at pagsusuri.
+272	Payagan muli ang mga aksyon sa pagtugon
+273	Ihinto ang lahat ng aksyon sa pagtugon
+274	Pang-emerhensiyang pamatay
+275	Uri
+276	Panggitnang minutong bukas ([0] bukas, pinakaluma [1] minuto)
+277	Mga pagtanggi ng patakaran
+278	Mga pagsasanay at simulasyon (hindi kasama sa itaas)
+279	Mga inulit na aksyon (layunin 0)
+280	Panggitnang antala ng daloy (p95 [0] segundo, n=[1])
+281	Mga pag-aprubang lampas sa oras ([0] naghihintay, layunin [1] minuto)
+282	Panggitna mula hudyat hanggang pag-uuri (p95 [0] minuto, n=[1], [2] hindi pa nauuri)
+283	Mga aksyong malayang napatunayan ([0]/[1])
+284	Panahon: [0]. Ang resibo lamang ay hindi kailanman binibilang bilang napatunayan. Ang kulang na datos ay ipinapakitang hindi magagamit.
+285	Mga sukatan ng pagtugon
+286	Huling pangyayari
+287	Nagmumungkahi ang mga ahente; isang nakapirming patakaran ang nagpapasya kung ano ang tatakbo. Ipinapakita ng bawat aksyon ang pag-apruba, resibo at malayang pagsusuri nito.
+288	Yugto
+289	Naghihintay ng pag-apruba
+290	Tinanggihan
+291	Nawalan ng bisa
+292	Nabigo
+293	Kailangan ng manwal na pagtutugma
+294	Iminungkahi
+295	Nakapila
+296	Tumatakbo
+297	Nakabinbin ang pagpapatunay
+298	Napatunayan
+299	Kasalukuyang kalagayan
+300	Moda
+301	Simulasyon
+302	Tumatakbo ang mga pagsusuri at pangangalap ng datos. Mananatiling mungkahi ang ibang aksyon.
+303	Tumatakbo ang mga inaprubahang aksyon sa mga napiling aparato.
+304	Tumatakbo lamang ang mga aksyon sa mga pansubok na adapter. Walang magbabago sa iyong mga aparato.
+305	Wala pang aksyon.
+306	Walang naghihintay ng pag-apruba.
+307	Wala pang naitalang katibayan sa produksyon.
+308	Wala pang aparato o pagsasamang nagpapadala ng datos.
+309	Hindi ito tumakbo
+310	Naobserbahan
+311	Ano ang nangyari
+312	Pagtugon sa DDoS
+313	Maling positibo at pagbabalik
+314	Pagkakakilanlan, phishing at kahina-hinalang trapiko
+315	Malware at kahina-hinalang dina-download
+316	Tanaw sa network at kalagayan ng aparato
+317	Pagbawi pagkatapos ng pagkakompromiso
+318	Ransomware o pinaghihinalaang pagkakompromiso
+319	Gabay sa pagtugon
+320	Mga gabay sa pagtugon
+321	Bersyon ng patakaran
+322	Naka-install na bersyon
+323	Paghihiwalay sa firewall
+324	Natanggap ang datos
+325	Inalis ang talaksan
+326	Inihinto ang proseso
+327	Kalagayan ng tagapagbigay
+328	Naitala
+329	Tapos na ang pagsusuri
+330	Ginaya
+331	Labas sa kuwarentenas
+332	Nasa kuwarentenas
+333	Mga aksyon at resibo
+334	Itala ang kinalabasan
+335	Itala
+336	Kayang tumugon
+337	Pinagmulan
+338	aparato
+339	konsol
+340	simulasyon
+341	Nagsisimula kapag
+342	Na-update
+343	Malayang pagsusuri
+344	Naghihintay
+345	Hangganan ng archive
+346	Naka-encrypt na archive
+347	Hindi kasama
+348	Hindi mabuksan
+349	Hangganan sa oras
+350	Masyadong malaki
+351	Hindi suportadong anyo
+352	Kinansela
+353	Nalampasan
+354	Bahagya
+355	Naubusan ng oras
+356	Buo
+357	Kapag kailangan
+358	Mabilis
+359	Pagbawi
+360	Nakatakda
+361	Tiyak na puntirya
+362	Magdagdag ng bahagi
+363	mga archive
+364	Mga ari-arian
+365	Ihinto ang pagsusuring ito? Ang mga resulta sa ngayon ay itatago bilang kinanselang pagsusuri.
+366	Hindi saklaw
+367	Mga natuklasan
+368	Mga aparato ayon sa kalagayan ng proteksyon
+369	Makina
+370	Takdang petsa
+371	Huling katibayan
+372	Inaasahang kontrol
+373	Iminungkahing pag-aayos
+374	Muling subukan
+375	Ari-arian o bahagi
+376	Mga bukas na kakulangan
+377	Mga resulta ng pagsusuri sa 30 araw
+378	babala hanggang napatunayang pagpigil
+379	mga protektadong aparato
+380	mga pampublikong dulong punto na may pagpapagaan mula sa itaas
+381	pangyayari hanggang babala
+382	mga aparatong may kasalukuyang mga kahulugan
+383	mga aparatong may buong pagsusuri sa loob ng 7 araw
+384	mga bukas na kakulangan ([0] lampas sa oras, [1] naisara sa loob ng 30 araw)
+385	mga binabantayang bahagi ng network
+386	mga kumpirmadong tunay na positibo
+387	mga natapos na pagsusuri
+388	Saklaw at pagtugon
+389	Huling buong pagsusuri
+390	Huling telemetry
+391	Bawat aparato at bahagi ng network na saklaw, kung protektado ito, at ano ang susunod na aayusin.
+392	Tanaw sa network
+393	Wala pang nakatalang aparato. Protektahan ang kompyuter mula sa Mga aparato.
+394	Walang bukas na kakulangan.
+395	[0] bukas
+396	lampas sa oras
+397	p95 [0] segundo
+398	Mga folder
+399	Mga folder na susuriin, pinaghihiwalay ng kuwit
+400	Encryption at firewall
+401	Encryption ng disk [0], firewall [1]
+402	Pagbawi pagkatapos ng mga insidente
+403	Suriin muli ngayon
+404	Hindi pa muling nasubok
+405	Nabigo ang muling pagsubok
+406	Napatunayang sarado
+407	Uri ng pagsusuri
+408	Mga pagsusuri
+409	Bahagi
+410	Pangalan ng bahagi
+411	Simulan ang pagsusuri
+412	Sinimulan
+413	Kalagayan
+414	Humina
+415	Protektado
+416	Hindi protektado
+417	Mga aparato ayon sa kalagayan
+418	[0] hindi alam
+419	Walang tanaw
+420	Binabantayan
+421	Tanaw
+422	Ang kawalan ng natuklasan ay hindi patunay ng proteksyon: tingnan din ang saklaw at mga resulta ng pagsusuri.
+423	Wika
+424	Saklaw ng pagsasalin
+425	Walang naunang bersyon
+426	Tema
+427	Madilim
+428	Mataas na kaibahan
+429	Maliwanag
+430	Walang nakitang bagong banta sa [0] talaksan.
+431	[0] banta
+432	[0] banta
+433	 ang nakita sa [0] talaksan. Tingnan ang Mga babala at Mga pag-apruba para suriin ang mga ito.
+434	Buong pagsusuri
+435	Hindi maprotektahan ang kompyuter na ito: [0]
+436	Protektado ang kompyuter na ito. Tumatakbo ang pagsusuri sa totoong oras habang bukas ang Agentic Antivirus.
+437	Hindi natapos ang pagsusuri: [0]
+438	Sinusuri…
+439	Sinusuri ang bawat drive. Maaaring matagal ito.
+440	Sinusuri ang Downloads, Desktop at mga pansamantalang talaksan…
+441	[0] talaksan ang hindi mabasa.
+442	Isang talaksan
+443	Link ng website
+444	Tanggapin ang pansubok na datos
+446	Mga aksyon
+447	Magdagdag ng pagsasama
+448	Magdagdag ng pagbubukod
+449	Magdagdag ng pagsasama
+450	Magdagdag ng lingguhang buong pagsusuri
+451	tagapangasiwa
+452	Pag-aanunsyo
+453	Pahintulot sa pag-aanunsyo
+454	Mga apektadong serbisyo
+455	mga babala sa nakaraang 24 oras
+456	Payagan
+457	Payagan at suriin
+458	Kailangang magbigay ng dahilan ang tagapangasiwa. Itinatala ang pagbubukod sa talaan ng pag-audit.
+459	Isang email
+460	Aprubahan ang pagbabalik sa serbisyo
+461	Pag-apruba ng mga aksyon
+462	Ari-arian
+463	mga ari-ariang nasa aktibong pagpapagaan
+464	mga ari-ariang may babala sa loob ng 24 oras
+465	Talaan ng pag-audit
+466	Patuloy na gumagana ang awtomatikong proteksyon sa bawat aparato. Ito ang mga aksyong kailangang pagpasyahan ng isang tao.
+467	Pagiging magagamit
+468	Mga magagamit na hudyat
+469	Napatunayan ang backup
+470	Harangin
+471	Bilang default, nagpapadala ang ahente ng telemetry sa seguridad at mga hash ng talaksan: mga pangalan ng proseso at linya ng utos, mga landas ng talaksan, metadata ng koneksyon sa network, at mga natuklasan. Kinokolekta lamang ang nilalaman ng talaksan kung bubuksan ito ng iyong organisasyon.
+472	Kapasidad
+473	Kategorya
+474	Binago
+475	Singil
+476	Suriin
+477	pumili
+478	Pumili ng aparato
+480	Isara
+481	Pinaghihiwalay ng kuwit
+482	Makipag-ugnayan
+483	Kontrol
+484	Saklaw ayon sa antas ng proteksyon
+485	kritikal
+486	paghahatid ng kritikal na babala (p95, 30 araw)
+487	Mga pasyang naghihintay
+488	Tanggihan
+489	Mga kahulugan
+490	Ilarawan ang nangyari
+491	Detalye
+492	Mga detalye
+493	Pagtuklas
+494	Aparatong bibigyan ng lisensya
+495	mga ganap na protektadong aparato
+496	mga nakahiwalay na aparato
+497	Mga aparatong kailangang asikasuhin
+498	Direksyon
+499	Sona ng DNS
+500	pahina ng pag-download
+501	Sa panahon ng libreng pagsubok, at sa mga planong hindi bayad, nagpapakita ang konsol ng mga patalastas ng Google AdSense at ang mga mobile app ay nagpapakita ng mga patalastas ng Google AdMob, pagkatapos humingi ng iyong pahintulot. Ang mga naka-subscribe ay nakakakita ng 95% na mas kaunting patalastas. Hindi kailanman lumalabas ang mga patalastas sa mga screen ng pag-apruba, pagpigil, babala sa banta, pagsusuri ng kuwarentenas, pag-sign in, pagbabayad o pag-audit.
+502	Ang bawat paglalathala ay lumilikha ng bagong bersyong may lagda. Patuloy na ipinapatupad ng mga aparato ang huling napatunayang bersyon habang walang koneksyon.
+503	Mag-email sa suporta sa
+504	Dulong punto
+505	Ang Equality Software Ltd ang nagpapatakbo ng Agentic Antivirus. Inilalarawan ng pahinang ito kung ano ang kinakalap ng serbisyo. Dapat itong suriin ng may-ari ng produkto bago ilathala.
+506	Ang bawat aksyong nagbabago ng aparato, account o trapiko ay dumadaan sa makina ng patakaran at pamamahala ng AEP-X. Saklaw ng isang pag-apruba ang isang aksyon, ang eksaktong mga puntirya nito, ang organisasyong ito, at isang takdang oras.
+507	Sinusuri ang bawat upload para sa malware at sa tunay nitong uri. Ang mga talaksang walang napatunayang pantingin ay iniimbak at nada-download ngunit hindi sinisilip.
+508	Eksepsiyon
+509	Mga pagbubukod
+510	Landas ng folder
+511	para sa mga kahilingan sa pag-access o pagwawasto.
+512	Mga kakulangan
+513	Kunin ang ahente para sa Windows, Mac o Linux mula sa
+514	Pumunta sa Mga aparato, piliin ang Magpatala ng aparato, at patakbuhin ang ipinapakitang utos sa kompyuter na gusto mong protektahan. Magsisimulang magsuri ang ahente sa sandaling matanggap nito ang patakarang may lagda nito.
+515	Kalusugan
+516	Kasaysayan
+517	Pangalan ng host
+518	Nauunawaan ko na titigil ang mga aparato sa pagsusuri at pagharang ng mga banta pagkatapos ng pagsubok hangga't hindi nababayaran ang suskripsyon.
+519	Epekto
+520	Mag-angkat ng zip o tar
+521	Insidente
+522	Isama ang modelo ng wika (kung may pinagana ang iyong organisasyon)
+523	Address ng IP
+524	Sumali
+525	Sumali sa iyong organisasyon
+526	Inililipat sa kuwarentenas ang kilalang malware, kung saan hindi ito makakatakbo. Kung sa tingin mo ay naharang ang isang talaksan nang hindi sinasadya, buksan ang Kuwarentenas at humiling ng pagsusuri. Isang tagapangasiwa ang magpapasya, at babalik lamang ang talaksan pagkatapos itong makitang malinis ng bagong pagsusuri.
+527	Ang mga wikang walang kumpletong salin ay babalik sa Ingles. Sinusukat ang saklaw, hindi tinatantya.
+528	Huling binago
+529	Antas
+530	Tagumpay ng lehitimong kahilingan
+531	Mga tuntunin sa lisensya
+532	Link, kung mayroon
+533	Mga host ng pamamahala na naaabot habang nakahiwalay
+534	Markahan bilang maling positibo
+535	Kahinugan
+536	Pagpapagaan
+537	Pangalan
+538	Pangalan ng lihim sa iyong imbakan ng lihim, hindi kailanman ang lihim mismo
+539	Walang naghihintay na aksyon.
+540	Walang bukas na insidente.
+541	Wala.
+542	Walang naiulat.
+543	hindi nakatakda
+544	Naabisuhan pagkatapos ng
+545	ng mga patalastas na ipinakita
+546	Imbakan ng mga pangyayari habang walang koneksyon (MB)
+547	Sa Android, mag-subscribe sa app ng Agentic Antivirus sa pamamagitan ng Google Play. Sa iPhone at iPad, hindi pa magagamit ang mga suskripsyon sa App Store. Hindi pa magagamit ang pagbabayad sa web.
+548	Bukas na insidente
+549	mga bukas na insidente
+550	Mga bukas na insidente
+551	Antala sa p95
+552	bayad hanggang
+553	Padron ng landas
+554	Mga tao
+555	Bawat aparato
+556	Bawat gumagamit (saklaw ang lahat ng kanilang aparato)
+557	Silipin
+558	Pangunahin
+560	Protektahan ang aparato
+561	Protokol
+562	Tagapagbigay
+563	Mga babala ng tagapagbigay (24 oras)
+564	Mga pampublikong dulong punto
+565	Ilathala ang bersyon ng patakaran
+566	Ilathala ang bersyong may lagda
+567	Nailathala
+568	Mabilis na pagsusuri
+569	Ang pagbasa nang malakas at pagdidikta ay gumagamit ng mga katangiang pampananalita na nakapaloob sa iyong browser. Hindi kami nagrerekord o nag-iimbak ng tunog.
+570	Natanggap
+571	Natatanggal na imbakan
+572	Alisin
+573	Hiniling
+574	Hiniling ni
+575	Pagpapanatili
+576	Ibalik sa serbisyo
+577	Ngayon mismo
+578	Panganib
+579	Tungkulin
+580	Bawiin
+581	I-save ang dulong punto
+582	I-save ang mga tuntunin sa lisensya
+583	Suriin
+584	Iskedyul (cron)
+585	Mga nakatakdang pagsusuri
+586	Sanggunian ng lihim
+587	Ipadala ang paanyaya
+588	Ipadala ang ulat
+589	Ipadala ang link sa pag-reset
+590	Serbisyo
+591	Mga layunin ng serbisyo
+594	Hudyat
+595	Laki
+596	Iba pa
+597	Pagsunud-sunurin
+598	Hakbang
+599	Ang paghinto ng mga proseso, paghihiwalay ng mga aparato, pagbabalik ng mga talaksan, pagdagdag ng mga pagbubukod at pagbabago ng mga tuntunin sa trapiko ay kailangang aprubahan ng isang tao. Saklaw ng isang pag-apruba ang isang aksyon, ang eksaktong mga puntirya nito at limitadong oras. Kung may magbago, aprubahan muli.
+600	Mag-subscribe sa aparatong ito gamit ang Google Play
+601	kalagayan ng suskripsyon
+603	Sistema
+604	Puntirya
+605	Ang AI na katuwang
+606	Pinagsasama-sama ng katuwang ang magkakaugnay na babala, inililista ang naobserbahan kasama ang mga link sa katibayan, at minamarkahan bilang palagay ang anumang hindi nito mapatunayan. Maaari itong magmungkahi ng mga aksyon ngunit hindi nito maaaprubahan ang mga ito. Kung hindi magagamit ang modelo, patuloy na gumagana ang pagsusuri, mga babala at manwal na pagtugon.
+607	Ang kompyuter na ito
+608	TLS lamang, dapat nasa listahan ng pinapayagang palabas
+609	Sinasalo ng iyong tagapagbigay sa itaas ang mga baha ng trapiko. Dito mo binibilang ang bawat pampublikong dulong punto, binabantayan ang mga babala ng tagapagbigay, at inaaprubahan ang mga bagong paghihigpit sa trapiko.
+610	Mga paghihigpit sa trapiko
+611	Naisalin
+612	Basurahan
+613	natitirang araw ng pagsubok
+614	Buksan ang proteksyon para suriin ang mga talaksan sa kompyuter na ito at bantayan ang ransomware at pagnanakaw ng kredensyal.
+615	hindi saklaw
+616	Bawiin ang huling pagbabago
+617	Gumagamit
+618	Patunayan ang email
+619	naghihintay ng pag-apruba
+620	Nagpapakita kami ng mga patalastas mula sa Google AdSense sa ilang pahina. Payagan ang mga personal na patalastas?
+621	Papasok na webhook:
+622	Ano ang ipinapadala ng mga aparato
+623	Ano ito?
+624	Kailan
+625	Kapag may naharang
+626	Kapag natapos ang pagsubok nang walang bayad
+627	Sino
+628	Maaari mong burahin ang iyong account mula sa iyong profile. Makipag-ugnayan sa
+629	Ang iyong pangalan
+630	Makakakuha ang iyong organisasyon ng 30-araw na libreng pagsubok. Pagkatapos nito, nagkakahalaga ito ng £4.99 bawat buwan para sa bawat gumagamit o aparato.
+631	Itinatakda ng iyong organisasyon kung gaano katagal itinatago ang telemetry at katibayan. Hindi mababago o mabubura ang mga tala ng pag-audit.
+632	Ang iyong mga karapatan
+633	Magdikta
+634	Payagan ang paggamit ng mikropono para sa pagdidikta? Pinoproseso ng iyong browser ang tunog at hindi namin ito iniimbak.
+635	Labas na tunog
+636	Ihinto sandali
+637	Tono
+638	Ituloy
+639	Bilis
+640	Ihinto
+641	Walang magagamit na boses para sa wikang ito.
+642	Boses
+643	Inilipat ang talaksan sa kuwarentenas at hindi ito makakatakbo.
+644	May bantang naharang sa aparatong ito.

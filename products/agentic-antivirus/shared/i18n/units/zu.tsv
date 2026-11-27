@@ -1,0 +1,637 @@
+0	Yeqela kokuqukethwe okuyinhloko
+1	Engeza ukukhishwa unomphela
+2	Sebenzisa umkhawulo wethrafikhi
+3	Qoqa imethadatha yedivayisi
+4	Hlukanisa idivayisi kunethiwekhi
+5	Valela ifayela
+6	Khulula idivayisi ekuhlukanisweni
+7	Buyisela ifayela elivalelwe
+8	Khipha umsebenzisi yonke indawo
+9	Buyisela emuva umkhawulo wethrafikhi
+10	Buyisela emuva isibuyekezo
+11	Skena amadivayisi
+12	Misa okwesikhashana i-akhawunti yomsebenzisi
+13	Misa inqubo
+14	Vuma
+15	Yenqaba
+16	Thumela kumadivayisi
+17	Imvume iphelelwa yisikhathi [0]
+18	Kuphakanyiswe umsizi we-AI
+19	Isikhangiso
+20	Isenzo
+21	Ama-ejenti
+22	Buza
+23	Buza umsizi wezokuphepha
+24	Izimpendulo zivela kumadivayisi akho, izigameko ezivuliwe namagebe. Umsizi akakwazi ukushintsha lutho.
+25	Kusekelwe ku-
+26	Isimangalo esingu-[0] esingenabufakazi sisusiwe
+27	Izimangalo ezingu-[0] ezingenabufakazi zisusiwe
+29	Imodeli ozibambela yona
+30	Imithetho (ayikho imodeli)
+31	Bhala uhlelo lokulungisa
+32	Isinyathelo ngasinye siyisiphakamiso. Akukho okuqalayo kuze kube umuntu ekuvumile.
+33	Umbuzo
+34	Isibonelo: yimaphi amadivayisi adinga ukunakwa?
+35	Ubucayi obuphakanyisiwe
+36	Isifinyezo
+37	Okuhlosiwe
+38	Fingqa lesi sigameko
+39	Kungani
+40	Kutholiwe
+41	Bika okuthile okusolisayo
+42	Umthetho
+43	Ubucayi
+44	Isexwayiso
+46	Engeza amafayela
+47	Engeza ifolda
+48	Engeza izithombe
+49	Okunamathiselwe okungu-[0]
+50	Okunamathiselwe okungu-[0]
+51	Okunamathiselwe
+52	Thatha isithombe
+53	Ukufinyelela kukhamera akuvunyelwanga. Kuvumele kusiphequluli sakho, noma usebenzise uhlelo lwekhamera yedivayisi yakho.
+54	Ukubuka kuqala kwekhamera
+55	Lesi siphequluli asikwazi ukuvula ikhamera lapha.
+56	Thwebula
+57	Vala umsizi
+58	Ayini lawa mafayela, futhi aphephile yini?
+59	Ifayela
+60	Buza ngokuphepha kwakho, noma unamathisele amafayela, ifolda, izithombe noma isithombe sekhamera. Okunamathiselwe ngakunye kuskenwa kuqala futhi akukho okugcinwayo.
+61	Isithombe esingu-[0] sichazwe
+62	Izithombe ezingu-[0] zichazwe
+63	 yimodeli.
+64	Isibonelo: ingabe lokhu okulandiwe kuphephile?
+65	Umbhalo nezithombe ezihlanzekile kungathunyelwa kumodeli ye-AI evulwe yinhlangano yakho. Amafayela anobungozi awathunyelwa neze.
+66	Ifayela elingu-[0] alengezwanga
+67	Amafayela angu-[0] awengezwanga
+68	: kufika kumafayela angu-[0], [1] MB ngalinye kanye no-[2] MB sekukonke.
+69	Susa [0]
+70	Skena bese ubuza
+71	Imiphumela yokuskena
+72	Uhlobo
+73	Sebenzisa ikhamera yedivayisi
+74	Umphumela
+75	Ayikho i-malware eyaziwayo
+76	Inobungozi
+77	Akuskenwanga
+78	Uchungechunge lokucwaningwa kwamabhuku luphukile kokufakiwe [0].
+79	Uchungechunge lokucwaningwa kwamabhuku luphelele: okufakiwe okungu-[0] kuqinisekisiwe.
+80	I-imeyili
+81	Ukhohlwe iphasiwedi?
+82	Ngena nge-Google
+83	Ukungena nge-Google akusebenzanga. Zama futhi, noma usebenzise i-imeyili nephasiwedi yakho.
+84	Ngena
+85	Phuma
+86	Iphasiwedi entsha
+87	noma
+88	Inhlangano
+89	Iphasiwedi
+90	Iphasiwedi ishintshiwe. Ngena ngephasiwedi yakho entsha.
+91	Okungenani izinhlamvu ezingu-12.
+92	Dala i-akhawunti
+93	Thumela isixhumanisi futhi
+94	Uma leyo akhawunti isadinga ukuqinisekiswa, isixhumanisi esisha sisendleleni. Hlola nefolda yogaxekile.
+95	Setha kabusha iphasiwedi
+96	Uma kukhona i-akhawunti esebenzisa lelo kheli, sithumele isixhumanisi sokusetha kabusha. Sisebenza ihora elilodwa.
+97	Qinisekisa ikheli lakho le-imeyili ngaphambi kokungena. Vula isixhumanisi esisithumele ku-[0].
+98	I-imeyili iqinisekisiwe. Ungangena manje.
+99	Lesi sixhumanisi siphelelwe yisikhathi noma sesisetshenzisiwe. Ngena ukuze uthole esisha.
+100	Hlola i-imeyili yakho ukuze uqinisekise ikheli lakho.
+101	Ukubhalisa kunciphisa izikhangiso ngo-95%.
+102	Isikhathi sakho sesilingo siphelile.
+103	Kubhaliselwe kuze kube ngu-[0]
+104	Gcina konke kumahhala nezikhangiso ezigcwele
+105	Misa konke, kuhlanganise nokuvikelwa kwedivayisi, kuze kube umuntu ekhokhile
+106	Ikhonsoli idinga ukubhalisa; amadivayisi ahlala evikelekile
+107	£4.99 ngenyanga
+108	Bhalisa
+109	Isilingo samahhala: 
+110	Kusele usuku olu-[0]
+111	Kusele izinsuku ezingu-[0]
+112	Khansela
+113	Susa
+114	Kukhona okungahambanga kahle.
+115	Thumela ngaphandle
+116	Iyalayisha…
+117	Akusebenzi
+118	Neze
+119	Okulandelayo
+120	cha
+121	Akukho okungaboniswa.
+122	kuvaliwe
+123	kuvuliwe
+124	Okwangaphambilini
+125	Vuselela
+126	Londoloza
+127	Sesha
+128	Ukulingisa (idatha yokuhlola)
+129	Isimo
+130	Akutholakali
+131	Akwaziwa
+132	Kubuyekezwe [0]
+133	Kuyasebenza…
+134	yebo
+135	Isexwayiso esingu-[0] emahoreni angu-24
+136	Izexwayiso ezingu-[0] emahoreni angu-24
+137	Idivayisi engu-[0]
+138	Amadivayisi angu-[0]
+139	Idatha kusukela ku-[0]
+140	Isigameko esivuliwe esingu-[0]
+141	Izigameko ezivuliwe ezingu-[0]
+142	Imvume engu-[0] ilindile
+143	Izimvume ezingu-[0] zilindile
+144	kuqinisekisiwe
+145	kusolwa
+146	Bhalisa idivayisi
+147	Idivayisi
+148	Ayibiki
+149	Inqubomgomo endala
+150	Inzwa ivaliwe
+151	Izincazelo ezindala
+152	Izinkinga
+153	Igcine ukubonwa
+154	Isistimu yokusebenza
+155	Inqubomgomo
+156	Qalisa kudivayisi phakathi kwamahora angu-24 (ukusetshenziswa okukodwa):
+157	Ukuvikelwa
+158	Kopisha
+159	Landa
+160	Hambisa
+161	Ifolda entsha
+162	Qamba kabusha
+163	Buyisela
+164	Hambisa kudoti
+165	Layisha
+166	Usizo
+167	Umbhalo ongu-[0] kuleli khasi uhunyushwe ngomshini futhi awukabuyekezwa.
+168	Imibhalo engu-[0] kulolu limi ihunyushwe ngomshini futhi ayikabuyekezwa.
+169	Lolu limi alukahunyushwa, ngakho kuboniswa isiNgisi.
+170	kuvunyiwe
+171	Amaqiniso abonwe
+172	Imicabango (engaqinisekisiwe)
+173	Umcabango, ukuzethemba [0]: [1]
+174	Qalisa uphenyo
+175	Ubufakazi obungekho
+176	Akukho: [0]
+177	Funda ngokuzwakalayo
+178	Izenzo ezinconyiwe
+179	Umugqa wesikhathi wobufakazi
+180	i-webhook engenayo
+181	Amasignali avela kumhlinzeki wakho wobunikazi, i-DNS, ama-firewall namanye amathuluzi. Ukuhlanganiswa okusha kuqala njengokungatholakali; i-adaptha yomhlinzeki ephumelele isivivinyo sayo senkontileka kuphela engamakwa njengephilayo. Idatha yokuhlola imakwa njengokulingisa yonke indawo lapho ivela khona.
+182	Akuxhunyiwe (stub)
+183	Idatha yokuhlola kuphela
+184	Akutholakali
+185	Kuyaphila (kuqinisekisiwe)
+186	Imfihlo (iboniswa kanye):
+187	Izimvume
+188	Izexwayiso
+189	Ukucwaningwa
+190	Ukubhalisa
+191	Ideshibhodi
+192	I-DDoS nokutholakala
+193	Amadivayisi
+194	Amafayela
+195	Izigameko
+196	Ukuhlanganiswa
+197	Izinqubomgomo
+198	Ubumfihlo
+199	Ukuvalelwa
+200	Impendulo
+201	Ukuphepha
+202	Izilungiselelo
+203	Valela i-malware eyaziwayo ngokuzenzakalela
+204	Qapha ukuziphatha okusolisayo
+205	Vimba izikripthi ezisolisayo
+206	Qoqa okuqukethwe kwamafayela ukuze kuphenywe (kuvaliwe ngokuzenzakalelayo)
+207	Vumela ukuhlukaniswa kwenethiwekhi
+208	Skena amafayela lapho evulwa noma ebhalwa
+209	Skena okulandiwe
+210	Skena izinhlelo lapho ziqala
+211	Vikela i-ejenti ezinguqukweni
+212	Xwayisa ngezixhumanisi ezinobungozi ezaziwayo
+213	Isizathu
+214	Cela ukubuyekezwa
+215	Buyisela ngemva kokuskena okusha
+216	isikhathi esimaphakathi sokuqedwa okuqinisekisiwe (n=[0], okungaxazululwanga [1])
+217	ukulungiswa okuphumelele ukuhlolwa kabusha
+218	ukuphinda kwenzeke ngemva kokubuyiselwa
+219	ukususwa kwegciwane okuqinisekisiwe
+220	ukubuyela emsebenzini ngokuphepha
+221	ukuskena kokubuyiselwa kuqediwe
+222	Imiphumela yokuvalelwa kuphela ([0]) namadivayisi afakwe kabusha isistimu ([1]) kubalwa ngokwehlukana; ukuvalelwa kuphela akukaze kubalwe njengokususwa.
+223	[0] amahora
+224	[0] imizuzu
+225	[0] imizuzwana
+226	Kulindelwe imvume
+227	Ubufakazi bokukhiqiza
+228	Rekhoda okuqinisekisiwe ekukhiqizeni, kuziphi izimpahla, nangiyiphi inguqulo. Okufakiwe akukwazi ukuhlelwa.
+229	Inguqulo
+230	Shintsha imodi
+231	abukho ubufakazi
+232	kuhlulekile
+233	kuphumelele
+234	kulindile
+235	Hlola inqubekela phambili yebhuku lezenzo
+236	Amadivayisi angaphendula
+237	Wonke amadivayisi
+238	Idivayisi yokulinga engu-[0]
+239	Amadivayisi okulinga angu-[0]
+240	Kuphelele
+241	Kuphelele lapho
+242	Ukuzilolonga
+243	Qaphela
+244	Phendula
+245	Ukumbozwa
+246	[0] kubonwe, [1] angaphendula
+247	Idatha
+248	Ubudala bedatha
+249	Kubukhoma
+250	Idatha yokuhlola
+251	akwenziwanga
+252	irisidi
+253	kuyaqhubeka
+254	akwaziwa
+255	Ukuthunyelwa
+256	Ubufakazi
+257	Kusebenzile
+258	Kudala
+259	Okuphakelwa kwedatha
+260	Inguqulo noma i-digest
+261	Indawo
+262	Umphumela
+263	Umnikazi
+264	Isidingo
+265	Impahla noma iqembu
+266	Bonisa
+267	Konke
+268	Akuphelele
+269	Kuvuliwe kuyo yonke isevisi
+270	Kuvuliwe kule nhlangano
+271	Misa zonke izenzo ezintsha zokuphendula kule nhlangano? Ukuvikelwa nokuskena kuyaqhubeka.
+272	Vumela izenzo zokuphendula futhi
+273	Misa zonke izenzo zokuphendula
+274	Inkinobho yokumisa yesimo esiphuthumayo
+275	Uhlobo
+276	Imizuzu emaphakathi kuvuliwe ([0] kuvuliwe, okudala kakhulu [1] imizuzu)
+277	Ukwenqaba kwenqubomgomo
+278	Ukuzilolonga nokulingisa (akubalwanga ngenhla)
+279	Izenzo eziphindiwe (umgomo 0)
+280	Ukubambezeleka okumaphakathi kokuphakelwa (p95 [0] imizuzwana, n=[1])
+281	Izimvume ezisalele emuva ([0] zilindile, umgomo [1] imizuzu)
+282	Isikhathi esimaphakathi kusuka kusignali kuya ekuhlungweni (p95 [0] imizuzu, n=[1], [2] engahlungiwe)
+283	Izenzo eziqinisekiswe ngokuzimela ([0]/[1])
+284	Iwindi: [0]. Irisidi lodwa alikaze libalwe njengokuqinisekisiwe. Idatha engekho iboniswa njengengatholakali.
+285	Izilinganiso zokuphendula
+286	Umcimbi wokugcina
+287	Ama-ejenti ayaphakamisa; inqubomgomo engaguquki inquma okuqaliswayo. Isenzo ngasinye sibonisa imvume yaso, irisidi lalo nokuhlolwa okuzimele.
+288	Isigaba
+289	Kulindelwe imvume
+290	Kwenqatshiwe
+291	Kuphelelwe yisikhathi
+292	Kuhlulekile
+293	Kudinga ukuvumelaniswa ngesandla
+294	Kuphakanyisiwe
+295	Kusemugqeni
+296	Kuyasebenza
+297	Ukuqinisekisa kulindile
+298	Kuqinisekisiwe
+299	Isimo esibukhoma
+300	Imodi
+301	Ukulingisa
+302	Ukuskena nokuqoqwa kwedatha kuyasebenza. Ezinye izenzo zihlala ziyiziphakamiso.
+303	Izenzo ezivunyiwe zisebenza kumadivayisi akhethiwe.
+304	Izenzo zisebenza kuphela kuma-adaptha okuhlola. Akukho okushintshayo kumadivayisi akho.
+305	Azikabikho izenzo.
+306	Akukho okulindele imvume.
+307	Abukabikho ubufakazi bokukhiqiza oburekhodiwe.
+308	Awekho amadivayisi noma ukuhlanganiswa okuthumela idatha okwamanje.
+309	Akusebenzanga
+310	Kubonwe
+311	Okwenzekile
+312	Impendulo ye-DDoS
+313	I-alamu engamanga nokubuyiselwa
+314	Ubunikazi, ukweba ngobuqili (phishing) nethrafikhi esolisayo
+315	I-malware nokulandiwe okusolisayo
+316	Ukubonakala kwenethiwekhi nesimo sedivayisi
+317	Ukubuyiselwa ngemva kokuhlaselwa
+318	I-ransomware noma ukuhlaselwa okusolwayo
+319	Ibhuku lezenzo
+320	Amabhuku ezenzo
+321	Inguqulo yenqubomgomo
+322	Inguqulo efakiwe
+323	Ukuhlukanisa nge-firewall
+324	Idatha itholiwe
+325	Ifayela lisusiwe
+326	Inqubo imisiwe
+327	Isimo somhlinzeki
+328	Kurekhodiwe
+329	Ukuskena kuqediwe
+330	Kulingisiwe
+331	Kuphumile ekuvalelweni
+332	Kuvalelwe
+333	Izenzo namarisidi
+334	Rekhoda umphumela
+335	Rekhoda
+336	Kungaphendula
+337	Umthombo
+338	idivayisi
+339	ikhonsoli
+340	ukulingisa
+341	Kuqala lapho
+342	Kubuyekeziwe
+343	Ukuhlolwa okuzimele
+344	Kulindile
+345	Umkhawulo we-archive
+346	I-archive ebethelwe
+347	Kukhishiwe
+348	Akufinyeleleki
+349	Umkhawulo wesikhathi
+350	Kukhulu kakhulu
+351	Ifomethi engasekelwe
+352	Kukhanseliwe
+353	Kugejiwe
+354	Ingxenye
+355	Isikhathi siphelile
+356	Okugcwele
+357	Uma kufunwa
+358	Okusheshayo
+359	Ukubuyiselwa
+360	Okuhleliwe
+361	Okuqondisiwe
+362	Engeza ingxenye
+363	ama-archive
+364	Izimpahla
+365	Misa lokhu kuskena? Imiphumela kuze kube manje igcinwa njengokuskena okukhanseliwe.
+366	Akumboziwe
+367	Okutholiwe
+368	Amadivayisi ngokwesimo sokuvikelwa
+369	Injini
+370	Kufanele
+371	Ubufakazi bokugcina
+372	Ukulawula okulindelekile
+373	Ukulungisa okuphakanyisiwe
+374	Hlola kabusha
+375	Impahla noma ingxenye
+376	Amagebe avuliwe
+377	Imiphumela yokuskena ezinsukwini ezingu-30
+378	isexwayiso kuya ekuvinjweni okuqinisekisiwe
+379	amadivayisi avikelekile
+380	amaphoyinti omphakathi anokunciphisa okuvela kumhlinzeki ophezulu
+381	umcimbi kuya esexwayisweni
+382	amadivayisi anezincazelo zamanje
+383	amadivayisi askenwe ngokugcwele ezinsukwini ezingu-7
+384	amagebe avuliwe ([0] asalele emuva, [1] avalwe ezinsukwini ezingu-30)
+385	izingxenye zenethiwekhi eziqashiwe
+386	okutholiwe okuyiqiniso okuqinisekisiwe
+387	ukuskena okuqediwe
+388	Ukumbozwa nokuphendula
+389	Ukuskena okugcwele kokugcina
+390	I-telemetry yokugcina
+391	Yonke idivayisi nengxenye yenethiwekhi ebandakanyekile, noma ivikelekile, nokufanele kulungiswe okulandelayo.
+392	Ukubonakala kwenethiwekhi
+393	Awekho amadivayisi abhalisiwe okwamanje. Vikela ikhompyutha kusuka kokuthi Amadivayisi.
+394	Awekho amagebe avuliwe.
+395	[0] kuvuliwe
+396	kusalele emuva
+397	p95 [0] imizuzwana
+398	Amafolda
+399	Amafolda azoskenwa, ahlukaniswe ngokhefana
+400	Ukubethela ne-firewall
+401	Ukubethela kwediski [0], i-firewall [1]
+402	Ukubuyiselwa ngemva kwezigameko
+403	Hlola futhi manje
+404	Akuhlolwanga kabusha
+405	Ukuhlola kabusha kuhlulekile
+406	Kuqinisekisiwe ukuthi kuvaliwe
+407	Uhlobo lokuskena
+408	Ukuskena
+409	Ingxenye
+410	Igama lengxenye
+411	Qala ukuskena
+412	Kuqalile
+413	Isimo
+414	Kwehlile
+415	Kuvikelekile
+416	Akuvikelekile
+417	Amadivayisi ngokwesimo
+418	[0] akwaziwa
+419	Akukho ukubonakala
+420	Kuyaqashwa
+421	Ukubonakala
+422	Ukungabi bikho kokutholiwe akufakazeli ukuvikelwa: hlola nokumbozwa nemiphumela yokuskena.
+423	Ulimi
+424	Ukumbozwa kokuhumusha
+425	Ayikho inguqulo yangaphambilini
+426	Itimu
+427	Kumnyama
+428	Ukugqama okuphezulu
+429	Kukhanya
+430	Azikho izinsongo ezintsha ezitholwe kumafayela angu-[0].
+431	Usongo olu-[0]
+432	Izinsongo ezingu-[0]
+433	 zitholwe kumafayela angu-[0]. Bheka Izexwayiso nezimvume ukuze uzibuyekeze.
+434	Ukuskena okugcwele
+435	Ayikwazanga ukuvikela le khompyutha: [0]
+436	Le khompyutha ivikelekile. Ukuskena kwesikhathi sangempela kuyasebenza ngenkathi i-Agentic Antivirus ivuliwe.
+437	Ukuskena akuqedanga: [0]
+438	Iyaskena…
+439	Iskena yonke idrayivu. Lokhu kungathatha isikhathi eside.
+440	Iskena Okulandiwe, Ideskithophu namafayela esikhashana…
+441	Amafayela angu-[0] awakwazanga ukufundwa.
+442	Ifayela
+443	Isixhumanisi sewebhusayithi
+444	Yamukela idatha yokuhlola
+446	Izenzo
+447	Engeza ukuhlanganiswa
+448	Engeza ukukhishwa
+449	Engeza ukuhlanganiswa
+450	Engeza ukuskena okugcwele kwamaviki onke
+451	umphathi
+452	Ukukhangisa
+453	Imvume yokukhangisa
+454	Amasevisi athintekile
+455	izexwayiso emahoreni angu-24 edlule
+456	Vumela
+457	Vumela futhi uskene
+458	Umphathi kufanele anikeze isizathu. Ukukhishwa kurekhodwa emlandweni wokucwaningwa.
+459	I-imeyili
+460	Vuma ukubuyela emsebenzini
+461	Ukuvuma izenzo
+462	Impahla
+463	izimpahla ezisaphansi kokunciphisa ukuhlasela
+464	izimpahla ezinezexwayiso emahoreni angu-24
+465	Umlando wokucwaningwa
+466	Ukuvikelwa okuzenzakalelayo kuyaqhubeka kuyo yonke idivayisi. Lezi yizenzo ezidinga umuntu ukuthi anqume.
+467	Ukutholakala
+468	Amasignali atholakalayo
+469	Isipele siqinisekisiwe
+470	Vimba
+471	Ngokuzenzakalelayo i-ejenti ithumela i-telemetry yokuphepha nama-hash amafayela: amagama ezinqubo nemigqa yemiyalo, izindlela zamafayela, imethadatha yokuxhumana kwenethiwekhi, nokutholiwe. Okuqukethwe kwamafayela kuqoqwa kuphela uma inhlangano yakho ikuvulile lokho.
+472	Umthamo
+473	Isigaba
+474	Kushintshiwe
+475	Inkokhelo
+476	Hlola
+477	khetha
+478	Khetha idivayisi
+480	Vala
+481	Kuhlukaniswe ngokhefana
+482	Xhumana
+483	Ukulawula
+484	Ukumbozwa ngokwesendlalelo sokuvikelwa
+485	kubucayi kakhulu
+486	ukulethwa kwezexwayiso ezibucayi kakhulu (p95, izinsuku ezingu-30)
+487	Izinqumo ezilindile
+488	Yenqaba
+489	Izincazelo
+490	Chaza okwenzekile
+491	Imininingwane
+492	Imininingwane egcwele
+493	Ukutholwa
+494	Idivayisi ezonikezwa ilayisensi
+495	amadivayisi avikelwe ngokugcwele
+496	amadivayisi ahlukanisiwe
+497	Amadivayisi adinga ukunakwa
+498	Isiqondiso
+499	Indawo ye-DNS
+500	ikhasi lokulanda
+501	Ngesikhathi sesilingo samahhala, nasezinhlelweni ezingakhokhelwa, ikhonsoli ibonisa izikhangiso ze-Google AdSense futhi izinhlelo zeselula zibonisa izikhangiso ze-Google AdMob, ngemva kokucela imvume yakho. Ababhalisile babona izikhangiso ezimbalwa ngo-95%. Izikhangiso azivele zivele kuzikrini zemvume, zokuvimba, zezexwayiso zosongo, zokubuyekeza ukuvalelwa, zokungena, zokukhokha noma zokucwaningwa.
+502	Ukushicilela ngakunye kudala inguqulo entsha esayiniwe. Amadivayisi aqhubeka nokusebenzisa inguqulo yokugcina eqinisekisiwe ngenkathi engaxhunyiwe ku-inthanethi.
+503	Thumela i-imeyili kosekelo ku-
+504	Iphoyinti lokugcina
+505	I-Equality Software Ltd isebenzisa i-Agentic Antivirus. Leli khasi lichaza lokho okuqoqwa yisevisi. Kumele libuyekezwe ngumnikazi womkhiqizo ngaphambi kokushicilelwa.
+506	Zonke izenzo ezishintsha idivayisi, i-akhawunti noma ithrafikhi zidlula enjinini yenqubomgomo nokuphatha kwe-AEP-X. Imvume ihlanganisa isenzo esisodwa, okuhlosiwe kwaso ngqo, le nhlangano, nesikhathi esinqunyiwe.
+507	Konke okulayishiwe kuhlolwa i-malware nohlobo lwakho lwangempela. Amafayela angenasibukeli esiqinisekisiwe ayagcinwa futhi ayalandeka kodwa awabukwa kuqala.
+508	Okuhlukile
+509	Okukhishiwe
+510	Indlela yefolda
+511	ukuze ucele ukufinyelela noma ukulungiswa.
+512	Amagebe
+513	Thola i-ejenti ye-Windows, Mac noma Linux ku-
+514	Iya kokuthi Amadivayisi, ukhethe Bhalisa idivayisi, bese uqalisa umyalo oboniswayo kukhompyutha ofuna ukuyivikela. I-ejenti iqala ukuskena ngokushesha nje lapho ithola inqubomgomo yayo esayiniwe.
+515	Impilo
+516	Umlando
+517	Igama lomsingathi
+518	Ngiyaqonda ukuthi amadivayisi azoyeka ukuskena nokuvimba izinsongo ngemva kwesilingo kuze kukhokhelwe okubhaliselwe.
+519	Umthelela
+520	Ngenisa i-zip noma i-tar
+521	Isigameko
+522	Faka imodeli yolimi (uma inhlangano yakho iyivulile)
+523	Ikheli le-IP
+524	Joyina
+525	Joyina inhlangano yakho
+526	I-malware eyaziwayo ihanjiswa ekuvalelweni, lapho ingakwazi ukusebenza khona. Uma ucabanga ukuthi ifayela livinjwe ngephutha, vula Ukuvalelwa bese ucela ukubuyekezwa. Umphathi uyanquma, futhi ifayela libuya kuphela ngemva kokuthi ukuskena okusha kulithole lihlanzekile.
+527	Izilimi ezingenakho ukuhumusha okuphelele zibuyela esiNgisini. Ukumbozwa kuyalinganiswa, akuqagelwa.
+528	Kushintshwe okokugcina
+529	Isendlalelo
+530	Impumelelo yezicelo ezisemthethweni
+531	Imithetho yelayisensi
+532	Isixhumanisi, uma sikhona
+533	Abasingathi bokuphatha abahlala befinyeleleka ngesikhathi sokuhlukanisa
+534	Maka njenge-alamu engamanga
+535	Ukuvuthwa
+536	Ukunciphisa ukuhlasela
+537	Igama
+538	Igama lemfihlo endaweni yakho yokugcina izimfihlo, hhayi imfihlo ngokwayo
+539	Azikho izenzo ezilindile.
+540	Azikho izigameko ezivuliwe.
+541	Lutho.
+542	Akukho okubikiwe.
+543	akusethiwe
+544	Kwaziswe ngemva kwe-
+545	kwezikhangiso eziboniswayo
+546	Isilondolozi semicimbi ngaphandle kwe-inthanethi (MB)
+547	Ku-Android, bhalisa ohlelweni lwe-Agentic Antivirus nge-Google Play. Ku-iPhone naku-iPad, ukubhalisa nge-App Store akukatholakali. Ukukhokha kuwebhu akukatholakali.
+548	Vula isigameko
+549	izigameko ezivuliwe
+550	Izigameko ezivuliwe
+551	Ukubambezeleka kwe-p95
+552	kukhokhelwe kuze kube
+553	Iphethini yendlela
+554	Abantu
+555	Ngedivayisi ngayinye
+556	Ngomsebenzisi ngamunye (kuhlanganisa wonke amadivayisi akhe)
+557	Ukubuka kuqala
+558	Okuyinhloko
+560	Vikela idivayisi
+561	Iphrothokholi
+562	Umhlinzeki
+563	Izexwayiso zomhlinzeki (amahora angu-24)
+564	Amaphoyinti omphakathi
+565	Shicilela inguqulo yenqubomgomo
+566	Shicilela inguqulo esayiniwe
+567	Kushicilelwe
+568	Ukuskena okusheshayo
+569	Ukufunda ngokuzwakalayo nokubhala ngezwi kusebenzisa izici zokukhuluma ezakhelwe esipheqululini sakho. Asirekhodi noma sigcine umsindo.
+570	Kutholiwe
+571	Imidiya ekhiphekayo
+572	Susa
+573	Kuceliwe
+574	Kucelwe ngu-
+575	Ukugcinwa
+576	Ukubuyela emsebenzini
+577	Manje
+578	Ubungozi
+579	Indima
+580	Buyisela emuva
+581	Londoloza iphoyinti
+582	Londoloza imithetho yelayisensi
+583	Skena
+584	Uhlelo lwesikhathi (cron)
+585	Ukuskena okuhleliwe
+586	Ireferensi yemfihlo
+587	Thumela isimemo
+588	Thumela umbiko
+589	Thumela isixhumanisi sokusetha kabusha
+590	Isevisi
+591	Izinhloso zesevisi
+594	Isignali
+595	Usayizi
+596	Okunye
+597	Hlunga
+598	Isinyathelo
+599	Ukumisa izinqubo, ukuhlukanisa amadivayisi, ukubuyisela amafayela, ukwengeza okukhishiwe nokushintsha imithetho yethrafikhi kudinga umuntu ukuthi akuvume. Imvume ihlanganisa isenzo esisodwa, okuhlosiwe kwaso ngqo nesikhathi esilinganiselwe. Uma kukhona okushintshayo, phinda uvume.
+600	Bhalisa le divayisi nge-Google Play
+601	isimo sokubhalisa
+603	Isistimu
+604	Okuhlosiwe
+605	Umsizi we-AI
+606	Umsizi uqoqa izexwayiso ezihlobene, ubala okubonwe nezixhumanisi eziya ebufakazini, futhi umaka noma yini angakwazi ukuyifakazela njengomcabango. Angaphakamisa izenzo kodwa akakwazi ukuzivuma. Uma imodeli ingatholakali, ukuskena, izexwayiso nezimpendulo zesandla kuyaqhubeka nokusebenza.
+607	Le khompyutha
+608	I-TLS kuphela, kufanele ibe kuhlu lwezivunyelwe ukuphuma
+609	Izikhukhula zethrafikhi zimuncwa ngumhlinzeki wakho ophezulu. Lapha uphendula ngawo wonke amaphoyinti omphakathi, uqaphe izexwayiso zomhlinzeki, futhi uvume imikhawulo emisha yethrafikhi.
+610	Imikhawulo yethrafikhi
+611	Kuhunyushiwe
+612	Udoti
+613	izinsuku zesilingo ezisele
+614	Vula ukuvikelwa ukuze uskene amafayela kule khompyutha futhi uqaphe i-ransomware nokwebiwa kwemininingwane yokungena.
+615	akumboziwe
+616	Hlehlisa ushintsho lokugcina
+617	Umsebenzisi
+618	Qinisekisa i-imeyili
+619	kulindelwe imvume
+620	Sibonisa izikhangiso ezivela ku-Google AdSense kwamanye amakhasi. Vumela izikhangiso eziqondene nawe?
+621	I-webhook:
+622	Lokho okuthunyelwa amadivayisi
+623	Kuyini lokhu?
+624	Nini
+625	Uma okuthile kuvinjiwe
+626	Uma isilingo siphela kungakhokhelwanga
+627	Ubani
+628	Ungasusa i-akhawunti yakho kuphrofayela yakho. Xhumana no-
+629	Igama lakho
+630	Inhlangano yakho ithola isilingo samahhala sezinsuku ezingu-30. Ngemva kwalokho kubiza u-£4.99 ngenyanga kumsebenzisi ngamunye noma idivayisi ngayinye.
+631	Inhlangano yakho inquma ukuthi i-telemetry nobufakazi kugcinwa isikhathi esingakanani. Amarekhodi okucwaningwa awakwazi ukuhlelwa noma ukususwa.
+632	Amalungelo akho
+633	Bhala ngezwi
+634	Vumela ukusetshenziswa kwemakrofoni ukuze ubhale ngezwi? Umsindo ucutshungulwa yisiphequluli sakho futhi asiwugcini.
+635	Okukhishwa umsindo
+636	Misa isikhashana
+637	Ukuphakama kwezwi
+638	Qhubeka
+639	Isivinini
+640	Misa
+641	Alikho izwi lalolu limi.
+642	Izwi
+643	Ifayela lihanjiswe ekuvalelweni futhi alikwazi ukusebenza.
+644	Kuvinjwe usongo kule divayisi.

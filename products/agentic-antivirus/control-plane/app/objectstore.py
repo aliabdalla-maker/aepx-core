@@ -105,6 +105,30 @@ class ObjectStore:
     def exists(self, key: str) -> bool:
         return self._req("HEAD", key).status_code == 200
 
+    def list(self, prefix: str = "", max_keys: int = 1000) -> list[dict]:
+        """ListObjectsV2 under prefix: [{key, size, last_modified (datetime)}]."""
+        from xml.etree import ElementTree as ET
+        q = "&".join(f"{k}={quote(str(v), safe='-_.~')}" for k, v in
+                     sorted({"list-type": 2, "max-keys": max_keys, "prefix": prefix}.items()))
+        url = f"{self.endpoint}/{quote(self.bucket)}?{q}"
+        headers = sign_v4(method="GET", url=url, headers={}, payload_sha256=EMPTY_SHA256, access_key=self._ak,
+                          secret_key=self._sk, region=self.region, now=datetime.now(timezone.utc))
+        r = self.http.get(url, headers=headers)
+        if r.status_code != 200:
+            raise ObjectStoreError(f"LIST {prefix}: HTTP {r.status_code}")
+        ns = {"s3": "http://s3.amazonaws.com/doc/2006-03-01/"}
+        if b"<!DOCTYPE" in r.content[:200].upper():
+            raise ObjectStoreError("unexpected document type")
+        root = ET.fromstring(r.content)
+        out = []
+        for c in root.findall("s3:Contents", ns) or root.findall("Contents"):
+            def t(tag):
+                el = c.find(f"s3:{tag}", ns)
+                return (el if el is not None else c.find(tag)).text
+            out.append({"key": t("Key"), "size": int(t("Size")),
+                        "last_modified": datetime.fromisoformat(t("LastModified").replace("Z", "+00:00"))})
+        return out
+
     def delete(self, key: str) -> None:
         r = self._req("DELETE", key)
         if r.status_code not in (200, 204, 404):

@@ -1,0 +1,637 @@
+0	Naar hoofdinhoud
+1	Een permanente uitzondering toevoegen
+2	Een verkeersbeperking toepassen
+3	Apparaatmetadata verzamelen
+4	Een apparaat van het netwerk isoleren
+5	Een bestand in quarantaine plaatsen
+6	Een apparaat uit isolatie halen
+7	Een bestand uit quarantaine herstellen
+8	Een gebruiker overal afmelden
+9	Een verkeersbeperking terugdraaien
+10	Een update terugdraaien
+11	Apparaten scannen
+12	Een gebruikersaccount blokkeren
+13	Een proces stoppen
+14	Goedkeuren
+15	Weigeren
+16	Naar apparaten sturen
+17	Goedkeuring verloopt [0]
+18	Voorgesteld door de AI-assistent
+19	Advertentie
+20	Actie
+21	Agents
+22	Vragen
+23	De beveiligingsassistent vragen
+24	Antwoorden komen van je apparaten, open incidenten en hiaten. De assistent kan niets wijzigen.
+25	Gebaseerd op
+26	[0] bewering zonder bewijs is verwijderd
+27	[0] beweringen zonder bewijs zijn verwijderd
+29	Zelf gehost model
+30	Regels (geen model)
+31	Een herstelplan opstellen
+32	Elke stap is een voorstel. Er wordt niets uitgevoerd tot iemand het goedkeurt.
+33	Vraag
+34	Bijvoorbeeld: welke apparaten hebben aandacht nodig?
+35	Voorgestelde ernst
+36	Samenvatting
+37	Doelen
+38	Dit incident samenvatten
+39	Waarom
+40	Gedetecteerd
+41	Iets verdachts melden
+42	Regel
+43	Ernst
+44	Waarschuwing
+46	Bestanden toevoegen
+47	Een map toevoegen
+48	Afbeeldingen toevoegen
+49	[0] bijlage
+50	[0] bijlagen
+51	Bijlagen
+52	Een foto maken
+53	Cameratoegang is niet toegestaan. Sta het toe in je browser of gebruik de camera-app van je apparaat.
+54	Cameravoorbeeld
+55	Deze browser kan de camera hier niet openen.
+56	Vastleggen
+57	De assistent sluiten
+58	Wat zijn deze bestanden en zijn ze veilig?
+59	Bestand
+60	Stel een vraag over je beveiliging of voeg bestanden, een map, afbeeldingen of een camerafoto toe. Elke bijlage wordt eerst gescand en er wordt niets opgeslagen.
+61	[0] afbeelding is
+62	[0] afbeeldingen zijn
+63	 beschreven door het model.
+64	Bijvoorbeeld: is deze download veilig?
+65	Schone tekst en afbeeldingen kunnen naar het AI-model gaan dat je organisatie heeft ingeschakeld. Schadelijke bestanden nooit.
+66	[0] bestand is niet toegevoegd
+67	[0] bestanden zijn niet toegevoegd
+68	: maximaal [0] bestanden, elk [1] MB en in totaal [2] MB.
+69	[0] verwijderen
+70	Scannen en vragen
+71	Scanresultaten
+72	Type
+73	De camera van het apparaat gebruiken
+74	Resultaat
+75	Geen bekende malware
+76	Schadelijk
+77	Niet gescand
+78	De auditketen is verbroken bij item [0].
+79	De auditketen is intact: [0] items geverifieerd.
+80	E-mail
+81	Wachtwoord vergeten?
+82	Inloggen met Google
+83	Inloggen met Google is niet gelukt. Probeer het opnieuw of gebruik je e-mailadres en wachtwoord.
+84	Inloggen
+85	Uitloggen
+86	Nieuw wachtwoord
+87	of
+88	Organisatie
+89	Wachtwoord
+90	Wachtwoord gewijzigd. Log in met je nieuwe wachtwoord.
+91	Minstens 12 tekens.
+92	Account aanmaken
+93	De link opnieuw sturen
+94	Als dat account nog bevestigd moet worden, is er een nieuwe link onderweg. Kijk ook in je spammap.
+95	Wachtwoord opnieuw instellen
+96	Als een account dat adres gebruikt, hebben we een herstellink gestuurd. Die werkt één uur.
+97	Bevestig je e-mailadres voordat je inlogt. Open de link die we naar [0] hebben gestuurd.
+98	E-mailadres geverifieerd. Je kunt nu inloggen.
+99	Deze link is verlopen of al gebruikt. Log in om een nieuwe te krijgen.
+100	Controleer je e-mail om je adres te verifiëren.
+101	Een abonnement vermindert advertenties met 95%.
+102	Je proefperiode is afgelopen.
+103	Geabonneerd tot [0]
+104	Alles gratis houden met volledige advertenties
+105	Alles stoppen, ook de apparaatbescherming, tot iemand betaalt
+106	De console vraagt een abonnement; apparaten blijven beschermd
+107	£ 4,99 per maand
+108	Abonneren
+109	Gratis proefperiode:
+110	Nog [0] dag
+111	Nog [0] dagen
+112	Annuleren
+113	Verwijderen
+114	Er is iets misgegaan.
+115	Exporteren
+116	Laden…
+117	n.v.t.
+118	Nooit
+119	Volgende
+120	nee
+121	Niets om te tonen.
+122	uit
+123	aan
+124	Vorige
+125	Vernieuwen
+126	Opslaan
+127	Zoeken
+128	Simulatie (testgegevens)
+129	Status
+130	Niet beschikbaar
+131	Onbekend
+132	Bijgewerkt [0]
+133	Bezig…
+134	ja
+135	[0] waarschuwing in 24 uur
+136	[0] waarschuwingen in 24 uur
+137	[0] apparaat
+138	[0] apparaten
+139	Gegevens per [0]
+140	[0] open incident
+141	[0] open incidenten
+142	[0] goedkeuring wacht
+143	[0] goedkeuringen wachten
+144	bevestigd
+145	vermoed
+146	Een apparaat registreren
+147	Apparaat
+148	Meldt zich niet
+149	Verouderd beleid
+150	Sensor uitgeschakeld
+151	Verouderde definities
+152	Problemen
+153	Laatst gezien
+154	Besturingssysteem
+155	Beleid
+156	Binnen 24 uur op het apparaat uitvoeren (eenmalig):
+157	Bescherming
+158	Kopiëren
+159	Downloaden
+160	Verplaatsen
+161	Nieuwe map
+162	Naam wijzigen
+163	Herstellen
+164	Naar prullenbak
+165	Uploaden
+166	Help
+167	[0] tekst op deze pagina is machinaal vertaald en nog niet gecontroleerd.
+168	[0] teksten in deze taal zijn machinaal vertaald en nog niet gecontroleerd.
+169	Deze taal is nog niet vertaald, daarom wordt Engels getoond.
+170	goedgekeurd
+171	Waargenomen feiten
+172	Hypothesen (niet bevestigd)
+173	Hypothese, betrouwbaarheid [0]: [1]
+174	Onderzoek uitvoeren
+175	Ontbrekend bewijs
+176	Ontbreekt: [0]
+177	Voorlezen
+178	Aanbevolen acties
+179	Tijdlijn van bewijs
+180	inkomende webhook
+181	Signalen van je identiteitsprovider, DNS, firewalls en andere tools. Nieuwe integraties beginnen als niet beschikbaar; alleen een provideradapter die zijn contracttest heeft doorstaan, kan als live worden gemarkeerd. Testgegevens zijn overal als simulatie gelabeld.
+182	Niet verbonden (stub)
+183	Alleen testgegevens
+184	Niet beschikbaar
+185	Live (geverifieerd)
+186	Geheim (eenmaal getoond):
+187	Goedkeuringen
+188	Waarschuwingen
+189	Audit
+190	Abonnement
+191	Dashboard
+192	DDoS en beschikbaarheid
+193	Apparaten
+194	Bestanden
+195	Incidenten
+196	Integraties
+197	Beleid
+198	Privacy
+199	Quarantaine
+200	Respons
+201	Beveiliging
+202	Instellingen
+203	Bekende malware automatisch in quarantaine plaatsen
+204	Op verdacht gedrag letten
+205	Verdachte scripts blokkeren
+206	Bestandsinhoud verzamelen voor onderzoek (standaard uit)
+207	Netwerkisolatie toestaan
+208	Bestanden scannen bij openen of schrijven
+209	Downloads scannen
+210	Programma's scannen bij het starten
+211	De agent beschermen tegen wijzigingen
+212	Waarschuwen voor bekende schadelijke links
+213	Reden
+214	Beoordeling aanvragen
+215	Herstellen na nieuwe scan
+216	mediane tijd tot geverifieerde verwijdering (n=[0], onopgelost [1])
+217	oplossingen met een geslaagde hertest
+218	terugkeer na herstel
+219	geverifieerde virusverwijdering
+220	veilige terugkeer in gebruik
+221	voltooide herstelscans
+222	Resultaten met alleen quarantaine ([0]) en opnieuw geïnstalleerde apparaten ([1]) worden apart geteld; quarantaine alleen telt nooit als verwijdering.
+223	[0] u
+224	[0] min
+225	[0] s
+226	Wacht op goedkeuring
+227	Productiebewijs
+228	Leg vast wat in productie is geverifieerd, op welke assets en met welke versie. Items kunnen niet worden bewerkt.
+229	Versie
+230	Modus wijzigen
+231	geen bewijs
+232	mislukt
+233	geslaagd
+234	in behandeling
+235	Voortgang van playbook controleren
+236	Apparaten die kunnen reageren
+237	Alle apparaten
+238	[0] pilotapparaat
+239	[0] pilotapparaten
+240	Voltooid
+241	Voltooid wanneer
+242	Oefening
+243	Observeren
+244	Reageren
+245	Dekking
+246	[0] waargenomen, [1] kunnen reageren
+247	Gegevens
+248	Leeftijd van gegevens
+249	Live
+250	Testgegevens
+251	niet uitgevoerd
+252	ontvangstbewijs
+253	bezig
+254	onbekend
+255	Verzenden
+256	Bewijs
+257	Is uitgevoerd
+258	Verouderd
+259	Gegevensbronnen
+260	Versie of digest
+261	Omgeving
+262	Uitkomst
+263	Eigenaar
+264	Vereiste
+265	Asset of groep
+266	Tonen
+267	Alle
+268	Niet voltooid
+269	Aan voor de hele dienst
+270	Aan voor deze organisatie
+271	Alle nieuwe responsacties voor deze organisatie stoppen? Bescherming en scannen blijven werken.
+272	Responsacties weer toestaan
+273	Alle responsacties stoppen
+274	Noodstop
+275	Soort
+276	Mediaan aantal minuten open ([0] open, oudste [1] min)
+277	Weigeringen door beleid
+278	Oefeningen en simulaties (hierboven niet geteld)
+279	Herhaalde acties (doel 0)
+280	Mediane vertraging van bronnen (p95 [0] s, n=[1])
+281	Achterstallige goedkeuringen ([0] wachtend, doel [1] min)
+282	Mediaan van signaal tot triage (p95 [0] min, n=[1], [2] niet getrieerd)
+283	Onafhankelijk geverifieerde acties ([0]/[1])
+284	Periode: [0]. Een ontvangstbewijs alleen telt nooit als geverifieerd. Ontbrekende gegevens worden als niet beschikbaar getoond.
+285	Responsmaatstaven
+286	Laatste gebeurtenis
+287	Agents doen voorstellen; een vast beleid bepaalt wat wordt uitgevoerd. Elke actie toont haar goedkeuring, ontvangstbewijs en onafhankelijke controle.
+288	Fase
+289	Wacht op goedkeuring
+290	Geweigerd
+291	Verlopen
+292	Mislukt
+293	Handmatige afstemming nodig
+294	Voorgesteld
+295	In wachtrij
+296	Wordt uitgevoerd
+297	Verificatie in behandeling
+298	Geverifieerd
+299	Actuele status
+300	Modus
+301	Simulatie
+302	Scans en gegevensverzameling worden uitgevoerd. Andere acties blijven voorstellen.
+303	Goedgekeurde acties worden uitgevoerd op de gekozen apparaten.
+304	Acties draaien alleen tegen testadapters. Er verandert niets op je apparaten.
+305	Nog geen acties.
+306	Er wacht niets op goedkeuring.
+307	Nog geen productiebewijs vastgelegd.
+308	Nog geen apparaten of integraties sturen gegevens.
+309	Is niet uitgevoerd
+310	Waargenomen
+311	Wat er gebeurde
+312	DDoS-respons
+313	Fout-positief en herstel
+314	Identiteit, phishing en verdacht verkeer
+315	Malware en verdachte downloads
+316	Netwerkzicht en apparaatstatus
+317	Herstel na een compromittering
+318	Ransomware of vermoedelijke compromittering
+319	Playbook
+320	Playbooks
+321	Beleidsversie
+322	Geïnstalleerde versie
+323	Firewallisolatie
+324	Gegevens ontvangen
+325	Bestand verwijderd
+326	Proces gestopt
+327	Status bij provider
+328	Vastgelegd
+329	Scan voltooid
+330	Gesimuleerd
+331	Uit quarantaine
+332	In quarantaine
+333	Acties en ontvangstbewijzen
+334	Uitkomst vastleggen
+335	Vastleggen
+336	Kan reageren
+337	Bron
+338	apparaat
+339	console
+340	simulatie
+341	Start wanneer
+342	Bijgewerkt
+343	Onafhankelijke controle
+344	Wachtend
+345	Archieflimiet
+346	Versleuteld archief
+347	Uitgesloten
+348	Niet toegankelijk
+349	Tijdslimiet
+350	Te groot
+351	Niet-ondersteund formaat
+352	Geannuleerd
+353	Gemist
+354	Gedeeltelijk
+355	Time-out
+356	Volledig
+357	Op aanvraag
+358	Snel
+359	Herstel
+360	Gepland
+361	Gericht
+362	Segment toevoegen
+363	archieven
+364	Assets
+365	Deze scan stoppen? De resultaten tot nu toe blijven bewaard als geannuleerde scan.
+366	Niet gedekt
+367	Detecties
+368	Apparaten per beschermingsstatus
+369	Engine
+370	Vervaldatum
+371	Laatste bewijs
+372	Verwachte controle
+373	Voorgestelde oplossing
+374	Hertest
+375	Asset of segment
+376	Open hiaten
+377	Scanresultaten in 30 dagen
+378	van waarschuwing tot geverifieerde inperking
+379	beschermde apparaten
+380	openbare eindpunten met mitigatie stroomopwaarts
+381	van gebeurtenis tot waarschuwing
+382	apparaten met actuele definities
+383	apparaten met een volledige scan in 7 dagen
+384	open hiaten ([0] achterstallig, [1] gesloten in 30 dagen)
+385	bewaakte netwerksegmenten
+386	bevestigde terecht-positieven
+387	voltooide scans
+388	Dekking en respons
+389	Laatste volledige scan
+390	Laatste telemetrie
+391	Elk apparaat en netwerksegment in scope, of het beschermd is en wat je hierna moet oplossen.
+392	Netwerkzicht
+393	Nog geen apparaten geregistreerd. Bescherm een computer via Apparaten.
+394	Geen open hiaten.
+395	[0] open
+396	achterstallig
+397	p95 [0] s
+398	Mappen
+399	Te scannen mappen, gescheiden door komma's
+400	Versleuteling en firewall
+401	Schijfversleuteling [0], firewall [1]
+402	Herstel na incidenten
+403	Nu opnieuw controleren
+404	Niet opnieuw getest
+405	Hertest mislukt
+406	Geverifieerd gesloten
+407	Scantype
+408	Scans
+409	Segment
+410	Segmentnaam
+411	Scan starten
+412	Gestart
+413	Status
+414	Verminderd
+415	Beschermd
+416	Onbeschermd
+417	Apparaten per status
+418	[0] onbekend
+419	Geen zicht
+420	Bewaakt
+421	Zicht
+422	Geen detecties bewijst geen bescherming: controleer ook de dekking en scanresultaten.
+423	Taal
+424	Vertaaldekking
+425	Geen eerdere versie
+426	Thema
+427	Donker
+428	Hoog contrast
+429	Licht
+430	Geen nieuwe bedreigingen gevonden in [0] bestanden.
+431	[0] bedreiging
+432	[0] bedreigingen
+433	 gevonden in [0] bestanden. Bekijk ze bij Waarschuwingen en Goedkeuringen.
+434	Volledige scan
+435	Kon deze computer niet beschermen: [0]
+436	Deze computer is beschermd. Realtime scannen werkt zolang Agentic Antivirus open is.
+437	De scan is niet voltooid: [0]
+438	Scannen…
+439	Alle stations worden gescand. Dit kan lang duren.
+440	Downloads, Bureaublad en tijdelijke bestanden worden gescand…
+441	[0] bestanden konden niet worden gelezen.
+442	Een bestand
+443	Een weblink
+444	Testgegevens accepteren
+446	Acties
+447	Een integratie toevoegen
+448	Uitzondering toevoegen
+449	Integratie toevoegen
+450	Wekelijkse volledige scan toevoegen
+451	beheerder
+452	Advertenties
+453	Toestemming voor advertenties
+454	Getroffen diensten
+455	waarschuwingen in de afgelopen 24 uur
+456	Toestaan
+457	Toestaan en scannen
+458	Een beheerder moet een reden opgeven. De uitzondering wordt vastgelegd in het auditlogboek.
+459	Een e-mail
+460	Terugkeer in gebruik goedkeuren
+461	Acties goedkeuren
+462	Asset
+463	assets onder actieve mitigatie
+464	assets met waarschuwingen in 24 uur
+465	Auditlogboek
+466	Automatische bescherming blijft op elk apparaat actief. Dit zijn de acties waarover een mens moet beslissen.
+467	Beschikbaarheid
+468	Beschikbare signalen
+469	Back-up geverifieerd
+470	Blokkeren
+471	Standaard stuurt de agent beveiligingstelemetrie en bestandshashes: procesnamen en opdrachtregels, bestandspaden, metadata van netwerkverbindingen en detecties. Bestandsinhoud wordt alleen verzameld als je organisatie dat inschakelt.
+472	Capaciteit
+473	Categorie
+474	Gewijzigd
+475	Kosten
+476	Controleren
+477	kiezen
+478	Kies een apparaat
+480	Sluiten
+481	Gescheiden door komma's
+482	Contact
+483	Maatregel
+484	Dekking per beschermingslaag
+485	kritiek
+486	levering van kritieke waarschuwingen (p95, 30 dagen)
+487	Openstaande beslissingen
+488	Afwijzen
+489	Definities
+490	Beschrijf wat er gebeurde
+491	Detail
+492	Details
+493	Detectie
+494	Apparaat om te licentiëren
+495	volledig beschermde apparaten
+496	geïsoleerde apparaten
+497	Apparaten die aandacht nodig hebben
+498	Richting
+499	DNS-zone
+500	downloadpagina
+501	Tijdens de gratis proefperiode en bij onbetaalde abonnementen toont de console advertenties van Google AdSense en tonen de mobiele apps advertenties van Google AdMob, nadat om je toestemming is gevraagd. Abonnees zien 95% minder advertenties. Advertenties verschijnen nooit op schermen voor goedkeuring, inperking, bedreigingswaarschuwingen, quarantainebeoordeling, inloggen, betalen of audit.
+502	Elke publicatie maakt een nieuwe ondertekende versie. Apparaten blijven offline de laatst geverifieerde versie handhaven.
+503	Mail de ondersteuning op
+504	Eindpunt
+505	Equality Software Ltd exploiteert Agentic Antivirus. Deze pagina beschrijft wat de dienst verzamelt. De producteigenaar moet haar vóór publicatie controleren.
+506	Elke actie die een apparaat, account of verkeer wijzigt, gaat door de beleidsengine en AEP-X-governance. Een goedkeuring geldt voor één actie, de exacte doelen, deze organisatie en een vaste tijd.
+507	Elke upload wordt gecontroleerd op malware en op het echte type. Bestanden zonder geverifieerde viewer worden opgeslagen en zijn te downloaden, maar zonder voorbeeld.
+508	Uitzondering
+509	Uitzonderingen
+510	Mappad
+511	voor verzoeken om inzage of correctie.
+512	Hiaten
+513	Download de agent voor Windows, Mac of Linux via de
+514	Ga naar Apparaten, kies Een apparaat registreren en voer de getoonde opdracht uit op de computer die je wilt beschermen. De agent begint met scannen zodra hij zijn ondertekende beleid ontvangt.
+515	Status
+516	Geschiedenis
+517	Hostnaam
+518	Ik begrijp dat apparaten na de proefperiode stoppen met scannen en blokkeren tot er een abonnement is betaald.
+519	Impact
+520	Zip of tar importeren
+521	Incident
+522	Het taalmodel meenemen (als je organisatie er een heeft ingeschakeld)
+523	IP-adres
+524	Deelnemen
+525	Word lid van je organisatie
+526	Bekende malware wordt naar quarantaine verplaatst, waar ze niet kan draaien. Denk je dat een bestand onterecht is geblokkeerd, open dan Quarantaine en vraag een beoordeling aan. Een beheerder beslist, en het bestand komt pas terug na een nieuwe scan die het schoon bevindt.
+527	Talen zonder volledige vertaling vallen terug op Engels. De dekking wordt gemeten, niet geschat.
+528	Laatst gewijzigd
+529	Laag
+530	Succes van legitieme verzoeken
+531	Licentieregels
+532	Link, indien aanwezig
+533	Beheerhosts die tijdens isolatie bereikbaar blijven
+534	Markeren als fout-positief
+535	Volwassenheid
+536	Mitigatie
+537	Naam
+538	Naam van het geheim in je geheimenkluis, nooit het geheim zelf
+539	Er wachten geen acties.
+540	Geen open incidenten.
+541	Geen.
+542	Geen gemeld.
+543	niet ingesteld
+544	Gemeld na
+545	van de getoonde advertenties
+546	Offline gebeurtenisbuffer (MB)
+547	Op Android abonneer je in de app Agentic Antivirus via Google Play. Op iPhone en iPad zijn App Store-abonnementen nog niet beschikbaar. Betalen via het web is nog niet beschikbaar.
+548	Incident openen
+549	open incidenten
+550	Open incidenten
+551	p95-latentie
+552	betaald tot
+553	Padpatroon
+554	Personen
+555	Per apparaat
+556	Per gebruiker (dekt al diens apparaten)
+557	Voorbeeld
+558	Primair
+560	Een apparaat beschermen
+561	Protocol
+562	Provider
+563	Providerwaarschuwingen (24 uur)
+564	Openbare eindpunten
+565	Een beleidsversie publiceren
+566	Ondertekende versie publiceren
+567	Gepubliceerd
+568	Snelle scan
+569	Voorlezen en dicteren gebruiken de ingebouwde spraakfuncties van je browser. We nemen geen audio op en slaan die niet op.
+570	Ontvangen
+571	Verwisselbare media
+572	Verwijderen
+573	Aangevraagd
+574	Aangevraagd door
+575	Bewaartermijn
+576	Terugkeer in gebruik
+577	Op dit moment
+578	Risico
+579	Rol
+580	Terugdraaien
+581	Eindpunt opslaan
+582	Licentieregels opslaan
+583	Scannen
+584	Planning (cron)
+585	Geplande scans
+586	Verwijzing naar geheim
+587	Uitnodiging sturen
+588	Melding sturen
+589	Herstellink sturen
+590	Dienst
+591	Dienstdoelen
+594	Signaal
+595	Grootte
+596	Iets anders
+597	Sorteren
+598	Stap
+599	Processen stoppen, apparaten isoleren, bestanden herstellen, uitzonderingen toevoegen en verkeersregels wijzigen vereisen goedkeuring van een mens. Een goedkeuring geldt voor één actie, de exacte doelen en een beperkte tijd. Verandert er iets, keur dan opnieuw goed.
+600	Dit apparaat abonneren via Google Play
+601	abonnementsstatus
+603	Systeem
+604	Doel
+605	De AI-assistent
+606	De assistent groepeert samenhangende waarschuwingen, somt waarnemingen op met links naar het bewijs en markeert alles wat hij niet kan bewijzen als hypothese. Hij kan acties voorstellen maar niet goedkeuren. Als het model niet beschikbaar is, blijven scannen, waarschuwingen en handmatige respons werken.
+607	Deze computer
+608	Alleen TLS, moet op de egress-toestaanlijst staan
+609	Verkeersstormen worden opgevangen door je provider stroomopwaarts. Hier leg je elk openbaar eindpunt vast, volg je providerwaarschuwingen en keur je nieuwe verkeersbeperkingen goed.
+610	Verkeersbeperkingen
+611	Vertaald
+612	Prullenbak
+613	resterende proefdagen
+614	Schakel bescherming in om bestanden op deze computer te scannen en te letten op ransomware en diefstal van inloggegevens.
+615	niet gedekt
+616	Laatste wijziging ongedaan maken
+617	Gebruiker
+618	E-mail verifiëren
+619	wacht op goedkeuring
+620	We tonen op sommige pagina's advertenties van Google AdSense. Gepersonaliseerde advertenties toestaan?
+621	Webhook:
+622	Wat apparaten versturen
+623	Wat is het?
+624	Wanneer
+625	Als er iets wordt geblokkeerd
+626	Als de proefperiode eindigt zonder betaling
+627	Wie
+628	Je kunt je account verwijderen via je profiel. Neem contact op met
+629	Je naam
+630	Je organisatie krijgt een gratis proefperiode van 30 dagen. Daarna kost het £ 4,99 per maand per gebruiker of apparaat.
+631	Je organisatie bepaalt hoe lang telemetrie en bewijs worden bewaard. Auditrecords kunnen niet worden bewerkt of verwijderd.
+632	Je rechten
+633	Dicteren
+634	Microfoongebruik voor dicteren toestaan? Audio wordt door je browser verwerkt en niet door ons opgeslagen.
+635	Audio-uitvoer
+636	Pauzeren
+637	Toonhoogte
+638	Hervatten
+639	Snelheid
+640	Stoppen
+641	Geen stem beschikbaar voor deze taal.
+642	Stem
+643	Het bestand is naar quarantaine verplaatst en kan niet worden uitgevoerd.
+644	Er is een bedreiging geblokkeerd op dit apparaat.

@@ -1,0 +1,637 @@
+0	Svetukira kune zviri mukati zvikuru
+1	Wedzera kusiyiwa kwechigarire
+2	Isa muganhu pakufamba kwedata
+3	Unganidza ruzivo rwemudziyo
+4	Paradzanisa mudziyo nenetiweki
+5	Isa faira mukwarantini
+6	Bvisa mudziyo pakuparadzaniswa
+7	Dzorera faira raiva mukwarantini
+8	Budisa mushandisi kwese kwese
+9	Dzosera shure muganhu wekufamba kwedata
+10	Dzosera shure kuvandudzwa
+11	Ongorora midziyo
+12	Mbomira akaundi yemushandisi
+13	Mira purosesi
+14	Bvumira
+15	Ramba
+16	Tumira kumidziyo
+17	Mvumo inopera [0]
+18	Yakurudzirwa nemubatsiri weAI
+19	Kushambadza
+20	Chiito
+21	Maejenti
+22	Bvunza
+23	Bvunza mubatsiri wezvekuchengetedza
+24	Mhinduro dzinobva pamidziyo yako, zviitiko zvakavhurika nemaburi. Mubatsiri haagoni kuchinja chero chinhu.
+25	Zvichibva pa
+26	[0] chirevo chisina humbowo chabviswa
+27	[0] zvirevo zvisina humbowo zvabviswa
+29	Modhi yakaiswa pachako
+30	Mitemo (pasina modhi)
+31	Gadzira zano rekugadzirisa
+32	Nhanho imwe neimwe ikurudziro. Hapana chinoitwa kusvikira mumwe munhu azvibvumira.
+33	Mubvunzo
+34	Semuenzaniso: ndeipi midziyo inoda kutariswa?
+35	Kuoma kunokurudzirwa
+36	Pfupiso
+37	Zvinonangwa
+38	Pfupisa chiitiko ichi
+39	Sei
+40	Zvaonekwa
+41	Shuma chinhu chinofungirwa
+42	Mutemo
+43	Kuoma
+44	Yambiro
+46	Wedzera mafaira
+47	Wedzera foroda
+48	Wedzera mifananidzo
+49	[0] chakanamatidzwa
+50	[0] zvakanamatidzwa
+51	Zvakanamatidzwa
+52	Tora mufananidzo
+53	Kushandisa kamera hakuna kubvumirwa. Kubvumira mubrowser yako, kana shandisa app yekamera yemudziyo wako.
+54	Kuona kamera
+55	Browser iyi haigoni kuvhura kamera pano.
+56	Tora
+57	Vhara mubatsiri
+58	Mafaira aya chii, uye akachengeteka here?
+59	Faira
+60	Bvunza nezvekuchengetedzeka kwako, kana namatidza mafaira, foroda, mifananidzo kana mufananidzo wekamera. Chimwe nechimwe chakanamatidzwa chinotanga kuongororwa uye hapana chinochengetwa.
+61	[0] mufananidzo wakatsanangurwa
+62	[0] mifananidzo yakatsanangurwa
+63	 nemodhi.
+64	Semuenzaniso: dhawunirodhi iyi yakachengeteka here?
+65	Zvinyorwa nemifananidzo zvakachena zvinogona kutumirwa kumodhi yeAI yakabatidzwa nesangano rako. Mafaira ane njodzi haatombotumirwi.
+66	[0] faira harina kuwedzerwa
+67	[0] mafaira haana kuwedzerwa
+68	: kusvika mafaira [0], [1] MB rimwe nerimwe uye [2] MB pamwe chete.
+69	Bvisa [0]
+70	Ongorora wobvunza
+71	Zvabuda pakuongorora
+72	Rudzi
+73	Shandisa kamera yemudziyo
+74	Mhedzisiro
+75	Hapana malware inozivikanwa
+76	Ine njodzi
+77	Hazvina kuongororwa
+78	Cheni yeodhiti yakaputsika pachinyorwa [0].
+79	Cheni yeodhiti yakakwana: zvinyorwa [0] zvasimbiswa.
+80	Imeri
+81	Wakanganwa pasiwedhi?
+82	Pinda neGoogle
+83	Kupinda neGoogle hakuna kushanda. Edza zvakare, kana shandisa imeri nepasiwedhi yako.
+84	Pinda
+85	Buda
+86	Pasiwedhi itsva
+87	kana
+88	Sangano
+89	Pasiwedhi
+90	Pasiwedhi yachinjwa. Pinda nepasiwedhi yako itsva.
+91	Mavara anosvika 12 kana kupfuura.
+92	Gadzira akaundi
+93	Tumira link zvakare
+94	Kana akaundi iyoyo ichiri kuda kusimbiswa, link itsva iri munzira. Tarisawo mufoda yespam.
+95	Seta pasiwedhi patsva
+96	Kana paine akaundi inoshandisa kero iyoyo, tatumira link yekuseta patsva. Inoshanda kweawa imwe.
+97	Simbisa kero yako yeimeri usati wapinda. Vhura link yatakatumira ku[0].
+98	Imeri yasimbiswa. Wava kugona kupinda.
+99	Link iyi yapera kana kuti yakatoshandiswa. Pinda kuti uwane imwe itsva.
+100	Tarisa imeri yako kuti usimbise kero yako.
+101	Kunyoresa kunoderedza kushambadza ne95%.
+102	Nguva yako yekuedza yapera.
+103	Wakanyoresa kusvika [0]
+104	Ramba zvese zviri zvemahara nekushambadza kwakazara
+105	Mira zvese, kusanganisira kuchengetedzwa kwemidziyo, kusvikira mumwe munhu abhadhara
+106	Console inoda kunyoresa; midziyo inoramba yakachengetedzwa
+107	£4.99 pamwedzi
+108	Nyoresa
+109	Kuedza kwemahara:
+110	[0] zuva rasara
+111	[0] mazuva asara
+112	Kanzura
+113	Dzima
+114	Pane chakanganisika.
+115	Buritsa
+116	Kurodha…
+117	Hazvishande
+118	Hapana kana kamwe
+119	Tevera
+120	kwete
+121	Hapana chekuratidza.
+122	yakadzimwa
+123	yakabatidzwa
+124	Kumashure
+125	Zorodza
+126	Chengetedza
+127	Tsvaga
+128	Kuedzesera (data rekuedza)
+129	Mamiriro
+130	Hazviwanikwe
+131	Hazvizivikanwe
+132	Yavandudzwa [0]
+133	Kushanda…
+134	hongu
+135	[0] yambiro mumaawa 24
+136	[0] yambiro mumaawa 24
+137	[0] mudziyo
+138	[0] midziyo
+139	Data kubva [0]
+140	[0] chiitiko chakavhurika
+141	[0] zviitiko zvakavhurika
+142	[0] mvumo yakamirira
+143	[0] mvumo dzakamirira
+144	zvasimbiswa
+145	zvinofungirwa
+146	Nyoresa mudziyo
+147	Mudziyo
+148	Hauri kutumira mishumo
+149	Mutemo wakasarira
+150	Sensor yadzimwa
+151	Ruzivo rwehutachiona rwakasarira
+152	Matambudziko
+153	Kwakapedzisira kuonekwa
+154	Sisitimu yekushandisa
+155	Mutemo
+156	Mhanyisa pamudziyo mukati memaawa 24 (kushandiswa kamwe chete):
+157	Kuchengetedza
+158	Kopa
+159	Dhawunirodha
+160	Tamisa
+161	Foroda itsva
+162	Shandura zita
+163	Dzorera
+164	Isa mumarara
+165	Kwidza
+166	Rubatsiro
+167	[0] chinyorwa pane peji ino chakashandurwa nemuchina uye hachisati chaongororwa.
+168	[0] zvinyorwa mumutauro uno zvakashandurwa nemuchina uye hazvisati zvaongororwa.
+169	Mutauro uyu hausati washandurwa, saka Chirungu chiri kuratidzwa.
+170	zvabvumirwa
+171	Zvakaonekwa
+172	Fungidziro (hadzina kusimbiswa)
+173	Fungidziro, chivimbo [0]: [1]
+174	Ita ongororo
+175	Humbowo husipo
+176	Hazvipo: [0]
+177	Verenga zvinonzwika
+178	Zviito zvinokurudzirwa
+179	Nhoroondo yehumbowo
+180	webhook inopinda
+181	Zviratidzo kubva kumupi wako wezitupa, DNS, mafirewall nezvimwe zvishandiso. Kubatanidzwa kutsva kunotanga kusingawanikwe; adapter yemupi chete yakapasa bvunzo yayo yechibvumirano ndiyo inogona kuiswa seiri kushanda. Data rekuedza rinonzi kuedzesera kwese kwarinooneka.
+182	Haina kubatanidzwa (stub)
+183	Data rekuedza chete
+184	Hazviwanikwe
+185	Iri kushanda (yasimbiswa)
+186	Chakavanzika (chinoratidzwa kamwe chete):
+187	Mvumo
+188	Yambiro
+189	Odhiti
+190	Kunyoresa
+191	Dhashibhodhi
+192	DDoS nekuwanikwa
+193	Midziyo
+194	Mafaira
+195	Zviitiko
+196	Kubatanidzwa
+197	Mitemo
+198	Kuvanzika
+199	Kwarantini
+200	Kupindura
+201	Kuchengetedza
+202	Marongero
+203	Isa malware inozivikanwa mukwarantini otomatiki
+204	Tarisa maitiro anofungirwa
+205	Vhara masikiripiti anofungirwa
+206	Unganidza zviri mukati memafaira kuti zviongororwe (zvakadzimwa pakutanga)
+207	Bvumira kuparadzanisa nenetiweki
+208	Ongorora mafaira kana avhurwa kana anyorwa
+209	Ongorora madhawunirodhi
+210	Ongorora mapurogiramu kana atanga
+211	Dzivirira ejenti pakuchinjwa
+212	Yambira nezvemalink ane njodzi anozivikanwa
+213	Chikonzero
+214	Kumbira kuongororwa
+215	Dzorera mushure mekuongorora patsva
+216	nguva yepakati yekubviswa kwakasimbiswa (n=[0], zvisina kugadziriswa [1])
+217	kugadzirisa kwakapasa bvunzo patsva
+218	kudzoka kwedambudziko mushure mekupora
+219	kubviswa kwehutachiona kwakasimbiswa
+220	kudzoka kubasa zvakachengeteka
+221	kuongorora kwekupora kwapera
+222	Mhedzisiro yekwarantini chete ([0]) nemidziyo yakaiswa sisitimu patsva ([1]) zvinoverengwa zvakasiyana; kwarantini yoga haimboverengwi sekubvisa.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Kumirira mvumo
+227	Humbowo hwekushanda chaiko
+228	Nyora zvakasimbiswa mukushanda chaiko, pazvinhu zvipi, neshanduro ipi. Zvinyorwa hazvigone kugadziridzwa.
+229	Shanduro
+230	Chinja nzira
+231	hapana humbowo
+232	zvakundikana
+233	zvapasa
+234	zvakamirira
+235	Tarisa kufambira mberi kwegwara
+236	Midziyo inogona kupindura
+237	Midziyo yese
+238	[0] mudziyo wekuedza
+239	[0] midziyo yekuedza
+240	Zvakakwana
+241	Zvinokwana kana
+242	Kudzidzira
+243	Tarisa
+244	Pindura
+245	Kufukidzwa
+246	[0] zvinotariswa, [1] zvinogona kupindura
+247	Data
+248	Zera redata
+249	Mhenyu
+250	Data rekuedza
+251	hazvina kuitwa
+252	risiti
+253	zviri kuitika
+254	hazvizivikanwe
+255	Tumira
+256	Humbowo
+257	Zvakaitwa
+258	Zvakasarira
+259	Zvinopa data
+260	Shanduro kana digest
+261	Nharaunda
+262	Mhedzisiro
+263	Muridzi
+264	Zvinodiwa
+265	Chinhu kana boka
+266	Ratidza
+267	Zvese
+268	Hazvina kukwana
+269	Zvakabatidzwa pabasa rese
+270	Zvakabatidzwa pasangano rino
+271	Mira zviito zvitsva zvese zvekupindura zvesangano rino? Kuchengetedza nekuongorora zvinoramba zvichishanda.
+272	Bvumira zviito zvekupindura zvakare
+273	Mira zviito zvese zvekupindura
+274	Chidzimiso chekukurumidza
+275	Rudzi
+276	Maminitsi epakati akavhurika ([0] akavhurika, rekare [1] min)
+277	Kurambwa nemutemo
+278	Kudzidzira nekuedzesera (hazvina kuverengwa pamusoro)
+279	Zviito zvakadzokororwa (chinangwa 0)
+280	Kunonoka kwedata kwepakati (p95 [0] s, n=[1])
+281	Mvumo dzanonoka ([0] dzakamirira, chinangwa [1] min)
+282	Nguva yepakati kubva pachiratidzo kusvika pakurongwa (p95 [0] min, n=[1], [2] zvisati zvarongwa)
+283	Zviito zvakasimbiswa zvakazvimiririra ([0]/[1])
+284	Nguva: [0]. Risiti yoga haimboverengwi seyakasimbiswa. Data risipo rinoratidzwa serisingawanikwe.
+285	Zviyero zvekupindura
+286	Chiitiko chekupedzisira
+287	Maejenti anokurudzira; mutemo wakatemwa unosarudza zvinoitwa. Chiito chimwe nechimwe chinoratidza mvumo yacho, risiti nekuongororwa kwakazvimiririra.
+288	Danho
+289	Kumirira mvumo
+290	Zvarambwa
+291	Zvapera nguva
+292	Zvakundikana
+293	Zvinoda kuenzaniswa nemaoko
+294	Zvakurudzirwa
+295	Zviri mumutsetse
+296	Zviri kushanda
+297	Kusimbiswa kwakamirira
+298	Zvasimbiswa
+299	Mamiriro epanguva ino
+300	Nzira
+301	Kuedzesera
+302	Kuongorora nekuunganidza data zvinoitwa. Zvimwe zviito zvinoramba zviri zvikurudziro.
+303	Zviito zvakabvumirwa zvinoitwa pamidziyo yakasarudzwa.
+304	Zviito zvinoitwa pamaadapter ekuedza chete. Hapana chinochinja pamidziyo yako.
+305	Hapana zviito parizvino.
+306	Hapana chakamirira mvumo.
+307	Hapana humbowo hwekushanda chaiko hwakanyorwa parizvino.
+308	Hapana midziyo kana kubatanidzwa kuri kutumira data parizvino.
+309	Hazvina kuitwa
+310	Zvakaonekwa
+311	Zvakaitika
+312	Kupindura kuDDoS
+313	Yambiro yenhema nekudzorera
+314	Zitupa, kubiridzira (phishing) nekufamba kwedata kunofungirwa
+315	Malware nemadhawunirodhi anofungirwa
+316	Kuonekwa kwenetiweki nemamiriro emidziyo
+317	Kupora mushure mekupambwa
+318	Ransomware kana kufungirwa kupambwa
+319	Gwara
+320	Magwara
+321	Shanduro yemutemo
+322	Shanduro yakaiswa
+323	Kuparadzanisa nefirewall
+324	Data ragamuchirwa
+325	Faira rabviswa
+326	Purosesi yamiswa
+327	Mamiriro emupi
+328	Zvanyorwa
+329	Kuongorora kwapera
+330	Zvakaedzeserwa
+331	Kunze kwekwarantini
+332	Mukwarantini
+333	Zviito nemarisiti
+334	Nyora mhedzisiro
+335	Nyora
+336	Inogona kupindura
+337	Kwakabva
+338	mudziyo
+339	console
+340	kuedzesera
+341	Zvinotanga kana
+342	Zvavandudzwa
+343	Kuongorora kwakazvimiririra
+344	Kumirira
+345	Muganhu wearchive
+346	Archive yakavharidzirwa
+347	Zvasiyiwa
+348	Hazvisvikiki
+349	Muganhu wenguva
+350	Hukuru zvakanyanya
+351	Fomati isingatsigirwe
+352	Zvakanzurwa
+353	Zvakapotswa
+354	Chikamu
+355	Nguva yapera
+356	Kuzere
+357	Pakudiwa
+358	Kwekukurumidza
+359	Kupora
+360	Zvakarongwa
+361	Zvakanangwa
+362	Wedzera chikamu
+363	maarchive
+364	Zvinhu
+365	Mira kuongorora uku? Mhedzisiro kusvika pari zvino inochengetwa sekuongorora kwakanzurwa.
+366	Hazvina kufukidzwa
+367	Zvakawanikwa
+368	Midziyo nemamiriro ekuchengetedzwa
+369	Injini
+370	Inofanira
+371	Humbowo hwekupedzisira
+372	Kudzora kunotarisirwa
+373	Kugadzirisa kunokurudzirwa
+374	Edza zvakare
+375	Chinhu kana chikamu
+376	Maburi akavhurika
+377	Mhedzisiro yekuongorora mumazuva 30
+378	yambiro kusvika pakudzivirirwa kwakasimbiswa
+379	midziyo yakachengetedzwa
+380	maendipoindi eruzhinji ane kudzivirira kwemupi
+381	chiitiko kusvika payambiro
+382	midziyo ine ruzivo rwehutachiona rwazvino
+383	midziyo yakaongororwa zvizere mumazuva 7
+384	maburi akavhurika ([0] anonoka, [1] akavharwa mumazuva 30)
+385	zvikamu zvenetiweki zvinotariswa
+386	zvakasimbiswa kuti ndezvechokwadi
+387	kuongorora kwapera
+388	Kufukidzwa nekupindura
+389	Kuongorora kuzere kwekupedzisira
+390	Telemetry yekupedzisira
+391	Mudziyo wega wega nechikamu chenetiweki chiri muchikamu chebasa, kana chakachengetedzwa, uye chekugadzirisa zvinotevera.
+392	Kuonekwa kwenetiweki
+393	Hapana midziyo yakanyoreswa parizvino. Chengetedza kombiyuta kubva paMidziyo.
+394	Hapana maburi akavhurika.
+395	[0] akavhurika
+396	zvanonoka
+397	p95 [0] s
+398	Maforoda
+399	Maforoda ekuongorora, akaparadzaniswa nemakoma
+400	Kuvharidzira nefirewall
+401	Kuvharidzira dhisiki [0], firewall [1]
+402	Kupora mushure mezviitiko
+403	Tarisa zvakare izvozvi
+404	Hazvina kuedzwa zvakare
+405	Kuedzwa zvakare kwakundikana
+406	Zvasimbiswa kuti zvavharwa
+407	Rudzi rwekuongorora
+408	Kuongorora
+409	Chikamu
+410	Zita rechikamu
+411	Tanga kuongorora
+412	Zvakatanga
+413	Mamiriro
+414	Zvaderera
+415	Zvakachengetedzwa
+416	Hazvina kuchengetedzwa
+417	Midziyo nemamiriro
+418	[0] hazvizivikanwe
+419	Hapana kuonekwa
+420	Zvinotariswa
+421	Kuonekwa
+422	Kusawanikwa kwetyisidziro hakuratidzi kuchengetedzwa: tarisawo kufukidzwa nemhedzisiro yekuongorora.
+423	Mutauro
+424	Kufukidzwa kweshanduro
+425	Hapana shanduro yekare
+426	Chimiro
+427	Rima
+428	Kusiyana kwakanyanya
+429	Chiedza
+430	Hapana tyisidziro itsva dzawanikwa mumafaira [0].
+431	[0] tyisidziro yawanikwa
+432	[0] tyisidziro dzawanikwa
+433	 mumafaira [0]. Ona Yambiro neMvumo kuti uzviongorore.
+434	Kuongorora kuzere
+435	Hazvina kukwanisika kuchengetedza kombiyuta iyi: [0]
+436	Kombiyuta iyi yakachengetedzwa. Kuongorora kwepanguva imwe chete kunoshanda Agentic Antivirus ichivhurika.
+437	Kuongorora hakuna kupera: [0]
+438	Kuongorora…
+439	Kuongorora dhiraivha yega yega. Izvi zvinogona kutora nguva refu.
+440	Kuongorora Downloads, Desktop nemafaira enguva pfupi…
+441	Mafaira [0] haana kukwanisa kuverengwa.
+442	Faira
+443	Link yewebhusaiti
+444	Gamuchira data rekuedza
+446	Zviito
+447	Wedzera kubatanidzwa
+448	Wedzera kusiyiwa
+449	Wedzera kubatanidzwa
+450	Wedzera kuongorora kuzere kwevhiki nevhiki
+451	maneja
+452	Kushambadza
+453	Mvumo yekushambadza
+454	Mabasa akakanganiswa
+455	yambiro mumaawa 24 apfuura
+456	Bvumira
+457	Bvumira woongorora
+458	Maneja anofanira kupa chikonzero. Kusiyiwa kunonyorwa munhoroondo yeodhiti.
+459	Imeri
+460	Bvumira kudzoka kubasa
+461	Kubvumira zviito
+462	Chinhu
+463	zvinhu zviri pasi pekudzivirirwa
+464	zvinhu zvine yambiro mumaawa 24
+465	Nhoroondo yeodhiti
+466	Kuchengetedza otomatiki kunoramba kuchishanda pamudziyo wese. Izvi ndizvo zviito zvinoda munhu kuti asarudze.
+467	Kuwanikwa
+468	Zviratidzo zviripo
+469	Backup yasimbiswa
+470	Vhara
+471	Sezvazviri, ejenti inotumira telemetry yekuchengetedza nemahashi emafaira: mazita emapurosesi nemitsetse yemirairo, nzira dzemafaira, ruzivo rwekubatana kwenetiweki, nezvakawanikwa. Zviri mukati memafaira zvinounganidzwa chete kana sangano rako razvibatidza.
+472	Huwandu hwekugona
+473	Boka
+474	Zvakachinjwa
+475	Muripo
+476	Tarisa
+477	sarudza
+478	Sarudza mudziyo
+480	Vhara
+481	Zvakaparadzaniswa nemakoma
+482	Wekutaura naye
+483	Kudzora
+484	Kufukidzwa nechikamu chekuchengetedza
+485	zvakakomba
+486	kusvitswa kweyambiro dzakakomba (p95, mazuva 30)
+487	Sarudzo dzakamirira
+488	Ramba
+489	Ruzivo rwehutachiona
+490	Tsanangura zvakaitika
+491	Ruzivo
+492	Zvakadzama
+493	Kuwanikwa
+494	Mudziyo werezinesi
+495	midziyo yakachengetedzwa zvizere
+496	midziyo yakaparadzaniswa
+497	Midziyo inoda kutariswa
+498	Kwazvinoenda
+499	Nzvimbo yeDNS
+500	peji rekudhawunirodha
+501	Munguva yekuedza kwemahara, uye pazvirongwa zvisina kubhadharwa, console inoratidza kushambadza kweGoogle AdSense uye maapp enhare anoratidza kushambadza kweGoogle AdMob, mushure mekukumbira mvumo yako. Vakanyoresa vanoona kushambadza kushoma ne95%. Kushambadza hakumbooneki pazviratidziri zvemvumo, kudzivirira, yambiro yetyisidziro, kuongorora kwekwarantini, kupinda, kubhadhara kana odhiti.
+502	Kuburitswa kwega kwega kunogadzira shanduro itsva yakasainwa. Midziyo inoramba ichishandisa shanduro yekupedzisira yakasimbiswa kana isina indaneti.
+503	Tumira imeri kurubatsiro pa
+504	Endipoindi
+505	Equality Software Ltd ndiyo inoshandisa Agentic Antivirus. Peji rino rinotsanangura zvinounganidzwa nebasa iri. Rinofanira kuongororwa nemuridzi wechigadzirwa risati raburitswa.
+506	Chiito chimwe nechimwe chinochinja mudziyo, akaundi kana kufamba kwedata chinopfuura nemuinjini yemutemo neutungamiri hweAEP-X. Mvumo inofukidza chiito chimwe, zvinonangwa zvacho chaizvo, sangano rino, nenguva yakatarwa.
+507	Faira rimwe nerimwe rinokwidzwa rinoongororwa malware nerudzi rwaro chairwo. Mafaira asina muoni akasimbiswa anochengetwa uye anogona kudhawunirodhwa asi haaratidzwe.
+508	Kunze kwemutemo
+509	Zvakasiyiwa
+510	Nzira yeforoda
+511	kuti uwane kana kugadzirisa ruzivo rwako.
+512	Maburi
+513	Tora ejenti yeWindows, Mac kana Linux kubva pa
+514	Enda kuMidziyo, sarudza Nyoresa mudziyo, uye mhanyisa murairo unoratidzwa pakombiyuta yaunoda kuchengetedza. Ejenti inotanga kuongorora painongogamuchira mutemo wayo wakasainwa.
+515	Utano
+516	Nhoroondo
+517	Zita rekombiyuta
+518	Ndinonzwisisa kuti midziyo ichamira kuongorora nekuvhara tyisidziro mushure mekuedza kusvikira kunyoresa kwabhadharwa.
+519	Kukanganiswa
+520	Pinza zip kana tar
+521	Chiitiko
+522	Sanganisira modhi yemutauro (kana sangano rako rakabatidza imwe)
+523	Kero yeIP
+524	Pinda
+525	Pinda musangano rako
+526	Malware inozivikanwa inotamiswa kukwarantini, kwaisingagone kushanda. Kana uchifunga kuti faira rakavharwa nekukanganisa, vhura Kwarantini ukumbire kuongororwa. Maneja anosarudza, uye faira rinodzoka chete mushure mekunge kuongororwa patsva kwariwana rakachena.
+527	Mitauro isina shanduro yakakwana inodzokera kuChirungu. Kufukidzwa kunoyerwa, hakufungidzirwi.
+528	Kwakapedzisira kuchinjwa
+529	Danho
+530	Kubudirira kwezvikumbiro zvechokwadi
+531	Mitemo yerezinesi
+532	Link, kana iripo
+533	Mahost ekutonga anoramba achisvikika panguva yekuparadzaniswa
+534	Isa seyambiro yenhema
+535	Kusimba
+536	Kudzivirira
+537	Zita
+538	Zita rechakavanzika muchitoro chako chezvakavanzika, kwete chakavanzika pachacho
+539	Hapana zviito zvakamirira.
+540	Hapana zviitiko zvakavhurika.
+541	Hapana.
+542	Hapana zvashumwa.
+543	hazvina kusetwa
+544	Zvaziviswa mushure me
+545	yekushambadza kunoratidzwa
+546	Buffer yezviitiko pasina indaneti (MB)
+547	PaAndroid, nyoresa muapp yeAgentic Antivirus kuburikidza neGoogle Play. PaiPhone neiPad, kunyoresa kweApp Store hakusati kwawanikwa. Kubhadhara pawebhu hakusati kwawanikwa.
+548	Vhura chiitiko
+549	zviitiko zvakavhurika
+550	Zviitiko zvakavhurika
+551	Kunonoka kwep95
+552	yakabhadharwa kusvika
+553	Patani yenzira
+554	Vanhu
+555	Pamudziyo
+556	Pamushandisi (inofukidza midziyo yake yese)
+557	Ona pamberi
+558	Huru
+560	Chengetedza mudziyo
+561	Purotokari
+562	Mupi
+563	Yambiro dzemupi (maawa 24)
+564	Maendipoindi eruzhinji
+565	Buritsa shanduro yemutemo
+566	Buritsa shanduro yakasainwa
+567	Zvaburitswa
+568	Kuongorora kwekukurumidza
+569	Kuverenga zvinonzwika nekunyora nezwi zvinoshandisa maficha ekutaura ari mubrowser yako. Hatirekodhi kana kuchengeta odhiyo.
+570	Zvagamuchirwa
+571	Midhiya inobviswa
+572	Bvisa
+573	Zvakumbirwa
+574	Zvakumbirwa na
+575	Kuchengetwa
+576	Kudzoka kubasa
+577	Izvozvi
+578	Njodzi
+579	Basa
+580	Dzosera shure
+581	Chengetedza endipoindi
+582	Chengetedza mitemo yerezinesi
+583	Ongorora
+584	Purogiramu (cron)
+585	Kuongorora kwakarongwa
+586	Chirevo chechakavanzika
+587	Tumira kukoka
+588	Tumira mushumo
+589	Tumira link yekuseta patsva
+590	Basa
+591	Zvinangwa zvebasa
+594	Chiratidzo
+595	Saizi
+596	Chimwe chinhu
+597	Ronga
+598	Nhanho
+599	Kumisa mapurosesi, kuparadzanisa midziyo, kudzorera mafaira, kuwedzera zvakasiyiwa nekuchinja mitemo yekufamba kwedata zvinoda munhu kuti azvibvumire. Mvumo inofukidza chiito chimwe, zvinonangwa zvacho chaizvo nenguva shoma. Kana paine chinochinja, bvumira zvakare.
+600	Nyoresa mudziyo uyu neGoogle Play
+601	mamiriro ekunyoresa
+603	Sisitimu
+604	Chinangwa
+605	Mubatsiri weAI
+606	Mubatsiri anoisa pamwe yambiro dzine hukama, anonyora zvakaonekwa nemalink kuhumbowo, uye anomaka chero chaasingagoni kuratidza sefungidziro. Anogona kukurudzira zviito asi haagoni kuzvibvumira. Kana modhi isingawanikwe, kuongorora, yambiro nemhinduro dzemaoko zvinoramba zvichishanda.
+607	Kombiyuta iyi
+608	TLS chete, inofanira kunge iri parondedzero yekubuda inobvumirwa
+609	Kuwandisa kwedata kunotorwa nemupi wako wepamusoro. Pano unoverenga endipoindi yega yega yeruzhinji, unotarisa yambiro dzemupi, uye unobvumira zvirambidzo zvitsva zvekufamba kwedata.
+610	Zvirambidzo zvekufamba kwedata
+611	Zvakashandurwa
+612	Marara
+613	mazuva ekuedza asara
+614	Batidza kuchengetedza kuti uongorore mafaira pakombiyuta iyi uye utarise ransomware nekubiwa kwezvitupa.
+615	zvisina kufukidzwa
+616	Dzosa shanduko yekupedzisira
+617	Mushandisi
+618	Simbisa imeri
+619	kumirira mvumo
+620	Tinoratidza kushambadza kubva kuGoogle AdSense pamamwe mapeji. Bvumira kushambadza kwakagadzirirwa iwe?
+621	Webhook:
+622	Zvinotumirwa nemidziyo
+623	Chii ichi?
+624	Rini
+625	Kana chimwe chinhu chavharwa
+626	Kana kuedza kwapera pasina kubhadhara
+627	Ani
+628	Unogona kudzima akaundi yako kubva paprofile yako. Taura na
+629	Zita rako
+630	Sangano rako rinowana kuedza kwemahara kwemazuva 30. Mushure maizvozvo zvinodhura £4.99 pamwedzi pamushandisi kana mudziyo wega wega.
+631	Sangano rako rinosarudza kuti telemetry nehumbowo zvinochengetwa kwenguva yakareba sei. Zvinyorwa zveodhiti hazvigone kugadziridzwa kana kudzimwa.
+632	Kodzero dzako
+633	Nyora nezwi
+634	Bvumira kushandiswa kwemaikorofoni pakunyora nezwi? Odhiyo inogadziriswa nebrowser yako uye hatiichengete.
+635	Kubuda kweodhiyo
+636	Mbomira
+637	Kukwirira kwezwi
+638	Enderera mberi
+639	Kumhanya
+640	Mira
+641	Hapana inzwi riripo remutauro uyu.
+642	Inzwi
+643	Faira ratamiswa kukwarantini uye harigoni kushanda.
+644	Tyisidziro yavharwa pamudziyo uyu.

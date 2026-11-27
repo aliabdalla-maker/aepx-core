@@ -1,0 +1,637 @@
+0	Joan eduki nagusira
+1	Gehitu salbuespen iraunkor bat
+2	Aplikatu trafiko-murriztapen bat
+3	Bildu gailuaren metadatuak
+4	Isolatu gailu bat saretik
+5	Jarri fitxategi bat berrogeialdian
+6	Atera gailu bat isolamendutik
+7	Leheneratu berrogeialdiko fitxategi bat
+8	Amaitu erabiltzaile baten saioa leku guztietan
+9	Desegin trafiko-murriztapen bat
+10	Desegin eguneratze bat
+11	Eskaneatu gailuak
+12	Eten erabiltzaile-kontu bat
+13	Gelditu prozesu bat
+14	Onartu
+15	Ukatu
+16	Bidali gailuetara
+17	Onarpena iraungitzen da: [0]
+18	AA laguntzaileak proposatua
+19	Iragarkia
+20	Ekintza
+21	Agenteak
+22	Galdetu
+23	Galdetu segurtasun-laguntzaileari
+24	Erantzunak zure gailuetatik, intzidentzia irekietatik eta hutsuneetatik datoz. Laguntzaileak ezin du ezer aldatu.
+25	Oinarria
+26	Frogarik gabeko [0] baieztapen kendu da
+27	Frogarik gabeko [0] baieztapen kendu dira
+29	Norberak ostatatutako eredua
+30	Arauak (eredurik gabe)
+31	Idatzi zuzenketa-plan baten zirriborroa
+32	Urrats bakoitza proposamen bat da. Ez da ezer exekutatzen norbaitek onartu arte.
+33	Galdera
+34	Adibidez: zer gailuk behar dute arreta?
+35	Iradokitako larritasuna
+36	Laburpena
+37	Helburuak
+38	Laburbildu intzidentzia hau
+39	Zergatik
+40	Detektatua
+41	Jakinarazi zerbait susmagarria
+42	Araua
+43	Larritasuna
+44	Alerta
+46	Gehitu fitxategiak
+47	Gehitu karpeta bat
+48	Gehitu irudiak
+49	[0] eranskin
+50	[0] eranskin
+51	Eranskinak
+52	Atera argazki bat
+53	Ez da kamera erabiltzeko baimenik eman. Eman baimena arakatzailean, edo erabili gailuaren kamera-aplikazioa.
+54	Kameraren aurrebista
+55	Arakatzaile honek ezin du kamera hemen ireki.
+56	Atera
+57	Itxi laguntzailea
+58	Zer dira fitxategi hauek, eta seguruak dira?
+59	Fitxategia
+60	Galdetu zure segurtasunari buruz, edo erantsi fitxategiak, karpeta bat, irudiak edo kamerako argazki bat. Eranskin bakoitza lehenik eskaneatzen da, eta ez da ezer gordetzen.
+61	[0] irudi
+62	[0] irudi
+63	 ereduak deskribatu ditu.
+64	Adibidez: segurua da deskarga hau?
+65	Testu eta irudi garbiak zure erakundeak gaitutako AA ereduari bidal dakizkioke. Fitxategi maltzurrak inoiz ez.
+66	Ez da [0] fitxategi gehitu
+67	Ez dira [0] fitxategi gehitu
+68	: gehienez [0] fitxategi, bakoitza [1] MB eta guztira [2] MB.
+69	Kendu [0]
+70	Eskaneatu eta galdetu
+71	Eskaneatzearen emaitzak
+72	Mota
+73	Erabili gailuaren kamera
+74	Emaitza
+75	Ez dago malware ezagunik
+76	Maltzurra
+77	Eskaneatu gabea
+78	Auditoria-katea hautsita dago sarrera honetan: [0].
+79	Auditoria-katea osorik dago: [0] sarrera egiaztatuta.
+80	Helbide elektronikoa
+81	Pasahitza ahaztu duzu?
+82	Hasi saioa Google-rekin
+83	Google-rekin saioa hasteak ez du funtzionatu. Saiatu berriro, edo erabili zure helbide elektronikoa eta pasahitza.
+84	Hasi saioa
+85	Amaitu saioa
+86	Pasahitz berria
+87	edo
+88	Erakundea
+89	Pasahitza
+90	Pasahitza aldatu da. Hasi saioa pasahitz berriarekin.
+91	Gutxienez 12 karaktere.
+92	Sortu kontua
+93	Bidali esteka berriro
+94	Kontu hori oraindik berretsi behar bada, esteka berri bat bidean da. Begiratu spam karpeta ere.
+95	Berrezarri pasahitza
+96	Kontu batek helbide hori erabiltzen badu, berrezartzeko esteka bat bidali dugu. Ordubetez balio du.
+97	Berretsi zure helbide elektronikoa saioa hasi aurretik. Ireki helbide honetara bidali dugun esteka: [0].
+98	Helbide elektronikoa egiaztatuta. Orain saioa has dezakezu.
+99	Esteka hau iraungita dago edo erabilita dago jada. Hasi saioa berri bat lortzeko.
+100	Begiratu zure posta helbidea egiaztatzeko.
+101	Harpidetzak iragarkiak % 95 murrizten ditu.
+102	Zure proba-aldia amaitu da.
+103	Harpidetuta data honetara arte: [0]
+104	Mantendu dena doan, iragarki guztiekin
+105	Gelditu dena, gailuen babesa barne, norbaitek ordaindu arte
+106	Kontsolak harpidetza behar du; gailuak babestuta jarraitzen dute
+107	4,99 £ hilean
+108	Harpidetu
+109	Doako proba: 
+110	[0] egun geratzen da
+111	[0] egun geratzen dira
+112	Utzi
+113	Ezabatu
+114	Zerbait gaizki joan da.
+115	Esportatu
+116	Kargatzen…
+117	E/E
+118	Inoiz ez
+119	Hurrengoa
+120	ez
+121	Ez dago ezer erakusteko.
+122	desaktibatuta
+123	aktibatuta
+124	Aurrekoa
+125	Freskatu
+126	Gorde
+127	Bilatu
+128	Simulazioa (proba-datuak)
+129	Egoera
+130	Ez dago erabilgarri
+131	Ezezaguna
+132	Eguneratua: [0]
+133	Lanean…
+134	bai
+135	[0] alerta 24 orduan
+136	[0] alerta 24 orduan
+137	[0] gailu
+138	[0] gailu
+139	Datuak data honetakoak: [0]
+140	[0] intzidentzia ireki
+141	[0] intzidentzia ireki
+142	[0] onarpen zain
+143	[0] onarpen zain
+144	berretsia
+145	susmagarria
+146	Erregistratu gailu bat
+147	Gailua
+148	Ez du txostenik bidaltzen
+149	Gidalerro zaharkitua
+150	Sentsorea desgaituta
+151	Definizio zaharkituak
+152	Arazoak
+153	Azken aldiz ikusia
+154	Sistema eragilea
+155	Gidalerroa
+156	Exekutatu gailuan 24 orduren barruan (erabilera bakarra):
+157	Babesa
+158	Kopiatu
+159	Deskargatu
+160	Mugitu
+161	Karpeta berria
+162	Aldatu izena
+163	Leheneratu
+164	Bota zakarrontzira
+165	Kargatu
+166	Laguntza
+167	Orri honetako [0] testu itzulpen automatikoa da, eta ez da berrikusi oraindik.
+168	Hizkuntza honetako [0] testu itzulpen automatikoak dira, eta ez dira berrikusi oraindik.
+169	Hizkuntza hau ez dago itzulita oraindik; beraz, ingelesa erakusten da.
+170	onartua
+171	Ikusitako gertaerak
+172	Hipotesiak (berretsi gabeak)
+173	Hipotesia, konfiantza [0]: [1]
+174	Abiarazi ikerketa
+175	Falta diren frogak
+176	Falta da: [0]
+177	Irakurri ozen
+178	Gomendatutako ekintzak
+179	Frogen kronologia
+180	sarrerako webhooka
+181	Zure identitate-hornitzailearen, DNSaren, suebakien eta beste tresna batzuen seinaleak. Integrazio berriak erabilgarri ez bezala hasten dira; kontratu-proba gainditu duen hornitzaile-egokitzaile bat bakarrik marka daiteke zuzeneko gisa. Proba-datuak simulazio gisa etiketatzen dira agertzen diren leku guztietan.
+182	Konektatu gabea (behin-behinekoa)
+183	Proba-datuak soilik
+184	Ez dago erabilgarri
+185	Zuzenean (egiaztatua)
+186	Sekretua (behin erakusten da):
+187	Onarpenak
+188	Alertak
+189	Auditoria
+190	Harpidetza
+191	Panela
+192	DDoS eta erabilgarritasuna
+193	Gailuak
+194	Fitxategiak
+195	Intzidentziak
+196	Integrazioak
+197	Gidalerroak
+198	Pribatutasuna
+199	Berrogeialdia
+200	Erantzuna
+201	Segurtasuna
+202	Ezarpenak
+203	Jarri malware ezaguna berrogeialdian automatikoki
+204	Zaindu portaera susmagarria
+205	Blokeatu script susmagarriak
+206	Bildu fitxategien edukia ikerketarako (desaktibatuta lehenespenez)
+207	Baimendu sare-isolamendua
+208	Eskaneatu fitxategiak irekitzean edo idaztean
+209	Eskaneatu deskargak
+210	Eskaneatu programak abiaraztean
+211	Babestu agentea aldaketetatik
+212	Abisatu esteka maltzur ezagunei buruz
+213	Arrazoia
+214	Eskatu berrikuspena
+215	Leheneratu eskaneatze berri baten ondoren
+216	desagerrarazte egiaztaturako batez besteko denbora (n=[0], ebatzi gabe [1])
+217	berriro probatuta gainditu duten zuzenketak
+218	berragerpena berreskuratu ondoren
+219	birus-kentze egiaztatua
+220	zerbitzura itzulera segurua
+221	berreskuratze-eskaneatze osatuak
+222	Berrogeialdia soilik izan duten emaitzak ([0]) eta berrinstalatutako gailuak ([1]) bereiz zenbatzen dira; berrogeialdia bera ez da inoiz kentzetzat hartzen.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Onarpenaren zain
+227	Ekoizpeneko frogak
+228	Erregistratu ekoizpenean zer egiaztatu den, zer aktibotan eta zer bertsiorekin. Sarrerak ezin dira editatu.
+229	Bertsioa
+230	Aldatu modua
+231	frogarik ez
+232	huts egin du
+233	gainditua
+234	zain
+235	Begiratu prozedura-gidaren aurrerapena
+236	Erantzun dezaketen gailuak
+237	Gailu guztiak
+238	[0] gailu pilotu
+239	[0] gailu pilotu
+240	Osatua
+241	Osatuta noiz
+242	Simulakroa
+243	Behatu
+244	Erantzun
+245	Estaldura
+246	[0] behatuta, [1] erantzuteko gai
+247	Datuak
+248	Datuen adina
+249	Zuzenean
+250	Proba-datuak
+251	exekutatu gabea
+252	ziurtagiria
+253	abian
+254	ezezaguna
+255	Bidalketa
+256	Frogak
+257	Exekutatu da
+258	Zaharkitua
+259	Datu-iturriak
+260	Bertsioa edo laburpena
+261	Ingurunea
+262	Emaitza
+263	Arduraduna
+264	Baldintza
+265	Aktiboa edo kohortea
+266	Erakutsi
+267	Guztiak
+268	Osatu gabea
+269	Aktibatuta zerbitzu osorako
+270	Aktibatuta erakunde honetarako
+271	Erakunde honetarako erantzun-ekintza berri guztiak gelditu nahi dituzu? Babesak eta eskaneatzeak martxan jarraituko dute.
+272	Baimendu berriro erantzun-ekintzak
+273	Gelditu erantzun-ekintza guztiak
+274	Larrialdi-etengailua
+275	Mota
+276	Irekita egondako minutuen mediana ([0] irekita, zaharrena [1] min)
+277	Gidalerroaren ukapenak
+278	Simulakroak eta simulazioak (goian zenbatu gabe)
+279	Ekintza errepikatuak (helburua 0)
+280	Iturrien atzerapenaren mediana (p95 [0] s, n=[1])
+281	Epez kanpoko onarpenak ([0] zain, helburua [1] min)
+282	Seinaletik triajera arteko mediana (p95 [0] min, n=[1], [2] triajerik gabe)
+283	Modu independentean egiaztatutako ekintzak ([0]/[1])
+284	Leihoa: [0]. Ziurtagiri bat bakarrik ez da inoiz egiaztatutzat hartzen. Falta diren datuak erabilgarri ez bezala agertzen dira.
+285	Erantzun-neurriak
+286	Azken gertaera
+287	Agenteek proposatzen dute; gidalerro finko batek erabakitzen du zer exekutatzen den. Ekintza bakoitzak bere onarpena, ziurtagiria eta egiaztapen independentea erakusten ditu.
+288	Fasea
+289	Onarpenaren zain
+290	Ukatua
+291	Iraungia
+292	Huts egin du
+293	Eskuzko bateratzea behar du
+294	Proposatua
+295	Ilaran
+296	Exekutatzen
+297	Egiaztapena zain
+298	Egiaztatua
+299	Zuzeneko egoera
+300	Modua
+301	Simulazioa
+302	Eskaneatzeak eta datu-bilketa exekutatzen dira. Beste ekintzak proposamen gisa geratzen dira.
+303	Onartutako ekintzak aukeratutako gailuetan exekutatzen dira.
+304	Ekintzak proba-egokitzaileen aurka bakarrik exekutatzen dira. Zure gailuetan ez da ezer aldatzen.
+305	Ez dago ekintzarik oraindik.
+306	Ez dago ezer onarpenaren zain.
+307	Ez da ekoizpeneko frogarik erregistratu oraindik.
+308	Oraindik ez dago daturik bidaltzen duen gailu edo integraziorik.
+309	Ez da exekutatu
+310	Behatua
+311	Zer gertatu den
+312	DDoS erantzuna
+313	Positibo faltsua eta leheneratzea
+314	Identitatea, phishinga eta trafiko susmagarria
+315	Malwarea eta deskarga susmagarriak
+316	Sare-ikusgarritasuna eta gailuen egoera
+317	Arriskuaren osteko berreskuratzea
+318	Ransomwarea edo arrisku susmagarria
+319	Prozedura-gida
+320	Prozedura-gidak
+321	Gidalerroaren bertsioa
+322	Instalatutako bertsioa
+323	Suebaki bidezko isolamendua
+324	Datuak jasota
+325	Fitxategia kenduta
+326	Prozesua geldituta
+327	Hornitzailearen egoera
+328	Erregistratua
+329	Eskaneatzea osatuta
+330	Simulatua
+331	Berrogeialditik kanpo
+332	Berrogeialdian
+333	Ekintzak eta ziurtagiriak
+334	Erregistratu emaitza
+335	Erregistratu
+336	Erantzun dezake
+337	Iturria
+338	gailua
+339	kontsola
+340	simulazioa
+341	Hasiera noiz
+342	Eguneratua
+343	Egiaztapen independentea
+344	Zain
+345	Artxibo-muga
+346	Artxibo zifratua
+347	Baztertua
+348	Eskuraezina
+349	Denbora-muga
+350	Handiegia
+351	Formatu ez-onartua
+352	Bertan behera utzia
+353	Galdua
+354	Partziala
+355	Denbora agortuta
+356	Osoa
+357	Eskaria egitean
+358	Azkarra
+359	Berreskuratzea
+360	Programatua
+361	Zuzendua
+362	Gehitu segmentua
+363	artxiboak
+364	Aktiboak
+365	Eskaneatze hau gelditu nahi duzu? Orain arteko emaitzak bertan behera utzitako eskaneatze gisa gordeko dira.
+366	Estali gabea
+367	Detekzioak
+368	Gailuak babes-egoeraren arabera
+369	Motorra
+370	Epemuga
+371	Azken froga
+372	Espero den kontrola
+373	Proposatutako zuzenketa
+374	Probatu berriro
+375	Aktiboa edo segmentua
+376	Hutsune irekiak
+377	Eskaneatzeen emaitzak 30 egunean
+378	alertatik euste egiaztatura
+379	gailu babestuak
+380	hornitzailearen arintzea duten amaiera-puntu publikoak
+381	gertaeratik alertara
+382	definizio eguneratuak dituzten gailuak
+383	7 egunean eskaneatze osoa izan duten gailuak
+384	hutsune irekiak ([0] epez kanpo, [1] itxita 30 egunean)
+385	monitorizatutako sare-segmentuak
+386	benetako positibo berretsiak
+387	osatutako eskaneatzeak
+388	Estaldura eta erantzuna
+389	Azken eskaneatze osoa
+390	Azken telemetria
+391	Esparruko gailu eta sare-segmentu guztiak, babestuta dauden ala ez, eta hurrengo zer konpondu.
+392	Sare-ikusgarritasuna
+393	Ez dago gailurik erregistratuta oraindik. Babestu ordenagailu bat Gailuak ataletik.
+394	Ez dago hutsune irekirik.
+395	[0] irekita
+396	epez kanpo
+397	p95 [0] s
+398	Karpetak
+399	Eskaneatu beharreko karpetak, komaz bereizita
+400	Zifratzea eta suebakia
+401	Disko-zifratzea: [0], suebakia: [1]
+402	Intzidentzien osteko berreskuratzea
+403	Egiaztatu berriro orain
+404	Berriro probatu gabea
+405	Berriro probatzeak huts egin du
+406	Itxita eta egiaztatuta
+407	Eskaneatze mota
+408	Eskaneatzeak
+409	Segmentua
+410	Segmentuaren izena
+411	Hasi eskaneatzea
+412	Hasia
+413	Egoera
+414	Degradatua
+415	Babestua
+416	Babesik gabe
+417	Gailuak egoeraren arabera
+418	[0] ezezagun
+419	Ikusgarritasunik ez
+420	Monitorizatua
+421	Ikusgarritasuna
+422	Detekziorik ez izateak ez du babesa frogatzen: begiratu estaldura eta eskaneatzeen emaitzak ere.
+423	Hizkuntza
+424	Itzulpenaren estaldura
+425	Ez dago aurreko bertsiorik
+426	Gaia
+427	Iluna
+428	Kontraste handia
+429	Argia
+430	Ez da mehatxu berririk aurkitu [0] fitxategitan.
+431	[0] mehatxu
+432	[0] mehatxu
+433	 aurkitu dira [0] fitxategitan. Ikusi Alertak eta Onarpenak berrikusteko.
+434	Eskaneatze osoa
+435	Ezin izan da ordenagailu hau babestu: [0]
+436	Ordenagailu hau babestuta dago. Denbora errealeko eskaneatzea martxan dago Agentic Antivirus irekita dagoen bitartean.
+437	Eskaneatzea ez da amaitu: [0]
+438	Eskaneatzen…
+439	Unitate guztiak eskaneatzen. Honek denbora luzea har dezake.
+440	Deskargak, Mahaigaina eta aldi baterako fitxategiak eskaneatzen…
+441	Ezin izan dira [0] fitxategi irakurri.
+442	Fitxategi bat
+443	Webgune-esteka bat
+444	Onartu proba-datuak
+446	Ekintzak
+447	Gehitu integrazio bat
+448	Gehitu salbuespena
+449	Gehitu integrazioa
+450	Gehitu asteroko eskaneatze osoa
+451	administratzailea
+452	Publizitatea
+453	Publizitaterako baimena
+454	Eragindako zerbitzuak
+455	azken 24 orduetako alertak
+456	Baimendu
+457	Baimendu eta eskaneatu
+458	Administratzaile batek arrazoi bat eman behar du. Salbuespena auditoria-erregistroan gordetzen da.
+459	Mezu elektroniko bat
+460	Onartu zerbitzura itzultzea
+461	Ekintzen onarpena
+462	Aktiboa
+463	arintze aktiboan dauden aktiboak
+464	24 orduan alertak izan dituzten aktiboak
+465	Auditoria-erregistroa
+466	Babes automatikoak martxan jarraitzen du gailu guztietan. Hauek dira pertsona batek erabaki behar dituen ekintzak.
+467	Erabilgarritasuna
+468	Seinale erabilgarriak
+469	Babeskopia egiaztatuta
+470	Blokeatu
+471	Lehenespenez, agenteak segurtasun-telemetria eta fitxategien hashak bidaltzen ditu: prozesuen izenak eta komando-lerroak, fitxategien bideak, sare-konexioen metadatuak eta detekzioak. Fitxategien edukia zure erakundeak aktibatzen badu bakarrik biltzen da.
+472	Edukiera
+473	Kategoria
+474	Aldatua
+475	Kobrua
+476	Egiaztatu
+477	aukeratu
+478	Aukeratu gailu bat
+480	Itxi
+481	Komaz bereizita
+482	Kontaktua
+483	Kontrola
+484	Estaldura babes-geruzaren arabera
+485	kritikoa
+486	alerta kritikoen entrega (p95, 30 egun)
+487	Zain dauden erabakiak
+488	Baztertu
+489	Definizioak
+490	Deskribatu zer gertatu den
+491	Xehetasuna
+492	Xehetasunak
+493	Detekzioa
+494	Lizentziatu beharreko gailua
+495	guztiz babestutako gailuak
+496	gailu isolatuak
+497	Arreta behar duten gailuak
+498	Norabidea
+499	DNS eremua
+500	deskarga-orria
+501	Doako proban eta ordaindu gabeko planetan, kontsolak Google AdSense iragarkiak erakusten ditu eta aplikazio mugikorrek Google AdMob iragarkiak, zure baimena eskatu ondoren. Harpidedunek % 95 iragarki gutxiago ikusten dituzte. Iragarkiak ez dira inoiz agertzen onarpen-, euste-, mehatxu-abisu-, berrogeialdi-berrikuspen-, saio-hasiera-, ordainketa- edo auditoria-pantailetan.
+502	Argitalpen bakoitzak bertsio sinatu berri bat sortzen du. Gailuek egiaztatutako azken bertsioa aplikatzen jarraitzen dute lineaz kanpo dauden bitartean.
+503	Idatzi laguntza-zerbitzura:
+504	Amaiera-puntua
+505	Equality Software Ltd-k kudeatzen du Agentic Antivirus. Orri honek zerbitzuak zer biltzen duen deskribatzen du. Produktuaren arduradunak berrikusi behar du argitaratu aurretik.
+506	Gailu bat, kontu bat edo trafikoa aldatzen duen ekintza orok gidalerro-motorra eta AEP-X gobernantza gainditzen ditu. Onarpen batek ekintza bat, haren helburu zehatzak, erakunde hau eta denbora finko bat hartzen ditu.
+507	Kargatutako fitxategi bakoitza malwarerik duen eta benetako mota zein den egiaztatzen da. Ikustaile egiaztaturik gabeko fitxategiak gorde eta deskarga daitezke, baina ez da aurrebistarik erakusten.
+508	Salbuespena
+509	Salbuespenak
+510	Karpetaren bidea
+511	sarbide- edo zuzenketa-eskaeretarako.
+512	Hutsuneak
+513	Lortu Windows, Mac edo Linux sistemetarako agentea hemendik:
+514	Joan Gailuak atalera, aukeratu Erregistratu gailu bat, eta exekutatu erakusten den komandoa babestu nahi duzun ordenagailuan. Agentea eskaneatzen hasten da bere gidalerro sinatua jaso bezain laster.
+515	Osasuna
+516	Historia
+517	Ostalari-izena
+518	Ulertzen dut gailuek mehatxuak eskaneatzeari eta blokeatzeari utziko diotela proba-aldiaren ondoren, harpidetza ordaindu arte.
+519	Eragina
+520	Inportatu zip edo tar
+521	Intzidentzia
+522	Sartu hizkuntza-eredua (zure erakundeak bat gaitu badu)
+523	IP helbidea
+524	Batu
+525	Batu zure erakundera
+526	Malware ezaguna berrogeialdira eramaten da, eta han ezin da exekutatu. Fitxategi bat oker blokeatu dela uste baduzu, ireki Berrogeialdia eta eskatu berrikuspena. Administratzaile batek erabakitzen du, eta fitxategia eskaneatze berri batek garbi dagoela ikusi ondoren bakarrik itzultzen da.
+527	Itzulpen osoa ez duten hizkuntzek ingelesa erakusten dute. Estaldura neurtu egiten da, ez da kalkulatzen.
+528	Azken aldaketa
+529	Geruza
+530	Eskaera legitimoen arrakasta
+531	Lizentzia-arauak
+532	Esteka, baldin badago
+533	Isolamenduan eskuragarri mantentzen diren kudeaketa-ostalariak
+534	Markatu positibo faltsu gisa
+535	Heldutasuna
+536	Arintzea
+537	Izena
+538	Sekretuaren izena zure sekretu-biltegian, inoiz ez sekretua bera
+539	Ez dago ekintzarik zain.
+540	Ez dago intzidentzia irekirik.
+541	Bat ere ez.
+542	Ez da ezer jakinarazi.
+543	ezarri gabea
+544	Jakinarazia honen ondoren:
+545	erakutsitako iragarkietatik
+546	Lineaz kanpoko gertaeren bufferra (MB)
+547	Androiden, harpidetu Agentic Antivirus aplikazioan Google Play bidez. iPhone eta iPad gailuetan, App Store harpidetzak ez daude erabilgarri oraindik. Webean ordaintzea ez dago erabilgarri oraindik.
+548	Intzidentzia irekia
+549	intzidentzia irekiak
+550	Intzidentzia irekiak
+551	p95 latentzia
+552	ordainduta data honetara arte:
+553	Bide-eredua
+554	Pertsonak
+555	Gailuko
+556	Erabiltzaileko (haren gailu guztiak barne)
+557	Aurrebista
+558	Nagusia
+560	Babestu gailu bat
+561	Protokoloa
+562	Hornitzailea
+563	Hornitzailearen alertak (24 ordu)
+564	Amaiera-puntu publikoak
+565	Argitaratu gidalerro-bertsio bat
+566	Argitaratu bertsio sinatua
+567	Argitaratua
+568	Eskaneatze azkarra
+569	Ozen irakurtzeko eta diktatzeko funtzioek zure arakatzailearen ahots-funtzio integratuak erabiltzen dituzte. Ez dugu audiorik grabatzen ez gordetzen.
+570	Jasoa
+571	Euskarri aldagarriak
+572	Kendu
+573	Eskatua
+574	Eskatzailea
+575	Atxikipena
+576	Zerbitzura itzultzea
+577	Oraintxe bertan
+578	Arriskua
+579	Rola
+580	Desegin
+581	Gorde amaiera-puntua
+582	Gorde lizentzia-arauak
+583	Eskaneatu
+584	Programazioa (cron)
+585	Programatutako eskaneatzeak
+586	Sekretuaren erreferentzia
+587	Bidali gonbidapena
+588	Bidali txostena
+589	Bidali berrezartzeko esteka
+590	Zerbitzua
+591	Zerbitzu-helburuak
+594	Seinalea
+595	Tamaina
+596	Beste zerbait
+597	Ordenatu
+598	Urratsa
+599	Prozesuak gelditzeko, gailuak isolatzeko, fitxategiak leheneratzeko, salbuespenak gehitzeko eta trafiko-arauak aldatzeko, pertsona batek onartu behar du. Onarpen batek ekintza bat, haren helburu zehatzak eta denbora mugatu bat hartzen ditu. Zerbait aldatzen bada, onartu berriro.
+600	Harpidetu gailu hau Google Play bidez
+601	harpidetzaren egoera
+603	Sistema
+604	Helburua
+605	AA laguntzailea
+606	Laguntzaileak erlazionatutako alertak taldekatzen ditu, ikusitakoa zerrendatzen du frogetarako estekekin, eta frogatu ezin duen guztia hipotesi gisa markatzen du. Ekintzak iradoki ditzake, baina ezin ditu onartu. Eredua erabilgarri ez badago, eskaneatzeak, alertek eta eskuzko erantzunek funtzionatzen jarraitzen dute.
+607	Ordenagailu hau
+608	TLS soilik, irteerako baimen-zerrendan egon behar du
+609	Trafiko-uholdeak zure goi-mailako hornitzaileak xurgatzen ditu. Hemen amaiera-puntu publiko guztiak kontrolatzen dituzu, hornitzailearen alertak zaintzen dituzu eta trafiko-murriztapen berriak onartzen dituzu.
+610	Trafiko-murriztapenak
+611	Itzulia
+612	Zakarrontzia
+613	proba-egun geratzen dira
+614	Aktibatu babesa ordenagailu honetako fitxategiak eskaneatzeko eta ransomwarea eta kredentzialen lapurreta zaintzeko.
+615	estali gabea
+616	Desegin azken aldaketa
+617	Erabiltzailea
+618	Egiaztatu helbide elektronikoa
+619	onarpenaren zain
+620	Google AdSense iragarkiak erakusten ditugu orri batzuetan. Iragarki pertsonalizatuak baimendu nahi dituzu?
+621	Webhooka:
+622	Zer bidaltzen duten gailuek
+623	Zer da?
+624	Noiz
+625	Zerbait blokeatzen denean
+626	Proba-aldia ordainketarik gabe amaitzen denean
+627	Nor
+628	Zure kontua profiletik ezaba dezakezu. Jarri harremanetan:
+629	Zure izena
+630	Zure erakundeak 30 eguneko doako proba du. Horren ondoren, 4,99 £ balio du hilean erabiltzaile edo gailu bakoitzeko.
+631	Zure erakundeak erabakitzen du telemetria eta frogak zenbat denboraz gordetzen diren. Auditoria-erregistroak ezin dira editatu ez ezabatu.
+632	Zure eskubideak
+633	Diktatu
+634	Mikrofonoa diktatzeko erabiltzea baimendu nahi duzu? Zure arakatzaileak prozesatzen du audioa, eta guk ez dugu gordetzen.
+635	Audio-irteera
+636	Pausatu
+637	Tonua
+638	Berrekin
+639	Abiadura
+640	Gelditu
+641	Ez dago ahotsik hizkuntza honetarako.
+642	Ahotsa
+643	Fitxategia berrogeialdira eraman da, eta ezin da exekutatu.
+644	Mehatxu bat blokeatu da gailu honetan.

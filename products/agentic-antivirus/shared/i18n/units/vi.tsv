@@ -1,0 +1,637 @@
+0	Chuyển đến nội dung chính
+1	Thêm loại trừ vĩnh viễn
+2	Áp dụng giới hạn lưu lượng
+3	Thu thập siêu dữ liệu thiết bị
+4	Cách ly thiết bị khỏi mạng
+5	Cách ly một tệp
+6	Gỡ cách ly cho thiết bị
+7	Khôi phục tệp đã cách ly
+8	Đăng xuất người dùng khỏi mọi nơi
+9	Hoàn tác giới hạn lưu lượng
+10	Hoàn tác bản cập nhật
+11	Quét thiết bị
+12	Tạm ngưng tài khoản người dùng
+13	Dừng tiến trình
+14	Phê duyệt
+15	Từ chối
+16	Gửi đến thiết bị
+17	Phê duyệt hết hạn [0]
+18	Do trợ lý AI đề xuất
+19	Quảng cáo
+20	Hành động
+21	Tác nhân
+22	Hỏi
+23	Hỏi trợ lý bảo mật
+24	Câu trả lời dựa trên thiết bị, sự cố đang mở và các lỗ hổng của bạn. Trợ lý không thể thay đổi bất cứ điều gì.
+25	Dựa trên
+26	Đã xóa [0] nhận định không có bằng chứng
+27	Đã xóa [0] nhận định không có bằng chứng
+29	Mô hình tự lưu trữ
+30	Quy tắc (không dùng mô hình)
+31	Soạn kế hoạch khắc phục
+32	Mỗi bước là một đề xuất. Không có gì được thực thi cho đến khi có người phê duyệt.
+33	Câu hỏi
+34	Ví dụ: thiết bị nào cần chú ý?
+35	Mức độ nghiêm trọng đề xuất
+36	Tóm tắt
+37	Mục tiêu
+38	Tóm tắt sự cố này
+39	Lý do
+40	Phát hiện lúc
+41	Báo cáo điều đáng ngờ
+42	Quy tắc
+43	Mức độ nghiêm trọng
+44	Cảnh báo
+46	Thêm tệp
+47	Thêm thư mục
+48	Thêm hình ảnh
+49	[0] tệp đính kèm
+50	[0] tệp đính kèm
+51	Tệp đính kèm
+52	Chụp ảnh
+53	Quyền truy cập máy ảnh không được cho phép. Hãy cho phép trong trình duyệt hoặc dùng ứng dụng máy ảnh của thiết bị.
+54	Xem trước máy ảnh
+55	Trình duyệt này không thể mở máy ảnh tại đây.
+56	Chụp
+57	Đóng trợ lý
+58	Các tệp này là gì và chúng có an toàn không?
+59	Tệp
+60	Hỏi về tình trạng bảo mật của bạn, hoặc đính kèm tệp, thư mục, hình ảnh hay ảnh chụp từ máy ảnh. Mỗi tệp đính kèm đều được quét trước và không có gì được lưu trữ.
+61	[0] hình ảnh đã được
+62	[0] hình ảnh đã được
+63	 mô hình mô tả.
+64	Ví dụ: tệp tải xuống này có an toàn không?
+65	Văn bản và hình ảnh sạch có thể được gửi đến mô hình AI mà tổ chức của bạn đã bật. Tệp độc hại không bao giờ được gửi.
+66	[0] tệp chưa được thêm
+67	[0] tệp chưa được thêm
+68	: tối đa [0] tệp, mỗi tệp [1] MB và tổng cộng [2] MB.
+69	Xóa [0]
+70	Quét và hỏi
+71	Kết quả quét
+72	Loại
+73	Dùng máy ảnh của thiết bị
+74	Kết quả
+75	Không có phần mềm độc hại đã biết
+76	Độc hại
+77	Chưa quét
+78	Chuỗi kiểm tra bị đứt tại mục [0].
+79	Chuỗi kiểm tra còn nguyên vẹn: đã xác minh [0] mục.
+80	Email
+81	Quên mật khẩu?
+82	Đăng nhập bằng Google
+83	Đăng nhập bằng Google không thành công. Hãy thử lại hoặc dùng email và mật khẩu.
+84	Đăng nhập
+85	Đăng xuất
+86	Mật khẩu mới
+87	hoặc
+88	Tổ chức
+89	Mật khẩu
+90	Đã đổi mật khẩu. Hãy đăng nhập bằng mật khẩu mới.
+91	Ít nhất 12 ký tự.
+92	Tạo tài khoản
+93	Gửi lại liên kết
+94	Nếu tài khoản đó vẫn cần xác nhận, một liên kết mới đang được gửi đến. Hãy kiểm tra cả thư mục thư rác.
+95	Đặt lại mật khẩu
+96	Nếu có tài khoản dùng địa chỉ đó, chúng tôi đã gửi liên kết đặt lại. Liên kết có hiệu lực trong một giờ.
+97	Hãy xác nhận địa chỉ email trước khi đăng nhập. Mở liên kết chúng tôi đã gửi đến [0].
+98	Đã xác minh email. Giờ bạn có thể đăng nhập.
+99	Liên kết này đã hết hạn hoặc đã được sử dụng. Hãy đăng nhập để nhận liên kết mới.
+100	Hãy kiểm tra email để xác minh địa chỉ của bạn.
+101	Đăng ký giúp giảm 95% quảng cáo.
+102	Thời gian dùng thử của bạn đã kết thúc.
+103	Đã đăng ký đến [0]
+104	Giữ mọi thứ miễn phí với đầy đủ quảng cáo
+105	Dừng mọi thứ, kể cả bảo vệ thiết bị, cho đến khi có người thanh toán
+106	Bảng điều khiển cần gói đăng ký; thiết bị vẫn được bảo vệ
+107	4,99 £ mỗi tháng
+108	Đăng ký
+109	Dùng thử miễn phí:
+110	còn [0] ngày
+111	còn [0] ngày
+112	Hủy
+113	Xóa
+114	Đã xảy ra lỗi.
+115	Xuất
+116	Đang tải…
+117	Không áp dụng
+118	Không bao giờ
+119	Tiếp
+120	không
+121	Không có gì để hiển thị.
+122	tắt
+123	bật
+124	Trước
+125	Làm mới
+126	Lưu
+127	Tìm kiếm
+128	Mô phỏng (dữ liệu thử nghiệm)
+129	Trạng thái
+130	Không khả dụng
+131	Không xác định
+132	Cập nhật [0]
+133	Đang xử lý…
+134	có
+135	[0] cảnh báo trong 24 giờ
+136	[0] cảnh báo trong 24 giờ
+137	[0] thiết bị
+138	[0] thiết bị
+139	Dữ liệu tính đến [0]
+140	[0] sự cố đang mở
+141	[0] sự cố đang mở
+142	[0] phê duyệt đang chờ
+143	[0] phê duyệt đang chờ
+144	đã xác nhận
+145	nghi ngờ
+146	Đăng ký thiết bị
+147	Thiết bị
+148	Không báo cáo
+149	Chính sách đã cũ
+150	Cảm biến bị tắt
+151	Định nghĩa đã cũ
+152	Vấn đề
+153	Lần cuối thấy
+154	Hệ điều hành
+155	Chính sách
+156	Chạy trên thiết bị trong vòng 24 giờ (dùng một lần):
+157	Bảo vệ
+158	Sao chép
+159	Tải xuống
+160	Di chuyển
+161	Thư mục mới
+162	Đổi tên
+163	Khôi phục
+164	Chuyển vào thùng rác
+165	Tải lên
+166	Trợ giúp
+167	[0] văn bản trên trang này được dịch máy và chưa được duyệt.
+168	[0] văn bản bằng ngôn ngữ này được dịch máy và chưa được duyệt.
+169	Ngôn ngữ này chưa được dịch nên đang hiển thị tiếng Anh.
+170	đã phê duyệt
+171	Sự kiện quan sát được
+172	Giả thuyết (chưa xác nhận)
+173	Giả thuyết, độ tin cậy [0]: [1]
+174	Chạy điều tra
+175	Thiếu bằng chứng
+176	Thiếu: [0]
+177	Đọc to
+178	Hành động đề xuất
+179	Dòng thời gian bằng chứng
+180	webhook đến
+181	Tín hiệu từ nhà cung cấp danh tính, DNS, tường lửa và các công cụ khác. Tích hợp mới bắt đầu ở trạng thái không khả dụng; chỉ bộ điều hợp nhà cung cấp đã vượt qua kiểm thử hợp đồng mới được đánh dấu là trực tiếp. Dữ liệu thử nghiệm được gắn nhãn mô phỏng ở mọi nơi xuất hiện.
+182	Chưa kết nối (stub)
+183	Chỉ dữ liệu thử nghiệm
+184	Không khả dụng
+185	Trực tiếp (đã xác minh)
+186	Khóa bí mật (chỉ hiển thị một lần):
+187	Phê duyệt
+188	Cảnh báo
+189	Kiểm tra
+190	Gói đăng ký
+191	Bảng tổng quan
+192	DDoS và khả năng sẵn sàng
+193	Thiết bị
+194	Tệp
+195	Sự cố
+196	Tích hợp
+197	Chính sách
+198	Quyền riêng tư
+199	Cách ly
+200	Phản hồi
+201	Bảo mật
+202	Cài đặt
+203	Tự động cách ly phần mềm độc hại đã biết
+204	Theo dõi hành vi đáng ngờ
+205	Chặn tập lệnh đáng ngờ
+206	Thu thập nội dung tệp để điều tra (mặc định tắt)
+207	Cho phép cách ly mạng
+208	Quét tệp khi được mở hoặc ghi
+209	Quét tệp tải xuống
+210	Quét chương trình khi khởi động
+211	Bảo vệ tác nhân khỏi bị thay đổi
+212	Cảnh báo về liên kết độc hại đã biết
+213	Lý do
+214	Yêu cầu xem xét
+215	Khôi phục sau khi quét lại
+216	thời gian trung vị đến khi loại bỏ được xác minh (n=[0], chưa giải quyết [1])
+217	bản sửa lỗi đạt kiểm tra lại
+218	tái phát sau khi khôi phục
+219	loại bỏ virus đã xác minh
+220	đưa vào hoạt động lại an toàn
+221	đã hoàn tất quét khôi phục
+222	Kết quả chỉ cách ly ([0]) và thiết bị được cài lại hệ thống ([1]) được tính riêng; chỉ cách ly không bao giờ được tính là loại bỏ.
+223	[0] giờ
+224	[0] phút
+225	[0] giây
+226	Đang chờ phê duyệt
+227	Bằng chứng môi trường thực tế
+228	Ghi lại những gì đã được xác minh trong môi trường thực tế, trên tài sản nào, với phiên bản nào. Không thể chỉnh sửa các mục.
+229	Phiên bản
+230	Đổi chế độ
+231	không có bằng chứng
+232	thất bại
+233	đạt
+234	đang chờ
+235	Kiểm tra tiến độ playbook
+236	Thiết bị có thể phản hồi
+237	Tất cả thiết bị
+238	[0] thiết bị thí điểm
+239	[0] thiết bị thí điểm
+240	Hoàn tất
+241	Hoàn tất khi
+242	Diễn tập
+243	Quan sát
+244	Phản hồi
+245	Độ bao phủ
+246	[0] được quan sát, [1] có thể phản hồi
+247	Dữ liệu
+248	Tuổi dữ liệu
+249	Trực tiếp
+250	Dữ liệu thử nghiệm
+251	chưa thực thi
+252	biên nhận
+253	đang thực hiện
+254	không xác định
+255	Điều phối
+256	Bằng chứng
+257	Đã chạy
+258	Đã cũ
+259	Nguồn dữ liệu
+260	Phiên bản hoặc digest
+261	Môi trường
+262	Kết quả
+263	Người phụ trách
+264	Yêu cầu
+265	Tài sản hoặc nhóm
+266	Hiển thị
+267	Tất cả
+268	Chưa hoàn tất
+269	Bật cho toàn bộ dịch vụ
+270	Bật cho tổ chức này
+271	Dừng mọi hành động phản hồi mới cho tổ chức này? Bảo vệ và quét vẫn tiếp tục chạy.
+272	Cho phép lại hành động phản hồi
+273	Dừng mọi hành động phản hồi
+274	Công tắc ngắt khẩn cấp
+275	Loại
+276	Số phút mở trung vị ([0] đang mở, lâu nhất [1] phút)
+277	Từ chối theo chính sách
+278	Diễn tập và mô phỏng (không tính ở trên)
+279	Hành động lặp lại (mục tiêu 0)
+280	Độ trễ nguồn dữ liệu trung vị (p95 [0] giây, n=[1])
+281	Phê duyệt quá hạn ([0] đang chờ, mục tiêu [1] phút)
+282	Trung vị từ tín hiệu đến phân loại (p95 [0] phút, n=[1], [2] chưa phân loại)
+283	Hành động được xác minh độc lập ([0]/[1])
+284	Khoảng thời gian: [0]. Chỉ có biên nhận thì không bao giờ được tính là đã xác minh. Dữ liệu bị thiếu hiển thị là không khả dụng.
+285	Chỉ số phản hồi
+286	Sự kiện gần nhất
+287	Tác nhân đề xuất; một chính sách cố định quyết định những gì được chạy. Mỗi hành động đều hiển thị phê duyệt, biên nhận và bước kiểm tra độc lập.
+288	Giai đoạn
+289	Đang chờ phê duyệt
+290	Bị từ chối
+291	Đã hết hạn
+292	Thất bại
+293	Cần đối chiếu thủ công
+294	Đã đề xuất
+295	Đã xếp hàng
+296	Đang chạy
+297	Đang chờ xác minh
+298	Đã xác minh
+299	Trạng thái trực tiếp
+300	Chế độ
+301	Mô phỏng
+302	Quét và thu thập dữ liệu sẽ được chạy. Các hành động khác vẫn là đề xuất.
+303	Hành động đã phê duyệt sẽ chạy trên các thiết bị đã chọn.
+304	Hành động chỉ chạy trên bộ điều hợp thử nghiệm. Không có gì trên thiết bị của bạn thay đổi.
+305	Chưa có hành động nào.
+306	Không có gì đang chờ phê duyệt.
+307	Chưa ghi nhận bằng chứng môi trường thực tế nào.
+308	Chưa có thiết bị hoặc tích hợp nào gửi dữ liệu.
+309	Không chạy
+310	Đã quan sát
+311	Điều gì đã xảy ra
+312	Phản hồi DDoS
+313	Dương tính giả và khôi phục
+314	Danh tính, lừa đảo và lưu lượng đáng ngờ
+315	Phần mềm độc hại và tệp tải xuống đáng ngờ
+316	Khả năng quan sát mạng và tình trạng thiết bị
+317	Khôi phục sau xâm nhập
+318	Mã độc tống tiền hoặc nghi bị xâm nhập
+319	Playbook
+320	Playbook
+321	Phiên bản chính sách
+322	Phiên bản đã cài đặt
+323	Cách ly bằng tường lửa
+324	Đã nhận dữ liệu
+325	Đã xóa tệp
+326	Đã dừng tiến trình
+327	Trạng thái nhà cung cấp
+328	Đã ghi nhận
+329	Đã quét xong
+330	Đã mô phỏng
+331	Đã ra khỏi khu cách ly
+332	Trong khu cách ly
+333	Hành động và biên nhận
+334	Ghi nhận kết quả
+335	Ghi nhận
+336	Có thể phản hồi
+337	Nguồn
+338	thiết bị
+339	bảng điều khiển
+340	mô phỏng
+341	Bắt đầu khi
+342	Đã cập nhật
+343	Kiểm tra độc lập
+344	Đang chờ
+345	Giới hạn tệp nén
+346	Tệp nén được mã hóa
+347	Bị loại trừ
+348	Không thể truy cập
+349	Giới hạn thời gian
+350	Quá lớn
+351	Định dạng không được hỗ trợ
+352	Đã hủy
+353	Đã bỏ lỡ
+354	Một phần
+355	Hết thời gian chờ
+356	Toàn bộ
+357	Theo yêu cầu
+358	Nhanh
+359	Khôi phục
+360	Theo lịch
+361	Có mục tiêu
+362	Thêm phân đoạn
+363	tệp nén
+364	Tài sản
+365	Dừng lần quét này? Kết quả đến hiện tại được giữ lại dưới dạng lần quét đã hủy.
+366	Chưa được bao phủ
+367	Phát hiện
+368	Thiết bị theo trạng thái bảo vệ
+369	Công cụ
+370	Hạn
+371	Bằng chứng gần nhất
+372	Biện pháp kiểm soát dự kiến
+373	Cách khắc phục đề xuất
+374	Kiểm tra lại
+375	Tài sản hoặc phân đoạn
+376	Lỗ hổng đang mở
+377	Kết quả quét trong 30 ngày
+378	cảnh báo đến khi ngăn chặn được xác minh
+379	thiết bị được bảo vệ
+380	điểm cuối công khai có giảm thiểu từ thượng nguồn
+381	sự kiện đến cảnh báo
+382	thiết bị có định nghĩa mới nhất
+383	thiết bị đã quét toàn bộ trong 7 ngày
+384	lỗ hổng đang mở ([0] quá hạn, [1] đã đóng trong 30 ngày)
+385	phân đoạn mạng được giám sát
+386	dương tính thật đã xác nhận
+387	lần quét đã hoàn tất
+388	Độ bao phủ và phản hồi
+389	Lần quét toàn bộ gần nhất
+390	Dữ liệu đo từ xa gần nhất
+391	Mọi thiết bị và phân đoạn mạng trong phạm vi, có được bảo vệ hay không, và cần khắc phục gì tiếp theo.
+392	Khả năng quan sát mạng
+393	Chưa có thiết bị nào được đăng ký. Hãy bảo vệ một máy tính từ mục Thiết bị.
+394	Không có lỗ hổng đang mở.
+395	[0] đang mở
+396	quá hạn
+397	p95 [0] giây
+398	Thư mục
+399	Các thư mục cần quét, phân tách bằng dấu phẩy
+400	Mã hóa và tường lửa
+401	Mã hóa ổ đĩa [0], tường lửa [1]
+402	Khôi phục sau sự cố
+403	Kiểm tra lại ngay
+404	Chưa kiểm tra lại
+405	Kiểm tra lại thất bại
+406	Đã xác minh đóng
+407	Loại quét
+408	Lần quét
+409	Phân đoạn
+410	Tên phân đoạn
+411	Bắt đầu quét
+412	Bắt đầu lúc
+413	Trạng thái
+414	Suy giảm
+415	Được bảo vệ
+416	Không được bảo vệ
+417	Thiết bị theo trạng thái
+418	[0] không xác định
+419	Không có khả năng quan sát
+420	Được giám sát
+421	Khả năng quan sát
+422	Không có phát hiện không chứng minh được là đã được bảo vệ: hãy kiểm tra cả độ bao phủ và kết quả quét.
+423	Ngôn ngữ
+424	Độ bao phủ bản dịch
+425	Không có phiên bản trước
+426	Giao diện
+427	Tối
+428	Độ tương phản cao
+429	Sáng
+430	Không tìm thấy mối đe dọa mới nào trong [0] tệp.
+431	[0] mối đe dọa
+432	[0] mối đe dọa
+433	 được tìm thấy trong [0] tệp. Xem Cảnh báo và Phê duyệt để xem xét chúng.
+434	Quét toàn bộ
+435	Không thể bảo vệ máy tính này: [0]
+436	Máy tính này đã được bảo vệ. Tính năng quét thời gian thực chạy khi Agentic Antivirus đang mở.
+437	Quá trình quét chưa hoàn tất: [0]
+438	Đang quét…
+439	Đang quét mọi ổ đĩa. Việc này có thể mất nhiều thời gian.
+440	Đang quét Tải xuống, Màn hình nền và tệp tạm thời…
+441	Không thể đọc [0] tệp.
+442	Một tệp
+443	Một liên kết trang web
+444	Chấp nhận dữ liệu thử nghiệm
+446	Hành động
+447	Thêm tích hợp
+448	Thêm loại trừ
+449	Thêm tích hợp
+450	Thêm lần quét toàn bộ hằng tuần
+451	quản trị viên
+452	Quảng cáo
+453	Đồng ý nhận quảng cáo
+454	Dịch vụ bị ảnh hưởng
+455	cảnh báo trong 24 giờ qua
+456	Cho phép
+457	Cho phép và quét
+458	Quản trị viên phải nêu lý do. Mục loại trừ được ghi lại trong nhật ký kiểm tra.
+459	Một email
+460	Phê duyệt đưa vào hoạt động lại
+461	Phê duyệt hành động
+462	Tài sản
+463	tài sản đang được giảm thiểu
+464	tài sản có cảnh báo trong 24 giờ
+465	Nhật ký kiểm tra
+466	Bảo vệ tự động vẫn chạy trên mọi thiết bị. Đây là những hành động cần một người quyết định.
+467	Khả năng sẵn sàng
+468	Tín hiệu khả dụng
+469	Đã xác minh bản sao lưu
+470	Chặn
+471	Theo mặc định, tác nhân gửi dữ liệu đo từ xa bảo mật và mã băm tệp: tên tiến trình và dòng lệnh, đường dẫn tệp, siêu dữ liệu kết nối mạng và các phát hiện. Nội dung tệp chỉ được thu thập nếu tổ chức của bạn bật tính năng đó.
+472	Dung lượng
+473	Danh mục
+474	Đã thay đổi
+475	Phí
+476	Kiểm tra
+477	chọn
+478	Chọn thiết bị
+480	Đóng
+481	Phân tách bằng dấu phẩy
+482	Liên hệ
+483	Biện pháp kiểm soát
+484	Độ bao phủ theo lớp bảo vệ
+485	nghiêm trọng
+486	gửi cảnh báo nghiêm trọng (p95, 30 ngày)
+487	Quyết định đang chờ
+488	Từ chối
+489	Định nghĩa
+490	Mô tả điều đã xảy ra
+491	Chi tiết
+492	Thông tin chi tiết
+493	Phát hiện
+494	Thiết bị cần cấp phép
+495	thiết bị được bảo vệ đầy đủ
+496	thiết bị bị cách ly
+497	Thiết bị cần chú ý
+498	Hướng
+499	Vùng DNS
+500	trang tải xuống
+501	Trong thời gian dùng thử miễn phí và với các gói chưa trả phí, bảng điều khiển hiển thị quảng cáo Google AdSense và ứng dụng di động hiển thị quảng cáo Google AdMob sau khi hỏi ý kiến đồng ý của bạn. Người đăng ký thấy ít hơn 95% quảng cáo. Quảng cáo không bao giờ xuất hiện trên màn hình phê duyệt, ngăn chặn, cảnh báo mối đe dọa, xem xét cách ly, đăng nhập, thanh toán hoặc kiểm tra.
+502	Mỗi lần xuất bản sẽ tạo một phiên bản mới có chữ ký. Thiết bị tiếp tục thực thi phiên bản đã xác minh gần nhất khi ngoại tuyến.
+503	Gửi email cho bộ phận hỗ trợ tại
+504	Điểm cuối
+505	Equality Software Ltd vận hành Agentic Antivirus. Trang này mô tả những gì dịch vụ thu thập. Trang phải được chủ sở hữu sản phẩm xem xét trước khi xuất bản.
+506	Mọi hành động thay đổi thiết bị, tài khoản hoặc lưu lượng đều phải qua công cụ chính sách và cơ chế quản trị AEP-X. Một phê duyệt chỉ áp dụng cho một hành động, đúng các mục tiêu của nó, tổ chức này và một khoảng thời gian cố định.
+507	Mọi tệp tải lên đều được kiểm tra phần mềm độc hại và loại thực tế. Tệp không có trình xem đã xác minh sẽ được lưu trữ và có thể tải xuống nhưng không được xem trước.
+508	Ngoại lệ
+509	Loại trừ
+510	Đường dẫn thư mục
+511	để yêu cầu truy cập hoặc chỉnh sửa dữ liệu.
+512	Lỗ hổng
+513	Tải tác nhân cho Windows, Mac hoặc Linux từ
+514	Vào Thiết bị, chọn Đăng ký thiết bị và chạy lệnh hiển thị trên máy tính bạn muốn bảo vệ. Tác nhân bắt đầu quét ngay khi nhận được chính sách có chữ ký.
+515	Tình trạng
+516	Lịch sử
+517	Tên máy chủ
+518	Tôi hiểu rằng sau thời gian dùng thử, thiết bị sẽ ngừng quét và chặn mối đe dọa cho đến khi thanh toán gói đăng ký.
+519	Tác động
+520	Nhập tệp zip hoặc tar
+521	Sự cố
+522	Bao gồm mô hình ngôn ngữ (nếu tổ chức của bạn đã bật)
+523	Địa chỉ IP
+524	Tham gia
+525	Tham gia tổ chức của bạn
+526	Phần mềm độc hại đã biết được chuyển vào khu cách ly, nơi nó không thể chạy. Nếu bạn cho rằng một tệp bị chặn nhầm, hãy mở Cách ly và yêu cầu xem xét. Quản trị viên sẽ quyết định, và tệp chỉ được trả lại sau khi lần quét mới xác nhận tệp sạch.
+527	Các ngôn ngữ chưa có bản dịch đầy đủ sẽ dùng tiếng Anh thay thế. Độ bao phủ được đo thực tế, không phải ước tính.
+528	Thay đổi lần cuối
+529	Lớp
+530	Tỷ lệ yêu cầu hợp lệ thành công
+531	Quy tắc cấp phép
+532	Liên kết, nếu có
+533	Máy chủ quản lý vẫn truy cập được trong khi cách ly
+534	Đánh dấu là dương tính giả
+535	Mức độ hoàn thiện
+536	Giảm thiểu
+537	Tên
+538	Tên của khóa bí mật trong kho bí mật, không bao giờ là chính khóa bí mật
+539	Không có hành động nào đang chờ.
+540	Không có sự cố đang mở.
+541	Không có.
+542	Không có báo cáo.
+543	chưa đặt
+544	Được thông báo sau
+545	quảng cáo được hiển thị
+546	Bộ đệm sự kiện ngoại tuyến (MB)
+547	Trên Android, hãy đăng ký trong ứng dụng Agentic Antivirus qua Google Play. Trên iPhone và iPad, gói đăng ký App Store chưa khả dụng. Thanh toán trên web chưa khả dụng.
+548	Sự cố đang mở
+549	sự cố đang mở
+550	Sự cố đang mở
+551	Độ trễ p95
+552	đã thanh toán đến
+553	Mẫu đường dẫn
+554	Người dùng
+555	Theo thiết bị
+556	Theo người dùng (bao gồm mọi thiết bị của họ)
+557	Xem trước
+558	Chính
+560	Bảo vệ thiết bị
+561	Giao thức
+562	Nhà cung cấp
+563	Cảnh báo của nhà cung cấp (24 giờ)
+564	Điểm cuối công khai
+565	Xuất bản phiên bản chính sách
+566	Xuất bản phiên bản có chữ ký
+567	Đã xuất bản
+568	Quét nhanh
+569	Đọc to và đọc chính tả sử dụng tính năng giọng nói tích hợp của trình duyệt. Chúng tôi không ghi âm hay lưu trữ âm thanh.
+570	Đã nhận
+571	Phương tiện di động
+572	Xóa
+573	Đã yêu cầu
+574	Người yêu cầu
+575	Thời gian lưu giữ
+576	Đưa vào hoạt động lại
+577	Ngay bây giờ
+578	Rủi ro
+579	Vai trò
+580	Hoàn tác
+581	Lưu điểm cuối
+582	Lưu quy tắc cấp phép
+583	Quét
+584	Lịch (cron)
+585	Lần quét theo lịch
+586	Tham chiếu khóa bí mật
+587	Gửi lời mời
+588	Gửi báo cáo
+589	Gửi liên kết đặt lại
+590	Dịch vụ
+591	Mục tiêu dịch vụ
+594	Tín hiệu
+595	Kích thước
+596	Khác
+597	Sắp xếp
+598	Bước
+599	Dừng tiến trình, cách ly thiết bị, khôi phục tệp, thêm loại trừ và thay đổi quy tắc lưu lượng cần một người phê duyệt. Một phê duyệt chỉ áp dụng cho một hành động, đúng các mục tiêu của nó và trong thời gian giới hạn. Nếu có gì thay đổi, hãy phê duyệt lại.
+600	Đăng ký cho thiết bị này qua Google Play
+601	trạng thái đăng ký
+603	Hệ thống
+604	Mục tiêu
+605	Trợ lý AI
+606	Trợ lý nhóm các cảnh báo liên quan, liệt kê những gì quan sát được kèm liên kết đến bằng chứng và đánh dấu mọi điều không chứng minh được là giả thuyết. Trợ lý có thể đề xuất hành động nhưng không thể phê duyệt. Nếu mô hình không khả dụng, việc quét, cảnh báo và phản hồi thủ công vẫn tiếp tục hoạt động.
+607	Máy tính này
+608	Chỉ TLS, phải nằm trong danh sách cho phép lưu lượng đi
+609	Các đợt lưu lượng tràn ngập được nhà cung cấp thượng nguồn hấp thụ. Tại đây bạn quản lý mọi điểm cuối công khai, theo dõi cảnh báo của nhà cung cấp và phê duyệt các giới hạn lưu lượng mới.
+610	Giới hạn lưu lượng
+611	Đã dịch
+612	Thùng rác
+613	ngày dùng thử còn lại
+614	Bật bảo vệ để quét tệp trên máy tính này và theo dõi mã độc tống tiền cũng như hành vi đánh cắp thông tin đăng nhập.
+615	chưa được bao phủ
+616	Hoàn tác thay đổi gần nhất
+617	Người dùng
+618	Xác minh email
+619	đang chờ phê duyệt
+620	Chúng tôi hiển thị quảng cáo từ Google AdSense trên một số trang. Cho phép quảng cáo được cá nhân hóa?
+621	Webhook:
+622	Thiết bị gửi gì
+623	Đây là gì?
+624	Thời điểm
+625	Khi có gì đó bị chặn
+626	Khi thời gian dùng thử kết thúc mà chưa thanh toán
+627	Ai
+628	Bạn có thể xóa tài khoản trong hồ sơ của mình. Liên hệ
+629	Tên của bạn
+630	Tổ chức của bạn được dùng thử miễn phí 30 ngày. Sau đó, chi phí là 4,99 £ mỗi tháng cho mỗi người dùng hoặc thiết bị.
+631	Tổ chức của bạn đặt thời gian lưu giữ dữ liệu đo từ xa và bằng chứng. Không thể chỉnh sửa hoặc xóa bản ghi kiểm tra.
+632	Quyền của bạn
+633	Đọc chính tả
+634	Cho phép dùng micrô để đọc chính tả? Âm thanh được trình duyệt của bạn xử lý và chúng tôi không lưu trữ.
+635	Đầu ra âm thanh
+636	Tạm dừng
+637	Cao độ
+638	Tiếp tục
+639	Tốc độ
+640	Dừng
+641	Không có giọng đọc cho ngôn ngữ này.
+642	Giọng đọc
+643	Tệp đã được chuyển vào khu cách ly và không thể chạy.
+644	Một mối đe dọa đã bị chặn trên thiết bị này.

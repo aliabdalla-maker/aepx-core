@@ -1,0 +1,637 @@
+0	Salta al contingut principal
+1	Afegeix una exclusió permanent
+2	Aplica una restricció de trànsit
+3	Recull metadades del dispositiu
+4	Aïlla un dispositiu de la xarxa
+5	Posa un fitxer en quarantena
+6	Treu un dispositiu de l'aïllament
+7	Restaura un fitxer en quarantena
+8	Tanca la sessió d'un usuari a tot arreu
+9	Reverteix una restricció de trànsit
+10	Reverteix una actualització
+11	Analitza dispositius
+12	Suspèn un compte d'usuari
+13	Atura un procés
+14	Aprova
+15	Denega
+16	Envia als dispositius
+17	L'aprovació caduca [0]
+18	Proposat per l'assistent d'IA
+19	Publicitat
+20	Acció
+21	Agents
+22	Pregunta
+23	Pregunta a l'assistent de seguretat
+24	Les respostes provenen dels teus dispositius, incidents oberts i mancances. L'assistent no pot canviar res.
+25	Basat en
+26	S'ha eliminat [0] afirmació sense proves
+27	S'han eliminat [0] afirmacions sense proves
+29	Model allotjat localment
+30	Regles (sense model)
+31	Redacta un pla de correcció
+32	Cada pas és una proposta. No s'executa res fins que algú ho aprova.
+33	Pregunta
+34	Per exemple: quins dispositius necessiten atenció?
+35	Gravetat suggerida
+36	Resum
+37	Objectius
+38	Resumeix aquest incident
+39	Per què
+40	Detectat
+41	Informa d'alguna cosa sospitosa
+42	Regla
+43	Gravetat
+44	Alerta
+46	Afegeix fitxers
+47	Afegeix una carpeta
+48	Afegeix imatges
+49	[0] fitxer adjunt
+50	[0] fitxers adjunts
+51	Fitxers adjunts
+52	Fes una foto
+53	No s'ha permès l'accés a la càmera. Permet-lo al navegador o fes servir l'aplicació de càmera del dispositiu.
+54	Previsualització de la càmera
+55	Aquest navegador no pot obrir la càmera aquí.
+56	Captura
+57	Tanca l'assistent
+58	Què són aquests fitxers i són segurs?
+59	Fitxer
+60	Pregunta sobre la teva seguretat o adjunta fitxers, una carpeta, imatges o una foto de la càmera. Cada fitxer adjunt s'analitza primer i no es desa res.
+61	[0] imatge ha estat descrita
+62	[0] imatges han estat descrites
+63	 pel model.
+64	Per exemple: és segura aquesta baixada?
+65	El text i les imatges nets es poden enviar al model d'IA que la teva organització hagi activat. Els fitxers maliciosos, mai.
+66	No s'ha afegit [0] fitxer
+67	No s'han afegit [0] fitxers
+68	: fins a [0] fitxers, [1] MB cadascun i [2] MB en total.
+69	Elimina [0]
+70	Analitza i pregunta
+71	Resultats de l'anàlisi
+72	Tipus
+73	Fes servir la càmera del dispositiu
+74	Resultat
+75	Cap programari maliciós conegut
+76	Maliciós
+77	No analitzat
+78	La cadena d'auditoria està trencada a l'entrada [0].
+79	La cadena d'auditoria està intacta: [0] entrades verificades.
+80	Correu electrònic
+81	Has oblidat la contrasenya?
+82	Inicia la sessió amb Google
+83	L'inici de sessió amb Google no ha funcionat. Torna-ho a provar o fes servir el correu i la contrasenya.
+84	Inicia la sessió
+85	Tanca la sessió
+86	Contrasenya nova
+87	o
+88	Organització
+89	Contrasenya
+90	S'ha canviat la contrasenya. Inicia la sessió amb la contrasenya nova.
+91	Almenys 12 caràcters.
+92	Crea un compte
+93	Torna a enviar l'enllaç
+94	Si aquest compte encara s'ha de confirmar, t'arribarà un enllaç nou. Revisa també la carpeta de correu brossa.
+95	Restableix la contrasenya
+96	Si algun compte fa servir aquesta adreça, hi hem enviat un enllaç de restabliment. Funciona durant una hora.
+97	Confirma la teva adreça electrònica abans d'iniciar la sessió. Obre l'enllaç que hem enviat a [0].
+98	Correu verificat. Ja pots iniciar la sessió.
+99	Aquest enllaç ha caducat o ja s'ha fet servir. Inicia la sessió per obtenir-ne un de nou.
+100	Revisa el correu per verificar la teva adreça.
+101	La subscripció redueix els anuncis un 95%.
+102	El teu període de prova ha acabat.
+103	Subscrit fins al [0]
+104	Mantén-ho tot gratuït amb anuncis complets
+105	Atura-ho tot, inclosa la protecció dels dispositius, fins que algú pagui
+106	La consola requereix una subscripció; els dispositius continuen protegits
+107	4,99 £ al mes
+108	Subscriu-te
+109	Prova gratuïta: 
+110	Queda [0] dia
+111	Queden [0] dies
+112	Cancel·la
+113	Suprimeix
+114	S'ha produït un error.
+115	Exporta
+116	S'està carregant…
+117	N/D
+118	Mai
+119	Següent
+120	no
+121	No hi ha res a mostrar.
+122	desactivat
+123	activat
+124	Anterior
+125	Actualitza
+126	Desa
+127	Cerca
+128	Simulació (dades de prova)
+129	Estat
+130	No disponible
+131	Desconegut
+132	Actualitzat [0]
+133	S'està processant…
+134	sí
+135	[0] alerta en 24 hores
+136	[0] alertes en 24 hores
+137	[0] dispositiu
+138	[0] dispositius
+139	Dades a [0]
+140	[0] incident obert
+141	[0] incidents oberts
+142	[0] aprovació pendent
+143	[0] aprovacions pendents
+144	confirmat
+145	sospitós
+146	Registra un dispositiu
+147	Dispositiu
+148	No informa
+149	Política obsoleta
+150	Sensor desactivat
+151	Definicions obsoletes
+152	Problemes
+153	Vist per última vegada
+154	Sistema operatiu
+155	Política
+156	Executa al dispositiu en un termini de 24 hores (un sol ús):
+157	Protecció
+158	Copia
+159	Baixa
+160	Mou
+161	Carpeta nova
+162	Canvia el nom
+163	Restaura
+164	Mou a la paperera
+165	Puja
+166	Ajuda
+167	[0] text d'aquesta pàgina s'ha traduït automàticament i encara no s'ha revisat.
+168	[0] textos en aquest idioma s'han traduït automàticament i encara no s'han revisat.
+169	Aquest idioma encara no està traduït, així que es mostra en anglès.
+170	aprovat
+171	Fets observats
+172	Hipòtesis (no confirmades)
+173	Hipòtesi, confiança [0]: [1]
+174	Executa la investigació
+175	Proves que falten
+176	Falta: [0]
+177	Llegeix en veu alta
+178	Accions recomanades
+179	Cronologia de proves
+180	webhook d'entrada
+181	Senyals del teu proveïdor d'identitat, DNS, tallafocs i altres eines. Les integracions noves comencen com a no disponibles; només es pot marcar com a activa una adaptació de proveïdor que hagi superat la prova de contracte. Les dades de prova s'etiqueten com a simulació a tot arreu on apareixen.
+182	No connectat (provisional)
+183	Només dades de prova
+184	No disponible
+185	Activa (verificada)
+186	Secret (es mostra una vegada):
+187	Aprovacions
+188	Alertes
+189	Auditoria
+190	Subscripció
+191	Tauler
+192	DDoS i disponibilitat
+193	Dispositius
+194	Fitxers
+195	Incidents
+196	Integracions
+197	Polítiques
+198	Privadesa
+199	Quarantena
+200	Resposta
+201	Seguretat
+202	Configuració
+203	Posa en quarantena automàticament el programari maliciós conegut
+204	Vigila el comportament sospitós
+205	Bloca els scripts sospitosos
+206	Recull el contingut dels fitxers per investigar (desactivat per defecte)
+207	Permet l'aïllament de xarxa
+208	Analitza els fitxers quan s'obren o s'escriuen
+209	Analitza les baixades
+210	Analitza els programes quan s'inicien
+211	Protegeix l'agent contra canvis
+212	Avisa sobre enllaços maliciosos coneguts
+213	Motiu
+214	Sol·licita una revisió
+215	Restaura després d'una anàlisi nova
+216	temps mitjà fins a l'eradicació verificada (n=[0], sense resoldre [1])
+217	correccions amb una prova repetida superada
+218	recurrència després de la recuperació
+219	eliminació de virus verificada
+220	retorn segur al servei
+221	anàlisis de recuperació completades
+222	Els resultats només de quarantena ([0]) i els dispositius reinstal·lats ([1]) es compten per separat; la quarantena sola mai no es compta com a eliminació.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Pendent d'aprovació
+227	Proves en producció
+228	Registra què s'ha verificat en producció, en quins actius i amb quina versió. Les entrades no es poden editar.
+229	Versió
+230	Canvia el mode
+231	sense proves
+232	error
+233	superat
+234	pendent
+235	Comprova el progrés del manual
+236	Dispositius que poden respondre
+237	Tots els dispositius
+238	[0] dispositiu pilot
+239	[0] dispositius pilot
+240	Completat
+241	Completat quan
+242	Simulacre
+243	Observa
+244	Respon
+245	Cobertura
+246	[0] observats, [1] capaços de respondre
+247	Dades
+248	Antiguitat de les dades
+249	En directe
+250	Dades de prova
+251	no executat
+252	comprovant
+253	en curs
+254	desconegut
+255	Enviament
+256	Proves
+257	S'ha executat
+258	Obsolet
+259	Fonts de dades
+260	Versió o resum
+261	Entorn
+262	Resultat
+263	Responsable
+264	Requisit
+265	Actiu o cohort
+266	Mostra
+267	Tot
+268	No completat
+269	Activat per a tot el servei
+270	Activat per a aquesta organització
+271	Vols aturar totes les accions de resposta noves per a aquesta organització? La protecció i l'anàlisi continuen funcionant.
+272	Torna a permetre les accions de resposta
+273	Atura totes les accions de resposta
+274	Interruptor d'emergència
+275	Classe
+276	Mediana de minuts obert ([0] oberts, el més antic [1] min)
+277	Rebutjos de la política
+278	Simulacres i simulacions (no comptats a dalt)
+279	Accions repetides (objectiu 0)
+280	Mediana del retard de les fonts (p95 [0] s, n=[1])
+281	Aprovacions endarrerides ([0] pendents, objectiu [1] min)
+282	Mediana del senyal al triatge (p95 [0] min, n=[1], [2] sense triar)
+283	Accions verificades de manera independent ([0]/[1])
+284	Període: [0]. Un comprovant sol mai no compta com a verificat. Les dades que falten es mostren com a no disponibles.
+285	Mesures de resposta
+286	Últim esdeveniment
+287	Els agents proposen; una política fixa decideix què s'executa. Cada acció mostra la seva aprovació, el comprovant i la comprovació independent.
+288	Fase
+289	Pendent d'aprovació
+290	Denegat
+291	Caducat
+292	Error
+293	Cal una conciliació manual
+294	Proposat
+295	A la cua
+296	En execució
+297	Verificació pendent
+298	Verificat
+299	Estat en directe
+300	Mode
+301	Simulació
+302	S'executen les anàlisis i la recollida de dades. Les altres accions continuen sent propostes.
+303	Les accions aprovades s'executen als dispositius triats.
+304	Les accions només s'executen contra adaptadors de prova. No canvia res als teus dispositius.
+305	Encara no hi ha accions.
+306	No hi ha res pendent d'aprovació.
+307	Encara no s'han registrat proves en producció.
+308	Encara no hi ha cap dispositiu ni integració que enviï dades.
+309	No s'ha executat
+310	Observat
+311	Què ha passat
+312	Resposta a DDoS
+313	Fals positiu i restauració
+314	Identitat, pesca electrònica i trànsit sospitós
+315	Programari maliciós i baixades sospitoses
+316	Visibilitat de xarxa i estat dels dispositius
+317	Recuperació després d'una intrusió
+318	Ransomware o sospita d'intrusió
+319	Manual
+320	Manuals
+321	Versió de la política
+322	Versió instal·lada
+323	Aïllament amb tallafocs
+324	Dades rebudes
+325	Fitxer eliminat
+326	Procés aturat
+327	Estat del proveïdor
+328	Registrat
+329	Anàlisi completada
+330	Simulat
+331	Fora de quarantena
+332	En quarantena
+333	Accions i comprovants
+334	Registra el resultat
+335	Registra
+336	Pot respondre
+337	Origen
+338	dispositiu
+339	consola
+340	simulació
+341	Comença quan
+342	Actualitzat
+343	Comprovació independent
+344	Pendent
+345	Límit d'arxiu
+346	Arxiu xifrat
+347	Exclòs
+348	Inaccessible
+349	Límit de temps
+350	Massa gran
+351	Format no admès
+352	Cancel·lat
+353	Omès
+354	Parcial
+355	Temps esgotat
+356	Completa
+357	A demanda
+358	Ràpida
+359	Recuperació
+360	Programada
+361	Dirigida
+362	Afegeix un segment
+363	arxius
+364	Actius
+365	Vols aturar aquesta anàlisi? Els resultats obtinguts fins ara es conserven com a anàlisi cancel·lada.
+366	Sense cobertura
+367	Deteccions
+368	Dispositius per estat de protecció
+369	Motor
+370	Venciment
+371	Última prova
+372	Control esperat
+373	Correcció proposada
+374	Repeteix la prova
+375	Actiu o segment
+376	Mancances obertes
+377	Resultats de les anàlisis en 30 dies
+378	de l'alerta a la contenció verificada
+379	dispositius protegits
+380	punts finals públics amb mitigació del proveïdor
+381	de l'esdeveniment a l'alerta
+382	dispositius amb definicions actuals
+383	dispositius amb una anàlisi completa en 7 dies
+384	mancances obertes ([0] endarrerides, [1] tancades en 30 dies)
+385	segments de xarxa supervisats
+386	positius reals confirmats
+387	anàlisis completades
+388	Cobertura i resposta
+389	Última anàlisi completa
+390	Última telemetria
+391	Cada dispositiu i segment de xarxa dins l'abast, si està protegit i què cal corregir a continuació.
+392	Visibilitat de xarxa
+393	Encara no hi ha cap dispositiu registrat. Protegeix un ordinador des de Dispositius.
+394	No hi ha mancances obertes.
+395	[0] obertes
+396	endarrerit
+397	p95 [0] s
+398	Carpetes
+399	Carpetes per analitzar, separades per comes
+400	Xifratge i tallafocs
+401	Xifratge de disc [0], tallafocs [1]
+402	Recuperació després d'incidents
+403	Torna-ho a comprovar ara
+404	Sense prova repetida
+405	Prova repetida fallida
+406	Tancat i verificat
+407	Tipus d'anàlisi
+408	Anàlisis
+409	Segment
+410	Nom del segment
+411	Inicia l'anàlisi
+412	Iniciat
+413	Estat
+414	Degradat
+415	Protegit
+416	Sense protecció
+417	Dispositius per estat
+418	[0] desconeguts
+419	Sense visibilitat
+420	Supervisat
+421	Visibilitat
+422	No tenir deteccions no demostra que hi hagi protecció: comprova també la cobertura i els resultats de les anàlisis.
+423	Idioma
+424	Cobertura de traducció
+425	No hi ha cap versió anterior
+426	Tema
+427	Fosc
+428	Contrast alt
+429	Clar
+430	No s'han trobat amenaces noves en [0] fitxers.
+431	[0] amenaça trobada
+432	[0] amenaces trobades
+433	 en [0] fitxers. Consulta Alertes i Aprovacions per revisar-les.
+434	Anàlisi completa
+435	No s'ha pogut protegir aquest ordinador: [0]
+436	Aquest ordinador està protegit. L'anàlisi en temps real funciona mentre Agentic Antivirus està obert.
+437	L'anàlisi no ha acabat: [0]
+438	S'està analitzant…
+439	S'estan analitzant totes les unitats. Això pot trigar molt.
+440	S'estan analitzant Baixades, Escriptori i els fitxers temporals…
+441	No s'han pogut llegir [0] fitxers.
+442	Un fitxer
+443	Un enllaç web
+444	Accepta les dades de prova
+446	Accions
+447	Afegeix una integració
+448	Afegeix una exclusió
+449	Afegeix la integració
+450	Afegeix una anàlisi completa setmanal
+451	administrador
+452	Publicitat
+453	Consentiment de publicitat
+454	Serveis afectats
+455	alertes en les últimes 24 hores
+456	Permet
+457	Permet i analitza
+458	Un administrador ha d'indicar un motiu. L'exclusió es registra al registre d'auditoria.
+459	Un correu electrònic
+460	Aprova el retorn al servei
+461	Aprovació d'accions
+462	Actiu
+463	actius amb mitigació activa
+464	actius amb alertes en 24 hores
+465	Registre d'auditoria
+466	La protecció automàtica continua funcionant a cada dispositiu. Aquestes són les accions que necessiten que una persona decideixi.
+467	Disponibilitat
+468	Senyals disponibles
+469	Còpia de seguretat verificada
+470	Bloca
+471	Per defecte, l'agent envia telemetria de seguretat i resums dels fitxers: noms de processos i línies d'ordres, camins de fitxers, metadades de connexions de xarxa i deteccions. El contingut dels fitxers només es recull si la teva organització ho activa.
+472	Capacitat
+473	Categoria
+474	Canviat
+475	Càrrec
+476	Comprova
+477	tria
+478	Tria un dispositiu
+480	Tanca
+481	Separat per comes
+482	Contacte
+483	Control
+484	Cobertura per capa de protecció
+485	crítica
+486	lliurament d'alertes crítiques (p95, 30 dies)
+487	Decisions pendents
+488	Rebutja
+489	Definicions
+490	Descriu què ha passat
+491	Detall
+492	Detalls
+493	Detecció
+494	Dispositiu per llicenciar
+495	dispositius totalment protegits
+496	dispositius aïllats
+497	Dispositius que necessiten atenció
+498	Direcció
+499	Zona DNS
+500	pàgina de baixades
+501	Durant la prova gratuïta i en els plans no pagats, la consola mostra anuncis de Google AdSense i les aplicacions mòbils mostren anuncis de Google AdMob, després de demanar-te el consentiment. Els subscriptors veuen un 95% menys d'anuncis. Els anuncis no apareixen mai a les pantalles d'aprovació, contenció, avís d'amenaça, revisió de quarantena, inici de sessió, pagament o auditoria.
+502	Cada publicació crea una versió signada nova. Els dispositius continuen aplicant l'última versió verificada mentre estan fora de línia.
+503	Escriu al suport a
+504	Punt final
+505	Equality Software Ltd gestiona Agentic Antivirus. Aquesta pàgina descriu què recull el servei. El responsable del producte l'ha de revisar abans de publicar-la.
+506	Cada acció que canvia un dispositiu, un compte o el trànsit passa pel motor de polítiques i la governança AEP-X. Una aprovació cobreix una acció, els seus objectius exactes, aquesta organització i un temps fix.
+507	Cada fitxer pujat es comprova per detectar programari maliciós i el seu tipus real. Els fitxers sense un visualitzador verificat es desen i es poden baixar, però no es previsualitzen.
+508	Excepció
+509	Exclusions
+510	Camí de la carpeta
+511	per a sol·licituds d'accés o rectificació.
+512	Mancances
+513	Obtén l'agent per a Windows, Mac o Linux des de la
+514	Ves a Dispositius, tria Registra un dispositiu i executa l'ordre que es mostra a l'ordinador que vols protegir. L'agent comença a analitzar tan bon punt rep la seva política signada.
+515	Salut
+516	Historial
+517	Nom de l'amfitrió
+518	Entenc que els dispositius deixaran d'analitzar i blocar amenaces després de la prova fins que es pagui una subscripció.
+519	Impacte
+520	Importa zip o tar
+521	Incident
+522	Inclou el model de llenguatge (si la teva organització n'ha activat un)
+523	Adreça IP
+524	Uneix-te
+525	Uneix-te a la teva organització
+526	El programari maliciós conegut es mou a la quarantena, on no es pot executar. Si creus que un fitxer s'ha blocat per error, obre Quarantena i sol·licita una revisió. Un administrador decideix, i el fitxer només torna després que una anàlisi nova el trobi net.
+527	Els idiomes sense una traducció completa es mostren en anglès. La cobertura es mesura, no s'estima.
+528	Últim canvi
+529	Capa
+530	Èxit de les sol·licituds legítimes
+531	Regles de llicència
+532	Enllaç, si n'hi ha
+533	Amfitrions de gestió accessibles durant l'aïllament
+534	Marca com a fals positiu
+535	Maduresa
+536	Mitigació
+537	Nom
+538	Nom del secret al teu magatzem de secrets, mai el secret mateix
+539	No hi ha accions pendents.
+540	No hi ha incidents oberts.
+541	Cap.
+542	No se n'ha informat cap.
+543	no definit
+544	Notificat després de
+545	dels anuncis mostrats
+546	Memòria intermèdia d'esdeveniments fora de línia (MB)
+547	A Android, subscriu-te a l'aplicació Agentic Antivirus a través de Google Play. A l'iPhone i l'iPad, les subscripcions de l'App Store encara no estan disponibles. El pagament al web encara no està disponible.
+548	Incident obert
+549	incidents oberts
+550	Incidents oberts
+551	Latència p95
+552	pagat fins al
+553	Patró de camí
+554	Persones
+555	Per dispositiu
+556	Per usuari (cobreix tots els seus dispositius)
+557	Previsualització
+558	Principal
+560	Protegeix un dispositiu
+561	Protocol
+562	Proveïdor
+563	Alertes del proveïdor (24 hores)
+564	Punts finals públics
+565	Publica una versió de la política
+566	Publica la versió signada
+567	Publicat
+568	Anàlisi ràpida
+569	La lectura en veu alta i el dictat fan servir les funcions de veu integrades del navegador. No enregistrem ni desem àudio.
+570	Rebut
+571	Suports extraïbles
+572	Elimina
+573	Sol·licitat
+574	Sol·licitat per
+575	Retenció
+576	Retorn al servei
+577	Ara mateix
+578	Risc
+579	Rol
+580	Reverteix
+581	Desa el punt final
+582	Desa les regles de llicència
+583	Analitza
+584	Programació (cron)
+585	Anàlisis programades
+586	Referència del secret
+587	Envia la invitació
+588	Envia l'informe
+589	Envia l'enllaç de restabliment
+590	Servei
+591	Objectius del servei
+594	Senyal
+595	Mida
+596	Una altra cosa
+597	Ordena
+598	Pas
+599	Aturar processos, aïllar dispositius, restaurar fitxers, afegir exclusions i canviar regles de trànsit requereix l'aprovació d'una persona. Una aprovació cobreix una acció, els seus objectius exactes i un temps limitat. Si canvia res, torna a aprovar.
+600	Subscriu aquest dispositiu amb Google Play
+601	estat de la subscripció
+603	Sistema
+604	Objectiu
+605	L'assistent d'IA
+606	L'assistent agrupa les alertes relacionades, enumera el que s'ha observat amb enllaços a les proves i marca com a hipòtesi tot el que no pot demostrar. Pot suggerir accions, però no les pot aprovar. Si el model no està disponible, l'anàlisi, les alertes i les respostes manuals continuen funcionant.
+607	Aquest ordinador
+608	Només TLS, ha de ser a la llista de sortida permesa
+609	El proveïdor del servei absorbeix les inundacions de trànsit. Aquí controles cada punt final públic, vigiles les alertes del proveïdor i aproves noves restriccions de trànsit.
+610	Restriccions de trànsit
+611	Traduït
+612	Paperera
+613	dies de prova restants
+614	Activa la protecció per analitzar els fitxers d'aquest ordinador i vigilar el ransomware i el robatori de credencials.
+615	sense cobertura
+616	Desfés l'últim canvi
+617	Usuari
+618	Verifica el correu
+619	pendent d'aprovació
+620	Mostrem anuncis de Google AdSense en algunes pàgines. Vols permetre anuncis personalitzats?
+621	Webhook:
+622	Què envien els dispositius
+623	Què és?
+624	Quan
+625	Quan es bloca alguna cosa
+626	Quan la prova acaba sense pagament
+627	Qui
+628	Pots suprimir el teu compte des del perfil. Escriu a
+629	El teu nom
+630	La teva organització té una prova gratuïta de 30 dies. Després costa 4,99 £ al mes per cada usuari o dispositiu.
+631	La teva organització defineix quant de temps es conserven la telemetria i les proves. Els registres d'auditoria no es poden editar ni suprimir.
+632	Els teus drets
+633	Dicta
+634	Vols permetre l'ús del micròfon per dictar? El navegador processa l'àudio i nosaltres no el desem.
+635	Sortida d'àudio
+636	Posa en pausa
+637	To
+638	Reprèn
+639	Velocitat
+640	Atura
+641	No hi ha cap veu disponible per a aquest idioma.
+642	Veu
+643	El fitxer s'ha mogut a la quarantena i no es pot executar.
+644	S'ha blocat una amenaça en aquest dispositiu.

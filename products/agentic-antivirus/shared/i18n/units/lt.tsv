@@ -1,0 +1,637 @@
+0	Pereiti prie pagrindinio turinio
+1	Pridėti nuolatinę išimtį
+2	Taikyti srauto apribojimą
+3	Rinkti įrenginio metaduomenis
+4	Izoliuoti įrenginį nuo tinklo
+5	Perkelti failą į karantiną
+6	Išleisti įrenginį iš izoliacijos
+7	Atkurti failą iš karantino
+8	Atjungti naudotoją visur
+9	Atšaukti srauto apribojimą
+10	Atšaukti naujinį
+11	Nuskaityti įrenginius
+12	Sustabdyti naudotojo paskyrą
+13	Sustabdyti procesą
+14	Patvirtinti
+15	Atmesti
+16	Siųsti į įrenginius
+17	Patvirtinimas baigia galioti [0]
+18	Pasiūlė DI asistentas
+19	Reklama
+20	Veiksmas
+21	Agentai
+22	Klausti
+23	Klausti saugos asistento
+24	Atsakymai pagrįsti jūsų įrenginiais, atvirais incidentais ir spragomis. Asistentas negali nieko pakeisti.
+25	Remiantis
+26	Pašalintas [0] teiginys be įrodymų
+27	Pašalinta teiginių be įrodymų: [0]
+29	Savarankiškai talpinamas modelis
+30	Taisyklės (be modelio)
+31	Parengti taisymo plano juodraštį
+32	Kiekvienas žingsnis yra pasiūlymas. Niekas nevykdoma, kol kas nors to nepatvirtina.
+33	Klausimas
+34	Pavyzdžiui: kuriems įrenginiams reikia dėmesio?
+35	Siūlomas svarbumas
+36	Santrauka
+37	Taikiniai
+38	Apibendrinti šį incidentą
+39	Kodėl
+40	Aptikta
+41	Pranešti apie kažką įtartino
+42	Taisyklė
+43	Svarbumas
+44	Įspėjimas
+46	Pridėti failų
+47	Pridėti aplanką
+48	Pridėti vaizdų
+49	[0] priedas
+50	Priedų: [0]
+51	Priedai
+52	Fotografuoti
+53	Prieiga prie kameros neleista. Leiskite ją naršyklėje arba naudokite įrenginio kameros programėlę.
+54	Kameros peržiūra
+55	Ši naršyklė čia negali atidaryti kameros.
+56	Užfiksuoti
+57	Uždaryti asistentą
+58	Kas tai per failai ir ar jie saugūs?
+59	Failas
+60	Klauskite apie savo saugą arba pridėkite failų, aplanką, vaizdų ar kameros nuotrauką. Kiekvienas priedas pirmiausia nuskaitomas, o niekas neišsaugoma.
+61	[0] vaizdą
+62	[0] vaizdus
+63	 aprašė modelis.
+64	Pavyzdžiui: ar šis atsisiuntimas saugus?
+65	Švarus tekstas ir švarūs vaizdai gali būti siunčiami DI modeliui, kurį įjungė jūsų organizacija. Kenkėjiški failai niekada nesiunčiami.
+66	[0] failas nepridėtas
+67	Nepridėta failų: [0]
+68	: iki [0] failų, kiekvienas iki [1] MB, iš viso iki [2] MB.
+69	Pašalinti [0]
+70	Nuskaityti ir klausti
+71	Nuskaitymo rezultatai
+72	Tipas
+73	Naudoti įrenginio kamerą
+74	Rezultatas
+75	Žinomos kenkėjiškos programos nėra
+76	Kenkėjiškas
+77	Nenuskaityta
+78	Audito grandinė nutrūko ties įrašu [0].
+79	Audito grandinė nepažeista: patikrinta įrašų – [0].
+80	El. paštas
+81	Pamiršote slaptažodį?
+82	Prisijungti su Google
+83	Prisijungti su Google nepavyko. Bandykite dar kartą arba naudokite el. paštą ir slaptažodį.
+84	Prisijungti
+85	Atsijungti
+86	Naujas slaptažodis
+87	arba
+88	Organizacija
+89	Slaptažodis
+90	Slaptažodis pakeistas. Prisijunkite su nauju slaptažodžiu.
+91	Ne mažiau kaip 12 simbolių.
+92	Sukurti paskyrą
+93	Siųsti nuorodą dar kartą
+94	Jei paskyrą vis dar reikia patvirtinti, nauja nuoroda jau siunčiama. Patikrinkite ir šlamšto aplanką.
+95	Atkurti slaptažodį
+96	Jei šiuo adresu naudojasi kokia nors paskyra, išsiuntėme slaptažodžio atkūrimo nuorodą. Ji galioja vieną valandą.
+97	Prieš prisijungdami patvirtinkite savo el. pašto adresą. Atidarykite nuorodą, kurią išsiuntėme adresu [0].
+98	El. pašto adresas patvirtintas. Dabar galite prisijungti.
+99	Ši nuoroda nebegalioja arba jau buvo panaudota. Prisijunkite, kad gautumėte naują.
+100	Patikrinkite el. paštą, kad patvirtintumėte savo adresą.
+101	Prenumerata sumažina reklamų 95 %.
+102	Jūsų bandomasis laikotarpis baigėsi.
+103	Prenumeruojama iki [0]
+104	Palikti viską nemokamai su visomis reklamomis
+105	Sustabdyti viską, įskaitant įrenginių apsaugą, kol kas nors sumokės
+106	Konsolei reikia prenumeratos; įrenginiai lieka apsaugoti
+107	4,99 £ per mėnesį
+108	Prenumeruoti
+109	Nemokamas bandomasis laikotarpis: 
+110	Liko [0] diena
+111	Liko dienų: [0]
+112	Atšaukti
+113	Ištrinti
+114	Kažkas nepavyko.
+115	Eksportuoti
+116	Įkeliama…
+117	Netaikoma
+118	Niekada
+119	Toliau
+120	ne
+121	Nėra ką rodyti.
+122	išjungta
+123	įjungta
+124	Ankstesnis
+125	Atnaujinti
+126	Išsaugoti
+127	Ieškoti
+128	Modeliavimas (bandomieji duomenys)
+129	Būsena
+130	Nepasiekiama
+131	Nežinoma
+132	Atnaujinta [0]
+133	Vykdoma…
+134	taip
+135	[0] įspėjimas per 24 valandas
+136	Įspėjimų per 24 valandas: [0]
+137	[0] įrenginys
+138	Įrenginių: [0]
+139	Duomenys [0] būsenos
+140	[0] atviras incidentas
+141	Atvirų incidentų: [0]
+142	Laukia [0] patvirtinimas
+143	Laukiančių patvirtinimų: [0]
+144	patvirtinta
+145	įtariama
+146	Užregistruoti įrenginį
+147	Įrenginys
+148	Neteikia ataskaitų
+149	Pasenusi politika
+150	Jutiklis išjungtas
+151	Pasenę apibrėžimai
+152	Problemos
+153	Paskutinį kartą matytas
+154	Operacinė sistema
+155	Politika
+156	Paleiskite įrenginyje per 24 valandas (vienkartinis naudojimas):
+157	Apsauga
+158	Kopijuoti
+159	Atsisiųsti
+160	Perkelti
+161	Naujas aplankas
+162	Pervardyti
+163	Atkurti
+164	Perkelti į šiukšlinę
+165	Įkelti
+166	Pagalba
+167	[0] tekstas šiame puslapyje išverstas mašininiu būdu ir dar neperžiūrėtas.
+168	Šia kalba mašininiu būdu išverstų ir dar neperžiūrėtų tekstų: [0].
+169	Ši kalba dar neišversta, todėl rodoma anglų kalba.
+170	patvirtinta
+171	Stebėti faktai
+172	Hipotezės (nepatvirtintos)
+173	Hipotezė, patikimumas [0]: [1]
+174	Vykdyti tyrimą
+175	Trūkstami įrodymai
+176	Trūksta: [0]
+177	Skaityti garsiai
+178	Rekomenduojami veiksmai
+179	Įrodymų laiko juosta
+180	gaunamasis žiniatinklio kablys
+181	Signalai iš jūsų tapatybės teikėjo, DNS, užkardų ir kitų įrankių. Naujos integracijos iš pradžių yra nepasiekiamos; veikiančiu galima pažymėti tik tą teikėjo adapterį, kuris išlaikė sutarties testą. Bandomieji duomenys visur, kur rodomi, pažymėti kaip modeliavimas.
+182	Neprijungta (laikinas)
+183	Tik bandomieji duomenys
+184	Nepasiekiama
+185	Veikia (patikrinta)
+186	Paslaptis (rodoma vieną kartą):
+187	Patvirtinimai
+188	Įspėjimai
+189	Auditas
+190	Prenumerata
+191	Prietaisų skydelis
+192	DDoS ir pasiekiamumas
+193	Įrenginiai
+194	Failai
+195	Incidentai
+196	Integracijos
+197	Politikos
+198	Privatumas
+199	Karantinas
+200	Reagavimas
+201	Sauga
+202	Nustatymai
+203	Automatiškai perkelti žinomas kenkėjiškas programas į karantiną
+204	Stebėti įtartiną elgseną
+205	Blokuoti įtartinus scenarijus
+206	Rinkti failų turinį tyrimui (pagal numatytuosius nustatymus išjungta)
+207	Leisti tinklo izoliaciją
+208	Nuskaityti failus, kai jie atidaromi arba įrašomi
+209	Nuskaityti atsisiuntimus
+210	Nuskaityti programas, kai jos paleidžiamos
+211	Apsaugoti agentą nuo pakeitimų
+212	Įspėti apie žinomas kenkėjiškas nuorodas
+213	Priežastis
+214	Prašyti peržiūros
+215	Atkurti po naujo nuskaitymo
+216	laiko iki patikrinto pašalinimo mediana (n=[0], neišspręsta [1])
+217	pataisymai, kurių pakartotinis testas sėkmingas
+218	pasikartojimas po atkūrimo
+219	patikrintas virusų pašalinimas
+220	saugus grąžinimas į darbą
+221	atkūrimo nuskaitymai baigti
+222	Tik karantinu pasibaigę atvejai ([0]) ir iš naujo įdiegti įrenginiai ([1]) skaičiuojami atskirai; vien karantinas niekada nelaikomas pašalinimu.
+223	[0] val.
+224	[0] min.
+225	[0] s
+226	Laukiama patvirtinimo
+227	Gamybinės aplinkos įrodymai
+228	Užfiksuokite, kas buvo patikrinta gamybinėje aplinkoje, kuriuose ištekliuose ir su kuria versija. Įrašų redaguoti negalima.
+229	Versija
+230	Keisti režimą
+231	nėra įrodymų
+232	nepavyko
+233	išlaikyta
+234	laukiama
+235	Tikrinti veiksmų plano eigą
+236	Įrenginiai, galintys reaguoti
+237	Visi įrenginiai
+238	[0] bandomasis įrenginys
+239	Bandomųjų įrenginių: [0]
+240	Baigta
+241	Baigta, kai
+242	Pratybos
+243	Stebėti
+244	Reaguoti
+245	Aprėptis
+246	Stebima: [0], gali reaguoti: [1]
+247	Duomenys
+248	Duomenų amžius
+249	Tiesiogiai
+250	Bandomieji duomenys
+251	neįvykdyta
+252	kvitas
+253	vykdoma
+254	nežinoma
+255	Išsiųsti
+256	Įrodymai
+257	Įvykdyta
+258	Pasenęs
+259	Duomenų srautai
+260	Versija arba maiša
+261	Aplinka
+262	Rezultatas
+263	Savininkas
+264	Reikalavimas
+265	Išteklius arba grupė
+266	Rodyti
+267	Visi
+268	Nebaigta
+269	Įjungta visai paslaugai
+270	Įjungta šiai organizacijai
+271	Sustabdyti visus naujus reagavimo veiksmus šioje organizacijoje? Apsauga ir nuskaitymas toliau veiks.
+272	Vėl leisti reagavimo veiksmus
+273	Sustabdyti visus reagavimo veiksmus
+274	Avarinis jungiklis
+275	Rūšis
+276	Atvirumo minučių mediana (atvira: [0], seniausias [1] min.)
+277	Politikos atmetimai
+278	Pratybos ir modeliavimai (aukščiau neįskaičiuoti)
+279	Pakartotiniai veiksmai (tikslas 0)
+280	Srauto vėlavimo mediana (p95 [0] s, n=[1])
+281	Vėluojantys patvirtinimai (laukia: [0], tikslas [1] min.)
+282	Mediana nuo signalo iki rūšiavimo (p95 [0] min., n=[1], nerūšiuota: [2])
+283	Nepriklausomai patikrinti veiksmai ([0]/[1])
+284	Laikotarpis: [0]. Vien kvitas niekada nelaikomas patikrinimu. Trūkstami duomenys rodomi kaip nepasiekiami.
+285	Reagavimo rodikliai
+286	Paskutinis įvykis
+287	Agentai siūlo; fiksuota politika nusprendžia, kas vykdoma. Kiekvienas veiksmas rodo savo patvirtinimą, kvitą ir nepriklausomą patikrą.
+288	Etapas
+289	Laukiama patvirtinimo
+290	Atmesta
+291	Nebegalioja
+292	Nepavyko
+293	Reikia rankinio suderinimo
+294	Pasiūlyta
+295	Eilėje
+296	Vykdoma
+297	Laukiama patikrinimo
+298	Patikrinta
+299	Dabartinė būsena
+300	Režimas
+301	Modeliavimas
+302	Nuskaitymai ir duomenų rinkimas vykdomi. Kiti veiksmai lieka pasiūlymais.
+303	Patvirtinti veiksmai vykdomi pasirinktuose įrenginiuose.
+304	Veiksmai vykdomi tik su bandomaisiais adapteriais. Jūsų įrenginiuose niekas nesikeičia.
+305	Veiksmų dar nėra.
+306	Niekas nelaukia patvirtinimo.
+307	Gamybinės aplinkos įrodymų dar neužfiksuota.
+308	Dar nė vienas įrenginys ar integracija nesiunčia duomenų.
+309	Neįvykdyta
+310	Stebėta
+311	Kas nutiko
+312	Reagavimas į DDoS
+313	Klaidingas teigiamas ir atkūrimas
+314	Tapatybė, sukčiavimas ir įtartinas srautas
+315	Kenkėjiškos programos ir įtartini atsisiuntimai
+316	Tinklo matomumas ir įrenginių būklė
+317	Atkūrimas po kompromitavimo
+318	Išpirkos reikalaujanti programa arba įtariamas kompromitavimas
+319	Veiksmų planas
+320	Veiksmų planai
+321	Politikos versija
+322	Įdiegta versija
+323	Izoliacija užkarda
+324	Duomenys gauti
+325	Failas pašalintas
+326	Procesas sustabdytas
+327	Teikėjo būsena
+328	Užfiksuota
+329	Nuskaitymas baigtas
+330	Modeliuota
+331	Ne karantine
+332	Karantine
+333	Veiksmai ir kvitai
+334	Užfiksuoti rezultatą
+335	Užfiksuoti
+336	Gali reaguoti
+337	Šaltinis
+338	įrenginys
+339	konsolė
+340	modeliavimas
+341	Prasideda, kai
+342	Atnaujinta
+343	Nepriklausoma patikra
+344	Laukiama
+345	Archyvo riba
+346	Šifruotas archyvas
+347	Neįtraukta
+348	Neprieinama
+349	Laiko riba
+350	Per didelis
+351	Nepalaikomas formatas
+352	Atšaukta
+353	Praleista
+354	Dalinis
+355	Baigėsi laikas
+356	Visas
+357	Pagal poreikį
+358	Greitas
+359	Atkūrimas
+360	Suplanuotas
+361	Tikslinis
+362	Pridėti segmentą
+363	archyvai
+364	Ištekliai
+365	Sustabdyti šį nuskaitymą? Iki šiol gauti rezultatai išsaugomi kaip atšauktas nuskaitymas.
+366	Neaprėpta
+367	Aptikimai
+368	Įrenginiai pagal apsaugos būseną
+369	Variklis
+370	Terminas
+371	Paskutiniai įrodymai
+372	Numatoma kontrolė
+373	Siūlomas pataisymas
+374	Pakartotinis testas
+375	Išteklius arba segmentas
+376	Atviros spragos
+377	Nuskaitymų rezultatai per 30 dienų
+378	nuo įspėjimo iki patikrinto sulaikymo
+379	apsaugoti įrenginiai
+380	viešieji galiniai taškai su tiekėjo pusės apsauga
+381	nuo įvykio iki įspėjimo
+382	įrenginiai su naujausiais apibrėžimais
+383	įrenginiai, kuriems per 7 dienas atliktas visas nuskaitymas
+384	atviros spragos (vėluoja: [0], uždaryta per 30 dienų: [1])
+385	stebimi tinklo segmentai
+386	patvirtinti tikri teigiami
+387	baigti nuskaitymai
+388	Aprėptis ir reagavimas
+389	Paskutinis visas nuskaitymas
+390	Paskutinė telemetrija
+391	Kiekvienas aprėpties įrenginys ir tinklo segmentas, ar jis apsaugotas ir ką taisyti toliau.
+392	Tinklo matomumas
+393	Dar neužregistruota jokių įrenginių. Apsaugokite kompiuterį skiltyje Įrenginiai.
+394	Atvirų spragų nėra.
+395	Atvira: [0]
+396	vėluoja
+397	p95 [0] s
+398	Aplankai
+399	Nuskaitomi aplankai, atskirti kableliais
+400	Šifravimas ir užkarda
+401	Disko šifravimas [0], užkarda [1]
+402	Atkūrimas po incidentų
+403	Tikrinti dar kartą dabar
+404	Pakartotinai netestuota
+405	Pakartotinis testas nepavyko
+406	Patikrintai uždaryta
+407	Nuskaitymo tipas
+408	Nuskaitymai
+409	Segmentas
+410	Segmento pavadinimas
+411	Pradėti nuskaitymą
+412	Pradėta
+413	Būsena
+414	Pablogėjusi
+415	Apsaugotas
+416	Neapsaugotas
+417	Įrenginiai pagal būseną
+418	Nežinoma: [0]
+419	Nėra matomumo
+420	Stebimas
+421	Matomumas
+422	Aptikimų nebuvimas neįrodo apsaugos: patikrinkite ir aprėptį bei nuskaitymo rezultatus.
+423	Kalba
+424	Vertimo aprėptis
+425	Ankstesnės versijos nėra
+426	Tema
+427	Tamsi
+428	Didelis kontrastas
+429	Šviesi
+430	[0] failuose naujų grėsmių nerasta.
+431	[0] grėsmė
+432	[0] grėsmės
+433	 rasta [0] failuose. Peržiūrėkite jas skiltyse Įspėjimai ir Patvirtinimai.
+434	Visas nuskaitymas
+435	Nepavyko apsaugoti šio kompiuterio: [0]
+436	Šis kompiuteris apsaugotas. Realiojo laiko nuskaitymas veikia, kol atidaryta Agentic Antivirus.
+437	Nuskaitymas nebaigtas: [0]
+438	Nuskaitoma…
+439	Nuskaitomi visi diskai. Tai gali užtrukti ilgai.
+440	Nuskaitomi aplankai Atsisiuntimai, Darbalaukis ir laikinieji failai…
+441	Nepavyko perskaityti failų: [0].
+442	Failas
+443	Svetainės nuoroda
+444	Priimti bandomuosius duomenis
+446	Veiksmai
+447	Pridėti integraciją
+448	Pridėti išimtį
+449	Pridėti integraciją
+450	Pridėti savaitinį visą nuskaitymą
+451	administratorius
+452	Reklama
+453	Sutikimas dėl reklamos
+454	Paveiktos paslaugos
+455	įspėjimai per pastarąsias 24 valandas
+456	Leisti
+457	Leisti ir nuskaityti
+458	Administratorius turi nurodyti priežastį. Išimtis užfiksuojama audito žurnale.
+459	El. laiškas
+460	Patvirtinti grąžinimą į darbą
+461	Veiksmų tvirtinimas
+462	Išteklius
+463	ištekliai, kuriems taikoma aktyvi apsauga
+464	ištekliai su įspėjimais per 24 valandas
+465	Audito žurnalas
+466	Automatinė apsauga toliau veikia kiekviename įrenginyje. Tai veiksmai, dėl kurių turi nuspręsti žmogus.
+467	Pasiekiamumas
+468	Galimi signalai
+469	Atsarginė kopija patikrinta
+470	Blokuoti
+471	Pagal numatytuosius nustatymus agentas siunčia saugos telemetriją ir failų maišas: procesų pavadinimus ir komandines eilutes, failų kelius, tinklo ryšių metaduomenis ir aptikimus. Failų turinys renkamas tik tada, jei jūsų organizacija tai įjungia.
+472	Pajėgumas
+473	Kategorija
+474	Pakeista
+475	Mokestis
+476	Tikrinti
+477	pasirinkite
+478	Pasirinkite įrenginį
+480	Uždaryti
+481	Atskirta kableliais
+482	Kontaktai
+483	Kontrolė
+484	Aprėptis pagal apsaugos sluoksnį
+485	kritinis
+486	kritinių įspėjimų pristatymas (p95, 30 dienų)
+487	Laukiantys sprendimai
+488	Atsisakyti
+489	Apibrėžimai
+490	Aprašykite, kas nutiko
+491	Detalė
+492	Išsami informacija
+493	Aptikimas
+494	Licencijuojamas įrenginys
+495	visiškai apsaugoti įrenginiai
+496	izoliuoti įrenginiai
+497	Įrenginiai, kuriems reikia dėmesio
+498	Kryptis
+499	DNS zona
+500	atsisiuntimo puslapio
+501	Nemokamo bandomojo laikotarpio metu ir neapmokėtuose planuose konsolė rodo Google AdSense reklamas, o mobiliosios programėlės – Google AdMob reklamas, prieš tai paprašiusios jūsų sutikimo. Prenumeratoriai mato 95 % mažiau reklamų. Reklamos niekada nerodomos patvirtinimo, sulaikymo, grėsmių įspėjimų, karantino peržiūros, prisijungimo, mokėjimo ar audito ekranuose.
+502	Kiekvienas paskelbimas sukuria naują pasirašytą versiją. Neprisijungę įrenginiai toliau taiko paskutinę patikrintą versiją.
+503	Rašykite pagalbos tarnybai adresu
+504	Galinis taškas
+505	Agentic Antivirus valdo Equality Software Ltd. Šiame puslapyje aprašoma, ką renka paslauga. Prieš paskelbiant jį turi peržiūrėti produkto savininkas.
+506	Kiekvienas veiksmas, keičiantis įrenginį, paskyrą ar srautą, praeina pro politikos variklį ir AEP-X valdymą. Patvirtinimas apima vieną veiksmą, tikslius jo taikinius, šią organizaciją ir nustatytą laiką.
+507	Kiekvienas įkėlimas tikrinamas dėl kenkėjiškų programų ir tikrojo tipo. Failai be patikrintos peržiūros priemonės saugomi ir gali būti atsisiunčiami, bet neperžiūrimi.
+508	Išimtis
+509	Išimtys
+510	Aplanko kelias
+511	dėl prieigos ar ištaisymo užklausų.
+512	Spragos
+513	Gaukite agentą, skirtą Windows, Mac ar Linux, iš
+514	Eikite į Įrenginiai, pasirinkite Užregistruoti įrenginį ir paleiskite parodytą komandą kompiuteryje, kurį norite apsaugoti. Agentas pradeda nuskaityti, kai tik gauna savo pasirašytą politiką.
+515	Būklė
+516	Istorija
+517	Pagrindinio kompiuterio vardas
+518	Suprantu, kad pasibaigus bandomajam laikotarpiui įrenginiai nustos nuskaityti ir blokuoti grėsmes, kol bus apmokėta prenumerata.
+519	Poveikis
+520	Importuoti zip arba tar
+521	Incidentas
+522	Įtraukti kalbos modelį (jei jūsų organizacija jį įjungė)
+523	IP adresas
+524	Prisijungti
+525	Prisijunkite prie savo organizacijos
+526	Žinomos kenkėjiškos programos perkeliamos į karantiną, kur jos negali veikti. Jei manote, kad failas užblokuotas per klaidą, atidarykite Karantinas ir paprašykite peržiūros. Sprendžia administratorius, o failas grąžinamas tik tada, kai naujas nuskaitymas jį pripažįsta švariu.
+527	Kalbos be išsamaus vertimo rodomos anglų kalba. Aprėptis išmatuota, o ne įvertinta apytiksliai.
+528	Paskutinį kartą pakeista
+529	Sluoksnis
+530	Teisėtų užklausų sėkmė
+531	Licencijavimo taisyklės
+532	Nuoroda, jei yra
+533	Valdymo kompiuteriai, kurie lieka pasiekiami izoliacijos metu
+534	Pažymėti kaip klaidingą teigiamą
+535	Branda
+536	Apsauga
+537	Pavadinimas
+538	Paslapties pavadinimas jūsų paslapčių saugykloje, niekada ne pati paslaptis
+539	Jokie veiksmai nelaukia.
+540	Atvirų incidentų nėra.
+541	Nėra.
+542	Nepranešta.
+543	nenustatyta
+544	Pranešta po
+545	iš rodomų reklamų
+546	Neprisijungus kaupiamų įvykių buferis (MB)
+547	Android įrenginiuose prenumeruokite Agentic Antivirus programėlėje per Google Play. iPhone ir iPad įrenginiuose App Store prenumeratos dar negalimos. Mokėjimas žiniatinklyje dar negalimas.
+548	Atviras incidentas
+549	atviri incidentai
+550	Atviri incidentai
+551	p95 delsa
+552	apmokėta iki
+553	Kelio šablonas
+554	Žmonės
+555	Už įrenginį
+556	Už naudotoją (apima visus jo įrenginius)
+557	Peržiūra
+558	Pagrindinis
+560	Apsaugoti įrenginį
+561	Protokolas
+562	Teikėjas
+563	Teikėjo įspėjimai (24 valandos)
+564	Viešieji galiniai taškai
+565	Paskelbti politikos versiją
+566	Paskelbti pasirašytą versiją
+567	Paskelbta
+568	Greitas nuskaitymas
+569	Skaitymas garsiai ir diktavimas naudoja naršyklės integruotas kalbos funkcijas. Mes neįrašome ir nesaugome garso.
+570	Gauta
+571	Keičiamosios laikmenos
+572	Pašalinti
+573	Paprašyta
+574	Paprašė
+575	Saugojimas
+576	Grąžinimas į darbą
+577	Šiuo metu
+578	Rizika
+579	Vaidmuo
+580	Atšaukti
+581	Išsaugoti galinį tašką
+582	Išsaugoti licencijavimo taisykles
+583	Nuskaityti
+584	Tvarkaraštis (cron)
+585	Suplanuoti nuskaitymai
+586	Nuoroda į paslaptį
+587	Siųsti kvietimą
+588	Siųsti ataskaitą
+589	Siųsti atkūrimo nuorodą
+590	Paslauga
+591	Paslaugos tikslai
+594	Signalas
+595	Dydis
+596	Kažkas kita
+597	Rikiuoti
+598	Žingsnis
+599	Procesų stabdymui, įrenginių izoliavimui, failų atkūrimui, išimčių pridėjimui ir srauto taisyklių keitimui reikia žmogaus patvirtinimo. Patvirtinimas apima vieną veiksmą, tikslius jo taikinius ir ribotą laiką. Jei kas nors pasikeičia, patvirtinkite dar kartą.
+600	Prenumeruoti šiame įrenginyje per Google Play
+601	prenumeratos būsena
+603	Sistema
+604	Taikinys
+605	DI asistentas
+606	Asistentas grupuoja susijusius įspėjimus, išvardija, kas pastebėta, su nuorodomis į įrodymus ir viską, ko negali įrodyti, pažymi kaip hipotezę. Jis gali siūlyti veiksmus, bet negali jų patvirtinti. Jei modelis nepasiekiamas, nuskaitymas, įspėjimai ir rankinis reagavimas toliau veikia.
+607	Šis kompiuteris
+608	Tik TLS, turi būti išeinančio srauto leidžiamųjų sąraše
+609	Srauto antplūdžius sugeria jūsų tiekėjas. Čia apskaitote kiekvieną viešąjį galinį tašką, stebite teikėjo įspėjimus ir tvirtinate naujus srauto apribojimus.
+610	Srauto apribojimai
+611	Išversta
+612	Šiukšlinė
+613	liko bandomojo laikotarpio dienų
+614	Įjunkite apsaugą, kad būtų nuskaitomi šio kompiuterio failai ir stebimos išpirkos reikalaujančios programos bei prisijungimo duomenų vagystės.
+615	neaprėpta
+616	Anuliuoti paskutinį pakeitimą
+617	Naudotojas
+618	Patvirtinti el. paštą
+619	laukia patvirtinimo
+620	Kai kuriuose puslapiuose rodome Google AdSense reklamas. Leisti suasmenintas reklamas?
+621	Žiniatinklio kablys:
+622	Ką siunčia įrenginiai
+623	Kas tai?
+624	Kada
+625	Kai kas nors užblokuojama
+626	Kai bandomasis laikotarpis baigiasi be mokėjimo
+627	Kas
+628	Paskyrą galite ištrinti savo profilyje. Susisiekite
+629	Jūsų vardas
+630	Jūsų organizacija gauna 30 dienų nemokamą bandomąjį laikotarpį. Po to kaina – 4,99 £ per mėnesį už kiekvieną naudotoją ar įrenginį.
+631	Jūsų organizacija nustato, kiek laiko saugoma telemetrija ir įrodymai. Audito įrašų negalima redaguoti ar ištrinti.
+632	Jūsų teisės
+633	Diktuoti
+634	Leisti naudoti mikrofoną diktavimui? Garsą apdoroja jūsų naršyklė, o mes jo nesaugome.
+635	Garso išvestis
+636	Pristabdyti
+637	Tono aukštis
+638	Tęsti
+639	Greitis
+640	Sustabdyti
+641	Šiai kalbai nėra balso.
+642	Balsas
+643	Failas perkeltas į karantiną ir negali būti paleistas.
+644	Šiame įrenginyje užblokuota grėsmė.

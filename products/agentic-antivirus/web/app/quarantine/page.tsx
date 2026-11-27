@@ -15,7 +15,7 @@ export default function Quarantine() {
       <p className="lede">{t("warning.quarantined")} A file is restored only after an administrator gives a reason and a fresh scan on the device finds it clean.</p>
       <Status error={d.error} loading={!d.data} />
       <table><thead><tr><th>{t("ui.file")}</th><th>{t("devices.hostname")}</th><th>{t("ui.detection")}</th><th>{t("ui.sha_256")}</th><th>{t("ui.when")}</th><th>{t("ui.status")}</th><th /></tr></thead>
-        <tbody>{(d.data ?? []).map((q) => <tr key={q.id}><td>{q.original_path}</td><td>{q.hostname}</td><td>{q.detection} ({q.rule_version})</td>
+        <tbody>{d.data && d.data.length === 0 && <tr><td colSpan={7}>{t("common.none")}</td></tr>}{(d.data ?? []).map((q) => <tr key={q.id}><td>{q.original_path}</td><td>{q.hostname}</td><td>{q.detection} ({q.rule_version})</td>
           <td><code>{q.sha256.slice(0, 16)}…</code></td><td>{formatDateTime(q.quarantined_at, locale)}</td>
           <td>{q.status}{q.restore_scan && q.restore_scan.clean === false ? " (rescan still detects it)" : ""}</td>
           <td className="row">

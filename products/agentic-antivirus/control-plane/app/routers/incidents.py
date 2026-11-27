@@ -23,6 +23,20 @@ _SEV = ["low", "medium", "high", "critical"]
 def notify(cur, tenant_id, kind: str, title: str, body: dict, user_id=None) -> None:
     cur.execute("INSERT INTO aav.notifications (tenant_id, user_id, kind, title, body) VALUES (%s,%s,%s,%s,%s)",
                 (tenant_id, user_id, kind, title[:300], json.dumps(body, default=str)))
+    if user_id is None:          # organisation-wide notices also go to messaging / CRM / ITSM integrations (INT-03)
+        import threading
+        from app.routers.integrations import deliver_outbound
+        snapshot = json.loads(json.dumps(body, default=str))
+        t = threading.Timer(0.5, lambda: _safe(deliver_outbound, tenant_id, kind, title, snapshot))
+        t.daemon = True
+        t.start()
+
+
+def _safe(fn, *a):
+    try:
+        fn(*a)
+    except Exception:  # pragma: no cover - delivery is best effort and recorded per integration
+        pass
 
 
 def attach_alert_to_incident(cur, tenant_id, alert_id, device_id, severity: str, title: str):

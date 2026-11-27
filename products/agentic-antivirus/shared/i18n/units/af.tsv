@@ -1,0 +1,637 @@
+0	Gaan na hoofinhoud
+1	Voeg 'n permanente uitsluiting by
+2	Pas 'n verkeersbeperking toe
+3	Versamel toestelmetadata
+4	Isoleer 'n toestel van die netwerk
+5	Plaas 'n lêer in kwarantyn
+6	Stel 'n toestel uit isolasie vry
+7	Herstel 'n gekwarantynde lêer
+8	Teken 'n gebruiker oral af
+9	Rol 'n verkeersbeperking terug
+10	Rol 'n opdatering terug
+11	Skandeer toestelle
+12	Skort 'n gebruikersrekening op
+13	Stop 'n proses
+14	Keur goed
+15	Weier
+16	Stuur na toestelle
+17	Goedkeuring verval [0]
+18	Voorgestel deur die KI-assistent
+19	Advertensie
+20	Aksie
+21	Agente
+22	Vra
+23	Vra die sekuriteitsassistent
+24	Antwoorde kom van jou toestelle, oop insidente en gapings. Die assistent kan niks verander nie.
+25	Gebaseer op
+26	[0] bewering sonder bewyse is verwyder
+27	[0] bewerings sonder bewyse is verwyder
+29	Selfgehuisveste model
+30	Reëls (geen model)
+31	Stel 'n herstelplan op
+32	Elke stap is 'n voorstel. Niks loop totdat iemand dit goedkeur nie.
+33	Vraag
+34	Byvoorbeeld: watter toestelle het aandag nodig?
+35	Voorgestelde erns
+36	Opsomming
+37	Teikens
+38	Som hierdie insident op
+39	Waarom
+40	Bespeur
+41	Rapporteer iets verdags
+42	Reël
+43	Erns
+44	Waarskuwing
+46	Voeg lêers by
+47	Voeg 'n vouer by
+48	Voeg beelde by
+49	[0] aanhegsel
+50	[0] aanhegsels
+51	Aanhegsels
+52	Neem 'n foto
+53	Kameratoegang is nie toegelaat nie. Laat dit in jou blaaier toe, of gebruik jou toestel se kamera-app.
+54	Kameravoorskou
+55	Hierdie blaaier kan nie die kamera hier oopmaak nie.
+56	Neem vas
+57	Sluit die assistent
+58	Wat is hierdie lêers, en is hulle veilig?
+59	Lêer
+60	Vra oor jou sekuriteit, of heg lêers, 'n vouer, beelde of 'n kamerafoto aan. Elke aanhegsel word eers geskandeer en niks word gestoor nie.
+61	[0] beeld is
+62	[0] beelde is
+63	 deur die model beskryf.
+64	Byvoorbeeld: is hierdie aflaai veilig?
+65	Skoon teks en beelde kan na die KI-model gestuur word wat jou organisasie geaktiveer het. Kwaadwillige lêers nooit nie.
+66	[0] lêer is nie bygevoeg nie
+67	[0] lêers is nie bygevoeg nie
+68	: tot [0] lêers, [1] MB elk en [2] MB altesaam.
+69	Verwyder [0]
+70	Skandeer en vra
+71	Skanderingsresultate
+72	Tipe
+73	Gebruik die toestel se kamera
+74	Resultaat
+75	Geen bekende wanware nie
+76	Kwaadwillig
+77	Nie geskandeer nie
+78	Die ouditketting is gebreek by inskrywing [0].
+79	Die ouditketting is ongeskonde: [0] inskrywings geverifieer.
+80	E-pos
+81	Wagwoord vergeet?
+82	Meld aan met Google
+83	Aanmelding met Google het nie gewerk nie. Probeer weer, of gebruik jou e-pos en wagwoord.
+84	Meld aan
+85	Meld af
+86	Nuwe wagwoord
+87	of
+88	Organisasie
+89	Wagwoord
+90	Wagwoord verander. Meld aan met jou nuwe wagwoord.
+91	Minstens 12 karakters.
+92	Skep rekening
+93	Stuur die skakel weer
+94	As daardie rekening nog bevestiging nodig het, is 'n nuwe skakel op pad. Kyk ook in jou gemorspos-vouer.
+95	Stel wagwoord terug
+96	As 'n rekening daardie adres gebruik, het ons 'n terugstelskakel gestuur. Dit werk vir een uur.
+97	Bevestig jou e-posadres voordat jy aanmeld. Maak die skakel oop wat ons na [0] gestuur het.
+98	E-pos geverifieer. Jy kan nou aanmeld.
+99	Hierdie skakel het verval of is reeds gebruik. Meld aan om 'n nuwe een te kry.
+100	Kyk in jou e-pos om jou adres te verifieer.
+101	'n Intekening verminder advertensies met 95%.
+102	Jou proeftydperk het verstryk.
+103	Ingeteken tot [0]
+104	Hou alles gratis met volle advertensies
+105	Stop alles, insluitend toestelbeskerming, totdat iemand betaal
+106	Die konsole vereis 'n intekening; toestelle bly beskerm
+107	£4,99 per maand
+108	Teken in
+109	Gratis proeftydperk: 
+110	[0] dag oor
+111	[0] dae oor
+112	Kanselleer
+113	Skrap
+114	Iets het verkeerd geloop.
+115	Voer uit
+116	Laai tans…
+117	n.v.t.
+118	Nooit
+119	Volgende
+120	nee
+121	Niks om te wys nie.
+122	af
+123	aan
+124	Vorige
+125	Herlaai
+126	Stoor
+127	Soek
+128	Simulasie (toetsdata)
+129	Status
+130	Nie beskikbaar nie
+131	Onbekend
+132	Opgedateer [0]
+133	Besig…
+134	ja
+135	[0] waarskuwing in 24 uur
+136	[0] waarskuwings in 24 uur
+137	[0] toestel
+138	[0] toestelle
+139	Data soos op [0]
+140	[0] oop insident
+141	[0] oop insidente
+142	[0] goedkeuring wag
+143	[0] goedkeurings wag
+144	bevestig
+145	vermoed
+146	Registreer 'n toestel
+147	Toestel
+148	Rapporteer nie
+149	Verouderde beleid
+150	Sensor gedeaktiveer
+151	Verouderde definisies
+152	Kwessies
+153	Laas gesien
+154	Bedryfstelsel
+155	Beleid
+156	Voer binne 24 uur op die toestel uit (eenmalige gebruik):
+157	Beskerming
+158	Kopieer
+159	Laai af
+160	Skuif
+161	Nuwe vouer
+162	Hernoem
+163	Herstel
+164	Skuif na asblik
+165	Laai op
+166	Hulp
+167	[0] teks op hierdie bladsy is masjienvertaal en nog nie hersien nie.
+168	[0] tekste in hierdie taal is masjienvertaal en nog nie hersien nie.
+169	Hierdie taal is nog nie vertaal nie, dus word Engels gewys.
+170	goedgekeur
+171	Waargenome feite
+172	Hipoteses (nie bevestig nie)
+173	Hipotese, [0] vertroue: [1]
+174	Voer ondersoek uit
+175	Ontbrekende bewyse
+176	Ontbreek: [0]
+177	Lees hardop
+178	Aanbevole aksies
+179	Bewystydlyn
+180	inkomende webhook
+181	Seine van jou identiteitsverskaffer, DNS, brandmure en ander gereedskap. Nuwe integrasies begin as nie beskikbaar nie; slegs 'n verskafferadapter wat sy kontraktoets geslaag het, kan as lewendig gemerk word. Toetsdata word oral waar dit verskyn as simulasie gemerk.
+182	Nie gekoppel nie (stomp)
+183	Slegs toetsdata
+184	Nie beskikbaar nie
+185	Lewendig (geverifieer)
+186	Geheim (een keer gewys):
+187	Goedkeurings
+188	Waarskuwings
+189	Oudit
+190	Intekening
+191	Kontroleskerm
+192	DDoS en beskikbaarheid
+193	Toestelle
+194	Lêers
+195	Insidente
+196	Integrasies
+197	Beleide
+198	Privaatheid
+199	Kwarantyn
+200	Reaksie
+201	Sekuriteit
+202	Instellings
+203	Plaas bekende wanware outomaties in kwarantyn
+204	Hou dop vir verdagte gedrag
+205	Blokkeer verdagte skripte
+206	Versamel lêerinhoud vir ondersoek (by verstek af)
+207	Laat netwerkisolasie toe
+208	Skandeer lêers wanneer hulle oopgemaak of geskryf word
+209	Skandeer aflaaie
+210	Skandeer programme wanneer hulle begin
+211	Beskerm die agent teen veranderinge
+212	Waarsku oor bekende kwaadwillige skakels
+213	Rede
+214	Versoek hersiening
+215	Herstel na nuwe skandering
+216	mediaantyd tot geverifieerde uitwissing (n=[0], onopgelos [1])
+217	regstellings met 'n geslaagde hertoets
+218	herhaling na herstel
+219	geverifieerde virusverwydering
+220	veilige terugkeer na diens
+221	herstelskanderings voltooi
+222	Uitkomste met slegs kwarantyn ([0]) en herinstalleerde toestelle ([1]) word apart getel; kwarantyn alleen word nooit as verwydering getel nie.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Wag vir goedkeuring
+227	Produksiebewyse
+228	Teken aan wat in produksie geverifieer is, op watter bates en met watter weergawe. Inskrywings kan nie gewysig word nie.
+229	Weergawe
+230	Verander modus
+231	geen bewyse nie
+232	misluk
+233	geslaag
+234	hangend
+235	Kontroleer speelboekvordering
+236	Toestelle wat kan reageer
+237	Alle toestelle
+238	[0] loodstoestel
+239	[0] loodstoestelle
+240	Voltooi
+241	Voltooi wanneer
+242	Oefening
+243	Neem waar
+244	Reageer
+245	Dekking
+246	[0] waargeneem, [1] kan reageer
+247	Data
+248	Data-ouderdom
+249	Lewendig
+250	Toetsdata
+251	nie uitgevoer nie
+252	kwitansie
+253	aan die gang
+254	onbekend
+255	Versending
+256	Bewyse
+257	Dit het geloop
+258	Verouderd
+259	Datavoere
+260	Weergawe of opsomming
+261	Omgewing
+262	Uitkoms
+263	Eienaar
+264	Vereiste
+265	Bate of kohort
+266	Wys
+267	Alles
+268	Nie voltooi nie
+269	Aan vir die hele diens
+270	Aan vir hierdie organisasie
+271	Stop elke nuwe reaksie-aksie vir hierdie organisasie? Beskerming en skandering bly loop.
+272	Laat reaksie-aksies weer toe
+273	Stop alle reaksie-aksies
+274	Noodskakelaar
+275	Soort
+276	Mediaan minute oop ([0] oop, oudste [1] min)
+277	Beleidsweierings
+278	Oefeninge en simulasies (nie hierbo getel nie)
+279	Herhaalde aksies (teiken 0)
+280	Mediaan voervertraging (p95 [0] s, n=[1])
+281	Agterstallige goedkeurings ([0] wag, teiken [1] min)
+282	Mediaan van sein tot triage (p95 [0] min, n=[1], [2] nie getrieer nie)
+283	Onafhanklik geverifieerde aksies ([0]/[1])
+284	Venster: [0]. 'n Kwitansie alleen tel nooit as geverifieer nie. Ontbrekende data word as nie beskikbaar nie gewys.
+285	Reaksiemaatstawwe
+286	Laaste gebeurtenis
+287	Agente stel voor; 'n vaste beleid besluit wat loop. Elke aksie wys sy goedkeuring, kwitansie en onafhanklike kontrole.
+288	Fase
+289	Wag op goedkeuring
+290	Geweier
+291	Verval
+292	Misluk
+293	Benodig handmatige rekonsiliasie
+294	Voorgestel
+295	In tou
+296	Loop tans
+297	Verifikasie hangend
+298	Geverifieer
+299	Lewendige toestand
+300	Modus
+301	Simulasie
+302	Skanderings en dataversameling loop. Ander aksies bly voorstelle.
+303	Goedgekeurde aksies loop op die gekose toestelle.
+304	Aksies loop slegs teen toetsadapters. Niks op jou toestelle verander nie.
+305	Nog geen aksies nie.
+306	Niks wag op goedkeuring nie.
+307	Nog geen produksiebewyse aangeteken nie.
+308	Nog geen toestelle of integrasies stuur data nie.
+309	Dit het nie geloop nie
+310	Waargeneem
+311	Wat gebeur het
+312	DDoS-reaksie
+313	Vals positief en herstel
+314	Identiteit, uitvissing en verdagte verkeer
+315	Wanware en verdagte aflaaie
+316	Netwerksigbaarheid en toestelgesteldheid
+317	Herstel na kompromittering
+318	Losprysware of vermoedelike kompromittering
+319	Speelboek
+320	Speelboeke
+321	Beleidsweergawe
+322	Weergawe geïnstalleer
+323	Brandmuurisolasie
+324	Data ontvang
+325	Lêer verwyder
+326	Proses gestop
+327	Verskaffertoestand
+328	Aangeteken
+329	Skandering voltooi
+330	Gesimuleer
+331	Uit kwarantyn
+332	In kwarantyn
+333	Aksies en kwitansies
+334	Teken uitkoms aan
+335	Teken aan
+336	Kan reageer
+337	Bron
+338	toestel
+339	konsole
+340	simulasie
+341	Begin wanneer
+342	Opgedateer
+343	Onafhanklike kontrole
+344	Wag
+345	Argieflimiet
+346	Geënkripteerde argief
+347	Uitgesluit
+348	Ontoeganklik
+349	Tydsbeperking
+350	Te groot
+351	Formaat nie ondersteun nie
+352	Gekanselleer
+353	Gemis
+354	Gedeeltelik
+355	Tyd verstreke
+356	Volledig
+357	Op aanvraag
+358	Vinnig
+359	Herstel
+360	Geskeduleer
+361	Geteiken
+362	Voeg segment by
+363	argiewe
+364	Bates
+365	Stop hierdie skandering? Resultate tot dusver word as 'n gekanselleerde skandering gehou.
+366	Nie gedek nie
+367	Bespeurings
+368	Toestelle volgens beskermingstoestand
+369	Enjin
+370	Sperdatum
+371	Laaste bewys
+372	Verwagte kontrole
+373	Voorgestelde regstelling
+374	Hertoets
+375	Bate of segment
+376	Oop gapings
+377	Skanderingsuitkomste in 30 dae
+378	waarskuwing tot geverifieerde inperking
+379	toestelle beskerm
+380	openbare eindpunte met stroomop-versagting
+381	gebeurtenis tot waarskuwing
+382	toestelle met huidige definisies
+383	toestelle met 'n volledige skandering in 7 dae
+384	oop gapings ([0] agterstallig, [1] gesluit in 30 dae)
+385	netwerksegmente gemonitor
+386	bevestigde ware positiewe
+387	skanderings voltooi
+388	Dekking en reaksie
+389	Laaste volledige skandering
+390	Laaste telemetrie
+391	Elke toestel en netwerksegment binne bestek, of dit beskerm is, en wat volgende reggestel moet word.
+392	Netwerksigbaarheid
+393	Nog geen toestelle geregistreer nie. Beskerm 'n rekenaar vanuit Toestelle.
+394	Geen oop gapings nie.
+395	[0] oop
+396	agterstallig
+397	p95 [0] s
+398	Vouers
+399	Vouers om te skandeer, geskei deur kommas
+400	Enkripsie en brandmuur
+401	Skyfenkripsie [0], brandmuur [1]
+402	Herstel na insidente
+403	Kontroleer nou weer
+404	Nie hertoets nie
+405	Hertoets het misluk
+406	Geverifieer gesluit
+407	Skanderingstipe
+408	Skanderings
+409	Segment
+410	Segmentnaam
+411	Begin skandering
+412	Begin
+413	Toestand
+414	Gedegradeer
+415	Beskerm
+416	Onbeskerm
+417	Toestelle volgens toestand
+418	[0] onbekend
+419	Geen sigbaarheid nie
+420	Gemonitor
+421	Sigbaarheid
+422	Geen bespeurings bewys nie beskerming nie: kontroleer ook dekking en skanderingsresultate.
+423	Taal
+424	Vertaaldekking
+425	Geen vroeëre weergawe nie
+426	Tema
+427	Donker
+428	Hoë kontras
+429	Lig
+430	Geen nuwe bedreigings in [0] lêers gevind nie.
+431	[0] bedreiging
+432	[0] bedreigings
+433	 in [0] lêers gevind. Sien Waarskuwings en Goedkeurings om hulle te hersien.
+434	Volledige skandering
+435	Kon nie hierdie rekenaar beskerm nie: [0]
+436	Hierdie rekenaar is beskerm. Intydse skandering loop terwyl Agentic Antivirus oop is.
+437	Die skandering het nie voltooi nie: [0]
+438	Skandeer tans…
+439	Skandeer tans elke skyf. Dit kan lank duur.
+440	Skandeer tans Aflaaie, Werkskerm en tydelike lêers…
+441	[0] lêers kon nie gelees word nie.
+442	'n Lêer
+443	'n Webwerfskakel
+444	Aanvaar toetsdata
+446	Aksies
+447	Voeg 'n integrasie by
+448	Voeg uitsluiting by
+449	Voeg integrasie by
+450	Voeg weeklikse volledige skandering by
+451	administrateur
+452	Advertensies
+453	Toestemming vir advertensies
+454	Geaffekteerde dienste
+455	waarskuwings in die afgelope 24 uur
+456	Laat toe
+457	Laat toe en skandeer
+458	'n Administrateur moet 'n rede gee. Die uitsluiting word in die ouditspoor aangeteken.
+459	'n E-pos
+460	Keur terugkeer na diens goed
+461	Goedkeuring van aksies
+462	Bate
+463	bates onder aktiewe versagting
+464	bates met waarskuwings in 24 uur
+465	Ouditspoor
+466	Outomatiese beskerming bly op elke toestel loop. Dit is die aksies waaroor 'n persoon moet besluit.
+467	Beskikbaarheid
+468	Beskikbare seine
+469	Rugsteun geverifieer
+470	Blokkeer
+471	By verstek stuur die agent sekuriteitstelemetrie en lêer-hashes: prosesname en opdragreëls, lêerpaaie, metadata van netwerkverbindings, en bespeurings. Lêerinhoud word slegs versamel as jou organisasie dit aanskakel.
+472	Kapasiteit
+473	Kategorie
+474	Verander
+475	Heffing
+476	Kontroleer
+477	kies
+478	Kies 'n toestel
+480	Sluit
+481	Kommageskei
+482	Kontak
+483	Kontrole
+484	Dekking volgens beskermingslaag
+485	kritiek
+486	aflewering van kritieke waarskuwings (p95, 30 dae)
+487	Besluite wat wag
+488	Wys af
+489	Definisies
+490	Beskryf wat gebeur het
+491	Besonderheid
+492	Besonderhede
+493	Bespeuring
+494	Toestel om te lisensieer
+495	toestelle volledig beskerm
+496	toestelle geïsoleer
+497	Toestelle wat aandag nodig het
+498	Rigting
+499	DNS-sone
+500	aflaaibladsy
+501	Tydens die gratis proeftydperk, en op onbetaalde planne, wys die konsole Google AdSense-advertensies en die mobiele apps wys Google AdMob-advertensies, nadat jou toestemming gevra is. Intekenaars sien 95% minder advertensies. Advertensies verskyn nooit op skerms vir goedkeuring, inperking, bedreigingswaarskuwings, kwarantynhersiening, aanmelding, betaling of oudit nie.
+502	Elke publikasie skep 'n nuwe ondertekende weergawe. Toestelle bly die laaste geverifieerde weergawe toepas terwyl hulle vanlyn is.
+503	E-pos ondersteuning by
+504	Eindpunt
+505	Equality Software Ltd bedryf Agentic Antivirus. Hierdie bladsy beskryf wat die diens versamel. Dit moet deur die produkeienaar hersien word voor publikasie.
+506	Elke aksie wat 'n toestel, 'n rekening of verkeer verander, gaan deur die beleidsenjin en AEP-X-bestuur. 'n Goedkeuring dek een aksie, sy presiese teikens, hierdie organisasie en 'n vaste tyd.
+507	Elke oplaai word nagegaan vir wanware en sy werklike tipe. Lêers sonder 'n geverifieerde kyker word gestoor en kan afgelaai word, maar word nie voorskou nie.
+508	Uitsondering
+509	Uitsluitings
+510	Vouerpad
+511	vir versoeke om toegang of regstelling.
+512	Gapings
+513	Kry die agent vir Windows, Mac of Linux vanaf die
+514	Gaan na Toestelle, kies Registreer 'n toestel, en voer die opdrag uit wat gewys word op die rekenaar wat jy wil beskerm. Die agent begin skandeer sodra dit sy ondertekende beleid ontvang.
+515	Gesondheid
+516	Geskiedenis
+517	Gasheernaam
+518	Ek verstaan dat toestelle ná die proeftydperk sal ophou om bedreigings te skandeer en te blokkeer totdat 'n intekening betaal is.
+519	Impak
+520	Voer zip of tar in
+521	Insident
+522	Sluit die taalmodel in (as jou organisasie een geaktiveer het)
+523	IP-adres
+524	Sluit aan
+525	Sluit by jou organisasie aan
+526	Bekende wanware word na kwarantyn geskuif, waar dit nie kan loop nie. As jy dink 'n lêer is per fout geblokkeer, maak Kwarantyn oop en versoek 'n hersiening. 'n Administrateur besluit, en die lêer kom eers terug nadat 'n nuwe skandering dit skoon bevind.
+527	Tale sonder 'n volledige vertaling val terug op Engels. Dekking word gemeet, nie geskat nie.
+528	Laas verander
+529	Laag
+530	Sukses van wettige versoeke
+531	Lisensiëringsreëls
+532	Skakel, as daar een is
+533	Bestuursgashere wat tydens isolasie bereikbaar bly
+534	Merk as vals positief
+535	Volwassenheid
+536	Versagting
+537	Naam
+538	Naam van die geheim in jou geheimstoor, nooit die geheim self nie
+539	Geen aksies wag nie.
+540	Geen oop insidente nie.
+541	Geen.
+542	Niks gerapporteer nie.
+543	nie gestel nie
+544	Ingelig ná
+545	van advertensies gewys
+546	Vanlyn gebeurtenisbuffer (MB)
+547	Op Android, teken in in die Agentic Antivirus-app deur Google Play. Op iPhone en iPad is App Store-intekeninge nog nie beskikbaar nie. Betaling op die web is nog nie beskikbaar nie.
+548	Oop insident
+549	oop insidente
+550	Oop insidente
+551	p95-latensie
+552	betaal tot
+553	Padpatroon
+554	Mense
+555	Per toestel
+556	Per gebruiker (dek al hul toestelle)
+557	Voorskou
+558	Primêr
+560	Beskerm 'n toestel
+561	Protokol
+562	Verskaffer
+563	Verskafferwaarskuwings (24 uur)
+564	Openbare eindpunte
+565	Publiseer 'n beleidsweergawe
+566	Publiseer ondertekende weergawe
+567	Gepubliseer
+568	Vinnige skandering
+569	Hardop lees en diktee gebruik jou blaaier se ingeboude spraakfunksies. Ons neem nie klank op of stoor dit nie.
+570	Ontvang
+571	Verwyderbare media
+572	Verwyder
+573	Versoek
+574	Versoek deur
+575	Behoud
+576	Terugkeer na diens
+577	Nou dadelik
+578	Risiko
+579	Rol
+580	Rol terug
+581	Stoor eindpunt
+582	Stoor lisensiëringsreëls
+583	Skandeer
+584	Skedule (cron)
+585	Geskeduleerde skanderings
+586	Geheimverwysing
+587	Stuur uitnodiging
+588	Stuur verslag
+589	Stuur terugstelskakel
+590	Diens
+591	Diensdoelwitte
+594	Sein
+595	Grootte
+596	Iets anders
+597	Sorteer
+598	Stap
+599	Om prosesse te stop, toestelle te isoleer, lêers te herstel, uitsluitings by te voeg en verkeersreëls te verander, moet 'n persoon dit goedkeur. 'n Goedkeuring dek een aksie, sy presiese teikens en 'n beperkte tyd. As enigiets verander, keur weer goed.
+600	Teken hierdie toestel in met Google Play
+601	intekeningstatus
+603	Stelsel
+604	Teiken
+605	Die KI-assistent
+606	Die assistent groepeer verwante waarskuwings, lys wat waargeneem is met skakels na die bewyse, en merk enigiets wat dit nie kan bewys nie as 'n hipotese. Dit kan aksies voorstel, maar nie goedkeur nie. As die model nie beskikbaar is nie, bly skandering, waarskuwings en handmatige reaksies werk.
+607	Hierdie rekenaar
+608	Slegs TLS, moet op die uitgaande toelaatlys wees
+609	Verkeersvloede word deur jou stroomop-verskaffer geabsorbeer. Hier hou jy rekening van elke openbare eindpunt, hou verskafferwaarskuwings dop en keur nuwe verkeersbeperkings goed.
+610	Verkeersbeperkings
+611	Vertaal
+612	Asblik
+613	proefdae oor
+614	Skakel beskerming aan om lêers op hierdie rekenaar te skandeer en dop te hou vir losprysware en diefstal van aanmeldbesonderhede.
+615	nie gedek nie
+616	Ontdoen laaste verandering
+617	Gebruiker
+618	Verifieer e-pos
+619	wag op goedkeuring
+620	Ons wys advertensies van Google AdSense op sommige bladsye. Laat gepersonaliseerde advertensies toe?
+621	Webhook:
+622	Wat toestelle stuur
+623	Wat is dit?
+624	Wanneer
+625	Wanneer iets geblokkeer word
+626	Wanneer die proeftydperk sonder betaling eindig
+627	Wie
+628	Jy kan jou rekening van jou profiel af skrap. Kontak
+629	Jou naam
+630	Jou organisasie kry 'n gratis proeftydperk van 30 dae. Daarna kos dit £4,99 per maand vir elke gebruiker of toestel.
+631	Jou organisasie bepaal hoe lank telemetrie en bewyse gehou word. Ouditrekords kan nie gewysig of geskrap word nie.
+632	Jou regte
+633	Dikteer
+634	Laat mikrofoongebruik vir diktee toe? Klank word deur jou blaaier verwerk en nie deur ons gestoor nie.
+635	Klankuitset
+636	Onderbreek
+637	Toonhoogte
+638	Hervat
+639	Spoed
+640	Stop
+641	Geen stem beskikbaar vir hierdie taal nie.
+642	Stem
+643	Die lêer is na kwarantyn geskuif en kan nie loop nie.
+644	'n Bedreiging is op hierdie toestel geblokkeer.

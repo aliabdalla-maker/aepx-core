@@ -1,0 +1,637 @@
+0	Pāriet uz galveno saturu
+1	Pievienot pastāvīgu izņēmumu
+2	Piemērot datplūsmas ierobežojumu
+3	Vākt ierīces metadatus
+4	Izolēt ierīci no tīkla
+5	Ievietot failu karantīnā
+6	Atbrīvot ierīci no izolācijas
+7	Atjaunot failu no karantīnas
+8	Izrakstīt lietotāju visur
+9	Atsaukt datplūsmas ierobežojumu
+10	Atsaukt atjauninājumu
+11	Skenēt ierīces
+12	Apturēt lietotāja kontu
+13	Apturēt procesu
+14	Apstiprināt
+15	Noraidīt
+16	Nosūtīt uz ierīcēm
+17	Apstiprinājums beidzas [0]
+18	Ierosinājis MI asistents
+19	Reklāma
+20	Darbība
+21	Aģenti
+22	Jautāt
+23	Jautāt drošības asistentam
+24	Atbildes balstās uz jūsu ierīcēm, atvērtajiem incidentiem un nepilnībām. Asistents neko nevar mainīt.
+25	Pamatojoties uz
+26	[0] apgalvojums bez pierādījumiem tika noņemts
+27	[0] apgalvojumi bez pierādījumiem tika noņemti
+29	Pašmitināts modelis
+30	Noteikumi (bez modeļa)
+31	Sagatavot novēršanas plāna melnrakstu
+32	Katrs solis ir priekšlikums. Nekas netiek palaists, kamēr kāds to neapstiprina.
+33	Jautājums
+34	Piemēram: kurām ierīcēm nepieciešama uzmanība?
+35	Ieteiktā nopietnība
+36	Kopsavilkums
+37	Mērķi
+38	Apkopot šo incidentu
+39	Kāpēc
+40	Konstatēts
+41	Ziņot par kaut ko aizdomīgu
+42	Noteikums
+43	Nopietnība
+44	Brīdinājums
+46	Pievienot failus
+47	Pievienot mapi
+48	Pievienot attēlus
+49	[0] pielikums
+50	[0] pielikumi
+51	Pielikumi
+52	Uzņemt fotoattēlu
+53	Piekļuve kamerai netika atļauta. Atļaujiet to pārlūkprogrammā vai izmantojiet ierīces kameras lietotni.
+54	Kameras priekšskatījums
+55	Šī pārlūkprogramma šeit nevar atvērt kameru.
+56	Uzņemt
+57	Aizvērt asistentu
+58	Kas ir šie faili, un vai tie ir droši?
+59	Fails
+60	Jautājiet par savu drošību vai pievienojiet failus, mapi, attēlus vai kameras fotoattēlu. Katrs pielikums vispirms tiek skenēts, un nekas netiek saglabāts.
+61	[0] attēlu
+62	[0] attēlus
+63	 aprakstīja modelis.
+64	Piemēram: vai šī lejupielāde ir droša?
+65	Tīrs teksts un tīri attēli var tikt nosūtīti MI modelim, ko iespējoja jūsu organizācija. Ļaunprātīgi faili netiek nosūtīti nekad.
+66	[0] fails netika pievienots
+67	[0] faili netika pievienoti
+68	: līdz [0] failiem, katrs līdz [1] MB un kopā [2] MB.
+69	Noņemt [0]
+70	Skenēt un jautāt
+71	Skenēšanas rezultāti
+72	Veids
+73	Izmantot ierīces kameru
+74	Rezultāts
+75	Nav zināmas ļaunprogrammatūras
+76	Ļaunprātīgs
+77	Nav skenēts
+78	Audita ķēde ir pārrauta pie ieraksta [0].
+79	Audita ķēde ir neskarta: pārbaudīti [0] ieraksti.
+80	E-pasts
+81	Aizmirsāt paroli?
+82	Pierakstīties ar Google
+83	Pierakstīšanās ar Google neizdevās. Mēģiniet vēlreiz vai izmantojiet e-pastu un paroli.
+84	Pierakstīties
+85	Izrakstīties
+86	Jauna parole
+87	vai
+88	Organizācija
+89	Parole
+90	Parole nomainīta. Pierakstieties ar jauno paroli.
+91	Vismaz 12 rakstzīmes.
+92	Izveidot kontu
+93	Nosūtīt saiti vēlreiz
+94	Ja kontam joprojām nepieciešams apstiprinājums, jauna saite ir ceļā. Pārbaudiet arī surogātpasta mapi.
+95	Atiestatīt paroli
+96	Ja kāds konts izmanto šo adresi, esam nosūtījuši atiestatīšanas saiti. Tā darbojas vienu stundu.
+97	Pirms pierakstīšanās apstipriniet savu e-pasta adresi. Atveriet saiti, ko nosūtījām uz [0].
+98	E-pasta adrese apstiprināta. Tagad varat pierakstīties.
+99	Šīs saites derīgums ir beidzies vai tā jau ir izmantota. Pierakstieties, lai saņemtu jaunu.
+100	Pārbaudiet e-pastu, lai apstiprinātu savu adresi.
+101	Abonements samazina reklāmas par 95%.
+102	Jūsu izmēģinājuma periods ir beidzies.
+103	Abonēts līdz [0]
+104	Saglabāt visu bez maksas ar pilnām reklāmām
+105	Apturēt visu, arī ierīču aizsardzību, līdz kāds samaksā
+106	Konsolei nepieciešams abonements; ierīces paliek aizsargātas
+107	4,99 £ mēnesī
+108	Abonēt
+109	Bezmaksas izmēģinājums: 
+110	Atlikusi [0] diena
+111	Atlikušas [0] dienas
+112	Atcelt
+113	Dzēst
+114	Radās kļūda.
+115	Eksportēt
+116	Notiek ielāde…
+117	Nav piemērojams
+118	Nekad
+119	Tālāk
+120	nē
+121	Nav ko rādīt.
+122	izslēgts
+123	ieslēgts
+124	Iepriekšējā
+125	Atsvaidzināt
+126	Saglabāt
+127	Meklēt
+128	Simulācija (testa dati)
+129	Statuss
+130	Nav pieejams
+131	Nezināms
+132	Atjaunināts [0]
+133	Notiek apstrāde…
+134	jā
+135	[0] brīdinājums 24 stundās
+136	[0] brīdinājumi 24 stundās
+137	[0] ierīce
+138	[0] ierīces
+139	Dati uz [0]
+140	[0] atvērts incidents
+141	[0] atvērti incidenti
+142	[0] apstiprinājums gaida
+143	[0] apstiprinājumi gaida
+144	apstiprināts
+145	aizdomas
+146	Reģistrēt ierīci
+147	Ierīce
+148	Neziņo
+149	Novecojusi politika
+150	Sensors atspējots
+151	Novecojušas definīcijas
+152	Problēmas
+153	Pēdējoreiz redzēts
+154	Operētājsistēma
+155	Politika
+156	Palaidiet ierīcē 24 stundu laikā (vienreizējai lietošanai):
+157	Aizsardzība
+158	Kopēt
+159	Lejupielādēt
+160	Pārvietot
+161	Jauna mape
+162	Pārdēvēt
+163	Atjaunot
+164	Pārvietot uz atkritni
+165	Augšupielādēt
+166	Palīdzība
+167	[0] teksts šajā lapā ir mašīntulkots un vēl nav pārskatīts.
+168	[0] teksti šajā valodā ir mašīntulkoti un vēl nav pārskatīti.
+169	Šī valoda vēl nav iztulkota, tāpēc tiek rādīta angļu valoda.
+170	apstiprināts
+171	Novērotie fakti
+172	Hipotēzes (nav apstiprinātas)
+173	Hipotēze, ticamība [0]: [1]
+174	Palaist izmeklēšanu
+175	Trūkstošie pierādījumi
+176	Trūkst: [0]
+177	Lasīt skaļi
+178	Ieteicamās darbības
+179	Pierādījumu laika skala
+180	ienākošais tīmekļa āķis
+181	Signāli no jūsu identitātes nodrošinātāja, DNS, ugunsmūriem un citiem rīkiem. Jaunas integrācijas sākotnēji ir statusā nav pieejams; kā darbojošos var atzīmēt tikai nodrošinātāja adapteri, kas izturējis līguma testu. Testa dati visur, kur tie parādās, ir atzīmēti kā simulācija.
+182	Nav savienots (aizstājējs)
+183	Tikai testa dati
+184	Nav pieejams
+185	Darbojas (pārbaudīts)
+186	Noslēpums (tiek parādīts vienreiz):
+187	Apstiprinājumi
+188	Brīdinājumi
+189	Audits
+190	Abonements
+191	Informācijas panelis
+192	DDoS un pieejamība
+193	Ierīces
+194	Faili
+195	Incidenti
+196	Integrācijas
+197	Politikas
+198	Privātums
+199	Karantīna
+200	Reaģēšana
+201	Drošība
+202	Iestatījumi
+203	Automātiski ievietot zināmu ļaunprogrammatūru karantīnā
+204	Uzraudzīt aizdomīgu uzvedību
+205	Bloķēt aizdomīgus skriptus
+206	Vākt failu saturu izmeklēšanai (pēc noklusējuma izslēgts)
+207	Atļaut tīkla izolāciju
+208	Skenēt failus, kad tie tiek atvērti vai rakstīti
+209	Skenēt lejupielādes
+210	Skenēt programmas, kad tās tiek palaistas
+211	Aizsargāt aģentu pret izmaiņām
+212	Brīdināt par zināmām ļaunprātīgām saitēm
+213	Iemesls
+214	Pieprasīt pārskatīšanu
+215	Atjaunot pēc jaunas skenēšanas
+216	mediānais laiks līdz pārbaudītai likvidēšanai (n=[0], neatrisināti [1])
+217	labojumi ar sekmīgu atkārtotu testu
+218	atkārtošanās pēc atkopšanas
+219	pārbaudīta vīrusu noņemšana
+220	droša atgriešanās darbā
+221	pabeigtas atkopšanas skenēšanas
+222	Tikai karantīnas iznākumi ([0]) un pārinstalētas ierīces ([1]) tiek skaitīti atsevišķi; karantīna viena pati nekad netiek uzskatīta par noņemšanu.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Gaida apstiprinājumu
+227	Ražošanas pierādījumi
+228	Reģistrējiet, kas tika pārbaudīts ražošanā, kuros aktīvos un ar kuru versiju. Ierakstus nevar rediģēt.
+229	Versija
+230	Mainīt režīmu
+231	nav pierādījumu
+232	neizdevās
+233	izturēts
+234	gaida
+235	Pārbaudīt rīcības plāna progresu
+236	Ierīces, kas var reaģēt
+237	Visas ierīces
+238	[0] izmēģinājuma ierīce
+239	[0] izmēģinājuma ierīces
+240	Pabeigts
+241	Pabeigts, kad
+242	Mācības
+243	Novērot
+244	Reaģēt
+245	Pārklājums
+246	[0] novērotas, [1] var reaģēt
+247	Dati
+248	Datu vecums
+249	Tiešraidē
+250	Testa dati
+251	nav izpildīts
+252	kvīts
+253	notiek
+254	nezināms
+255	Izsūtīt
+256	Pierādījumi
+257	Tas tika palaists
+258	Novecojis
+259	Datu plūsmas
+260	Versija vai jaucējvērtība
+261	Vide
+262	Iznākums
+263	Īpašnieks
+264	Prasība
+265	Aktīvs vai grupa
+266	Rādīt
+267	Visi
+268	Nav pabeigts
+269	Ieslēgts visam pakalpojumam
+270	Ieslēgts šai organizācijai
+271	Vai apturēt visas jaunās reaģēšanas darbības šai organizācijai? Aizsardzība un skenēšana turpinās darboties.
+272	Atkal atļaut reaģēšanas darbības
+273	Apturēt visas reaģēšanas darbības
+274	Avārijas slēdzis
+275	Tips
+276	Mediānās minūtes atvērtā stāvoklī ([0] atvērti, vecākais [1] min)
+277	Politikas atteikumi
+278	Mācības un simulācijas (iepriekš neieskaitītas)
+279	Atkārtotas darbības (mērķis 0)
+280	Datu plūsmas aizkaves mediāna (p95 [0] s, n=[1])
+281	Nokavēti apstiprinājumi ([0] gaida, mērķis [1] min)
+282	Mediāna no signāla līdz šķirošanai (p95 [0] min, n=[1], [2] nešķiroti)
+283	Neatkarīgi pārbaudītas darbības ([0]/[1])
+284	Logs: [0]. Kvīts viena pati nekad netiek uzskatīta par pārbaudi. Trūkstošie dati tiek rādīti kā nav pieejami.
+285	Reaģēšanas rādītāji
+286	Pēdējais notikums
+287	Aģenti ierosina; fiksēta politika izlemj, kas tiek palaists. Katra darbība rāda savu apstiprinājumu, kvīti un neatkarīgu pārbaudi.
+288	Posms
+289	Gaida apstiprinājumu
+290	Noraidīts
+291	Beidzies derīgums
+292	Neizdevās
+293	Nepieciešama manuāla saskaņošana
+294	Ierosināts
+295	Rindā
+296	Darbojas
+297	Gaida pārbaudi
+298	Pārbaudīts
+299	Pašreizējais stāvoklis
+300	Režīms
+301	Simulācija
+302	Skenēšana un datu vākšana tiek palaista. Citas darbības paliek priekšlikumi.
+303	Apstiprinātās darbības tiek palaistas atlasītajās ierīcēs.
+304	Darbības tiek palaistas tikai pret testa adapteriem. Jūsu ierīcēs nekas nemainās.
+305	Vēl nav darbību.
+306	Nekas negaida apstiprinājumu.
+307	Vēl nav reģistrēti ražošanas pierādījumi.
+308	Neviena ierīce vai integrācija vēl nesūta datus.
+309	Tas netika palaists
+310	Novērots
+311	Kas notika
+312	DDoS reaģēšana
+313	Viltus pozitīvs un atjaunošana
+314	Identitāte, pikšķerēšana un aizdomīga datplūsma
+315	Ļaunprogrammatūra un aizdomīgas lejupielādes
+316	Tīkla redzamība un ierīču stāvoklis
+317	Atkopšana pēc kompromitēšanas
+318	Izspiedējprogrammatūra vai aizdomas par kompromitēšanu
+319	Rīcības plāns
+320	Rīcības plāni
+321	Politikas versija
+322	Instalētā versija
+323	Ugunsmūra izolācija
+324	Dati saņemti
+325	Fails noņemts
+326	Process apturēts
+327	Nodrošinātāja stāvoklis
+328	Reģistrēts
+329	Skenēšana pabeigta
+330	Simulēts
+331	Ārpus karantīnas
+332	Karantīnā
+333	Darbības un kvītis
+334	Reģistrēt iznākumu
+335	Reģistrēt
+336	Var reaģēt
+337	Avots
+338	ierīce
+339	konsole
+340	simulācija
+341	Sākas, kad
+342	Atjaunināts
+343	Neatkarīga pārbaude
+344	Gaida
+345	Arhīva ierobežojums
+346	Šifrēts arhīvs
+347	Izslēgts
+348	Nepieejams
+349	Laika ierobežojums
+350	Pārāk liels
+351	Neatbalstīts formāts
+352	Atcelts
+353	Izlaists
+354	Daļējs
+355	Iestājās noildze
+356	Pilna
+357	Pēc pieprasījuma
+358	Ātrā
+359	Atkopšana
+360	Ieplānota
+361	Mērķēta
+362	Pievienot segmentu
+363	arhīvi
+364	Aktīvi
+365	Vai apturēt šo skenēšanu? Līdzšinējie rezultāti tiek saglabāti kā atcelta skenēšana.
+366	Nav aptverts
+367	Konstatējumi
+368	Ierīces pēc aizsardzības stāvokļa
+369	Dzinējs
+370	Termiņš
+371	Pēdējie pierādījumi
+372	Paredzētā kontrole
+373	Ierosinātais labojums
+374	Atkārtots tests
+375	Aktīvs vai segments
+376	Atvērtās nepilnības
+377	Skenēšanas iznākumi 30 dienās
+378	no brīdinājuma līdz pārbaudītai ierobežošanai
+379	aizsargātas ierīces
+380	publiskie galapunkti ar augšupējo mazināšanu
+381	no notikuma līdz brīdinājumam
+382	ierīces ar aktuālām definīcijām
+383	ierīces ar pilnu skenēšanu 7 dienu laikā
+384	atvērtās nepilnības ([0] nokavētas, [1] slēgtas 30 dienās)
+385	uzraudzītie tīkla segmenti
+386	apstiprināti patiesi pozitīvi
+387	pabeigtas skenēšanas
+388	Pārklājums un reaģēšana
+389	Pēdējā pilnā skenēšana
+390	Pēdējā telemetrija
+391	Katra ierīce un tīkla segments tvērumā, vai tas ir aizsargāts un ko labot tālāk.
+392	Tīkla redzamība
+393	Vēl nav reģistrētu ierīču. Aizsargājiet datoru sadaļā Ierīces.
+394	Nav atvērtu nepilnību.
+395	[0] atvērti
+396	nokavēts
+397	p95 [0] s
+398	Mapes
+399	Skenējamās mapes, atdalītas ar komatiem
+400	Šifrēšana un ugunsmūris
+401	Diska šifrēšana [0], ugunsmūris [1]
+402	Atkopšana pēc incidentiem
+403	Pārbaudīt vēlreiz tagad
+404	Nav atkārtoti testēts
+405	Atkārtotais tests neizdevās
+406	Pārbaudīti slēgts
+407	Skenēšanas veids
+408	Skenēšanas
+409	Segments
+410	Segmenta nosaukums
+411	Sākt skenēšanu
+412	Sākts
+413	Stāvoklis
+414	Pasliktināts
+415	Aizsargāts
+416	Neaizsargāts
+417	Ierīces pēc stāvokļa
+418	[0] nezināmi
+419	Nav redzamības
+420	Uzraudzīts
+421	Redzamība
+422	Konstatējumu neesamība nepierāda aizsardzību: pārbaudiet arī pārklājumu un skenēšanas rezultātus.
+423	Valoda
+424	Tulkojuma pārklājums
+425	Nav iepriekšējās versijas
+426	Motīvs
+427	Tumšs
+428	Augsts kontrasts
+429	Gaišs
+430	[0] failos netika atrasti jauni draudi.
+431	[0] drauds
+432	[0] draudi
+433	 atrasti [0] failos. Pārskatiet tos sadaļās Brīdinājumi un Apstiprinājumi.
+434	Pilna skenēšana
+435	Neizdevās aizsargāt šo datoru: [0]
+436	Šis dators ir aizsargāts. Reāllaika skenēšana darbojas, kamēr Agentic Antivirus ir atvērts.
+437	Skenēšana netika pabeigta: [0]
+438	Notiek skenēšana…
+439	Tiek skenēti visi diski. Tas var aizņemt ilgu laiku.
+440	Tiek skenētas mapes Lejupielādes, Darbvirsma un pagaidu faili…
+441	[0] failus nevarēja nolasīt.
+442	Fails
+443	Tīmekļa saite
+444	Pieņemt testa datus
+446	Darbības
+447	Pievienot integrāciju
+448	Pievienot izņēmumu
+449	Pievienot integrāciju
+450	Pievienot iknedēļas pilnu skenēšanu
+451	administrators
+452	Reklāmas
+453	Piekrišana reklāmām
+454	Ietekmētie pakalpojumi
+455	brīdinājumi pēdējās 24 stundās
+456	Atļaut
+457	Atļaut un skenēt
+458	Administratoram jānorāda iemesls. Izņēmums tiek reģistrēts audita pierakstā.
+459	E-pasta ziņojums
+460	Apstiprināt atgriešanos darbā
+461	Darbību apstiprināšana
+462	Aktīvs
+463	aktīvi aktīvas mazināšanas režīmā
+464	aktīvi ar brīdinājumiem 24 stundās
+465	Audita pieraksts
+466	Automātiskā aizsardzība turpina darboties katrā ierīcē. Šīs ir darbības, par kurām jāizlemj cilvēkam.
+467	Pieejamība
+468	Pieejamie signāli
+469	Dublējums pārbaudīts
+470	Bloķēt
+471	Pēc noklusējuma aģents sūta drošības telemetriju un failu jaucējvērtības: procesu nosaukumus un komandrindas, failu ceļus, tīkla savienojumu metadatus un konstatējumus. Failu saturs tiek vākts tikai tad, ja jūsu organizācija to ieslēdz.
+472	Kapacitāte
+473	Kategorija
+474	Mainīts
+475	Maksa
+476	Pārbaudīt
+477	izvēlieties
+478	Izvēlieties ierīci
+480	Aizvērt
+481	Atdalīts ar komatiem
+482	Kontaktinformācija
+483	Kontrole
+484	Pārklājums pa aizsardzības slāņiem
+485	kritisks
+486	kritisko brīdinājumu piegāde (p95, 30 dienas)
+487	Gaidošie lēmumi
+488	Atteikt
+489	Definīcijas
+490	Aprakstiet, kas notika
+491	Detaļa
+492	Informācija
+493	Konstatējums
+494	Licencējamā ierīce
+495	pilnībā aizsargātas ierīces
+496	izolētas ierīces
+497	Ierīces, kurām nepieciešama uzmanība
+498	Virziens
+499	DNS zona
+500	lejupielādes lapas
+501	Bezmaksas izmēģinājuma laikā un neapmaksātos plānos konsole rāda Google AdSense reklāmas, bet mobilās lietotnes rāda Google AdMob reklāmas, iepriekš lūdzot jūsu piekrišanu. Abonenti redz par 95% mazāk reklāmu. Reklāmas nekad netiek rādītas apstiprināšanas, ierobežošanas, draudu brīdinājumu, karantīnas pārskatīšanas, pierakstīšanās, maksājumu vai audita ekrānos.
+502	Katra publicēšana izveido jaunu parakstītu versiju. Bezsaistē ierīces turpina piemērot pēdējo pārbaudīto versiju.
+503	Rakstiet atbalsta dienestam uz
+504	Galapunkts
+505	Agentic Antivirus darbību nodrošina Equality Software Ltd. Šajā lapā aprakstīts, ko pakalpojums vāc. Pirms publicēšanas tā jāpārskata produkta īpašniekam.
+506	Katra darbība, kas maina ierīci, kontu vai datplūsmu, iziet caur politikas dzinēju un AEP-X pārvaldību. Apstiprinājums attiecas uz vienu darbību, tās precīziem mērķiem, šo organizāciju un noteiktu laiku.
+507	Katra augšupielāde tiek pārbaudīta, vai tajā nav ļaunprogrammatūras, un tiek noteikts tās patiesais veids. Faili bez pārbaudīta skatītāja tiek saglabāti un tos var lejupielādēt, taču tie netiek priekšskatīti.
+508	Izņēmums
+509	Izņēmumi
+510	Mapes ceļš
+511	piekļuves vai labošanas pieprasījumiem.
+512	Nepilnības
+513	Iegūstiet aģentu operētājsistēmai Windows, Mac vai Linux no
+514	Atveriet sadaļu Ierīces, izvēlieties Reģistrēt ierīci un palaidiet parādīto komandu datorā, kuru vēlaties aizsargāt. Aģents sāk skenēt, tiklīdz saņem savu parakstīto politiku.
+515	Veselība
+516	Vēsture
+517	Resursdatora nosaukums
+518	Es saprotu, ka pēc izmēģinājuma ierīces pārtrauks skenēt un bloķēt draudus, līdz tiks samaksāts abonements.
+519	Ietekme
+520	Importēt zip vai tar
+521	Incidents
+522	Iekļaut valodas modeli (ja jūsu organizācija tādu ir iespējojusi)
+523	IP adrese
+524	Pievienoties
+525	Pievienoties savai organizācijai
+526	Zināma ļaunprogrammatūra tiek pārvietota uz karantīnu, kur tā nevar darboties. Ja uzskatāt, ka fails bloķēts kļūdas pēc, atveriet Karantīna un pieprasiet pārskatīšanu. Lēmumu pieņem administrators, un fails tiek atgriezts tikai pēc tam, kad jauna skenēšana to atzīst par tīru.
+527	Valodas bez pilna tulkojuma tiek rādītas angļu valodā. Pārklājums ir izmērīts, nevis aplēsts.
+528	Pēdējoreiz mainīts
+529	Slānis
+530	Likumīgo pieprasījumu sekmīgums
+531	Licencēšanas noteikumi
+532	Saite, ja tāda ir
+533	Pārvaldības resursdatori, kas paliek sasniedzami izolācijas laikā
+534	Atzīmēt kā viltus pozitīvu
+535	Briedums
+536	Mazināšana
+537	Nosaukums
+538	Noslēpuma nosaukums jūsu noslēpumu krātuvē, nekad pats noslēpums
+539	Neviena darbība negaida.
+540	Nav atvērtu incidentu.
+541	Nav.
+542	Nekas nav ziņots.
+543	nav iestatīts
+544	Paziņots pēc
+545	no rādītajām reklāmām
+546	Bezsaistes notikumu buferis (MB)
+547	Android ierīcēs abonējiet Agentic Antivirus lietotnē, izmantojot Google Play. iPhone un iPad ierīcēs App Store abonementi vēl nav pieejami. Maksāšana tīmeklī vēl nav pieejama.
+548	Atvērts incidents
+549	atvērti incidenti
+550	Atvērtie incidenti
+551	p95 latentums
+552	apmaksāts līdz
+553	Ceļa šablons
+554	Personas
+555	Par ierīci
+556	Par lietotāju (aptver visas viņa ierīces)
+557	Priekšskatījums
+558	Primārais
+560	Aizsargāt ierīci
+561	Protokols
+562	Nodrošinātājs
+563	Nodrošinātāja brīdinājumi (24 stundas)
+564	Publiskie galapunkti
+565	Publicēt politikas versiju
+566	Publicēt parakstītu versiju
+567	Publicēts
+568	Ātrā skenēšana
+569	Skaļa lasīšana un diktēšana izmanto pārlūkprogrammas iebūvētās runas funkcijas. Mēs neierakstām un neglabājam audio.
+570	Saņemts
+571	Noņemami datu nesēji
+572	Noņemt
+573	Pieprasīts
+574	Pieprasītājs
+575	Glabāšana
+576	Atgriešanās darbā
+577	Pašlaik
+578	Risks
+579	Loma
+580	Atsaukt
+581	Saglabāt galapunktu
+582	Saglabāt licencēšanas noteikumus
+583	Skenēt
+584	Grafiks (cron)
+585	Ieplānotās skenēšanas
+586	Noslēpuma atsauce
+587	Sūtīt uzaicinājumu
+588	Sūtīt ziņojumu
+589	Sūtīt atiestatīšanas saiti
+590	Pakalpojums
+591	Pakalpojuma mērķi
+594	Signāls
+595	Lielums
+596	Kaut kas cits
+597	Kārtot
+598	Solis
+599	Procesu apturēšanai, ierīču izolēšanai, failu atjaunošanai, izņēmumu pievienošanai un datplūsmas noteikumu maiņai nepieciešams cilvēka apstiprinājums. Apstiprinājums attiecas uz vienu darbību, tās precīziem mērķiem un ierobežotu laiku. Ja kaut kas mainās, apstipriniet vēlreiz.
+600	Abonēt šajā ierīcē, izmantojot Google Play
+601	abonementa stāvoklis
+603	Sistēma
+604	Mērķis
+605	MI asistents
+606	Asistents grupē saistītos brīdinājumus, uzskaita novēroto ar saitēm uz pierādījumiem un atzīmē visu, ko nevar pierādīt, kā hipotēzi. Tas var ieteikt darbības, bet nevar tās apstiprināt. Ja modelis nav pieejams, skenēšana, brīdinājumi un manuāla reaģēšana turpina darboties.
+607	Šis dators
+608	Tikai TLS, jābūt izejošās datplūsmas atļauto sarakstā
+609	Datplūsmas pārpludinājumus absorbē jūsu augšupējais nodrošinātājs. Šeit jūs uzskaitāt katru publisko galapunktu, sekojat nodrošinātāja brīdinājumiem un apstiprināt jaunus datplūsmas ierobežojumus.
+610	Datplūsmas ierobežojumi
+611	Iztulkots
+612	Atkritne
+613	atlikušās izmēģinājuma dienas
+614	Ieslēdziet aizsardzību, lai skenētu šī datora failus un uzraudzītu izspiedējprogrammatūru un akreditācijas datu zādzību.
+615	neaptverts
+616	Atsaukt pēdējo izmaiņu
+617	Lietotājs
+618	Apstiprināt e-pastu
+619	gaida apstiprinājumu
+620	Dažās lapās mēs rādām Google AdSense reklāmas. Vai atļaut personalizētas reklāmas?
+621	Tīmekļa āķis:
+622	Ko sūta ierīces
+623	Kas tas ir?
+624	Kad
+625	Kad kaut kas tiek bloķēts
+626	Kad izmēģinājums beidzas bez maksājuma
+627	Kas
+628	Savu kontu varat dzēst savā profilā. Sazinieties ar
+629	Jūsu vārds
+630	Jūsu organizācija saņem 30 dienu bezmaksas izmēģinājumu. Pēc tam tas maksā 4,99 £ mēnesī par katru lietotāju vai ierīci.
+631	Jūsu organizācija nosaka, cik ilgi tiek glabāta telemetrija un pierādījumi. Audita ierakstus nevar rediģēt vai dzēst.
+632	Jūsu tiesības
+633	Diktēt
+634	Vai atļaut mikrofona izmantošanu diktēšanai? Audio apstrādā jūsu pārlūkprogramma, un mēs to neglabājam.
+635	Audio izvade
+636	Pauzēt
+637	Toņa augstums
+638	Atsākt
+639	Ātrums
+640	Apturēt
+641	Šai valodai nav pieejama balss.
+642	Balss
+643	Fails tika pārvietots uz karantīnu un nevar darboties.
+644	Šajā ierīcē tika bloķēts drauds.

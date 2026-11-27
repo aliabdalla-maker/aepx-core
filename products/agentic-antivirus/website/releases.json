@@ -1,18 +1,51 @@
 {
   "_rule": "A download button renders only for signed, checksummed files on downloads.softwareequality.com; store links only for real store URLs (same rule as platform/saas-ide/distribution).",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "status": "early_access",
   "artifacts": [
-    {"platform": "windows", "label": "Windows agent (x64)"},
-    {"platform": "windows", "label": "Windows agent (Arm64)"},
-    {"platform": "windows", "label": "Windows console app"},
-    {"platform": "macos", "label": "macOS agent (Apple silicon)"},
-    {"platform": "macos", "label": "macOS agent (Intel)"},
-    {"platform": "macos", "label": "macOS console app"},
-    {"platform": "linux", "label": "Linux agent (x64)"},
-    {"platform": "linux", "label": "Linux agent (Arm64)"},
-    {"platform": "linux", "label": "Linux console app (AppImage, deb)"},
-    {"platform": "store", "label": "Android app on Google Play"},
-    {"platform": "store", "label": "iPhone and iPad app on the App Store"}
+    {
+      "platform": "windows",
+      "label": "Windows agent (x64)"
+    },
+    {
+      "platform": "windows",
+      "label": "Windows agent (Arm64)"
+    },
+    {
+      "platform": "windows",
+      "label": "Windows console app"
+    },
+    {
+      "platform": "macos",
+      "label": "macOS agent (Apple silicon)"
+    },
+    {
+      "platform": "macos",
+      "label": "macOS agent (Intel)"
+    },
+    {
+      "platform": "macos",
+      "label": "macOS console app"
+    },
+    {
+      "platform": "linux",
+      "label": "Linux agent (x64)"
+    },
+    {
+      "platform": "linux",
+      "label": "Linux agent (Arm64)"
+    },
+    {
+      "platform": "linux",
+      "label": "Linux console app (AppImage, deb)"
+    },
+    {
+      "platform": "store",
+      "label": "Android app on Google Play"
+    },
+    {
+      "platform": "store",
+      "label": "iPhone and iPad app on the App Store"
+    }
   ]
 }

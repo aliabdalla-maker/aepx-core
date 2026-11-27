@@ -110,7 +110,7 @@ def triage(incident_id: UUID, body: AgentIn, p: Principal = Depends(need("incide
     refs = {e["ref"] for e in evidence}
     sev = max((e.get("severity") for e in evidence if e.get("severity") in ("low", "medium", "high", "critical")),
               key=["low", "medium", "high", "critical"].index, default="medium")
-    out = {"engine": "rules", "summary": f"{len(evidence)} evidence items; highest severity {sev}.",
+    out = {"engine": "rules", "summary": f"{len(evidence)} evidence item{'' if len(evidence) == 1 else 's'}; highest severity {sev}.",
            "suggested_severity": sev, "key_points": [
                {"statement": e.get("summary") or f"{e['type']} {e.get('kind') or e.get('category') or ''}".strip(),
                 "evidence_refs": [e["ref"]]} for e in evidence[:8]]}

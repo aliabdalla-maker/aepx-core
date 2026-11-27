@@ -64,12 +64,14 @@ def product_body(m):
 
 <h2>What it does</h2>
 <div class="grid">
-<div class="card"><h3>Stops known malware</h3><p>Scans files on demand, on a schedule and when they arrive. Known threats go to an encrypted quarantine where they cannot run. A file comes back only after an administrator gives a reason and a fresh scan finds it clean.</p></div>
+<div class="card"><h3>Stops known malware</h3><p>Blocks known threats the moment a file is opened or run, on Windows, macOS and Linux, and also scans on demand and on a schedule. Known threats go to an encrypted quarantine where they cannot run. A file comes back only after an administrator gives a reason and a fresh scan finds it clean.</p></div>
 <div class="card"><h3>Catches suspicious behaviour</h3><p>Flags encoded scripts, credential dumping, mass file encryption, deleted backups and misuse of admin tools, and links every alert to the events behind it.</p></div>
 <div class="card"><h3>Explains incidents with evidence</h3><p>The assistant groups related alerts into a timeline, separates what was observed from what is suspected, and lists what evidence is missing. It can suggest actions but never approve them.</p></div>
 <div class="card"><h3>Keeps you in control</h3><p>Stopping processes, isolating devices and changing traffic rules need an approval that covers one action, its exact targets and a limited time. Every step is recorded in a tamper-evident audit trail.</p></div>
 <div class="card"><h3>Works offline</h3><p>Devices keep enforcing their last verified, signed policy without a connection, buffer events, and send them when they reconnect.</p></div>
 <div class="card"><h3>Watches your public services</h3><p>Tracks every internet-facing endpoint, shows when your DDoS provider is mitigating an attack, and alerts on services with no protection.</p></div>
+<div class="card"><h3>Connects to the tools you already use</h3><p>Brings in signals from identity providers, firewalls, Cloudflare, cloud storage, CRM, ERP, ticketing and IoT systems over webhooks, gRPC, SQL, email, MQTT, AMQP and SFTP, and sends alerts back out to your chat and ticketing tools.</p></div>
+<div class="card"><h3>In your language</h3><p>The console is available in 100 languages, including right-to-left scripts. Translations other than English are machine-assisted and marked as such until a native speaker has reviewed them.</p></div>
 </div>
 
 <h2>Pricing</h2>
@@ -80,18 +82,26 @@ def product_body(m):
 <div class="grid">{dl}</div>
 
 <h2>System requirements (planned)</h2>
-<p>Windows 11 first, then macOS and Linux as each platform passes testing. The management console runs in current Chrome, Edge, Firefox and Safari, and as an installable app.</p>
+<p>Windows 10 and 11, macOS 13 or later, and Linux with kernel 5.1 or later. Each platform opens to customers as it passes release testing. The management console runs in current Chrome, Edge, Firefox and Safari, and as an installable app.</p>
 
 <footer><p><a href="{BASE}privacy.html">Privacy</a>&nbsp;&nbsp; <a href="mailto:support@softwareequality.com">Support</a></p><p>Licence: proprietary, © Equality Software Ltd, registered in England, Co. No. 15006381.</p></footer>
 </main>"""
 
 
 def privacy_body():
+    """Render the i18n'd console privacy page with the English catalogue."""
+    import re
     src = (P / "web" / "app" / "privacy" / "page.tsx").read_text()
-    parts = src.split("<StaticPage title=\"Privacy\">", 1)[1].split("</StaticPage>", 1)[0]
-    parts = parts.replace("<p>Equality Software Ltd operates Agentic Antivirus. This page describes what the service collects. It must be reviewed by the product owner before publication.</p>",
-                          "<p>Equality Software Ltd operates Agentic Antivirus. This page describes what the service collects.</p>")
-    return f'<main><header><a href="{BASE}"><strong>Agentic Antivirus</strong></a></header><h1>Privacy</h1>{parts}</main>'
+    cat = json.loads((P / "shared" / "i18n" / "en.json").read_text())
+    def look(k):
+        v = cat
+        for part in k.split("."):
+            v = v.get(part, {}) if isinstance(v, dict) else {}
+        return v if isinstance(v, str) else cat.get(k, k)
+    inner = src.split("<StaticPage", 1)[1].split(">", 1)[1].split("</StaticPage>", 1)[0]
+    inner = re.sub(r'\{t\("([^"]+)"\)\}', lambda mm: html.escape(look(mm.group(1))), inner)
+    inner = inner.replace(" It must be reviewed by the product owner before publication.", "")
+    return f'<main><header><a href="{BASE}"><strong>Agentic Antivirus</strong></a></header><h1>Privacy</h1>{inner}</main>'
 
 
 def page(title, body, desc):

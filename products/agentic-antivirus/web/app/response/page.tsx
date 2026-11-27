@@ -124,9 +124,9 @@ export default function Response() {
             <span>{t("response.kpi.overdue", { waiting: k.approvals_overdue.waiting, sla: k.approvals_overdue.sla_minutes })}</span></div>
           <div><strong>{k.backlog_age_minutes.median ?? t("common.na")}</strong>
             <span>{t("response.kpi.backlog", { open: k.backlog_age_minutes.open, oldest: k.backlog_age_minutes.oldest ?? "—" })}</span></div>
-          <div><strong>{k.feed_lag_seconds.median == null ? t("common.unavailable") : `${k.feed_lag_seconds.median} s`}</strong>
+          <div><strong>{k.feed_lag_seconds.median == null ? t("common.na") : `${k.feed_lag_seconds.median} s`}</strong>
             <span>{t("response.kpi.lag", { p95: k.feed_lag_seconds.p95 ?? "—", n: k.feed_lag_seconds.sample })}</span></div>
-          <div><strong>{k.signal_to_triage_minutes.median == null ? t("common.unavailable") : `${k.signal_to_triage_minutes.median} min`}</strong>
+          <div><strong>{k.signal_to_triage_minutes.median == null ? t("common.na") : `${k.signal_to_triage_minutes.median} min`}</strong>
             <span>{t("response.kpi.triage", { p95: k.signal_to_triage_minutes.p95 ?? "—", n: k.signal_to_triage_minutes.sample,
               open: k.signal_to_triage_minutes.open_untriaged })}</span></div>
           <div><strong>{k.drill_and_simulation_requests}</strong><span>{t("response.kpi.drills")}</span></div>

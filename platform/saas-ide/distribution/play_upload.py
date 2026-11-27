@@ -3,7 +3,7 @@
 Deliberately narrow:
   * the only track is "internal" and the only status is "draft" -- an owner must still roll the
     release out in Play Console, so this script can never publish to testers or production;
-  * the package name is fixed to the companion app;
+  * the package name must be one of the allowlisted Equality Software apps (default: the companion);
   * credentials come from a service-account JSON file path (never an argument value or a log line).
 
 Uses the Android Publisher API v3 edits flow: insert -> bundles.upload -> tracks.update -> commit.
@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Protocol
 
 PACKAGE = "com.equalitysoftware.aepx.companion"
+PACKAGES = frozenset({PACKAGE, "com.equalitysoftware.agenticantivirus"})
 TRACK = "internal"
 STATUS = "draft"
 API = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications"
@@ -42,7 +43,9 @@ def _ok(response, step: str) -> dict:
     return response.json() if response.content else {}
 
 
-def upload(session: Session, aab: Path, version_code: int, release_name: str) -> dict:
+def upload(session: Session, aab: Path, version_code: int, release_name: str, package: str = PACKAGE) -> dict:
+    if package not in PACKAGES:
+        raise PlayUploadError(f"Package {package!r} is not allowlisted")
     if aab.suffix != ".aab" or not aab.is_file() or aab.is_symlink():
         raise PlayUploadError("A regular .aab file is required")
     data = aab.read_bytes()
@@ -51,11 +54,11 @@ def upload(session: Session, aab: Path, version_code: int, release_name: str) ->
     if version_code < 1:
         raise PlayUploadError("versionCode must be positive")
 
-    base = f"{API}/{PACKAGE}"
+    base = f"{API}/{package}"
     edit_id = _ok(session.post(f"{base}/edits", json={}), "edits.insert")["id"]
     try:
         bundle = _ok(session.post(
-            f"{UPLOAD_API}/{PACKAGE}/edits/{edit_id}/bundles",
+            f"{UPLOAD_API}/{package}/edits/{edit_id}/bundles",
             params={"uploadType": "media"},
             headers={"Content-Type": "application/octet-stream"},
             data=data,
@@ -70,7 +73,7 @@ def upload(session: Session, aab: Path, version_code: int, release_name: str) ->
     except Exception:
         session.delete(f"{base}/edits/{edit_id}")  # abandon the edit; nothing is left half-applied
         raise
-    return {"package": PACKAGE, "track": TRACK, "status": STATUS, "versionCode": version_code,
+    return {"package": package, "track": TRACK, "status": STATUS, "versionCode": version_code,
             "sha256": hashlib.sha256(data).hexdigest()}
 
 
@@ -80,13 +83,14 @@ def main() -> None:
     parser.add_argument("--version-code", type=int, required=True)
     parser.add_argument("--release-name", required=True)
     parser.add_argument("--service-account-file", type=Path, required=True)
+    parser.add_argument("--package", default=PACKAGE, choices=sorted(PACKAGES))
     args = parser.parse_args()
 
     from google.auth.transport.requests import AuthorizedSession  # imported late: tests need no Google libs
     from google.oauth2 import service_account
 
     creds = service_account.Credentials.from_service_account_file(str(args.service_account_file), scopes=[SCOPE])
-    print(json.dumps(upload(AuthorizedSession(creds), args.aab, args.version_code, args.release_name)))
+    print(json.dumps(upload(AuthorizedSession(creds), args.aab, args.version_code, args.release_name, args.package)))
 
 
 if __name__ == "__main__":

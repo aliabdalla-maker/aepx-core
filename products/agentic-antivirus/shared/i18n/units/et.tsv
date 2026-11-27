@@ -1,0 +1,637 @@
+0	Liigu põhisisu juurde
+1	Lisa püsiv erand
+2	Rakenda liikluspiirang
+3	Kogu seadme metaandmed
+4	Isoleeri seade võrgust
+5	Pane fail karantiini
+6	Vabasta seade isolatsioonist
+7	Taasta karantiinis olev fail
+8	Logi kasutaja kõikjalt välja
+9	Tühista liikluspiirang
+10	Tühista värskendus
+11	Skanni seadmeid
+12	Peata kasutajakonto
+13	Peata protsess
+14	Kinnita
+15	Keeldu
+16	Saada seadmetesse
+17	Kinnitus aegub [0]
+18	Tehisintellekti assistendi ettepanek
+19	Reklaam
+20	Toiming
+21	Agendid
+22	Küsi
+23	Küsi turbeassistendilt
+24	Vastused põhinevad sinu seadmetel, avatud intsidentidel ja puudujääkidel. Assistent ei saa midagi muuta.
+25	Põhineb
+26	[0] tõenditeta väide eemaldati
+27	[0] tõenditeta väidet eemaldati
+29	Isehostitud mudel
+30	Reeglid (mudelita)
+31	Koosta parandusplaani mustand
+32	Iga samm on ettepanek. Midagi ei käivitata enne, kui keegi selle kinnitab.
+33	Küsimus
+34	Näiteks: millised seadmed vajavad tähelepanu?
+35	Soovitatud raskusaste
+36	Kokkuvõte
+37	Sihtmärgid
+38	Tee sellest intsidendist kokkuvõte
+39	Miks
+40	Tuvastatud
+41	Teata millestki kahtlasest
+42	Reegel
+43	Raskusaste
+44	Hoiatus
+46	Lisa faile
+47	Lisa kaust
+48	Lisa pilte
+49	[0] manus
+50	[0] manust
+51	Manused
+52	Tee foto
+53	Kaamerale juurdepääsu ei lubatud. Luba see brauseris või kasuta seadme kaamerarakendust.
+54	Kaamera eelvaade
+55	See brauser ei saa siin kaamerat avada.
+56	Jäädvusta
+57	Sulge assistent
+58	Mis failid need on ja kas need on ohutud?
+59	Fail
+60	Küsi oma turvalisuse kohta või lisa faile, kaust, pilte või kaamerafoto. Iga manus skannitakse esmalt ja midagi ei salvestata.
+61	[0] pilt
+62	[0] pilti
+63	 kirjeldati mudeli abil.
+64	Näiteks: kas see allalaadimine on ohutu?
+65	Puhast teksti ja puhtaid pilte võidakse saata sinu organisatsiooni lubatud tehisintellekti mudelile. Pahatahtlikke faile ei saadeta kunagi.
+66	[0] faili ei lisatud
+67	[0] faili ei lisatud
+68	: kuni [0] faili, igaüks kuni [1] MB ja kokku [2] MB.
+69	Eemalda [0]
+70	Skanni ja küsi
+71	Skannimise tulemused
+72	Tüüp
+73	Kasuta seadme kaamerat
+74	Tulemus
+75	Teadaolevat pahavara pole
+76	Pahatahtlik
+77	Skannimata
+78	Auditiahel on katkenud kirje [0] juures.
+79	Auditiahel on terve: [0] kirjet kontrollitud.
+80	E-post
+81	Unustasid parooli?
+82	Logi sisse Google'iga
+83	Google'iga sisselogimine ei õnnestunud. Proovi uuesti või kasuta e-posti ja parooli.
+84	Logi sisse
+85	Logi välja
+86	Uus parool
+87	või
+88	Organisatsioon
+89	Parool
+90	Parool on muudetud. Logi sisse uue parooliga.
+91	Vähemalt 12 märki.
+92	Loo konto
+93	Saada link uuesti
+94	Kui konto vajab veel kinnitamist, on uus link teel. Kontrolli ka rämpsposti kausta.
+95	Lähtesta parool
+96	Kui mõni konto kasutab seda aadressi, saatsime lähtestamislingi. See kehtib ühe tunni.
+97	Kinnita oma e-posti aadress enne sisselogimist. Ava link, mille saatsime aadressile [0].
+98	E-posti aadress on kinnitatud. Saad nüüd sisse logida.
+99	See link on aegunud või juba kasutatud. Logi sisse, et saada uus.
+100	Aadressi kinnitamiseks kontrolli oma e-posti.
+101	Tellimus vähendab reklaame 95%.
+102	Sinu prooviperiood on lõppenud.
+103	Tellitud kuni [0]
+104	Jäta kõik tasuta koos täieliku reklaamiga
+105	Peata kõik, sh seadmete kaitse, kuni keegi maksab
+106	Konsool vajab tellimust; seadmed jäävad kaitstuks
+107	4,99 £ kuus
+108	Telli
+109	Tasuta prooviperiood: 
+110	[0] päev jäänud
+111	[0] päeva jäänud
+112	Tühista
+113	Kustuta
+114	Midagi läks valesti.
+115	Ekspordi
+116	Laadimine…
+117	Pole kohaldatav
+118	Mitte kunagi
+119	Edasi
+120	ei
+121	Pole midagi kuvada.
+122	väljas
+123	sees
+124	Eelmine
+125	Värskenda
+126	Salvesta
+127	Otsi
+128	Simulatsioon (testandmed)
+129	Olek
+130	Pole saadaval
+131	Teadmata
+132	Uuendatud [0]
+133	Töötleb…
+134	jah
+135	[0] hoiatus 24 tunni jooksul
+136	[0] hoiatust 24 tunni jooksul
+137	[0] seade
+138	[0] seadet
+139	Andmed seisuga [0]
+140	[0] avatud intsident
+141	[0] avatud intsidenti
+142	[0] kinnitus ootel
+143	[0] kinnitust ootel
+144	kinnitatud
+145	kahtlustatav
+146	Registreeri seade
+147	Seade
+148	Ei raporteeri
+149	Aegunud poliitika
+150	Andur on keelatud
+151	Aegunud definitsioonid
+152	Probleemid
+153	Viimati nähtud
+154	Operatsioonisüsteem
+155	Poliitika
+156	Käivita seadmes 24 tunni jooksul (ühekordne):
+157	Kaitse
+158	Kopeeri
+159	Laadi alla
+160	Teisalda
+161	Uus kaust
+162	Nimeta ümber
+163	Taasta
+164	Teisalda prügikasti
+165	Laadi üles
+166	Abi
+167	[0] tekst sellel lehel on masintõlgitud ja pole veel üle vaadatud.
+168	[0] teksti selles keeles on masintõlgitud ja pole veel üle vaadatud.
+169	Seda keelt pole veel tõlgitud, seetõttu kuvatakse inglise keelt.
+170	kinnitatud
+171	Täheldatud faktid
+172	Hüpoteesid (kinnitamata)
+173	Hüpotees, kindlus [0]: [1]
+174	Käivita uurimine
+175	Puuduvad tõendid
+176	Puudub: [0]
+177	Loe ette
+178	Soovitatud toimingud
+179	Tõendite ajajoon
+180	sissetulev veebihaak
+181	Signaalid sinu identiteedipakkujalt, DNS-ist, tulemüüridest ja muudest tööriistadest. Uued integratsioonid on algul olekus pole saadaval; reaalajas olekuks saab märkida ainult pakkuja adapteri, mis on läbinud lepingutesti. Testandmed on kõikjal märgistatud simulatsioonina.
+182	Ühendamata (asendus)
+183	Ainult testandmed
+184	Pole saadaval
+185	Reaalajas (kontrollitud)
+186	Saladus (kuvatakse üks kord):
+187	Kinnitused
+188	Hoiatused
+189	Audit
+190	Tellimus
+191	Töölaud
+192	DDoS ja käideldavus
+193	Seadmed
+194	Failid
+195	Intsidendid
+196	Integratsioonid
+197	Poliitikad
+198	Privaatsus
+199	Karantiin
+200	Reageerimine
+201	Turvalisus
+202	Seaded
+203	Pane teadaolev pahavara automaatselt karantiini
+204	Jälgi kahtlast käitumist
+205	Blokeeri kahtlased skriptid
+206	Kogu uurimiseks failide sisu (vaikimisi väljas)
+207	Luba võrguisolatsioon
+208	Skanni faile nende avamisel või kirjutamisel
+209	Skanni allalaadimisi
+210	Skanni programme nende käivitumisel
+211	Kaitse agenti muudatuste eest
+212	Hoiata teadaolevate pahatahtlike linkide eest
+213	Põhjus
+214	Taotle ülevaatust
+215	Taasta pärast uut skannimist
+216	mediaanaeg kinnitatud kõrvaldamiseni (n=[0], lahendamata [1])
+217	parandused, mis läbisid kordustesti
+218	kordumine pärast taastamist
+219	kinnitatud viiruse eemaldamine
+220	turvaline naasmine kasutusse
+221	taastamisskannimised lõpetatud
+222	Ainult karantiiniga tulemused ([0]) ja uuesti paigaldatud seadmed ([1]) loetakse eraldi; ainult karantiini ei loeta kunagi eemaldamiseks.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Ootab kinnitust
+227	Tootmiskeskkonna tõendid
+228	Salvesta, mida tootmiskeskkonnas kontrolliti, millistel varadel ja millise versiooniga. Kirjeid ei saa muuta.
+229	Versioon
+230	Muuda režiimi
+231	tõendid puuduvad
+232	nurjus
+233	läbitud
+234	ootel
+235	Kontrolli tegevusjuhendi edenemist
+236	Seadmed, mis saavad reageerida
+237	Kõik seadmed
+238	[0] pilootseade
+239	[0] pilootseadet
+240	Lõpetatud
+241	Lõpetatud, kui
+242	Õppus
+243	Jälgi
+244	Reageeri
+245	Katvus
+246	[0] jälgitud, [1] saavad reageerida
+247	Andmed
+248	Andmete vanus
+249	Reaalajas
+250	Testandmed
+251	täitmata
+252	kviitung
+253	pooleli
+254	teadmata
+255	Saada välja
+256	Tõendid
+257	See käivitus
+258	Aegunud
+259	Andmevood
+260	Versioon või räsi
+261	Keskkond
+262	Tulemus
+263	Omanik
+264	Nõue
+265	Vara või rühm
+266	Kuva
+267	Kõik
+268	Lõpetamata
+269	Sees kogu teenuse jaoks
+270	Sees selle organisatsiooni jaoks
+271	Kas peatada kõik uued reageerimistoimingud selles organisatsioonis? Kaitse ja skannimine jätkuvad.
+272	Luba reageerimistoimingud uuesti
+273	Peata kõik reageerimistoimingud
+274	Hädaseiskamine
+275	Liik
+276	Avatud olekus minuteid, mediaan ([0] avatud, vanim [1] min)
+277	Poliitika keeldumised
+278	Õppused ja simulatsioonid (ülal arvestamata)
+279	Korduvad toimingud (eesmärk 0)
+280	Andmevoo viivituse mediaan (p95 [0] s, n=[1])
+281	Hilinenud kinnitused ([0] ootel, eesmärk [1] min)
+282	Mediaan signaalist triaažini (p95 [0] min, n=[1], [2] triažeerimata)
+283	Sõltumatult kontrollitud toimingud ([0]/[1])
+284	Aken: [0]. Ainult kviitungit ei loeta kunagi kontrollituks. Puuduvad andmed kuvatakse kui pole saadaval.
+285	Reageerimise mõõdikud
+286	Viimane sündmus
+287	Agendid teevad ettepanekuid; fikseeritud poliitika otsustab, mis käivitatakse. Iga toiming näitab oma kinnitust, kviitungit ja sõltumatut kontrolli.
+288	Etapp
+289	Ootab kinnitust
+290	Keeldutud
+291	Aegunud
+292	Nurjus
+293	Vajab käsitsi vastavusse viimist
+294	Ettepanek
+295	Järjekorras
+296	Töötab
+297	Kontrollimine ootel
+298	Kontrollitud
+299	Praegune olek
+300	Režiim
+301	Simulatsioon
+302	Skannimine ja andmete kogumine toimuvad. Muud toimingud jäävad ettepanekuteks.
+303	Kinnitatud toimingud käivitatakse valitud seadmetes.
+304	Toiminguid käivitatakse ainult testadapterite vastu. Sinu seadmetes ei muutu midagi.
+305	Toiminguid veel pole.
+306	Midagi ei oota kinnitust.
+307	Tootmiskeskkonna tõendeid pole veel salvestatud.
+308	Ükski seade ega integratsioon ei saada veel andmeid.
+309	See ei käivitunud
+310	Täheldatud
+311	Mis juhtus
+312	DDoS-i tõrje
+313	Valepositiivne ja taastamine
+314	Identiteet, andmepüük ja kahtlane liiklus
+315	Pahavara ja kahtlased allalaadimised
+316	Võrgu nähtavus ja seadmete seisund
+317	Taastamine pärast ründamist
+318	Lunavara või kahtlustatav ründamine
+319	Tegevusjuhend
+320	Tegevusjuhendid
+321	Poliitika versioon
+322	Paigaldatud versioon
+323	Tulemüüriga isoleerimine
+324	Andmed vastu võetud
+325	Fail eemaldatud
+326	Protsess peatatud
+327	Pakkuja olek
+328	Salvestatud
+329	Skannimine lõpetatud
+330	Simuleeritud
+331	Karantiinist väljas
+332	Karantiinis
+333	Toimingud ja kviitungid
+334	Salvesta tulemus
+335	Salvesta
+336	Saab reageerida
+337	Allikas
+338	seade
+339	konsool
+340	simulatsioon
+341	Algab, kui
+342	Uuendatud
+343	Sõltumatu kontroll
+344	Ootel
+345	Arhiivi piirang
+346	Krüpteeritud arhiiv
+347	Välistatud
+348	Pole juurdepääsetav
+349	Ajapiirang
+350	Liiga suur
+351	Toetamata vorming
+352	Tühistatud
+353	Vahele jäänud
+354	Osaline
+355	Aegus
+356	Täielik
+357	Nõudmisel
+358	Kiire
+359	Taastamine
+360	Ajastatud
+361	Sihitud
+362	Lisa segment
+363	arhiivid
+364	Varad
+365	Kas peatada see skannimine? Seniseid tulemusi säilitatakse tühistatud skannimisena.
+366	Katmata
+367	Tuvastused
+368	Seadmed kaitseoleku järgi
+369	Mootor
+370	Tähtaeg
+371	Viimased tõendid
+372	Oodatav kontroll
+373	Soovitatud parandus
+374	Kordustest
+375	Vara või segment
+376	Avatud puudujäägid
+377	Skannimise tulemused 30 päeva jooksul
+378	hoiatusest kinnitatud tõkestamiseni
+379	kaitstud seadmed
+380	avalikud lõpp-punktid ülesvoolu leevendusega
+381	sündmusest hoiatuseni
+382	ajakohaste definitsioonidega seadmed
+383	seadmed, mida on 7 päeva jooksul täielikult skannitud
+384	avatud puudujäägid ([0] hilinenud, [1] suletud 30 päeva jooksul)
+385	jälgitavad võrgusegmendid
+386	kinnitatud tõesed positiivsed
+387	lõpetatud skannimised
+388	Katvus ja reageerimine
+389	Viimane täielik skannimine
+390	Viimane telemeetria
+391	Iga ulatusse kuuluv seade ja võrgusegment, kas see on kaitstud ja mida järgmisena parandada.
+392	Võrgu nähtavus
+393	Seadmeid pole veel registreeritud. Kaitse arvutit jaotises Seadmed.
+394	Avatud puudujääke pole.
+395	[0] avatud
+396	hilinenud
+397	p95 [0] s
+398	Kaustad
+399	Skannitavad kaustad, komadega eraldatud
+400	Krüpteerimine ja tulemüür
+401	Ketta krüpteerimine [0], tulemüür [1]
+402	Taastamine pärast intsidente
+403	Kontrolli kohe uuesti
+404	Kordustestimata
+405	Kordustest nurjus
+406	Kinnitatult suletud
+407	Skannimise tüüp
+408	Skannimised
+409	Segment
+410	Segmendi nimi
+411	Alusta skannimist
+412	Alustatud
+413	Olek
+414	Häiritud
+415	Kaitstud
+416	Kaitsmata
+417	Seadmed oleku järgi
+418	[0] teadmata
+419	Nähtavus puudub
+420	Jälgitud
+421	Nähtavus
+422	Tuvastuste puudumine ei tõesta kaitset: kontrolli ka katvust ja skannimise tulemusi.
+423	Keel
+424	Tõlke katvus
+425	Varasem versioon puudub
+426	Teema
+427	Tume
+428	Suur kontrastsus
+429	Hele
+430	[0] failist ei leitud uusi ohte.
+431	[0] oht
+432	[0] ohtu
+433	 leiti [0] failist. Vaata need üle jaotistes Hoiatused ja Kinnitused.
+434	Täielik skannimine
+435	Seda arvutit ei õnnestunud kaitsta: [0]
+436	See arvuti on kaitstud. Reaalajas skannimine töötab, kui Agentic Antivirus on avatud.
+437	Skannimine ei lõppenud: [0]
+438	Skannimine…
+439	Kõigi draivide skannimine. See võib võtta kaua aega.
+440	Kaustade Allalaadimised, Töölaud ja ajutiste failide skannimine…
+441	[0] faili ei saanud lugeda.
+442	Fail
+443	Veebilink
+444	Nõustu testandmetega
+446	Toimingud
+447	Lisa integratsioon
+448	Lisa erand
+449	Lisa integratsioon
+450	Lisa iganädalane täielik skannimine
+451	administraator
+452	Reklaam
+453	Reklaaminõusolek
+454	Mõjutatud teenused
+455	hoiatused viimase 24 tunni jooksul
+456	Luba
+457	Luba ja skanni
+458	Administraator peab esitama põhjuse. Erand salvestatakse auditijälge.
+459	E-kiri
+460	Kinnita naasmine kasutusse
+461	Toimingute kinnitamine
+462	Vara
+463	aktiivse leevenduse all olevad varad
+464	varad, millel on 24 tunni jooksul hoiatusi
+465	Auditijälg
+466	Automaatne kaitse töötab edasi igas seadmes. Need on toimingud, mille kohta peab otsustama inimene.
+467	Käideldavus
+468	Saadaolevad signaalid
+469	Varukoopia kontrollitud
+470	Blokeeri
+471	Vaikimisi saadab agent turvatelemeetriat ja failide räsisid: protsesside nimed ja käsuread, failiteed, võrguühenduste metaandmed ja tuvastused. Failide sisu kogutakse ainult siis, kui sinu organisatsioon selle sisse lülitab.
+472	Mahutavus
+473	Kategooria
+474	Muudetud
+475	Tasu
+476	Kontrolli
+477	vali
+478	Vali seade
+480	Sulge
+481	Komadega eraldatud
+482	Kontakt
+483	Kontroll
+484	Katvus kaitsekihtide kaupa
+485	kriitiline
+486	kriitiliste hoiatuste edastamine (p95, 30 päeva)
+487	Ootel otsused
+488	Keeldu
+489	Definitsioonid
+490	Kirjelda, mis juhtus
+491	Üksikasi
+492	Üksikasjad
+493	Tuvastus
+494	Litsentsitav seade
+495	täielikult kaitstud seadmed
+496	isoleeritud seadmed
+497	Tähelepanu vajavad seadmed
+498	Suund
+499	DNS-tsoon
+500	allalaadimislehelt
+501	Tasuta prooviperioodi ajal ja tasumata pakettidega näitab konsool Google AdSense'i reklaame ja mobiilirakendused Google AdMobi reklaame pärast sinu nõusoleku küsimist. Tellijad näevad 95% vähem reklaame. Reklaame ei kuvata kunagi kinnitamise, tõkestamise, ohuhoiatuste, karantiini ülevaatuse, sisselogimise, makse ega auditi kuvadel.
+502	Iga avaldamine loob uue allkirjastatud versiooni. Seadmed jõustavad võrguühenduseta olles edasi viimast kontrollitud versiooni.
+503	Kirjuta toele aadressil
+504	Lõpp-punkt
+505	Agentic Antivirust haldab Equality Software Ltd. Sellel lehel kirjeldatakse, mida teenus kogub. Tooteomanik peab selle enne avaldamist üle vaatama.
+506	Iga toiming, mis muudab seadet, kontot või liiklust, läbib poliitikamootori ja AEP-X-i halduse. Kinnitus hõlmab üht toimingut, selle täpseid sihtmärke, seda organisatsiooni ja kindlat aega.
+507	Iga üleslaadimist kontrollitakse pahavara ja tegeliku tüübi suhtes. Kontrollitud vaaturita failid salvestatakse ja neid saab alla laadida, kuid eelvaadet ei kuvata.
+508	Erand
+509	Erandid
+510	Kausta tee
+511	juurdepääsu- või parandustaotluste jaoks.
+512	Puudujäägid
+513	Hangi Windowsi, Maci või Linuxi agent
+514	Ava Seadmed, vali Registreeri seade ja käivita kuvatud käsk arvutis, mida soovid kaitsta. Agent alustab skannimist kohe, kui saab oma allkirjastatud poliitika.
+515	Seisund
+516	Ajalugu
+517	Hostinimi
+518	Mõistan, et pärast prooviperioodi lõpetavad seadmed skannimise ja ohtude blokeerimise, kuni tellimus on tasutud.
+519	Mõju
+520	Impordi zip või tar
+521	Intsident
+522	Kaasa keelemudel (kui sinu organisatsioon on selle lubanud)
+523	IP-aadress
+524	Liitu
+525	Liitu oma organisatsiooniga
+526	Teadaolev pahavara teisaldatakse karantiini, kus see ei saa käivituda. Kui arvad, et fail blokeeriti ekslikult, ava Karantiin ja taotle ülevaatust. Administraator otsustab ja fail taastatakse alles siis, kui uus skannimine leiab selle puhta olevat.
+527	Ilma täieliku tõlketa keeled kuvatakse inglise keeles. Katvus on mõõdetud, mitte hinnanguline.
+528	Viimati muudetud
+529	Kiht
+530	Õigustatud päringute õnnestumine
+531	Litsentsireeglid
+532	Link, kui see on olemas
+533	Haldushostid, mis jäävad isoleerimise ajal kättesaadavaks
+534	Märgi valepositiivseks
+535	Küpsus
+536	Leevendus
+537	Nimi
+538	Saladuse nimi sinu saladuste hoidlas, mitte kunagi saladus ise
+539	Ükski toiming ei oota.
+540	Avatud intsidente pole.
+541	Puudub.
+542	Ühtegi pole teatatud.
+543	määramata
+544	Teavitatud pärast
+545	kuvatud reklaamidest
+546	Võrguühenduseta sündmuste puhver (MB)
+547	Androidis telli Agentic Antiviruse rakenduses Google Play kaudu. iPhone'is ja iPadis pole App Store'i tellimused veel saadaval. Veebis maksmine pole veel saadaval.
+548	Avatud intsident
+549	avatud intsidendid
+550	Avatud intsidendid
+551	p95 latentsus
+552	tasutud kuni
+553	Tee muster
+554	Inimesed
+555	Seadme kohta
+556	Kasutaja kohta (hõlmab kõiki tema seadmeid)
+557	Eelvaade
+558	Peamine
+560	Kaitse seadet
+561	Protokoll
+562	Pakkuja
+563	Pakkuja hoiatused (24 tundi)
+564	Avalikud lõpp-punktid
+565	Avalda poliitika versioon
+566	Avalda allkirjastatud versioon
+567	Avaldatud
+568	Kiirskannimine
+569	Ettelugemine ja dikteerimine kasutavad brauseri sisseehitatud kõnefunktsioone. Me ei salvesta ega säilita heli.
+570	Vastu võetud
+571	Irdkandjad
+572	Eemalda
+573	Taotletud
+574	Taotleja
+575	Säilitamine
+576	Naasmine kasutusse
+577	Praegu
+578	Risk
+579	Roll
+580	Tühista
+581	Salvesta lõpp-punkt
+582	Salvesta litsentsireeglid
+583	Skanni
+584	Ajakava (cron)
+585	Ajastatud skannimised
+586	Saladuse viide
+587	Saada kutse
+588	Saada aruanne
+589	Saada lähtestamislink
+590	Teenus
+591	Teenuse eesmärgid
+594	Signaal
+595	Suurus
+596	Midagi muud
+597	Sordi
+598	Samm
+599	Protsesside peatamine, seadmete isoleerimine, failide taastamine, erandite lisamine ja liiklusreeglite muutmine vajavad inimese kinnitust. Kinnitus hõlmab üht toimingut, selle täpseid sihtmärke ja piiratud aega. Kui midagi muutub, kinnita uuesti.
+600	Telli see seade Google Play kaudu
+601	tellimuse olek
+603	Süsteem
+604	Sihtmärk
+605	Tehisintellekti assistent
+606	Assistent rühmitab seotud hoiatused, loetleb täheldatu koos linkidega tõenditele ja märgib kõik, mida ta ei suuda tõestada, hüpoteesiks. Ta saab soovitada toiminguid, kuid ei saa neid kinnitada. Kui mudel pole saadaval, jätkavad skannimine, hoiatused ja käsitsi reageerimine tööd.
+607	See arvuti
+608	Ainult TLS, peab olema väljuva liikluse lubatud loendis
+609	Liiklusuputused neelab sinu ülesvoolu pakkuja. Siin annad aru igast avalikust lõpp-punktist, jälgid pakkuja hoiatusi ja kinnitad uusi liikluspiiranguid.
+610	Liikluspiirangud
+611	Tõlgitud
+612	Prügikast
+613	prooviperioodi päeva jäänud
+614	Lülita kaitse sisse, et skannida selle arvuti faile ning jälgida lunavara ja mandaatide vargust.
+615	katmata
+616	Võta viimane muudatus tagasi
+617	Kasutaja
+618	Kinnita e-post
+619	ootab kinnitust
+620	Näitame mõnel lehel Google AdSense'i reklaame. Kas lubada isikupärastatud reklaamid?
+621	Veebihaak:
+622	Mida seadmed saadavad
+623	Mis see on?
+624	Millal
+625	Kui midagi blokeeritakse
+626	Kui prooviperiood lõpeb ilma makseta
+627	Kes
+628	Saad oma konto kustutada oma profiilist. Võta ühendust
+629	Sinu nimi
+630	Sinu organisatsioon saab 30-päevase tasuta prooviperioodi. Pärast seda maksab see 4,99 £ kuus iga kasutaja või seadme kohta.
+631	Sinu organisatsioon määrab, kui kaua telemeetriat ja tõendeid säilitatakse. Auditikirjeid ei saa muuta ega kustutada.
+632	Sinu õigused
+633	Dikteeri
+634	Kas lubada mikrofoni kasutamine dikteerimiseks? Heli töötleb sinu brauser ja me ei salvesta seda.
+635	Heliväljund
+636	Paus
+637	Helikõrgus
+638	Jätka
+639	Kiirus
+640	Peata
+641	Selle keele jaoks pole häält saadaval.
+642	Hääl
+643	Fail teisaldati karantiini ja see ei saa käivituda.
+644	Selles seadmes blokeeriti oht.

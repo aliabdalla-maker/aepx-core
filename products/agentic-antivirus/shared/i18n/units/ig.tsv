@@ -1,0 +1,637 @@
+0	Wụga gaa na isi ọdịnaya
+1	Tinye mwepụ na-adịgide adịgide
+2	Tinye mmachi okporo data
+3	Chịkọta metadata ngwaọrụ
+4	Kewapụ ngwaọrụ na netwọk
+5	Tinye faịlụ na nkewapụ
+6	Wepụta ngwaọrụ na nkewapụ
+7	Weghachi faịlụ dị na nkewapụ
+8	Wepụ onye ọrụ n'ebe niile
+9	Laghachi mmachi okporo data
+10	Laghachi mmelite
+11	Nyochaa ngwaọrụ
+12	Kwụsịtụ akaụntụ onye ọrụ
+13	Kwụsị usoro
+14	Kwado
+15	Jụ
+16	Zigara ngwaọrụ
+17	Nkwado ga-agwụ [0]
+18	Onye enyemaka AI tụpụtara ya
+19	Mgbasa ozi
+20	Omume
+21	Ndị ejenti
+22	Jụọ
+23	Jụọ onye enyemaka nchekwa
+24	Azịza na-esite na ngwaọrụ gị, ihe merenụ ndị ka mepere emepe na oghere. Onye enyemaka enweghị ike ịgbanwe ihe ọ bụla.
+25	Dabere na
+26	Ewepụrụ nkwupụta [0] na-enweghị ihe akaebe
+27	Ewepụrụ nkwupụta [0] na-enweghị ihe akaebe
+29	Ụdị AI ị na-elekọta n'onwe gị
+30	Iwu (enweghị ụdị AI)
+31	Dee atụmatụ ndozi
+32	Nzọụkwụ ọ bụla bụ atụmatụ. Ọ dịghị ihe na-agba ruo mgbe mmadụ kwadoro ya.
+33	Ajụjụ
+34	Ọmụmaatụ: kedu ngwaọrụ chọrọ nlebara anya?
+35	Ogo njọ a tụrụ aro
+36	Nchịkọta
+37	Ihe a na-elekwasị anya
+38	Chịkọta ihe merenụ a
+39	Ihe kpatara
+40	Achọpụtara
+41	Kọọ ihe na-enyo enyo
+42	Iwu
+43	Ogo njọ
+44	Ọkwa
+46	Tinye faịlụ
+47	Tinye folda
+48	Tinye onyonyo
+49	Ihe mgbakwunye [0]
+50	Ihe mgbakwunye [0]
+51	Ihe mgbakwunye
+52	See foto
+53	Enyeghị ikike iji igwefoto. Kwe ya na ihe nchọgharị gị, ma ọ bụ jiri ngwa igwefoto ngwaọrụ gị.
+54	Nlele igwefoto
+55	Ihe nchọgharị a enweghị ike imepe igwefoto ebe a.
+56	Were
+57	Mechie onye enyemaka
+58	Gịnị bụ faịlụ ndị a, ha nwere nchekwa?
+59	Faịlụ
+60	Jụọ maka nchekwa gị, ma ọ bụ tinye faịlụ, folda, onyonyo ma ọ bụ foto igwefoto. A na-ebu ụzọ nyochaa ihe mgbakwunye ọ bụla, a naghị echekwa ihe ọ bụla.
+61	Onyonyo [0] ka
+62	Onyonyo [0] ka
+63	 ụdị AI kọwara.
+64	Ọmụmaatụ: ihe a m budatara ọ dị mma?
+65	Enwere ike iziga ederede na onyonyo dị ọcha na ụdị AI nzukọ gị gbanyere. Faịlụ ọjọọ anaghị aga ma ọlị.
+66	Etinyeghị faịlụ [0]
+67	Etinyeghị faịlụ [0]
+68	: ruo faịlụ [0], [1] MB nke ọ bụla na [2] MB n'ozuzu.
+69	Wepụ [0]
+70	Nyochaa ma jụọ
+71	Nsonaazụ nyocha
+72	Ụdị
+73	Jiri igwefoto ngwaọrụ
+74	Nsonaazụ
+75	Enweghị malware a ma ama
+76	Ọjọọ
+77	Anyochaghị ya
+78	Agbụ nyocha akwụkwọ gbajiri na ndenye [0].
+79	Agbụ nyocha akwụkwọ zuru oke: e nyochala ndenye [0].
+80	Email
+81	Ichefuola okwuntughe?
+82	Jiri Google banye
+83	Ịbanye site na Google arụghị ọrụ. Nwaa ọzọ, ma ọ bụ jiri email na okwuntughe gị.
+84	Banye
+85	Pụọ
+86	Okwuntughe ọhụrụ
+87	ma ọ bụ
+88	Nzukọ
+89	Okwuntughe
+90	Agbanwela okwuntughe. Jiri okwuntughe ọhụrụ gị banye.
+91	Opekata mpe mkpụrụedemede 12.
+92	Mepụta akaụntụ
+93	Ziga njikọ ahụ ọzọ
+94	Ọ bụrụ na akaụntụ ahụ ka chọrọ nkwenye, njikọ ọhụrụ na-abịa. Lelee folda spam gị kwa.
+95	Tọgharịa okwuntughe
+96	Ọ bụrụ na akaụntụ na-eji adreesị ahụ, anyị ezitela njikọ ntọgharị. Ọ na-arụ ọrụ maka otu awa.
+97	Kwenye adreesị email gị tupu ị banye. Mepee njikọ anyị zigara na [0].
+98	E kwenyela email. Ị nwere ike ịbanye ugbu a.
+99	Njikọ a agwụla ma ọ bụ e jirila ya mee ihe. Banye ka ị nweta nke ọhụrụ.
+100	Lelee email gị iji kwenye adreesị gị.
+101	Idebanye aha na-ebelata mgbasa ozi site na 95%.
+102	Oge nnwale gị agwụla.
+103	Edebanyere aha ruo [0]
+104	Mee ka ihe niile bụrụ n'efu ya na mgbasa ozi zuru oke
+105	Kwụsị ihe niile, gụnyere nchekwa ngwaọrụ, ruo mgbe mmadụ kwụrụ ụgwọ
+106	Ọdụ njikwa chọrọ ndebanye aha; ngwaọrụ na-anọgide na nchekwa
+107	£4.99 kwa ọnwa
+108	Debanye aha
+109	Nnwale n'efu: 
+110	Ụbọchị [0] fọdụrụ
+111	Ụbọchị [0] fọdụrụ
+112	Kagbuo
+113	Hichapụ
+114	Ihe ezighi ezi mere.
+115	Bupụ
+116	Na-ebu…
+117	Adịghị
+118	Ọ dịghị mgbe
+119	Ọzọ
+120	mba
+121	Ọ dịghị ihe a ga-egosi.
+122	gbanyụọ
+123	gbanye
+124	Nke gara aga
+125	Mee ka ọ dị ọhụrụ
+126	Chekwaa
+127	Chọọ
+128	Ịṅomi (data nnwale)
+129	Ọnọdụ
+130	Adịghị
+131	Amaghị
+132	Emelitere [0]
+133	Na-arụ ọrụ…
+134	ee
+135	Ọkwa [0] n'ime awa 24
+136	Ọkwa [0] n'ime awa 24
+137	Ngwaọrụ [0]
+138	Ngwaọrụ [0]
+139	Data dị ka nke [0]
+140	Ihe merenụ [0] mepere emepe
+141	Ihe merenụ [0] mepere emepe
+142	Nkwado [0] na-eche
+143	Nkwado [0] na-eche
+144	ekwenyere
+145	a na-enyo enyo
+146	Debanye ngwaọrụ
+147	Ngwaọrụ
+148	Anaghị akọ akụkọ
+149	Amụma ochie
+150	Agbanyụrụ ihe mmetụta
+151	Nkọwa malware ochie
+152	Nsogbu
+153	Oge ikpeazụ a hụrụ ya
+154	Sistemụ arụmọrụ
+155	Amụma
+156	Mee ya na ngwaọrụ n'ime awa 24 (otu ojiji):
+157	Nchekwa
+158	Detuo
+159	Budata
+160	Bugharịa
+161	Folda ọhụrụ
+162	Gụgharịa aha
+163	Weghachi
+164	Bugara na ebe mkpofu
+165	Bulite
+166	Enyemaka
+167	Ederede [0] dị na ibe a bụ igwe sụgharịrị ya, a ka enyochabeghị ya.
+168	Ederede [0] dị n'asụsụ a bụ igwe sụgharịrị ha, a ka enyochabeghị ha.
+169	A sụgharịbeghị asụsụ a, ya mere a na-egosi Bekee.
+170	akwadoro
+171	Eziokwu a hụrụ
+172	Echiche (ekwenyeghị)
+173	Echiche, ntụkwasị obi [0]: [1]
+174	Mee nyocha
+175	Ihe akaebe na-efu efu
+176	Na-efu: [0]
+177	Gụpụta n'olu dara ụda
+178	Omume a tụrụ aro
+179	Usoro oge ihe akaebe
+180	webhook na-abata
+181	Mgbaàmà sitere n'aka onye na-enye njirimara gị, DNS, mgbidi ọkụ na ngwaọrụ ndị ọzọ. Njikọ ọhụrụ na-amalite dị ka ndị na-adịghị; naanị adapta onye na-eweta nke gafere ule nkwekọrịta ya ka enwere ike ịkpọ dị ndụ. A na-akpọ data nnwale ịṅomi ebe ọ bụla ọ pụtara.
+182	Ejikọghị (stub)
+183	Naanị data nnwale
+184	Adịghị
+185	Dị ndụ (enyochara)
+186	Nzuzo (egosiri otu ugboro):
+187	Nkwado
+188	Ọkwa
+189	Nyocha akwụkwọ
+190	Ndebanye aha
+191	Ihuenyo nchịkọta
+192	DDoS na nnweta
+193	Ngwaọrụ
+194	Faịlụ
+195	Ihe merenụ
+196	Njikọ
+197	Amụma
+198	Nzuzo onwe
+199	Nkewapụ
+200	Nzaghachi
+201	Nchekwa
+202	Ntọala
+203	Tinye malware a ma ama na nkewapụ na-akpaghị aka
+204	Lezie anya maka omume na-enyo enyo
+205	Gbochie script na-enyo enyo
+206	Chịkọta ọdịnaya faịlụ maka nyocha (gbanyụrụ na ndabara)
+207	Kwe ka e kewapụ netwọk
+208	Nyochaa faịlụ mgbe e mepere ma ọ bụ dee ha
+209	Nyochaa ihe ebudatara
+210	Nyochaa mmemme mgbe ha malitere
+211	Chekwaa ejenti pụọ na mgbanwe
+212	Dọọ aka na ntị maka njikọ ọjọọ a ma ama
+213	Ihe kpatara
+214	Rịọ nlebanya
+215	Weghachi mgbe nyocha ọhụrụ gasịrị
+216	oge etiti ruo mkpochapụ enyochara (n=[0], edozibeghị [1])
+217	ndozi gafere ule ọzọ
+218	nlọghachi mgbe mgbake gasịrị
+219	mwepụ nje enyochara
+220	nlọghachi n'ọrụ n'enweghị nsogbu
+221	nyocha mgbake ezuru oke
+222	A na-agụ nsonaazụ naanị nkewapụ ([0]) na ngwaọrụ e tinyeghachiri sistemụ ([1]) iche; a dịghị agụ naanị nkewapụ dị ka mwepụ.
+223	[0] awa
+224	[0] nkeji
+225	[0] sekọnd
+226	Na-eche nkwado
+227	Ihe akaebe mmepụta
+228	Dekọọ ihe e nyochara na mmepụta, n'akụ ndị ole, na ụdị ole. Enweghị ike idezi ndenye.
+229	Ụdị
+230	Gbanwee ọnọdụ
+231	enweghị ihe akaebe
+232	dara
+233	gafere
+234	na-eche
+235	Lelee ọganihu akwụkwọ usoro
+236	Ngwaọrụ nwere ike ịzaghachi
+237	Ngwaọrụ niile
+238	Ngwaọrụ nnwale [0]
+239	Ngwaọrụ nnwale [0]
+240	Zuru ezu
+241	Zuru ezu mgbe
+242	Mmega ahụ
+243	Lezie anya
+244	Zaghachi
+245	Mkpuchi
+246	[0] a hụrụ, [1] nwere ike ịzaghachi
+247	Data
+248	Afọ data
+249	Dị ndụ
+250	Data nnwale
+251	emeghị ya
+252	nnata
+253	na-aga n'ihu
+254	amaghị
+255	Ziga
+256	Ihe akaebe
+257	Ọ gbara
+258	Ochie
+259	Ntọala data
+260	Ụdị ma ọ bụ digest
+261	Gburugburu
+262	Nsonaazụ
+263	Onye nwe ya
+264	Ihe achọrọ
+265	Akụ ma ọ bụ otu
+266	Gosi
+267	Niile
+268	Ezughị ezu
+269	Gbanyere maka ọrụ niile
+270	Gbanyere maka nzukọ a
+271	Kwụsị omume nzaghachi ọhụrụ ọ bụla maka nzukọ a? Nchekwa na nyocha na-aga n'ihu.
+272	Kwe ka omume nzaghachi malite ọzọ
+273	Kwụsị omume nzaghachi niile
+274	Mgba ọkụ nkwụsị mberede
+275	Ụdị
+276	Nkeji etiti mepere emepe ([0] mepere emepe, nke kachasị ochie [1] nkeji)
+277	Ajụjụ amụma
+278	Mmega ahụ na ịṅomi (agụghị ha n'elu)
+279	Omume a na-emegharị (ebumnuche 0)
+280	Igbu oge etiti data (p95 [0] sekọnd, n=[1])
+281	Nkwado gafere oge ([0] na-eche, ebumnuche [1] nkeji)
+282	Oge etiti site na mgbaàmà ruo nhazi (p95 [0] nkeji, n=[1], [2] ahazighị)
+283	Omume enyochara n'onwe ya ([0]/[1])
+284	Oge: [0]. Naanị nnata adịghị agụ dị ka nke enyochara. Data na-efu efu na-egosi dị ka nke na-adịghị.
+285	Ọ̀tụ̀tụ̀ nzaghachi
+286	Ihe omume ikpeazụ
+287	Ndị ejenti na-atụ aro; amụma kwụsiri ike na-ekpebi ihe na-agba. Omume ọ bụla na-egosi nkwado ya, nnata ya na nyocha nọọrọ onwe ya.
+288	Ọkwa usoro
+289	Na-eche nkwado
+290	Ajụrụ
+291	Agwụla
+292	Dara
+293	Chọrọ nhazi aka
+294	Atụpụtara
+295	Nọ n'ahịrị
+296	Na-agba
+297	Nnyocha na-eche
+298	Enyochara
+299	Ọnọdụ dị ndụ
+300	Ọnọdụ
+301	Ịṅomi
+302	Nyocha na nchịkọta data na-agba. Omume ndị ọzọ ka bụ atụmatụ.
+303	Omume akwadoro na-agba na ngwaọrụ a họọrọ.
+304	Omume na-agba naanị na adapta nnwale. Ọ dịghị ihe na-agbanwe na ngwaọrụ gị.
+305	Enwebeghị omume.
+306	Ọ dịghị ihe na-eche nkwado.
+307	Edekọbeghị ihe akaebe mmepụta.
+308	Ọ dịbeghị ngwaọrụ ma ọ bụ njikọ na-ezite data.
+309	Ọ gbaghị
+310	A hụrụ
+311	Ihe mere
+312	Nzaghachi DDoS
+313	Ọkwa ụgha na mweghachi
+314	Njirimara, phishing na okporo data na-enyo enyo
+315	Malware na nbudata na-enyo enyo
+316	Ịhụ netwọk na ọnọdụ ngwaọrụ
+317	Mgbake mgbe mwakpo gasịrị
+318	Ransomware ma ọ bụ mwakpo a na-enyo enyo
+319	Akwụkwọ usoro
+320	Akwụkwọ usoro
+321	Ụdị amụma
+322	Ụdị etinyere
+323	Nkewapụ mgbidi ọkụ
+324	Natara data
+325	Ewepụrụ faịlụ
+326	Akwụsịrị usoro
+327	Ọnọdụ onye na-eweta
+328	Edekọrọ
+329	Nyocha zuru oke
+330	Ṅomiri
+331	Pụọ na nkewapụ
+332	Nọ na nkewapụ
+333	Omume na nnata
+334	Dekọọ nsonaazụ
+335	Dekọọ
+336	Nwere ike ịzaghachi
+337	Isi mmalite
+338	ngwaọrụ
+339	ọdụ njikwa
+340	ịṅomi
+341	Na-amalite mgbe
+342	Emelitere
+343	Nyocha nọọrọ onwe ya
+344	Na-eche
+345	Oke ebe nchekwa faịlụ
+346	Ebe nchekwa faịlụ ezoro ezo
+347	Ewepụrụ
+348	Enweghị ike ịbanye
+349	Oke oge
+350	Buru oke ibu
+351	Usoro anaghị akwado
+352	Kagburu
+353	Agbaghara
+354	Akụkụ
+355	Oge agwụla
+356	Zuru ezu
+357	Mgbe achọrọ
+358	Ngwa ngwa
+359	Mgbake
+360	Ahaziri
+361	Elekwasịrị anya
+362	Tinye akụkụ netwọk
+363	ebe nchekwa faịlụ
+364	Akụ
+365	Kwụsị nyocha a? A ga-echekwa nsonaazụ ruo ugbu a dị ka nyocha kagburu.
+366	Enweghị mkpuchi
+367	Nchọpụta
+368	Ngwaọrụ dịka ọnọdụ nchekwa
+369	Injin
+370	Oge njedebe
+371	Ihe akaebe ikpeazụ
+372	Njikwa a tụrụ anya
+373	Ndozi a tụrụ aro
+374	Nwaa ọzọ
+375	Akụ ma ọ bụ akụkụ netwọk
+376	Oghere mepere emepe
+377	Nsonaazụ nyocha n'ime ụbọchị 30
+378	ọkwa ruo njide enyochara
+379	ngwaọrụ echekwara
+380	njedebe ọha nwere mbelata n'aka onye na-eweta n'elu
+381	ihe omume ruo ọkwa
+382	ngwaọrụ nwere nkọwa malware ọhụrụ
+383	ngwaọrụ e nyochara nke ọma n'ime ụbọchị 7
+384	oghere mepere emepe ([0] gafere oge, [1] mechiri n'ime ụbọchị 30)
+385	akụkụ netwọk a na-elele
+386	nchọpụta eziokwu ekwenyere
+387	nyocha zuru oke
+388	Mkpuchi na nzaghachi
+389	Nyocha zuru oke ikpeazụ
+390	Telemetry ikpeazụ
+391	Ngwaọrụ na akụkụ netwọk ọ bụla dị n'ime oke, ma ọ nwere nchekwa, na ihe a ga-edozi ọzọ.
+392	Ịhụ netwọk
+393	E debanyebeghị ngwaọrụ ọ bụla. Chekwaa kọmputa site na Ngwaọrụ.
+394	Enweghị oghere mepere emepe.
+395	[0] mepere emepe
+396	gafere oge
+397	p95 [0] sekọnd
+398	Folda
+399	Folda a ga-enyocha, kewaa ha na rikoma
+400	Nzuzo koodu na mgbidi ọkụ
+401	Nzuzo koodu diski [0], mgbidi ọkụ [1]
+402	Mgbake mgbe ihe merenụ gasịrị
+403	Lelee ọzọ ugbu a
+404	Anwaghị ọzọ
+405	Ule ọzọ dara
+406	Enyochara na emechiela
+407	Ụdị nyocha
+408	Nyocha
+409	Akụkụ netwọk
+410	Aha akụkụ netwọk
+411	Malite nyocha
+412	Amalitere
+413	Ọnọdụ
+414	Dara ada
+415	Echekwara
+416	Echekwaghị
+417	Ngwaọrụ dịka ọnọdụ
+418	[0] amaghị
+419	Enweghị ihu
+420	A na-elele
+421	Ihu
+422	Enweghị nchọpụta egosighị nchekwa: lelee mkpuchi na nsonaazụ nyocha kwa.
+423	Asụsụ
+424	Mkpuchi ntụgharị
+425	Enweghị ụdị mbụ
+426	Isiokwu agba
+427	Ọchịchịrị
+428	Ọdịiche dị elu
+429	Ìhè
+430	Achọtaghị ihe iyi egwu ọhụrụ na faịlụ [0].
+431	Ihe iyi egwu [0]
+432	Ihe iyi egwu [0]
+433	 ka achọtara na faịlụ [0]. Lee Ọkwa na Nkwado iji nyochaa ha.
+434	Nyocha zuru oke
+435	Enweghị ike ichekwa kọmputa a: [0]
+436	Kọmputa a nwere nchekwa. Nyocha n'oge n'ezie na-agba mgbe Agentic Antivirus mepere emepe.
+437	Nyocha ahụ emechaghị: [0]
+438	Na-enyocha…
+439	Na-enyocha draịvụ ọ bụla. Nke a nwere ike iwe ogologo oge.
+440	Na-enyocha Nbudata, Desktọpụ na faịlụ nwa oge…
+441	Enweghị ike ịgụ faịlụ [0].
+442	Otu faịlụ
+443	Njikọ weebụsaịtị
+444	Nabata data nnwale
+446	Omume
+447	Tinye njikọ
+448	Tinye mwepụ
+449	Tinye njikọ
+450	Tinye nyocha zuru oke kwa izu
+451	onye nchịkwa
+452	Mgbasa ozi
+453	Nkwenye mgbasa ozi
+454	Ọrụ metụtara
+455	ọkwa n'ime awa 24 gara aga
+456	Kwe
+457	Kwe ma nyochaa
+458	Onye nchịkwa ga-enye ihe kpatara. A na-edekọ mwepụ ahụ n'akwụkwọ nyocha.
+459	Otu email
+460	Kwado nlọghachi n'ọrụ
+461	Ịkwado omume
+462	Akụ
+463	akụ nọ n'okpuru mbelata mwakpo ugbu a
+464	akụ nwere ọkwa n'ime awa 24
+465	Akwụkwọ nyocha
+466	Nchekwa akpaaka na-aga n'ihu na ngwaọrụ ọ bụla. Ndị a bụ omume chọrọ ka mmadụ kpebie.
+467	Nnweta
+468	Mgbaàmà dị
+469	Enyochara ndabere
+470	Gbochie
+471	Na ndabara ejenti na-ezite telemetry nchekwa na hash faịlụ: aha usoro na ahịrị iwu, ụzọ faịlụ, metadata njikọ netwọk, na nchọpụta. A na-anakọta ọdịnaya faịlụ naanị ma nzukọ gị gbanye ya.
+472	Ikike
+473	Ngalaba
+474	Agbanweela
+475	Ụgwọ
+476	Lelee
+477	họrọ
+478	Họrọ ngwaọrụ
+480	Mechie
+481	Kewara na rikoma
+482	Kpọtụrụ
+483	Njikwa
+484	Mkpuchi dịka oyi akwa nchekwa
+485	dị oke egwu
+486	nnyefe ọkwa dị oke egwu (p95, ụbọchị 30)
+487	Mkpebi na-eche
+488	Jụ
+489	Nkọwa malware
+490	Kọwaa ihe mere
+491	Nkọwa
+492	Nkọwa zuru ezu
+493	Nchọpụta
+494	Ngwaọrụ a ga-enye ikike
+495	ngwaọrụ echekwara nke ọma
+496	ngwaọrụ ekewapụrụ
+497	Ngwaọrụ chọrọ nlebara anya
+498	Ntụziaka
+499	Mpaghara DNS
+500	ibe nbudata
+501	N'oge nnwale n'efu, na na atụmatụ a na-akwụghị ụgwọ, ọdụ njikwa na-egosi mgbasa ozi Google AdSense, ngwa ekwentị na-egosikwa mgbasa ozi Google AdMob, mgbe a jụchara maka nkwenye gị. Ndị debanyere aha na-ahụ mgbasa ozi pere mpe site na 95%. Mgbasa ozi anaghị apụta na ihuenyo nkwado, njide, ịdọ aka na ntị egwu, nlebanya nkewapụ, ịbanye, ịkwụ ụgwọ ma ọ bụ nyocha akwụkwọ.
+502	Mbipụta ọ bụla na-emepụta ụdị ọhụrụ abịanyere aka. Ngwaọrụ na-aga n'ihu na-eme ụdị ikpeazụ enyochara mgbe ha anọghị n'ịntanetị.
+503	Zitere ndị nkwado email na
+504	Njedebe
+505	Equality Software Ltd na-arụ Agentic Antivirus. Ibe a na-akọwa ihe ọrụ ahụ na-anakọta. Onye nwe ngwaahịa ga-enyocha ya tupu e bipụta ya.
+506	Omume ọ bụla na-agbanwe ngwaọrụ, akaụntụ ma ọ bụ okporo data na-agafe injin amụma na ọchịchị AEP-X. Otu nkwado na-ekpuchi otu omume, ihe a na-elekwasị anya ya kpọmkwem, nzukọ a, na oge akọwapụtara.
+507	A na-enyocha ihe ọ bụla ebulitere maka malware na ezigbo ụdị ya. A na-echekwa faịlụ na-enweghị ihe ngosi enyochara, a pụkwara ibudata ha, mana a naghị egosi nlele ha.
+508	Ewezuga
+509	Mwepụ
+510	Ụzọ folda
+511	maka arịrịọ ịnweta ma ọ bụ idozi data.
+512	Oghere
+513	Nweta ejenti maka Windows, Mac ma ọ bụ Linux site na
+514	Gaa na Ngwaọrụ, họrọ Debanye ngwaọrụ, ma mee iwu e gosiri na kọmputa ịchọrọ ichekwa. Ejenti na-amalite nyocha ozugbo ọ natara amụma ya abịanyere aka.
+515	Ahụike
+516	Akụkọ ihe mere eme
+517	Aha onye nnabata
+518	Aghọtara m na ngwaọrụ ga-akwụsị inyocha na igbochi ihe iyi egwu mgbe nnwale gasịrị ruo mgbe a kwụrụ ụgwọ ndebanye aha.
+519	Mmetụta
+520	Bubata zip ma ọ bụ tar
+521	Ihe merenụ
+522	Tinye ụdị asụsụ (ọ bụrụ na nzukọ gị gbanyere otu)
+523	Adreesị IP
+524	Sonye
+525	Sonye na nzukọ gị
+526	A na-ebuga malware a ma ama na nkewapụ, ebe ọ na-enweghị ike ịgba. Ọ bụrụ na ị chere na egbochiri faịlụ na mmejọ, mepee Nkewapụ ma rịọ nlebanya. Onye nchịkwa na-ekpebi, faịlụ ahụ na-alọghachi naanị mgbe nyocha ọhụrụ chọpụtara na ọ dị ọcha.
+527	Asụsụ na-enweghị ntụgharị zuru ezu na-alaghachi na Bekee. A na-atụ mkpuchi, a naghị eme atụmatụ ya.
+528	Mgbanwe ikpeazụ
+529	Oyi akwa
+530	Ihe ịga nke ọma arịrịọ ziri ezi
+531	Iwu ikike
+532	Njikọ, ọ bụrụ na o nwere
+533	Ndị nnabata njikwa a na-enweta n'oge nkewapụ
+534	Kaa dị ka ọkwa ụgha
+535	Ntozu
+536	Mbelata mwakpo
+537	Aha
+538	Aha nzuzo ahụ n'ebe nchekwa nzuzo gị, ọ bụghị nzuzo ahụ n'onwe ya
+539	Ọ dịghị omume na-eche.
+540	Ọ dịghị ihe merenụ mepere emepe.
+541	Ọ dịghị.
+542	Ọ dịghị ihe a kọrọ.
+543	edobeghị
+544	Mara ọkwa mgbe
+545	nke mgbasa ozi e gosiri
+546	Ebe nchekwa ihe omume na-anọghị n'ịntanetị (MB)
+547	Na Android, debanye aha na ngwa Agentic Antivirus site na Google Play. Na iPhone na iPad, ndebanye aha App Store adịbeghị. Ịkwụ ụgwọ na weebụ adịbeghị.
+548	Mepee ihe merenụ
+549	ihe merenụ mepere emepe
+550	Ihe merenụ mepere emepe
+551	Igbu oge p95
+552	kwụrụ ụgwọ ruo
+553	Ụkpụrụ ụzọ
+554	Ndị mmadụ
+555	Kwa ngwaọrụ
+556	Kwa onye ọrụ (na-ekpuchi ngwaọrụ ha niile)
+557	Nlele
+558	Isi
+560	Chekwaa ngwaọrụ
+561	Usoro nkwurịta
+562	Onye na-eweta
+563	Ọkwa onye na-eweta (awa 24)
+564	Njedebe ọha
+565	Bipụta ụdị amụma
+566	Bipụta ụdị abịanyere aka
+567	Ebipụtara
+568	Nyocha ngwa ngwa
+569	Ịgụpụta n'olu na ịkpọ okwu ka e dee na-eji atụmatụ okwu dị n'ime ihe nchọgharị gị. Anyị anaghị edekọ ma ọ bụ echekwa ụda.
+570	Natara
+571	Ngwa nchekwa a na-ewepụ ewepụ
+572	Wepụ
+573	Arịọrọ
+574	Onye rịọrọ
+575	Njigide
+576	Nlọghachi n'ọrụ
+577	Ugbu a
+578	Ihe egwu
+579	Ọrụ
+580	Laghachi
+581	Chekwaa njedebe
+582	Chekwaa iwu ikike
+583	Nyochaa
+584	Usoro oge (cron)
+585	Nyocha ahaziri
+586	Ntụaka nzuzo
+587	Ziga oku
+588	Ziga akụkọ
+589	Ziga njikọ ntọgharị
+590	Ọrụ
+591	Ebumnuche ọrụ
+594	Mgbaàmà
+595	Nha
+596	Ihe ọzọ
+597	Hazie
+598	Nzọụkwụ
+599	Ịkwụsị usoro, ịkewapụ ngwaọrụ, iweghachi faịlụ, itinye mwepụ na ịgbanwe iwu okporo data chọrọ ka mmadụ kwado ha. Otu nkwado na-ekpuchi otu omume, ihe a na-elekwasị anya ya kpọmkwem na oge nwere oke. Ọ bụrụ na ihe ọ bụla agbanwee, kwado ọzọ.
+600	Debanye aha ngwaọrụ a site na Google Play
+601	ọnọdụ ndebanye aha
+603	Sistemụ
+604	Ihe a na-elekwasị anya
+605	Onye enyemaka AI
+606	Onye enyemaka na-achịkọta ọkwa metụtara onwe ha, na-edepụta ihe a hụrụ na njikọ gaa na ihe akaebe, ma na-akpọ ihe ọ bụla ọ na-enweghị ike igosi echiche. Ọ nwere ike ịtụ aro omume mana ọ pụghị ịkwado ha. Ọ bụrụ na ụdị AI adịghị, nyocha, ọkwa na nzaghachi aka na-arụ ọrụ.
+607	Kọmputa a
+608	Naanị TLS, ga-adị na ndepụta ikike ọpụpụ
+609	Onye na-eweta gị n'elu na-anabata idei mmiri okporo data. Ebe a ị na-aza maka njedebe ọha ọ bụla, na-elele ọkwa onye na-eweta, ma na-akwado mmachi okporo data ọhụrụ.
+610	Mmachi okporo data
+611	Asụgharịrị
+612	Ebe mkpofu
+613	ụbọchị nnwale fọdụrụ
+614	Gbanye nchekwa ka ị nyochaa faịlụ na kọmputa a ma lezie anya maka ransomware na izu ohi nzere.
+615	enweghị mkpuchi
+616	Weghachi mgbanwe ikpeazụ
+617	Onye ọrụ
+618	Kwenye email
+619	na-eche nkwado
+620	Anyị na-egosi mgbasa ozi sitere na Google AdSense na ibe ụfọdụ. Kwe ka e gosi mgbasa ozi ahaziri maka gị?
+621	Webhook:
+622	Ihe ngwaọrụ na-ezite
+623	Gịnị bụ nke a?
+624	Mgbe
+625	Mgbe egbochiri ihe
+626	Mgbe nnwale gwụrụ n'akwụghị ụgwọ
+627	Onye
+628	Ị nwere ike ihichapụ akaụntụ gị site na profaịlụ gị. Kpọtụrụ
+629	Aha gị
+630	Nzukọ gị na-enweta nnwale n'efu ụbọchị 30. Mgbe nke ahụ gasịrị ọ na-efu £4.99 kwa ọnwa maka onye ọrụ ọ bụla ma ọ bụ ngwaọrụ ọ bụla.
+631	Nzukọ gị na-ekpebi ogologo oge a na-echekwa telemetry na ihe akaebe. Enweghị ike idezi ma ọ bụ ihichapụ ndekọ nyocha akwụkwọ.
+632	Ikike gị
+633	Kpọọ okwu ka e dee
+634	Kwe iji igwe okwu maka ịkpọ okwu ka e dee? Ihe nchọgharị gị na-ahazi ụda ahụ, anyị anaghị echekwa ya.
+635	Mwepụta ụda
+636	Kwụsịtụ
+637	Ụda olu
+638	Gaa n'ihu
+639	Ọsọ
+640	Kwụsị
+641	Enweghị olu maka asụsụ a.
+642	Olu
+643	E bugara faịlụ ahụ na nkewapụ, ọ pụghị ịgba.
+644	Egbochiri ihe iyi egwu na ngwaọrụ a.

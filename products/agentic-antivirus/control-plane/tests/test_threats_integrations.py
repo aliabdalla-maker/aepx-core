@@ -86,12 +86,12 @@ def test_ddos_asset_coverage_and_uncovered_alert(org):
     admin.post("/v1/assets", json={"kind": "hostname", "value": "shop.example.com", "service": "shop",
                                    "service_owner": "web team", "provider": "upstream-x", "mitigation_policy": "always-on",
                                    "capacity_assumptions": "10 Gbps clean"})
-    r = admin.post("/v1/assets", json={"kind": "ip", "value": "198.51.100.7", "service": "api"})
+    r = admin.post("/v1/assets", json={"kind": "ip", "value": "93.184.216.34", "service": "api"})
     assert r.json()["covered"] is False
     assert any(n["kind"] == "ddos.uncovered_asset" for n in admin.get("/v1/notifications").json())
     cov = admin.get("/v1/ddos/coverage").json()
     assert cov["public_endpoints"] == 2 and cov["accounted_for"] == 1 and cov["accounted_pct"] == 50.0
-    admin.post("/v1/assets", json={"kind": "ip", "value": "198.51.100.7", "service": "api",
+    admin.post("/v1/assets", json={"kind": "ip", "value": "93.184.216.34", "service": "api",
                                    "exception_note": "internal-only, not internet reachable"})
     assert admin.get("/v1/ddos/coverage").json()["uncovered"] == []
 

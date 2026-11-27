@@ -144,7 +144,10 @@ def test_secrets_are_redacted_before_model_calls():
         {"a": "[redacted]", "b": ["[redacted]"]}
 
 
-def test_translation_labels_validation_and_review(new_account, admin_sql):
+def test_translation_labels_validation_and_review(new_account, admin_sql, monkeypatch):
+    # The shipped catalogue now has a complete sw.json; exercise the in-app pipeline as for an untranslated locale.
+    from app import i18n
+    monkeypatch.setattr(i18n, "file_messages", lambda loc: {} if loc == "sw" else i18n._load(loc))
     admin = new_account("i18n")
     llm.configure(api_key="test-key", cap=10.0)
 

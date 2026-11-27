@@ -31,7 +31,9 @@ export default function Devices() {
       <Status error={d.error} loading={!d.data} />
       <table><thead><tr><th>{t("devices.hostname")}</th><th>{t("devices.os")}</th><th>{t("devices.status")}</th><th>{t("ui.definitions")}</th>
         <th>{t("devices.policy")}</th><th>{t("devices.last_seen")}</th><th>{t("devices.issues")}</th><th>{t("ui.scan")}</th></tr></thead>
-        <tbody>{(d.data ?? []).filter((x) => localeIncludes(x.hostname, q, locale)).map((x) => <tr key={x.id}>
+        <tbody>{d.data && d.data.filter((x) => localeIncludes(x.hostname, q, locale)).length === 0 &&
+          <tr><td colSpan={8}>{d.data.length === 0 ? t("security.noDevices") : t("common.none")}</td></tr>}
+          {(d.data ?? []).filter((x) => localeIncludes(x.hostname, q, locale)).map((x) => <tr key={x.id}>
           <td>{x.hostname}{x.criticality === "critical" && <span className="chip">{t("ui.critical")}</span>}
             {x.isolation_state === "isolated" && <span className="chip sim">isolated until {formatRelative(x.isolation_expires_at, locale)}</span>}</td>
           <td>{x.os} {x.os_version}</td>
