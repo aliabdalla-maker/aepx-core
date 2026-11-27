@@ -635,3 +635,5 @@
 642	Hang
 643	A fájl karanténba került, és nem tud futni.
 644	Egy fenyegetés blokkolva lett ezen az eszközön.
+646	Titok cseréje
+645	Új webhook-titkot ad ki? A jelenlegi titok azonnal megszűnik működni.

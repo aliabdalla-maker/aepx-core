@@ -635,3 +635,5 @@
 642	Voz
 643	El archivo se trasladó a la cuarentena y no puede ejecutarse.
 644	Se bloqueó una amenaza en este dispositivo.
+646	Rotar secreto
+645	¿Emitir un nuevo secreto de webhook? El secreto actual deja de funcionar de inmediato.

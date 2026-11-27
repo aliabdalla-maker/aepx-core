@@ -643,5 +643,7 @@
 "No voice available for this language.",
 "Voice",
 "The file was moved to quarantine and cannot run.",
-"A threat was blocked on this device."
+"A threat was blocked on this device.",
+"Issue a new webhook secret? The current secret stops working immediately.",
+"Rotate secret"
 ]

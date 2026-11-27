@@ -635,3 +635,5 @@
 642	Voix
 643	Le fichier a été placé en quarantaine et ne peut pas s’exécuter.
 644	Une menace a été bloquée sur cet appareil.
+646	Renouveler le secret
+645	Émettre un nouveau secret de webhook ? Le secret actuel cesse de fonctionner immédiatement.
