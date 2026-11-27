@@ -1,6 +1,6 @@
 # Deploy runbook — R1 close-out and R2 build (v0.1.2)
 
-Owner and release approver: **Ali**. Branch: `feat/aav-r1-closeout-r2` (11 commits on top of `master` `97c4746`).
+Owner and release approver: **Ali**. Branch: `feat/aav-r1-closeout-r2` (18 commits on top of `master` `97c4746`).
 Every step names the requirement IDs it closes. Commands assume a checkout of `aliabdalla-maker/aepx-core`.
 
 ## 0. Land the branch (≈10 min)
@@ -144,8 +144,35 @@ permissions: `control-plane/app/providers/__init__.py`.
 - gRPC ingest: set `AAV_GRPC_PORT=50051` and route `grpc.<your host>` through the TLS proxy to
   `control-plane:50051` (h2c). Clients call `aav.ingest.v1.Ingest/Submit` with a `google.protobuf.Struct` and the
   metadata `x-aav-integration-id`, `x-aav-webhook-secret`.
-- SQL and IMAP pull run every `AAV_POLL_SECONDS` (default 300) for integrations with `protocol: sql` or `imap`
-  (details in `control-plane/app/transports.py`).
+- SQL, IMAP, MQTT, AMQP and SFTP pull run every `AAV_POLL_SECONDS` (default 300) for integrations with
+  `protocol: sql|imap|mqtt|amqp|sftp` (details in `control-plane/app/transports.py`). Outbound alerts go to Slack,
+  Teams, HubSpot and ServiceNow integrations (`providers/outbound.py`).
+- Migrations 007 (transport protocols, signal kinds) and 008 (scrubs a pasted key out of `secret_ref`) run on start.
+  **Before step 6:** revoke the OpenRouter key, rotate the webhook secret of the integration and the device enrolment
+  token that appear in the 27 Nov console screenshots, then re-save the key with `PUT /integrations/{id}/secret`.
+
+## 13. Website — www.softwareequality.com/apps/agentic-antivirus/ (DLV-15)
+
+```bash
+python3 products/agentic-antivirus/website/build_site.py   # writes website/dist/agentic-antivirus-website.zip
+```
+Upload the zip contents into `public_html/` (it contains `apps/agentic-antivirus/index.html`, `privacy.html`,
+`icon.svg` and the product icons), or paste `dist/wordpress/agentic-antivirus-block.html` into the WordPress page.
+The page now says version 0.1.2, real-time blocking on all three desktop platforms, the new connectors and the
+100-language console. Download buttons appear by themselves once `releases.json` entries carry a signed URL and SHA-256
+on downloads.softwareequality.com. Check: `curl -s https://www.softwareequality.com/apps/agentic-antivirus/ | grep 0.1.2`.
+
+## 14. Android AAB to Google Play (B-03, DST-02)
+
+The AAV app (`com.equalitysoftware.agenticantivirus`, `clients/android`) now has its own release workflow,
+`.github/workflows/aav-android-release.yml` (the older `android-release.yml` builds the AEP-X companion).
+```bash
+gh workflow run aav-android-release.yml -f version_code=<higher than any AAV upload> -f version_name=0.1.2 -f upload_to_play=true
+```
+It runs in the `play-release` environment (approve it), builds and signs the AAB with the `AEPX_UPLOAD_*` secrets,
+prints the upload-key SHA-256 (compare with Play Console > App integrity), and uploads it as a **draft on the internal
+track** with `AEPX_PLAY_SERVICE_ACCOUNT_JSON` (the service account needs Release access to the AAV app). Roll the
+draft out to testers in Play Console. The signed AAB is also kept as the run artifact `aav-android-release-0.1.2`.
 
 ## Still with you (not code)
 
@@ -155,6 +182,6 @@ permissions: `control-plane/app/providers/__init__.py`.
 | Stores | Play Console app + service account; App Store Connect app | B-03, B-05, PRJ-21, DST-02/03/09, OBJ-08, DLV-12, PLT-03, UI-02/08/10 |
 | Kernel blocking | Microsoft altitude + attestation signing (EV cert); Apple Endpoint Security entitlement | B-01, B-04 |
 | Live providers | Accounts and keys for the providers you choose (step 11) | B-06, then DDoS/load B-08/B-09, NFR-02, DDOS-02/04, DDL-03 |
-| Translations | Run `agentic-antivirus-i18n.yml` (local M2M100/MADLAD models, or ANTHROPIC_API_KEY); native per-locale QA | L10N-01/10/11 |
-| Remaining transports | SFTP, AMQP, MQTT; CRM/ERP/messaging/IoT connectors once a product is chosen | INT-02, INT-03 |
+| Translations | All 99 locales are machine-translated and pass QA; native review per locale with `tools/i18n_review.py` | L10N-10/11 |
+| ERP connector | Choose the ERP product (SAP, Dynamics, Odoo…) so a vendor adapter can be added; generic SQL/SFTP pull works today | INT-03 |
 | Later stages | Managed, Agentic, Expanded release stages and optional platforms are roadmap scope after R2 | REL-02…05, PLT-04 |

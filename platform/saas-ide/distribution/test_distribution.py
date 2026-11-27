@@ -160,3 +160,15 @@ def test_website_package_is_in_sync_and_self_contained():
     block = (here / "website" / "wordpress" / "aepx-downloads-block.html").read_text(encoding="utf-8")
     assert "<html" not in block and "https://www.softwareequality.com/aepx/logo.svg" in block
     assert ".aepx-page" in block  # styles scoped so they cannot restyle the WordPress theme
+
+
+def test_upload_agentic_antivirus_package(aab):
+    s = FakeSession()
+    out = play_upload.upload(s, aab, 7, "0.1.2 (7)", package="com.equalitysoftware.agenticantivirus")
+    assert out["package"] == "com.equalitysoftware.agenticantivirus"
+    assert all("com.equalitysoftware.agenticantivirus" in u for _, u, _ in s.calls)
+
+
+def test_upload_rejects_unlisted_package(aab):
+    with pytest.raises(play_upload.PlayUploadError, match="allowlisted"):
+        play_upload.upload(FakeSession(), aab, 7, "x", package="com.example.other")
