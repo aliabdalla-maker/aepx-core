@@ -29,6 +29,7 @@ router = APIRouter(prefix="/v1", tags=["integrations"])
 # Adapters whose provider contract is covered by tests, keyed by (signal_kind, provider) — app/providers.
 VERIFIED_ADAPTERS = providers.REGISTRY
 CREDENTIAL_CHECK_MAX_AGE_S = 24 * 3600
+OUTBOUND_KINDS = ("messaging", "crm", "itsm")
 TEST_TRANSPORT = None          # tests only: an httpx transport standing in for the providers' APIs
 
 
@@ -42,7 +43,7 @@ def build_adapter(cur, integ: dict):
     secret = crypto.open_secret(bytes(row["nonce"]), bytes(row["ciphertext"]),
                                 f"{integ['tenant_id']}:{integ['id']}") if row else ""
     kw = {"http": __import__("httpx").Client(transport=TEST_TRANSPORT), "check_egress": False} if TEST_TRANSPORT else {}
-    if cls is providers.REGISTRY[("backup", "s3")]:
+    if cls is providers.REGISTRY[("backup", "s3")] or integ["signal_kind"] in OUTBOUND_KINDS:
         return cls(integ.get("config") or {}, secret, **kw)
     return cls(integ.get("config") or {}, secret, endpoint=integ.get("endpoint") or "", **kw)
 
@@ -109,7 +110,7 @@ def list_integrations(p: Principal = Depends(need("integrations.read"))):
 
 @router.post("/integrations", status_code=201)
 def create_integration(body: IntegrationIn, p: Principal = Depends(need("integrations.write"))):
-    if body.signal_kind not in INGEST_CATEGORIES and body.signal_kind not in ("smtp", "other"):
+    if body.signal_kind not in INGEST_CATEGORIES and body.signal_kind not in ("smtp", "other") + OUTBOUND_KINDS:
         raise HTTPException(422, "unknown signal_kind")
     if "password" in json.dumps(body.config).lower() or "secret" in json.dumps(body.config).lower():
         raise HTTPException(422, "credentials belong in the secret store; pass secret_ref instead")
@@ -392,3 +393,23 @@ def url_reputation(body: UrlCheckIn, p: Principal = Depends(need("alerts.read"))
         audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="url.reputation_check", target=body.url[:200],
                      detail={"verdict": verdict, "sources": [r.get("source") for r in results]})
     return {"url": body.url, "verdict": verdict, "results": results}
+
+
+def deliver_outbound(tenant_id, kind: str, title: str, body: dict) -> list[dict]:
+    """INT-03: send one notification to every verified_live messaging/CRM/ITSM integration of the tenant.
+    Called after commit (see incidents.notify); failures are recorded on the integration, never raised."""
+    out = []
+    with db.tenant_tx(tenant_id) as cur:
+        cur.execute("SELECT * FROM aav.integrations WHERE signal_kind = ANY(%s) AND maturity = 'verified_live' "
+                    "AND enabled", (list(OUTBOUND_KINDS),))
+        for integ in cur.fetchall():
+            if kind not in (integ["config"].get("kinds") or [kind]):      # optional per-integration filter
+                continue
+            try:
+                res = {"ok": True, **build_adapter(cur, integ).send(kind, title, body)}
+            except providers.ProviderError as exc:
+                res = {"ok": False, "reason": str(exc)[:300]}
+            res["checked_at"] = datetime.now(timezone.utc).isoformat()
+            cur.execute("UPDATE aav.integrations SET last_health = %s WHERE id = %s", (json.dumps(res), integ["id"]))
+            out.append({"integration_id": str(integ["id"]), **res})
+    return out

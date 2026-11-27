@@ -18,6 +18,7 @@ decrypted only for the call. Every outbound host must pass the egress policy (AA
 | backup | s3 | verify_backup (newest object age) | "ACCESS_KEY:SECRET_KEY" (config: endpoint, region, bucket, prefix) |
 | url_reputation | urlhaus | lookup | abuse.ch Auth-Key |
 | url_reputation | google_safe_browsing | lookup | API key |
+| messaging / crm / itsm | slack, teams, hubspot, servicenow | outbound notifications and tickets | see providers/outbound.py |
 """
 from __future__ import annotations
 
@@ -25,6 +26,7 @@ from app.providers.base import Provider, ProviderError, Unsupported
 from app.providers.cloudflare import Cloudflare
 from app.providers.identity import EntraId, GoogleWorkspace
 from app.providers.network import OPNsense
+from app.providers.outbound import OUTBOUND
 from app.providers.reputation import GoogleSafeBrowsing, UrlHaus
 from app.providers.storage import S3Backup
 
@@ -38,6 +40,7 @@ REGISTRY: dict[tuple[str, str], type[Provider]] = {
     ("backup", "s3"): S3Backup,
     ("url_reputation", "urlhaus"): UrlHaus,
     ("url_reputation", "google_safe_browsing"): GoogleSafeBrowsing,
+    **OUTBOUND,
 }
 
 __all__ = ["REGISTRY", "Provider", "ProviderError", "Unsupported"]

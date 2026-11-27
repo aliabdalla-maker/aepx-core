@@ -67,3 +67,19 @@ def test_smoke_tool_fails_on_wrong_version_and_unreachable_host(live_api):
     down = smoke.Run()
     smoke.check_api(down, "http://127.0.0.1:9", "0.1.2", None)
     assert not down.passed and "unreachable" in down.checks[0]["detail"]
+
+
+def test_load_test_tool_runs_a_small_fleet(live_api, new_account):
+    """NFR-02 tooling: the same tool that runs the 1,000-endpoint test, at small scale against a real control plane."""
+    import argparse
+    import asyncio
+    load = _load("load_test", PRODUCT / "tools" / "load_test.py")
+    admin = new_account("load")
+    if not admin.get("/v1/policies").json():
+        admin.post("/v1/policies", json={"name": "default", "body": {"on_access": True, "on_execute": True}})
+    tok = admin.post("/v1/enrollment-tokens", json={"max_uses": 25}).json()["token"]
+    a = argparse.Namespace(api=live_api, token=tok, agents=20, minutes=0.05, interval=1, events=5, backlog=20,
+                           connections=20, max_heartbeat_p95=5000, max_events_p95=10000, max_error_rate=0.01)
+    res = asyncio.run(load.main_async(a))
+    assert res["enrolled"] == 20 and res["passed"], res
+    assert res["operations"]["heartbeat"]["requests"] >= 20 and res["operations"]["reconnect_events"]["errors"] == 0

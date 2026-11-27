@@ -10,6 +10,7 @@ Pull (python -m app.admin poll-integrations, or every AAV_POLL_SECONDS in the co
   returning the canonical columns (external_id, category, severity, observed_at, and optionally asset,
   device_hostname, device_ip, user_ref, confirmed, data) with a %(cursor)s parameter; config.cursor_column (default
   external_id) advances the cursor. Runs in a READ ONLY transaction with a statement timeout.
+- MQTT (IoT), AMQP and SFTP: see poll_mqtt, poll_amqp, poll_sftp below.
 - IMAP: protocol "imap" on an email integration, endpoint imaps://host:993, config.username, config.mailbox
   (default INBOX), credential = password. Each unseen message becomes a phishing_report (malicious_url when a URL
   in it is on the detection bundle's reputation list); the message is then marked seen.
@@ -164,6 +165,115 @@ def poll_imap(integ: dict, secret: str, *, check_egress: bool = True, imap_facto
     return out, None
 
 
+def _signals(raw: bytes) -> list[dict]:
+    """A message or file holds one JSON signal, a JSON array of signals, or JSON lines."""
+    text = raw.decode("utf-8", errors="replace").strip()
+    if not text:
+        return []
+    try:
+        v = json.loads(text)
+        return v if isinstance(v, list) else [v]
+    except ValueError:
+        return [json.loads(line) for line in text.splitlines() if line.strip()]
+
+
+def poll_mqtt(integ: dict, secret: str, *, check_egress: bool = True, window_s: float = 5.0,
+              client_factory=None) -> tuple[list[dict], None]:
+    """IoT / MQTT: persistent session (clean_session off, QoS 1, client id per integration), so the broker keeps
+    messages between polls; collects for window_s seconds. Endpoint mqtts://host:8883 (mqtt:// only when
+    config.private_network_approved). Each message: one JSON signal, an array, or JSON lines."""
+    import time
+    import paho.mqtt.client as mqtt
+    cfg = integ["config"]
+    u = urlparse(integ["endpoint"])
+    if u.scheme not in ("mqtts", "mqtt") or (u.scheme == "mqtt" and not cfg.get("private_network_approved")):
+        raise ValueError("MQTT must use mqtts:// (TLS) unless the endpoint is an approved private network")
+    if check_egress:
+        netpolicy.check_endpoint(integ["endpoint"].replace("mqtt://", "mqtts://"),
+                                 allow_private=bool(cfg.get("private_network_approved")))
+    got: list[dict] = []
+    c = (client_factory or mqtt.Client)(mqtt.CallbackAPIVersion.VERSION2, client_id=f"aav-{integ['id']}",
+                                         clean_session=False)
+    if cfg.get("username"):
+        c.username_pw_set(cfg["username"], secret or None)
+    if u.scheme == "mqtts":
+        c.tls_set()
+    c.on_message = lambda _c, _u, m: got.extend(_signals(m.payload))
+    c.on_connect = lambda cl, _u, _f, rc, _p=None: cl.subscribe(cfg.get("topic", "aav/signals/#"), qos=1)
+    c.connect(u.hostname, u.port or (8883 if u.scheme == "mqtts" else 1883), keepalive=30)
+    c.loop_start()
+    try:
+        time.sleep(window_s)
+    finally:
+        c.loop_stop()
+        c.disconnect()
+    return got[:MAX_POLL_ROWS], None
+
+
+def poll_amqp(integ: dict, secret: str, *, check_egress: bool = True, connection_factory=None) -> tuple[list[dict], None]:
+    """AMQP 0-9-1 (RabbitMQ and compatible): basic_get from config.queue until empty, ack each message after it
+    has been read. Endpoint amqps://host:5671/vhost; config.username; credential = password."""
+    import pika
+    cfg = integ["config"]
+    if check_egress:
+        netpolicy.check_endpoint(integ["endpoint"], allow_private=bool(cfg.get("private_network_approved")))
+    if connection_factory is None:
+        params = pika.URLParameters(integ["endpoint"])
+        params.credentials = pika.PlainCredentials(cfg.get("username", "guest"), secret)
+        connection_factory = lambda: pika.BlockingConnection(params)  # noqa: E731
+    conn = connection_factory()
+    out: list[dict] = []
+    try:
+        ch = conn.channel()
+        while len(out) < MAX_POLL_ROWS:
+            method, _props, body = ch.basic_get(queue=cfg["queue"], auto_ack=False)
+            if method is None:
+                break
+            out.extend(_signals(body))
+            ch.basic_ack(method.delivery_tag)
+    finally:
+        conn.close()
+    return out, None
+
+
+def poll_sftp(integ: dict, secret: str, *, check_egress: bool = True, transport_factory=None) -> tuple[list[dict], str]:
+    """SFTP drop folder: reads new *.json / *.jsonl files under config.path (sorted by name, newer than the cursor),
+    each holding signals as JSON or JSON lines. Endpoint sftp://host:22; config.username, config.host_key
+    (base64 of the server's public key: required, the connection is refused on mismatch); credential = password."""
+    import fnmatch
+    import paramiko
+    cfg = integ["config"]
+    u = urlparse(integ["endpoint"])
+    if check_egress:
+        netpolicy.check_endpoint(integ["endpoint"], allow_private=bool(cfg.get("private_network_approved")))
+    if transport_factory is None:
+        def transport_factory():
+            t = paramiko.Transport((u.hostname, u.port or 22))
+            t.connect(username=cfg["username"], password=secret)
+            return t
+    t = transport_factory()
+    try:
+        key = t.get_remote_server_key()
+        if not cfg.get("host_key") or key.get_base64() != cfg["host_key"]:
+            raise ValueError("SFTP host key does not match config.host_key (refusing to read)")
+        sftp = paramiko.SFTPClient.from_transport(t)
+        base = cfg.get("path", ".")
+        cursor = cfg.get("poll_cursor", "")
+        names = sorted(n for n in sftp.listdir(base)
+                       if fnmatch.fnmatch(n, cfg.get("pattern", "*.json*")) and n > cursor)
+        out: list[dict] = []
+        last = cursor
+        for n in names:
+            with sftp.open(f"{base.rstrip('/')}/{n}", "rb") as f:
+                out.extend(_signals(f.read(5 * 1024 * 1024)))
+            last = n
+            if len(out) >= MAX_POLL_ROWS:
+                break
+        return out, last or None
+    finally:
+        t.close()
+
+
 def poll_integration(iid: UUID, tid: UUID, **kw) -> dict:
     with db.tenant_tx(tid) as cur:
         integ, secret = _load(cur, iid)
@@ -173,6 +283,12 @@ def poll_integration(iid: UUID, tid: UUID, **kw) -> dict:
             rows, cursor = poll_sql(integ, secret, **{k: v for k, v in kw.items() if k == "check_egress"})
         elif integ["protocol"] == "imap":
             rows, cursor = poll_imap(integ, secret, **kw)
+        elif integ["protocol"] == "mqtt":
+            rows, cursor = poll_mqtt(integ, secret, **kw)
+        elif integ["protocol"] == "amqp":
+            rows, cursor = poll_amqp(integ, secret, **kw)
+        elif integ["protocol"] == "sftp":
+            rows, cursor = poll_sftp(integ, secret, **kw)
         else:
             raise ValueError(f"protocol {integ['protocol']} is not pulled")
     except Exception as exc:                        # unreachable source, bad query, auth failure
