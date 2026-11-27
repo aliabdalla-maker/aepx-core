@@ -10,3 +10,9 @@ docker compose exec -T postgres pg_dump -U aav_owner -d aav --format=custom \
 sha256sum "$OUT/aav-$STAMP.dump.enc" > "$OUT/aav-$STAMP.dump.enc.sha256"
 ls -1t "$OUT"/aav-*.dump.enc | tail -n +15 | xargs -r -I{} sh -c 'rm -f "{}" "{}.sha256"'
 echo "backup written: $OUT/aav-$STAMP.dump.enc"
+# Off-VM copy to OCI Object Storage (BE-05, OCI-10) when a bucket is configured; the file is already encrypted.
+if [ -n "${AAV_OBJECT_STORE_BUCKET:-}" ]; then
+  docker compose exec -T control-plane python -m app.admin store-backup "aav-$STAMP.dump.enc" < "$OUT/aav-$STAMP.dump.enc" \
+    && echo "off-VM copy stored in bucket $AAV_OBJECT_STORE_BUCKET" \
+    || echo "WARNING: off-VM copy failed; the local backup is intact" >&2
+fi

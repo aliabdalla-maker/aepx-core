@@ -41,6 +41,10 @@ async def lifespan(_app: FastAPI):
 app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.2", openapi_url="/v1/openapi.json",
               docs_url="/v1/docs", lifespan=lifespan)
 
+from app import telemetry  # noqa: E402
+
+TELEMETRY_ENABLED = telemetry.setup(app)
+
 for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
           integrations.router, threats.router, billing.router, files.router, platform.router, security.router,
           ai.router, harness.router, graphql_api.router, mcp.router, memory.router):

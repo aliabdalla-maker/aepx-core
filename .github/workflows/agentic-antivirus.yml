@@ -118,7 +118,7 @@ jobs:
       - run: cd $P/web && npm ci && npm audit --audit-level=high --omit=dev
       - name: Compose guard (loopback-only, no privileged, Always Free totals)
         run: |
-          for f in compose.yml compose.yml:compose.cohost.yml compose.yml:compose.staging.yml; do
+          for f in compose.yml compose.yml:compose.cohost.yml compose.yml:compose.staging.yml compose.yml:compose.cohost.yml:compose.otel.yml; do
             COMPOSE_FILE=$f python $P/deploy/guard.py
           done
           bash -n $P/deploy/*.sh
