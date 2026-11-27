@@ -1,0 +1,645 @@
+0	Skip to main content
+1	Add a permanent exclusion
+2	Apply a traffic restriction
+3	Collect device metadata
+4	Isolate a device from the network
+5	Quarantine a file
+6	Release a device from isolation
+7	Restore a quarantined file
+8	Sign a user out everywhere
+9	Roll back a traffic restriction
+10	Roll back an update
+11	Scan devices
+12	Suspend a user account
+13	Stop a process
+14	Approve
+15	Deny
+16	Send to devices
+17	Approval expires [0]
+18	Proposed by the AI assistant
+19	Advertisement
+20	Action
+21	Agents
+22	Ask
+23	Ask the security assistant
+24	Answers come from your devices, open incidents and gaps. The assistant cannot change anything.
+25	Based on
+26	[0] claim without evidence was removed
+27	[0] claims without evidence were removed
+28	Claude
+29	Self-hosted model
+30	Rules (no model)
+31	Draft a remediation plan
+32	Each step is a proposal. Nothing runs until someone approves it.
+33	Question
+34	For example: which devices need attention?
+35	Suggested severity
+36	Summary
+37	Targets
+38	Summarise this incident
+39	Why
+40	Detected
+41	Report something suspicious
+42	Rule
+43	Severity
+44	Alert
+45	Agentic Antivirus
+46	Add files
+47	Add a folder
+48	Add images
+49	[0] attachment
+50	[0] attachments
+51	Attachments
+52	Take a photo
+53	Camera access was not allowed. Allow it in your browser, or use your device camera app.
+54	Camera preview
+55	This browser cannot open the camera here.
+56	Capture
+57	Close the assistant
+58	What are these files, and are they safe?
+59	File
+60	Ask about your security, or attach files, a folder, images or a camera photo. Each attachment is scanned first and nothing is stored.
+61	[0] image was
+62	[0] images were
+63	 described by the model.
+64	For example: is this download safe?
+65	Clean text and images may be sent to the AI model your organisation enabled. Malicious files never are.
+66	[0] file was not added
+67	[0] files were not added
+68	: up to [0] files, [1] MB each and [2] MB in total.
+69	Remove [0]
+70	Scan and ask
+71	Scan results
+72	Type
+73	Use the device camera
+74	Result
+75	No known malware
+76	Malicious
+77	Not scanned
+78	The audit chain is broken at entry [0].
+79	The audit chain is intact: [0] entries verified.
+80	Email
+81	Forgot password?
+82	Sign in with Google
+83	Google sign-in did not work. Try again, or use your email and password.
+84	Sign in
+85	Sign out
+86	New password
+87	or
+88	Organisation
+89	Password
+90	Password changed. Sign in with your new password.
+91	At least 12 characters.
+92	Create account
+93	Send the link again
+94	If that account still needs confirming, a new link is on its way. Check your spam folder too.
+95	Reset password
+96	If an account uses that address, we have sent a reset link. It works for one hour.
+97	Confirm your email address before you sign in. Open the link we sent to [0].
+98	Email verified. You can sign in now.
+99	This link has expired or was already used. Sign in to get a new one.
+100	Check your email to verify your address.
+101	Subscribing reduces adverts by 95%.
+102	Your trial has ended.
+103	Subscribed until [0]
+104	Keep everything free with full adverts
+105	Stop everything, including device protection, until someone pays
+106	Console needs a subscription; devices stay protected
+107	£4.99 per month
+108	Subscribe
+109	Free trial: 
+110	[0] day left
+111	[0] days left
+112	Cancel
+113	Delete
+114	Something went wrong.
+115	Export
+116	Loading…
+117	N/A
+118	Never
+119	Next
+120	no
+121	Nothing to show.
+122	off
+123	on
+124	Previous
+125	Refresh
+126	Save
+127	Search
+128	Simulation (test data)
+129	Status
+130	Unavailable
+131	Unknown
+132	Updated [0]
+133	Working…
+134	yes
+135	[0] alert in 24 hours
+136	[0] alerts in 24 hours
+137	[0] device
+138	[0] devices
+139	Data as of [0]
+140	[0] open incident
+141	[0] open incidents
+142	[0] approval waiting
+143	[0] approvals waiting
+144	confirmed
+145	suspected
+146	Enrol a device
+147	Device
+148	Not reporting
+149	Outdated policy
+150	Sensor disabled
+151	Stale definitions
+152	Issues
+153	Last seen
+154	Operating system
+155	Policy
+156	Run on the device within 24 hours (one use):
+157	Protection
+158	Copy
+159	Download
+160	Move
+161	New folder
+162	Rename
+163	Restore
+164	Move to trash
+165	Upload
+166	Help
+167	[0] text on this page is machine translated and not yet reviewed.
+168	[0] texts in this language are machine translated and not yet reviewed.
+169	This language is not translated yet, so English is shown.
+170	approved
+171	Observed facts
+172	Hypotheses (not confirmed)
+173	Hypothesis, [0] confidence: [1]
+174	Run investigation
+175	Missing evidence
+176	Missing: [0]
+177	Read aloud
+178	Recommended actions
+179	Evidence timeline
+180	inbound webhook
+181	Signals from your identity provider, DNS, firewalls and other tools. New integrations start as not available; only a provider adapter that passed its contract test can be marked live. Test data is labelled as simulation everywhere it appears.
+182	Not connected (stub)
+183	Test data only
+184	Not available
+185	Live (verified)
+186	Secret (shown once):
+187	Approvals
+188	Alerts
+189	Audit
+190	Subscription
+191	Dashboard
+192	DDoS and availability
+193	Devices
+194	Files
+195	Incidents
+196	Integrations
+197	Policies
+198	Privacy
+199	Quarantine
+200	Response
+201	Security
+202	Settings
+203	Quarantine known malware automatically
+204	Watch for suspicious behaviour
+205	Block suspicious scripts
+206	Collect file contents for investigation (off by default)
+207	Allow network isolation
+208	Scan files when they are opened or written
+209	Scan downloads
+210	Scan programs when they start
+211	Protect the agent from changes
+212	Warn about known malicious links
+213	Reason
+214	Request review
+215	Restore after fresh scan
+216	median time to verified eradication (n=[0], unresolved [1])
+217	fixes with a passing retest
+218	recurrence after recovery
+219	verified virus removal
+220	safe return to service
+221	recovery scans complete
+222	Quarantine-only outcomes ([0]) and reimaged devices ([1]) are counted separately; quarantine alone is never counted as removal.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Waiting for approval
+227	Production evidence
+228	Record what was verified in production, on which assets, with which version. Entries cannot be edited.
+229	Version
+230	Change mode
+231	no evidence
+232	failed
+233	passed
+234	pending
+235	Check playbook progress
+236	Devices that can respond
+237	All devices
+238	[0] pilot device
+239	[0] pilot devices
+240	Complete
+241	Complete when
+242	Drill
+243	Observe
+244	Respond
+245	Coverage
+246	[0] observed, [1] able to respond
+247	Data
+248	Data age
+249	Live
+250	Test data
+251	not executed
+252	receipt
+253	in progress
+254	unknown
+255	Dispatch
+256	Evidence
+257	It ran
+258	Stale
+259	Data feeds
+260	Version or digest
+261	Environment
+262	Outcome
+263	Owner
+264	Requirement
+265	Asset or cohort
+266	Show
+267	All
+268	Not complete
+269	On for the whole service
+270	On for this organisation
+271	Stop every new response action for this organisation? Protection and scanning keep running.
+272	Allow response actions again
+273	Stop all response actions
+274	Kill switch
+275	Kind
+276	Median minutes open ([0] open, oldest [1] min)
+277	Policy refusals
+278	Drills and simulations (not counted above)
+279	Repeated actions (target 0)
+280	Median feed delay (p95 [0] s, n=[1])
+281	Approvals overdue ([0] waiting, [1] min target)
+282	Median signal to triage (p95 [0] min, n=[1], [2] untriaged)
+283	Actions verified independently ([0]/[1])
+284	Window: [0]. A receipt alone never counts as verified. Missing data shows as unavailable.
+285	Response measures
+286	Last event
+287	Agents propose; a fixed policy decides what runs. Every action shows its approval, receipt and independent check.
+288	Stage
+289	Awaiting approval
+290	Denied
+291	Expired
+292	Failed
+293	Needs manual reconciliation
+294	Proposed
+295	Queued
+296	Running
+297	Verification pending
+298	Verified
+299	Live state
+300	Mode
+301	Simulation
+302	Scans and data collection run. Other actions stay proposals.
+303	Approved actions run on the chosen devices.
+304	Actions run against test adapters only. Nothing on your devices changes.
+305	No actions yet.
+306	Nothing is waiting for approval.
+307	No production evidence recorded yet.
+308	No devices or integrations are sending data yet.
+309	It did not run
+310	Observed
+311	What happened
+312	DDoS response
+313	False positive and restoration
+314	Identity, phishing and suspicious traffic
+315	Malware and suspicious downloads
+316	Network visibility and device posture
+317	Post-compromise recovery
+318	Ransomware or suspected compromise
+319	Playbook
+320	Playbooks
+321	Policy version
+322	Version installed
+323	Firewall isolation
+324	Data received
+325	File removed
+326	Process stopped
+327	Provider state
+328	Recorded
+329	Scan complete
+330	Simulated
+331	Out of quarantine
+332	In quarantine
+333	Actions and receipts
+334	Record outcome
+335	Record
+336	Can respond
+337	Source
+338	device
+339	console
+340	simulation
+341	Starts when
+342	Updated
+343	Independent check
+344	Waiting
+345	Archive limit
+346	Encrypted archive
+347	Excluded
+348	Inaccessible
+349	Time limit
+350	Too large
+351	Unsupported format
+352	Cancelled
+353	Missed
+354	Partial
+355	Timed out
+356	Full
+357	On demand
+358	Quick
+359	Recovery
+360	Scheduled
+361	Targeted
+362	Add segment
+363	archives
+364	Assets
+365	Stop this scan? Results so far are kept as a cancelled scan.
+366	Not covered
+367	Detections
+368	Devices by protection state
+369	Engine
+370	Due
+371	Last evidence
+372	Expected control
+373	Proposed fix
+374	Retest
+375	Asset or segment
+376	Open gaps
+377	Scan outcomes in 30 days
+378	alert to verified containment
+379	devices protected
+380	public endpoints with upstream mitigation
+381	event to alert
+382	devices with current definitions
+383	devices with a full scan in 7 days
+384	open gaps ([0] overdue, [1] closed in 30 days)
+385	network segments monitored
+386	confirmed true positives
+387	scans completed
+388	Coverage and response
+389	Last full scan
+390	Last telemetry
+391	Every device and network segment in scope, whether it is protected, and what to fix next.
+392	Network visibility
+393	No devices enrolled yet. Protect a computer from Devices.
+394	No open gaps.
+395	[0] open
+396	overdue
+397	p95 [0] s
+398	Folders
+399	Folders to scan, separated by commas
+400	Encryption and firewall
+401	Disk encryption [0], firewall [1]
+402	Recovery after incidents
+403	Check again now
+404	Not retested
+405	Retest failed
+406	Verified closed
+407	Scan type
+408	Scans
+409	Segment
+410	Segment name
+411	Start scan
+412	Started
+413	State
+414	Degraded
+415	Protected
+416	Unprotected
+417	Devices by state
+418	[0] unknown
+419	No visibility
+420	Monitored
+421	Visibility
+422	No detections does not prove protection: check coverage and scan results too.
+423	Language
+424	Translation coverage
+425	No earlier version
+426	Theme
+427	Dark
+428	High contrast
+429	Light
+430	No new threats found in [0] files.
+431	[0] threat
+432	[0] threats
+433	 found in [0] files. See Alerts and Approvals to review them.
+434	Full scan
+435	Could not protect this computer: [0]
+436	This computer is protected. Real-time scanning runs while Agentic Antivirus is open.
+437	The scan did not finish: [0]
+438	Scanning…
+439	Scanning every drive. This can take a long time.
+440	Scanning Downloads, Desktop and temporary files…
+441	[0] files could not be read.
+442	A file
+443	A website link
+444	Accept test data
+445	action.approve
+446	Actions
+447	Add an integration
+448	Add exclusion
+449	Add integration
+450	Add weekly full scan
+451	administrator
+452	Advertising
+453	Advertising consent
+454	Affected services
+455	alerts in the last 24 hours
+456	Allow
+457	Allow and scan
+458	An administrator must give a reason. The exclusion is recorded in the audit trail.
+459	An email
+460	Approve return to service
+461	Approving actions
+462	Asset
+463	assets under active mitigation
+464	assets with alerts in 24 hours
+465	Audit trail
+466	Automatic protection keeps running on every device. These are the actions that need a person to decide.
+467	Availability
+468	Available signals
+469	Backup verified
+470	Block
+471	By default the agent sends security telemetry and file hashes: process names and command lines, file paths, network connection metadata, and detections. File contents are collected only if your organisation turns that on.
+472	Capacity
+473	Category
+474	Changed
+475	Charge
+476	Check
+477	choose
+478	Choose a device
+479	CIDR
+480	Close
+481	Comma separated
+482	Contact
+483	Control
+484	Coverage by protection layer
+485	critical
+486	critical alert delivery (p95, 30 days)
+487	Decisions waiting
+488	Decline
+489	Definitions
+490	Describe what happened
+491	Detail
+492	Details
+493	Detection
+494	Device to license
+495	devices fully protected
+496	devices isolated
+497	Devices that need attention
+498	Direction
+499	DNS zone
+500	download page
+501	During the free trial, and on unpaid plans, the console shows Google AdSense adverts and the mobile apps show Google AdMob adverts, after asking for your consent. Subscribers see 95% fewer adverts. Adverts never appear on approval, containment, threat warning, quarantine review, sign-in, payment or audit screens.
+502	Each publish creates a new signed version. Devices keep enforcing the last verified version while offline.
+503	Email support at
+504	Endpoint
+505	Equality Software Ltd operates Agentic Antivirus. This page describes what the service collects. It must be reviewed by the product owner before publication.
+506	Every action that changes a device, an account or traffic passes the policy engine and AEP-X governance. An approval covers one action, its exact targets, this organisation, and a fixed time.
+507	Every upload is checked for malware and its real type. Files without a verified viewer are stored and downloadable but not previewed.
+508	Exception
+509	Exclusions
+510	Folder path
+511	for access or correction requests.
+512	Gaps
+513	Get the agent for Windows, Mac or Linux from the
+514	Go to Devices, choose Enrol a device, and run the command shown on the computer you want to protect. The agent starts scanning as soon as it receives its signed policy.
+515	Health
+516	History
+517	Hostname
+518	I understand devices will stop scanning and blocking threats after the trial until a subscription is paid.
+519	Impact
+520	Import zip or tar
+521	Incident
+522	Include the language model (if your organisation enabled one)
+523	IP address
+524	Join
+525	Join your organisation
+526	Known malware is moved to quarantine, where it cannot run. If you think a file was blocked by mistake, open Quarantine and request a review. An administrator decides, and the file comes back only after a fresh scan finds it clean.
+527	Languages without a complete translation fall back to English. Coverage is measured, not estimated.
+528	Last changed
+529	Layer
+530	Legitimate request success
+531	Licensing rules
+532	Link, if there is one
+533	Management hosts kept reachable during isolation
+534	Mark false positive
+535	Maturity
+536	Mitigation
+537	Name
+538	Name of the secret in your secret store, never the secret itself
+539	No actions are waiting.
+540	No open incidents.
+541	None.
+542	None reported.
+543	not set
+544	Notified after
+545	of adverts shown
+546	Offline event buffer (MB)
+547	On Android, subscribe in the Agentic Antivirus app through Google Play. On iPhone and iPad, App Store subscriptions are not available yet. Paying on the web is not available yet.
+548	Open incident
+549	open incidents
+550	Open incidents
+551	p95 latency
+552	paid until
+553	Path pattern
+554	People
+555	Per device
+556	Per user (covers all of their devices)
+557	Preview
+558	Primary
+559	privacy@softwareequality.com
+560	Protect a device
+561	Protocol
+562	Provider
+563	Provider alerts (24 hours)
+564	Public endpoints
+565	Publish a policy version
+566	Publish signed version
+567	Published
+568	Quick scan
+569	Read-aloud and dictation use your browser's built-in speech features. We do not record or store audio.
+570	Received
+571	Removable media
+572	Remove
+573	Requested
+574	Requested by
+575	Retention
+576	Return to service
+577	Right now
+578	Risk
+579	Role
+580	Roll back
+581	Save endpoint
+582	Save licensing rules
+583	Scan
+584	Schedule (cron)
+585	Scheduled scans
+586	Secret reference
+587	Send invitation
+588	Send report
+589	Send reset link
+590	Service
+591	Service objectives
+592	SHA-256
+593	shop.example.com
+594	Signal
+595	Size
+596	Something else
+597	Sort
+598	Step
+599	Stopping processes, isolating devices, restoring files, adding exclusions and changing traffic rules need a person to approve them. An approval covers one action, its exact targets and a limited time. If anything changes, approve again.
+600	Subscribe this device with Google Play
+601	subscription state
+602	support@softwareequality.com
+603	System
+604	Target
+605	The AI assistant
+606	The assistant groups related alerts, lists what was observed with links to the evidence, and marks anything it cannot prove as a hypothesis. It can suggest actions but cannot approve them. If the model is unavailable, scanning, alerts and manual responses keep working.
+607	This computer
+608	TLS only, must be on the egress allowlist
+609	Traffic floods are absorbed by your upstream provider. Here you account for every public endpoint, watch provider alerts, and approve new traffic restrictions.
+610	Traffic restrictions
+611	Translated
+612	Trash
+613	trial days left
+614	Turn on protection to scan files on this computer and watch for ransomware and credential theft.
+615	uncovered
+616	Undo last change
+617	User
+618	Verify email
+619	waiting for approval
+620	We show adverts from Google AdSense on some pages. Allow personalised adverts?
+621	Webhook:
+622	What devices send
+623	What is it?
+624	When
+625	When something is blocked
+626	When the trial ends without payment
+627	Who
+628	You can delete your account from your profile. Contact
+629	Your name
+630	Your organisation gets a 30-day free trial. After that it costs £4.99 per month for each user or device.
+631	Your organisation sets how long telemetry and evidence are kept. Audit records cannot be edited or deleted.
+632	Your rights
+633	Dictate
+634	Allow microphone use for dictation? Audio is processed by your browser and not stored by us.
+635	Audio output
+636	Pause
+637	Pitch
+638	Resume
+639	Speed
+640	Stop
+641	No voice available for this language.
+642	Voice
+643	The file was moved to quarantine and cannot run.
+644	A threat was blocked on this device.

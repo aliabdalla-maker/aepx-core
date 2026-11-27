@@ -1,6 +1,8 @@
 """Machine-translate shared/i18n/en.json into the 100-locale catalogue (L10N-01, L10N-11, L10N-12).
 
 Engines, in order (the first available one is used for a locale):
+  file     pre-translated units from shared/i18n/units/<locale>.tsv ("index<TAB>text" lines over the unit list
+           in shared/i18n/units/units.json; produced by an assistant or a translation vendor). --engine file
   claude   Anthropic Messages API, when ANTHROPIC_API_KEY is set (paid; best quality and coverage)
   m2m100   facebook/m2m100_418M (MIT licence), local CPU inference, 100 languages
   madlad   google/madlad400-3b-mt (Apache-2.0), local CPU inference, for locales M2M100 lacks
@@ -152,7 +154,53 @@ class HF:
         return out
 
 
+UNITS_DIR = I18N / "units"
+# Units kept verbatim in every language (product, vendor and protocol names, identifiers, addresses).
+KEEP = {"Claude", "Agentic Antivirus", "action.approve", "CIDR", "SHA-256", "privacy@softwareequality.com",
+        "support@softwareequality.com", "shop.example.com"}
+
+
+def all_units() -> list[str]:
+    """Every masked translatable unit of en.json, de-duplicated, in catalogue order."""
+    base = json.loads((I18N / "en.json").read_text(encoding="utf-8"))
+    units: list[str] = []
+    for v in base.values():
+        for part in split_units(v)[0]:
+            units.append(mask(part)[0])
+    return list(dict.fromkeys(units))
+
+
+class FileEngine:
+    name = "file"
+
+    def __init__(self):
+        self.units = json.loads((UNITS_DIR / "units.json").read_text(encoding="utf-8"))
+        if self.units != all_units():
+            raise SystemExit("shared/i18n/units/units.json is out of date: run tools/i18n_translate.py --export-units")
+        self.index = {u: i for i, u in enumerate(self.units)}
+
+    def table(self, locale: str) -> dict[int, str]:
+        f = UNITS_DIR / f"{locale}.tsv"
+        out: dict[int, str] = {}
+        for line in f.read_text(encoding="utf-8").splitlines():
+            if "\t" in line:
+                i, _, text = line.partition("\t")
+                if i.strip().isdigit():
+                    out[int(i)] = text.replace("\\n", "\n")
+        return out
+
+    def translate(self, texts: list[str], locale: str) -> list[str]:
+        t = self.table(locale)
+        out = []
+        for x in texts:
+            i = self.index.get(x)
+            out.append(x if x in KEEP else (t.get(i, "") if i is not None else ""))
+        return out
+
+
 def engine_for(locale: str, choice: str, cache: dict):
+    if choice == "file" or (choice == "auto" and (UNITS_DIR / f"{locale}.tsv").exists()):
+        return cache.setdefault("file", FileEngine())
     if choice in ("auto", "claude") and os.getenv("ANTHROPIC_API_KEY"):
         return cache.setdefault("claude", Claude())
     if choice == "claude":
@@ -219,9 +267,17 @@ def translate_locale(locale: str, choice: str, cache: dict, limit: int | None) -
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--locales", default="all")
-    ap.add_argument("--engine", default="auto", choices=["auto", "claude", "m2m100", "madlad"])
+    ap.add_argument("--engine", default="auto", choices=["auto", "file", "claude", "m2m100", "madlad"])
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--export-units", action="store_true", help="write shared/i18n/units/units.json and units.tsv")
     a = ap.parse_args()
+    if a.export_units:
+        UNITS_DIR.mkdir(exist_ok=True)
+        u = all_units()
+        (UNITS_DIR / "units.json").write_text(json.dumps(u, ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
+        (UNITS_DIR / "units.tsv").write_text("".join(f"{i}\t{x}\n" for i, x in enumerate(u)), encoding="utf-8")
+        print(f"{len(u)} units")
+        return
     locales = [x for x in LOCALES if x != "en"] if a.locales == "all" else a.locales.split(",")
     cache: dict = {}
     report = [translate_locale(loc, a.engine, cache, a.limit) for loc in locales]

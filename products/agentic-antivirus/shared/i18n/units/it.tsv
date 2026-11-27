@@ -1,0 +1,637 @@
+0	Vai al contenuto principale
+1	Aggiungi un'esclusione permanente
+2	Applica una restrizione del traffico
+3	Raccogli i metadati del dispositivo
+4	Isola un dispositivo dalla rete
+5	Metti un file in quarantena
+6	Rilascia un dispositivo dall'isolamento
+7	Ripristina un file in quarantena
+8	Disconnetti un utente ovunque
+9	Annulla una restrizione del traffico
+10	Annulla un aggiornamento
+11	Analizza i dispositivi
+12	Sospendi un account utente
+13	Arresta un processo
+14	Approva
+15	Nega
+16	Invia ai dispositivi
+17	L'approvazione scade [0]
+18	Proposto dall'assistente IA
+19	Pubblicità
+20	Azione
+21	Agenti
+22	Chiedi
+23	Chiedi all'assistente di sicurezza
+24	Le risposte provengono dai tuoi dispositivi, dagli incidenti aperti e dalle lacune. L'assistente non può modificare nulla.
+25	Basato su
+26	[0] affermazione senza prove è stata rimossa
+27	[0] affermazioni senza prove sono state rimosse
+29	Modello self-hosted
+30	Regole (nessun modello)
+31	Prepara un piano di correzione
+32	Ogni passaggio è una proposta. Nulla viene eseguito finché qualcuno non lo approva.
+33	Domanda
+34	Ad esempio: quali dispositivi richiedono attenzione?
+35	Gravità suggerita
+36	Riepilogo
+37	Obiettivi
+38	Riassumi questo incidente
+39	Perché
+40	Rilevato
+41	Segnala qualcosa di sospetto
+42	Regola
+43	Gravità
+44	Avviso
+46	Aggiungi file
+47	Aggiungi una cartella
+48	Aggiungi immagini
+49	[0] allegato
+50	[0] allegati
+51	Allegati
+52	Scatta una foto
+53	L'accesso alla fotocamera non è stato consentito. Consentilo nel browser oppure usa l'app fotocamera del dispositivo.
+54	Anteprima della fotocamera
+55	Questo browser non può aprire la fotocamera qui.
+56	Acquisisci
+57	Chiudi l'assistente
+58	Che cosa sono questi file e sono sicuri?
+59	File
+60	Fai una domanda sulla tua sicurezza oppure allega file, una cartella, immagini o una foto. Ogni allegato viene prima analizzato e nulla viene conservato.
+61	[0] immagine è stata
+62	[0] immagini sono state
+63	 descritte dal modello.
+64	Ad esempio: questo download è sicuro?
+65	Testo e immagini puliti possono essere inviati al modello di IA abilitato dalla tua organizzazione. I file dannosi mai.
+66	[0] file non è stato aggiunto
+67	[0] file non sono stati aggiunti
+68	: fino a [0] file, [1] MB ciascuno e [2] MB in totale.
+69	Rimuovi [0]
+70	Analizza e chiedi
+71	Risultati dell'analisi
+72	Tipo
+73	Usa la fotocamera del dispositivo
+74	Risultato
+75	Nessun malware noto
+76	Dannoso
+77	Non analizzato
+78	La catena di audit è interrotta alla voce [0].
+79	La catena di audit è integra: [0] voci verificate.
+80	Email
+81	Password dimenticata?
+82	Accedi con Google
+83	L'accesso con Google non ha funzionato. Riprova oppure usa email e password.
+84	Accedi
+85	Esci
+86	Nuova password
+87	oppure
+88	Organizzazione
+89	Password
+90	Password modificata. Accedi con la nuova password.
+91	Almeno 12 caratteri.
+92	Crea account
+93	Invia di nuovo il link
+94	Se l'account deve ancora essere confermato, è in arrivo un nuovo link. Controlla anche la cartella spam.
+95	Reimposta password
+96	Se un account usa quell'indirizzo, abbiamo inviato un link di reimpostazione. È valido per un'ora.
+97	Conferma il tuo indirizzo email prima di accedere. Apri il link inviato a [0].
+98	Email verificata. Ora puoi accedere.
+99	Questo link è scaduto o è già stato usato. Accedi per riceverne uno nuovo.
+100	Controlla la tua email per verificare l'indirizzo.
+101	L'abbonamento riduce la pubblicità del 95%.
+102	La prova è terminata.
+103	Abbonato fino al [0]
+104	Mantieni tutto gratuito con tutta la pubblicità
+105	Ferma tutto, compresa la protezione dei dispositivi, finché qualcuno non paga
+106	La console richiede un abbonamento; i dispositivi restano protetti
+107	4,99 £ al mese
+108	Abbonati
+109	Prova gratuita:
+110	[0] giorno rimanente
+111	[0] giorni rimanenti
+112	Annulla
+113	Elimina
+114	Si è verificato un errore.
+115	Esporta
+116	Caricamento…
+117	N/D
+118	Mai
+119	Avanti
+120	no
+121	Niente da mostrare.
+122	disattivato
+123	attivato
+124	Indietro
+125	Aggiorna
+126	Salva
+127	Cerca
+128	Simulazione (dati di test)
+129	Stato
+130	Non disponibile
+131	Sconosciuto
+132	Aggiornato [0]
+133	Elaborazione…
+134	sì
+135	[0] avviso in 24 ore
+136	[0] avvisi in 24 ore
+137	[0] dispositivo
+138	[0] dispositivi
+139	Dati al [0]
+140	[0] incidente aperto
+141	[0] incidenti aperti
+142	[0] approvazione in attesa
+143	[0] approvazioni in attesa
+144	confermato
+145	sospetto
+146	Registra un dispositivo
+147	Dispositivo
+148	Non comunica
+149	Criterio obsoleto
+150	Sensore disattivato
+151	Definizioni obsolete
+152	Problemi
+153	Ultimo contatto
+154	Sistema operativo
+155	Criterio
+156	Esegui sul dispositivo entro 24 ore (uso singolo):
+157	Protezione
+158	Copia
+159	Scarica
+160	Sposta
+161	Nuova cartella
+162	Rinomina
+163	Ripristina
+164	Sposta nel cestino
+165	Carica
+166	Guida
+167	[0] testo in questa pagina è tradotto automaticamente e non ancora revisionato.
+168	[0] testi in questa lingua sono tradotti automaticamente e non ancora revisionati.
+169	Questa lingua non è ancora tradotta, quindi viene mostrato l'inglese.
+170	approvato
+171	Fatti osservati
+172	Ipotesi (non confermate)
+173	Ipotesi, affidabilità [0]: [1]
+174	Avvia indagine
+175	Prove mancanti
+176	Mancante: [0]
+177	Leggi ad alta voce
+178	Azioni consigliate
+179	Cronologia delle prove
+180	webhook in entrata
+181	Segnali dal tuo provider di identità, DNS, firewall e altri strumenti. Le nuove integrazioni partono come non disponibili; solo un adattatore del provider che ha superato il test di contratto può essere contrassegnato come attivo. I dati di test sono etichettati come simulazione ovunque compaiano.
+182	Non connesso (stub)
+183	Solo dati di test
+184	Non disponibile
+185	Attivo (verificato)
+186	Segreto (mostrato una sola volta):
+187	Approvazioni
+188	Avvisi
+189	Audit
+190	Abbonamento
+191	Dashboard
+192	DDoS e disponibilità
+193	Dispositivi
+194	File
+195	Incidenti
+196	Integrazioni
+197	Criteri
+198	Privacy
+199	Quarantena
+200	Risposta
+201	Sicurezza
+202	Impostazioni
+203	Metti automaticamente in quarantena il malware noto
+204	Sorveglia i comportamenti sospetti
+205	Blocca gli script sospetti
+206	Raccogli il contenuto dei file per le indagini (disattivato per impostazione predefinita)
+207	Consenti l'isolamento di rete
+208	Analizza i file quando vengono aperti o scritti
+209	Analizza i download
+210	Analizza i programmi all'avvio
+211	Proteggi l'agente dalle modifiche
+212	Avvisa dei link dannosi noti
+213	Motivo
+214	Richiedi revisione
+215	Ripristina dopo una nuova analisi
+216	tempo mediano fino all'eradicazione verificata (n=[0], irrisolti [1])
+217	correzioni con nuovo test superato
+218	ricomparsa dopo il ripristino
+219	rimozione dei virus verificata
+220	ritorno sicuro in servizio
+221	analisi di ripristino completate
+222	Gli esiti solo con quarantena ([0]) e i dispositivi reinstallati ([1]) sono conteggiati a parte; la sola quarantena non conta mai come rimozione.
+223	[0] h
+224	[0] min
+225	[0] s
+226	In attesa di approvazione
+227	Prove di produzione
+228	Registra cosa è stato verificato in produzione, su quali asset e con quale versione. Le voci non possono essere modificate.
+229	Versione
+230	Cambia modalità
+231	nessuna prova
+232	non riuscito
+233	superato
+234	in sospeso
+235	Controlla l'avanzamento del playbook
+236	Dispositivi in grado di rispondere
+237	Tutti i dispositivi
+238	[0] dispositivo pilota
+239	[0] dispositivi pilota
+240	Completato
+241	Completato quando
+242	Esercitazione
+243	Osserva
+244	Rispondi
+245	Copertura
+246	[0] osservati, [1] in grado di rispondere
+247	Dati
+248	Età dei dati
+249	Attivo
+250	Dati di test
+251	non eseguito
+252	ricevuta
+253	in corso
+254	sconosciuto
+255	Invia
+256	Prove
+257	È stato eseguito
+258	Obsoleto
+259	Flussi di dati
+260	Versione o digest
+261	Ambiente
+262	Esito
+263	Responsabile
+264	Requisito
+265	Asset o gruppo
+266	Mostra
+267	Tutti
+268	Non completato
+269	Attivo per l'intero servizio
+270	Attivo per questa organizzazione
+271	Fermare tutte le nuove azioni di risposta per questa organizzazione? La protezione e le analisi continuano.
+272	Consenti di nuovo le azioni di risposta
+273	Ferma tutte le azioni di risposta
+274	Interruttore di emergenza
+275	Natura
+276	Minuti mediani di apertura ([0] aperti, il più vecchio [1] min)
+277	Rifiuti del criterio
+278	Esercitazioni e simulazioni (non conteggiate sopra)
+279	Azioni ripetute (obiettivo 0)
+280	Ritardo mediano dei flussi (p95 [0] s, n=[1])
+281	Approvazioni in ritardo ([0] in attesa, obiettivo [1] min)
+282	Mediana dal segnale allo smistamento (p95 [0] min, n=[1], [2] non smistati)
+283	Azioni verificate in modo indipendente ([0]/[1])
+284	Periodo: [0]. Una ricevuta da sola non conta mai come verifica. I dati mancanti risultano non disponibili.
+285	Misure di risposta
+286	Ultimo evento
+287	Gli agenti propongono; un criterio fisso decide cosa viene eseguito. Ogni azione mostra approvazione, ricevuta e verifica indipendente.
+288	Fase
+289	In attesa di approvazione
+290	Negato
+291	Scaduto
+292	Non riuscito
+293	Richiede riconciliazione manuale
+294	Proposto
+295	In coda
+296	In esecuzione
+297	Verifica in sospeso
+298	Verificato
+299	Stato attuale
+300	Modalità
+301	Simulazione
+302	Analisi e raccolta dati vengono eseguite. Le altre azioni restano proposte.
+303	Le azioni approvate vengono eseguite sui dispositivi scelti.
+304	Le azioni vengono eseguite solo su adattatori di test. Sui tuoi dispositivi non cambia nulla.
+305	Ancora nessuna azione.
+306	Nulla è in attesa di approvazione.
+307	Nessuna prova di produzione registrata finora.
+308	Nessun dispositivo o integrazione sta ancora inviando dati.
+309	Non è stato eseguito
+310	Osservato
+311	Cosa è successo
+312	Risposta DDoS
+313	Falso positivo e ripristino
+314	Identità, phishing e traffico sospetto
+315	Malware e download sospetti
+316	Visibilità di rete e stato dei dispositivi
+317	Ripristino dopo una compromissione
+318	Ransomware o sospetta compromissione
+319	Playbook
+320	Playbook
+321	Versione del criterio
+322	Versione installata
+323	Isolamento tramite firewall
+324	Dati ricevuti
+325	File rimosso
+326	Processo arrestato
+327	Stato presso il provider
+328	Registrato
+329	Analisi completata
+330	Simulato
+331	Fuori dalla quarantena
+332	In quarantena
+333	Azioni e ricevute
+334	Registra l'esito
+335	Registra
+336	Può rispondere
+337	Origine
+338	dispositivo
+339	console
+340	simulazione
+341	Inizia quando
+342	Aggiornato
+343	Verifica indipendente
+344	In attesa
+345	Limite dell'archivio
+346	Archivio crittografato
+347	Escluso
+348	Inaccessibile
+349	Limite di tempo
+350	Troppo grande
+351	Formato non supportato
+352	Annullato
+353	Saltato
+354	Parziale
+355	Tempo scaduto
+356	Completa
+357	Su richiesta
+358	Rapida
+359	Ripristino
+360	Pianificata
+361	Mirata
+362	Aggiungi segmento
+363	archivi
+364	Asset
+365	Fermare questa analisi? I risultati finora vengono conservati come analisi annullata.
+366	Non coperto
+367	Rilevamenti
+368	Dispositivi per stato di protezione
+369	Motore
+370	Scadenza
+371	Ultima prova
+372	Controllo previsto
+373	Correzione proposta
+374	Nuovo test
+375	Asset o segmento
+376	Lacune aperte
+377	Esiti delle analisi in 30 giorni
+378	dall'avviso al contenimento verificato
+379	dispositivi protetti
+380	endpoint pubblici con mitigazione a monte
+381	dall'evento all'avviso
+382	dispositivi con definizioni aggiornate
+383	dispositivi con un'analisi completa in 7 giorni
+384	lacune aperte ([0] in ritardo, [1] chiuse in 30 giorni)
+385	segmenti di rete monitorati
+386	veri positivi confermati
+387	analisi completate
+388	Copertura e risposta
+389	Ultima analisi completa
+390	Ultima telemetria
+391	Ogni dispositivo e segmento di rete nell'ambito, se è protetto e cosa correggere dopo.
+392	Visibilità di rete
+393	Nessun dispositivo registrato finora. Proteggi un computer da Dispositivi.
+394	Nessuna lacuna aperta.
+395	[0] aperte
+396	in ritardo
+397	p95 [0] s
+398	Cartelle
+399	Cartelle da analizzare, separate da virgole
+400	Crittografia e firewall
+401	Crittografia del disco [0], firewall [1]
+402	Ripristino dopo gli incidenti
+403	Ricontrolla ora
+404	Nessun nuovo test
+405	Nuovo test non riuscito
+406	Chiusura verificata
+407	Tipo di analisi
+408	Analisi
+409	Segmento
+410	Nome del segmento
+411	Avvia analisi
+412	Avviata
+413	Stato
+414	Degradato
+415	Protetto
+416	Non protetto
+417	Dispositivi per stato
+418	[0] sconosciuti
+419	Nessuna visibilità
+420	Monitorato
+421	Visibilità
+422	L'assenza di rilevamenti non dimostra la protezione: controlla anche copertura e risultati delle analisi.
+423	Lingua
+424	Copertura della traduzione
+425	Nessuna versione precedente
+426	Tema
+427	Scuro
+428	Contrasto elevato
+429	Chiaro
+430	Nessuna nuova minaccia trovata in [0] file.
+431	[0] minaccia
+432	[0] minacce
+433	 trovate in [0] file. Consulta Avvisi e Approvazioni per esaminarle.
+434	Analisi completa
+435	Impossibile proteggere questo computer: [0]
+436	Questo computer è protetto. L'analisi in tempo reale funziona mentre Agentic Antivirus è aperto.
+437	L'analisi non è terminata: [0]
+438	Analisi in corso…
+439	Analisi di tutte le unità. Può richiedere molto tempo.
+440	Analisi di Download, Scrivania e file temporanei…
+441	Impossibile leggere [0] file.
+442	Un file
+443	Un link web
+444	Accetta dati di test
+446	Azioni
+447	Aggiungi un'integrazione
+448	Aggiungi esclusione
+449	Aggiungi integrazione
+450	Aggiungi analisi completa settimanale
+451	amministratore
+452	Pubblicità
+453	Consenso alla pubblicità
+454	Servizi interessati
+455	avvisi nelle ultime 24 ore
+456	Consenti
+457	Consenti e analizza
+458	Un amministratore deve indicare un motivo. L'esclusione viene registrata nel registro di audit.
+459	Un'email
+460	Approva il ritorno in servizio
+461	Approvazione delle azioni
+462	Asset
+463	asset con mitigazione attiva
+464	asset con avvisi in 24 ore
+465	Registro di audit
+466	La protezione automatica continua su ogni dispositivo. Queste sono le azioni che richiedono la decisione di una persona.
+467	Disponibilità
+468	Segnali disponibili
+469	Backup verificato
+470	Blocca
+471	Per impostazione predefinita l'agente invia telemetria di sicurezza e hash dei file: nomi dei processi e righe di comando, percorsi dei file, metadati delle connessioni di rete e rilevamenti. Il contenuto dei file viene raccolto solo se la tua organizzazione lo attiva.
+472	Capacità
+473	Categoria
+474	Modificato
+475	Addebito
+476	Controlla
+477	scegli
+478	Scegli un dispositivo
+480	Chiudi
+481	Separati da virgole
+482	Contatto
+483	Controllo
+484	Copertura per livello di protezione
+485	critico
+486	consegna degli avvisi critici (p95, 30 giorni)
+487	Decisioni in attesa
+488	Rifiuta
+489	Definizioni
+490	Descrivi cosa è successo
+491	Dettaglio
+492	Dettagli
+493	Rilevamento
+494	Dispositivo da licenziare
+495	dispositivi completamente protetti
+496	dispositivi isolati
+497	Dispositivi che richiedono attenzione
+498	Direzione
+499	Zona DNS
+500	pagina di download
+501	Durante la prova gratuita e nei piani non pagati, la console mostra annunci Google AdSense e le app mobili annunci Google AdMob, dopo aver chiesto il tuo consenso. Gli abbonati vedono il 95% di annunci in meno. Gli annunci non compaiono mai nelle schermate di approvazione, contenimento, avviso di minaccia, revisione della quarantena, accesso, pagamento o audit.
+502	Ogni pubblicazione crea una nuova versione firmata. I dispositivi continuano ad applicare l'ultima versione verificata quando sono offline.
+503	Scrivi al supporto a
+504	Endpoint
+505	Equality Software Ltd gestisce Agentic Antivirus. Questa pagina descrive cosa raccoglie il servizio. Deve essere revisionata dal responsabile del prodotto prima della pubblicazione.
+506	Ogni azione che modifica un dispositivo, un account o il traffico passa per il motore dei criteri e la governance AEP-X. Un'approvazione copre un'azione, i suoi obiettivi esatti, questa organizzazione e un tempo fisso.
+507	Ogni caricamento viene controllato per malware e per il tipo reale. I file senza un visualizzatore verificato vengono archiviati e sono scaricabili, ma senza anteprima.
+508	Eccezione
+509	Esclusioni
+510	Percorso della cartella
+511	per richieste di accesso o rettifica.
+512	Lacune
+513	Scarica l'agente per Windows, Mac o Linux dalla
+514	Vai a Dispositivi, scegli Registra un dispositivo ed esegui il comando mostrato sul computer da proteggere. L'agente inizia l'analisi appena riceve il criterio firmato.
+515	Stato di salute
+516	Cronologia
+517	Nome host
+518	Capisco che dopo la prova i dispositivi smetteranno di analizzare e bloccare le minacce finché non verrà pagato un abbonamento.
+519	Impatto
+520	Importa zip o tar
+521	Incidente
+522	Includi il modello linguistico (se la tua organizzazione ne ha abilitato uno)
+523	Indirizzo IP
+524	Unisciti
+525	Unisciti alla tua organizzazione
+526	Il malware noto viene spostato in quarantena, dove non può essere eseguito. Se pensi che un file sia stato bloccato per errore, apri Quarantena e richiedi una revisione. Un amministratore decide e il file torna solo dopo che una nuova analisi lo ritiene pulito.
+527	Le lingue senza traduzione completa ricadono sull'inglese. La copertura è misurata, non stimata.
+528	Ultima modifica
+529	Livello
+530	Successo delle richieste legittime
+531	Regole di licenza
+532	Link, se presente
+533	Host di gestione raggiungibili durante l'isolamento
+534	Segna come falso positivo
+535	Maturità
+536	Mitigazione
+537	Nome
+538	Nome del segreto nel tuo archivio di segreti, mai il segreto stesso
+539	Nessuna azione in attesa.
+540	Nessun incidente aperto.
+541	Nessuno.
+542	Nessuno segnalato.
+543	non impostato
+544	Notificato dopo
+545	degli annunci mostrati
+546	Buffer eventi offline (MB)
+547	Su Android, abbonati nell'app Agentic Antivirus tramite Google Play. Su iPhone e iPad gli abbonamenti App Store non sono ancora disponibili. Il pagamento sul web non è ancora disponibile.
+548	Apri incidente
+549	incidenti aperti
+550	Incidenti aperti
+551	latenza p95
+552	pagato fino al
+553	Modello di percorso
+554	Persone
+555	Per dispositivo
+556	Per utente (copre tutti i suoi dispositivi)
+557	Anteprima
+558	Principale
+560	Proteggi un dispositivo
+561	Protocollo
+562	Provider
+563	Avvisi del provider (24 ore)
+564	Endpoint pubblici
+565	Pubblica una versione del criterio
+566	Pubblica versione firmata
+567	Pubblicato
+568	Analisi rapida
+569	La lettura ad alta voce e la dettatura usano le funzioni vocali integrate del browser. Non registriamo né conserviamo audio.
+570	Ricevuto
+571	Supporti rimovibili
+572	Rimuovi
+573	Richiesto
+574	Richiesto da
+575	Conservazione
+576	Ritorno in servizio
+577	Proprio ora
+578	Rischio
+579	Ruolo
+580	Annulla
+581	Salva endpoint
+582	Salva regole di licenza
+583	Analizza
+584	Pianificazione (cron)
+585	Analisi pianificate
+586	Riferimento al segreto
+587	Invia invito
+588	Invia segnalazione
+589	Invia link di reimpostazione
+590	Servizio
+591	Obiettivi di servizio
+594	Segnale
+595	Dimensione
+596	Altro
+597	Ordina
+598	Passaggio
+599	Arrestare processi, isolare dispositivi, ripristinare file, aggiungere esclusioni e modificare le regole del traffico richiedono l'approvazione di una persona. Un'approvazione copre un'azione, i suoi obiettivi esatti e un tempo limitato. Se cambia qualcosa, approva di nuovo.
+600	Abbona questo dispositivo con Google Play
+601	stato dell'abbonamento
+603	Sistema
+604	Obiettivo
+605	L'assistente IA
+606	L'assistente raggruppa gli avvisi correlati, elenca ciò che è stato osservato con link alle prove e segna come ipotesi tutto ciò che non può dimostrare. Può suggerire azioni ma non approvarle. Se il modello non è disponibile, analisi, avvisi e risposte manuali continuano a funzionare.
+607	Questo computer
+608	Solo TLS, deve essere nella lista di uscita consentita
+609	Le ondate di traffico vengono assorbite dal tuo provider a monte. Qui registri ogni endpoint pubblico, segui gli avvisi del provider e approvi nuove restrizioni del traffico.
+610	Restrizioni del traffico
+611	Tradotto
+612	Cestino
+613	giorni di prova rimanenti
+614	Attiva la protezione per analizzare i file di questo computer e sorvegliare ransomware e furto di credenziali.
+615	non coperto
+616	Annulla l'ultima modifica
+617	Utente
+618	Verifica email
+619	in attesa di approvazione
+620	Mostriamo annunci di Google AdSense su alcune pagine. Consentire annunci personalizzati?
+621	Webhook:
+622	Cosa inviano i dispositivi
+623	Che cos'è?
+624	Quando
+625	Quando qualcosa viene bloccato
+626	Quando la prova termina senza pagamento
+627	Chi
+628	Puoi eliminare il tuo account dal profilo. Contatta
+629	Il tuo nome
+630	La tua organizzazione riceve una prova gratuita di 30 giorni. Dopo costa 4,99 £ al mese per ogni utente o dispositivo.
+631	La tua organizzazione stabilisce per quanto tempo conservare telemetria e prove. I record di audit non possono essere modificati né eliminati.
+632	I tuoi diritti
+633	Detta
+634	Consentire l'uso del microfono per la dettatura? L'audio viene elaborato dal browser e non viene conservato da noi.
+635	Uscita audio
+636	Pausa
+637	Tono
+638	Riprendi
+639	Velocità
+640	Ferma
+641	Nessuna voce disponibile per questa lingua.
+642	Voce
+643	Il file è stato spostato in quarantena e non può essere eseguito.
+644	Una minaccia è stata bloccata su questo dispositivo.
