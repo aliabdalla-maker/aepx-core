@@ -68,7 +68,13 @@ SHIM = textwrap.dedent('''\
         args = [x for x in a[1:] if x not in ("-i", "-T")]
         name, cmd = args[0], args[1:]
         if cmd[0] == "pg_isready": sys.exit(0)
-        if cmd[0] == "pg_restore": run(["pg_restore", "--no-owner", "--exit-on-error", "-d", pg(name)])
+        if cmd[0] == "pg_restore":
+            # The runner's pg_restore may be newer than the PostgreSQL server (CI: client 17+, server 16), and
+            # newer archives carry SET transaction_timeout. Real rehearsals use the container's own matching
+            # client; here restore through SQL and drop that one setting.
+            sql = subprocess.run(["pg_restore", "--no-owner", "-f", "-"], stdin=sys.stdin, capture_output=True, check=True).stdout
+            sql = b"\\n".join(l for l in sql.split(b"\\n") if not l.startswith(b"SET transaction_timeout"))
+            run(["psql", "-q", "-v", "ON_ERROR_STOP=1", pg(name)], input=sql)
         if cmd[0] == "psql":
             if "-c" in cmd and "CREATE ROLE" in cmd[cmd.index("-c") + 1]: sys.exit(0)  # roles are cluster-wide here
             q = cmd[cmd.index("-tAc") + 1]

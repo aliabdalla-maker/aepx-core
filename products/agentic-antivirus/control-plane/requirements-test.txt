@@ -1,0 +1,3 @@
+# Test-only dependencies (not installed in the production image).
+pytest
+amqtt==0.12.2   # in-process MQTT broker for the IoT transport test (INT-02)
