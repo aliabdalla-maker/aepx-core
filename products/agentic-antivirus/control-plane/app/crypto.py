@@ -11,6 +11,7 @@ import base64
 import hashlib
 import hmac
 import json
+import os
 import secrets
 
 from argon2 import PasswordHasher
@@ -96,3 +97,27 @@ def verify_password(stored: str | None, password: str) -> bool:
 
 def hmac_ok(secret_hash: str, presented_secret: str) -> bool:
     return hmac.compare_digest(secret_hash, token_hash(presented_secret))
+
+
+# ----------------------------------------------------------------- integration secrets (B-06)
+# Provider credentials are stored encrypted (AES-256-GCM) in aav.integration_secrets and never returned by the API.
+# The data key is derived with HKDF from the control plane's signing key (a compose secret that never leaves the
+# server), bound to the tenant and integration as associated data, so a ciphertext cannot be moved between them.
+def _secrets_key() -> bytes:
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+    raw = _signing_key().private_bytes(serialization.Encoding.Raw, serialization.PrivateFormat.Raw,
+                                       serialization.NoEncryption())
+    return HKDF(algorithm=hashes.SHA256(), length=32, salt=b"aav-integration-secrets",
+                info=b"v1").derive(raw)
+
+
+def seal_secret(plaintext: str, aad: str) -> tuple[bytes, bytes]:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    nonce = os.urandom(12)
+    return nonce, AESGCM(_secrets_key()).encrypt(nonce, plaintext.encode(), aad.encode())
+
+
+def open_secret(nonce: bytes, ciphertext: bytes, aad: str) -> str:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    return AESGCM(_secrets_key()).decrypt(nonce, ciphertext, aad.encode()).decode()

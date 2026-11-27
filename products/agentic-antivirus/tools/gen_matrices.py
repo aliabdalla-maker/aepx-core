@@ -39,16 +39,22 @@ hrows = "\n".join(f"| {m} | {'yes' if h['store'] else 'no'} | {'yes' if h['previ
     "malware-scanned, checksummed blob; preview, edit and conversion exist only where listed. Tests: `control-plane/tests/test_files.py`.\n\n"
     "| MIME type | Store | Preview | Edit | Convert to | Status | Note |\n|---|---|---|---|---|---|---|\n" + hrows +
     f"\n| any other type | yes | no | no | — | tested | {OPAQUE['note']} |\n")
-crow = "\n".join(f"| {k} | {', '.join(sorted(v))} | webhook ingest (canonical schema) | "
-                 f"{'verified_live' if any(a[0] == k for a in VERIFIED_ADAPTERS) else 'test_only at most'} | named provider + credentials + sandbox contract test |"
+def _adapters(k):
+    names = sorted(p for kind, p in VERIFIED_ADAPTERS if kind == k)
+    return ", ".join(names) if names else "none yet"
+
+
+crow = "\n".join(f"| {k} | {', '.join(sorted(v))} | webhook ingest (canonical schema) | {_adapters(k)} | "
+                 f"{'per integration: stored credential + live verify-credentials + sandbox/policy evidence' if _adapters(k) != 'none yet' else 'test_only at most'} |"
                  for k, v in sorted(INGEST_CATEGORIES.items()))
 (out / "connector-maturity.md").write_text(
     "# Connector maturity matrix\n\nFrom `control-plane/app/routers/integrations.py`. New integrations start as `unavailable`. "
     "An integration can be set to `test_only` (its data is labelled simulation everywhere); `verified_live` is refused until a "
-    "provider adapter is registered in `VERIFIED_ADAPTERS` and sandbox-contract, credential and policy evidence is recorded. "
-    f"Registered verified adapters in this release: {len(VERIFIED_ADAPTERS)}. Actions that need a provider (suspend account, revoke "
+    "provider adapter exists (`app/providers`, contract-tested in `tests/test_providers.py`), the integration's own encrypted "
+    "credential passed a live `verify-credentials` check in the last 24 h, and sandbox-contract and policy evidence is recorded. "
+    f"Provider adapters in this release: {len(VERIFIED_ADAPTERS)} (kind/provider pairs). Actions that need a provider (suspend account, revoke "
     "sessions, apply traffic policy, verify backup) return a failed outcome with the reason instead of pretending to succeed.\n\n"
     "AEP-X components used: services/governance `/policy/evaluate` (live, exercised by every action test); connector-bus "
     "`/bus/route` to `aepx://connector/ml` (Ollama adapter; tested with a recorded transport, not against a running model).\n\n"
-    "| Signal | Accepted categories | Path | Maturity now | Needed for verified_live |\n|---|---|---|---|---|\n" + crow + "\n")
+    "| Signal | Accepted categories | Path | Provider adapters | Path to verified_live |\n|---|---|---|---|---|\n" + crow + "\n")
 print("matrices written:", sorted(p.name for p in out.iterdir()))

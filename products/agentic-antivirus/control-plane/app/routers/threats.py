@@ -179,23 +179,33 @@ def execute_traffic_action(cur, tenant_id, action: str, tpid: UUID, request_id) 
     tp = cur.fetchone()
     if not tp:
         return {"target": str(tpid), "status": "failed", "reason": "not found"}
-    cur.execute("SELECT signal_kind, config FROM aav.integrations WHERE signal_kind IN ('ddos','cdn','waf',"
-                "'api_gateway','load_balancer') AND maturity = 'verified_live' AND enabled")
-    adapter = None
+    kinds = ("ddos", "cdn", "waf", "api_gateway", "load_balancer", "firewall")
+    cur.execute("SELECT * FROM aav.integrations WHERE signal_kind = ANY(%s) AND maturity = 'verified_live' AND enabled "
+                "ORDER BY array_position(%s, signal_kind)", (list(kinds), list(kinds)))
+    integ = None
     for r in cur.fetchall():
-        adapter = VERIFIED_ADAPTERS.get((r["signal_kind"], r["config"].get("provider", "")))
-        if adapter:
+        if VERIFIED_ADAPTERS.get((r["signal_kind"], r["config"].get("provider", ""))):
+            integ = r
             break
-    if adapter is None:
+    if integ is None:
         new = "approved" if action == "apply_traffic_policy" else tp["status"]
         cur.execute("UPDATE aav.traffic_policies SET status = %s, updated_at = now() WHERE id = %s", (new, tpid))
         return {"target": str(tpid), "status": "failed",
                 "reason": "no verified_live provider adapter; policy approved but not applied"}
-    result = adapter.apply(tp) if action == "apply_traffic_policy" else adapter.rollback(tp)  # pragma: no cover
-    final = "active" if action == "apply_traffic_policy" else "rolled_back"  # pragma: no cover
-    cur.execute("UPDATE aav.traffic_policies SET status = %s, updated_at = now() WHERE id = %s",  # pragma: no cover
-                (final, tpid))
-    return {"target": str(tpid), "status": final, "provider_result": result}  # pragma: no cover
+    from app import providers
+    from app.routers.integrations import build_adapter
+    try:
+        adapter = build_adapter(cur, integ)
+        result = adapter.apply(tp) if action == "apply_traffic_policy" else adapter.rollback(tp)
+    except providers.ProviderError as exc:
+        new = "approved" if action == "apply_traffic_policy" else tp["status"]
+        cur.execute("UPDATE aav.traffic_policies SET status = %s, updated_at = now() WHERE id = %s", (new, tpid))
+        return {"target": str(tpid), "status": "failed", "reason": str(exc)}
+    final = "active" if action == "apply_traffic_policy" else "rolled_back"
+    cur.execute("UPDATE aav.traffic_policies SET status = %s, config = config || %s, updated_at = now() WHERE id = %s",
+                (final, json.dumps({"provider_ref": result} if action == "apply_traffic_policy" else
+                                   {"provider_rollback": result}), tpid))
+    return {"target": str(tpid), "status": final, "provider_result": result}
 
 
 @router.get("/coverage")
