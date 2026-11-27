@@ -4,10 +4,11 @@ Trace: ARC-01, AV-01 (on-demand, quick/full/scheduled, on-download/on-access via
 on-execute via new-process image scanning), AV-02, EDR-01, EDR-02, OPS-02, RSP-02, RSP-08,
 THR-06 (reject unsigned updates), THR-08 (removable media, tamper), OBJ-06.
 
-Limitation (register B-01): in user mode, "on access" and "on execute" detect and respond
-immediately after the file is written or the process starts; pre-open / pre-execution blocking
-needs the kernel minifilter (Windows) / Endpoint Security entitlement (macOS) / fanotify
-permission events (Linux), which are not part of this package.
+Real-time blocking (B-01, B-04): when the service runs, start_realtime() adds pre-open / pre-execute
+blocking — fanotify permission events on Linux (realtime_linux.py), the AavFilter minifilter on Windows
+(realtime_windows.py + kernel/windows) and the Endpoint Security extension on macOS (kernel/macos, asking
+over realtime.VerdictSocketServer). Where a backend is unavailable the agent says so in its sensor health
+and keeps the user-mode post-write / post-start detection below.
 """
 from __future__ import annotations
 
@@ -16,6 +17,7 @@ import hashlib
 import json
 import os
 import platform
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -65,6 +67,8 @@ class Agent:
         self._fingerprint = self.state.config_fingerprint()
         self._seen_conns: set[tuple] = set()
         self._baselined = False
+        self._rt = None
+        self._rt_status = "not started"
 
     # ----------------------------------------------------------------- identity
     @property
@@ -629,6 +633,42 @@ class Agent:
         return {"ok": False, "reason": f"unsupported command {ctype}"}
 
     # ----------------------------------------------------------------- loop
+    # ----------------------------------------------------------------- real-time blocking
+    def start_realtime(self, roots: list[str] | None = None, macos_socket: str = "/var/run/aav-verdict.sock") -> str:
+        """Start the platform's pre-open / pre-execute blocking backend once. Returns a status string that is
+        reported in sensor health ("fanotify", "minifilter", "endpoint_security", or "unavailable: why")."""
+        if self._rt is not None:
+            return self._rt_status
+        pol = self.policy
+        block_open, block_exec = bool(pol.get("on_access", True)), bool(pol.get("on_execute", True))
+        if not (block_open or block_exec):
+            self._rt_status = "off (policy)"
+            return self._rt_status
+        from aav_agent.realtime import VerdictService
+        svc = VerdictService(lambda: self.engine, self.excluded, self._respond_to_file)
+        try:
+            if sys.platform.startswith("linux"):
+                from aav_agent.realtime_linux import FanotifyGuard
+                self._rt = FanotifyGuard(svc, roots or self.watch_dirs(), block_open=block_open,
+                                         block_exec=block_exec).start()
+                self._rt_status = "fanotify"
+            elif sys.platform == "win32":
+                from aav_agent.realtime_windows import FilterPortClient
+                self._rt = FilterPortClient(svc).start()
+                self._rt_status = "minifilter"
+            elif sys.platform == "darwin":
+                from aav_agent.realtime import VerdictSocketServer
+                self._rt = VerdictSocketServer(svc, macos_socket).start()
+                self._rt_status = "endpoint_security"
+            else:
+                self._rt_status = f"unavailable: no backend for {sys.platform}"
+        except Exception as exc:  # backend missing (driver not loaded, no privileges): keep user-mode detection
+            self._rt, self._rt_status = None, f"unavailable: {exc}"[:200]
+        if self._rt is not None:
+            self._rt_service = svc
+        self.emit("realtime_protection", {"status": self._rt_status})
+        return self._rt_status
+
     def heartbeat(self) -> dict | None:
         sensors = {"file_watch": bool(self.policy.get("on_access", True)),
                    "process_monitor": bool(self.policy.get("on_execute", True)),
@@ -638,6 +678,7 @@ class Agent:
         if not self.licence_allows_protection():
             status = "disabled"
             sensors["licence"] = False
+        sensors["realtime_blocking"] = self._rt_status       # informational: never marks the device degraded
         try:
             r = self.http.post("/v1/agent/heartbeat", headers=self._h(), json={
                 "agent_version": AGENT_VERSION, "definitions_version": self.state.get("active:detections"),
@@ -720,6 +761,9 @@ class Agent:
             p.nice(10) if os.name == "posix" else p.nice(psutil.BELOW_NORMAL_PRIORITY_CLASS)
         except (psutil.Error, AttributeError):
             pass
+        self.refresh_policy()
+        self.refresh_updates()
+        self.start_realtime()
         while True:
             start = time.monotonic()
             try:

@@ -144,6 +144,9 @@ jobs:
         run: pip install pywin32
       - name: Agent unit tests on this OS
         run: python -m pytest ${{ env.P }}/agent/tests -v
+      - name: Real fanotify blocking tests (root)
+        if: runner.os == 'Linux'
+        run: sudo -E env "PATH=$PATH" python -m pytest ${{ env.P }}/agent/tests/test_realtime.py -v -rs
       - run: python ${{ env.P }}/agent/packaging/build.py dist
       - name: Smoke test the binary
         shell: bash
@@ -152,6 +155,28 @@ jobs:
           "./$BIN" --state "$RUNNER_TEMP/s" status || test $? -eq 2
       - uses: actions/upload-artifact@v7
         with: { name: "aav-agent-${{ matrix.target }}", path: "dist/aav-agent-*\ndist/SHA256SUMS-*" }
+
+  kernel-windows:
+    # B-01: builds the AavFilter minifilter with the WDK. The .sys is unsigned: loading needs test-signing or
+    # Microsoft attestation signing (Partner Center).
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build AavFilter.sys
+        shell: pwsh
+        run: ${{ env.P }}/agent/kernel/windows/build.ps1 -OutDir out
+      - uses: actions/upload-artifact@v7
+        with: { name: aav-kernel-windows, path: out/ }
+
+  kernel-macos:
+    # B-04: builds the Endpoint Security client (universal). Running it needs Apple's ES entitlement.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build AavEndpointSecurity
+        run: ${{ env.P }}/agent/kernel/macos/build.sh
+      - uses: actions/upload-artifact@v7
+        with: { name: aav-kernel-macos, path: "${{ env.P }}/agent/kernel/macos/out/AavEndpointSecurity" }
 
   android:
     runs-on: ubuntu-latest
