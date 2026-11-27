@@ -635,3 +635,5 @@
 642	Veu
 643	El fitxer s'ha mogut a la quarantena i no es pot executar.
 644	S'ha blocat una amenaça en aquest dispositiu.
+646	Rota el secret
+645	Vols emetre un secret de webhook nou? El secret actual deixa de funcionar immediatament.

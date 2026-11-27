@@ -195,6 +195,21 @@ def store_secret(iid: UUID, body: SecretIn, p: Principal = Depends(need("integra
                      detail={"bytes": len(body.value)})
 
 
+@router.post("/integrations/{iid}/rotate-webhook-secret")
+def rotate_webhook_secret(iid: UUID, p: Principal = Depends(need("integrations.write"))):
+    """Issue a new inbound webhook secret. The old one stops working immediately (webhook, gRPC and every other
+    transport that authenticates with it). The new secret is returned once and only its hash is stored."""
+    webhook_secret = crypto.new_token()
+    with db.tenant_tx(p.tenant_id) as cur:
+        cur.execute("UPDATE aav.integrations SET webhook_secret_hash = %s WHERE id = %s RETURNING id",
+                    (crypto.token_hash(webhook_secret), iid))
+        if not cur.fetchone():
+            raise HTTPException(404, "not found")
+        audit.record(cur, tenant_id=p.tenant_id, actor=p.actor, action="integration.webhook_secret_rotated",
+                     target=str(iid), detail={})
+    return {"id": str(iid), "webhook_url": f"/v1/ingest/{iid}", "webhook_secret": webhook_secret}
+
+
 @router.post("/integrations/{iid}/verify-credentials")
 def verify_credentials(iid: UUID, p: Principal = Depends(need("integrations.write"))):
     """Live check of the stored credential against the provider's API (read-only call)."""

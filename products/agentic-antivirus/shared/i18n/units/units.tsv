@@ -643,3 +643,5 @@
 642	Voice
 643	The file was moved to quarantine and cannot run.
 644	A threat was blocked on this device.
+645	Issue a new webhook secret? The current secret stops working immediately.
+646	Rotate secret

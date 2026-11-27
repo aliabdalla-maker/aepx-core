@@ -635,3 +635,5 @@
 642	Röst
 643	Filen flyttades till karantän och kan inte köras.
 644	Ett hot blockerades på den här enheten.
+646	Byt hemlighet
+645	Utfärda en ny webhook-hemlighet? Den nuvarande hemligheten slutar fungera direkt.

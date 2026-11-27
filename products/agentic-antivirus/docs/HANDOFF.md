@@ -31,7 +31,7 @@ The 27 Nov console screenshots show three live secrets, and they must be treated
 
 1. Revoke the **OpenRouter key** (starts `sk-or-v1-ae55…`) in OpenRouter.
 2. Create a new key and save it with `PUT /integrations/{id}/secret`. Never paste a key into the reference field.
-3. Rotate the **webhook secret** on that integration.
+3. Rotate the **webhook secret** on that integration: console → Integrations → **Rotate secret** (or `POST /v1/integrations/{id}/rotate-webhook-secret`). The old secret stops working at once; give the sender the new secret shown, with the URL `https://api.softwareequality.com/apps/agentic-antivirus/api/v1/ingest/{id}`.
 4. Rotate the **device enrolment token**.
 
 ## 4. How to land and deploy

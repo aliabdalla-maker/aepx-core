@@ -161,13 +161,21 @@ KEEP = {"Claude", "Agentic Antivirus", "action.approve", "CIDR", "SHA-256", "pri
 
 
 def all_units() -> list[str]:
-    """Every masked translatable unit of en.json, de-duplicated, in catalogue order."""
+    """Every masked translatable unit of en.json, de-duplicated. Numbering is stable: units already listed in
+    units.json keep their index and new units are appended, so translated <locale>.tsv files (and any copy a
+    vendor is working on) never need renumbering when English strings are added."""
     base = json.loads((I18N / "en.json").read_text(encoding="utf-8"))
     units: list[str] = []
     for v in base.values():
         for part in split_units(v)[0]:
             units.append(mask(part)[0])
-    return list(dict.fromkeys(units))
+    fresh = list(dict.fromkeys(units))
+    prev_file = UNITS_DIR / "units.json"
+    prev = json.loads(prev_file.read_text(encoding="utf-8")) if prev_file.exists() else []
+    live = set(fresh)
+    kept = [u for u in prev if u in live]
+    seen = set(kept)
+    return kept + [u for u in fresh if u not in seen]
 
 
 class FileEngine:

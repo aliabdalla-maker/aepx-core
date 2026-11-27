@@ -180,3 +180,29 @@ def test_coverage_records_per_layer(org, client):
     assert "no enrolled windows devices" in cov["endpoint"]["gaps"]
     assert any("test_only" in g for g in cov["network"]["gaps"])
     assert "no enabled identity integration" in cov["identity"]["gaps"]
+
+
+def test_rotate_webhook_secret_revokes_the_old_one(org, client, new_account, admin_sql):
+    admin, analyst, dev = org
+    integ = _integration(admin, "identity")
+    assert _ingest(client, integ, category="unusual_sign_in", external_id="rot-1").status_code == 202
+    old = integ["webhook_secret"]
+
+    assert analyst.post(f"/v1/integrations/{integ['id']}/rotate-webhook-secret").status_code == 403
+    other = new_account("rotate-other-tenant")
+    assert other.post(f"/v1/integrations/{integ['id']}/rotate-webhook-secret").status_code == 404
+
+    r = admin.post(f"/v1/integrations/{integ['id']}/rotate-webhook-secret")
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["webhook_url"] == f"/v1/ingest/{integ['id']}" and body["webhook_secret"] != old
+
+    assert _ingest(client, integ, category="unusual_sign_in", external_id="rot-2").status_code == 401   # old secret dead
+    fresh = dict(integ, webhook_secret=body["webhook_secret"])
+    assert _ingest(client, fresh, category="unusual_sign_in", external_id="rot-3").status_code == 202
+
+    rows = admin_sql("SELECT actor, detail::text AS detail FROM aav.audit_log WHERE action = "
+                     "'integration.webhook_secret_rotated' AND target = %s", integ["id"])
+    assert len(rows) == 1 and body["webhook_secret"] not in rows[0]["detail"]          # audited, secret not logged
+    hashes = admin_sql("SELECT webhook_secret_hash FROM aav.integrations WHERE id = %s", integ["id"])
+    assert body["webhook_secret"] not in hashes[0]["webhook_secret_hash"]                # only the hash is stored

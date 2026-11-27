@@ -635,3 +635,5 @@
 642	Voz
 643	O arquivo foi movido para a quarentena e não pode ser executado.
 644	Uma ameaça foi bloqueada neste dispositivo.
+646	Rodar segredo
+645	Emitir um novo segredo de webhook? O segredo atual deixa de funcionar imediatamente.

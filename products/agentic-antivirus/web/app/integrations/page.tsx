@@ -3,7 +3,7 @@ import { useI18n } from "../../lib/i18n";
 import { useState } from "react";
 import { Shell } from "../../components/Shell";
 import { Act, Status, useApi } from "../../components/ui";
-import { api } from "../../lib/api";
+import { api, apiUrl } from "../../lib/api";
 
 const KINDS = ["identity", "dns", "firewall", "waf", "api_gateway", "ddos", "cdn", "load_balancer", "backup", "dlp", "cloud_audit",
   "email", "url_reputation", "physical", "vulnerability", "smtp", "other"];
@@ -26,6 +26,8 @@ export default function Integrations() {
           <td>{i.endpoint || t("integration.inbound")}</td><td>{t(MATURITY[i.maturity])}</td>
           <td>{i.last_health ? (i.last_health.ok ? "reachable under egress policy" : i.last_health.reason) : "not checked"}</td>
           <td className="row"><Act label={t("ui.check")} run={() => api(`/v1/integrations/${i.id}/health`, { method: "POST" })} onDone={d.reload} />
+            <Act label={t("ui.rotate_secret")} confirm={t("integration.rotateConfirm")}
+              run={() => api(`/v1/integrations/${i.id}/rotate-webhook-secret`, { method: "POST" })} onDone={(r) => setCreated(r)} />
             {i.maturity === "unavailable" && <Act label={t("ui.accept_test_data")} run={() => api(`/v1/integrations/${i.id}/maturity`,
               { body: { maturity: "test_only", provider: i.config?.provider ?? "unspecified", evidence: {} } })} onDone={d.reload} />}</td></tr>)}</tbody></table>
 
@@ -39,7 +41,7 @@ export default function Integrations() {
           <input value={f.secret_ref} onChange={(e) => setF({ ...f, secret_ref: e.target.value })} /></label>
         <Act className="primary" label={t("ui.add_integration")} run={() => api("/v1/integrations", { body: { ...f, secret_ref: f.secret_ref || null } })}
           onDone={(r) => { setCreated(r); d.reload(); }} />
-        {created && <div className="banner" role="status">{t("ui.webhook")} <code>{created.webhook_url}</code>. {t("integration.secretOnce")} <code style={{ overflowWrap: "anywhere" }}>{created.webhook_secret}</code></div>}
+        {created && <div className="banner" role="status">{t("ui.webhook")} <code>{`${apiUrl()}${created.webhook_url}`}</code>. {t("integration.secretOnce")} <code style={{ overflowWrap: "anywhere" }}>{created.webhook_secret}</code></div>}
       </div>
 
       <h2>{t("ui.coverage_by_protection_layer")}</h2>
