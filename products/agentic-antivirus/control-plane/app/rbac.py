@@ -6,7 +6,7 @@ ROLES = ("tenant_admin", "it_admin", "security_analyst", "endpoint_user", "audit
 
 _READ = {"devices.read", "alerts.read", "incidents.read", "policies.read", "quarantine.read", "audit.read",
          "assets.read", "integrations.read", "settings.read", "kpi.read", "files.read", "recovery.read",
-         "actions.read", "coverage.read"}
+         "actions.read", "coverage.read", "memory.read"}
 
 PERMISSIONS: dict[str, set[str]] = {
     "auditor": set(_READ),
@@ -15,10 +15,10 @@ PERMISSIONS: dict[str, set[str]] = {
     "it_admin": _READ - {"audit.read"} | {
         "devices.enrol", "devices.write", "policies.write", "scans.schedule", "scans.run", "exclusions.write",
         "quarantine.restore", "settings.write", "files.write", "integrations.write", "assets.write",
-        "notifications.read", "updates.publish"},
+        "notifications.read", "updates.publish", "memory.write"},
     "security_analyst": _READ - {"audit.read"} | {
         "alerts.write", "incidents.write", "investigations.run", "actions.propose", "actions.approve",
-        "recovery.write", "notifications.read", "files.write", "report.suspicious", "traffic.propose"},
+        "recovery.write", "notifications.read", "files.write", "report.suspicious", "traffic.propose", "memory.write"},
     "msp_operator": set(),  # filled below
     "tenant_admin": set(),  # filled below
 }

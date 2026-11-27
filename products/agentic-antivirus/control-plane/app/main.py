@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app import db, governance, licensing, mailer
 from app.routers import (actions, agent, ai, auth, billing, endpoints, files, graphql_api, harness, incidents,
-                         integrations, investigation, mcp, platform, security, threats)
+                         integrations, investigation, mcp, memory, platform, security, threats)
 
 _retention_stop = threading.Event()
 
@@ -21,6 +21,7 @@ def _retention_loop() -> None:
         try:
             with db.global_tx() as cur:
                 cur.execute("SELECT aav.apply_telemetry_retention() AS n")
+                cur.execute("SELECT aav.apply_memory_retention() AS n")
         except Exception:  # pragma: no cover - retried at the next interval
             pass
 
@@ -42,7 +43,7 @@ app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.2", openapi_
 
 for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
           integrations.router, threats.router, billing.router, files.router, platform.router, security.router,
-          ai.router, harness.router, graphql_api.router, mcp.router):
+          ai.router, harness.router, graphql_api.router, mcp.router, memory.router):
     app.include_router(r)
 
 # Paths that stay reachable when the console is paywalled (post-trial policy) so users can
