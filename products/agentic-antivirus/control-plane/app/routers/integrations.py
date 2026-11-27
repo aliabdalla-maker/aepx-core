@@ -33,6 +33,21 @@ OUTBOUND_KINDS = ("messaging", "crm", "itsm")
 TEST_TRANSPORT = None          # tests only: an httpx transport standing in for the providers' APIs
 
 
+_SECRET_PREFIXES = ("sk-", "sk_", "pk_", "rk_", "ghp_", "gho_", "github_pat_", "xox", "AKIA", "ASIA", "AIza", "ya29.",
+                    "eyJ", "glpat-", "-----BEGIN")
+
+
+def looks_like_secret(value: str) -> bool:
+    """A secret reference is a short name (e.g. "cloudflare-prod"); tokens and keys are long and high-entropy."""
+    v = value.strip()
+    if v.startswith(_SECRET_PREFIXES):
+        return True
+    if len(v) >= 32 and " " not in v:
+        classes = sum(any(f(c) for c in v) for f in (str.islower, str.isupper, str.isdigit))
+        return classes >= 2 and len(set(v)) >= 16
+    return False
+
+
 def build_adapter(cur, integ: dict):
     """Instantiate the adapter for an integration row (needs id, tenant_id, signal_kind, endpoint, config)."""
     cls = VERIFIED_ADAPTERS.get((integ["signal_kind"], (integ.get("config") or {}).get("provider", "")))
@@ -114,6 +129,19 @@ def create_integration(body: IntegrationIn, p: Principal = Depends(need("integra
         raise HTTPException(422, "unknown signal_kind")
     if "password" in json.dumps(body.config).lower() or "secret" in json.dumps(body.config).lower():
         raise HTTPException(422, "credentials belong in the secret store; pass secret_ref instead")
+    if body.secret_ref and looks_like_secret(body.secret_ref):
+        # Audit 27 Nov 2026: an API key was typed into "Secret reference" and stored in clear text.
+        raise HTTPException(422, "This looks like a real credential, not a reference to one. Leave Secret reference "
+                                 "empty, create the integration, then store the credential with "
+                                 "PUT /v1/integrations/{id}/secret (it is encrypted and never shown again). "
+                                 "If you pasted a live key, revoke it with the provider.")
+    if body.endpoint:
+        from urllib.parse import urlparse
+        u = urlparse(body.endpoint)
+        from app.netpolicy import ALLOWED_SCHEMES
+        if u.scheme not in ALLOWED_SCHEMES | {"mqtt"} or not (u.hostname or (u.scheme == "postgresql" and "host=" in u.query)):
+            raise HTTPException(422, "Endpoint must be a full address with a TLS scheme, e.g. https://api.example.com "
+                                     f"(allowed: {', '.join(sorted(ALLOWED_SCHEMES))}); leave it empty for inbound webhooks")
     webhook_secret = crypto.new_token()
     with db.tenant_tx(p.tenant_id) as cur:
         cur.execute("INSERT INTO aav.integrations (tenant_id, name, signal_kind, protocol, endpoint, config, secret_ref, "

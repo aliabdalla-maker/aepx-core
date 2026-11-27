@@ -45,6 +45,7 @@ def mqtt_broker():
     from amqtt.broker import Broker
     port = _free_port()
     loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     cfg = {"listeners": {"default": {"type": "tcp", "bind": f"127.0.0.1:{port}"}},
            "plugins": {"amqtt.plugins.authentication.AnonymousAuthPlugin": {"allow_anonymous": True}}}
     broker = Broker(cfg, loop=loop)

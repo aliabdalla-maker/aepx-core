@@ -4,7 +4,7 @@ import { Shell } from "../../components/Shell";
 import { Act, Status, useApi } from "../../components/ui";
 import { api, API_BASE, session } from "../../lib/api";
 import { useI18n } from "../../lib/i18n";
-import { formatDateTime, formatNumber } from "../../lib/format";
+import { formatDateTime, formatNumber, formatBytes } from "../../lib/format";
 
 export default function Files() {
   const { t, locale } = useI18n();
@@ -53,7 +53,7 @@ export default function Files() {
       <table><thead><tr><th>{t("ui.name")}</th><th>{t("ui.type")}</th><th>{t("ui.size")}</th><th>{t("ui.changed")}</th><th>{t("ui.actions")}</th></tr></thead>
         <tbody>{(d.data ?? []).map((n) => <tr key={n.id}>
           <td>{n.kind === "dir" && !trashed ? <button onClick={() => setTrail([...trail, { id: n.id, name: n.name }])}>{n.name}/</button> : n.name}</td>
-          <td>{n.kind === "dir" ? "Folder" : n.mime}</td><td>{n.size_bytes != null ? `${formatNumber(n.size_bytes, locale)} B` : ""}</td>
+          <td>{n.kind === "dir" ? "Folder" : n.mime}</td><td>{n.size_bytes != null ? formatBytes(n.size_bytes, locale) : ""}</td>
           <td>{formatDateTime(n.updated_at, locale)}</td>
           <td className="row">{trashed ? <Act label={t("files.restore")} run={() => api(`/v1/files/${n.id}/restore`, { method: "POST" })} onDone={d.reload} /> : <>
             {n.kind === "file" && <button onClick={() => download(n.id, n.name)}>{t("files.download")}</button>}

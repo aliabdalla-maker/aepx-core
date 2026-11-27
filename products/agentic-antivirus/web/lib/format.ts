@@ -80,6 +80,15 @@ export function formatNumber(n: number, locale: string): string {
   return new Intl.NumberFormat(locale).format(n);
 }
 
+/** Human-readable size (audit: "70,267 B"). Uses the locale's own unit formatting. */
+export function formatBytes(n: number, locale: string): string {
+  const units = ["byte", "kilobyte", "megabyte", "gigabyte", "terabyte"] as const;
+  let i = 0, v = n;
+  while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+  return new Intl.NumberFormat(locale, { style: "unit", unit: units[i], unitDisplay: "short",
+    maximumFractionDigits: i === 0 ? 0 : 1 }).format(v);
+}
+
 export function formatCurrency(amount: number, currency: string, locale: string): string {
   return new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount);
 }

@@ -35,6 +35,24 @@ class AssetIn(BaseModel):
     public: bool = True
 
 
+def _check_public_asset(body) -> None:
+    """DDL-01 counts these as public endpoints, so they must really be public (audit 27 Nov 2026: a private
+    172.27.x address was registered and made the KPI read 100 %)."""
+    import ipaddress
+    import re
+    v = body.value.strip()
+    if body.kind == "ip":
+        try:
+            ip = ipaddress.ip_address(v)
+        except ValueError:
+            raise HTTPException(422, "value is not an IP address")
+        if body.public and not ip.is_global:
+            raise HTTPException(422, f"{v} is a private or reserved address, not a public endpoint. "
+                                     "Register the public address or hostname that the provider protects.")
+    elif not re.fullmatch(r"(?=.{1,253}$)([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}\.?", v):
+        raise HTTPException(422, "value must be a fully qualified host or zone name, e.g. shop.example.com")
+
+
 class SloIn(BaseModel):
     service: str
     availability_pct: float = Field(gt=0, le=100)
@@ -69,6 +87,7 @@ def assets(p: Principal = Depends(need("assets.read"))):
 def upsert_asset(body: AssetIn, p: Principal = Depends(need("assets.write"))):
     if body.kind not in ("ip", "hostname", "dns_zone"):
         raise HTTPException(422, "kind must be ip, hostname or dns_zone")
+    _check_public_asset(body)
     with db.tenant_tx(p.tenant_id) as cur:
         cur.execute("INSERT INTO aav.protected_assets (tenant_id, kind, value, service, service_owner, provider, "
                     "mitigation_policy, capacity_assumptions, exception_note, public) VALUES "
@@ -93,10 +112,20 @@ def ddos_coverage(p: Principal = Depends(need("assets.read"))):
     with db.tenant_tx(p.tenant_id) as cur:
         cur.execute("SELECT * FROM aav.protected_assets WHERE public")
         rows = cur.fetchall()
+    import ipaddress
+
+    def _invalid(r):     # private addresses registered before validation existed never count as covered
+        try:
+            return r["kind"] == "ip" and not ipaddress.ip_address(r["value"].strip()).is_global
+        except ValueError:
+            return r["kind"] == "ip"
+    invalid = [r for r in rows if _invalid(r)]
+    rows = [r for r in rows if not _invalid(r)]
     covered = [r for r in rows if not _uncovered(r)]
     excepted = [r for r in rows if r["exception_note"]]
     return {"public_endpoints": len(rows), "accounted_for": len(covered),
             "accounted_pct": round(100 * len(covered) / len(rows), 2) if rows else None,
+            "invalid": [{"id": str(r["id"]), "value": r["value"], "reason": "not a public address"} for r in invalid],
             "with_exceptions": len(excepted),
             "uncovered": [{"id": str(r["id"]), "value": r["value"], "service": r["service"]} for r in rows
                           if _uncovered(r)],

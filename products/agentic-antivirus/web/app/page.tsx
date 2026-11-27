@@ -35,7 +35,7 @@ export default function Dashboard() {
       <h2>{t("ui.right_now")}</h2>
       <Freshness at={k.at} />
       {k.data && <div className="stats">
-        <div><strong>{k.data.devices.protected}/{k.data.devices.enrolled}</strong><span>{t("ui.devices_fully_protected")}</span></div>
+        <div><strong>{k.data.devices.enrolled === 0 ? "—" : `${k.data.devices.protected}/${k.data.devices.enrolled}`}</strong><span>{t("ui.devices_fully_protected")}</span></div>
         <div><strong>{k.data.alerts_24h.total}</strong><span>{t("ui.alerts_in_the_last_24_hours")}</span></div>
         <div><strong>{k.data.incidents.open}</strong><span>{t("ui.open_incidents")}</span></div>
         <div><strong>{k.data.devices.isolated}</strong><span>{t("ui.devices_isolated")}</span></div>

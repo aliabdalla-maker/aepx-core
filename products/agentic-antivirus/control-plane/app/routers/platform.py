@@ -75,6 +75,79 @@ def _validate_setting(category: str, key: str, value) -> None:
         raise HTTPException(422, f"{category}.{key} must be one of {sorted(ENUMS[(category, key)])}")
     if (category, key) == ("localization", "default_locale") and value not in i18n.LOCALES:
         raise HTTPException(422, "unsupported locale")
+    rule = RULES.get((category, key))
+    if rule:
+        msg = rule(value)
+        if msg:
+            raise HTTPException(422, f"{category}.{key}: {msg}")
+
+
+def _range(lo, hi, unit=""):
+    return lambda v: None if lo <= v <= hi else f"must be between {lo} and {hi}{unit}"
+
+
+def _tz(v):
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+    try:
+        ZoneInfo(v)
+        return None if "/" in v or v == "UTC" else "use an IANA time zone such as Europe/London or UTC"
+    except (ZoneInfoNotFoundError, ValueError):
+        return "use an IANA time zone such as Europe/London or UTC"
+
+
+_HOST = __import__("re").compile(r"^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
+
+
+def _hosts(v):
+    bad = [h for h in v if not isinstance(h, str) or not _HOST.match(h.strip().lower())]
+    return f"not hostnames: {bad[:5]}" if bad else None
+
+
+def _ports(v):
+    bad = [x for x in v if not (isinstance(x, int) and not isinstance(x, bool) and 1 <= x <= 65535)
+           and not (isinstance(x, str) and x.isdigit() and 1 <= int(x) <= 65535)]
+    return f"not TCP ports: {bad[:5]}" if bad else None
+
+
+def _uuid_or_empty(v):
+    try:
+        UUID(v)
+        return None
+    except ValueError:
+        return None if v == "" else "must be the id of a backup integration (a UUID)"
+
+
+def _clean_text(maxlen):
+    return lambda v: ("must not start or end with spaces or contain line breaks"
+                      if v != v.strip() or "\n" in v or "\r" in v else
+                      (f"must be at most {maxlen} characters" if len(v) > maxlen else
+                       ("must not be empty" if not v else None)))
+
+
+def _email(v):
+    return None if __import__("re").fullmatch(r"[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}", v) else "must be an email address"
+
+
+# Value rules beyond the type (audit 27 Nov 2026: settings accepted "Gmt", 36-byte quotas, "321" as an egress host).
+RULES = {
+    ("general", "organisation_name"): _clean_text(200),
+    ("general", "support_email"): _email,
+    ("localization", "timezone"): _tz,
+    ("voice", "voice_retention_days"): _range(0, 365, " days"),
+    ("accessibility", "font_scale"): _range(0.75, 2.0),
+    ("authentication", "session_hours"): _range(1, 24 * 30, " hours"),
+    ("privacy", "telemetry_retention_days"): _range(7, 3650, " days"),
+    ("privacy", "evidence_retention_days"): _range(30, 3650, " days"),
+    ("storage", "quota_bytes"): _range(10 * 1024 * 1024, 10 * 1024 ** 4, " bytes (10 MB to 10 TB)"),
+    ("backups", "backup_integration_id"): _uuid_or_empty,
+    ("network", "egress_allowlist"): _hosts,
+    ("integration_ports", "approved_ports"): _ports,
+    ("agent_policies", "approval_ttl_minutes"): _range(5, 7 * 24 * 60, " minutes"),
+    ("llm_providers", "provider"): lambda v: None if v in ("anthropic", "ollama", "none")
+    else "must be one of anthropic, ollama, none (D-07: none in Release 1)",
+    ("billing_limits", "max_cost_per_task_usd"): _range(0, 1.0, " USD (owner decision D-09 caps a task at 1.00)"),
+    ("billing_limits", "monthly_budget_usd"): _range(0, 10000, " USD"),
+}
 
 
 @router.get("/settings/schema")
@@ -350,7 +423,17 @@ def my_tenants(p: Principal = Depends(current_user)):
 def members(p: Principal = Depends(need("users.manage"))):
     with db.tenant_tx(p.tenant_id) as cur:
         cur.execute("SELECT user_id, role, created_at FROM aav.memberships ORDER BY created_at")
-        return cur.fetchall()
+        rows = cur.fetchall()
+    # Show people by email, one row per person with all their roles (audit: UUIDs listed twice).
+    with db.global_tx() as cur:
+        cur.execute("SELECT id, email FROM aav.users WHERE id = ANY(%s)", ([r["user_id"] for r in rows],))
+        emails = {r["id"]: r["email"] for r in cur.fetchall()}
+    people: dict = {}
+    for r in rows:
+        e = people.setdefault(r["user_id"], {"user_id": r["user_id"], "email": emails.get(r["user_id"]),
+                                             "roles": [], "created_at": r["created_at"]})
+        e["roles"].append(r["role"])
+    return [{**v, "role": ", ".join(v["roles"])} for v in people.values()]
 
 
 @router.post("/members")

@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app import audit, crypto, db
 from app.deps import Principal, need, tenant_principal
@@ -53,6 +53,11 @@ class ScheduleIn(BaseModel):
     scan_type: str
     cron: str = Field(pattern=r"^(\S+\s+){4}\S+$")
 
+    @field_validator("cron")
+    @classmethod
+    def _cron(cls, v: str) -> str:
+        return validate_cron(v)
+
 
 class ScanIn(BaseModel):
     # Empty list means "all active devices in the tenant" (resolved in run_scan).
@@ -70,6 +75,28 @@ class BundleIn(BaseModel):
     body: dict
 
 
+_CRON_RANGES = [(0, 59), (0, 23), (1, 31), (1, 12), (0, 7)]
+
+
+def validate_cron(expr: str) -> str:
+    """Five fields (minute hour day month weekday); numbers, *, ranges, lists and steps within each field's range."""
+    fields = expr.split()
+    if len(fields) != 5:
+        raise ValueError("schedule needs 5 fields: minute hour day month weekday, e.g. '0 2 * * 0'")
+    for f, (lo, hi), name in zip(fields, _CRON_RANGES, ("minute", "hour", "day", "month", "weekday")):
+        for part in f.split(","):
+            base, _, step = part.partition("/")
+            if step and (not step.isdigit() or int(step) == 0):
+                raise ValueError(f"{name}: bad step '{part}'")
+            if base == "*":
+                continue
+            a, _, b = base.partition("-")
+            for x in (a, b) if b else (a,):
+                if not x.isdigit() or not lo <= int(x) <= hi:
+                    raise ValueError(f"{name}: '{part}' is outside {lo}-{hi}")
+    return expr
+
+
 def validate_policy(body: dict) -> None:
     unknown = set(body) - set(POLICY_SCHEMA_KEYS)
     if unknown:
@@ -82,6 +109,19 @@ def validate_policy(body: dict) -> None:
         raise HTTPException(422, "removable_media must be allow, audit or block")
     if not 1 <= body.get("event_buffer_mb", 64) <= 4096:
         raise HTTPException(422, "event_buffer_mb out of range")
+    import ipaddress
+    import re as _re
+    for h in body.get("allowed_management_hosts", []):
+        ok = isinstance(h, str) and (bool(_re.fullmatch(r"(?=.{1,253}$)([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)*"
+                                                       r"[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(:\d{1,5})?", h)))
+        if not ok:
+            try:
+                ipaddress.ip_network(h, strict=False)
+                ok = True
+            except ValueError:
+                ok = False
+        if not ok:   # audit 27 Nov 2026: a folder path was accepted here
+            raise HTTPException(422, f"allowed_management_hosts: '{h}' is not a host name, IP address or network")
 
 
 @router.post("/enrollment-tokens", status_code=201)

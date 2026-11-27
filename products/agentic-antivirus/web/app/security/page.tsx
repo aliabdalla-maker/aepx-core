@@ -20,7 +20,7 @@ function Kpi({ label, r }: { label: string; r?: Ratio }) {
 function Times({ label, v }: { label: string; v?: { median: number | null; p95: number | null; n: number; open_cases?: number } }) {
   const { t } = useI18n();
   if (!v) return null;
-  return <div><strong>{v.median == null ? t("common.unavailable") : `${v.median} s`}</strong>
+  return <div><strong>{v.median == null ? t("common.na") : `${v.median} s`}</strong>
     <span>{label}: {t("security.p95", { v: v.p95 ?? "—" })} · n={v.n}{v.open_cases ? ` · ${t("security.openCases", { n: v.open_cases })}` : ""}</span></div>;
 }
 
@@ -106,7 +106,7 @@ export default function Security() {
       <table><thead><tr><th>{t("devices.hostname")}</th><th>{t("security.scanType")}</th><th>{t("common.status")}</th>
         <th>{t("security.files")}</th><th>{t("security.detections")}</th><th>{t("security.coverageGaps")}</th>
         <th>{t("security.engine")}</th><th>{t("security.started")}</th><th /></tr></thead>
-        <tbody>{(jobs.data ?? []).map((j) => <tr key={j.id}><td>{j.hostname}</td><td>{t(`scan.type.${j.scan_type}`)}</td>
+        <tbody>{jobs.data && jobs.data.length === 0 && <tr><td colSpan={9}>{t("common.none")}</td></tr>}{(jobs.data ?? []).map((j) => <tr key={j.id}><td>{j.hostname}</td><td>{t(`scan.type.${j.scan_type}`)}</td>
           <td>{t(`scan.status.${j.status}`)}</td><td>{j.files_scanned}{j.archives_scanned ? ` (+${j.archives_scanned} ${t("security.archives")})` : ""}</td>
           <td>{j.detections}</td><td>{Object.entries(j.gaps ?? {}).map(([g, n]) => `${t(`scan.gap.${g}`)} ${n}`).join(", ") || "—"}</td>
           <td>{j.engine_version ?? "—"}</td><td>{formatDateTime(j.created_at, locale)}</td>
@@ -133,7 +133,7 @@ export default function Security() {
           <Kpi label={t("recovery.kpi.mitigation")} r={rec.mitigation_verification_rate} />
           <Kpi label={t("recovery.kpi.recurrence")} r={rec.recurrence_rate} />
           <Kpi label={t("recovery.kpi.return")} r={rec.safe_return_to_service_rate} />
-          <div><strong>{rec.time_to_verified_eradication_hours.median ?? t("common.unavailable")}{rec.time_to_verified_eradication_hours.median != null ? " h" : ""}</strong>
+          <div><strong>{rec.time_to_verified_eradication_hours.median ?? t("common.na")}{rec.time_to_verified_eradication_hours.median != null ? " h" : ""}</strong>
             <span>{t("recovery.kpi.eradication", { n: rec.time_to_verified_eradication_hours.n, open: rec.time_to_verified_eradication_hours.unresolved })}</span></div>
         </div>
         <p className="hint">{t("recovery.note", { q: rec.verified_removal_rate.quarantine_only, r: rec.verified_removal_rate.reimage })}</p>

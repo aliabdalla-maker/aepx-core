@@ -75,7 +75,8 @@ def source_db():
 
 def test_sql_pull_with_cursor(new_account, source_db):
     admin = new_account("sqlpull")
-    endpoint = psycopg.conninfo.make_conninfo(**{k: v for k, v in source_db.items() if k != "password"})
+    endpoint = (f"postgresql://{source_db.get('user', 'postgres')}@/{source_db['dbname']}"
+                f"?host={source_db.get('host', '/tmp/pg')}&port={source_db.get('port', 5432)}")
     query = ("SELECT lpad(id::text, 8, '0') AS external_id, kind AS category, sev AS severity, at AS observed_at, "
              "src AS device_ip FROM fw_events WHERE lpad(id::text, 8, '0') > %(cursor)s ORDER BY id")
     integ = _integration(admin, "firewall", "sql", endpoint=endpoint, config={"query": query})

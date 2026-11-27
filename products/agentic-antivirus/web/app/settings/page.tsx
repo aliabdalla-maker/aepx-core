@@ -43,7 +43,7 @@ export default function Settings() {
 
       <h2>{t("ui.people")}</h2>
       <table><thead><tr><th>{t("ui.user")}</th><th>{t("ui.role")}</th></tr></thead>
-        <tbody>{(members.data ?? []).map((m) => <tr key={m.user_id + m.role}><td><code>{m.user_id}</code></td><td>{m.role}</td></tr>)}</tbody></table>
+        <tbody>{(members.data ?? []).map((m) => <tr key={m.user_id}><td>{m.email ?? <code>{m.user_id}</code>}</td><td>{(m.roles ?? [m.role]).join(", ")}</td></tr>)}</tbody></table>
       <div className="row"><label style={{ margin: 0 }}>{t("auth.email")}<input type="email" value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} /></label>
         <label style={{ margin: 0 }}>{t("ui.role")}<select value={role} onChange={(e) => setRole(e.target.value)}>
           {["tenant_admin", "it_admin", "security_analyst", "endpoint_user", "auditor", "msp_operator"].map((r) => <option key={r}>{r}</option>)}</select></label>

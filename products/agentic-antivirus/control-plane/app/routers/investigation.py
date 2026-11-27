@@ -72,14 +72,14 @@ def rules_findings(cur, incident_id, evidence: list[dict]) -> dict:
     events = [e for e in evidence if e["type"] == "event"]
     external = [e for e in evidence if e["type"] == "external_alert"]
     for a in alerts:
-        facts.append({"statement": f"{a.get('severity','?')} alert '{a.get('summary')}' on {a.get('device')} "
+        facts.append({"statement": f"{a.get('severity','?')} alert '{a.get('summary')}' on {a.get('device') or 'no device (reported or external)'} "
                                    f"(rule {a.get('rule')}, technique {a.get('technique') or 'n/a'}); "
                                    f"local action: {a.get('action_taken') or 'none'}",
                       "evidence_refs": [a["ref"]]})
     for e in events:
         d = e.get("data", {})
         desc = ", ".join(f"{k}={d[k]}" for k in ("process", "pid", "parent", "path", "sha256", "remote_ip") if k in d)
-        facts.append({"statement": f"{e.get('kind')} on {e.get('device')}: {desc}", "evidence_refs": [e["ref"]]})
+        facts.append({"statement": f"{e.get('kind')} on {e.get('device') or 'an unknown device'}: {desc}", "evidence_refs": [e["ref"]]})
     for x in external:
         facts.append({"statement": f"{x.get('signal')} alert ({x.get('category')}, {x.get('severity')}) for "
                                    f"{x.get('asset') or 'unspecified asset'}; impact "
