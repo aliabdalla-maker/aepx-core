@@ -102,7 +102,7 @@ class VerdictService:
         """For backends that pass a path (macOS socket protocol). Opens with O_NOFOLLOW; the caller (the ES
         extension) is the only process allowed to make this open without generating a new auth event."""
         try:
-            fd = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0))
+            fd = os.open(path, os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0))
         except OSError:
             return Decision(True, "unreadable (fail open)")
         try:

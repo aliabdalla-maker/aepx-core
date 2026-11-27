@@ -13,7 +13,6 @@ is recorded on the integration (last_health) and never blocks or rolls back the 
 """
 from __future__ import annotations
 
-import json
 from urllib.parse import urlparse
 
 from app.providers.base import Provider, ProviderError

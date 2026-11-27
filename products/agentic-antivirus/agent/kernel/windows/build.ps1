@@ -16,7 +16,8 @@ $bin = "$($msvc.FullName)\bin\Hostx64\x64"
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 $inc = @("$kits\Include\$v\km", "$kits\Include\$v\shared", "$kits\Include\$v\km\crt", "$($msvc.FullName)\include")
 $lib = "$kits\Lib\$v\km\x64"
-$cflags = @("/nologo", "/c", "/kernel", "/W4", "/WX", "/O2", "/GS", "/Gy", "/Zi", "/D_AMD64_", "/DAMD64", "/D_WIN64",
+# /wd4324: the WDK's own fltKernel.h pads structures (C4324) and would otherwise fail /WX.
+$cflags = @("/nologo", "/c", "/kernel", "/W4", "/WX", "/wd4324", "/O2", "/GS", "/Gy", "/Zi", "/D_AMD64_", "/DAMD64", "/D_WIN64",
             "/DNTDDI_VERSION=0x0A00000C", "/D_WIN32_WINNT=0x0A00", "/DPOOL_NX_OPTIN=1", "/Fo$OutDir\AavFilter.obj",
             "/Fd$OutDir\AavFilter.pdb") + ($inc | ForEach-Object { "/I$_" })
 & "$bin\cl.exe" @cflags "$PSScriptRoot\AavFilter.c"

@@ -25,6 +25,15 @@ SEVERITIES = ("low", "medium", "high", "critical")
 READ_CHUNK = 1024 * 1024
 
 
+def _pread(fd: int, n: int, off: int) -> bytes:
+    """os.pread where available (Linux, macOS); on Windows, seek and read the same descriptor.
+    The Windows minifilter hands the service a handle it owns, so moving its offset is safe."""
+    if hasattr(os, "pread"):
+        return os.pread(fd, n, off)
+    os.lseek(fd, off, os.SEEK_SET)
+    return os.read(fd, n)
+
+
 @dataclass
 class Detection:
     rule_id: str
@@ -126,7 +135,7 @@ class Engine:
         def chunks():
             off = 0
             while True:
-                b = os.pread(fd, READ_CHUNK, off)
+                b = _pread(fd, READ_CHUNK, off)
                 if not b:
                     return
                 off += len(b)

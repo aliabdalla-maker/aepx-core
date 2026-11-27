@@ -96,7 +96,7 @@ def pptx_slides(path: Path) -> list[dict]:
         for i, name in enumerate(slides, 1):
             root = pkg.xml(name)
             lines = ["".join(t.text or "" for t in p.iter(f"{_A}t")) for p in root.iter(f"{_A}p")]
-            out.append({"slide": i, "text": "\n".join(l for l in lines if l)})
+            out.append({"slide": i, "text": "\n".join(line for line in lines if line)})
         return out
     finally:
         pkg.close()
