@@ -2,8 +2,14 @@
 # OCI Always Free preflight for Agentic Antivirus (OCI-01..07). READ-ONLY: lists and checks only; creates,
 # changes and deletes nothing. Stops at the first condition that could incur charges or that cannot be verified.
 # Run in OCI Cloud Shell or with an authenticated OCI CLI:  AAV_COMPARTMENT_OCID=ocid1.compartment... ./preflight.sh
+# Evidence (OCI-04, RA-09, DLV-09): the full transcript goes to $AAV_EVIDENCE_DIR/preflight-<UTC>.log.
+# Optional AAV_INSTANCE_OCID adds the boot-volume encryption check (NFR-01).
 set -euo pipefail
-REGION="uk-london-1"
+EVID=${AAV_EVIDENCE_DIR:-/var/lib/aav/evidence}; mkdir -p "$EVID" 2>/dev/null || EVID=.
+LOG="$EVID/preflight-$(date -u +%Y%m%dT%H%M%SZ).log"
+exec > >(tee -a "$LOG") 2>&1
+echo "preflight transcript: $LOG"
+REGION="${AAV_OCI_REGION:-uk-london-1}"
 fail() { echo "STOP: $*" >&2; exit 1; }
 command -v oci >/dev/null || fail "OCI CLI not available"
 [ -n "${AAV_COMPARTMENT_OCID:-}" ] || fail "AAV_COMPARTMENT_OCID not set (register PRJ-31)"
@@ -46,5 +52,16 @@ NONFREE=$(oci compute instance list --region "$REGION" --compartment-id "$AAV_CO
   --query 'length(data[?"lifecycle-state"==`RUNNING` && shape!=`VM.Standard.A1.Flex` && shape!=`VM.Standard.E2.1.Micro`])' --raw-output)
 [ "$NONFREE" = "0" ] || fail "compartment runs $NONFREE non-Always-Free instance(s); review costs before continuing"
 echo "7/7 no paid compute in the compartment"
+if [ -n "${AAV_INSTANCE_OCID:-}" ]; then
+  BVID=$(oci compute boot-volume-attachment list --region "$REGION" --availability-domain "$AD" \
+    --compartment-id "$AAV_COMPARTMENT_OCID" --instance-id "$AAV_INSTANCE_OCID" --query 'data[0]."boot-volume-id"' --raw-output)
+  KMS=$(oci bv boot-volume get --region "$REGION" --boot-volume-id "$BVID" --query 'data."kms-key-id"' --raw-output 2>/dev/null || true)
+  TRANSIT=$(oci compute instance get --region "$REGION" --instance-id "$AAV_INSTANCE_OCID" \
+    --query 'data."launch-options"."is-pv-encryption-in-transit-enabled"' --raw-output 2>/dev/null || echo unknown)
+  case "$KMS" in ""|null) KMS="Oracle-managed key (OCI encrypts every boot volume at rest by default)";; esac
+  echo "8/8 boot volume $BVID encrypted at rest: $KMS; in-transit PV encryption: $TRANSIT"
+else
+  echo "8/8 skipped: set AAV_INSTANCE_OCID to record the boot-volume encryption (NFR-01)"
+fi
 python3 "$(dirname "$0")/guard.py" >/dev/null || fail "compose guard failed"
-echo "PREFLIGHT PASSED. Nothing was created. Deployment still needs written approval (register RA-10)."
+echo "PREFLIGHT PASSED. Nothing was created. Deployment still needs written approval (register RA-10). Evidence: $LOG"

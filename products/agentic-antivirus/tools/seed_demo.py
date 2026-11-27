@@ -1,8 +1,11 @@
-"""Seeds a running control plane through its public API and the real agent (used for screenshots and the
-CI accessibility gate). Env: AAV_API, AAV_PSQL (psql connection string to read the verification mail)."""
+"""Seeds a running control plane through its public API and the real agent with synthetic, sanitised data
+(used for screenshots, the CI accessibility gate and the staging environment, OCI-16). Env: AAV_API,
+AAV_PSQL (psql connection string to read the verification mail) or AAV_PSQL_CMD (a full psql command, e.g.
+"docker compose -p agentic-antivirus-staging exec -T postgres psql -U aav_owner -d aav")."""
 import json
 import os
 import pathlib
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -18,7 +21,8 @@ c = httpx.Client(base_url=B)
 
 
 def sql(q):
-    return subprocess.run(["psql", os.environ["AAV_PSQL"], "-tAc", q], capture_output=True, text=True, check=True).stdout.strip()
+    cmd = shlex.split(os.environ["AAV_PSQL_CMD"]) if os.environ.get("AAV_PSQL_CMD") else ["psql", os.environ["AAV_PSQL"]]
+    return subprocess.run([*cmd, "-tAc", q], capture_output=True, text=True, check=True).stdout.strip()
 
 
 email = "ops@example.com"

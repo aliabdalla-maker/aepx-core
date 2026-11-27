@@ -12,8 +12,13 @@ on:
   workflow_dispatch:
     inputs:
       deploy_sha:
-        description: "Verified commit SHA to deploy (production only; requires environment approval)"
+        description: "Verified commit SHA on master to deploy"
         required: false
+      target:
+        description: "Where to deploy: staging first, then production (production refuses a SHA that has not passed staging)"
+        default: staging
+        type: choice
+        options: [staging, production]
       channel:
         description: "Desktop update channel"
         default: beta
@@ -112,7 +117,11 @@ jobs:
       - run: pip install pip-audit && pip-audit -r $P/control-plane/requirements.txt -r $P/agent/requirements.txt
       - run: cd $P/web && npm ci && npm audit --audit-level=high --omit=dev
       - name: Compose guard (loopback-only, no privileged, Always Free totals)
-        run: python $P/deploy/guard.py
+        run: |
+          for f in compose.yml compose.yml:compose.cohost.yml compose.yml:compose.staging.yml; do
+            COMPOSE_FILE=$f python $P/deploy/guard.py
+          done
+          bash -n $P/deploy/*.sh
       - uses: anchore/sbom-action@v0
         with: { path: "${{ env.P }}", format: spdx-json, artifact-name: aav-sbom.spdx.json, upload-release-assets: false }
 
@@ -324,8 +333,34 @@ jobs:
               --notes-file notes.md $(ls | grep -v '^notes.md$')
           fi
 
+  deploy-staging:
+    # OCI-16, RA-13: isolated staging stack on the same VM (deploy/compose.staging.yml), synthetic data only.
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_sha != '' && inputs.target == 'staging'
+    needs: [images, agent, android, desktop]
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+        with: { ref: "${{ inputs.deploy_sha }}", fetch-depth: 0 }
+      - name: Refuse unverified commits
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ inputs.deploy_sha }}"
+          git fetch --no-tags origin master
+          git merge-base --is-ancestor HEAD FETCH_HEAD || { echo "deploy_sha is not on master" >&2; exit 1; }
+      - name: Deploy to staging over SSH and seed synthetic data
+        env:
+          HOST: ${{ secrets.OCI_HOST }}
+          SSH_USER: ${{ secrets.OCI_USER }}
+          KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+        run: |
+          test -n "$HOST" && test -n "$KEY" && test -n "$SSH_USER" || { echo "OCI_HOST / OCI_USER / OCI_SSH_PRIVATE_KEY not configured; nothing deployed" >&2; exit 1; }
+          echo "$KEY" > k && chmod 600 k
+          mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }} staging && (products/agentic-antivirus/deploy/staging-seed.sh || echo 'seed skipped (already seeded)')"
+          echo "Staging verified: \`${{ inputs.deploy_sha }}\` may now be deployed to production" >> "$GITHUB_STEP_SUMMARY"
+
   deploy-production:
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_sha != ''
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_sha != '' && inputs.target == 'production'
     needs: [images, agent, android, desktop]
     runs-on: ubuntu-latest
     environment: production
@@ -346,7 +381,7 @@ jobs:
           test -n "$HOST" && test -n "$KEY" && test -n "$SSH_USER" || { echo "OCI_HOST / OCI_USER / OCI_SSH_PRIVATE_KEY not configured; nothing deployed" >&2; exit 1; }
           echo "$KEY" > k && chmod 600 k
           mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }}"
+          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }} production"
       - name: Post-deploy smoke test (RA-03, RA-11, FN-06)
         run: |
           V=$(python3 -c "import json;print(json.load(open('$P/clients/desktop/package.json'))['version'])")
@@ -390,7 +425,7 @@ jobs:
           test -n "$HOST" && test -n "$KEY" && test -n "$SSH_USER" || { echo "OCI_HOST / OCI_USER / OCI_SSH_PRIVATE_KEY not configured; nothing deployed" >&2; exit 1; }
           echo "$KEY" > k && chmod 600 k
           mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${GITHUB_SHA} && products/agentic-antivirus/deploy/deploy.sh ${GITHUB_SHA}"
+          ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${GITHUB_SHA} && products/agentic-antivirus/deploy/deploy.sh ${GITHUB_SHA} staging && products/agentic-antivirus/deploy/deploy.sh ${GITHUB_SHA} production"
       - name: Verify the public endpoint is live and ready
         run: |
           for i in $(seq 1 24); do

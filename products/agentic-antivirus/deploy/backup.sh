@@ -2,7 +2,7 @@
 # Encrypted logical backup (OCI-10). Stores on the VM's boot/block volume within Always Free storage.
 # Requires AAV_BACKUP_PASSPHRASE_FILE (mode 600). Keeps the last 14 backups.
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "${AAV_COMPOSE_DIR:-$(dirname "$0")}"   # compose files (and COMPOSE_FILE/COMPOSE_PROJECT_NAME) select the stack
 OUT=${AAV_BACKUP_DIR:-/var/backups/aav}; mkdir -p "$OUT"; chmod 700 "$OUT"
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 docker compose exec -T postgres pg_dump -U aav_owner -d aav --format=custom \
