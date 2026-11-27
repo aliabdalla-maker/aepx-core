@@ -1,0 +1,175 @@
+name: aav-server-bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'check reports readiness; prepare creates missing AAV configuration'
+        type: choice
+        default: check
+        options: [check, prepare]
+
+permissions: {}
+
+concurrency:
+  group: aav-server-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - name: Check or prepare ai4business over SSH
+        shell: bash
+        env:
+          HOST: ${{ secrets.OCI_HOST }}
+          SSH_USER: ${{ secrets.OCI_USER }}
+          KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ vars.OCI_SSH_KNOWN_HOSTS }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          umask 077
+          : "${HOST:?Set OCI_HOST}"
+          : "${SSH_USER:?Set OCI_USER}"
+          : "${KEY:?Set OCI_SSH_PRIVATE_KEY}"
+          : "${KNOWN_HOSTS:?Set OCI_SSH_KNOWN_HOSTS to a verified host entry}"
+          [[ "$HOST" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]]
+          [[ "$SSH_USER" =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]]
+          [[ "$MODE" == check || "$MODE" == prepare ]]
+
+          temp=$(mktemp -d "$RUNNER_TEMP/aav-ssh.XXXXXX")
+          trap 'rm -rf -- "$temp"' EXIT
+          printf '%s\n' "$KEY" | tr -d '\r' >"$temp/key"
+          printf '%s\n' "$KNOWN_HOSTS" | tr -d '\r' >"$temp/known_hosts"
+          unset KEY KNOWN_HOSTS
+
+          ssh -T -i "$temp/key" -o BatchMode=yes -o IdentitiesOnly=yes \
+            -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 \
+            -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$temp/known_hosts" \
+            -o GlobalKnownHostsFile=/dev/null "$SSH_USER@$HOST" "bash -s -- $MODE" <<'REMOTE'
+          set -euo pipefail
+          printf 'Host: %s\n' "$(hostname)"
+          printf 'Checkout: '
+          git -C /opt/aepx-core rev-parse --verify HEAD
+          sudo -n bash -s -- "$1" <<'ROOT'
+          set -euo pipefail
+          umask 077
+          mode=$1
+          cfg=/etc/aav
+          evidence=/var/lib/aav/evidence
+          incomplete=0
+          fail() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
+          missing() { printf 'Missing: %s\n' "$1"; incomplete=1; }
+          if [[ "$mode" == prepare ]]; then
+            exec 9>/run/lock/aav-preparation.lock
+            flock -n 9 || fail 'Another AAV preparation is running.'
+          fi
+
+          for dir in "$cfg" "$evidence"; do
+            [[ ! -L "$dir" ]] || fail "Unexpected symlink: $dir"
+            if [[ -e "$dir" ]]; then
+              [[ -d "$dir" && "$(stat -c '%u:%g:%a' "$dir")" == 0:0:700 ]] ||
+                fail "Expected root:root and mode 0700: $dir"
+            else
+              missing "$dir"
+            fi
+          done
+
+          check_file() {
+            local path=$1 metadata=$2
+            [[ ! -L "$path" ]] || fail "Unexpected symlink: $path"
+            if [[ -e "$path" ]]; then
+              [[ -f "$path" && "$(stat -c '%u:%a:%h' "$path")" == "$metadata:1" ]] ||
+                fail "Unexpected file type, owner, mode or link count: $path"
+              [[ -s "$path" || "$path" == "$cfg/aav.env" ]] ||
+                fail "Existing file is empty: $path"
+            else
+              missing "$path"
+            fi
+          }
+          check_file "$cfg/aav.env" 0:600
+          check_file "$cfg/backup.pass" 0:600
+          check_file "$cfg/staging_signing_key.pem" 10001:400
+          check_file "$cfg/aav-staging.env" 0:600
+
+          setting() {
+            local key=$1 value=$2 current=
+            if [[ -f "$cfg/aav.env" ]]; then
+              current=$(awk -v k="$key" '$0 ~ ("^[[:space:]]*(export[[:space:]]+)?" k "[[:space:]]*=")' "$cfg/aav.env")
+            fi
+            if [[ -z "$current" ]]; then
+              missing "$key"
+              if [[ "$mode" == prepare ]]; then
+                printf '\n%s=%s\n' "$key" "$value" >>"$tmp/aav.env"
+              fi
+            else
+              [[ "$current" == "$key=$value" ]] || fail "Review conflicting or duplicate $key"
+            fi
+          }
+
+          if [[ -f "$cfg/aav-staging.env" ]]; then
+            for key in AAV_POSTGRES_PASSWORD AAV_APP_DB_PASSWORD; do
+              awk -v k="$key" 'index($0,k "=")==1 {n++; value=substr($0,length(k)+2)} END {exit !(n==1 && length(value)>0)}' \
+                "$cfg/aav-staging.env" || fail "Expected one nonempty $key in aav-staging.env"
+            done
+            for entry in "AAV_SIGNING_KEY_PATH=$cfg/staging_signing_key.pem" \
+                         "AAV_BACKUP_PASSPHRASE_FILE=$cfg/backup.pass"; do
+              awk -v expected="$entry" 'BEGIN {split(expected,k,"=")} index($0,k[1] "=")==1 {n++; exact+=($0==expected)} END {exit !(n==1 && exact==1)}' \
+                "$cfg/aav-staging.env" || fail "Review ${entry%%=*} in aav-staging.env"
+            done
+          fi
+          if [[ -f "$cfg/staging_signing_key.pem" ]]; then
+            openssl pkey -in "$cfg/staging_signing_key.pem" -passin pass: -check -noout >/dev/null 2>&1 ||
+              fail 'Existing staging signing key could not be validated.'
+          fi
+
+          if [[ "$mode" == prepare ]]; then
+            install -d -o root -g root -m 0700 -- "$cfg" "$evidence"
+            tmp=$(mktemp -d "$cfg/.bootstrap.XXXXXX")
+            trap 'rm -rf -- "$tmp"' EXIT
+            : >"$tmp/aav.env"
+            if [[ -f "$cfg/aav.env" ]]; then
+              cat -- "$cfg/aav.env" >"$tmp/aav.env"
+            fi
+          fi
+          setting AAV_COMPOSE_FILES 'compose.yml:compose.cohost.yml'
+          setting AAV_BACKUP_PASSPHRASE_FILE "$cfg/backup.pass"
+          setting AAV_PLATFORM_OPERATORS 'ali.abdalla@softwareequality.com'
+
+          if [[ "$mode" == check ]]; then
+            if (( incomplete )); then
+              echo AAV_CHECK_INCOMPLETE
+              exit 3
+            fi
+            echo AAV_CHECK_OK
+            exit 0
+          fi
+
+          if [[ ! -e "$cfg/backup.pass" ]]; then
+            openssl rand -base64 48 >"$tmp/backup.pass"
+            mv -T -- "$tmp/backup.pass" "$cfg/backup.pass"
+          fi
+          if [[ ! -e "$cfg/staging_signing_key.pem" ]]; then
+            openssl genpkey -algorithm ed25519 -out "$tmp/signing.pem"
+            chown 10001:root "$tmp/signing.pem"
+            chmod 0400 "$tmp/signing.pem"
+            mv -T -- "$tmp/signing.pem" "$cfg/staging_signing_key.pem"
+          fi
+          if [[ ! -e "$cfg/aav-staging.env" ]]; then
+            pg_password=$(openssl rand -hex 24)
+            app_password=$(openssl rand -hex 24)
+            printf 'AAV_POSTGRES_PASSWORD=%s\nAAV_APP_DB_PASSWORD=%s\nAAV_SIGNING_KEY_PATH=%s\nAAV_BACKUP_PASSPHRASE_FILE=%s\n' \
+              "$pg_password" "$app_password" "$cfg/staging_signing_key.pem" "$cfg/backup.pass" >"$tmp/aav-staging.env"
+            unset pg_password app_password
+            mv -T -- "$tmp/aav-staging.env" "$cfg/aav-staging.env"
+          fi
+          if ! cmp -s -- "$tmp/aav.env" "$cfg/aav.env"; then
+            mv -T -- "$tmp/aav.env" "$cfg/aav.env"
+          fi
+          echo AAV_PREPARATION_OK
+          ROOT
+          REMOTE
