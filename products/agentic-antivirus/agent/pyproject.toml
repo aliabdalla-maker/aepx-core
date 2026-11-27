@@ -1,6 +1,6 @@
 [project]
 name = "aav-agent"
-version = "0.1.0"
+version = "0.1.2"
 description = "Agentic Antivirus endpoint agent (user mode)"
 requires-python = ">=3.11"
 dependencies = ["httpx>=0.28", "psutil>=7.0", "cryptography>=44"]

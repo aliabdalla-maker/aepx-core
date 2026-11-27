@@ -63,6 +63,9 @@ class Settings:
     action_request_ttl_minutes: int = field(default_factory=lambda: _int("AAV_ACTION_REQUEST_TTL_MINUTES", 24 * 60))
     environment: str = field(default_factory=lambda: os.getenv("AAV_ENVIRONMENT", "development"))
     build_sha: str = field(default_factory=lambda: os.getenv("AAV_BUILD_SHA", "unknown"))
+    # KPI-01: emails of the platform operators who may read cross-tenant business KPIs (aggregates only).
+    platform_operators: frozenset = field(default_factory=lambda: frozenset(
+        e.strip().lower() for e in os.getenv("AAV_PLATFORM_OPERATORS", "").split(",") if e.strip()))
     play_package_name: str = field(default_factory=lambda: os.getenv("AAV_PLAY_PACKAGE", "com.equalitysoftware.agenticantivirus"))
 
 

@@ -1,0 +1,31 @@
+# Staging overlay (OCI-16, RA-13, DEL-05): a second, isolated copy of the stack on the same Always Free VM.
+#   COMPOSE_PROJECT_NAME=agentic-antivirus-staging COMPOSE_FILE=compose.yml:compose.staging.yml docker compose up -d
+# (deploy.sh SHA staging sets both). The project name gives staging its own containers, network and volumes, so
+# its database and files never touch production. Secrets come from /etc/aav/aav-staging.env (own passwords and
+# own signing key). Only reachable on loopback (127.0.0.1:18481) or through an SSH tunnel: never public.
+# Sanitised data only: deploy/staging-seed.sh loads synthetic tenants, devices and incidents. Stop it after
+# acceptance to free memory:  docker compose -p agentic-antivirus-staging stop
+services:
+  postgres:
+    mem_limit: 256m
+    cpus: "0.25"
+    command: ["postgres", "-c", "shared_buffers=32MB", "-c", "max_connections=20", "-c", "work_mem=1MB"]
+  governance:
+    mem_limit: 128m
+    cpus: "0.1"
+  control-plane:
+    mem_limit: 384m
+    cpus: "0.4"
+    environment:
+      AAV_ENVIRONMENT: staging
+      AAV_PUBLIC_BASE_URL: http://127.0.0.1:18481
+      AAV_HARNESS_DEFAULT_MODE: simulation
+      # No outbound side effects from staging: no mail, no LLM spend, no store verification.
+      AAV_SMTP_HOST: ""
+      AAV_ANTHROPIC_API_KEY: ""
+      AAV_LLM_MONTHLY_CAP_USD: "0"
+      AAV_PLAY_SERVICE_ACCOUNT_FILE: ""
+  web:
+    mem_limit: 64m
+    cpus: "0.1"
+    ports: !override ["127.0.0.1:18481:8080"]

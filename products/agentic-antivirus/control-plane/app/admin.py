@@ -3,6 +3,8 @@
     docker compose exec control-plane python -m app.admin verify-email someone@example.com
     docker compose exec control-plane python -m app.admin send-mail
     docker compose exec control-plane python -m app.admin publish-baseline
+    docker compose exec -T control-plane python -m app.admin store-backup NAME < file   (BE-05, off-VM copy)
+    docker compose exec -T control-plane python -m app.admin fetch-backup NAME > file
 
 publish-baseline signs and publishes the shipped baseline detection rules (detection/rules/baseline.json) if no
 detection bundle has been published yet, so newly enrolled devices can scan straight away. It never replaces a
@@ -70,6 +72,19 @@ def main(argv: list[str]) -> int:
         with db.global_tx() as cur:
             cur.execute("SELECT aav.apply_telemetry_retention() AS n")
             print(f"deleted {cur.fetchone()['n']} expired telemetry events")
+        return 0
+    if len(argv) == 2 and argv[0] in ("store-backup", "fetch-backup"):
+        from app.objectstore import ObjectStore, ObjectStoreError
+        name = Path(argv[1]).name
+        try:
+            store = ObjectStore.from_env()
+            if argv[0] == "store-backup":
+                print(json.dumps(store.put(f"backups/{name}", sys.stdin.buffer.read())))
+            else:
+                sys.stdout.buffer.write(store.get(f"backups/{name}"))
+        except ObjectStoreError as exc:
+            print(f"object store: {exc}", file=sys.stderr)
+            return 1
         return 0
     if argv == ["publish-baseline"]:
         return publish_baseline()

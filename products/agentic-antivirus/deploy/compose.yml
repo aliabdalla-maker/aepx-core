@@ -61,6 +61,15 @@ services:
       AAV_HARNESS_DEFAULT_MODE: ${AAV_HARNESS_DEFAULT_MODE:-observe}
       AAV_HARNESS_KILL_SWITCH: ${AAV_HARNESS_KILL_SWITCH:-false}
       AAV_ENVIRONMENT: ${AAV_ENVIRONMENT:-production}
+      # BE-05 off-VM backup copies (OCI Object Storage, S3 compatibility API; Always Free 20 GB).
+      AAV_OBJECT_STORE_ENDPOINT: ${AAV_OBJECT_STORE_ENDPOINT:-}
+      AAV_OBJECT_STORE_REGION: ${AAV_OBJECT_STORE_REGION:-}
+      AAV_OBJECT_STORE_BUCKET: ${AAV_OBJECT_STORE_BUCKET:-}
+      AAV_OBJECT_STORE_ACCESS_KEY: ${AAV_OBJECT_STORE_ACCESS_KEY:-}
+      AAV_OBJECT_STORE_SECRET_KEY: ${AAV_OBJECT_STORE_SECRET_KEY:-}
+      # BE-06 OpenTelemetry traces (OTLP/HTTP); empty = disabled. compose.otel.yml adds a local collector.
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_SERVICE_NAME: agentic-antivirus-control-plane
       AAV_BUILD_SHA: ${AAV_BUILD_SHA:-unknown}
     secrets: [aav_signing_key]
     volumes: [aavfiles:/var/lib/aav/files]

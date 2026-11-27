@@ -285,6 +285,18 @@ def kpis(p: Principal = Depends(need("kpi.read"))):
     return data
 
 
+@router.get("/platform/business-kpis")
+def business_kpis(u: Principal = Depends(current_user)):
+    """KPI-01: active users, activation, conversion, retention and feature adoption across all tenants. Aggregates
+    only; readable by the platform operators named in AAV_PLATFORM_OPERATORS."""
+    from app.config import settings
+    if u.email.lower() not in settings.platform_operators:
+        raise HTTPException(403, "platform operators only")
+    with db.global_tx() as cur:
+        cur.execute("SELECT aav.business_kpis() AS k")
+        return cur.fetchone()["k"]
+
+
 @router.get("/kpis/export")
 def kpis_export(fmt: str = "json", p: Principal = Depends(need("kpi.read"))):
     data = kpis(p)

@@ -29,7 +29,7 @@ from aav_agent.quarantine import Vault
 from aav_agent.store import State
 from aav_agent.trust import Verifier, not_expired
 
-AGENT_VERSION = "0.1.0"
+AGENT_VERSION = "0.1.2"
 SCAN_SKIP_BYTES = 256 * 1024 * 1024
 ARCHIVE_MAX_MEMBERS = 10_000
 ARCHIVE_MAX_BYTES = 512 * 1024 * 1024

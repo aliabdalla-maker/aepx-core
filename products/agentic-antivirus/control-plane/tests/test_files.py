@@ -84,7 +84,7 @@ def test_folder_crud_move_copy_trash_restore_retention_purge(fs):
 def test_handlers_preview_edit_convert_gated(fs):
     caps = fs.get("/v1/files/handlers").json()
     assert caps["handlers"]["text/csv"]["convert"] == ["application/json"]
-    assert caps["handlers"]["application/vnd.openxmlformats-officedocument.wordprocessingml.document"]["verified"] is False
+    assert caps["handlers"]["application/vnd.openxmlformats-officedocument.wordprocessingml.document"]["verified"] is True
     csv_id = up(fs, "t.csv", b"a,b\n1,2\n").json()["id"]
     assert fs.get(f"/v1/files/{csv_id}/preview").json()["text"].startswith("a,b")
     j = fs.post(f"/v1/files/{csv_id}/convert", params={"to": "application/json"}).json()
@@ -95,7 +95,7 @@ def test_handlers_preview_edit_convert_gated(fs):
     assert fs.put(f"/v1/files/{j['id']}/content", json={"content": "[]"}).json()["version"] == 2
     docx = up(fs, "r.docx", b"PK\x03\x04" + b"\x00" * 40).json()
     assert docx["mime"].endswith("wordprocessingml.document")
-    assert fs.get(f"/v1/files/{docx['id']}/preview").status_code == 415
+    assert fs.get(f"/v1/files/{docx['id']}/preview").status_code == 422  # verified handler, corrupt package
     assert fs.put(f"/v1/files/{docx['id']}/content", json={"content": "x"}).status_code == 415
     blob = up(fs, "data.xyz", b"\x00\x01\x02binary").json()
     assert blob["mime"] == "application/octet-stream"  # opaque but stored

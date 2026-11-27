@@ -23,7 +23,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
-from app import audit, db
+from app import audit, db, file_handlers as fh
 from app.config import settings
 from app.deps import Principal, need
 
@@ -51,29 +51,28 @@ OFFICE_EXT = {".docx": "application/vnd.openxmlformats-officedocument.wordproces
               ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
               ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation"}
 
-# Capability matrix (DLV-19). 'verified' means covered by tests/test_files.py.
+# Capability matrix (DLV-19, VFS-07/08). 'verified' means covered by tests (test_files.py, test_file_handlers.py).
+# Preview of PDF, images, audio and video = served inline to the browser's sandboxed viewer/player; Office and
+# archive preview = structured JSON extracted server-side without rendering or extracting anything (file_handlers).
+_TEXT = {"store": True, "preview": True, "edit": True, "verified": True}
+_INLINE = {"store": True, "preview": True, "edit": False, "convert": [], "verified": True}
 HANDLERS = {
-    "text/plain": {"store": True, "preview": True, "edit": True, "convert": [], "verified": True},
-    "text/markdown": {"store": True, "preview": True, "edit": True, "convert": [], "verified": True},
-    "text/csv": {"store": True, "preview": True, "edit": True, "convert": ["application/json"], "verified": True},
-    "application/json": {"store": True, "preview": True, "edit": True, "convert": ["text/csv"], "verified": True},
-    "application/xml": {"store": True, "preview": True, "edit": True, "convert": [], "verified": True},
-    "image/png": {"store": True, "preview": True, "edit": False, "convert": [], "verified": True},
-    "image/jpeg": {"store": True, "preview": True, "edit": False, "convert": [], "verified": True},
-    "image/gif": {"store": True, "preview": True, "edit": False, "convert": [], "verified": True},
-    "application/pdf": {"store": True, "preview": False, "edit": False, "convert": [], "verified": True,
-                        "note": "download only; no in-app renderer verified"},
-    "application/zip": {"store": True, "preview": False, "edit": False, "convert": [], "verified": True,
-                        "note": "bulk import/export supported; preview not implemented"},
-    "application/x-tar": {"store": True, "preview": False, "edit": False, "convert": [], "verified": True},
-    "application/gzip": {"store": True, "preview": False, "edit": False, "convert": [], "verified": True},
+    "text/plain": {**_TEXT, "convert": []},
+    "text/markdown": {**_TEXT, "convert": []},
+    "text/csv": {**_TEXT, "convert": ["application/json"]},
+    "application/json": {**_TEXT, "convert": ["text/csv"]},
+    "application/xml": {**_TEXT, "convert": []},
+    "image/png": dict(_INLINE), "image/jpeg": dict(_INLINE), "image/gif": dict(_INLINE), "image/webp": dict(_INLINE),
+    "application/pdf": {**_INLINE, "note": "inline in the browser's PDF viewer; deny-all CSP"},
+    "application/zip": {**_INLINE, "note": "preview = entry listing; bulk import/export supported"},
+    "application/x-tar": {**_INLINE, "note": "preview = entry listing"},
+    "application/gzip": {**_INLINE, "note": "preview = entry listing"},
+    fh.DOCX: {**_INLINE, "convert": ["text/plain"], "note": "preview = extracted text"},
+    fh.XLSX: {**_INLINE, "convert": ["text/csv"], "note": "preview = sheets and cells; convert = first sheet"},
+    fh.PPTX: {**_INLINE, "convert": ["text/plain"], "note": "preview = slide text"},
 }
-for m in OFFICE_EXT.values():
-    HANDLERS[m] = {"store": True, "preview": False, "edit": False, "convert": [], "verified": False,
-                   "note": "opaque: office handler not implemented"}
-for m in ("audio/mpeg", "audio/ogg", "audio/flac", "video/mp4", "video/webm"):
-    HANDLERS[m] = {"store": True, "preview": False, "edit": False, "convert": [], "verified": False,
-                   "note": "opaque: media handler not implemented"}
+for m in ("audio/mpeg", "audio/ogg", "audio/flac", "audio/wav", "video/mp4", "video/webm"):
+    HANDLERS[m] = {**_INLINE, "note": "inline in the browser's media player (range requests)"}
 OPAQUE = {"store": True, "preview": False, "edit": False, "convert": [], "verified": True, "note": "opaque blob"}
 
 
@@ -352,11 +351,15 @@ def preview(node_id: UUID, p: Principal = Depends(need("files.read"))):
     if not v or not HANDLERS.get(v["mime"], OPAQUE)["preview"]:
         raise HTTPException(415, "no verified preview handler for this format")
     path = _blob_path(p.tenant_id, v["storage_key"])
-    if v["mime"].startswith("image/"):
-        return FileResponse(path, media_type=v["mime"], headers={"X-Content-Type-Options": "nosniff",
-                                                                 "Content-Security-Policy": "sandbox"})
-    with open(path, "rb") as fh:
-        text = fh.read(1024 * 1024).decode("utf-8", errors="replace")
+    if fh.inline_media(v["mime"]):
+        return FileResponse(path, media_type=v["mime"], headers=fh.inline_headers(v["mime"]))
+    if v["mime"] in fh.OFFICE or v["mime"] in fh.ARCHIVES:
+        try:
+            return fh.preview(path, v["mime"])
+        except fh.HandlerError as exc:
+            raise HTTPException(422, f"cannot preview: {exc}")
+    with open(path, "rb") as fh_:
+        text = fh_.read(1024 * 1024).decode("utf-8", errors="replace")
     return {"mime": v["mime"], "truncated": v["size_bytes"] > 1024 * 1024, "text": text}
 
 
@@ -391,6 +394,14 @@ def convert(node_id: UUID, to: str = Query(...), p: Principal = Depends(need("fi
         v = cur.fetchone()
     if not v or to not in HANDLERS.get(v["mime"], OPAQUE)["convert"]:
         raise HTTPException(415, "conversion not supported")
+    ext = {"text/plain": ".txt", "text/csv": ".csv", "application/json": ".json"}
+    if v["mime"] in fh.OFFICE:
+        try:
+            out, new_name = fh.convert(_blob_path(p.tenant_id, v["storage_key"]), v["mime"], to).decode(), \
+                Path(n["name"]).stem + ext[to]
+        except fh.HandlerError as exc:
+            raise HTTPException(422, f"cannot convert: {exc}")
+        return _save_converted(p, n, node_id, to, out, new_name)
     raw = _blob_path(p.tenant_id, v["storage_key"]).read_text(encoding="utf-8")
     if v["mime"] == "text/csv" and to == "application/json":
         out, new_name = json.dumps(list(csv.DictReader(io.StringIO(raw))), indent=2), Path(n["name"]).stem + ".json"
@@ -404,6 +415,10 @@ def convert(node_id: UUID, to: str = Query(...), p: Principal = Depends(need("fi
         w.writeheader()
         w.writerows(data)
         out, new_name = buf.getvalue(), Path(n["name"]).stem + ".csv"
+    return _save_converted(p, n, node_id, to, out, new_name)
+
+
+def _save_converted(p: Principal, n: dict, node_id, to: str, out: str, new_name: str) -> dict:
     blob = _store_stream(p.tenant_id, [out.encode()], new_name)
     with db.tenant_tx(p.tenant_id) as cur:
         cur.execute("SELECT 1 FROM aav.vfs_nodes WHERE parent_id IS NOT DISTINCT FROM %s AND name = %s AND trashed_at "

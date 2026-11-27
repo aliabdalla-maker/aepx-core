@@ -1,0 +1,26 @@
+# OpenTelemetry Collector for Agentic Antivirus (BE-06). Receives OTLP/HTTP on the compose network only (no
+# published port), batches, drops request bodies/headers that could carry secrets, and keeps 7 days of traces in
+# rotated files (100 MB x 7). Add an OCI APM or other OTLP exporter here later if wanted.
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+processors:
+  memory_limiter: { check_interval: 5s, limit_mib: 64, spike_limit_mib: 16 }
+  batch: {}
+  attributes/scrub:
+    actions:
+      - { key: http.request.header.authorization, action: delete }
+      - { key: http.request.header.cookie, action: delete }
+      - { key: http.request.header.x-device-key, action: delete }
+exporters:
+  file:
+    path: /var/lib/otel/traces.json
+    rotation: { max_megabytes: 100, max_days: 7, max_backups: 7 }
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/scrub, batch]
+      exporters: [file]

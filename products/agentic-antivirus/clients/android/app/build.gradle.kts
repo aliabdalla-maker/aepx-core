@@ -27,7 +27,7 @@ android {
         minSdk = 24
         targetSdk = 35
         versionCode = providers.gradleProperty("aav.versionCode").orNull?.toInt() ?: 1
-        versionName = providers.gradleProperty("aav.versionName").orNull ?: "0.1.0"
+        versionName = providers.gradleProperty("aav.versionName").orNull ?: "0.1.2"
         buildConfigField("String", "CONSOLE_URL", quoted(providers.gradleProperty("aav.consoleUrl").get()))
         buildConfigField("String", "PLAY_SUBSCRIPTION_ID", quoted(providers.gradleProperty("aav.playSubscriptionId").get()))
     }

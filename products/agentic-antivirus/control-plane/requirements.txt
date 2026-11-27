@@ -7,3 +7,7 @@ cryptography==50.0.1
 httpx==0.28.1
 PyJWT[crypto]==2.15.0
 python-multipart==0.0.32
+graphql-core==3.2.6
+opentelemetry-sdk==1.45.2
+opentelemetry-exporter-otlp-proto-http==1.45.2
+opentelemetry-instrumentation-fastapi==0.66b2

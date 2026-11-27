@@ -1,0 +1,19 @@
+# OpenTelemetry overlay (BE-06): a small collector receiving OTLP/HTTP from the control plane on the internal
+# network and writing rotated JSON trace files on the VM disk (no external service, no cost). Use with the base
+# stack:  AAV_COMPOSE_FILES=compose.yml:compose.cohost.yml:compose.otel.yml  (or -f compose.otel.yml).
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.116.1
+    restart: unless-stopped
+    mem_limit: 96m
+    cpus: "0.1"
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./otel-collector.yaml:/etc/otelcol/config.yaml:ro
+      - aavtraces:/var/lib/otel
+  control-plane:
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    depends_on: { otel-collector: { condition: service_started } }
+volumes:
+  aavtraces: {}

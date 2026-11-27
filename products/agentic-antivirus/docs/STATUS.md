@@ -15,6 +15,28 @@ percentage would be invented (RA-17).
 
 Test paths below are relative to `control-plane/tests/` unless shown otherwise.
 
+## Update 27 Nov 2026 — R1 close-out and R2 build (branch `feat/aav-r1-closeout-r2`)
+
+Owner decisions recorded (Ali = product owner and release approver; all proposed defaults accepted): 37 items,
+`docs/APPROVALS.md`. Tests: control plane 177 passed (was 145), agent 10 passed. Register: 322/380 passed (84.7%),
+23 in progress, 35 deferred — item by item in `docs/evidence/evidence-r1.json`.
+
+New since 0.1.1, all covered by tests:
+- Release: v0.1.2 versions; `/health` reports version, build and environment; `tools/smoke_release.py` post-deploy
+  smoke test and release asset checksum verification; approval record on every production deploy (RA-10).
+- Deployment: isolated staging stack (`deploy/compose.staging.yml`, synthetic seed) and a staging-first gate;
+  cohost-aware `deploy.sh` (readiness inside the web container; the old loopback-port check could never pass on the
+  shared VM) with mandatory backup and migrations; `rollback-rehearsal.sh` and `restore-rehearsal.sh` write timed
+  evidence; `preflight.sh` records boot-volume encryption; ops scripts tested against PostgreSQL 16.
+- R2: verified file handlers for Office, PDF, audio/video, archives (VFS-07/08); GraphQL read API and MCP server
+  on the governed action path (INT-02, partial); agent memory with access-controlled retrieval (AGT-03/04);
+  business KPIs (KPI-01); OCI Object Storage for off-VM encrypted backups (BE-05); OpenTelemetry traces with a
+  collector overlay (BE-06); FastAPI lifespan handlers (audit L-3).
+
+Still needs the VM, a provider, an account or a person: VM runs of staging/preflight/restore/rollback, GitHub
+environment reviewer, signing certificates, store accounts, kernel-level blocking, live provider adapters,
+1,000-endpoint load and DDoS exercises, translations + per-locale QA, gRPC/IMAP/SFTP/AMQP/MQTT/SQL transports.
+
 ## Update 19 Nov 2026 — sign-off assessment and Release 1 re-baseline
 
 Tests: 126 passed, 0 failed (control plane 98, agent 6, console 17, desktop 5). Production (build 4e5c8ea) verified live:

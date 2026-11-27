@@ -1,6 +1,6 @@
 # Release 1 re-baseline proposal (19 Nov 2026)
 
-Status: **proposed — needs the product owner's approval** (register §22). Nothing here changes scope until approved.
+Status: **decisions approved 27 Nov 2026 by Ali (product owner and release approver, D-02)** — every item under *Accept proposed decision* is accepted as written and recorded in `docs/evidence/evidence-r1.json` (verification level `owner-decided`; see `docs/APPROVALS.md`). The *Defer to R2* list is scope guidance: R2 items are being built on `feat/aav-r1-closeout-r2`.
 
 Register items: 380. Met with evidence: 279. Proposed deferrals to Release 2: 43. Proposed decision defaults: 34. Remaining work: 24.
 

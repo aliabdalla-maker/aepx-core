@@ -26,6 +26,40 @@
 - **Database:** `deploy/restore-rehearsal.sh <backup>` proves the backup is good. Production restore is a manual, approved step: stop `control-plane`, then `pg_restore` into a new database and switch the DSN.
 - **Traffic policy:** use "Roll back" on the DDoS page, which goes through the approval path.
 
+## 2a. Release path: staging first, then production (OCI-16, RA-13, CI-11, RA-10)
+
+One-time setup on the VM (as the deploy user, from `/opt/aepx-core`):
+
+1. `sudo install -m 600 /dev/null /etc/aav/aav-staging.env` and fill it with **staging-only** values:
+   `AAV_POSTGRES_PASSWORD`, `AAV_APP_DB_PASSWORD` (`openssl rand -hex 24` each), `AAV_SIGNING_KEY_PATH=/etc/aav/staging_signing_key.pem`
+   (`openssl genpkey -algorithm ed25519 -out /etc/aav/staging_signing_key.pem; chown 10001 …; chmod 400 …`).
+   No SMTP, LLM or store credentials: staging never sends mail or spends money.
+2. In `/etc/aav/aav.env` add `AAV_COMPOSE_FILES=compose.yml:compose.cohost.yml` (shared VM layout) and
+   `AAV_BACKUP_PASSPHRASE_FILE=/etc/aav/backup.pass` (mode 600). Production refuses to deploy without a backup.
+3. GitHub → Settings → Environments: `staging` (no reviewer) and `production` (required reviewer: the release approver, Ali).
+
+Every release:
+
+1. Actions → agentic-antivirus → Run workflow: `deploy_sha=<sha on master>`, `target=staging`. The job deploys the
+   isolated staging stack (`compose.staging.yml`, own project, volumes and secrets; loopback port 18481) and loads
+   synthetic data (`deploy/staging-seed.sh`). Accept it with `ssh -L 18481:127.0.0.1:18481 <vm>` and
+   `python3 tools/smoke_release.py --api http://127.0.0.1:18481/api --version <v> --build <sha>`.
+2. Run workflow again with `target=production`. GitHub waits for the approver; the approval is the release record.
+   `deploy.sh` refuses any SHA that has not passed staging (`AAV_SKIP_STAGING=1` overrides it and is logged in
+   `deploy/.staging-overrides`). The job then runs the public smoke test and uploads the evidence.
+3. Stop staging when accepted to free memory: `docker compose -p agentic-antivirus-staging stop`.
+
+## 2b. Rehearsals with evidence (OCI-10, OCI-12, CI-15, RA-12, OCI-04, RA-09)
+
+Evidence files land in `/var/lib/aav/evidence/`; copy them into `docs/evidence/` with the release.
+
+| Rehearsal | Command (on the VM) | Pass condition |
+|---|---|---|
+| Preflight (read-only) | `AAV_COMPARTMENT_OCID=… AAV_INSTANCE_OCID=… deploy/preflight.sh` | `PREFLIGHT PASSED`, 8/8 shows boot-volume encryption |
+| Backup + restore | `deploy/backup.sh && deploy/restore-rehearsal.sh /var/backups/aav/<latest>.dump.enc` | `passed: true`, restored counts = live counts |
+| Rollback (staging first) | `deploy/rollback-rehearsal.sh <current-sha> <previous-sha> staging` | `passed: true`; `unavailable_seconds` recorded |
+| Rollback (production, approved window) | `deploy/rollback-rehearsal.sh <current-sha> <previous-sha> production` | same, then production back on current |
+
 ## 3. Incident playbooks
 
 | Situation | First 15 minutes | Then |
