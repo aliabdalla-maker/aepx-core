@@ -70,6 +70,10 @@ services:
       # BE-06 OpenTelemetry traces (OTLP/HTTP); empty = disabled. compose.otel.yml adds a local collector.
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
       OTEL_SERVICE_NAME: agentic-antivirus-control-plane
+      # INT-02: gRPC ingest on the compose network only (route it through the TLS proxy as h2c), SQL/IMAP pull.
+      AAV_GRPC_PORT: ${AAV_GRPC_PORT:-}
+      AAV_GRPC_HOST: 0.0.0.0
+      AAV_POLL_SECONDS: ${AAV_POLL_SECONDS:-300}
       AAV_BUILD_SHA: ${AAV_BUILD_SHA:-unknown}
     secrets: [aav_signing_key]
     volumes: [aavfiles:/var/lib/aav/files]

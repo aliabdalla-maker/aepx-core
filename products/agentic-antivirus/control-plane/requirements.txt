@@ -11,3 +11,5 @@ graphql-core==3.2.6
 opentelemetry-sdk==1.45.2
 opentelemetry-exporter-otlp-proto-http==1.45.2
 opentelemetry-instrumentation-fastapi==0.66b2
+grpcio==1.85.4
+protobuf==7.36.1

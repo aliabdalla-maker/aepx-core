@@ -251,6 +251,21 @@ def ingest(iid: UUID, body: IngestIn, x_aav_webhook_secret: str | None = Header(
         integ = cur.fetchone()
     if not integ or not x_aav_webhook_secret or not crypto.hmac_ok(integ["webhook_secret_hash"], x_aav_webhook_secret):
         raise HTTPException(401, "unknown integration or bad secret")
+    return ingest_signal(iid, integ, body)
+
+
+def authenticate_ingest(iid: UUID, presented_secret: str | None) -> dict:
+    """Shared by the webhook, gRPC and other push transports: returns the integration row or raises 401."""
+    with db.global_tx() as cur:
+        cur.execute("SELECT * FROM aav.integration_for_webhook(%s)", (iid,))
+        integ = cur.fetchone()
+    if not integ or not presented_secret or not crypto.hmac_ok(integ["webhook_secret_hash"], presented_secret):
+        raise HTTPException(401, "unknown integration or bad secret")
+    return integ
+
+
+def ingest_signal(iid: UUID, integ: dict, body: IngestIn) -> dict:
+    """Canonical signal ingestion for every transport (webhook, gRPC, SQL and IMAP pollers)."""
     if not integ["enabled"] or integ["maturity"] not in ("verified_live", "test_only"):
         raise HTTPException(409, f"integration not enabled (maturity {integ['maturity']})")
     kind = integ["signal_kind"]

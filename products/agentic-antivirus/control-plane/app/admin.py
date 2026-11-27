@@ -5,6 +5,7 @@
     docker compose exec control-plane python -m app.admin publish-baseline
     docker compose exec -T control-plane python -m app.admin store-backup NAME < file   (BE-05, off-VM copy)
     docker compose exec -T control-plane python -m app.admin fetch-backup NAME > file
+    docker compose exec control-plane python -m app.admin poll-integrations   (INT-02 SQL/IMAP pull, once)
 
 publish-baseline signs and publishes the shipped baseline detection rules (detection/rules/baseline.json) if no
 detection bundle has been published yet, so newly enrolled devices can scan straight away. It never replaces a
@@ -85,6 +86,10 @@ def main(argv: list[str]) -> int:
         except ObjectStoreError as exc:
             print(f"object store: {exc}", file=sys.stderr)
             return 1
+        return 0
+    if argv == ["poll-integrations"]:
+        from app import transports
+        print(json.dumps(transports.poll_all(), default=str))
         return 0
     if argv == ["publish-baseline"]:
         return publish_baseline()
