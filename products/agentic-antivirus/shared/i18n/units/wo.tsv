@@ -1,0 +1,637 @@
+0	Dem ci li gën a am solo
+1	Yokk benn exclusion bu sax
+2	Def benn tëye ci trafik bi
+3	Dajale metadata yu jumtukaay bi
+4	Beral jumtukaay bi ci rézo bi
+5	Def fichier bi ci karantin
+6	Génne jumtukaay bi ci beral gi
+7	Delloo fichier bu nekk ci karantin
+8	Génne jëfandikukat bi fépp
+9	Neenal tëye trafik bi
+10	Neenal yeesal gi
+11	Saytu jumtukaay yi
+12	Taxawal kontu jëfandikukat bi
+13	Taxawal benn processus
+14	Nangu
+15	Bañ
+16	Yónne ci jumtukaay yi
+17	Ndigël gi dina jeex [0]
+18	Ndimbalu AI bi moo ko digle
+19	Xibaar njaaykat
+20	Jëf
+21	Agent yi
+22	Laaj
+23	Laaj ndimbalu kaaraange bi
+24	Tontu yi dañuy jóge ci say jumtukaay, xew-xew yu ubbeeku ak kàmb yi. Ndimbal bi mënul soppi dara.
+25	Ci kaw
+26	[0] wax bu amul firnde lañu dindi
+27	[0] wax yu amul firnde lañu dindi
+29	Modèle bu ñu yor ci seen bopp
+30	Sàrt yi (amul modèle)
+31	Bind benn pexe ngir defar
+32	Bépp jéego ab digle la. Dara du dox ba benn nit nangu ko.
+33	Laaj
+34	Misaal: ban jumtukaay yu soxla ñu toppatoo leen?
+35	Diis bu ñu digle
+36	Gëstu bu gàtt
+37	Jubluwaay yi
+38	Gàttal xew-xew bii
+39	Lu tax
+40	Gis nañu ko
+41	Yëgle lu mel ni lu bon
+42	Sàrt
+43	Diis
+44	Artu
+46	Yokk ay fichier
+47	Yokk benn dossier
+48	Yokk ay nataal
+49	[0] fichier bu ñu takk
+50	[0] fichier yu ñu takk
+51	Fichier yu ñu takk
+52	Jël benn nataal
+53	Kamera bi nangu wuñu ko. Nangu ko ci sa navigateur, walla jëfandikoo appu kamera bu sa jumtukaay.
+54	Wone kamera bi
+55	Navigateur bii mënul ubbi kamera bi fii.
+56	Jël
+57	Tëj ndimbal bi
+58	Lan la fichier yii, te ndax am nañu kaaraange?
+59	Fichier
+60	Laajal sa kaaraange, walla takk ay fichier, benn dossier, ay nataal walla nataalu kamera. Bépp fichier bu ñu takk dañu koy saytu jëkk te dara duñu ko denc.
+61	[0] nataal
+62	[0] nataal
+63	 la modèle bi leeral.
+64	Misaal: ndax li ma yeb am na kaaraange?
+65	Mbind ak nataal yu sell mën nañu leen yónne ci modèle AI bi sa mbootaay ubbi. Fichier yu bon duñu leen mukk yónne.
+66	[0] fichier yokkuwul
+67	[0] fichier yokkuwuñu
+68	: ba [0] fichier, [1] MB ci kenn ku nekk ak [2] MB lépp.
+69	Dindi [0]
+70	Saytu te laaj
+71	Njeexitalu saytu gi
+72	Xeet
+73	Jëfandikoo kamera bu jumtukaay bi
+74	Njeexital
+75	Amul malware bu ñu xam
+76	Bon na
+77	Saytuwuñu ko
+78	Ceenu audit bi dafa dog ci bind [0].
+79	Ceenu audit bi mat na: [0] bind lañu wóoral.
+80	Imeel
+81	Fàtte nga sa baatu jàll?
+82	Dugg ak Google
+83	Dugg ak Google doxul. Jéemaatal, walla jëfandikoo sa imeel ak sa baatu jàll.
+84	Dugg
+85	Génn
+86	Baatu jàll bu bees
+87	walla
+88	Mbootaay
+89	Baatu jàll
+90	Baatu jàll bi soppiku na. Duggal ak sa baatu jàll bu bees.
+91	Lu néew lu néew 12 araf.
+92	Sos benn kont
+93	Yónneeti lien bi
+94	Su kont boobu soxlaagum wóoral, benn lien bu bees mi ngi ci yoon wi. Seetal itam sa dossier spam.
+95	Soppi baatu jàll bi
+96	Su benn kont jëfandikoo adrees boobu, yónne nanu benn lien ngir soppi. Dafay dox benn waxtu.
+97	Wóoral sa adreesu imeel balaa ngay dugg. Ubbil lien bi nu yónne ci [0].
+98	Imeel bi wóor na. Mën nga dugg léegi.
+99	Lien bii jeex na walla jëfandikoo nañu ko ba noppi. Duggal ngir am bu bees.
+100	Seetal sa imeel ngir wóoral sa adrees.
+101	Abonmaa dafay wàññi xibaaru njaaykat yi 95%.
+102	Sa jamono jéem jeex na.
+103	Abonne nga ba [0]
+104	Bàyyi lépp ñu dox ci dara ak xibaaru njaaykat yépp
+105	Taxawal lépp, boole ci aaru jumtukaay yi, ba benn nit fey
+106	Console bi soxla na abonmaa; jumtukaay yi dañuy des ci aar
+107	£4,99 ci weer wi
+108	Abonne
+109	Jéem bu amul pay:
+110	[0] fan moo des
+111	[0] fan moo des
+112	Neenal
+113	Far
+114	Am na lu baaxul.
+115	Génne
+116	Mi ngi yeb…
+117	Bokkul ci
+118	Mukk
+119	Li ci topp
+120	déedéet
+121	Amul dara lu ñu wone.
+122	fey na
+123	taal na
+124	Li jiitu
+125	Yeesal
+126	Denc
+127	Wut
+128	Simulation (data yu jéem)
+129	Na mu tollu
+130	Amul
+131	Xamuñu ko
+132	Yeesal nañu ko [0]
+133	Mi ngi liggéey…
+134	waaw
+135	[0] artu ci 24 waxtu
+136	[0] artu ci 24 waxtu
+137	[0] jumtukaay
+138	[0] jumtukaay
+139	Data yi ba [0]
+140	[0] xew-xew bu ubbeeku
+141	[0] xew-xew yu ubbeeku
+142	[0] ndigël mi ngi xaar
+143	[0] ndigël mi ngi xaar
+144	wóor na
+145	dañu ko sikk
+146	Bindlu benn jumtukaay
+147	Jumtukaay
+148	Yónnewul dara
+149	Pólitig bu màggat
+150	Capteur bi dañu ko fey
+151	Definitions yu màggat
+152	Jafe-jafe
+153	Mujj gi ñu ko gis
+154	Sistem bu doxal
+155	Pólitig
+156	Doxal ko ci jumtukaay bi ci biir 24 waxtu (benn yoon rekk):
+157	Aar
+158	Duppi
+159	Yeb
+160	Toxal
+161	Dossier bu bees
+162	Soppi tur
+163	Delloo
+164	Toxal ci mbalit mi
+165	Yebal
+166	Ndimbal
+167	[0] mbind ci xët wii masin moo ko tekki te saytuwuñu ko ba leegi.
+168	[0] mbind ci làkk wii masin moo leen tekki te saytuwuñu leen ba leegi.
+169	Làkk wii tekkiwuñu ko ba leegi, looloo tax ñuy wone Angale.
+170	nangu nañu ko
+171	Dëgg yu ñu gis
+172	Xalaat yu wóorul (wóoralaguñu leen)
+173	Xalaat, kóolute [0]: [1]
+174	Doxal benn luñu seet
+175	Firnde yu ñàkk
+176	Ñàkk na: [0]
+177	Jàng ci kaw
+178	Jëf yu ñu digle
+179	Rëddu jamono bu firnde yi
+180	webhook buy dugg
+181	Màndarga yu jóge ci sa joxekatu identité, DNS, firewall yi ak yeneen jumtukaay. Integration yu bees yi dañuy tàmbali ni yu amul; adaptateuru joxekat bu romb test bu kontaraam rekk lañu mën a màndargaal ni dafa dox. Data yu jéem dañu leen di màndargaal ni simulation fépp fu ñu feeñ.
+182	Lëkkaloowul (stub)
+183	Data yu jéem rekk
+184	Amul
+185	Mi ngi dox (wóor na)
+186	Kumpa (ñu wone ko benn yoon):
+187	Ndigël yi
+188	Artu yi
+189	Audit
+190	Abonmaa
+191	Tablo
+192	DDoS ak nekkin
+193	Jumtukaay yi
+194	Fichier yi
+195	Xew-xew yi
+196	Integration yi
+197	Pólitig yi
+198	Sutura
+199	Karantin
+200	Tontu
+201	Kaaraange
+202	Paramètres
+203	Def malware yu ñu xam ci karantin ci boppam
+204	Xool jëf yu mel ni yu bon
+205	Tëye script yu mel ni yu bon
+206	Dajale li nekk ci fichier yi ngir seet (fey na ci boppam)
+207	Nangu beral ci rézo bi
+208	Saytu fichier yi bu ñu leen ubbee walla bind ci
+209	Saytu li ñu yeb
+210	Saytu prógaraam yi bu ñuy tàmbali
+211	Aar agent bi ci coppite yi
+212	Artu ci lien yu bon yu ñu xam
+213	Lu tax
+214	Laaj ñu saytu
+215	Delloo ko ginnaaw saytu bu bees
+216	diggu jamono ba dindi gu wóor (n=[0], yu ñu safaraluwul [1])
+217	defar yu romb test bu ñu def waat
+218	délsi ginnaaw wér gi
+219	dindi wirus bu wóor
+220	dellu ci liggéey ak kaaraange
+221	saytu yu wér gi mat nañu
+222	Njeexital yu karantin rekk ([0]) ak jumtukaay yu ñu sampaat sistem ([1]) dañu leen di waññ ñu ràññee; karantin rekk du mukk jaar ni dindi.
+223	[0] w
+224	[0] simili
+225	[0] s
+226	Mi ngi xaar ndigël
+227	Firndey production
+228	Bindal li ñu wóoral ci production, ci ban mbir, ak ban version. Bind yi kenn mënu leen soppi.
+229	Version
+230	Soppi mode
+231	amul firnde
+232	antuwul
+233	romb na
+234	mi ngi xaar
+235	Seet naka la playbook bi di dem
+236	Jumtukaay yu mën a tontu
+237	Jumtukaay yépp
+238	[0] jumtukaay bu jéem
+239	[0] jumtukaay yu jéem
+240	Mat na
+241	Mat na bu
+242	Exercice
+243	Xool
+244	Tontu
+245	Li ñu aar
+246	[0] lañu gis, [1] mën nañu tontu
+247	Data
+248	Màgget data yi
+249	Ci jamono ji
+250	Data yu jéem
+251	defuñu ko
+252	reçu
+253	mi ngi dox
+254	xamuñu ko
+255	Yónne
+256	Firnde
+257	Dox na
+258	Màggat na
+259	Ndoxu data yi
+260	Version walla digest
+261	Wàll
+262	Njeexital
+263	Boroom
+264	Li ñu soxla
+265	Mbir walla mbooloo
+266	Wone
+267	Lépp
+268	Matul
+269	Taal na ci sérwiis bi bépp
+270	Taal na ci mbootaay bii
+271	Taxawal bépp jëfu tontu bu bees ci mbootaay bii? Aar gi ak saytu gi dinañu wéy di dox.
+272	Nanguwaat jëfu tontu yi
+273	Taxawal jëfu tontu yépp
+274	Buton bu taxawal
+275	Xeet
+276	Diggu simili yu ubbeeku ([0] ubbeeku, bi gën a yàgg [1] simili)
+277	Pólitig bi bañ na
+278	Exercice ak simulation (waññuñu leen ci kaw)
+279	Jëf yu ñu def waat (jubluwaay 0)
+280	Diggu yeexaay ndoxu data (p95 [0] s, n=[1])
+281	Ndigël yu yeex ([0] mi ngi xaar, jubluwaay [1] simili)
+282	Diggu jamono ci màndarga ba tànn (p95 [0] simili, n=[1], [2] yu ñu tànnul)
+283	Jëf yu ñu wóoral ci seen bopp ([0]/[1])
+284	Jamono: [0]. Reçu rekk du mukk jaar ni lu wóor. Data yu ñàkk dañuy feeñ ni yu amul.
+285	Natt yu tontu
+286	Xew-xew bu mujj
+287	Agent yi dañuy digle; benn pólitig bu sax moo dogal li dox. Bépp jëf day wone ndigëlam, reçuam ak seetlu bu moom boppam.
+288	Tolluwaay
+289	Mi ngi xaar ndigël
+290	Bañ nañu ko
+291	Jeex na
+292	Antuwul
+293	Soxla na ñu boole ko ak loxo
+294	Ñu digle ko
+295	Ci rëdd bi
+296	Mi ngi dox
+297	Wóoral gi mi ngi xaar
+298	Wóor na
+299	Na mu tollu léegi
+300	Mode
+301	Simulation
+302	Saytu yi ak dajale data dañuy dox. Yeneen jëf dañuy des ay digle.
+303	Jëf yu ñu nangu dañuy dox ci jumtukaay yu ñu tànn.
+304	Jëf yi dañuy dox ci adaptateur yu jéem rekk. Dara du soppiku ci say jumtukaay.
+305	Amagul jëf.
+306	Amul dara lu xaar ndigël.
+307	Amagul firndey production bu ñu bind.
+308	Amagul jumtukaay walla integration buy yónne data.
+309	Doxul
+310	Gis nañu ko
+311	Lu xew
+312	Tontu DDoS
+313	Artu bu dul dëgg ak delloo
+314	Identité, phishing ak trafik bu mel ni lu bon
+315	Malware ak li ñu yeb lu mel ni lu bon
+316	Gisu rézo bi ak na jumtukaay bi tollu
+317	Wér ginnaaw ñu song
+318	Ransomware walla song bu ñu sikk
+319	Playbook
+320	Playbook yi
+321	Versionu pólitig bi
+322	Version bu ñu samp
+323	Beral ak firewall
+324	Data agsi na
+325	Fichier bi dindi nañu ko
+326	Processus bi taxaw na
+327	Na joxekat bi tollu
+328	Bind nañu ko
+329	Saytu gi mat na
+330	Simulé
+331	Génn na ci karantin
+332	Ci karantin
+333	Jëf ak reçu
+334	Bind njeexital
+335	Bind
+336	Mën na tontu
+337	Cosaan
+338	jumtukaay
+339	console
+340	simulation
+341	Tàmbali bu
+342	Yeesal nañu ko
+343	Seetlu bu moom boppam
+344	Mi ngi xaar
+345	Dayob archive
+346	Archive bu ñu kumpa
+347	Ñu génne ko
+348	Mënuñu ko jot
+349	Dayob jamono
+350	Dafa rëy lool
+351	Format bu ñu nanguwul
+352	Neenal nañu ko
+353	Ñàkk nañu ko
+354	Benn wàll
+355	Jamono ji jeex na
+356	Bu mat
+357	Bu ñu ko soxla
+358	Bu gaaw
+359	Wér
+360	Bu ñu waajal
+361	Bu ñu jublu
+362	Yokk benn segment
+363	archive yi
+364	Mbir yi
+365	Taxawal saytu bii? Njeexital yi ba leegi dañu leen di denc ni saytu bu ñu neenal.
+366	Aaruñu ko
+367	Li ñu gis
+368	Jumtukaay yi ci ni seen aar tollu
+369	Moteur
+370	Jamono ji
+371	Firnde bu mujj
+372	Saytu bu ñu xaar
+373	Defar bu ñu digle
+374	Testaat
+375	Mbir walla segment
+376	Kàmb yu ubbeeku
+377	Njeexitalu saytu ci 30 fan
+378	artu ba tëye gu wóor
+379	jumtukaay yu ñu aar
+380	endpoint yu ñépp yu am aaru joxekat bu kaw
+381	xew-xew ba artu
+382	jumtukaay yu am definitions yu bees
+383	jumtukaay yu am saytu bu mat ci 7 fan
+384	kàmb yu ubbeeku ([0] yeex nañu, [1] tëj nañu leen ci 30 fan)
+385	segmentu rézo yu ñuy xool
+386	li ñu gis lu dëgg te wóor
+387	saytu yu mat
+388	Aar ak tontu
+389	Saytu bu mat bu mujj
+390	Telemetry bu mujj
+391	Bépp jumtukaay ak segmentu rézo bu bokk ci, ndax dañu ko aar, ak li war a defaru ci topp.
+392	Gisu rézo bi
+393	Amagul jumtukaay bu ñu bindlu. Aaral benn ordinatëer ci Jumtukaay yi.
+394	Amul kàmb yu ubbeeku.
+395	[0] ubbeeku
+396	yeex na
+397	p95 [0] s
+398	Dossier yi
+399	Dossier yi ñuy saytu, ñu xàjjale leen ak virgule
+400	Kumpa ak firewall
+401	Kumpa disk [0], firewall [1]
+402	Wér ginnaaw xew-xew yi
+403	Seetaat léegi
+404	Testaatuñu ko
+405	Testaat gi antuwul
+406	Wóor na ne tëj nañu ko
+407	Xeetu saytu
+408	Saytu yi
+409	Segment
+410	Turu segment bi
+411	Tàmbali saytu
+412	Tàmbali na
+413	Na mu tollu
+414	Wàññiku na
+415	Ñu aar ko
+416	Aaruñu ko
+417	Jumtukaay yi ci ni ñu tollu
+418	[0] xamuñu ko
+419	Gisuñu dara
+420	Ñuy ko xool
+421	Gis
+422	Ñàkk li ñu gis du firndeel aar: seetal itam li ñu aar ak njeexitalu saytu yi.
+423	Làkk
+424	Li ñu tekki
+425	Amul version bu jiitu
+426	Melo
+427	Lëndëm
+428	Contraste bu kawe
+429	Leer
+430	Amul menace bu bees bu ñu gis ci [0] fichier.
+431	[0] menace
+432	[0] menace
+433	 lañu gis ci [0] fichier. Seetal Artu yi ak Ndigël yi ngir saytu leen.
+434	Saytu bu mat
+435	Mënuñu aar ordinatëer bii: [0]
+436	Ordinatëer bii aar nañu ko. Saytu ci saa si dafay dox bu Agentic Antivirus ubbeekoo.
+437	Saytu gi matul: [0]
+438	Mi ngi saytu…
+439	Mi ngi saytu bépp disk. Lii mën na yàgg lool.
+440	Mi ngi saytu Téléchargements, Bureau ak fichier yu diirul…
+441	[0] fichier mënuñu leen jàng.
+442	Benn fichier
+443	Benn lienu site
+444	Nangu data yu jéem
+446	Jëf yi
+447	Yokk benn integration
+448	Yokk exclusion
+449	Yokk integration
+450	Yokk saytu bu mat bu ayu-bés
+451	njiitu sistem
+452	Xibaaru njaaykat
+453	Nanguwaayu xibaaru njaaykat
+454	Sérwiis yi ñu laal
+455	artu ci 24 waxtu yi weesu
+456	Nangu
+457	Nangu te saytu
+458	Njiitu sistem bi war na wax lu tax. Exclusion bi dañu koy bind ci rëddu audit bi.
+459	Benn imeel
+460	Nangu dellu ci liggéey
+461	Nangu jëf yi
+462	Mbir
+463	mbir yu nekk ci aar buy dox
+464	mbir yu am artu ci 24 waxtu
+465	Rëddu audit
+466	Aar bu otomatik day wéy di dox ci bépp jumtukaay. Yii ñoo di jëf yi soxla benn nit mu dogal.
+467	Nekkin
+468	Màndarga yu am
+469	Sauvegarde bi wóor na
+470	Tëye
+471	Ci boppam agent bi day yónne telemetryu kaaraange ak hash yu fichier yi: turu processus yi ak seeni ndigëlu rëdd, yoonu fichier yi, metadata yu lëkkalekaay rézo, ak li ñu gis. Li nekk ci fichier yi dañu koy dajale rekk su sa mbootaay taalee loolu.
+472	Kàttan
+473	Xeet
+474	Soppiku na
+475	Fey
+476	Seet
+477	tànn
+478	Tànn benn jumtukaay
+480	Tëj
+481	Ñu xàjjale ak virgule
+482	Jokkoo
+483	Saytu
+484	Li ñu aar ci wàllu aar
+485	bu am solo lool
+486	yónne artu yu am solo lool (p95, 30 fan)
+487	Dogal yuy xaar
+488	Bañ
+489	Definitions
+490	Leeral li xew
+491	Benn leeral
+492	Leeral yi
+493	Li ñu gis
+494	Jumtukaay bu ñuy jox licence
+495	jumtukaay yu ñu aar bu mat
+496	jumtukaay yu ñu beral
+497	Jumtukaay yu soxla ñu toppatoo leen
+498	Fu muy jëm
+499	Zone DNS
+500	xëtu yeb
+501	Ci jamonoy jéem bu amul pay, ak ci plan yu ñu feyul, console bi day wone xibaaru njaaykat yu Google AdSense te appu telefon yi di wone xibaaru njaaykat yu Google AdMob, ginnaaw bu ñu laajee sa nanguwaay. Ñi abonne dañuy gis xibaaru njaaykat yu wàññiku 95%. Xibaaru njaaykat du mukk feeñ ci xëti ndigël, tëye, artu menace, saytu karantin, dugg, fey walla audit.
+502	Bépp siiwal day sos benn version bu bees bu ñu xaatimee. Jumtukaay yi dañuy wéy di topp version bu mujj bu wóor bu ñu nekkul ci internet.
+503	Bindal ndimbal gi ci
+504	Endpoint
+505	Equality Software Ltd moo yor Agentic Antivirus. Xët wii day leeral li sérwiis bi di dajale. Boroom produit bi war na ko saytu balaa ñu koy siiwal.
+506	Bépp jëf buy soppi jumtukaay, kont walla trafik day jaar ci moteuru pólitig bi ak njiiteefu AEP-X. Benn ndigël day laal benn jëf, jubluwaay yu wóor yi, mbootaay bii, ak benn jamono bu ñu dogal.
+507	Bépp fichier bu ñu yebal dañu koy seet ndax malware ak xeetam bu dëgg. Fichier yu amul visionneuse bu wóor dañu leen di denc te mën nañu leen yeb waaye duñu leen wone.
+508	Exception
+509	Exclusion yi
+510	Yoonu dossier bi
+511	ngir laaj jot walla defar.
+512	Kàmb yi
+513	Jotal agent bi ngir Windows, Mac walla Linux ci
+514	Demal ci Jumtukaay yi, tànn Bindlu benn jumtukaay, te doxal ndigël bi ñu wone ci ordinatëer bi nga bëgg a aar. Agent bi day tàmbali saytu bu jotee pólitig bi ñu xaatimee.
+515	Wér-gi-yaram
+516	Jaar-jaar
+517	Turu host
+518	Xam naa ne jumtukaay yi dinañu taxawal saytu ak tëye menace ginnaaw jéem gi ba ñu fey abonmaa.
+519	Njeexital
+520	Indi zip walla tar
+521	Xew-xew
+522	Boole ci modèle làkk bi (su sa mbootaay ubbee ko)
+523	Adreesu IP
+524	Bokk
+525	Bokkal ci sa mbootaay
+526	Malware yu ñu xam dañu leen di toxal ci karantin, fu ñu mënul a dox. Soo xalaatee ne benn fichier dañu ko tëye ci njuumte, ubbil Karantin te laaj ñu saytu ko. Njiitu sistem bi moo dogal, te fichier bi du dellusi lu dul ginnaaw bu saytu bu bees gisee ne sell na.
+527	Làkk yu amul tekki bu mat dañuy dellu ci Angale. Li ñu tekki dañu koy natt, du lu ñu natt ci xalaat.
+528	Mujj gi ñu ko soppi
+529	Wàll
+530	Laaj yu jaadu yu antu
+531	Sàrti licence
+532	Lien, su amee
+533	Host yu njiiteef yuy des ñu mën leen jot ci jamonoy beral
+534	Màndargaal ni artu bu dul dëgg
+535	Mag
+536	Wàññi
+537	Tur
+538	Turu kumpa bi ci sa dencukaayu kumpa, du kumpa bi ci boppam
+539	Amul jëf yuy xaar.
+540	Amul xew-xew yu ubbeeku.
+541	Dara.
+542	Kenn yëglewul dara.
+543	defuñu ko
+544	Ñu yëgle ginnaaw
+545	ci xibaaru njaaykat yi ñu wone
+546	Dencukaayu xew-xew bu amul internet (MB)
+547	Ci Android, abonne ci appu Agentic Antivirus jaarale ko ci Google Play. Ci iPhone ak iPad, abonmaa App Store amagul. Fey ci web amagul.
+548	Ubbi xew-xew
+549	xew-xew yu ubbeeku
+550	Xew-xew yu ubbeeku
+551	Yeexaay p95
+552	fey nañu ba
+553	Motifu yoon wi
+554	Nit ñi
+555	Ci benn jumtukaay
+556	Ci benn jëfandikukat (day laal ay jumtukaayam yépp)
+557	Wone
+558	Bu njëkk
+560	Aar benn jumtukaay
+561	Protocole
+562	Joxekat
+563	Artu joxekat bi (24 waxtu)
+564	Endpoint yu ñépp
+565	Siiwal benn versionu pólitig
+566	Siiwal version bu ñu xaatimee
+567	Siiwal nañu ko
+568	Saytu bu gaaw
+569	Jàng ci kaw ak bind ci baat dañuy jëfandikoo jumtukaayu wax yi nekk ci sa navigateur. Duñu bind walla denc baat.
+570	Agsi na
+571	Dencukaay yu ñu mën a génne
+572	Dindi
+573	Laaj nañu ko
+574	Ki ko laaj
+575	Denc
+576	Dellu ci liggéey
+577	Léegi
+578	Loraange
+579	Wàll
+580	Neenal
+581	Denc endpoint bi
+582	Denc sàrti licence yi
+583	Saytu
+584	Waxtu (cron)
+585	Saytu yu ñu waajal
+586	Référence kumpa
+587	Yónne woote
+588	Yónne rapport
+589	Yónne lien ngir soppi
+590	Sérwiis
+591	Jubluwaayu sérwiis bi
+594	Màndarga
+595	Dayo
+596	Yeneen
+597	Tànn-tànn
+598	Jéego
+599	Taxawal processus yi, beral jumtukaay yi, delloo fichier yi, yokk exclusion ak soppi sàrti trafik soxla nañu benn nit nangu leen. Benn ndigël day laal benn jëf, jubluwaay yu wóor yi ak benn jamono bu tollu. Su dara soppikoo, nanguwaatal.
+600	Abonne jumtukaay bii ak Google Play
+601	na abonmaa bi tollu
+603	Sistem
+604	Jubluwaay
+605	Ndimbalu AI bi
+606	Ndimbal bi day boole artu yu ànd, lim li ñu gis ak lien yuy jëm ci firnde yi, te màndargaal lépp lu mu mënul firndeel ni xalaat. Mën na digle ay jëf waaye mënu leen nangu. Su modèle bi amul, saytu, artu ak tontu yu loxo dinañu wéy di dox.
+607	Ordinatëer bii
+608	TLS rekk, war na nekk ci limu génn yu ñu nangu
+609	Ndoxu trafik bu bare, sa joxekat bu kaw moo koy jël. Fii nga koy topp bépp endpoint bu ñépp, xool artu joxekat bi, te nangu tëye trafik yu bees.
+610	Tëye trafik yi
+611	Tekki nañu ko
+612	Mbalit
+613	fanu jéem yi des
+614	Taalal aar gi ngir saytu fichier yi ci ordinatëer bii te xool ransomware ak sàcc baatu jàll yi.
+615	aaruñu ko
+616	Neenal coppite bu mujj
+617	Jëfandikukat
+618	Wóoral imeel
+619	mi ngi xaar ndigël
+620	Danuy wone xibaaru njaaykat yu Google AdSense ci yenn xët. Ndax nangu nga xibaaru njaaykat yu ñu waajal ngir yow?
+621	Webhook:
+622	Li jumtukaay yi di yónne
+623	Lan la?
+624	Kañ
+625	Bu ñu tëyee dara
+626	Bu jéem gi jeexee te kenn feyul
+627	Kan
+628	Mën nga far sa kont ci sa profil. Jokkool ak
+629	Sa tur
+630	Sa mbootaay day am jéem bu amul pay bu 30 fan. Ginnaaw loolu, £4,99 ci weer wi la ci bépp jëfandikukat walla jumtukaay.
+631	Sa mbootaay moo dogal ñaata jamono lañuy denc telemetry ak firnde yi. Bindu audit yi kenn mënu leen soppi walla far.
+632	Say sañ-sañ
+633	Bind ci baat
+634	Nangu jëfandikoo mikro bi ngir bind ci baat? Baat bi sa navigateur moo koy liggéey te dunu ko denc.
+635	Génnu baat
+636	Taxawal tuuti
+637	Kawe-suufe baat
+638	Wéyal
+639	Gaawaay
+640	Taxawal
+641	Amul baat bu am ci làkk wii.
+642	Baat
+643	Fichier bi dañu ko toxal ci karantin te mënul a dox.
+644	Dañu tëye benn menace ci jumtukaay bii.

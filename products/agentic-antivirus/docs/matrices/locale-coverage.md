@@ -1,6 +1,6 @@
 # Locale coverage matrix
 
-Generated from `shared/i18n/*.json` by `tools/gen_matrices.py`. 75 of 100 catalogue locales are complete; the rest fall back to English and are reported as unavailable in the console. No machine translation has been added: each locale needs a translator and per-locale QA (L10N-11) before it is marked complete.
+Generated from `shared/i18n/*.json` by `tools/gen_matrices.py`. 100 of 100 catalogue locales are complete; the rest fall back to English and are reported as unavailable in the console. No machine translation has been added: each locale needs a translator and per-locale QA (L10N-11) before it is marked complete.
 
 Locale-aware formatting (dates, numbers, currency, plurals, collation search) uses the browser's Intl APIs for every locale regardless of translation status (tested for en, de, fr, ar in `web/tests/lib.test.ts`).
 
@@ -14,7 +14,7 @@ Locale-aware formatting (dates, numbers, currency, plurals, collation search) us
 | fr | ltr | 672/672 | 100.0% | complete | fr > en |
 | pt | ltr | 672/672 | 100.0% | complete | pt > en |
 | ru | ltr | 672/672 | 100.0% | complete | ru > en |
-| bn | ltr | 0/672 | 0.0% | unavailable | bn > en |
+| bn | ltr | 672/672 | 100.0% | complete | bn > en |
 | id | ltr | 672/672 | 100.0% | complete | id > en |
 | ur | rtl | 672/672 | 100.0% | complete | ur > en |
 | de | ltr | 672/672 | 100.0% | complete | de > en |
@@ -22,23 +22,23 @@ Locale-aware formatting (dates, numbers, currency, plurals, collation search) us
 | sw | ltr | 672/672 | 100.0% | complete | sw > en |
 | mr | ltr | 672/672 | 100.0% | complete | mr > en |
 | te | ltr | 672/672 | 100.0% | complete | te > en |
-| tr | ltr | 0/672 | 0.0% | unavailable | tr > en |
+| tr | ltr | 672/672 | 100.0% | complete | tr > en |
 | ta | ltr | 672/672 | 100.0% | complete | ta > en |
 | vi | ltr | 672/672 | 100.0% | complete | vi > en |
 | ko | ltr | 672/672 | 100.0% | complete | ko > en |
 | it | ltr | 672/672 | 100.0% | complete | it > en |
 | th | ltr | 672/672 | 100.0% | complete | th > en |
-| gu | ltr | 0/672 | 0.0% | unavailable | gu > en |
+| gu | ltr | 672/672 | 100.0% | complete | gu > en |
 | fa | rtl | 672/672 | 100.0% | complete | fa > en |
 | pl | ltr | 672/672 | 100.0% | complete | pl > en |
 | uk | ltr | 672/672 | 100.0% | complete | uk > en |
-| pa | ltr | 0/672 | 0.0% | unavailable | pa > en |
+| pa | ltr | 672/672 | 100.0% | complete | pa > en |
 | ml | ltr | 672/672 | 100.0% | complete | ml > en |
-| jv | ltr | 0/672 | 0.0% | unavailable | jv > en |
+| jv | ltr | 672/672 | 100.0% | complete | jv > en |
 | nl | ltr | 672/672 | 100.0% | complete | nl > en |
 | ro | ltr | 672/672 | 100.0% | complete | ro > en |
 | hu | ltr | 672/672 | 100.0% | complete | hu > en |
-| el | ltr | 0/672 | 0.0% | unavailable | el > en |
+| el | ltr | 672/672 | 100.0% | complete | el > en |
 | cs | ltr | 672/672 | 100.0% | complete | cs > en |
 | sv | ltr | 672/672 | 100.0% | complete | sv > en |
 | fi | ltr | 672/672 | 100.0% | complete | fi > en |
@@ -57,52 +57,52 @@ Locale-aware formatting (dates, numbers, currency, plurals, collation search) us
 | eu | ltr | 672/672 | 100.0% | complete | eu > en |
 | gl | ltr | 672/672 | 100.0% | complete | gl > en |
 | af | ltr | 672/672 | 100.0% | complete | af > en |
-| am | ltr | 0/672 | 0.0% | unavailable | am > en |
-| az | ltr | 0/672 | 0.0% | unavailable | az > en |
+| am | ltr | 672/672 | 100.0% | complete | am > en |
+| az | ltr | 672/672 | 100.0% | complete | az > en |
 | be | ltr | 672/672 | 100.0% | complete | be > en |
 | bs | ltr | 672/672 | 100.0% | complete | bs > en |
 | cy | ltr | 672/672 | 100.0% | complete | cy > en |
 | eo | ltr | 672/672 | 100.0% | complete | eo > en |
 | fil | ltr | 672/672 | 100.0% | complete | fil > en |
 | ha | ltr | 672/672 | 100.0% | complete | ha > en |
-| hy | ltr | 0/672 | 0.0% | unavailable | hy > en |
+| hy | ltr | 672/672 | 100.0% | complete | hy > en |
 | ig | ltr | 672/672 | 100.0% | complete | ig > en |
 | is | ltr | 672/672 | 100.0% | complete | is > en |
-| ka | ltr | 0/672 | 0.0% | unavailable | ka > en |
+| ka | ltr | 672/672 | 100.0% | complete | ka > en |
 | kk | ltr | 672/672 | 100.0% | complete | kk > en |
 | km | ltr | 672/672 | 100.0% | complete | km > en |
 | kn | ltr | 672/672 | 100.0% | complete | kn > en |
-| ku | ltr | 0/672 | 0.0% | unavailable | ku > en |
+| ku | ltr | 672/672 | 100.0% | complete | ku > en |
 | ky | ltr | 672/672 | 100.0% | complete | ky > en |
 | lo | ltr | 672/672 | 100.0% | complete | lo > en |
 | mk | ltr | 672/672 | 100.0% | complete | mk > en |
-| mn | ltr | 0/672 | 0.0% | unavailable | mn > en |
-| my | ltr | 0/672 | 0.0% | unavailable | my > en |
+| mn | ltr | 672/672 | 100.0% | complete | mn > en |
+| my | ltr | 672/672 | 100.0% | complete | my > en |
 | ne | ltr | 672/672 | 100.0% | complete | ne > en |
-| or | ltr | 0/672 | 0.0% | unavailable | or > en |
+| or | ltr | 672/672 | 100.0% | complete | or > en |
 | ps | rtl | 672/672 | 100.0% | complete | ps > en |
 | si | ltr | 672/672 | 100.0% | complete | si > en |
-| sq | ltr | 0/672 | 0.0% | unavailable | sq > en |
-| su | ltr | 0/672 | 0.0% | unavailable | su > en |
-| tg | ltr | 0/672 | 0.0% | unavailable | tg > en |
-| tk | ltr | 0/672 | 0.0% | unavailable | tk > en |
+| sq | ltr | 672/672 | 100.0% | complete | sq > en |
+| su | ltr | 672/672 | 100.0% | complete | su > en |
+| tg | ltr | 672/672 | 100.0% | complete | tg > en |
+| tk | ltr | 672/672 | 100.0% | complete | tk > en |
 | tl | ltr | 672/672 | 100.0% | complete | tl > en |
-| uz | ltr | 0/672 | 0.0% | unavailable | uz > en |
+| uz | ltr | 672/672 | 100.0% | complete | uz > en |
 | yo | ltr | 672/672 | 100.0% | complete | yo > en |
 | zu | ltr | 672/672 | 100.0% | complete | zu > en |
-| xh | ltr | 0/672 | 0.0% | unavailable | xh > en |
+| xh | ltr | 672/672 | 100.0% | complete | xh > en |
 | so | ltr | 672/672 | 100.0% | complete | so > en |
-| rw | ltr | 0/672 | 0.0% | unavailable | rw > en |
+| rw | ltr | 672/672 | 100.0% | complete | rw > en |
 | mg | ltr | 672/672 | 100.0% | complete | mg > en |
-| ny | ltr | 0/672 | 0.0% | unavailable | ny > en |
+| ny | ltr | 672/672 | 100.0% | complete | ny > en |
 | sn | ltr | 672/672 | 100.0% | complete | sn > en |
 | st | ltr | 672/672 | 100.0% | complete | st > en |
 | tn | ltr | 672/672 | 100.0% | complete | tn > en |
 | ts | ltr | 672/672 | 100.0% | complete | ts > en |
-| wo | ltr | 0/672 | 0.0% | unavailable | wo > en |
+| wo | ltr | 672/672 | 100.0% | complete | wo > en |
 | yi | rtl | 672/672 | 100.0% | complete | yi > en |
 | ceb | ltr | 672/672 | 100.0% | complete | ceb > en |
-| hmn | ltr | 0/672 | 0.0% | unavailable | hmn > en |
+| hmn | ltr | 672/672 | 100.0% | complete | hmn > en |
 | bho | ltr | 672/672 | 100.0% | complete | bho > en |
 | mai | ltr | 672/672 | 100.0% | complete | mai > en |
-| sat | ltr | 0/672 | 0.0% | unavailable | sat > en |
+| sat | ltr | 672/672 | 100.0% | complete | sat > en |

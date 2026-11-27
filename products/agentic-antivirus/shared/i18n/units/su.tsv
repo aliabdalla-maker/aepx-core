@@ -1,0 +1,637 @@
+0	Langsung ka eusi utama
+1	Tambahkeun pengecualian permanén
+2	Larapkeun watesan lalu lintas
+3	Kumpulkeun metadata parangkat
+4	Isolasi parangkat tina jaringan
+5	Karantina file
+6	Leupaskeun parangkat tina isolasi
+7	Pulihkeun file anu dikarantina
+8	Kaluarkeun pamaké ti mana waé
+9	Balikkeun watesan lalu lintas
+10	Balikkeun pembaruan
+11	Pindai parangkat
+12	Gantungkeun akun pamaké
+13	Eureunkeun prosés
+14	Satujuan
+15	Tolak
+16	Kirim ka parangkat
+17	Persetujuan kadaluwarsa [0]
+18	Diusulkeun ku asistén AI
+19	Iklan
+20	Tindakan
+21	Agén
+22	Taros
+23	Taros ka asistén kaamanan
+24	Jawaban asalna tina parangkat, insidén anu masih dibuka sareng celah anjeun. Asistén teu tiasa ngarobah naon waé.
+25	Dumasar kana
+26	[0] klaim tanpa bukti parantos dipupus
+27	[0] klaim tanpa bukti parantos dipupus
+29	Modél anu di-host nyalira
+30	Aturan (tanpa modél)
+31	Damel draf rencana pemulihan
+32	Unggal léngkah téh usulan. Teu aya anu dijalankeun dugi ka aya anu nyatujuan.
+33	Patarosan
+34	Conto: parangkat mana anu peryogi perhatosan?
+35	Tingkat bahaya anu disarankeun
+36	Ringkesan
+37	Udagan
+38	Ringkeskeun insidén ieu
+39	Naha
+40	Kadeteksi
+41	Laporkeun hal anu curiga
+42	Aturan
+43	Tingkat bahaya
+44	Peringatan
+46	Tambahkeun file
+47	Tambahkeun polder
+48	Tambahkeun gambar
+49	[0] lampiran
+50	[0] lampiran
+51	Lampiran
+52	Candak poto
+53	Aksés kaméra teu diidinan. Idinan dina browser anjeun, atanapi anggo aplikasi kaméra parangkat anjeun.
+54	Pratinjau kaméra
+55	Browser ieu teu tiasa muka kaméra di dieu.
+56	Candak
+57	Tutup asistén
+58	File naon ieu, sareng naha aman?
+59	File
+60	Taros ngeunaan kaamanan anjeun, atanapi lampirkeun file, polder, gambar atanapi poto kaméra. Unggal lampiran dipindai heula sareng teu aya anu disimpen.
+61	[0] gambar parantos
+62	[0] gambar parantos
+63	 dijelaskeun ku modél.
+64	Conto: naha unduhan ieu aman?
+65	Téks sareng gambar anu bersih tiasa dikirim ka modél AI anu diaktipkeun ku organisasi anjeun. File jahat moal pernah dikirim.
+66	[0] file teu ditambahkeun
+67	[0] file teu ditambahkeun
+68	: paling seueur [0] file, masing-masing [1] MB sareng jumlahna [2] MB.
+69	Piceun [0]
+70	Pindai teras taros
+71	Hasil pindai
+72	Jinis
+73	Anggo kaméra parangkat
+74	Hasil
+75	Teu aya malware anu dipikanyaho
+76	Jahat
+77	Teu acan dipindai
+78	Ranté audit pegat dina éntri [0].
+79	Ranté audit utuh: [0] éntri parantos diverifikasi.
+80	Surélék
+81	Hilap kecap konci?
+82	Lebet nganggo Google
+83	Lebet nganggo Google gagal. Cobian deui, atanapi anggo surélék sareng kecap konci anjeun.
+84	Lebet
+85	Kaluar
+86	Kecap konci énggal
+87	atanapi
+88	Organisasi
+89	Kecap konci
+90	Kecap konci parantos diganti. Lebet nganggo kecap konci énggal anjeun.
+91	Sahenteuna 12 karakter.
+92	Damel akun
+93	Kirim deui tautan
+94	Upami akun éta masih peryogi dikonfirmasi, tautan énggal nuju dikirim. Pariksa ogé polder spam anjeun.
+95	Reset kecap konci
+96	Upami aya akun anu nganggo alamat éta, kami parantos ngirim tautan reset. Tautan éta lumaku salami sajam.
+97	Konfirmasi alamat surélék anjeun saméméh lebet. Buka tautan anu kami kirim ka [0].
+98	Surélék parantos diverifikasi. Ayeuna anjeun tiasa lebet.
+99	Tautan ieu parantos kadaluwarsa atanapi parantos dianggo. Lebet pikeun kéngingkeun anu énggal.
+100	Pariksa surélék anjeun pikeun ngaverifikasi alamat.
+101	Langganan ngirangan iklan dugi ka 95%.
+102	Masa uji coba anjeun parantos réngsé.
+103	Langganan dugi ka [0]
+104	Sadayana tetep gratis kalayan iklan lengkep
+105	Eureunkeun sadayana, kalebet panyalindungan parangkat, dugi ka aya anu mayar
+106	Konsol peryogi langganan; parangkat tetep ditangtayungan
+107	£4,99 per bulan
+108	Langganan
+109	Uji coba gratis:
+110	[0] dinten deui
+111	[0] dinten deui
+112	Bolay
+113	Pupus
+114	Aya anu lepat.
+115	Ékspor
+116	Nuju ngamuat…
+117	N/A
+118	Teu kantos
+119	Salajengna
+120	henteu
+121	Teu aya anu ditampilkeun.
+122	pareum
+123	hurung
+124	Saméméhna
+125	Segerkeun
+126	Simpen
+127	Milarian
+128	Simulasi (data uji)
+129	Status
+130	Teu sayogi
+131	Teu dipikanyaho
+132	Diropéa [0]
+133	Nuju diolah…
+134	enya
+135	[0] peringatan dina 24 jam
+136	[0] peringatan dina 24 jam
+137	[0] parangkat
+138	[0] parangkat
+139	Data per [0]
+140	[0] insidén dibuka
+141	[0] insidén dibuka
+142	[0] persetujuan ngantosan
+143	[0] persetujuan ngantosan
+144	dikonfirmasi
+145	disangka
+146	Daptarkeun parangkat
+147	Parangkat
+148	Teu ngalaporkeun
+149	Kawijakan kolot
+150	Sénsor dipareuman
+151	Définisi kolot
+152	Masalah
+153	Terakhir katingal
+154	Sistem operasi
+155	Kawijakan
+156	Jalankeun dina parangkat dina 24 jam (sakali pakéan):
+157	Panyalindungan
+158	Salin
+159	Unduh
+160	Pindahkeun
+161	Polder énggal
+162	Ganti nami
+163	Pulihkeun
+164	Pindahkeun ka runtah
+165	Unggah
+166	Pitulung
+167	[0] téks dina kaca ieu ditarjamahkeun ku mesin sareng teu acan dipariksa.
+168	[0] téks dina basa ieu ditarjamahkeun ku mesin sareng teu acan dipariksa.
+169	Basa ieu teu acan ditarjamahkeun, janten basa Inggris anu ditampilkeun.
+170	disatujuan
+171	Fakta anu dititénan
+172	Hipotésis (teu acan dikonfirmasi)
+173	Hipotésis, kapercayaan [0]: [1]
+174	Jalankeun panalungtikan
+175	Bukti anu leungit
+176	Leungit: [0]
+177	Baca nganggo sora
+178	Tindakan anu disarankeun
+179	Garis waktos bukti
+180	webhook asup
+181	Sinyal ti panyadia idéntitas, DNS, firewall sareng alat séjén anjeun. Integrasi énggal dimimitian salaku teu sayogi; ngan adaptor panyadia anu lulus uji kontrak anu tiasa ditandaan langsung. Data uji dilabélan simulasi di mana waé éta muncul.
+182	Teu nyambung (stub)
+183	Ngan data uji
+184	Teu sayogi
+185	Langsung (diverifikasi)
+186	Rusiah (ditingalikeun sakali):
+187	Persetujuan
+188	Peringatan
+189	Audit
+190	Langganan
+191	Dasbor
+192	DDoS sareng kasayogian
+193	Parangkat
+194	File
+195	Insidén
+196	Integrasi
+197	Kawijakan
+198	Privasi
+199	Karantina
+200	Réspon
+201	Kaamanan
+202	Setélan
+203	Karantina malware anu dipikanyaho sacara otomatis
+204	Awaskeun paripolah anu curiga
+205	Blokir skrip anu curiga
+206	Kumpulkeun eusi file pikeun panalungtikan (standarna pareum)
+207	Idinan isolasi jaringan
+208	Pindai file nalika dibuka atanapi ditulis
+209	Pindai unduhan
+210	Pindai program nalika dimimitian
+211	Tangtayungan agén tina parobahan
+212	Ngingetan ngeunaan tautan jahat anu dipikanyaho
+213	Alesan
+214	Nyuhunkeun tinjauan
+215	Pulihkeun saatos dipindai énggal
+216	median waktos dugi ka penghapusan diverifikasi (n=[0], teu acan réngsé [1])
+217	perbaikan anu lulus uji ulang
+218	kambuh saatos pemulihan
+219	penghapusan virus diverifikasi
+220	balik aman ka layanan
+221	pindai pemulihan réngsé
+222	Hasil ngan karantina ([0]) sareng parangkat anu dipasang ulang ([1]) diitung misah; karantina waé moal pernah diitung salaku penghapusan.
+223	[0] j
+224	[0] mnt
+225	[0] dtk
+226	Ngantosan persetujuan
+227	Bukti produksi
+228	Catet naon anu parantos diverifikasi dina produksi, dina aset mana, nganggo vérsi naon. Éntri teu tiasa diédit.
+229	Vérsi
+230	Ganti mode
+231	teu aya bukti
+232	gagal
+233	lulus
+234	ngantosan
+235	Pariksa kamajuan playbook
+236	Parangkat anu tiasa ngaréspon
+237	Sadaya parangkat
+238	[0] parangkat pilot
+239	[0] parangkat pilot
+240	Réngsé
+241	Réngsé nalika
+242	Latihan
+243	Titénan
+244	Réspon
+245	Cakupan
+246	[0] dititénan, [1] tiasa ngaréspon
+247	Data
+248	Umur data
+249	Langsung
+250	Data uji
+251	teu dieksekusi
+252	tanda tampi
+253	nuju jalan
+254	teu dipikanyaho
+255	Pangiriman
+256	Bukti
+257	Parantos jalan
+258	Kolot
+259	Aliran data
+260	Vérsi atanapi digest
+261	Lingkungan
+262	Hasil
+263	Nu gaduh
+264	Sarat
+265	Aset atanapi kohort
+266	Témbongkeun
+267	Sadayana
+268	Teu acan réngsé
+269	Hurung pikeun sadaya layanan
+270	Hurung pikeun organisasi ieu
+271	Eureunkeun sadaya tindakan réspon énggal pikeun organisasi ieu? Panyalindungan sareng pindai tetep jalan.
+272	Idinan deui tindakan réspon
+273	Eureunkeun sadaya tindakan réspon
+274	Saklar darurat
+275	Jinis
+276	Median menit dibuka ([0] dibuka, pangkolotna [1] mnt)
+277	Panolakan kawijakan
+278	Latihan sareng simulasi (teu diitung di luhur)
+279	Tindakan diulang (udagan 0)
+280	Median reureuh aliran (p95 [0] dtk, n=[1])
+281	Persetujuan telat ([0] ngantosan, udagan [1] mnt)
+282	Median sinyal dugi ka triase (p95 [0] mnt, n=[1], [2] teu acan ditriase)
+283	Tindakan anu diverifikasi mandiri ([0]/[1])
+284	Jandéla: [0]. Tanda tampi waé moal pernah diitung diverifikasi. Data anu leungit ditampilkeun teu sayogi.
+285	Ukuran réspon
+286	Kajadian terakhir
+287	Agén ngusulkeun; kawijakan tetep anu nangtukeun naon anu jalan. Unggal tindakan nembongkeun persetujuan, tanda tampi sareng pamariksaan mandiri.
+288	Tahap
+289	Ngantosan persetujuan
+290	Ditolak
+291	Kadaluwarsa
+292	Gagal
+293	Peryogi rékonsiliasi manual
+294	Diusulkeun
+295	Dina antrian
+296	Nuju jalan
+297	Vérifikasi ngantosan
+298	Diverifikasi
+299	Kaayaan langsung
+300	Mode
+301	Simulasi
+302	Pindai sareng ngumpulkeun data jalan. Tindakan séjén tetep janten usulan.
+303	Tindakan anu disatujuan jalan dina parangkat anu dipilih.
+304	Tindakan ngan jalan dina adaptor uji. Teu aya anu robih dina parangkat anjeun.
+305	Teu acan aya tindakan.
+306	Teu aya anu ngantosan persetujuan.
+307	Teu acan aya bukti produksi anu dicatet.
+308	Teu acan aya parangkat atanapi integrasi anu ngirim data.
+309	Teu jalan
+310	Dititénan
+311	Naon anu kajantenan
+312	Réspon DDoS
+313	Positip palsu sareng pemulihan
+314	Idéntitas, phishing sareng lalu lintas anu curiga
+315	Malware sareng unduhan anu curiga
+316	Visibilitas jaringan sareng kaayaan parangkat
+317	Pemulihan saatos dibobol
+318	Ransomware atanapi disangka dibobol
+319	Playbook
+320	Playbook
+321	Vérsi kawijakan
+322	Vérsi anu dipasang
+323	Isolasi firewall
+324	Data ditampi
+325	File dipiceun
+326	Prosés dieureunkeun
+327	Kaayaan panyadia
+328	Dicatet
+329	Pindai réngsé
+330	Disimulasikeun
+331	Kaluar tina karantina
+332	Dina karantina
+333	Tindakan sareng tanda tampi
+334	Catet hasil
+335	Catet
+336	Tiasa ngaréspon
+337	Sumber
+338	parangkat
+339	konsol
+340	simulasi
+341	Dimimitian nalika
+342	Diropéa
+343	Pamariksaan mandiri
+344	Ngantosan
+345	Wates arsip
+346	Arsip énkripsi
+347	Dikecualikeun
+348	Teu tiasa diaksés
+349	Wates waktos
+350	Kagedéan
+351	Format teu dirojong
+352	Dibolaykeun
+353	Kaliwat
+354	Sabagian
+355	Béak waktos
+356	Lengkep
+357	Saupami dipénta
+358	Gancang
+359	Pemulihan
+360	Dijadwalkeun
+361	Ditargétkeun
+362	Tambahkeun ségmén
+363	arsip
+364	Aset
+365	Eureunkeun pindai ieu? Hasil dugi ka ayeuna disimpen salaku pindai anu dibolaykeun.
+366	Teu kacakup
+367	Déteksi
+368	Parangkat dumasar kaayaan panyalindungan
+369	Mesin
+370	Tanggal wates
+371	Bukti terakhir
+372	Kontrol anu dipiharep
+373	Perbaikan anu diusulkeun
+374	Uji ulang
+375	Aset atanapi ségmén
+376	Celah dibuka
+377	Hasil pindai dina 30 dinten
+378	peringatan dugi ka panahanan diverifikasi
+379	parangkat ditangtayungan
+380	titik tungtung publik kalayan mitigasi hulu
+381	kajadian dugi ka peringatan
+382	parangkat kalayan définisi panganyarna
+383	parangkat kalayan pindai lengkep dina 7 dinten
+384	celah dibuka ([0] telat, [1] ditutup dina 30 dinten)
+385	ségmén jaringan anu diawaskeun
+386	positip leres anu dikonfirmasi
+387	pindai réngsé
+388	Cakupan sareng réspon
+389	Pindai lengkep terakhir
+390	Télemétri terakhir
+391	Unggal parangkat sareng ségmén jaringan dina cakupan, naha ditangtayungan, sareng naon anu kedah dibenerkeun salajengna.
+392	Visibilitas jaringan
+393	Teu acan aya parangkat anu didaptarkeun. Tangtayungan komputer tina Parangkat.
+394	Teu aya celah dibuka.
+395	[0] dibuka
+396	telat
+397	p95 [0] dtk
+398	Polder
+399	Polder anu badé dipindai, dipisahkeun ku koma
+400	Énkripsi sareng firewall
+401	Énkripsi disk [0], firewall [1]
+402	Pemulihan saatos insidén
+403	Pariksa deui ayeuna
+404	Teu acan diuji ulang
+405	Uji ulang gagal
+406	Ditutup diverifikasi
+407	Jinis pindai
+408	Pindai
+409	Ségmén
+410	Nami ségmén
+411	Mimitian pindai
+412	Dimimitian
+413	Kaayaan
+414	Turun
+415	Ditangtayungan
+416	Teu ditangtayungan
+417	Parangkat dumasar kaayaan
+418	[0] teu dipikanyaho
+419	Teu aya visibilitas
+420	Diawaskeun
+421	Visibilitas
+422	Teu aya déteksi henteu ngabuktikeun panyalindungan: pariksa ogé cakupan sareng hasil pindai.
+423	Basa
+424	Cakupan tarjamahan
+425	Teu aya vérsi saméméhna
+426	Téma
+427	Poék
+428	Kontras luhur
+429	Caang
+430	Teu aya ancaman énggal anu kapendak dina [0] file.
+431	[0] ancaman
+432	[0] ancaman
+433	 kapendak dina [0] file. Tingali Peringatan sareng Persetujuan pikeun mariksa.
+434	Pindai lengkep
+435	Teu tiasa nangtayungan komputer ieu: [0]
+436	Komputer ieu ditangtayungan. Pindai waktos nyata jalan salami Agentic Antivirus dibuka.
+437	Pindai teu réngsé: [0]
+438	Nuju mindai…
+439	Mindai sadaya drive. Ieu tiasa lami pisan.
+440	Mindai Downloads, Desktop sareng file samentawis…
+441	[0] file teu tiasa dibaca.
+442	File
+443	Tautan situs wéb
+444	Tampi data uji
+446	Tindakan
+447	Tambahkeun integrasi
+448	Tambahkeun pengecualian
+449	Tambahkeun integrasi
+450	Tambahkeun pindai lengkep mingguan
+451	administrator
+452	Iklan
+453	Idin iklan
+454	Layanan anu kapangaruhan
+455	peringatan dina 24 jam terakhir
+456	Idinan
+457	Idinan teras pindai
+458	Administrator kedah masihan alesan. Pengecualian dicatet dina jejak audit.
+459	Surélék
+460	Satujuan balik ka layanan
+461	Nyatujuan tindakan
+462	Aset
+463	aset dina mitigasi aktip
+464	aset kalayan peringatan dina 24 jam
+465	Jejak audit
+466	Panyalindungan otomatis tetep jalan dina unggal parangkat. Ieu tindakan anu peryogi jalma pikeun mutuskeun.
+467	Kasayogian
+468	Sinyal anu sayogi
+469	Cadangan diverifikasi
+470	Blokir
+471	Sacara standar agén ngirim télemétri kaamanan sareng hash file: nami prosés sareng baris paréntah, jalur file, metadata sambungan jaringan, sareng déteksi. Eusi file ngan dikumpulkeun upami organisasi anjeun ngahurungkeunana.
+472	Kapasitas
+473	Kategori
+474	Dirobah
+475	Biaya
+476	Pariksa
+477	pilih
+478	Pilih parangkat
+480	Tutup
+481	Dipisahkeun ku koma
+482	Kontak
+483	Kontrol
+484	Cakupan dumasar lapisan panyalindungan
+485	kritis
+486	pangiriman peringatan kritis (p95, 30 dinten)
+487	Kaputusan anu ngantosan
+488	Tolak
+489	Définisi
+490	Jelaskeun naon anu kajantenan
+491	Rincian
+492	Rincian
+493	Déteksi
+494	Parangkat anu dilisénsikeun
+495	parangkat ditangtayungan pinuh
+496	parangkat diisolasi
+497	Parangkat anu peryogi perhatosan
+498	Arah
+499	Zona DNS
+500	kaca unduhan
+501	Salami uji coba gratis, sareng dina paket anu teu acan dibayar, konsol nembongkeun iklan Google AdSense sareng aplikasi sélulér nembongkeun iklan Google AdMob, saatos naros idin anjeun. Palanggan ningali iklan 95% langkung saeutik. Iklan moal pernah muncul dina layar persetujuan, panahanan, peringatan ancaman, tinjauan karantina, lebet, pamayaran atanapi audit.
+502	Unggal publikasi ngadamel vérsi énggal anu ditandatanganan. Parangkat tetep ngalarapkeun vérsi terakhir anu diverifikasi nalika offline.
+503	Surélék dukungan di
+504	Titik tungtung
+505	Equality Software Ltd ngoperasikeun Agentic Antivirus. Kaca ieu ngajelaskeun naon anu dikumpulkeun ku layanan. Kedah ditinjau ku nu gaduh produk saméméh dipedalkeun.
+506	Unggal tindakan anu ngarobah parangkat, akun atanapi lalu lintas ngaliwatan mesin kawijakan sareng tata kelola AEP-X. Hiji persetujuan nyakup hiji tindakan, udagan anu pasti, organisasi ieu, sareng waktos anu tetep.
+507	Unggal unggahan dipariksa tina malware sareng jinis aslina. File tanpa panémbong anu diverifikasi disimpen sareng tiasa diunduh tapi teu dipratinjau.
+508	Pangecualian
+509	Pengecualian
+510	Jalur polder
+511	pikeun pamundut aksés atanapi koréksi.
+512	Celah
+513	Kéngingkeun agén pikeun Windows, Mac atanapi Linux ti
+514	Buka Parangkat, pilih Daptarkeun parangkat, teras jalankeun paréntah anu ditampilkeun dina komputer anu badé ditangtayungan. Agén mimiti mindai pas nampi kawijakan anu ditandatanganan.
+515	Kaséhatan
+516	Riwayat
+517	Nami host
+518	Abdi ngartos yén parangkat bakal eureun mindai sareng meungpeuk ancaman saatos uji coba dugi ka langganan dibayar.
+519	Dampak
+520	Impor zip atanapi tar
+521	Insidén
+522	Kalebet modél basa (upami organisasi anjeun ngaktipkeun)
+523	Alamat IP
+524	Gabung
+525	Gabung sareng organisasi anjeun
+526	Malware anu dipikanyaho dipindahkeun ka karantina, di mana éta teu tiasa jalan. Upami anjeun nyangka file diblokir ku kalepatan, buka Karantina sareng nyuhunkeun tinjauan. Administrator anu mutuskeun, sareng file ngan balik saatos pindai énggal mendakan éta bersih.
+527	Basa anu tarjamahanana teu acan lengkep balik deui ka basa Inggris. Cakupan diukur, sanés diperkirakeun.
+528	Terakhir dirobah
+529	Lapisan
+530	Kasuksésan pamundut anu sah
+531	Aturan lisénsi
+532	Tautan, upami aya
+533	Host manajemén anu tetep tiasa dihontal salami isolasi
+534	Tandaan positip palsu
+535	Kadéwasaan
+536	Mitigasi
+537	Nami
+538	Nami rusiah dina panyimpenan rusiah anjeun, sanés rusiahna nyalira
+539	Teu aya tindakan anu ngantosan.
+540	Teu aya insidén dibuka.
+541	Teu aya.
+542	Teu aya laporan.
+543	teu acan disetél
+544	Dibéjaan saatos
+545	tina iklan anu ditampilkeun
+546	Panyangga kajadian offline (MB)
+547	Dina Android, langganan dina aplikasi Agentic Antivirus ngalangkungan Google Play. Dina iPhone sareng iPad, langganan App Store teu acan sayogi. Mayar dina wéb teu acan sayogi.
+548	Buka insidén
+549	insidén dibuka
+550	Insidén dibuka
+551	Laténsi p95
+552	dibayar dugi ka
+553	Pola jalur
+554	Jalma
+555	Per parangkat
+556	Per pamaké (nyakup sadaya parangkatna)
+557	Pratinjau
+558	Utama
+560	Tangtayungan parangkat
+561	Protokol
+562	Panyadia
+563	Peringatan panyadia (24 jam)
+564	Titik tungtung publik
+565	Pedalkeun vérsi kawijakan
+566	Pedalkeun vérsi anu ditandatanganan
+567	Dipedalkeun
+568	Pindai gancang
+569	Baca nganggo sora sareng dikté nganggo fitur ucapan bawaan browser anjeun. Kami henteu ngarékam atanapi nyimpen sora.
+570	Ditampi
+571	Média anu tiasa dicabut
+572	Piceun
+573	Dipénta
+574	Dipénta ku
+575	Rétensi
+576	Balik ka layanan
+577	Ayeuna kénéh
+578	Résiko
+579	Peran
+580	Balikkeun
+581	Simpen titik tungtung
+582	Simpen aturan lisénsi
+583	Pindai
+584	Jadwal (cron)
+585	Pindai anu dijadwalkeun
+586	Rujukan rusiah
+587	Kirim uleman
+588	Kirim laporan
+589	Kirim tautan reset
+590	Layanan
+591	Tujuan layanan
+594	Sinyal
+595	Ukuran
+596	Anu séjén
+597	Urutkeun
+598	Léngkah
+599	Ngeureunkeun prosés, ngisolasi parangkat, mulihkeun file, nambihan pengecualian sareng ngarobah aturan lalu lintas peryogi persetujuan jalma. Hiji persetujuan nyakup hiji tindakan, udagan anu pasti sareng waktos anu terbatas. Upami aya anu robih, satujuan deui.
+600	Langganan parangkat ieu nganggo Google Play
+601	kaayaan langganan
+603	Sistem
+604	Udagan
+605	Asistén AI
+606	Asistén ngagolongkeun peringatan anu patali, ngadaptarkeun naon anu dititénan kalayan tautan ka bukti, sareng nandaan naon waé anu teu tiasa dibuktikeun salaku hipotésis. Asistén tiasa nyarankeun tindakan tapi teu tiasa nyatujuanana. Upami modél teu sayogi, pindai, peringatan sareng réspon manual tetep jalan.
+607	Komputer ieu
+608	Ngan TLS, kedah aya dina daptar idin egress
+609	Banjir lalu lintas diserep ku panyadia hulu anjeun. Di dieu anjeun ngadata unggal titik tungtung publik, ngawaskeun peringatan panyadia, sareng nyatujuan watesan lalu lintas énggal.
+610	Watesan lalu lintas
+611	Ditarjamahkeun
+612	Runtah
+613	dinten uji coba sésana
+614	Hurungkeun panyalindungan pikeun mindai file dina komputer ieu sareng ngawaskeun ransomware sareng maling kredénsial.
+615	teu kacakup
+616	Bolaykeun parobahan terakhir
+617	Pamaké
+618	Verifikasi surélék
+619	ngantosan persetujuan
+620	Kami nembongkeun iklan ti Google AdSense dina sababaraha kaca. Idinan iklan anu dipersonalisasi?
+621	Webhook:
+622	Naon anu dikirim ku parangkat
+623	Naon ieu?
+624	Iraha
+625	Nalika aya anu diblokir
+626	Nalika uji coba réngsé tanpa pamayaran
+627	Saha
+628	Anjeun tiasa mupus akun tina profil anjeun. Hubungi
+629	Nami anjeun
+630	Organisasi anjeun kéngingkeun uji coba gratis 30 dinten. Saatos éta biayana £4,99 per bulan kanggo unggal pamaké atanapi parangkat.
+631	Organisasi anjeun nangtukeun sabaraha lami télemétri sareng bukti disimpen. Catetan audit teu tiasa diédit atanapi dipupus.
+632	Hak anjeun
+633	Dikté
+634	Idinan nganggo mikropon pikeun dikté? Sora diolah ku browser anjeun sareng henteu disimpen ku kami.
+635	Kaluaran sora
+636	Reureuh
+637	Nada
+638	Teraskeun
+639	Laju
+640	Eureun
+641	Teu aya sora pikeun basa ieu.
+642	Sora
+643	File parantos dipindahkeun ka karantina sareng teu tiasa jalan.
+644	Ancaman parantos diblokir dina parangkat ieu.

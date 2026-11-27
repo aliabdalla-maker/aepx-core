@@ -1,0 +1,637 @@
+0	Kalo te përmbajtja kryesore
+1	Shto një përjashtim të përhershëm
+2	Zbato një kufizim trafiku
+3	Mblidh meta të dhënat e pajisjes
+4	Izolo një pajisje nga rrjeti
+5	Vendos një skedar në karantinë
+6	Hiq një pajisje nga izolimi
+7	Rikthe një skedar nga karantina
+8	Nxirr një përdorues nga të gjitha seancat
+9	Anulo një kufizim trafiku
+10	Anulo një përditësim
+11	Skano pajisjet
+12	Pezullo një llogari përdoruesi
+13	Ndalo një proces
+14	Mirato
+15	Refuzo
+16	Dërgo te pajisjet
+17	Miratimi skadon [0]
+18	Propozuar nga asistenti i AI
+19	Reklamë
+20	Veprim
+21	Agjentë
+22	Pyet
+23	Pyet asistentin e sigurisë
+24	Përgjigjet vijnë nga pajisjet, incidentet e hapura dhe mangësitë tuaja. Asistenti nuk mund të ndryshojë asgjë.
+25	Bazuar në
+26	U hoq [0] pohim pa prova
+27	U hoqën [0] pohime pa prova
+29	Model i vetë-strehuar
+30	Rregulla (pa model)
+31	Harto një plan riparimi
+32	Çdo hap është një propozim. Asgjë nuk ekzekutohet derisa dikush ta miratojë.
+33	Pyetje
+34	Për shembull: cilat pajisje kanë nevojë për vëmendje?
+35	Rëndësia e sugjeruar
+36	Përmbledhje
+37	Objektivat
+38	Përmblidh këtë incident
+39	Pse
+40	Zbuluar
+41	Raporto diçka të dyshimtë
+42	Rregull
+43	Rëndësia
+44	Sinjalizim
+46	Shto skedarë
+47	Shto një dosje
+48	Shto imazhe
+49	[0] bashkëngjitje
+50	[0] bashkëngjitje
+51	Bashkëngjitjet
+52	Bëj një foto
+53	Qasja te kamera nuk u lejua. Lejojeni në shfletues ose përdorni aplikacionin e kamerës së pajisjes.
+54	Pamja paraprake e kamerës
+55	Ky shfletues nuk mund ta hapë kamerën këtu.
+56	Kap
+57	Mbyll asistentin
+58	Çfarë janë këta skedarë dhe a janë të sigurt?
+59	Skedar
+60	Pyetni për sigurinë tuaj ose bashkëngjitni skedarë, një dosje, imazhe ose një foto nga kamera. Çdo bashkëngjitje skanohet fillimisht dhe asgjë nuk ruhet.
+61	[0] imazh u
+62	[0] imazhe u
+63	 përshkruan nga modeli.
+64	Për shembull: a është i sigurt ky shkarkim?
+65	Teksti dhe imazhet e pastra mund të dërgohen te modeli i AI që ka aktivizuar organizata juaj. Skedarët keqdashës nuk dërgohen kurrë.
+66	[0] skedar nuk u shtua
+67	[0] skedarë nuk u shtuan
+68	: deri në [0] skedarë, [1] MB secili dhe [2] MB gjithsej.
+69	Hiq [0]
+70	Skano dhe pyet
+71	Rezultatet e skanimit
+72	Lloji
+73	Përdor kamerën e pajisjes
+74	Rezultati
+75	Asnjë malware i njohur
+76	Keqdashës
+77	I paskanuar
+78	Zinxhiri i auditimit është prishur te hyrja [0].
+79	Zinxhiri i auditimit është i paprekur: [0] hyrje u verifikuan.
+80	Email
+81	Keni harruar fjalëkalimin?
+82	Hyr me Google
+83	Hyrja me Google nuk funksionoi. Provoni përsëri ose përdorni emailin dhe fjalëkalimin.
+84	Hyr
+85	Dil
+86	Fjalëkalim i ri
+87	ose
+88	Organizata
+89	Fjalëkalimi
+90	Fjalëkalimi u ndryshua. Hyni me fjalëkalimin e ri.
+91	Të paktën 12 karaktere.
+92	Krijo llogari
+93	Dërgo lidhjen përsëri
+94	Nëse ajo llogari ende ka nevojë për konfirmim, një lidhje e re është rrugës. Kontrolloni edhe dosjen e postës së padëshiruar.
+95	Rivendos fjalëkalimin
+96	Nëse një llogari përdor atë adresë, kemi dërguar një lidhje rivendosjeje. Ajo vlen për një orë.
+97	Konfirmoni adresën e emailit para se të hyni. Hapni lidhjen që dërguam te [0].
+98	Emaili u verifikua. Tani mund të hyni.
+99	Kjo lidhje ka skaduar ose është përdorur tashmë. Hyni për të marrë një të re.
+100	Kontrolloni emailin për të verifikuar adresën tuaj.
+101	Abonimi i ul reklamat me 95%.
+102	Periudha juaj provë ka përfunduar.
+103	I abonuar deri më [0]
+104	Gjithçka falas me reklama të plota
+105	Ndalo gjithçka, përfshirë mbrojtjen e pajisjeve, derisa dikush të paguajë
+106	Konsola kërkon abonim; pajisjet mbeten të mbrojtura
+107	4,99 £ në muaj
+108	Abonohu
+109	Provë falas:
+110	[0] ditë e mbetur
+111	[0] ditë të mbetura
+112	Anulo
+113	Fshi
+114	Diçka shkoi keq.
+115	Eksporto
+116	Po ngarkohet…
+117	N/A
+118	Kurrë
+119	Tjetri
+120	jo
+121	Asgjë për të shfaqur.
+122	joaktiv
+123	aktiv
+124	I mëparshmi
+125	Rifresko
+126	Ruaj
+127	Kërko
+128	Simulim (të dhëna prove)
+129	Statusi
+130	I padisponueshëm
+131	I panjohur
+132	Përditësuar [0]
+133	Duke punuar…
+134	po
+135	[0] sinjalizim në 24 orë
+136	[0] sinjalizime në 24 orë
+137	[0] pajisje
+138	[0] pajisje
+139	Të dhëna deri më [0]
+140	[0] incident i hapur
+141	[0] incidente të hapura
+142	[0] miratim në pritje
+143	[0] miratime në pritje
+144	i konfirmuar
+145	i dyshuar
+146	Regjistro një pajisje
+147	Pajisja
+148	Nuk raporton
+149	Politikë e vjetruar
+150	Sensori i çaktivizuar
+151	Përkufizime të vjetra
+152	Problemet
+153	Parë së fundi
+154	Sistemi operativ
+155	Politika
+156	Ekzekutojeni në pajisje brenda 24 orëve (një përdorim):
+157	Mbrojtja
+158	Kopjo
+159	Shkarko
+160	Zhvendos
+161	Dosje e re
+162	Riemërto
+163	Rikthe
+164	Zhvendos në kosh
+165	Ngarko
+166	Ndihmë
+167	[0] tekst në këtë faqe është përkthyer me makinë dhe ende nuk është rishikuar.
+168	[0] tekste në këtë gjuhë janë përkthyer me makinë dhe ende nuk janë rishikuar.
+169	Kjo gjuhë nuk është përkthyer ende, ndaj shfaqet anglishtja.
+170	miratuar
+171	Fakte të vëzhguara
+172	Hipoteza (të pakonfirmuara)
+173	Hipotezë, besueshmëri [0]: [1]
+174	Nis hetimin
+175	Prova që mungojnë
+176	Mungon: [0]
+177	Lexo me zë
+178	Veprime të rekomanduara
+179	Kronologjia e provave
+180	webhook hyrës
+181	Sinjale nga ofruesi i identitetit, DNS, muret mbrojtëse dhe mjete të tjera. Integrimet e reja nisin si të padisponueshme; vetëm një përshtatës ofruesi që ka kaluar testin e kontratës mund të shënohet si aktiv. Të dhënat e provës etiketohen si simulim kudo ku shfaqen.
+182	I palidhur (stub)
+183	Vetëm të dhëna prove
+184	I padisponueshëm
+185	Aktiv (i verifikuar)
+186	Sekreti (shfaqet një herë):
+187	Miratimet
+188	Sinjalizimet
+189	Auditimi
+190	Abonimi
+191	Paneli
+192	DDoS dhe disponueshmëria
+193	Pajisjet
+194	Skedarët
+195	Incidentet
+196	Integrimet
+197	Politikat
+198	Privatësia
+199	Karantina
+200	Reagimi
+201	Siguria
+202	Cilësimet
+203	Vendos automatikisht në karantinë malware-in e njohur
+204	Monitoro sjelljen e dyshimtë
+205	Blloko skriptet e dyshimta
+206	Mblidh përmbajtjen e skedarëve për hetim (joaktiv si parazgjedhje)
+207	Lejo izolimin e rrjetit
+208	Skano skedarët kur hapen ose shkruhen
+209	Skano shkarkimet
+210	Skano programet kur nisin
+211	Mbro agjentin nga ndryshimet
+212	Paralajmëro për lidhje keqdashëse të njohura
+213	Arsyeja
+214	Kërko rishikim
+215	Rikthe pas një skanimi të ri
+216	koha mesatare deri në çrrënjosjen e verifikuar (n=[0], të pazgjidhura [1])
+217	riparime me ritest të suksesshëm
+218	përsëritje pas rikuperimit
+219	heqje e verifikuar e viruseve
+220	kthim i sigurt në shërbim
+221	skanime rikuperimi të përfunduara
+222	Rezultatet vetëm me karantinë ([0]) dhe pajisjet e riinstaluara ([1]) numërohen veçmas; karantina vetëm nuk numërohet kurrë si heqje.
+223	[0] orë
+224	[0] min
+225	[0] s
+226	Në pritje të miratimit
+227	Prova nga prodhimi
+228	Regjistroni çfarë u verifikua në prodhim, në cilat asete dhe me cilin version. Hyrjet nuk mund të ndryshohen.
+229	Versioni
+230	Ndrysho modalitetin
+231	pa prova
+232	dështoi
+233	kaloi
+234	në pritje
+235	Kontrollo progresin e udhëzuesit
+236	Pajisjet që mund të reagojnë
+237	Të gjitha pajisjet
+238	[0] pajisje pilot
+239	[0] pajisje pilot
+240	Përfunduar
+241	Përfundon kur
+242	Ushtrim
+243	Vëzhgo
+244	Reago
+245	Mbulimi
+246	[0] të vëzhguara, [1] të afta për të reaguar
+247	Të dhënat
+248	Mosha e të dhënave
+249	Aktiv
+250	Të dhëna prove
+251	nuk u ekzekutua
+252	dëftesë
+253	në vazhdim
+254	i panjohur
+255	Dërgimi
+256	Provat
+257	U ekzekutua
+258	I vjetruar
+259	Burimet e të dhënave
+260	Versioni ose digest
+261	Mjedisi
+262	Rezultati
+263	Pronari
+264	Kërkesa
+265	Aseti ose grupi
+266	Shfaq
+267	Të gjitha
+268	Jo i përfunduar
+269	Aktiv për gjithë shërbimin
+270	Aktiv për këtë organizatë
+271	Të ndalohet çdo veprim i ri reagimi për këtë organizatë? Mbrojtja dhe skanimi vazhdojnë të funksionojnë.
+272	Lejo përsëri veprimet e reagimit
+273	Ndalo të gjitha veprimet e reagimit
+274	Çelësi i ndalimit emergjent
+275	Lloji
+276	Minuta mesatare të hapura ([0] të hapura, më i vjetri [1] min)
+277	Refuzime nga politika
+278	Ushtrime dhe simulime (nuk numërohen më sipër)
+279	Veprime të përsëritura (objektivi 0)
+280	Vonesa mesatare e burimit (p95 [0] s, n=[1])
+281	Miratime me vonesë ([0] në pritje, objektivi [1] min)
+282	Koha mesatare nga sinjali te triazhi (p95 [0] min, n=[1], [2] pa triazh)
+283	Veprime të verifikuara në mënyrë të pavarur ([0]/[1])
+284	Dritarja: [0]. Një dëftesë vetëm nuk numërohet kurrë si e verifikuar. Të dhënat që mungojnë shfaqen si të padisponueshme.
+285	Matjet e reagimit
+286	Ngjarja e fundit
+287	Agjentët propozojnë; një politikë fikse vendos çfarë ekzekutohet. Çdo veprim tregon miratimin, dëftesën dhe kontrollin e tij të pavarur.
+288	Faza
+289	Në pritje të miratimit
+290	Refuzuar
+291	Skaduar
+292	Dështoi
+293	Kërkon pajtim manual
+294	Propozuar
+295	Në radhë
+296	Në ekzekutim
+297	Verifikimi në pritje
+298	Verifikuar
+299	Gjendja aktuale
+300	Modaliteti
+301	Simulim
+302	Skanimet dhe mbledhja e të dhënave ekzekutohen. Veprimet e tjera mbeten propozime.
+303	Veprimet e miratuara ekzekutohen në pajisjet e zgjedhura.
+304	Veprimet ekzekutohen vetëm ndaj përshtatësve të provës. Asgjë nuk ndryshon në pajisjet tuaja.
+305	Ende nuk ka veprime.
+306	Asgjë nuk pret miratim.
+307	Ende nuk janë regjistruar prova nga prodhimi.
+308	Asnjë pajisje apo integrim nuk po dërgon të dhëna ende.
+309	Nuk u ekzekutua
+310	Vëzhguar
+311	Çfarë ndodhi
+312	Reagimi ndaj DDoS
+313	Pozitive të rreme dhe rikthim
+314	Identiteti, phishing dhe trafik i dyshimtë
+315	Malware dhe shkarkime të dyshimta
+316	Dukshmëria e rrjetit dhe gjendja e pajisjeve
+317	Rikuperimi pas kompromentimit
+318	Ransomware ose kompromentim i dyshuar
+319	Udhëzues
+320	Udhëzuesit
+321	Versioni i politikës
+322	Versioni i instaluar
+323	Izolim me mur mbrojtës
+324	Të dhënat u morën
+325	Skedari u hoq
+326	Procesi u ndalua
+327	Gjendja e ofruesit
+328	Regjistruar
+329	Skanimi përfundoi
+330	Simuluar
+331	Jashtë karantinës
+332	Në karantinë
+333	Veprimet dhe dëftesat
+334	Regjistro rezultatin
+335	Regjistro
+336	Mund të reagojë
+337	Burimi
+338	pajisje
+339	konsolë
+340	simulim
+341	Fillon kur
+342	Përditësuar
+343	Kontroll i pavarur
+344	Në pritje
+345	Kufiri i arkivit
+346	Arkiv i enkriptuar
+347	I përjashtuar
+348	I paarritshëm
+349	Kufiri kohor
+350	Shumë i madh
+351	Format i pambështetur
+352	Anuluar
+353	Humbur
+354	I pjesshëm
+355	Koha mbaroi
+356	I plotë
+357	Sipas kërkesës
+358	I shpejtë
+359	Rikuperim
+360	I planifikuar
+361	I synuar
+362	Shto segment
+363	arkiva
+364	Asetet
+365	Të ndalohet ky skanim? Rezultatet deri tani ruhen si skanim i anuluar.
+366	I pambuluar
+367	Zbulimet
+368	Pajisjet sipas gjendjes së mbrojtjes
+369	Motori
+370	Afati
+371	Prova e fundit
+372	Kontrolli i pritur
+373	Riparimi i propozuar
+374	Ritest
+375	Aseti ose segmenti
+376	Mangësi të hapura
+377	Rezultatet e skanimeve në 30 ditë
+378	nga sinjalizimi te izolimi i verifikuar
+379	pajisje të mbrojtura
+380	pika fundore publike me zbutje upstream
+381	nga ngjarja te sinjalizimi
+382	pajisje me përkufizime të përditësuara
+383	pajisje me skanim të plotë në 7 ditë
+384	mangësi të hapura ([0] me vonesë, [1] të mbyllura në 30 ditë)
+385	segmente rrjeti të monitoruara
+386	pozitive të vërteta të konfirmuara
+387	skanime të përfunduara
+388	Mbulimi dhe reagimi
+389	Skanimi i fundit i plotë
+390	Telemetria e fundit
+391	Çdo pajisje dhe segment rrjeti në fushëveprim, nëse është i mbrojtur dhe çfarë duhet rregulluar më pas.
+392	Dukshmëria e rrjetit
+393	Ende nuk ka pajisje të regjistruara. Mbroni një kompjuter nga Pajisjet.
+394	Nuk ka mangësi të hapura.
+395	[0] të hapura
+396	me vonesë
+397	p95 [0] s
+398	Dosjet
+399	Dosjet për t'u skanuar, të ndara me presje
+400	Enkriptimi dhe muri mbrojtës
+401	Enkriptimi i diskut [0], muri mbrojtës [1]
+402	Rikuperimi pas incidenteve
+403	Kontrollo përsëri tani
+404	Pa ritest
+405	Ritesti dështoi
+406	Mbyllur e verifikuar
+407	Lloji i skanimit
+408	Skanimet
+409	Segmenti
+410	Emri i segmentit
+411	Nis skanimin
+412	Filloi
+413	Gjendja
+414	E degraduar
+415	E mbrojtur
+416	E pambrojtur
+417	Pajisjet sipas gjendjes
+418	[0] të panjohura
+419	Pa dukshmëri
+420	E monitoruar
+421	Dukshmëria
+422	Mungesa e zbulimeve nuk e provon mbrojtjen: kontrolloni edhe mbulimin dhe rezultatet e skanimit.
+423	Gjuha
+424	Mbulimi i përkthimit
+425	Nuk ka version të mëparshëm
+426	Tema
+427	E errët
+428	Kontrast i lartë
+429	E çelët
+430	Nuk u gjetën kërcënime të reja në [0] skedarë.
+431	[0] kërcënim
+432	[0] kërcënime
+433	 u gjetën në [0] skedarë. Shihni Sinjalizimet dhe Miratimet për t'i rishikuar.
+434	Skanim i plotë
+435	Ky kompjuter nuk mund të mbrohej: [0]
+436	Ky kompjuter është i mbrojtur. Skanimi në kohë reale funksionon ndërsa Agentic Antivirus është i hapur.
+437	Skanimi nuk përfundoi: [0]
+438	Duke skanuar…
+439	Duke skanuar çdo disk. Kjo mund të zgjasë shumë.
+440	Duke skanuar Shkarkimet, Desktopin dhe skedarët e përkohshëm…
+441	[0] skedarë nuk mund të lexoheshin.
+442	Një skedar
+443	Një lidhje faqeje interneti
+444	Prano të dhënat e provës
+446	Veprimet
+447	Shto një integrim
+448	Shto përjashtim
+449	Shto integrim
+450	Shto skanim të plotë javor
+451	administrator
+452	Reklamat
+453	Pëlqimi për reklamat
+454	Shërbimet e prekura
+455	sinjalizime në 24 orët e fundit
+456	Lejo
+457	Lejo dhe skano
+458	Një administrator duhet të japë një arsye. Përjashtimi regjistrohet në gjurmën e auditimit.
+459	Një email
+460	Mirato kthimin në shërbim
+461	Miratimi i veprimeve
+462	Aseti
+463	asete nën zbutje aktive
+464	asete me sinjalizime në 24 orë
+465	Gjurma e auditimit
+466	Mbrojtja automatike vazhdon të funksionojë në çdo pajisje. Këto janë veprimet që kërkojnë vendimin e një personi.
+467	Disponueshmëria
+468	Sinjalet e disponueshme
+469	Kopja rezervë u verifikua
+470	Blloko
+471	Si parazgjedhje agjenti dërgon telemetri sigurie dhe hash-e skedarësh: emrat e proceseve dhe linjat e komandave, shtigjet e skedarëve, meta të dhënat e lidhjeve të rrjetit dhe zbulimet. Përmbajtja e skedarëve mblidhet vetëm nëse organizata juaj e aktivizon.
+472	Kapaciteti
+473	Kategoria
+474	Ndryshuar
+475	Tarifa
+476	Kontrollo
+477	zgjidh
+478	Zgjidh një pajisje
+480	Mbyll
+481	Të ndara me presje
+482	Kontakti
+483	Kontrolli
+484	Mbulimi sipas shtresës së mbrojtjes
+485	kritik
+486	dërgimi i sinjalizimeve kritike (p95, 30 ditë)
+487	Vendime në pritje
+488	Refuzo
+489	Përkufizimet
+490	Përshkruani çfarë ndodhi
+491	Detaji
+492	Detajet
+493	Zbulimi
+494	Pajisja për licencë
+495	pajisje plotësisht të mbrojtura
+496	pajisje të izoluara
+497	Pajisjet që kanë nevojë për vëmendje
+498	Drejtimi
+499	Zona DNS
+500	faqja e shkarkimit
+501	Gjatë provës falas dhe në planet e papaguara, konsola shfaq reklama Google AdSense dhe aplikacionet celulare shfaqin reklama Google AdMob, pasi kërkojnë pëlqimin tuaj. Abonentët shohin 95% më pak reklama. Reklamat nuk shfaqen kurrë në ekranet e miratimit, izolimit, paralajmërimit për kërcënime, rishikimit të karantinës, hyrjes, pagesës ose auditimit.
+502	Çdo publikim krijon një version të ri të nënshkruar. Pajisjet vazhdojnë të zbatojnë versionin e fundit të verifikuar kur janë jashtë linje.
+503	Mbështetje me email te
+504	Pika fundore
+505	Equality Software Ltd operon Agentic Antivirus. Kjo faqe përshkruan çfarë mbledh shërbimi. Duhet të rishikohet nga pronari i produktit para publikimit.
+506	Çdo veprim që ndryshon një pajisje, një llogari ose trafikun kalon përmes motorit të politikave dhe qeverisjes AEP-X. Një miratim mbulon një veprim, objektivat e tij të saktë, këtë organizatë dhe një kohë të caktuar.
+507	Çdo ngarkim kontrollohet për malware dhe për llojin e tij real. Skedarët pa shikues të verifikuar ruhen dhe mund të shkarkohen, por nuk shfaqen paraprakisht.
+508	Përjashtim
+509	Përjashtimet
+510	Shtegu i dosjes
+511	për kërkesa qasjeje ose korrigjimi.
+512	Mangësitë
+513	Merrni agjentin për Windows, Mac ose Linux nga
+514	Shkoni te Pajisjet, zgjidhni Regjistro një pajisje dhe ekzekutoni komandën e shfaqur në kompjuterin që doni të mbroni. Agjenti fillon skanimin sapo të marrë politikën e tij të nënshkruar.
+515	Shëndeti
+516	Historiku
+517	Emri i hostit
+518	E kuptoj që pajisjet do të ndalojnë skanimin dhe bllokimin e kërcënimeve pas provës derisa të paguhet një abonim.
+519	Ndikimi
+520	Importo zip ose tar
+521	Incident
+522	Përfshi modelin gjuhësor (nëse organizata juaj ka aktivizuar një)
+523	Adresa IP
+524	Bashkohu
+525	Bashkohu me organizatën tuaj
+526	Malware-i i njohur zhvendoset në karantinë, ku nuk mund të ekzekutohet. Nëse mendoni se një skedar u bllokua gabimisht, hapni Karantinën dhe kërkoni rishikim. Një administrator vendos dhe skedari kthehet vetëm pasi një skanim i ri ta gjejë të pastër.
+527	Gjuhët pa përkthim të plotë kalojnë në anglisht. Mbulimi matet, nuk vlerësohet.
+528	Ndryshuar së fundi
+529	Shtresa
+530	Suksesi i kërkesave legjitime
+531	Rregullat e licencimit
+532	Lidhja, nëse ka
+533	Hostet e menaxhimit të arritshëm gjatë izolimit
+534	Shëno si pozitiv të rremë
+535	Pjekuria
+536	Zbutja
+537	Emri
+538	Emri i sekretit në ruajtësin tuaj të sekreteve, kurrë vetë sekreti
+539	Asnjë veprim nuk është në pritje.
+540	Nuk ka incidente të hapura.
+541	Asnjë.
+542	Asgjë e raportuar.
+543	pa vendosur
+544	Njoftuar pas
+545	të reklamave të shfaqura
+546	Buferi i ngjarjeve jashtë linje (MB)
+547	Në Android, abonohuni në aplikacionin Agentic Antivirus përmes Google Play. Në iPhone dhe iPad, abonimet në App Store nuk janë ende të disponueshme. Pagesa në web nuk është ende e disponueshme.
+548	Incident i hapur
+549	incidente të hapura
+550	Incidentet e hapura
+551	Vonesa p95
+552	paguar deri më
+553	Modeli i shtegut
+554	Njerëzit
+555	Për pajisje
+556	Për përdorues (mbulon të gjitha pajisjet e tij)
+557	Pamje paraprake
+558	Kryesor
+560	Mbro një pajisje
+561	Protokolli
+562	Ofruesi
+563	Sinjalizimet e ofruesit (24 orë)
+564	Pikat fundore publike
+565	Publiko një version politike
+566	Publiko versionin e nënshkruar
+567	Publikuar
+568	Skanim i shpejtë
+569	Leximi me zë dhe diktimi përdorin funksionet e integruara të të folurit të shfletuesit. Ne nuk regjistrojmë ose ruajmë audio.
+570	Marrë
+571	Media e lëvizshme
+572	Hiq
+573	Kërkuar
+574	Kërkuar nga
+575	Ruajtja
+576	Kthimi në shërbim
+577	Tani
+578	Rreziku
+579	Roli
+580	Anulo ndryshimin
+581	Ruaj pikën fundore
+582	Ruaj rregullat e licencimit
+583	Skano
+584	Orari (cron)
+585	Skanimet e planifikuara
+586	Referenca e sekretit
+587	Dërgo ftesën
+588	Dërgo raportin
+589	Dërgo lidhjen e rivendosjes
+590	Shërbimi
+591	Objektivat e shërbimit
+594	Sinjali
+595	Madhësia
+596	Diçka tjetër
+597	Rendit
+598	Hapi
+599	Ndalimi i proceseve, izolimi i pajisjeve, rikthimi i skedarëve, shtimi i përjashtimeve dhe ndryshimi i rregullave të trafikut kërkojnë miratimin e një personi. Një miratim mbulon një veprim, objektivat e tij të saktë dhe një kohë të kufizuar. Nëse ndryshon diçka, miratoni përsëri.
+600	Abono këtë pajisje me Google Play
+601	gjendja e abonimit
+603	Sistemi
+604	Objektivi
+605	Asistenti i AI
+606	Asistenti grupon sinjalizimet e lidhura, liston çfarë u vëzhgua me lidhje te provat dhe shënon si hipotezë gjithçka që nuk mund ta provojë. Mund të sugjerojë veprime, por nuk mund t'i miratojë. Nëse modeli nuk është i disponueshëm, skanimi, sinjalizimet dhe reagimet manuale vazhdojnë të funksionojnë.
+607	Ky kompjuter
+608	Vetëm TLS, duhet të jetë në listën e lejimit për daljen
+609	Vërshimet e trafikut absorbohen nga ofruesi juaj upstream. Këtu llogaritni çdo pikë fundore publike, ndiqni sinjalizimet e ofruesit dhe miratoni kufizime të reja trafiku.
+610	Kufizimet e trafikut
+611	Përkthyer
+612	Koshi
+613	ditë prove të mbetura
+614	Aktivizoni mbrojtjen për të skanuar skedarët në këtë kompjuter dhe për të monitoruar ransomware dhe vjedhjen e kredencialeve.
+615	i pambuluar
+616	Zhbëj ndryshimin e fundit
+617	Përdoruesi
+618	Verifiko emailin
+619	në pritje të miratimit
+620	Ne shfaqim reklama nga Google AdSense në disa faqe. Të lejohen reklamat e personalizuara?
+621	Webhook:
+622	Çfarë dërgojnë pajisjet
+623	Çfarë është?
+624	Kur
+625	Kur diçka bllokohet
+626	Kur prova përfundon pa pagesë
+627	Kush
+628	Mund ta fshini llogarinë nga profili juaj. Kontaktoni
+629	Emri juaj
+630	Organizata juaj merr një provë falas 30-ditore. Pas kësaj kushton 4,99 £ në muaj për çdo përdorues ose pajisje.
+631	Organizata juaj përcakton sa kohë ruhen telemetria dhe provat. Regjistrimet e auditimit nuk mund të ndryshohen ose fshihen.
+632	Të drejtat tuaja
+633	Dikto
+634	Të lejohet përdorimi i mikrofonit për diktim? Audio përpunohet nga shfletuesi juaj dhe nuk ruhet nga ne.
+635	Dalja e audios
+636	Pauzë
+637	Lartësia e zërit
+638	Vazhdo
+639	Shpejtësia
+640	Ndalo
+641	Nuk ka zë të disponueshëm për këtë gjuhë.
+642	Zëri
+643	Skedari u zhvendos në karantinë dhe nuk mund të ekzekutohet.
+644	Një kërcënim u bllokua në këtë pajisje.

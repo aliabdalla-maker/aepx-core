@@ -1,0 +1,637 @@
+0	Esasy mazmuna geç
+1	Hemişelik kadadan çykma goş
+2	Trafik çäklendirmesini ulan
+3	Enjamyň metamaglumatlaryny ýygna
+4	Enjamy torundan üzňeleşdir
+5	Faýly karantine geçir
+6	Enjamy üzňeleşdirmeden çykar
+7	Karantindäki faýly dikelt
+8	Ulanyjyny ähli ýerden çykar
+9	Trafik çäklendirmesini yzyna al
+10	Täzelenmäni yzyna al
+11	Enjamlary skanirle
+12	Ulanyjy hasabyny togtat
+13	Prosesi togtat
+14	Tassykla
+15	Ret et
+16	Enjamlara iber
+17	Tassyklamanyň möhleti gutarýar: [0]
+18	EA kömekçisi tarapyndan teklip edildi
+19	Mahabat
+20	Hereket
+21	Agentler
+22	Sora
+23	Howpsuzlyk kömekçisinden sora
+24	Jogaplar enjamlaryňyzdan, açyk hadysalardan we boşluklardan gelýär. Kömekçi hiç zady üýtgedip bilmeýär.
+25	Esasynda
+26	Subutnamasyz [0] tassyklama aýryldy
+27	Subutnamasyz [0] tassyklama aýryldy
+29	Öz serweriňizdäki model
+30	Düzgünler (modelsiz)
+31	Düzediş meýilnamasynyň taslamasyny düz
+32	Her ädim bir teklipdir. Kimdir biri tassyklaýança hiç zat işe girizilmeýär.
+33	Sorag
+34	Meselem: haýsy enjamlar üns talap edýär?
+35	Teklip edilýän agyrlyk derejesi
+36	Gysgaça mazmun
+37	Nyşanalar
+38	Bu hadysanyň gysgaça mazmunyny düz
+39	Näme üçin
+40	Ýüze çykaryldy
+41	Şübheli zat barada habar ber
+42	Düzgün
+43	Agyrlyk derejesi
+44	Duýduryş
+46	Faýl goş
+47	Bukja goş
+48	Surat goş
+49	[0] goşundy
+50	[0] goşundy
+51	Goşundylar
+52	Surata al
+53	Kamera rugsat berilmedi. Brauzeriňizde rugsat beriň ýa-da enjamyňyzyň kamera programmasyny ulanyň.
+54	Kameranyň deslapky görnüşi
+55	Bu brauzer bu ýerde kamerany açyp bilmeýär.
+56	Surata al
+57	Kömekçini ýap
+58	Bu faýllar näme we olar howpsuzmy?
+59	Faýl
+60	Howpsuzlygyňyz barada soraň ýa-da faýl, bukja, surat ýa-da kamera suratyny goşuň. Her goşundy ilki skanirlenýär we hiç zat saklanmaýar.
+61	[0] surat
+62	[0] surat
+63	 model tarapyndan beýan edildi.
+64	Meselem: bu ýüklenen faýl howpsuzmy?
+65	Arassa tekst we suratlar guramaňyzyň açan EA modeline iberilip bilner. Zyýanly faýllar hiç haçan iberilmeýär.
+66	[0] faýl goşulmady
+67	[0] faýl goşulmady
+68	: iň köp [0] faýl, her biri [1] MB we jemi [2] MB.
+69	[0] aýyr
+70	Skanirle we sora
+71	Skanirleme netijeleri
+72	Görnüşi
+73	Enjamyň kamerasyny ulan
+74	Netije
+75	Belli zyýanly programma ýok
+76	Zyýanly
+77	Skanirlenmedi
+78	Audit zynjyry [0]-nji ýazgyda bozuk.
+79	Audit zynjyry bitewi: [0] ýazgy barlandy.
+80	E-poçta
+81	Açar sözüňizi ýatdan çykardyňyzmy?
+82	Google bilen gir
+83	Google bilen girip bolmady. Gaýtadan synanyşyň ýa-da e-poçtaňyzy we açar sözüňizi ulanyň.
+84	Gir
+85	Çyk
+86	Täze açar söz
+87	ýa-da
+88	Gurama
+89	Açar söz
+90	Açar söz üýtgedildi. Täze açar sözüňiz bilen giriň.
+91	Azyndan 12 nyşan.
+92	Hasap döret
+93	Salgylanmany gaýtadan iber
+94	Eger bu hasap henizem tassyklanmaly bolsa, täze salgylanma ugradyldy. Spam bukjaňyzy hem barlaň.
+95	Açar sözi täzeden düz
+96	Bu salgyny ulanýan hasap bar bolsa, täzeden düzmek üçin salgylanma iberdik. Ol bir sagat hereket edýär.
+97	Girmezden öň e-poçta salgyňyzy tassyklaň. [0] salgysyna iberen salgylanmamyzy açyň.
+98	E-poçta tassyklandy. Indi girip bilersiňiz.
+99	Bu salgylanmanyň möhleti gutardy ýa-da ol eýýäm ulanyldy. Täzesini almak üçin giriň.
+100	Salgyňyzy tassyklamak üçin e-poçtaňyzy barlaň.
+101	Abuna mahabatlary 95% azaldýar.
+102	Synag möhletiňiz gutardy.
+103	[0] çenli abuna
+104	Hemme zady mugt we doly mahabat bilen sakla
+105	Kimdir biri töleýänçä, enjam goragy bilen birlikde hemme zady togtat
+106	Konsol abuna talap edýär; enjamlar goralmagyny dowam etdirýär
+107	Aýda 4,99 £
+108	Abuna ýazyl
+109	Mugt synag:
+110	[0] gün galdy
+111	[0] gün galdy
+112	Ýatyr
+113	Poz
+114	Bir näsazlyk ýüze çykdy.
+115	Eksport et
+116	Ýüklenýär…
+117	Ýok
+118	Hiç haçan
+119	Indiki
+120	ýok
+121	Görkezmäge hiç zat ýok.
+122	öçük
+123	açyk
+124	Öňki
+125	Täzele
+126	Sakla
+127	Gözle
+128	Simulýasiýa (synag maglumatlary)
+129	Ýagdaýy
+130	Elýeterli däl
+131	Näbelli
+132	Täzelendi: [0]
+133	Ýerine ýetirilýär…
+134	hawa
+135	24 sagatda [0] duýduryş
+136	24 sagatda [0] duýduryş
+137	[0] enjam
+138	[0] enjam
+139	Maglumatlaryň ýagdaýy: [0]
+140	[0] açyk hadysa
+141	[0] açyk hadysa
+142	[0] tassyklama garaşýar
+143	[0] tassyklama garaşýar
+144	tassyklanan
+145	şübheli
+146	Enjamy hasaba al
+147	Enjam
+148	Hasabat ibermeýär
+149	Köne syýasat
+150	Sensor öçürilen
+151	Köne kesgitlemeler
+152	Meseleler
+153	Soňky görlen wagty
+154	Operasiýa ulgamy
+155	Syýasat
+156	24 sagadyň dowamynda enjamda işlediň (bir gezeklik):
+157	Gorag
+158	Göçür
+159	Ýükläp al
+160	Geçir
+161	Täze bukja
+162	Adyny üýtget
+163	Dikelt
+164	Sebede geçir
+165	Ýükle
+166	Kömek
+167	Bu sahypadaky [0] tekst maşyn terjimesi we entek barlanmady.
+168	Bu dildäki [0] tekst maşyn terjimesi we entek barlanmady.
+169	Bu dil entek terjime edilmedi, şonuň üçin iňlis dili görkezilýär.
+170	tassyklandy
+171	Synlanan faktlar
+172	Çaklamalar (tassyklanmadyk)
+173	Çaklama, [0] ynamlylyk: [1]
+174	Derňewi başla
+175	Ýetmeýän subutnamalar
+176	Ýetmeýär: [0]
+177	Sesli oka
+178	Maslahat berilýän hereketler
+179	Subutnamalaryň wagt çyzgysy
+180	gelýän webhook
+181	Şahsyýet üpjünçiňizden, DNS-den, goragly diwarlardan we beýleki gurallardan gelýän signallar. Täze integrasiýalar elýeterli däl hökmünde başlaýar; diňe şertnama synagyndan geçen üpjünçi adapteri göni hökmünde bellenip bilner. Synag maglumatlary nirede görünse-de simulýasiýa hökmünde bellenýär.
+182	Birikdirilmedik (stub)
+183	Diňe synag maglumatlary
+184	Elýeterli däl
+185	Göni (barlanan)
+186	Gizlin açar (bir gezek görkezilýär):
+187	Tassyklamalar
+188	Duýduryşlar
+189	Audit
+190	Abuna
+191	Dolandyryş paneli
+192	DDoS we elýeterlilik
+193	Enjamlar
+194	Faýllar
+195	Hadysalar
+196	Integrasiýalar
+197	Syýasatlar
+198	Gizlinlik
+199	Karantin
+200	Jogap çäreleri
+201	Howpsuzlyk
+202	Sazlamalar
+203	Belli zyýanly programmalary awtomatik karantine geçir
+204	Şübheli hereketleri yzarla
+205	Şübheli skriptleri blokla
+206	Derňew üçin faýllaryň mazmunyny ýygna (deslapky ýagdaýda öçük)
+207	Tor üzňeleşdirmesine rugsat ber
+208	Faýllary açylanda ýa-da ýazylanda skanirle
+209	Ýüklenenleri skanirle
+210	Programmalary işe başlanda skanirle
+211	Agenti üýtgetmelerden gora
+212	Belli zyýanly salgylanmalar barada duýdur
+213	Sebäp
+214	Gözden geçirmegi sora
+215	Täze skanirlemeden soň dikelt
+216	tassyklanan aýyrmaga çenli mediana wagt (n=[0], çözülmedik [1])
+217	gaýtadan synagdan geçen düzedişler
+218	dikeldişden soň gaýtalanma
+219	tassyklanan wirus aýyrmak
+220	hyzmata howpsuz gaýdyp gelmek
+221	tamamlanan dikeldiş skanirlemeleri
+222	Diňe karantin netijeleri ([0]) we täzeden gurlan enjamlar ([1]) aýratyn sanalýar; karantiniň özi hiç haçan aýyrmak hökmünde sanalmaýar.
+223	[0] sag
+224	[0] min
+225	[0] sek
+226	Tassyklama garaşylýar
+227	Önümçilik subutnamasy
+228	Önümçilikde nämäniň, haýsy aktiwlerde we haýsy wersiýa bilen barlanandygyny ýazga geçiriň. Ýazgylary üýtgedip bolmaýar.
+229	Wersiýa
+230	Tertibi üýtget
+231	subutnama ýok
+232	şowsuz
+233	geçdi
+234	garaşylýar
+235	Playbook ýagdaýyny barla
+236	Jogap berip bilýän enjamlar
+237	Ähli enjamlar
+238	[0] synag enjamy
+239	[0] synag enjamy
+240	Tamamlandy
+241	Tamamlanmak şerti
+242	Türgenleşik
+243	Synla
+244	Jogap ber
+245	Gurşaw
+246	[0] synlanýar, [1] jogap berip bilýär
+247	Maglumatlar
+248	Maglumatlaryň köneligi
+249	Göni
+250	Synag maglumatlary
+251	ýerine ýetirilmedi
+252	kwitansiýa
+253	dowam edýär
+254	näbelli
+255	Ugratmak
+256	Subutnama
+257	Ýerine ýetirildi
+258	Köne
+259	Maglumat akymlary
+260	Wersiýa ýa-da hash
+261	Gurşaw
+262	Netije
+263	Eýesi
+264	Talap
+265	Aktiw ýa-da topar
+266	Görkez
+267	Hemmesi
+268	Tamamlanmadyk
+269	Tutuş hyzmat üçin açyk
+270	Bu gurama üçin açyk
+271	Bu gurama üçin ähli täze jogap hereketleri togtadylsynmy? Gorag we skanirleme işlemegini dowam etdirýär.
+272	Jogap hereketlerine ýene rugsat ber
+273	Ähli jogap hereketlerini togtat
+274	Gyssagly togtatmak
+275	Görnüşi
+276	Açyk durmagyň mediana wagty, min ([0] açyk, iň könesi [1] min)
+277	Syýasat ret etmeleri
+278	Türgenleşikler we simulýasiýalar (ýokarda sanalmaýar)
+279	Gaýtalanýan hereketler (maksat 0)
+280	Akymyň mediana gijikmesi (p95 [0] sek, n=[1])
+281	Möhleti geçen tassyklamalar ([0] garaşýar, maksat [1] min)
+282	Signaldan ilkinji bahalandyrma çenli mediana wagt (p95 [0] min, n=[1], [2] bahalandyrylmadyk)
+283	Garaşsyz barlanan hereketler ([0]/[1])
+284	Döwür: [0]. Diňe kwitansiýa hiç haçan barlanan hökmünde sanalmaýar. Ýetmeýän maglumatlar elýeterli däl hökmünde görkezilýär.
+285	Jogap görkezijileri
+286	Soňky waka
+287	Agentler teklip edýär; nämäniň ýerine ýetiriljekdigini berk syýasat çözýär. Her hereket öz tassyklamasyny, kwitansiýasyny we garaşsyz barlagyny görkezýär.
+288	Tapgyr
+289	Tassyklama garaşýar
+290	Ret edildi
+291	Möhleti gutardy
+292	Şowsuz
+293	El bilen ylalaşdyrmak gerek
+294	Teklip edildi
+295	Nobatda
+296	Ýerine ýetirilýär
+297	Barlag garaşylýar
+298	Barlandy
+299	Göni ýagdaý
+300	Tertip
+301	Simulýasiýa
+302	Skanirlemeler we maglumat ýygnamak işleýär. Beýleki hereketler teklip bolup galýar.
+303	Tassyklanan hereketler saýlanan enjamlarda ýerine ýetirilýär.
+304	Hereketler diňe synag adapterlerinde ýerine ýetirilýär. Enjamlaryňyzda hiç zat üýtgemeýär.
+305	Entek hereket ýok.
+306	Tassyklama garaşýan hiç zat ýok.
+307	Entek önümçilik subutnamasy ýazga geçirilmedi.
+308	Entek hiç bir enjam ýa-da integrasiýa maglumat ibermeýär.
+309	Ýerine ýetirilmedi
+310	Synlandy
+311	Näme boldy
+312	DDoS-a jogap
+313	Ýalňyş položitel we dikeltmek
+314	Şahsyýet, fişing we şübheli trafik
+315	Zyýanly programmalar we şübheli ýüklemeler
+316	Toruň görünijiligi we enjamyň ýagdaýy
+317	Bozulmadan soň dikeldiş
+318	Töleg talap edýän programma ýa-da şübheli bozulma
+319	Playbook
+320	Playbooklar
+321	Syýasat wersiýasy
+322	Wersiýa guruldy
+323	Goragly diwar arkaly üzňeleşdirme
+324	Maglumatlar alyndy
+325	Faýl aýryldy
+326	Proses togtadyldy
+327	Üpjünçiniň ýagdaýy
+328	Ýazga geçirildi
+329	Skanirleme tamamlandy
+330	Simulýasiýa edildi
+331	Karantinden çykaryldy
+332	Karantinde
+333	Hereketler we kwitansiýalar
+334	Netijäni ýazga geçir
+335	Ýazga geçir
+336	Jogap berip bilýär
+337	Çeşme
+338	enjam
+339	konsol
+340	simulýasiýa
+341	Başlamak şerti
+342	Täzelendi
+343	Garaşsyz barlag
+344	Garaşylýar
+345	Arhiw çägi
+346	Şifrlenen arhiw
+347	Aýrylan
+348	Elýeterli däl
+349	Wagt çägi
+350	Gaty uly
+351	Goldanylmaýan format
+352	Ýatyryldy
+353	Sypdyryldy
+354	Bölekleýin
+355	Wagty gutardy
+356	Doly
+357	Talap boýunça
+358	Çalt
+359	Dikeldiş
+360	Meýilleşdirilen
+361	Maksatly
+362	Segment goş
+363	arhiwler
+364	Aktiwler
+365	Bu skanirleme togtadylsynmy? Şu wagta çenli netijeler ýatyrylan skanirleme hökmünde saklanar.
+366	Gurşalmadyk
+367	Ýüze çykarmalar
+368	Gorag ýagdaýy boýunça enjamlar
+369	Hereketlendiriji
+370	Möhlet
+371	Soňky subutnama
+372	Garaşylýan gözegçilik
+373	Teklip edilýän düzediş
+374	Gaýtadan synag
+375	Aktiw ýa-da segment
+376	Açyk boşluklar
+377	30 günüň skanirleme netijeleri
+378	duýduryşdan tassyklanan çäklendirmä çenli
+379	goralýan enjamlar
+380	ýokary üpjünçi tarapyndan goralýan jemgyýetçilik nokatlary
+381	wakadan duýduryşa çenli
+382	kesgitlemeleri täze enjamlar
+383	7 günde doly skanirlenen enjamlar
+384	açyk boşluklar ([0] möhleti geçen, 30 günde [1] ýapylan)
+385	gözegçilik edilýän tor segmentleri
+386	tassyklanan hakyky položitel netijeler
+387	tamamlanan skanirlemeler
+388	Gurşaw we jogap
+389	Soňky doly skanirleme
+390	Soňky telemetriýa
+391	Gurşawdaky her enjam we tor segmenti, onuň goralýandygy we indiki näme düzetmelidigi.
+392	Toruň görünijiligi
+393	Entek hasaba alnan enjam ýok. Enjamlar bölüminden kompýuteri goraň.
+394	Açyk boşluk ýok.
+395	[0] açyk
+396	möhleti geçen
+397	p95 [0] sek
+398	Bukjalar
+399	Skanirlenjek bukjalar, otur bilen aýrylan
+400	Şifrlemek we goragly diwar
+401	Disk şifrlemesi [0], goragly diwar [1]
+402	Hadysalardan soň dikeldiş
+403	Häzir gaýtadan barla
+404	Gaýtadan synagdan geçirilmedi
+405	Gaýtadan synag şowsuz
+406	Barlanyp ýapyldy
+407	Skanirleme görnüşi
+408	Skanirlemeler
+409	Segment
+410	Segmentiň ady
+411	Skanirlemäni başla
+412	Başlandy
+413	Ýagdaýy
+414	Peselen
+415	Goralýar
+416	Goralmaýar
+417	Ýagdaý boýunça enjamlar
+418	[0] näbelli
+419	Görünijilik ýok
+420	Gözegçilikde
+421	Görünijilik
+422	Ýüze çykarmalaryň ýoklugy goragy subut etmeýär: gurşawy we skanirleme netijelerini hem barlaň.
+423	Dil
+424	Terjime gurşawy
+425	Öňki wersiýa ýok
+426	Tema
+427	Garaňky
+428	Ýokary kontrast
+429	Ýagty
+430	[0] faýlda täze howp tapylmady.
+431	[0] howp
+432	[0] howp
+433	 [0] faýlda tapyldy. Olary gözden geçirmek üçin Duýduryşlar we Tassyklamalar bölümlerine serediň.
+434	Doly skanirleme
+435	Bu kompýuteri gorap bolmady: [0]
+436	Bu kompýuter goralýar. Agentic Antivirus açyk wagtynda hakyky wagtda skanirleme işleýär.
+437	Skanirleme tamamlanmady: [0]
+438	Skanirlenýär…
+439	Ähli diskler skanirlenýär. Bu uzak wagt alyp biler.
+440	Ýüklenenler, Iş stoly we wagtlaýyn faýllar skanirlenýär…
+441	[0] faýly okap bolmady.
+442	Faýl
+443	Web sahypasynyň salgylanmasy
+444	Synag maglumatlaryny kabul et
+446	Hereketler
+447	Integrasiýa goş
+448	Kadadan çykma goş
+449	Integrasiýa goş
+450	Hepdelik doly skanirleme goş
+451	administrator
+452	Mahabat
+453	Mahabata razylyk
+454	Täsir edilen hyzmatlar
+455	soňky 24 sagatdaky duýduryşlar
+456	Rugsat ber
+457	Rugsat ber we skanirle
+458	Administrator sebäbini görkezmeli. Kadadan çykma audit žurnalyna ýazylýar.
+459	E-poçta
+460	Hyzmata gaýdyp gelmegi tassykla
+461	Hereketleri tassyklamak
+462	Aktiw
+463	işjeň gorag astyndaky aktiwler
+464	24 sagatda duýduryşy bolan aktiwler
+465	Audit žurnaly
+466	Awtomatik gorag her enjamda işlemegini dowam etdirýär. Bular adamyň karar bermeli hereketleri.
+467	Elýeterlilik
+468	Elýeterli signallar
+469	Ätiýaçlyk nusga barlandy
+470	Blokla
+471	Deslapky ýagdaýda agent howpsuzlyk telemetriýasyny we faýl hashlaryny iberýär: proses atlary we buýruk setirleri, faýl ýollary, tor birikmesiniň metamaglumatlary we ýüze çykarmalar. Faýllaryň mazmuny diňe guramaňyz muny açan ýagdaýynda ýygnalýar.
+472	Kuwwatlylyk
+473	Kategoriýa
+474	Üýtgedildi
+475	Töleg
+476	Barla
+477	saýlaň
+478	Enjamy saýlaň
+480	Ýap
+481	Otur bilen aýrylan
+482	Habarlaşmak
+483	Gözegçilik
+484	Gorag gatlaklary boýunça gurşaw
+485	möhüm
+486	möhüm duýduryşlaryň gowşurylyşy (p95, 30 gün)
+487	Garaşýan kararlar
+488	Ret et
+489	Kesgitlemeler
+490	Näme bolandygyny beýan ediň
+491	Jikme-jiklik
+492	Jikme-jiklikler
+493	Ýüze çykarma
+494	Ygtyýarnama beriljek enjam
+495	doly goralýan enjamlar
+496	üzňeleşdirilen enjamlar
+497	Üns talap edýän enjamlar
+498	Ugur
+499	DNS zonasy
+500	ýükläp alyş sahypasyndan
+501	Mugt synag döwründe we tölegsiz meýilnamalarda razylygyňyz soralandan soň, konsol Google AdSense mahabatlaryny, mobil programmalar bolsa Google AdMob mahabatlaryny görkezýär. Abunaçylar 95% az mahabat görýär. Mahabatlar hiç haçan tassyklama, çäklendirme, howp duýduryşy, karantini gözden geçirmek, giriş, töleg ýa-da audit ekranlarynda görünmeýär.
+502	Her neşir täze gol çekilen wersiýa döredýär. Enjamlar oflaýn wagty soňky barlanan wersiýany ulanmagy dowam etdirýär.
+503	Goldaw e-poçtasy:
+504	Nokat
+505	Agentic Antivirus hyzmatyny Equality Software Ltd dolandyrýar. Bu sahypa hyzmatyň nämeleri ýygnaýandygyny beýan edýär. Neşir edilmezden öň ony önüm eýesi gözden geçirmeli.
+506	Enjamy, hasaby ýa-da trafigi üýtgedýän her hereket syýasat hereketlendirijisinden we AEP-X dolandyryşyndan geçýär. Tassyklama bir hereketi, onuň takyk nyşanalaryny, bu guramany we bellenen wagty öz içine alýar.
+507	Her ýüklenen faýl zyýanly programma we hakyky görnüşi boýunça barlanýar. Barlanan görkezijisi bolmadyk faýllar saklanýar we ýükläp alyp bolýar, ýöne deslapky görkezilmeýär.
+508	Kadadan çykma
+509	Kadadan çykmalar
+510	Bukja ýoly
+511	salgysyna maglumata elýeterlilik ýa-da düzediş haýyşlary üçin ýazyň.
+512	Boşluklar
+513	Windows, Mac ýa-da Linux üçin agenti şu ýerden alyň:
+514	Enjamlar bölümine geçiň, Enjamy hasaba al saýlaň we görkezilen buýrugy gorajak kompýuteriňizde işlediň. Agent gol çekilen syýasatyny alan badyna skanirlemäge başlaýar.
+515	Saglyk
+516	Taryh
+517	Host ady
+518	Synag möhletinden soň abuna tölenýänçä enjamlaryň skanirlemegi we howplary bloklamagy bes etjekdigine düşünýärin.
+519	Täsir
+520	zip ýa-da tar import et
+521	Hadysa
+522	Dil modelini goş (guramaňyz açan bolsa)
+523	IP salgysy
+524	Goşul
+525	Guramaňyza goşulyň
+526	Belli zyýanly programmalar işläp bilmejek karantine geçirilýär. Eger faýl ýalňyşlyk bilen bloklandy diýip pikir etseňiz, Karantini açyň we gözden geçirmegi soraň. Karary administrator berýär we faýl diňe täze skanirleme ony arassa tapandan soň yzyna gaýdýar.
+527	Doly terjimesi bolmadyk diller iňlis diline geçýär. Gurşaw çaklanmaýar, ölçenýär.
+528	Soňky üýtgeşme
+529	Gatlak
+530	Kanuny haýyşlaryň üstünligi
+531	Ygtyýarnama düzgünleri
+532	Salgylanma, bar bolsa
+533	Üzňeleşdirme wagtynda elýeterli saklanýan dolandyryş hostlary
+534	Ýalňyş položitel diýip belle
+535	Ösüş derejesi
+536	Ýumşatmak
+537	Ady
+538	Gizlin açar ammaryňyzdaky açaryň ady, hiç haçan açaryň özi däl
+539	Garaşýan hereket ýok.
+540	Açyk hadysa ýok.
+541	Ýok.
+542	Hiç zat habar berilmedi.
+543	bellenmedik
+544	Habar berlen wagty
+545	görkezilen mahabatlaryň paýy
+546	Oflaýn waka buferi (MB)
+547	Android-de Agentic Antivirus programmasynda Google Play arkaly abuna ýazylyň. iPhone we iPad-de App Store abunalary entek elýeterli däl. Webde tölemek entek elýeterli däl.
+548	Hadysa aç
+549	açyk hadysalar
+550	Açyk hadysalar
+551	p95 gijikme
+552	tölenen möhleti
+553	Ýol nusgasy
+554	Adamlar
+555	Her enjam üçin
+556	Her ulanyjy üçin (onuň ähli enjamlaryny öz içine alýar)
+557	Deslapky görnüş
+558	Esasy
+560	Enjamy gora
+561	Protokol
+562	Üpjünçi
+563	Üpjünçi duýduryşlary (24 sagat)
+564	Jemgyýetçilik nokatlary
+565	Syýasat wersiýasyny neşir et
+566	Gol çekilen wersiýany neşir et
+567	Neşir edildi
+568	Çalt skanirleme
+569	Sesli okamak we diktowka brauzeriňiziň içki gürleýiş funksiýalaryny ulanýar. Biz sesi ýazga almaýarys we saklamaýarys.
+570	Alyndy
+571	Aýrylýan göterijiler
+572	Aýyr
+573	Soraldy
+574	Soran
+575	Saklamak möhleti
+576	Hyzmata gaýdyp gelmek
+577	Häzir
+578	Töwekgelçilik
+579	Roly
+580	Yzyna al
+581	Nokady sakla
+582	Ygtyýarnama düzgünlerini sakla
+583	Skanirle
+584	Tertip (cron)
+585	Meýilleşdirilen skanirlemeler
+586	Gizlin açar salgylanmasy
+587	Çakylyk iber
+588	Hasabat iber
+589	Täzeden düzmek salgylanmasyny iber
+590	Hyzmat
+591	Hyzmat maksatlary
+594	Signal
+595	Ölçegi
+596	Başga bir zat
+597	Tertiple
+598	Ädim
+599	Prosesleri togtatmak, enjamlary üzňeleşdirmek, faýllary dikeltmek, kadadan çykmalary goşmak we trafik düzgünlerini üýtgetmek adamyň tassyklamagyny talap edýär. Tassyklama bir hereketi, onuň takyk nyşanalaryny we çäkli wagty öz içine alýar. Bir zat üýtgese, gaýtadan tassyklaň.
+600	Bu enjamy Google Play arkaly abuna ýazdyr
+601	abuna ýagdaýy
+603	Ulgam
+604	Nyşana
+605	EA kömekçisi
+606	Kömekçi baglanyşykly duýduryşlary toparlaýar, synlananlary subutnamalara salgylanmalar bilen sanap geçýär we subut edip bilmeýän islendik zadyny çaklama hökmünde belleýär. Ol hereketleri teklip edip biler, ýöne tassyklap bilmeýär. Model elýeterli bolmasa, skanirleme, duýduryşlar we el bilen jogap çäreleri işlemegini dowam etdirýär.
+607	Bu kompýuter
+608	Diňe TLS, çykyş rugsat sanawynda bolmaly
+609	Trafik joşmalaryny ýokary üpjünçiňiz siňdirýär. Bu ýerde siz her jemgyýetçilik nokadyny hasaba alýarsyňyz, üpjünçi duýduryşlaryny yzarlaýarsyňyz we täze trafik çäklendirmelerini tassyklaýarsyňyz.
+610	Trafik çäklendirmeleri
+611	Terjime edildi
+612	Sebet
+613	synag güni galdy
+614	Bu kompýuterdäki faýllary skanirlemek, töleg talap edýän programmalary we hasap maglumatlarynyň ogurlanmagyny yzarlamak üçin goragy açyň.
+615	gurşalmadyk
+616	Soňky üýtgeşmäni yzyna al
+617	Ulanyjy
+618	E-poçtany tassykla
+619	tassyklama garaşýar
+620	Käbir sahypalarda Google AdSense mahabatlaryny görkezýäris. Şahsylaşdyrylan mahabatlara rugsat berilsinmi?
+621	Webhook:
+622	Enjamlaryň iberýän zatlary
+623	Bu näme?
+624	Haçan
+625	Bir zat bloklananda
+626	Synag tölegsiz gutaranda
+627	Kim
+628	Hasabyňyzy profiliňizden pozup bilersiňiz. Habarlaşmak:
+629	Adyňyz
+630	Guramaňyz 30 günlük mugt synag alýar. Ondan soň her ulanyjy ýa-da enjam üçin aýda 4,99 £ durýar.
+631	Telemetriýanyň we subutnamalaryň näçe wagt saklanjakdygyny guramaňyz kesgitleýär. Audit ýazgylaryny üýtgedip ýa-da pozup bolmaýar.
+632	Hukuklaryňyz
+633	Diktowka et
+634	Diktowka üçin mikrofony ulanmaga rugsat berilsinmi? Ses brauzeriňiz tarapyndan işlenýär we biz ony saklamaýarys.
+635	Ses çykyşy
+636	Arakesme
+637	Äheň
+638	Dowam et
+639	Tizlik
+640	Togtat
+641	Bu dil üçin ses elýeterli däl.
+642	Ses
+643	Faýl karantine geçirildi we işläp bilmeýär.
+644	Bu enjamda howp bloklandy.

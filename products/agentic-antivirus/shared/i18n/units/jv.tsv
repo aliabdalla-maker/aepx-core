@@ -1,0 +1,637 @@
+0	Langsung menyang isi utama
+1	Tambah pengecualian permanen
+2	Trapake watesan lalu lintas
+3	Klumpukake metadata piranti
+4	Isolasi piranti saka jaringan
+5	Karantina berkas
+6	Uculake piranti saka isolasi
+7	Pulihake berkas sing dikarantina
+8	Metokake pangguna saka endi wae
+9	Batalake watesan lalu lintas
+10	Batalake pembaruan
+11	Pindai piranti
+12	Tangguhake akun pangguna
+13	Mandhegake proses
+14	Setujoni
+15	Tolak
+16	Kirim menyang piranti
+17	Persetujuan kedaluwarsa [0]
+18	Diusulake dening asisten AI
+19	Iklan
+20	Tumindak
+21	Agen
+22	Takon
+23	Takon marang asisten keamanan
+24	Wangsulan asale saka piranti, insiden sing isih mbukak lan celah panjenengan. Asisten ora bisa ngowahi apa wae.
+25	Adhedhasar
+26	[0] pratelan tanpa bukti wis dibusak
+27	[0] pratelan tanpa bukti wis dibusak
+29	Model sing di-host dhewe
+30	Aturan (tanpa model)
+31	Gawe rancangan rencana pemulihan
+32	Saben langkah iku usulan. Ora ana sing mlaku nganti ana sing nyetujoni.
+33	Pitakon
+34	Tuladha: piranti endi sing kudu digatekake?
+35	Tingkat bebaya sing disaranake
+36	Ringkesan
+37	Target
+38	Ringkesen insiden iki
+39	Kenapa
+40	Kadeteksi
+41	Laporake bab sing curiga
+42	Aturan
+43	Tingkat bebaya
+44	Peringatan
+46	Tambah berkas
+47	Tambah folder
+48	Tambah gambar
+49	[0] lampiran
+50	[0] lampiran
+51	Lampiran
+52	Jupuk foto
+53	Akses kamera ora diidini. Idinana ing browser, utawa gunakake aplikasi kamera piranti panjenengan.
+54	Pratinjau kamera
+55	Browser iki ora bisa mbukak kamera ing kene.
+56	Jupuk
+57	Tutup asisten
+58	Berkas apa iki, lan apa aman?
+59	Berkas
+60	Takon bab keamanan panjenengan, utawa lampirake berkas, folder, gambar utawa foto kamera. Saben lampiran dipindai dhisik lan ora ana sing disimpen.
+61	[0] gambar wis
+62	[0] gambar wis
+63	 diterangake dening model.
+64	Tuladha: apa unduhan iki aman?
+65	Teks lan gambar sing resik bisa dikirim menyang model AI sing diaktifake organisasi panjenengan. Berkas mbebayani ora tau dikirim.
+66	[0] berkas ora ditambahake
+67	[0] berkas ora ditambahake
+68	: paling akeh [0] berkas, saben [1] MB lan gunggunge [2] MB.
+69	Busak [0]
+70	Pindai lan takon
+71	Asil pindai
+72	Jinis
+73	Gunakake kamera piranti
+74	Asil
+75	Ora ana malware sing dikenal
+76	Mbebayani
+77	Durung dipindai
+78	Rantai audit pedhot ing entri [0].
+79	Rantai audit utuh: [0] entri wis diverifikasi.
+80	Email
+81	Lali sandhi?
+82	Mlebu nganggo Google
+83	Mlebu nganggo Google gagal. Coba maneh, utawa gunakake email lan sandhi panjenengan.
+84	Mlebu
+85	Metu
+86	Sandhi anyar
+87	utawa
+88	Organisasi
+89	Sandhi
+90	Sandhi wis diganti. Mlebu nganggo sandhi anyar panjenengan.
+91	Paling sethithik 12 karakter.
+92	Gawe akun
+93	Kirim tautan maneh
+94	Yen akun kasebut isih perlu dikonfirmasi, tautan anyar lagi dikirim. Priksa uga folder spam.
+95	Reset sandhi
+96	Yen ana akun sing nganggo alamat kasebut, kita wis ngirim tautan reset. Tautan iki laku sajrone sak jam.
+97	Konfirmasi alamat email panjenengan sadurunge mlebu. Bukak tautan sing dikirim menyang [0].
+98	Email wis diverifikasi. Saiki panjenengan bisa mlebu.
+99	Tautan iki wis kedaluwarsa utawa wis tau dienggo. Mlebu kanggo njupuk sing anyar.
+100	Priksa email panjenengan kanggo verifikasi alamat.
+101	Langganan nyuda iklan nganti 95%.
+102	Masa uji coba panjenengan wis rampung.
+103	Langganan nganti [0]
+104	Kabeh tetep gratis kanthi iklan lengkap
+105	Mandhegake kabeh, kalebu proteksi piranti, nganti ana sing mbayar
+106	Konsol butuh langganan; piranti tetep dilindhungi
+107	£4,99 saben sasi
+108	Langganan
+109	Uji coba gratis:
+110	[0] dina maneh
+111	[0] dina maneh
+112	Batal
+113	Busak
+114	Ana sing salah.
+115	Ekspor
+116	Lagi ngemot…
+117	N/A
+118	Ora tau
+119	Sabanjure
+120	ora
+121	Ora ana sing ditampilake.
+122	mati
+123	urip
+124	Sadurunge
+125	Segerake
+126	Simpen
+127	Golek
+128	Simulasi (data uji)
+129	Status
+130	Ora kasedhiya
+131	Ora dingerteni
+132	Dianyari [0]
+133	Lagi diproses…
+134	ya
+135	[0] peringatan sajrone 24 jam
+136	[0] peringatan sajrone 24 jam
+137	[0] piranti
+138	[0] piranti
+139	Data per [0]
+140	[0] insiden mbukak
+141	[0] insiden mbukak
+142	[0] persetujuan nunggu
+143	[0] persetujuan nunggu
+144	dikonfirmasi
+145	dicurigai
+146	Daftarake piranti
+147	Piranti
+148	Ora nglaporake
+149	Kabijakan lawas
+150	Sensor dipateni
+151	Definisi lawas
+152	Masalah
+153	Pungkasan katon
+154	Sistem operasi
+155	Kabijakan
+156	Lakokna ing piranti sajrone 24 jam (sapisan pakai):
+157	Proteksi
+158	Salin
+159	Unduh
+160	Pindhah
+161	Folder anyar
+162	Ganti jeneng
+163	Pulihake
+164	Pindhah menyang sampah
+165	Unggah
+166	Pitulung
+167	[0] teks ing kaca iki diterjemahake mesin lan durung dipriksa.
+168	[0] teks ing basa iki diterjemahake mesin lan durung dipriksa.
+169	Basa iki durung diterjemahake, mula basa Inggris sing ditampilake.
+170	disetujoni
+171	Kasunyatan sing diamati
+172	Hipotesis (durung dikonfirmasi)
+173	Hipotesis, kapercayan [0]: [1]
+174	Lakokna investigasi
+175	Bukti sing ilang
+176	Ilang: [0]
+177	Waca kanthi swara
+178	Tumindak sing disaranake
+179	Garis wektu bukti
+180	webhook mlebu
+181	Sinyal saka panyedhiya identitas, DNS, firewall lan piranti liyane panjenengan. Integrasi anyar diwiwiti kanthi status ora kasedhiya; mung adaptor panyedhiya sing lulus uji kontrak sing bisa ditandhani langsung. Data uji diwenehi label simulasi ing ngendi wae katon.
+182	Ora kasambung (stub)
+183	Mung data uji
+184	Ora kasedhiya
+185	Langsung (diverifikasi)
+186	Rahasia (ditampilake sapisan):
+187	Persetujuan
+188	Peringatan
+189	Audit
+190	Langganan
+191	Dasbor
+192	DDoS lan kasedhiyan
+193	Piranti
+194	Berkas
+195	Insiden
+196	Integrasi
+197	Kabijakan
+198	Privasi
+199	Karantina
+200	Tanggapan
+201	Keamanan
+202	Setelan
+203	Karantina malware sing dikenal kanthi otomatis
+204	Awasi tumindak sing curiga
+205	Blokir skrip sing curiga
+206	Klumpukake isi berkas kanggo investigasi (standar mati)
+207	Idinake isolasi jaringan
+208	Pindai berkas nalika dibukak utawa ditulis
+209	Pindai unduhan
+210	Pindai program nalika diwiwiti
+211	Lindhungi agen saka owah-owahan
+212	Elingake bab tautan mbebayani sing dikenal
+213	Alesan
+214	Njaluk ditinjau
+215	Pulihake sawise dipindai anyar
+216	median wektu nganti pambusakan diverifikasi (n=[0], durung rampung [1])
+217	perbaikan sing lulus uji ulang
+218	kambuh sawise pemulihan
+219	pambusakan virus diverifikasi
+220	bali aman menyang layanan
+221	pindai pemulihan rampung
+222	Asil mung karantina ([0]) lan piranti sing diinstal ulang ([1]) diitung kapisah; karantina wae ora tau diitung minangka pambusakan.
+223	[0] jam
+224	[0] mnt
+225	[0] dtk
+226	Nunggu persetujuan
+227	Bukti produksi
+228	Cathet apa sing wis diverifikasi ing produksi, ing aset endi, nganggo versi apa. Entri ora bisa diowahi.
+229	Versi
+230	Ganti mode
+231	ora ana bukti
+232	gagal
+233	lulus
+234	nunggu
+235	Priksa kemajuan playbook
+236	Piranti sing bisa nanggapi
+237	Kabeh piranti
+238	[0] piranti pilot
+239	[0] piranti pilot
+240	Rampung
+241	Rampung nalika
+242	Latihan
+243	Amati
+244	Tanggapi
+245	Cakupan
+246	[0] diamati, [1] bisa nanggapi
+247	Data
+248	Umur data
+249	Langsung
+250	Data uji
+251	ora dieksekusi
+252	tandha terima
+253	lagi mlaku
+254	ora dingerteni
+255	Pangiriman
+256	Bukti
+257	Wis mlaku
+258	Lawas
+259	Aliran data
+260	Versi utawa digest
+261	Lingkungan
+262	Asil
+263	Pemilik
+264	Syarat
+265	Aset utawa kohort
+266	Tampilake
+267	Kabeh
+268	Durung rampung
+269	Urip kanggo kabeh layanan
+270	Urip kanggo organisasi iki
+271	Mandhegake kabeh tumindak tanggapan anyar kanggo organisasi iki? Proteksi lan pindai tetep mlaku.
+272	Idinake maneh tumindak tanggapan
+273	Mandhegake kabeh tumindak tanggapan
+274	Saklar darurat
+275	Jinis
+276	Median menit mbukak ([0] mbukak, paling suwe [1] mnt)
+277	Penolakan kabijakan
+278	Latihan lan simulasi (ora diitung ing ndhuwur)
+279	Tumindak bola-bali (target 0)
+280	Median tundha aliran (p95 [0] dtk, n=[1])
+281	Persetujuan telat ([0] nunggu, target [1] mnt)
+282	Median sinyal nganti triase (p95 [0] mnt, n=[1], [2] durung ditriase)
+283	Tumindak sing diverifikasi mandhiri ([0]/[1])
+284	Jendhela: [0]. Tandha terima wae ora tau diitung diverifikasi. Data sing ilang ditampilake ora kasedhiya.
+285	Ukuran tanggapan
+286	Prastawa pungkasan
+287	Agen ngusulake; kabijakan tetep sing nemtokake apa sing mlaku. Saben tumindak nuduhake persetujuan, tandha terima lan pamriksan mandhiri.
+288	Tahap
+289	Nunggu persetujuan
+290	Ditolak
+291	Kedaluwarsa
+292	Gagal
+293	Butuh rekonsiliasi manual
+294	Diusulake
+295	Ing antrean
+296	Lagi mlaku
+297	Verifikasi nunggu
+298	Diverifikasi
+299	Kahanan langsung
+300	Mode
+301	Simulasi
+302	Pindai lan pangumpulan data mlaku. Tumindak liyane tetep dadi usulan.
+303	Tumindak sing disetujoni mlaku ing piranti sing dipilih.
+304	Tumindak mung mlaku ing adaptor uji. Ora ana sing owah ing piranti panjenengan.
+305	Durung ana tumindak.
+306	Ora ana sing nunggu persetujuan.
+307	Durung ana bukti produksi sing dicathet.
+308	Durung ana piranti utawa integrasi sing ngirim data.
+309	Ora mlaku
+310	Diamati
+311	Apa sing kedadeyan
+312	Tanggapan DDoS
+313	Positif palsu lan pemulihan
+314	Identitas, phishing lan lalu lintas sing curiga
+315	Malware lan unduhan sing curiga
+316	Visibilitas jaringan lan kahanan piranti
+317	Pemulihan sawise kebobolan
+318	Ransomware utawa diduga kebobolan
+319	Playbook
+320	Playbook
+321	Versi kabijakan
+322	Versi sing diinstal
+323	Isolasi firewall
+324	Data ditampa
+325	Berkas dibusak
+326	Proses dimandhegake
+327	Kahanan panyedhiya
+328	Dicathet
+329	Pindai rampung
+330	Disimulasikake
+331	Metu saka karantina
+332	Ing karantina
+333	Tumindak lan tandha terima
+334	Cathet asil
+335	Cathet
+336	Bisa nanggapi
+337	Sumber
+338	piranti
+339	konsol
+340	simulasi
+341	Diwiwiti nalika
+342	Dianyari
+343	Pamriksan mandhiri
+344	Nunggu
+345	Watesan arsip
+346	Arsip ndhelik
+347	Dikecualikake
+348	Ora bisa diakses
+349	Watesan wektu
+350	Kegedhen
+351	Format ora didhukung
+352	Dibatalake
+353	Kliwat
+354	Sebagian
+355	Kehabisan wektu
+356	Lengkap
+357	Miturut panjaluk
+358	Cepet
+359	Pemulihan
+360	Dijadwal
+361	Ditargetake
+362	Tambah segmen
+363	arsip
+364	Aset
+365	Mandhegake pindai iki? Asil nganti saiki disimpen minangka pindai sing dibatalake.
+366	Ora kacakup
+367	Deteksi
+368	Piranti miturut kahanan proteksi
+369	Mesin
+370	Tenggat
+371	Bukti pungkasan
+372	Kontrol sing dikarepake
+373	Perbaikan sing diusulake
+374	Uji ulang
+375	Aset utawa segmen
+376	Celah mbukak
+377	Asil pindai sajrone 30 dina
+378	peringatan nganti penahanan diverifikasi
+379	piranti dilindhungi
+380	titik pungkasan publik kanthi mitigasi hulu
+381	prastawa nganti peringatan
+382	piranti kanthi definisi paling anyar
+383	piranti kanthi pindai lengkap sajrone 7 dina
+384	celah mbukak ([0] telat, [1] ditutup sajrone 30 dina)
+385	segmen jaringan sing diawasi
+386	positif bener sing dikonfirmasi
+387	pindai rampung
+388	Cakupan lan tanggapan
+389	Pindai lengkap pungkasan
+390	Telemetri pungkasan
+391	Saben piranti lan segmen jaringan ing cakupan, apa wis dilindhungi, lan apa sing kudu didandani sabanjure.
+392	Visibilitas jaringan
+393	Durung ana piranti sing didaftarake. Lindhungi komputer saka Piranti.
+394	Ora ana celah mbukak.
+395	[0] mbukak
+396	telat
+397	p95 [0] dtk
+398	Folder
+399	Folder sing arep dipindai, dipisah nganggo koma
+400	Enkripsi lan firewall
+401	Enkripsi disk [0], firewall [1]
+402	Pemulihan sawise insiden
+403	Priksa maneh saiki
+404	Durung diuji ulang
+405	Uji ulang gagal
+406	Ditutup diverifikasi
+407	Jinis pindai
+408	Pindai
+409	Segmen
+410	Jeneng segmen
+411	Wiwiti pindai
+412	Diwiwiti
+413	Kahanan
+414	Mudhun
+415	Dilindhungi
+416	Ora dilindhungi
+417	Piranti miturut kahanan
+418	[0] ora dingerteni
+419	Ora ana visibilitas
+420	Diawasi
+421	Visibilitas
+422	Ora ana deteksi ora mbuktekake proteksi: priksa uga cakupan lan asil pindai.
+423	Basa
+424	Cakupan terjemahan
+425	Ora ana versi sadurunge
+426	Tema
+427	Peteng
+428	Kontras dhuwur
+429	Padhang
+430	Ora ana ancaman anyar ditemokake ing [0] berkas.
+431	[0] ancaman
+432	[0] ancaman
+433	 ditemokake ing [0] berkas. Deleng Peringatan lan Persetujuan kanggo mriksa.
+434	Pindai lengkap
+435	Ora bisa nglindhungi komputer iki: [0]
+436	Komputer iki dilindhungi. Pindai wektu nyata mlaku salawase Agentic Antivirus dibukak.
+437	Pindai ora rampung: [0]
+438	Lagi mindai…
+439	Mindai kabeh drive. Iki bisa suwe banget.
+440	Mindai Downloads, Desktop lan berkas sementara…
+441	[0] berkas ora bisa diwaca.
+442	Berkas
+443	Tautan situs web
+444	Tampa data uji
+446	Tumindak
+447	Tambah integrasi
+448	Tambah pengecualian
+449	Tambah integrasi
+450	Tambah pindai lengkap saben minggu
+451	administrator
+452	Iklan
+453	Idin iklan
+454	Layanan sing kena pengaruh
+455	peringatan sajrone 24 jam pungkasan
+456	Idinake
+457	Idinake lan pindai
+458	Administrator kudu menehi alesan. Pengecualian dicathet ing jejak audit.
+459	Email
+460	Setujoni bali menyang layanan
+461	Nyetujoni tumindak
+462	Aset
+463	aset ing mitigasi aktif
+464	aset kanthi peringatan sajrone 24 jam
+465	Jejak audit
+466	Proteksi otomatis tetep mlaku ing saben piranti. Iki tumindak sing butuh wong kanggo mutusake.
+467	Kasedhiyan
+468	Sinyal sing kasedhiya
+469	Cadhangan diverifikasi
+470	Blokir
+471	Kanthi standar agen ngirim telemetri keamanan lan hash berkas: jeneng proses lan baris printah, path berkas, metadata sambungan jaringan, lan deteksi. Isi berkas mung diklumpukake yen organisasi panjenengan nguripake.
+472	Kapasitas
+473	Kategori
+474	Diowahi
+475	Biaya
+476	Priksa
+477	pilih
+478	Pilih piranti
+480	Tutup
+481	Dipisah nganggo koma
+482	Kontak
+483	Kontrol
+484	Cakupan miturut lapisan proteksi
+485	kritis
+486	pangiriman peringatan kritis (p95, 30 dina)
+487	Keputusan sing nunggu
+488	Tolak
+489	Definisi
+490	Terangna apa sing kedadeyan
+491	Rincian
+492	Rincian
+493	Deteksi
+494	Piranti sing dilisensi
+495	piranti dilindhungi kanthi lengkap
+496	piranti diisolasi
+497	Piranti sing butuh digatekake
+498	Arah
+499	Zona DNS
+500	kaca unduhan
+501	Sajrone uji coba gratis, lan ing paket sing durung dibayar, konsol nampilake iklan Google AdSense lan aplikasi seluler nampilake iklan Google AdMob, sawise njaluk idin panjenengan. Pelanggan ndeleng iklan 95% luwih sithik. Iklan ora tau katon ing layar persetujuan, penahanan, peringatan ancaman, tinjauan karantina, mlebu, pambayaran utawa audit.
+502	Saben publikasi nggawe versi anyar sing ditandhatangani. Piranti tetep ngetrapake versi pungkasan sing diverifikasi nalika offline.
+503	Email dhukungan ing
+504	Titik pungkasan
+505	Equality Software Ltd ngoperasikake Agentic Antivirus. Kaca iki nerangake apa sing diklumpukake layanan. Kudu ditinjau pemilik produk sadurunge diterbitake.
+506	Saben tumindak sing ngowahi piranti, akun utawa lalu lintas ngliwati mesin kabijakan lan tata kelola AEP-X. Sak persetujuan nyakup sak tumindak, target persise, organisasi iki, lan wektu tetep.
+507	Saben unggahan dipriksa malware lan jinis asline. Berkas tanpa panampil sing diverifikasi disimpen lan bisa diunduh nanging ora dipratinjau.
+508	Pangecualian
+509	Pengecualian
+510	Path folder
+511	kanggo panjaluk akses utawa koreksi.
+512	Celah
+513	Jupuk agen kanggo Windows, Mac utawa Linux saka
+514	Bukak Piranti, pilih Daftarake piranti, lan lakokna printah sing ditampilake ing komputer sing arep dilindhungi. Agen wiwit mindai sanalika nampa kabijakan sing ditandhatangani.
+515	Kesehatan
+516	Riwayat
+517	Jeneng host
+518	Aku ngerti piranti bakal mandheg mindai lan mblokir ancaman sawise uji coba nganti langganan dibayar.
+519	Dampak
+520	Impor zip utawa tar
+521	Insiden
+522	Kalebu model basa (yen organisasi panjenengan ngaktifake)
+523	Alamat IP
+524	Gabung
+525	Gabung karo organisasi panjenengan
+526	Malware sing dikenal dipindhah menyang karantina, ing kono ora bisa mlaku. Yen panjenengan rumangsa berkas diblokir amarga kleru, bukak Karantina lan njaluk ditinjau. Administrator sing mutusake, lan berkas mung bali sawise pindai anyar nemokake resik.
+527	Basa sing terjemahane durung lengkap bali menyang basa Inggris. Cakupan diukur, dudu dikira-kira.
+528	Pungkasan diowahi
+529	Lapisan
+530	Kasil panjaluk sing sah
+531	Aturan lisensi
+532	Tautan, yen ana
+533	Host manajemen sing tetep bisa digayuh sajrone isolasi
+534	Tandhani positif palsu
+535	Kadewasan
+536	Mitigasi
+537	Jeneng
+538	Jeneng rahasia ing panyimpenan rahasia panjenengan, dudu rahasia iku dhewe
+539	Ora ana tumindak sing nunggu.
+540	Ora ana insiden mbukak.
+541	Ora ana.
+542	Ora ana laporan.
+543	durung disetel
+544	Diwenehi kabar sawise
+545	saka iklan sing ditampilake
+546	Buffer prastawa offline (MB)
+547	Ing Android, langganan ing aplikasi Agentic Antivirus liwat Google Play. Ing iPhone lan iPad, langganan App Store durung kasedhiya. Mbayar liwat web durung kasedhiya.
+548	Bukak insiden
+549	insiden mbukak
+550	Insiden mbukak
+551	Latensi p95
+552	dibayar nganti
+553	Pola path
+554	Wong
+555	Saben piranti
+556	Saben pangguna (nyakup kabeh pirantine)
+557	Pratinjau
+558	Utama
+560	Lindhungi piranti
+561	Protokol
+562	Panyedhiya
+563	Peringatan panyedhiya (24 jam)
+564	Titik pungkasan publik
+565	Terbitake versi kabijakan
+566	Terbitake versi sing ditandhatangani
+567	Diterbitake
+568	Pindai cepet
+569	Waca kanthi swara lan dikte nganggo fitur wicara bawaan browser panjenengan. Kita ora ngrekam utawa nyimpen swara.
+570	Ditampa
+571	Media sing bisa dicopot
+572	Busak
+573	Dijaluk
+574	Dijaluk dening
+575	Retensi
+576	Bali menyang layanan
+577	Saiki uga
+578	Risiko
+579	Peran
+580	Batalake
+581	Simpen titik pungkasan
+582	Simpen aturan lisensi
+583	Pindai
+584	Jadwal (cron)
+585	Pindai sing dijadwal
+586	Referensi rahasia
+587	Kirim undhangan
+588	Kirim laporan
+589	Kirim tautan reset
+590	Layanan
+591	Tujuan layanan
+594	Sinyal
+595	Ukuran
+596	Liyane
+597	Urutake
+598	Langkah
+599	Mandhegake proses, ngisolasi piranti, mulihake berkas, nambah pengecualian lan ngganti aturan lalu lintas butuh persetujuan wong. Sak persetujuan nyakup sak tumindak, target persise lan wektu winates. Yen ana sing owah, setujoni maneh.
+600	Langganan piranti iki nganggo Google Play
+601	kahanan langganan
+603	Sistem
+604	Target
+605	Asisten AI
+606	Asisten nglumpukake peringatan sing gegandhengan, ndhaptar apa sing diamati kanthi tautan menyang bukti, lan nandhani apa wae sing ora bisa dibuktekake minangka hipotesis. Asisten bisa nyaranake tumindak nanging ora bisa nyetujoni. Yen model ora kasedhiya, pindai, peringatan lan tanggapan manual tetep mlaku.
+607	Komputer iki
+608	Mung TLS, kudu ana ing daftar idin egress
+609	Banjir lalu lintas diserep dening panyedhiya hulu panjenengan. Ing kene panjenengan nyathet saben titik pungkasan publik, ngawasi peringatan panyedhiya, lan nyetujoni watesan lalu lintas anyar.
+610	Watesan lalu lintas
+611	Diterjemahake
+612	Sampah
+613	dina uji coba isih ana
+614	Uripake proteksi kanggo mindai berkas ing komputer iki lan ngawasi ransomware lan nyolong kredensial.
+615	ora kacakup
+616	Batalake owah-owahan pungkasan
+617	Pangguna
+618	Verifikasi email
+619	nunggu persetujuan
+620	Kita nampilake iklan saka Google AdSense ing sawetara kaca. Idinake iklan sing dipersonalisasi?
+621	Webhook:
+622	Apa sing dikirim piranti
+623	Iki apa?
+624	Kapan
+625	Nalika ana sing diblokir
+626	Nalika uji coba rampung tanpa pambayaran
+627	Sapa
+628	Panjenengan bisa mbusak akun saka profil. Hubungi
+629	Jeneng panjenengan
+630	Organisasi panjenengan entuk uji coba gratis 30 dina. Sawise iku regane £4,99 saben sasi kanggo saben pangguna utawa piranti.
+631	Organisasi panjenengan nemtokake suwene telemetri lan bukti disimpen. Cathetan audit ora bisa diowahi utawa dibusak.
+632	Hak panjenengan
+633	Dikte
+634	Idinake nganggo mikrofon kanggo dikte? Swara diproses dening browser panjenengan lan ora disimpen dening kita.
+635	Output swara
+636	Ngaso
+637	Nada
+638	Terusake
+639	Kacepetan
+640	Mandheg
+641	Ora ana swara kanggo basa iki.
+642	Swara
+643	Berkas wis dipindhah menyang karantina lan ora bisa mlaku.
+644	Ancaman wis diblokir ing piranti iki.

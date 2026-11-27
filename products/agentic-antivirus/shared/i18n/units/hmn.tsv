@@ -1,0 +1,637 @@
+0	Hla mus rau cov ntsiab lus tseem ceeb
+1	Ntxiv ib qho kev zam mus tas li
+2	Siv kev txwv tsheb ntaus ntawv
+3	Sau cov ntaub ntawv qhia txog cuab yeej
+4	Cais ib lub cuab yeej tawm ntawm network
+5	Cais ib daim ntaub ntawv tseg
+6	Tso ib lub cuab yeej tawm ntawm kev cais
+7	Rov qab muab daim ntaub ntawv uas cais tseg los
+8	Tshem ib tus neeg siv tawm txhua qhov chaw
+9	Thim kev txwv tsheb ntaus ntawv
+10	Thim kev hloov tshiab
+11	Tshawb xyuas cov cuab yeej
+12	Ncua ib tus neeg siv tus as khauj
+13	Nres ib txoj haujlwm
+14	Pom zoo
+15	Tsis pom zoo
+16	Xa mus rau cov cuab yeej
+17	Kev pom zoo tas sij hawm [0]
+18	Tus pab AI tau tawm tswv yim
+19	Kev tshaj tawm
+20	Kev ua
+21	Cov neeg sawv cev
+22	Nug
+23	Nug tus pab kev ruaj ntseg
+24	Cov lus teb los ntawm koj cov cuab yeej, cov xwm txheej uas tseem qhib thiab cov qhov tsis txaus. Tus pab tsis muaj peev xwm hloov dab tsi li.
+25	Raws li
+26	Tau tshem [0] qhov lus thov uas tsis muaj pov thawj
+27	Tau tshem [0] qhov lus thov uas tsis muaj pov thawj
+29	Tus qauv uas tswj rau ntawm koj tus kheej
+30	Cov cai (tsis muaj qauv)
+31	Npaj ib daim phiaj xwm kho
+32	Txhua kauj ruam yog ib qho kev tawm tswv yim. Tsis muaj dab tsi khiav kom txog thaum muaj neeg pom zoo.
+33	Lo lus nug
+34	Piv txwv: lub cuab yeej twg xav tau kev saib xyuas?
+35	Qib hnyav uas pom zoo
+36	Cov ntsiab lus luv
+37	Cov hom phiaj
+38	Ua ntsiab lus luv rau qhov xwm txheej no
+39	Vim li cas
+40	Pom lawm
+41	Qhia txog ib yam dab tsi uas xav tsis thoob
+42	Txoj cai
+43	Qib hnyav
+44	Ceeb toom
+46	Ntxiv cov ntaub ntawv
+47	Ntxiv ib lub nplaub tshev
+48	Ntxiv cov duab
+49	[0] daim ntawv txuas
+50	[0] daim ntawv txuas
+51	Cov ntawv txuas
+52	Thaij ib daim duab
+53	Tsis tau tso cai siv lub koob yees duab. Tso cai rau hauv koj lub browser, lossis siv koj lub cuab yeej lub app koob yees duab.
+54	Saib ua ntej lub koob yees duab
+55	Lub browser no qhib tsis tau lub koob yees duab ntawm no.
+56	Thaij
+57	Kaw tus pab
+58	Cov ntaub ntawv no yog dab tsi, thiab puas muaj kev nyab xeeb?
+59	Ntaub ntawv
+60	Nug txog koj txoj kev ruaj ntseg, lossis txuas cov ntaub ntawv, ib lub nplaub tshev, cov duab lossis ib daim duab koob yees duab. Txhua daim ntawv txuas raug tshawb xyuas ua ntej thiab tsis khaws dab tsi tseg.
+61	[0] daim duab
+62	[0] daim duab
+63	 raug tus qauv piav lawm.
+64	Piv txwv: qhov rub tawm no puas muaj kev nyab xeeb?
+65	Cov ntawv thiab duab uas huv yuav raug xa mus rau tus qauv AI uas koj lub koom haum qhib. Cov ntaub ntawv phom sij yeej tsis raug xa.
+66	[0] daim ntaub ntawv tsis tau ntxiv
+67	[0] daim ntaub ntawv tsis tau ntxiv
+68	: txog li [0] daim ntaub ntawv, txhua daim [1] MB thiab tag nrho [2] MB.
+69	Tshem [0]
+70	Tshawb xyuas thiab nug
+71	Cov txiaj ntsig tshawb xyuas
+72	Hom
+73	Siv lub cuab yeej lub koob yees duab
+74	Txiaj ntsig
+75	Tsis muaj malware uas paub
+76	Phom sij
+77	Tsis tau tshawb xyuas
+78	Txoj saw kev kuaj xyuas tawg ntawm qhov sau [0].
+79	Txoj saw kev kuaj xyuas zoo tag: tau lees paub [0] qhov sau.
+80	Email
+81	Tsis nco qab lo lus zais?
+82	Nkag mus nrog Google
+83	Nkag mus nrog Google tsis tau. Sim dua, lossis siv koj email thiab lo lus zais.
+84	Nkag mus
+85	Tawm
+86	Lo lus zais tshiab
+87	lossis
+88	Koom haum
+89	Lo lus zais
+90	Lo lus zais tau hloov lawm. Nkag mus nrog koj lo lus zais tshiab.
+91	Tsawg kawg 12 tus ntawv.
+92	Tsim as khauj
+93	Xa txoj link dua
+94	Yog tus as khauj ntawd tseem xav tau kev lees paub, ib txoj link tshiab tab tom xa tuaj. Kuj saib koj lub nplaub tshev spam thiab.
+95	Teeb tsa lo lus zais dua
+96	Yog muaj ib tus as khauj siv qhov chaw nyob ntawd, peb tau xa ib txoj link teeb tsa dua. Nws siv tau ib teev.
+97	Lees paub koj qhov chaw nyob email ua ntej koj nkag mus. Qhib txoj link uas peb xa mus rau [0].
+98	Email tau lees paub lawm. Koj nkag tau tam sim no.
+99	Txoj link no tas sij hawm lawm lossis twb siv lawm. Nkag mus kom tau ib txoj tshiab.
+100	Saib koj email kom lees paub koj qhov chaw nyob.
+101	Kev sau npe them nqi txo kev tshaj tawm 95%.
+102	Koj lub sij hawm sim dawb tas lawm.
+103	Sau npe them nqi txog [0]
+104	Khaws txhua yam pub dawb nrog kev tshaj tawm puv npo
+105	Nres txhua yam, suav nrog kev tiv thaiv cuab yeej, kom txog thaum muaj neeg them nqi
+106	Lub console xav tau kev sau npe them nqi; cov cuab yeej tseem raug tiv thaiv
+107	£4.99 ib hlis
+108	Sau npe them nqi
+109	Sim dawb:
+110	tshuav [0] hnub
+111	tshuav [0] hnub
+112	Tso tseg
+113	Rho tawm
+114	Muaj ib yam dab tsi tsis raug.
+115	Xa tawm
+116	Tab tom thauj…
+117	Tsis muaj
+118	Tsis tau muaj
+119	Tom ntej
+120	tsis yog
+121	Tsis muaj dab tsi qhia.
+122	kaw
+123	qhib
+124	Yav dhau los
+125	Ua kom tshiab
+126	Khaws tseg
+127	Nrhiav
+128	Kev sim ua (cov ntaub ntawv sim)
+129	Xwm txheej
+130	Tsis muaj
+131	Tsis paub
+132	Hloov tshiab [0]
+133	Tab tom ua…
+134	yog
+135	[0] qhov ceeb toom hauv 24 teev
+136	[0] qhov ceeb toom hauv 24 teev
+137	[0] lub cuab yeej
+138	[0] lub cuab yeej
+139	Cov ntaub ntawv txij li [0]
+140	[0] qhov xwm txheej qhib
+141	[0] qhov xwm txheej qhib
+142	[0] qhov kev pom zoo tos
+143	[0] qhov kev pom zoo tos
+144	lees paub lawm
+145	xav tias muaj
+146	Sau npe ib lub cuab yeej
+147	Cuab yeej
+148	Tsis qhia xov
+149	Txoj cai qub lawm
+150	Lub sensor raug kaw
+151	Cov kev txhais qub lawm
+152	Cov teeb meem
+153	Pom zaum kawg
+154	Lub operating system
+155	Txoj cai
+156	Khiav rau ntawm lub cuab yeej hauv 24 teev (siv ib zaug):
+157	Kev tiv thaiv
+158	Theej
+159	Rub tawm
+160	Txav
+161	Nplaub tshev tshiab
+162	Hloov npe
+163	Rov qab los
+164	Txav mus rau lub thoob khib nyiab
+165	Xa mus
+166	Kev pab
+167	[0] cov ntawv ntawm nplooj no yog tshuab txhais thiab tseem tsis tau tshuaj xyuas.
+168	[0] cov ntawv hauv hom lus no yog tshuab txhais thiab tseem tsis tau tshuaj xyuas.
+169	Hom lus no tseem tsis tau txhais, yog li qhia ua lus Askiv.
+170	pom zoo lawm
+171	Cov tseeb uas pom
+172	Cov kev xav (tsis tau lees paub)
+173	Kev xav, kev ntseeg siab [0]: [1]
+174	Khiav kev tshawb nrhiav
+175	Pov thawj uas ploj
+176	Ploj: [0]
+177	Nyeem nrov nrov
+178	Cov kev ua uas pom zoo
+179	Lub sij hawm teev pov thawj
+180	webhook nkag tuaj
+181	Cov teeb liab los ntawm koj tus muab kev lees paub tus kheej, DNS, firewall thiab lwm yam cuab yeej. Kev sib txuas tshiab pib ua tsis muaj; tsuas yog tus muab kev pab adapter uas dhau kev sim cog lus thiaj cim tau tias nyob tam sim. Cov ntaub ntawv sim raug cim ua kev sim ua txhua qhov chaw uas nws tshwm.
+182	Tsis txuas (stub)
+183	Tsuas yog cov ntaub ntawv sim
+184	Tsis muaj
+185	Nyob tam sim (lees paub lawm)
+186	Lus zais (qhia ib zaug):
+187	Kev pom zoo
+188	Cov ceeb toom
+189	Kev kuaj xyuas
+190	Kev sau npe them nqi
+191	Daim ntawv qhia
+192	DDoS thiab kev siv tau
+193	Cov cuab yeej
+194	Cov ntaub ntawv
+195	Cov xwm txheej
+196	Kev sib txuas
+197	Cov cai
+198	Kev ceev ntiag tug
+199	Kev cais tseg
+200	Kev teb
+201	Kev ruaj ntseg
+202	Chaw teeb tsa
+203	Cais malware uas paub tseg yam tsis siv neeg
+204	Saib xyuas tus cwj pwm xav tsis thoob
+205	Thaiv cov script xav tsis thoob
+206	Sau cov ntsiab lus ntaub ntawv rau kev tshawb nrhiav (kaw ua ntej)
+207	Tso cai cais network
+208	Tshawb xyuas cov ntaub ntawv thaum qhib lossis sau
+209	Tshawb xyuas cov rub tawm
+210	Tshawb xyuas cov program thaum pib
+211	Tiv thaiv tus neeg sawv cev ntawm kev hloov
+212	Ceeb toom txog cov link phom sij uas paub
+213	Vim li cas
+214	Thov kev tshuaj xyuas
+215	Rov qab los tom qab tshawb xyuas tshiab
+216	lub sij hawm nruab nrab mus txog kev tshem tawm uas lees paub (n=[0], tsis tau daws [1])
+217	kev kho uas dhau kev sim dua
+218	rov tshwm dua tom qab rov zoo
+219	kev tshem kab mob uas lees paub
+220	rov qab ua haujlwm nyab xeeb
+221	kev tshawb xyuas rov zoo tiav
+222	Cov txiaj ntsig tsuas cais tseg ([0]) thiab cov cuab yeej uas nruab dua ([1]) raug suav cais; kev cais tseg xwb yeej tsis raug suav ua kev tshem tawm.
+223	[0] teev
+224	[0] feeb
+225	[0] vib
+226	Tos kev pom zoo
+227	Pov thawj ntawm kev siv tiag
+228	Sau tseg yam uas tau lees paub hauv kev siv tiag, rau cov khoom twg, nrog version twg. Cov sau tsis kho tau.
+229	Version
+230	Hloov hom
+231	tsis muaj pov thawj
+232	tsis tiav
+233	dhau
+234	tab tom tos
+235	Saib kev nce qib ntawm playbook
+236	Cov cuab yeej uas teb tau
+237	Tag nrho cov cuab yeej
+238	[0] lub cuab yeej sim
+239	[0] lub cuab yeej sim
+240	Tiav
+241	Tiav thaum
+242	Kev xyaum
+243	Saib xyuas
+244	Teb
+245	Kev npog
+246	[0] pom, [1] teb tau
+247	Cov ntaub ntawv
+248	Hnub nyoog ntaub ntawv
+249	Nyob tam sim
+250	Cov ntaub ntawv sim
+251	tsis tau ua
+252	daim ntawv txais
+253	tab tom ua
+254	tsis paub
+255	Xa tawm
+256	Pov thawj
+257	Nws tau khiav
+258	Qub lawm
+259	Cov kwj ntaub ntawv
+260	Version lossis digest
+261	Ib puag ncig
+262	Txiaj ntsig
+263	Tus tswv
+264	Qhov yuav tsum muaj
+265	Khoom lossis pab pawg
+266	Qhia
+267	Tag nrho
+268	Tsis tiav
+269	Qhib rau tag nrho kev pab
+270	Qhib rau lub koom haum no
+271	Nres txhua qhov kev teb tshiab rau lub koom haum no? Kev tiv thaiv thiab kev tshawb xyuas tseem khiav.
+272	Tso cai kev teb dua
+273	Nres tag nrho kev teb
+274	Lub khawm nres ceev
+275	Hom
+276	Feeb nruab nrab qhib ([0] qhib, qub tshaj [1] feeb)
+277	Kev tsis kam raws txoj cai
+278	Kev xyaum thiab kev sim ua (tsis suav saum toj no)
+279	Kev ua rov qab dua (hom phiaj 0)
+280	Kev ncua nruab nrab ntawm kwj (p95 [0] vib, n=[1])
+281	Kev pom zoo dhau sij hawm ([0] tos, hom phiaj [1] feeb)
+282	Nruab nrab ntawm teeb liab mus txog kev xaiv qib (p95 [0] feeb, n=[1], [2] tsis tau xaiv qib)
+283	Kev ua uas lees paub ywj pheej ([0]/[1])
+284	Lub sij hawm: [0]. Daim ntawv txais xwb yeej tsis suav ua lees paub. Cov ntaub ntawv ploj qhia ua tsis muaj.
+285	Kev ntsuas kev teb
+286	Qhov xwm txheej kawg
+287	Cov neeg sawv cev tawm tswv yim; ib txoj cai ruaj khov txiav txim seb yam twg khiav. Txhua qhov kev ua qhia nws qhov kev pom zoo, daim ntawv txais thiab kev kuaj ywj pheej.
+288	Theem
+289	Tos kev pom zoo
+290	Tsis pom zoo lawm
+291	Tas sij hawm
+292	Tsis tiav
+293	Xav tau kev sib piv los ntawm tes
+294	Tau tawm tswv yim
+295	Nyob hauv kab tos
+296	Tab tom khiav
+297	Tos kev lees paub
+298	Lees paub lawm
+299	Xwm txheej tam sim
+300	Hom
+301	Kev sim ua
+302	Kev tshawb xyuas thiab kev sau ntaub ntawv khiav. Lwm yam kev ua tseem yog kev tawm tswv yim.
+303	Cov kev ua uas pom zoo khiav rau ntawm cov cuab yeej uas xaiv.
+304	Cov kev ua khiav rau ntawm cov adapter sim xwb. Tsis muaj dab tsi hloov rau ntawm koj cov cuab yeej.
+305	Tseem tsis tau muaj kev ua.
+306	Tsis muaj dab tsi tos kev pom zoo.
+307	Tseem tsis tau sau pov thawj ntawm kev siv tiag.
+308	Tseem tsis tau muaj cuab yeej lossis kev sib txuas xa ntaub ntawv.
+309	Nws tsis tau khiav
+310	Pom lawm
+311	Muaj dab tsi tshwm sim
+312	Kev teb DDoS
+313	Kev ceeb toom cuav thiab kev rov qab los
+314	Tus kheej, phishing thiab tsheb ntaus ntawv xav tsis thoob
+315	Malware thiab cov rub tawm xav tsis thoob
+316	Kev pom network thiab xwm txheej cuab yeej
+317	Kev rov zoo tom qab raug nkag
+318	Ransomware lossis xav tias raug nkag
+319	Playbook
+320	Cov playbook
+321	Version ntawm txoj cai
+322	Version uas nruab lawm
+323	Kev cais firewall
+324	Tau txais ntaub ntawv
+325	Tshem daim ntaub ntawv lawm
+326	Nres txoj haujlwm lawm
+327	Xwm txheej ntawm tus muab kev pab
+328	Sau tseg lawm
+329	Tshawb xyuas tiav
+330	Sim ua lawm
+331	Tawm ntawm kev cais tseg
+332	Hauv kev cais tseg
+333	Cov kev ua thiab cov ntawv txais
+334	Sau txiaj ntsig
+335	Sau tseg
+336	Teb tau
+337	Qhov chaw los
+338	cuab yeej
+339	console
+340	kev sim ua
+341	Pib thaum
+342	Hloov tshiab lawm
+343	Kev kuaj ywj pheej
+344	Tab tom tos
+345	Txwv archive
+346	Archive uas muab zais
+347	Zam lawm
+348	Nkag tsis tau
+349	Txwv sij hawm
+350	Loj dhau
+351	Hom ntawv tsis txhawb
+352	Tso tseg lawm
+353	Plam lawm
+354	Ib feem
+355	Tas sij hawm
+356	Puv
+357	Thaum thov
+358	Sai
+359	Kev rov zoo
+360	Teem sij hawm
+361	Tsom
+362	Ntxiv ntu
+363	cov archive
+364	Cov khoom
+365	Nres qhov kev tshawb xyuas no? Cov txiaj ntsig txog tam sim no raug khaws ua kev tshawb xyuas uas tso tseg.
+366	Tsis npog
+367	Cov kev nrhiav pom
+368	Cov cuab yeej raws xwm txheej kev tiv thaiv
+369	Cav
+370	Hnub kawg
+371	Pov thawj kawg
+372	Kev tswj uas xav tau
+373	Kev kho uas tawm tswv yim
+374	Sim dua
+375	Khoom lossis ntu
+376	Cov qhov tsis txaus qhib
+377	Cov txiaj ntsig tshawb xyuas hauv 30 hnub
+378	ceeb toom mus txog kev tswj uas lees paub
+379	cov cuab yeej raug tiv thaiv
+380	cov endpoint pej xeem nrog kev txo los ntawm sab saud
+381	xwm txheej mus txog ceeb toom
+382	cov cuab yeej nrog cov kev txhais tshiab
+383	cov cuab yeej nrog kev tshawb xyuas puv hauv 7 hnub
+384	cov qhov tsis txaus qhib ([0] dhau sij hawm, [1] kaw hauv 30 hnub)
+385	cov ntu network uas saib xyuas
+386	cov kev pom tseeb uas lees paub
+387	cov kev tshawb xyuas tiav
+388	Kev npog thiab kev teb
+389	Kev tshawb xyuas puv kawg
+390	Telemetry kawg
+391	Txhua lub cuab yeej thiab ntu network hauv qhov ntau, seb puas raug tiv thaiv, thiab yuav kho dab tsi tom ntej.
+392	Kev pom network
+393	Tseem tsis tau sau npe cuab yeej. Tiv thaiv ib lub khoos phis tawj los ntawm Cov cuab yeej.
+394	Tsis muaj qhov tsis txaus qhib.
+395	[0] qhib
+396	dhau sij hawm
+397	p95 [0] vib
+398	Cov nplaub tshev
+399	Cov nplaub tshev yuav tshawb xyuas, cais nrog cim comma
+400	Kev zais thiab firewall
+401	Kev zais disk [0], firewall [1]
+402	Kev rov zoo tom qab xwm txheej
+403	Kuaj dua tam sim no
+404	Tsis tau sim dua
+405	Sim dua tsis tiav
+406	Lees paub kaw lawm
+407	Hom kev tshawb xyuas
+408	Cov kev tshawb xyuas
+409	Ntu
+410	Npe ntu
+411	Pib tshawb xyuas
+412	Pib lawm
+413	Xwm txheej
+414	Poob qis
+415	Raug tiv thaiv
+416	Tsis raug tiv thaiv
+417	Cov cuab yeej raws xwm txheej
+418	[0] tsis paub
+419	Tsis pom
+420	Saib xyuas
+421	Kev pom
+422	Tsis muaj kev nrhiav pom tsis tau ua pov thawj tias muaj kev tiv thaiv: kuj saib kev npog thiab cov txiaj ntsig tshawb xyuas thiab.
+423	Hom lus
+424	Kev npog kev txhais lus
+425	Tsis muaj version ua ntej
+426	Ntsiab
+427	Tsaus
+428	Sib txawv siab
+429	Kaj
+430	Tsis pom kev hem thawj tshiab hauv [0] cov ntaub ntawv.
+431	[0] qhov kev hem thawj
+432	[0] qhov kev hem thawj
+433	 pom hauv [0] cov ntaub ntawv. Saib Cov ceeb toom thiab Kev pom zoo kom tshuaj xyuas lawv.
+434	Kev tshawb xyuas puv
+435	Tiv thaiv tsis tau lub khoos phis tawj no: [0]
+436	Lub khoos phis tawj no raug tiv thaiv. Kev tshawb xyuas tam sim khiav thaum Agentic Antivirus qhib.
+437	Kev tshawb xyuas tsis tiav: [0]
+438	Tab tom tshawb xyuas…
+439	Tab tom tshawb xyuas txhua lub drive. Qhov no yuav siv sij hawm ntev.
+440	Tab tom tshawb xyuas Downloads, Desktop thiab cov ntaub ntawv ib ntus…
+441	[0] cov ntaub ntawv nyeem tsis tau.
+442	Ib daim ntaub ntawv
+443	Ib txoj link vev xaib
+444	Txais cov ntaub ntawv sim
+446	Cov kev ua
+447	Ntxiv ib qho kev sib txuas
+448	Ntxiv kev zam
+449	Ntxiv kev sib txuas
+450	Ntxiv kev tshawb xyuas puv txhua lub lim tiam
+451	tus thawj tswj
+452	Kev tshaj tawm
+453	Kev pom zoo rau kev tshaj tawm
+454	Cov kev pab uas raug cuam tshuam
+455	cov ceeb toom hauv 24 teev dhau los
+456	Tso cai
+457	Tso cai thiab tshawb xyuas
+458	Tus thawj tswj yuav tsum muab ib qho laj thawj. Kev zam raug sau tseg hauv kev kuaj xyuas.
+459	Ib tsab email
+460	Pom zoo rov qab ua haujlwm
+461	Pom zoo cov kev ua
+462	Khoom
+463	cov khoom uas tab tom txo kev phom sij
+464	cov khoom uas muaj ceeb toom hauv 24 teev
+465	Keeb kwm kev kuaj xyuas
+466	Kev tiv thaiv yam tsis siv neeg tseem khiav rau txhua lub cuab yeej. Cov no yog cov kev ua uas xav tau ib tug neeg txiav txim.
+467	Kev siv tau
+468	Cov teeb liab muaj
+469	Kev thaub qab lees paub lawm
+470	Thaiv
+471	Ua ntej, tus neeg sawv cev xa telemetry kev ruaj ntseg thiab cov hash ntaub ntawv: cov npe txoj haujlwm thiab cov kab hais kom ua, cov kev mus rau ntaub ntawv, cov ntaub ntawv txog kev sib txuas network, thiab cov kev nrhiav pom. Cov ntsiab lus ntaub ntawv tsuas raug sau yog koj lub koom haum qhib nws.
+472	Peev xwm
+473	Pawg
+474	Hloov lawm
+475	Nqi
+476	Kuaj
+477	xaiv
+478	Xaiv ib lub cuab yeej
+480	Kaw
+481	Cais nrog cim comma
+482	Tiv tauj
+483	Kev tswj
+484	Kev npog raws theem kev tiv thaiv
+485	tseem ceeb heev
+486	kev xa ceeb toom tseem ceeb heev (p95, 30 hnub)
+487	Cov kev txiav txim tos
+488	Tsis kam
+489	Cov kev txhais
+490	Piav seb muaj dab tsi tshwm sim
+491	Ntsiab lus
+492	Cov ntsiab lus
+493	Kev nrhiav pom
+494	Cuab yeej yuav muab daim ntawv tso cai
+495	cov cuab yeej raug tiv thaiv puv
+496	cov cuab yeej raug cais
+497	Cov cuab yeej uas xav tau kev saib xyuas
+498	Kev taw qhia
+499	Cheeb tsam DNS
+500	nplooj rub tawm
+501	Thaum lub sij hawm sim dawb, thiab ntawm cov phiaj xwm tsis tau them, lub console qhia kev tshaj tawm Google AdSense thiab cov app xov tooj qhia kev tshaj tawm Google AdMob, tom qab nug koj kev pom zoo. Cov neeg sau npe pom kev tshaj tawm tsawg dua 95%. Kev tshaj tawm yeej tsis tshwm rau ntawm cov npo kev pom zoo, kev tswj, ceeb toom kev hem thawj, tshuaj xyuas kev cais tseg, nkag mus, them nqi lossis kev kuaj xyuas.
+502	Txhua zaus tshaj tawm tsim ib version tshiab uas kos npe. Cov cuab yeej tseem siv version kawg uas lees paub thaum tsis muaj internet.
+503	Email kev pab ntawm
+504	Endpoint
+505	Equality Software Ltd khiav Agentic Antivirus. Nplooj no piav txog yam uas kev pab sau. Tus tswv khoom yuav tsum tshuaj xyuas ua ntej tshaj tawm.
+506	Txhua qhov kev ua uas hloov ib lub cuab yeej, ib tus as khauj lossis tsheb ntaus ntawv hla lub cav txoj cai thiab kev tswj AEP-X. Ib qho kev pom zoo npog ib qho kev ua, nws cov hom phiaj tseeb, lub koom haum no, thiab ib lub sij hawm ruaj khov.
+507	Txhua qhov xa mus raug kuaj seb puas muaj malware thiab nws hom tiag. Cov ntaub ntawv uas tsis muaj tus saib uas lees paub raug khaws thiab rub tawm tau tab sis tsis qhia ua ntej.
+508	Kev zam tshwj xeeb
+509	Cov kev zam
+510	Kev mus rau nplaub tshev
+511	rau kev thov nkag lossis kho.
+512	Cov qhov tsis txaus
+513	Tau tus neeg sawv cev rau Windows, Mac lossis Linux los ntawm
+514	Mus rau Cov cuab yeej, xaiv Sau npe ib lub cuab yeej, thiab khiav cov lus hais kom ua uas qhia rau ntawm lub khoos phis tawj koj xav tiv thaiv. Tus neeg sawv cev pib tshawb xyuas thaum nws tau txais nws txoj cai uas kos npe.
+515	Kev noj qab haus huv
+516	Keeb kwm
+517	Npe host
+518	Kuv to taub tias cov cuab yeej yuav nres tshawb xyuas thiab thaiv kev hem thawj tom qab sim dawb kom txog thaum them nqi sau npe.
+519	Kev cuam tshuam
+520	Import zip lossis tar
+521	Xwm txheej
+522	Suav nrog tus qauv lus (yog koj lub koom haum qhib ib qho)
+523	Chaw nyob IP
+524	Koom
+525	Koom koj lub koom haum
+526	Malware uas paub raug txav mus rau kev cais tseg, qhov chaw nws khiav tsis tau. Yog koj xav tias ib daim ntaub ntawv raug thaiv yuam kev, qhib Kev cais tseg thiab thov kev tshuaj xyuas. Tus thawj tswj txiav txim, thiab daim ntaub ntawv tsuas rov qab los tom qab kev tshawb xyuas tshiab pom tias nws huv.
+527	Cov hom lus uas tsis muaj kev txhais tiav rov qab siv lus Askiv. Kev npog raug ntsuas, tsis yog kwv yees.
+528	Hloov zaum kawg
+529	Theem
+530	Kev thov raug cai ua tiav
+531	Cov cai daim ntawv tso cai
+532	Link, yog muaj
+533	Cov host tswj uas tseem ncav cuag tau thaum cais
+534	Cim ua ceeb toom cuav
+535	Kev loj hlob
+536	Kev txo kev phom sij
+537	Npe
+538	Npe ntawm tus lus zais hauv koj lub chaw khaws lus zais, tsis yog tus lus zais nws tus kheej
+539	Tsis muaj kev ua tos.
+540	Tsis muaj xwm txheej qhib.
+541	Tsis muaj.
+542	Tsis muaj kev qhia.
+543	tsis tau teeb
+544	Ceeb toom tom qab
+545	ntawm cov kev tshaj tawm qhia
+546	Chaw khaws xwm txheej thaum tsis muaj internet (MB)
+547	Ntawm Android, sau npe them nqi hauv Agentic Antivirus app los ntawm Google Play. Ntawm iPhone thiab iPad, kev sau npe App Store tseem tsis tau muaj. Kev them nqi hauv web tseem tsis tau muaj.
+548	Qhib xwm txheej
+549	cov xwm txheej qhib
+550	Cov xwm txheej qhib
+551	Kev ncua p95
+552	them txog
+553	Qauv kev mus
+554	Cov neeg
+555	Ib lub cuab yeej
+556	Ib tus neeg siv (npog tag nrho lawv cov cuab yeej)
+557	Saib ua ntej
+558	Thawj
+560	Tiv thaiv ib lub cuab yeej
+561	Protocol
+562	Tus muab kev pab
+563	Cov ceeb toom ntawm tus muab kev pab (24 teev)
+564	Cov endpoint pej xeem
+565	Tshaj tawm ib version txoj cai
+566	Tshaj tawm version uas kos npe
+567	Tshaj tawm lawm
+568	Kev tshawb xyuas sai
+569	Kev nyeem nrov nrov thiab kev hais sau siv koj lub browser cov yam ntxwv hais lus uas muaj nyob. Peb tsis kaw lossis khaws suab.
+570	Tau txais
+571	Cov khoom khaws uas rho tau
+572	Tshem
+573	Tau thov
+574	Thov los ntawm
+575	Kev khaws cia
+576	Rov qab ua haujlwm
+577	Tam sim no
+578	Kev pheej hmoo
+579	Lub luag haujlwm
+580	Thim rov qab
+581	Khaws endpoint
+582	Khaws cov cai daim ntawv tso cai
+583	Tshawb xyuas
+584	Teem sij hawm (cron)
+585	Cov kev tshawb xyuas teem sij hawm
+586	Kev xa mus rau lus zais
+587	Xa daim ntawv caw
+588	Xa daim ntawv qhia
+589	Xa txoj link teeb tsa dua
+590	Kev pab
+591	Cov hom phiaj kev pab
+594	Teeb liab
+595	Qhov loj
+596	Lwm yam
+597	Txheeb
+598	Kauj ruam
+599	Kev nres cov haujlwm, cais cov cuab yeej, rov qab muab cov ntaub ntawv los, ntxiv cov kev zam thiab hloov cov cai tsheb ntaus ntawv xav tau ib tug neeg pom zoo. Ib qho kev pom zoo npog ib qho kev ua, nws cov hom phiaj tseeb thiab ib lub sij hawm txwv. Yog muaj dab tsi hloov, pom zoo dua.
+600	Sau npe them nqi rau lub cuab yeej no nrog Google Play
+601	xwm txheej kev sau npe them nqi
+603	System
+604	Hom phiaj
+605	Tus pab AI
+606	Tus pab muab cov ceeb toom uas cuam tshuam ua pab pawg, teev yam uas pom nrog cov link mus rau pov thawj, thiab cim txhua yam uas nws ua pov thawj tsis tau ua kev xav. Nws tawm tswv yim tau kev ua tab sis pom zoo tsis tau. Yog tus qauv tsis muaj, kev tshawb xyuas, ceeb toom thiab kev teb los ntawm tes tseem ua haujlwm.
+607	Lub khoos phis tawj no
+608	TLS xwb, yuav tsum nyob hauv daim ntawv tso cai tawm
+609	Kev nyab tsheb ntaus ntawv raug koj tus muab kev pab sab saud nqus. Ntawm no koj suav txhua lub endpoint pej xeem, saib cov ceeb toom ntawm tus muab kev pab, thiab pom zoo cov kev txwv tsheb ntaus ntawv tshiab.
+610	Cov kev txwv tsheb ntaus ntawv
+611	Txhais lawm
+612	Thoob khib nyiab
+613	hnub sim dawb tshuav
+614	Qhib kev tiv thaiv kom tshawb xyuas cov ntaub ntawv ntawm lub khoos phis tawj no thiab saib xyuas ransomware thiab kev nyiag ntaub ntawv nkag.
+615	tsis npog
+616	Thim qhov kev hloov kawg
+617	Tus neeg siv
+618	Lees paub email
+619	tos kev pom zoo
+620	Peb qhia kev tshaj tawm los ntawm Google AdSense rau qee nplooj. Tso cai kev tshaj tawm raws koj tus kheej?
+621	Webhook:
+622	Cov cuab yeej xa dab tsi
+623	Nws yog dab tsi?
+624	Thaum twg
+625	Thaum muaj ib yam raug thaiv
+626	Thaum sim dawb tas yam tsis tau them nqi
+627	Leej twg
+628	Koj rho tau koj tus as khauj los ntawm koj daim profile. Tiv tauj
+629	Koj lub npe
+630	Koj lub koom haum tau sim dawb 30 hnub. Tom qab ntawd nws raug nqi £4.99 ib hlis rau txhua tus neeg siv lossis cuab yeej.
+631	Koj lub koom haum teem seb khaws telemetry thiab pov thawj ntev npaum li cas. Cov ntaub ntawv kuaj xyuas kho lossis rho tsis tau.
+632	Koj cov cai
+633	Hais sau
+634	Tso cai siv lub microphone rau kev hais sau? Suab raug koj lub browser ua thiab peb tsis khaws.
+635	Suab tawm
+636	Nres ib pliag
+637	Suab siab qis
+638	Txuas ntxiv
+639	Kev ceev
+640	Nres
+641	Tsis muaj suab rau hom lus no.
+642	Suab
+643	Daim ntaub ntawv raug txav mus rau kev cais tseg thiab khiav tsis tau.
+644	Ib qho kev hem thawj raug thaiv rau ntawm lub cuab yeej no.

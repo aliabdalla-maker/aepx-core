@@ -28,10 +28,13 @@ def test_locale_catalogue_coverage_and_fallback(client):
     assert by["en"]["status"] == "complete" and by["en"]["coverage_pct"] == 100.0
     assert {k for k, v in by.items() if v["direction"] == "rtl"} == {"ar", "fa", "he", "ps", "ur", "yi"}
     assert by["zh-Hans"]["fallback_chain"] == ["zh-Hans", "zh", "en"]
-    unavailable = [k for k, v in by.items() if v["status"] == "unavailable"]
-    assert len(unavailable) == 99  # reported honestly: only English is translated in this release
+    assert all(v["status"] == "complete" for v in by.values())   # all 100 catalogue locales have every key
     m = client.get("/v1/i18n/messages/ar").json()
-    assert m["direction"] == "rtl" and m["messages"]["nav.devices"] == "Devices"  # English fallback
+    import json as _json
+    from app.i18n import MESSAGES_DIR
+    ar = _json.loads((MESSAGES_DIR / "ar.json").read_text(encoding="utf-8"))
+    assert m["direction"] == "rtl" and m["messages"]["nav.devices"] == ar["nav.devices"] != "Devices"
+    assert ar["_meta"]["origin"] == "machine:catalogue"    # labelled machine translated until native review
     assert client.get("/v1/i18n/messages/xx").status_code == 404
 
 
