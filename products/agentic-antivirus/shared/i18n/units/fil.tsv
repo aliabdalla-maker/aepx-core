@@ -1,0 +1,637 @@
+0	Lumaktaw sa pangunahing nilalaman
+1	Magdagdag ng permanenteng exclusion
+2	Maglapat ng paghihigpit sa traffic
+3	Mangolekta ng metadata ng device
+4	I-isolate ang device mula sa network
+5	I-quarantine ang file
+6	Alisin ang device sa isolation
+7	I-restore ang naka-quarantine na file
+8	I-sign out ang user kahit saan
+9	Ibalik ang paghihigpit sa traffic
+10	Ibalik ang update
+11	I-scan ang mga device
+12	Suspindihin ang user account
+13	Ihinto ang proseso
+14	Aprubahan
+15	Tanggihan
+16	Ipadala sa mga device
+17	Mag-e-expire ang pag-apruba [0]
+18	Iminungkahi ng AI assistant
+19	Patalastas
+20	Aksyon
+21	Mga agent
+22	Magtanong
+23	Magtanong sa security assistant
+24	Ang mga sagot ay mula sa iyong mga device, bukas na insidente at mga puwang. Walang mababago ang assistant.
+25	Batay sa
+26	Inalis ang [0] claim na walang ebidensya
+27	Inalis ang [0] claim na walang ebidensya
+29	Self-hosted na model
+30	Mga panuntunan (walang model)
+31	Gumawa ng draft na plano sa remediation
+32	Ang bawat hakbang ay isang mungkahi. Walang tatakbo hangga't walang nag-aapruba.
+33	Tanong
+34	Halimbawa: aling mga device ang kailangang asikasuhin?
+35	Iminumungkahing kalubhaan
+36	Buod
+37	Mga target
+38	Ibuod ang insidenteng ito
+39	Bakit
+40	Natukoy
+41	Mag-ulat ng kahina-hinala
+42	Panuntunan
+43	Kalubhaan
+44	Alerto
+46	Magdagdag ng mga file
+47	Magdagdag ng folder
+48	Magdagdag ng mga larawan
+49	[0] kalakip
+50	[0] kalakip
+51	Mga kalakip
+52	Kumuha ng litrato
+53	Hindi pinayagan ang access sa camera. Payagan ito sa iyong browser, o gamitin ang camera app ng iyong device.
+54	Preview ng camera
+55	Hindi mabuksan ng browser na ito ang camera dito.
+56	Kunan
+57	Isara ang assistant
+58	Ano ang mga file na ito, at ligtas ba ang mga ito?
+59	Talaksan
+60	Magtanong tungkol sa iyong seguridad, o mag-attach ng mga file, folder, larawan o litrato mula sa camera. Ang bawat attachment ay ini-scan muna at walang iniimbak.
+61	[0] larawan ang
+62	[0] larawan ang
+63	 inilarawan ng model.
+64	Halimbawa: ligtas ba ang download na ito?
+65	Ang malinis na text at mga larawan ay maaaring ipadala sa AI model na pinagana ng iyong organisasyon. Hindi kailanman ipinapadala ang mga mapaminsalang file.
+66	Hindi naidagdag ang [0] file
+67	Hindi naidagdag ang [0] file
+68	: hanggang [0] file, [1] MB bawat isa at [2] MB sa kabuuan.
+69	Alisin ang [0]
+70	I-scan at magtanong
+71	Mga resulta ng scan
+72	Uri
+73	Gamitin ang camera ng device
+74	Resulta
+75	Walang kilalang malware
+76	Mapaminsala
+77	Hindi na-scan
+78	Sira ang audit chain sa entry [0].
+79	Buo ang audit chain: [0] entry ang na-verify.
+80	Email address
+81	Nakalimutan ang password?
+82	Mag-sign in gamit ang Google
+83	Hindi gumana ang pag-sign in sa Google. Subukang muli, o gamitin ang iyong email at password.
+84	Mag-sign in
+85	Mag-sign out
+86	Bagong password
+87	o
+88	Organisasyon
+89	Password ng account
+90	Napalitan ang password. Mag-sign in gamit ang bago mong password.
+91	Hindi bababa sa 12 character.
+92	Gumawa ng account
+93	Ipadala muli ang link
+94	Kung kailangan pang kumpirmahin ang account na iyon, may bagong link na papunta. Tingnan din ang iyong spam folder.
+95	I-reset ang password
+96	Kung may account na gumagamit ng address na iyon, nagpadala kami ng reset link. Gumagana ito nang isang oras.
+97	Kumpirmahin ang iyong email address bago ka mag-sign in. Buksan ang link na ipinadala namin sa [0].
+98	Na-verify ang email. Maaari ka nang mag-sign in.
+99	Nag-expire na o nagamit na ang link na ito. Mag-sign in para makakuha ng bago.
+100	Tingnan ang iyong email para i-verify ang iyong address.
+101	Binabawasan ng subscription ang mga ad nang 95%.
+102	Tapos na ang iyong trial.
+103	Naka-subscribe hanggang [0]
+104	Panatilihing libre ang lahat na may buong ad
+105	Ihinto ang lahat, kasama ang proteksyon ng device, hanggang may magbayad
+106	Kailangan ng subscription ang console; mananatiling protektado ang mga device
+107	£4.99 bawat buwan
+108	Mag-subscribe
+109	Libreng trial:
+110	[0] araw na lang
+111	[0] araw na lang
+112	Kanselahin
+113	Burahin
+114	May nangyaring mali.
+115	I-export
+116	Naglo-load…
+117	Wala
+118	Hindi kailanman
+119	Susunod
+120	hindi
+121	Walang maipapakita.
+122	naka-off
+123	naka-on
+124	Nakaraan
+125	I-refresh
+126	I-save
+127	Maghanap
+128	Simulation (pansubok na data)
+129	Katayuan
+130	Hindi available
+131	Hindi alam
+132	Na-update [0]
+133	Ginagawa…
+134	oo
+135	[0] alerto sa loob ng 24 oras
+136	[0] alerto sa loob ng 24 oras
+137	[0] aparato
+138	[0] aparato
+139	Data hanggang [0]
+140	[0] bukas na insidente
+141	[0] bukas na insidente
+142	[0] pag-apruba ang naghihintay
+143	[0] pag-apruba ang naghihintay
+144	kumpirmado
+145	pinaghihinalaan
+146	Mag-enroll ng device
+147	Aparato
+148	Hindi nag-uulat
+149	Lumang policy
+150	Naka-disable ang sensor
+151	Lumang definitions
+152	Mga isyu
+153	Huling nakita
+154	Operating system ng device
+155	Patakaran
+156	Patakbuhin sa device sa loob ng 24 oras (isang beses gamitin):
+157	Proteksyon
+158	Kopyahin
+159	I-download
+160	Ilipat
+161	Bagong folder
+162	Palitan ang pangalan
+163	I-restore
+164	Ilipat sa basurahan
+165	I-upload
+166	Tulong
+167	[0] text sa pahinang ito ang isinalin ng makina at hindi pa nare-review.
+168	[0] text sa wikang ito ang isinalin ng makina at hindi pa nare-review.
+169	Hindi pa naisasalin ang wikang ito, kaya Ingles ang ipinapakita.
+170	inaprubahan
+171	Mga naobserbahang katotohanan
+172	Mga hypothesis (hindi kumpirmado)
+173	Hypothesis, [0] kumpiyansa: [1]
+174	Patakbuhin ang imbestigasyon
+175	Kulang na ebidensya
+176	Kulang: [0]
+177	Basahin nang malakas
+178	Mga inirerekomendang aksyon
+179	Timeline ng ebidensya
+180	papasok na webhook
+181	Mga signal mula sa iyong identity provider, DNS, firewall at iba pang tool. Ang mga bagong integration ay nagsisimula bilang hindi available; tanging provider adapter na pumasa sa contract test nito ang maaaring markahang live. Ang test data ay may label na simulation saanman ito lumabas.
+182	Hindi nakakonekta (stub)
+183	Pansubok na data lamang
+184	Hindi available
+185	Live (na-verify)
+186	Secret (isang beses ipinapakita):
+187	Mga pag-apruba
+188	Mga alerto
+189	Pag-audit
+190	Suskripsyon
+191	Pangunahing pahina
+192	DDoS at availability
+193	Mga device
+194	Mga file
+195	Mga insidente
+196	Mga integration
+197	Mga policy
+198	Pagkapribado
+199	Kuwarentenas
+200	Pagtugon
+201	Seguridad
+202	Mga setting
+203	Awtomatikong i-quarantine ang kilalang malware
+204	Bantayan ang kahina-hinalang gawi
+205	I-block ang mga kahina-hinalang script
+206	Kolektahin ang nilalaman ng file para sa imbestigasyon (naka-off bilang default)
+207	Payagan ang network isolation
+208	I-scan ang mga file kapag binuksan o isinulat
+209	I-scan ang mga download
+210	I-scan ang mga program kapag nagsimula
+211	Protektahan ang agent mula sa mga pagbabago
+212	Magbabala tungkol sa kilalang mapaminsalang link
+213	Dahilan
+214	Humiling ng review
+215	I-restore pagkatapos ng bagong scan
+216	median na oras hanggang sa na-verify na pag-alis (n=[0], hindi nalutas [1])
+217	mga ayos na pumasa sa retest
+218	pag-ulit pagkatapos ng recovery
+219	na-verify na pag-alis ng virus
+220	ligtas na pagbabalik sa serbisyo
+221	tapos na ang mga recovery scan
+222	Ang mga resultang quarantine lamang ([0]) at mga device na na-reimage ([1]) ay hiwalay na binibilang; ang quarantine lamang ay hindi kailanman binibilang bilang pag-alis.
+223	[0] oras
+224	[0] minuto
+225	[0] seg
+226	Naghihintay ng pag-apruba
+227	Ebidensya sa production
+228	Itala kung ano ang na-verify sa production, sa aling mga asset, at sa aling bersyon. Hindi mae-edit ang mga entry.
+229	Bersyon
+230	Palitan ang mode
+231	walang ebidensya
+232	nabigo
+233	pumasa
+234	nakabinbin
+235	Tingnan ang progreso ng playbook
+236	Mga device na kayang tumugon
+237	Lahat ng device
+238	[0] pilot na device
+239	[0] pilot device
+240	Kumpleto
+241	Kumpleto kapag
+242	Pagsasanay
+243	Obserbahan
+244	Tumugon
+245	Saklaw
+246	[0] naobserbahan, [1] kayang tumugon
+247	Datos
+248	Edad ng data
+249	Aktibo
+250	Pansubok na data
+251	hindi naisagawa
+252	resibo
+253	isinasagawa
+254	hindi alam
+255	Ipadala
+256	Ebidensya
+257	Tumakbo ito
+258	Luma
+259	Mga data feed
+260	Bersyon o digest
+261	Kapaligiran
+262	Kinalabasan
+263	May-ari
+264	Kinakailangan
+265	Asset o grupo
+266	Ipakita
+267	Lahat
+268	Hindi kumpleto
+269	Naka-on para sa buong serbisyo
+270	Naka-on para sa organisasyong ito
+271	Ihinto ang bawat bagong aksyon sa pagtugon para sa organisasyong ito? Patuloy na gagana ang proteksyon at pag-scan.
+272	Payagan muli ang mga aksyon sa pagtugon
+273	Ihinto ang lahat ng aksyon sa pagtugon
+274	Pang-emergency na switch
+275	Uri
+276	Median na minutong bukas ([0] bukas, pinakaluma [1] min)
+277	Mga pagtanggi ng policy
+278	Mga drill at simulation (hindi kasama sa itaas)
+279	Mga inulit na aksyon (target 0)
+280	Median na delay ng feed (p95 [0] seg, n=[1])
+281	Mga overdue na pag-apruba ([0] naghihintay, target [1] min)
+282	Median mula signal hanggang triage (p95 [0] min, n=[1], [2] hindi pa na-triage)
+283	Mga aksyong independiyenteng na-verify ([0]/[1])
+284	Window: [0]. Ang resibo lamang ay hindi kailanman binibilang bilang na-verify. Ang kulang na data ay ipinapakitang hindi available.
+285	Mga sukatan ng pagtugon
+286	Huling event
+287	Nagmumungkahi ang mga agent; isang nakapirming policy ang nagpapasya kung ano ang tatakbo. Ipinapakita ng bawat aksyon ang pag-apruba, resibo at independiyenteng pagsusuri nito.
+288	Yugto
+289	Naghihintay ng pag-apruba
+290	Tinanggihan
+291	Nag-expire
+292	Nabigo
+293	Kailangan ng manwal na pagtutugma
+294	Iminungkahi
+295	Nakapila
+296	Tumatakbo
+297	Nakabinbin ang pag-verify
+298	Na-verify
+299	Kasalukuyang estado
+300	Moda
+301	Simulasyon
+302	Tumatakbo ang mga scan at pangongolekta ng data. Mananatiling mungkahi ang ibang aksyon.
+303	Tumatakbo ang mga inaprubahang aksyon sa mga napiling device.
+304	Tumatakbo lamang ang mga aksyon sa mga test adapter. Walang magbabago sa iyong mga device.
+305	Wala pang aksyon.
+306	Walang naghihintay ng pag-apruba.
+307	Wala pang naitalang ebidensya sa production.
+308	Wala pang device o integration na nagpapadala ng data.
+309	Hindi ito tumakbo
+310	Naobserbahan
+311	Ano ang nangyari
+312	Pagtugon sa DDoS
+313	False positive at pag-restore
+314	Identity, phishing at kahina-hinalang traffic
+315	Malware at kahina-hinalang download
+316	Visibility ng network at kalagayan ng device
+317	Recovery pagkatapos ng compromise
+318	Ransomware o pinaghihinalaang compromise
+319	Gabay sa pagtugon
+320	Mga gabay sa pagtugon
+321	Bersyon ng policy
+322	Naka-install na bersyon
+323	Isolation sa firewall
+324	Natanggap ang data
+325	Inalis ang file
+326	Inihinto ang proseso
+327	Estado ng provider
+328	Naitala
+329	Tapos na ang scan
+330	Sinimulate
+331	Wala sa quarantine
+332	Nasa quarantine
+333	Mga aksyon at resibo
+334	Itala ang kinalabasan
+335	Itala
+336	Kayang tumugon
+337	Pinagmulan
+338	aparato
+339	konsol
+340	simulasyon
+341	Nagsisimula kapag
+342	Na-update
+343	Independiyenteng pagsusuri
+344	Naghihintay
+345	Limitasyon ng archive
+346	Naka-encrypt na archive
+347	Hindi kasama
+348	Hindi ma-access
+349	Limitasyon sa oras
+350	Masyadong malaki
+351	Hindi suportadong format
+352	Kinansela
+353	Nalampasan
+354	Bahagya
+355	Nag-time out
+356	Buo
+357	Kapag kailangan
+358	Mabilis
+359	Pagbawi
+360	Naka-iskedyul
+361	Naka-target
+362	Magdagdag ng segment
+363	mga archive
+364	Mga asset
+365	Ihinto ang scan na ito? Ang mga resulta sa ngayon ay itatago bilang kinanselang scan.
+366	Hindi saklaw
+367	Mga detection
+368	Mga device ayon sa estado ng proteksyon
+369	Makina ng scan
+370	Takdang petsa
+371	Huling ebidensya
+372	Inaasahang kontrol
+373	Iminungkahing ayos
+374	Muling subukan
+375	Asset o segment
+376	Mga bukas na puwang
+377	Mga resulta ng scan sa 30 araw
+378	alerto hanggang na-verify na containment
+379	mga protektadong device
+380	mga pampublikong endpoint na may upstream mitigation
+381	event hanggang alerto
+382	mga device na may kasalukuyang definitions
+383	mga device na may full scan sa loob ng 7 araw
+384	mga bukas na puwang ([0] overdue, [1] naisara sa loob ng 30 araw)
+385	mga binabantayang network segment
+386	mga kumpirmadong true positive
+387	mga natapos na scan
+388	Saklaw at pagtugon
+389	Huling full scan
+390	Huling telemetry
+391	Bawat device at network segment na saklaw, kung protektado ito, at ano ang susunod na aayusin.
+392	Visibility ng network
+393	Wala pang naka-enroll na device. Protektahan ang computer mula sa Mga device.
+394	Walang bukas na puwang.
+395	[0] bukas
+396	lampas sa takdang oras
+397	p95 [0] seg
+398	Mga folder
+399	Mga folder na i-scan, pinaghihiwalay ng kuwit
+400	Encryption at firewall
+401	Encryption ng disk [0], firewall [1]
+402	Recovery pagkatapos ng mga insidente
+403	Suriin muli ngayon
+404	Hindi pa na-retest
+405	Nabigo ang retest
+406	Na-verify na sarado
+407	Uri ng scan
+408	Mga scan
+409	Bahagi ng network
+410	Pangalan ng segment
+411	Simulan ang scan
+412	Sinimulan
+413	Estado
+414	Humina
+415	Protektado
+416	Hindi protektado
+417	Mga device ayon sa estado
+418	[0] hindi alam
+419	Walang visibility
+420	Binabantayan
+421	Pagkakita
+422	Ang kawalan ng detection ay hindi patunay ng proteksyon: tingnan din ang saklaw at mga resulta ng scan.
+423	Wika
+424	Saklaw ng pagsasalin
+425	Walang naunang bersyon
+426	Tema
+427	Madilim
+428	Mataas na contrast
+429	Maliwanag
+430	Walang nakitang bagong banta sa [0] file.
+431	[0] banta
+432	[0] banta
+433	 ang nakita sa [0] file. Tingnan ang Mga alerto at Mga pag-apruba para suriin ang mga ito.
+434	Buong scan
+435	Hindi maprotektahan ang computer na ito: [0]
+436	Protektado ang computer na ito. Tumatakbo ang real-time scanning habang bukas ang Agentic Antivirus.
+437	Hindi natapos ang scan: [0]
+438	Nag-i-scan…
+439	Ini-scan ang bawat drive. Maaaring matagal ito.
+440	Ini-scan ang Downloads, Desktop at mga pansamantalang file…
+441	[0] file ang hindi mabasa.
+442	Isang file
+443	Link ng website
+444	Tanggapin ang test data
+446	Mga aksyon
+447	Magdagdag ng integration
+448	Magdagdag ng exclusion
+449	Magdagdag ng integration
+450	Magdagdag ng lingguhang full scan
+451	tagapangasiwa
+452	Pag-a-advertise
+453	Pahintulot sa advertising
+454	Mga apektadong serbisyo
+455	mga alerto sa nakaraang 24 oras
+456	Payagan
+457	Payagan at i-scan
+458	Kailangang magbigay ng dahilan ang administrator. Itinatala ang exclusion sa audit trail.
+459	Isang email
+460	Aprubahan ang pagbabalik sa serbisyo
+461	Pag-apruba ng mga aksyon
+462	Ari-arian
+463	mga asset na nasa aktibong mitigation
+464	mga asset na may alerto sa loob ng 24 oras
+465	Talaan ng audit
+466	Patuloy na gumagana ang awtomatikong proteksyon sa bawat device. Ito ang mga aksyong kailangang pagpasyahan ng isang tao.
+467	Pagkakaroon
+468	Mga available na signal
+469	Na-verify ang backup
+470	I-block
+471	Bilang default, nagpapadala ang agent ng security telemetry at mga file hash: mga pangalan ng proseso at command line, mga file path, metadata ng network connection, at mga detection. Kinokolekta lamang ang nilalaman ng file kung i-on ito ng iyong organisasyon.
+472	Kapasidad
+473	Kategorya
+474	Binago
+475	Singil
+476	Suriin
+477	pumili
+478	Pumili ng device
+480	Isara
+481	Pinaghihiwalay ng kuwit
+482	Makipag-ugnayan
+483	Kontrol
+484	Saklaw ayon sa layer ng proteksyon
+485	kritikal
+486	paghahatid ng kritikal na alerto (p95, 30 araw)
+487	Mga desisyong naghihintay
+488	Tanggihan
+489	Mga definition
+490	Ilarawan ang nangyari
+491	Detalye
+492	Mga detalye
+493	Pagtuklas
+494	Device na lilisensyahan
+495	mga ganap na protektadong device
+496	mga naka-isolate na device
+497	Mga device na kailangang asikasuhin
+498	Direksyon
+499	Zone ng DNS
+500	pahina ng download
+501	Sa panahon ng libreng trial, at sa mga hindi bayad na plan, nagpapakita ang console ng mga ad ng Google AdSense at ang mga mobile app ay nagpapakita ng mga ad ng Google AdMob, pagkatapos humingi ng iyong pahintulot. Ang mga subscriber ay nakakakita ng 95% na mas kaunting ad. Hindi kailanman lumalabas ang mga ad sa mga screen ng pag-apruba, containment, babala sa banta, review ng quarantine, pag-sign in, pagbabayad o audit.
+502	Ang bawat pag-publish ay gumagawa ng bagong signed na bersyon. Patuloy na ipinapatupad ng mga device ang huling na-verify na bersyon habang offline.
+503	Mag-email sa support sa
+504	Dulong punto
+505	Ang Equality Software Ltd ang nagpapatakbo ng Agentic Antivirus. Inilalarawan ng pahinang ito kung ano ang kinokolekta ng serbisyo. Dapat itong i-review ng product owner bago i-publish.
+506	Ang bawat aksyong nagbabago ng device, account o traffic ay dumadaan sa policy engine at AEP-X governance. Saklaw ng isang pag-apruba ang isang aksyon, ang eksaktong mga target nito, ang organisasyong ito, at isang takdang oras.
+507	Sinusuri ang bawat upload para sa malware at sa tunay nitong uri. Ang mga file na walang na-verify na viewer ay iniimbak at nada-download ngunit hindi pini-preview.
+508	Eksepsiyon
+509	Mga exclusion
+510	Path ng folder
+511	para sa mga kahilingan sa access o pagwawasto.
+512	Mga puwang
+513	Kunin ang agent para sa Windows, Mac o Linux mula sa
+514	Pumunta sa Mga device, piliin ang Mag-enroll ng device, at patakbuhin ang ipinapakitang command sa computer na gusto mong protektahan. Magsisimulang mag-scan ang agent sa sandaling matanggap nito ang signed na policy nito.
+515	Kalusugan
+516	Kasaysayan
+517	Pangalan ng host
+518	Nauunawaan ko na titigil ang mga device sa pag-scan at pag-block ng mga banta pagkatapos ng trial hangga't hindi nababayaran ang subscription.
+519	Epekto
+520	Mag-import ng zip o tar
+521	Insidente
+522	Isama ang language model (kung may pinagana ang iyong organisasyon)
+523	Address ng IP
+524	Sumali
+525	Sumali sa iyong organisasyon
+526	Inililipat sa quarantine ang kilalang malware, kung saan hindi ito makakatakbo. Kung sa tingin mo ay na-block ang isang file nang hindi sinasadya, buksan ang Quarantine at humiling ng review. Isang administrator ang magpapasya, at babalik lamang ang file pagkatapos itong makitang malinis ng bagong scan.
+527	Ang mga wikang walang kumpletong salin ay babalik sa Ingles. Sinusukat ang saklaw, hindi tinatantya.
+528	Huling binago
+529	Antas
+530	Tagumpay ng lehitimong request
+531	Mga panuntunan sa lisensya
+532	Link, kung mayroon
+533	Mga management host na naaabot habang naka-isolate
+534	Markahan bilang false positive
+535	Kahinugan
+536	Pagpapagaan
+537	Pangalan
+538	Pangalan ng secret sa iyong secret store, hindi kailanman ang secret mismo
+539	Walang naghihintay na aksyon.
+540	Walang bukas na insidente.
+541	Wala.
+542	Walang naiulat.
+543	hindi nakatakda
+544	Naabisuhan pagkatapos ng
+545	ng mga ad na ipinakita
+546	Buffer ng offline na event (MB)
+547	Sa Android, mag-subscribe sa Agentic Antivirus app sa pamamagitan ng Google Play. Sa iPhone at iPad, hindi pa available ang mga subscription sa App Store. Hindi pa available ang pagbabayad sa web.
+548	Bukas na insidente
+549	mga bukas na insidente
+550	Mga bukas na insidente
+551	Latency sa p95
+552	bayad hanggang
+553	Pattern ng path
+554	Mga tao
+555	Bawat device
+556	Bawat user (saklaw ang lahat ng kanilang device)
+557	Silipin
+558	Pangunahin
+560	Protektahan ang device
+561	Protokol
+562	Tagapagbigay
+563	Mga alerto ng provider (24 oras)
+564	Mga pampublikong endpoint
+565	Mag-publish ng bersyon ng policy
+566	I-publish ang signed na bersyon
+567	Na-publish
+568	Mabilis na scan
+569	Ang read-aloud at dictation ay gumagamit ng built-in na speech feature ng iyong browser. Hindi kami nagre-record o nag-iimbak ng audio.
+570	Natanggap
+571	Natatanggal na storage
+572	Alisin
+573	Hiniling
+574	Hiniling ni
+575	Pagpapanatili
+576	Ibalik sa serbisyo
+577	Ngayon mismo
+578	Panganib
+579	Tungkulin
+580	Ibalik
+581	I-save ang endpoint
+582	I-save ang mga panuntunan sa lisensya
+583	I-scan
+584	Iskedyul (cron)
+585	Mga naka-iskedyul na scan
+586	Reference ng secret
+587	Ipadala ang imbitasyon
+588	Ipadala ang ulat
+589	Ipadala ang reset link
+590	Serbisyo
+591	Mga layunin ng serbisyo
+594	Senyas
+595	Laki
+596	Iba pa
+597	Pagbukud-bukurin
+598	Hakbang
+599	Ang paghinto ng mga proseso, pag-isolate ng mga device, pag-restore ng mga file, pagdagdag ng mga exclusion at pagbabago ng mga panuntunan sa traffic ay kailangang aprubahan ng isang tao. Saklaw ng isang pag-apruba ang isang aksyon, ang eksaktong mga target nito at limitadong oras. Kung may magbago, aprubahan muli.
+600	I-subscribe ang device na ito gamit ang Google Play
+601	estado ng subscription
+603	Sistema
+604	Target na item
+605	Ang AI assistant
+606	Pinagsasama-sama ng assistant ang magkakaugnay na alerto, inililista ang naobserbahan kasama ang mga link sa ebidensya, at minamarkahan bilang hypothesis ang anumang hindi nito mapatunayan. Maaari itong magmungkahi ng mga aksyon ngunit hindi nito maaaprubahan ang mga ito. Kung hindi available ang model, patuloy na gumagana ang pag-scan, mga alerto at manwal na pagtugon.
+607	Ang computer na ito
+608	TLS lamang, dapat nasa egress allowlist
+609	Sinasalo ng iyong upstream provider ang mga traffic flood. Dito mo binibilang ang bawat pampublikong endpoint, binabantayan ang mga alerto ng provider, at inaaprubahan ang mga bagong paghihigpit sa traffic.
+610	Mga paghihigpit sa traffic
+611	Naisalin
+612	Basurahan
+613	natitirang araw ng trial
+614	I-on ang proteksyon para i-scan ang mga file sa computer na ito at bantayan ang ransomware at pagnanakaw ng credential.
+615	hindi saklaw
+616	I-undo ang huling pagbabago
+617	Gumagamit
+618	I-verify ang email
+619	naghihintay ng pag-apruba
+620	Nagpapakita kami ng mga ad mula sa Google AdSense sa ilang pahina. Payagan ang mga personalized na ad?
+621	Webhook ng papasok:
+622	Ano ang ipinapadala ng mga device
+623	Ano ito?
+624	Kailan
+625	Kapag may na-block
+626	Kapag natapos ang trial nang walang bayad
+627	Sino
+628	Maaari mong burahin ang iyong account mula sa iyong profile. Makipag-ugnayan sa
+629	Ang iyong pangalan
+630	Makakakuha ang iyong organisasyon ng 30-araw na libreng trial. Pagkatapos nito, nagkakahalaga ito ng £4.99 bawat buwan para sa bawat user o device.
+631	Itinatakda ng iyong organisasyon kung gaano katagal itinatago ang telemetry at ebidensya. Hindi mae-edit o mabubura ang mga audit record.
+632	Ang iyong mga karapatan
+633	Mag-dictate
+634	Payagan ang paggamit ng mikropono para sa dictation? Pinoproseso ng iyong browser ang audio at hindi namin ito iniimbak.
+635	Output ng audio
+636	I-pause
+637	Tono
+638	Ituloy
+639	Bilis
+640	Ihinto
+641	Walang available na boses para sa wikang ito.
+642	Boses
+643	Inilipat ang file sa quarantine at hindi ito makakatakbo.
+644	May banta na na-block sa device na ito.

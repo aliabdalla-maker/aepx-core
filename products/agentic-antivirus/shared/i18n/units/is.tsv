@@ -1,0 +1,637 @@
+0	Fara beint í aðalefni
+1	Bæta við varanlegri undanþágu
+2	Setja á umferðartakmörkun
+3	Safna lýsigögnum tækis
+4	Einangra tæki frá netinu
+5	Setja skrá í sóttkví
+6	Losa tæki úr einangrun
+7	Endurheimta skrá úr sóttkví
+8	Skrá notanda út alls staðar
+9	Afturkalla umferðartakmörkun
+10	Afturkalla uppfærslu
+11	Skanna tæki
+12	Loka notandareikningi tímabundið
+13	Stöðva ferli
+14	Samþykkja
+15	Hafna
+16	Senda í tæki
+17	Samþykki rennur út [0]
+18	Lagt til af gervigreindaraðstoðinni
+19	Auglýsing
+20	Aðgerð
+21	Fulltrúar
+22	Spyrja
+23	Spyrja öryggisaðstoðina
+24	Svörin byggja á tækjunum þínum, opnum atvikum og eyðum. Aðstoðin getur engu breytt.
+25	Byggt á
+26	[0] fullyrðing án sönnunar var fjarlægð
+27	[0] fullyrðingar án sönnunar voru fjarlægðar
+29	Sjálfhýst líkan
+30	Reglur (ekkert líkan)
+31	Gera drög að úrbótaáætlun
+32	Hvert skref er tillaga. Ekkert er keyrt fyrr en einhver samþykkir það.
+33	Spurning
+34	Til dæmis: hvaða tæki þarfnast athygli?
+35	Tillaga að alvarleika
+36	Samantekt
+37	Markmið
+38	Taka saman þetta atvik
+39	Hvers vegna
+40	Greint
+41	Tilkynna eitthvað grunsamlegt
+42	Regla
+43	Alvarleiki
+44	Viðvörun
+46	Bæta við skrám
+47	Bæta við möppu
+48	Bæta við myndum
+49	[0] viðhengi
+50	[0] viðhengi
+51	Viðhengi
+52	Taka mynd
+53	Aðgangur að myndavél var ekki leyfður. Leyfðu hann í vafranum eða notaðu myndavélarforrit tækisins.
+54	Forskoðun myndavélar
+55	Þessi vafri getur ekki opnað myndavélina hér.
+56	Smella af
+57	Loka aðstoðinni
+58	Hvaða skrár eru þetta og eru þær öruggar?
+59	Skrá
+60	Spurðu um öryggið þitt eða hengdu við skrár, möppu, myndir eða mynd úr myndavél. Hvert viðhengi er skannað fyrst og ekkert er vistað.
+61	[0] mynd var
+62	[0] myndum var
+63	 lýst af líkaninu.
+64	Til dæmis: er þetta niðurhal öruggt?
+65	Hreinn texti og hreinar myndir geta verið sendar til gervigreindarlíkansins sem fyrirtækið þitt virkjaði. Skaðlegar skrár eru aldrei sendar.
+66	[0] skrá var ekki bætt við
+67	[0] skrám var ekki bætt við
+68	: allt að [0] skrár, [1] MB hver og [2] MB samtals.
+69	Fjarlægja [0]
+70	Skanna og spyrja
+71	Niðurstöður skönnunar
+72	Tegund
+73	Nota myndavél tækisins
+74	Niðurstaða
+75	Ekkert þekkt spilliforrit
+76	Skaðlegt
+77	Ekki skannað
+78	Endurskoðunarkeðjan er rofin við færslu [0].
+79	Endurskoðunarkeðjan er óskert: [0] færslur staðfestar.
+80	Netfang
+81	Gleymt lykilorð?
+82	Skrá inn með Google
+83	Innskráning með Google tókst ekki. Reyndu aftur eða notaðu netfang og lykilorð.
+84	Skrá inn
+85	Skrá út
+86	Nýtt lykilorð
+87	eða
+88	Fyrirtæki
+89	Lykilorð
+90	Lykilorði breytt. Skráðu þig inn með nýja lykilorðinu.
+91	Að minnsta kosti 12 stafir.
+92	Stofna aðgang
+93	Senda tengilinn aftur
+94	Ef enn þarf að staðfesta aðganginn er nýr tengill á leiðinni. Athugaðu líka ruslpóstsmöppuna.
+95	Endurstilla lykilorð
+96	Ef aðgangur notar þetta netfang höfum við sent tengil til að endurstilla. Hann virkar í eina klukkustund.
+97	Staðfestu netfangið þitt áður en þú skráir þig inn. Opnaðu tengilinn sem við sendum á [0].
+98	Netfang staðfest. Þú getur skráð þig inn núna.
+99	Þessi tengill er útrunninn eða hefur þegar verið notaður. Skráðu þig inn til að fá nýjan.
+100	Athugaðu tölvupóstinn þinn til að staðfesta netfangið.
+101	Áskrift fækkar auglýsingum um 95%.
+102	Prufutímabilinu þínu er lokið.
+103	Í áskrift til [0]
+104	Halda öllu ókeypis með fullum auglýsingum
+105	Stöðva allt, líka vernd tækja, þar til einhver greiðir
+106	Stjórnborðið krefst áskriftar; tækin eru áfram varin
+107	4,99 £ á mánuði
+108	Gerast áskrifandi
+109	Ókeypis prufa: 
+110	[0] dagur eftir
+111	[0] dagar eftir
+112	Hætta við
+113	Eyða
+114	Eitthvað fór úrskeiðis.
+115	Flytja út
+116	Hleður…
+117	Á ekki við
+118	Aldrei
+119	Áfram
+120	nei
+121	Ekkert að sýna.
+122	af
+123	á
+124	Til baka
+125	Endurnýja
+126	Vista
+127	Leita
+128	Hermun (prófunargögn)
+129	Staða
+130	Ekki tiltækt
+131	Óþekkt
+132	Uppfært [0]
+133	Vinnur…
+134	já
+135	[0] viðvörun á 24 klukkustundum
+136	[0] viðvaranir á 24 klukkustundum
+137	[0] tæki
+138	[0] tæki
+139	Gögn frá [0]
+140	[0] opið atvik
+141	[0] opin atvik
+142	[0] samþykki bíður
+143	[0] samþykki bíða
+144	staðfest
+145	grunað
+146	Skrá tæki
+147	Tæki
+148	Sendir ekki skýrslur
+149	Úrelt stefna
+150	Nemi óvirkur
+151	Úreltar skilgreiningar
+152	Vandamál
+153	Síðast séð
+154	Stýrikerfi
+155	Stefna
+156	Keyrðu á tækinu innan 24 klukkustunda (einnota):
+157	Vernd
+158	Afrita
+159	Sækja
+160	Færa
+161	Ný mappa
+162	Endurnefna
+163	Endurheimta
+164	Færa í ruslið
+165	Hlaða upp
+166	Hjálp
+167	[0] texti á þessari síðu er vélþýddur og ekki enn yfirfarinn.
+168	[0] textar á þessu tungumáli eru vélþýddir og ekki enn yfirfarnir.
+169	Þetta tungumál hefur ekki verið þýtt enn, svo enska er sýnd.
+170	samþykkt
+171	Staðreyndir sem sáust
+172	Tilgátur (ekki staðfestar)
+173	Tilgáta, [0] vissa: [1]
+174	Keyra rannsókn
+175	Sönnunargögn sem vantar
+176	Vantar: [0]
+177	Lesa upphátt
+178	Ráðlagðar aðgerðir
+179	Tímalína sönnunargagna
+180	innkominn webhook
+181	Merki frá auðkennisveitunni þinni, DNS, eldveggjum og öðrum tólum. Nýjar samþættingar byrja sem ekki tiltækar; aðeins millistykki veitu sem hefur staðist samningspróf má merkja sem virkt. Prófunargögn eru merkt sem hermun alls staðar þar sem þau birtast.
+182	Ekki tengt (stubbur)
+183	Aðeins prófunargögn
+184	Ekki tiltækt
+185	Virkt (staðfest)
+186	Leyndarmál (sýnt einu sinni):
+187	Samþykki
+188	Viðvaranir
+189	Endurskoðun
+190	Áskrift
+191	Yfirlit
+192	DDoS og aðgengi
+193	Tæki
+194	Skrár
+195	Atvik
+196	Samþættingar
+197	Stefnur
+198	Persónuvernd
+199	Sóttkví
+200	Viðbrögð
+201	Öryggi
+202	Stillingar
+203	Setja þekkt spilliforrit sjálfkrafa í sóttkví
+204	Fylgjast með grunsamlegri hegðun
+205	Loka á grunsamlegar skriftur
+206	Safna innihaldi skráa til rannsóknar (slökkt sjálfgefið)
+207	Leyfa einangrun frá neti
+208	Skanna skrár þegar þær eru opnaðar eða skrifaðar
+209	Skanna niðurhal
+210	Skanna forrit þegar þau ræsast
+211	Verja fulltrúann gegn breytingum
+212	Vara við þekktum skaðlegum tenglum
+213	Ástæða
+214	Biðja um yfirferð
+215	Endurheimta eftir nýja skönnun
+216	miðgildi tíma að staðfestri útrýmingu (n=[0], óleyst [1])
+217	lagfæringar sem stóðust endurprófun
+218	endurkoma eftir endurheimt
+219	staðfest fjarlæging veira
+220	örugg endurkoma í rekstur
+221	endurheimtarskönnunum lokið
+222	Niðurstöður með aðeins sóttkví ([0]) og enduruppsett tæki ([1]) eru talin sér; sóttkví ein og sér telst aldrei sem fjarlæging.
+223	[0] klst.
+224	[0] mín.
+225	[0] sek.
+226	Bíður samþykkis
+227	Sönnunargögn úr rekstri
+228	Skráðu hvað var staðfest í rekstri, á hvaða eignum og með hvaða útgáfu. Ekki er hægt að breyta færslum.
+229	Útgáfa
+230	Skipta um ham
+231	engin sönnunargögn
+232	mistókst
+233	staðið
+234	í bið
+235	Athuga framvindu viðbragðsáætlunar
+236	Tæki sem geta brugðist við
+237	Öll tæki
+238	[0] tilraunatæki
+239	[0] tilraunatæki
+240	Lokið
+241	Lokið þegar
+242	Æfing
+243	Fylgjast með
+244	Bregðast við
+245	Umfang
+246	[0] vöktuð, [1] geta brugðist við
+247	Gögn
+248	Aldur gagna
+249	Í rauntíma
+250	Prófunargögn
+251	ekki framkvæmt
+252	kvittun
+253	í vinnslu
+254	óþekkt
+255	Senda út
+256	Sönnunargögn
+257	Þetta keyrði
+258	Úrelt
+259	Gagnastraumar
+260	Útgáfa eða tætigildi
+261	Umhverfi
+262	Útkoma
+263	Eigandi
+264	Krafa
+265	Eign eða hópur
+266	Sýna
+267	Allt
+268	Ekki lokið
+269	Kveikt fyrir alla þjónustuna
+270	Kveikt fyrir þetta fyrirtæki
+271	Stöðva allar nýjar viðbragðsaðgerðir fyrir þetta fyrirtæki? Vernd og skönnun halda áfram.
+272	Leyfa viðbragðsaðgerðir aftur
+273	Stöðva allar viðbragðsaðgerðir
+274	Neyðarrofi
+275	Gerð
+276	Miðgildi mínútna opið ([0] opin, elsta [1] mín.)
+277	Synjanir stefnu
+278	Æfingar og hermanir (ekki taldar að ofan)
+279	Endurteknar aðgerðir (markmið 0)
+280	Miðgildi tafar í straumi (p95 [0] sek., n=[1])
+281	Samþykki á eftir áætlun ([0] bíða, markmið [1] mín.)
+282	Miðgildi frá merki að forgangsröðun (p95 [0] mín., n=[1], [2] óflokkuð)
+283	Aðgerðir staðfestar óháð ([0]/[1])
+284	Tímabil: [0]. Kvittun ein og sér telst aldrei staðfesting. Gögn sem vantar eru sýnd sem ekki tiltæk.
+285	Mælikvarðar viðbragða
+286	Síðasti atburður
+287	Fulltrúar leggja til; föst stefna ákveður hvað er keyrt. Hver aðgerð sýnir samþykki sitt, kvittun og óháða athugun.
+288	Stig
+289	Bíður samþykkis
+290	Hafnað
+291	Útrunnið
+292	Mistókst
+293	Þarfnast handvirkrar afstemmingar
+294	Lagt til
+295	Í biðröð
+296	Í keyrslu
+297	Staðfesting í bið
+298	Staðfest
+299	Núverandi staða
+300	Hamur
+301	Hermun
+302	Skannanir og gagnasöfnun eru keyrðar. Aðrar aðgerðir eru áfram tillögur.
+303	Samþykktar aðgerðir eru keyrðar á völdum tækjum.
+304	Aðgerðir eru aðeins keyrðar gegn prófunarmillistykkjum. Engu er breytt á tækjunum þínum.
+305	Engar aðgerðir enn.
+306	Ekkert bíður samþykkis.
+307	Engin sönnunargögn úr rekstri hafa verið skráð enn.
+308	Engin tæki eða samþættingar senda gögn enn.
+309	Þetta keyrði ekki
+310	Séð
+311	Hvað gerðist
+312	Viðbrögð við DDoS
+313	Falsjákvætt og endurheimt
+314	Auðkenni, vefveiðar og grunsamleg umferð
+315	Spilliforrit og grunsamlegt niðurhal
+316	Sýnileiki nets og staða tækja
+317	Endurheimt eftir innbrot
+318	Gagnagíslatökuforrit eða grunur um innbrot
+319	Viðbragðsáætlun
+320	Viðbragðsáætlanir
+321	Útgáfa stefnu
+322	Uppsett útgáfa
+323	Einangrun með eldvegg
+324	Gögn móttekin
+325	Skrá fjarlægð
+326	Ferli stöðvað
+327	Staða veitu
+328	Skráð
+329	Skönnun lokið
+330	Hermt
+331	Úr sóttkví
+332	Í sóttkví
+333	Aðgerðir og kvittanir
+334	Skrá útkomu
+335	Skrá
+336	Getur brugðist við
+337	Uppruni
+338	tæki
+339	stjórnborð
+340	hermun
+341	Hefst þegar
+342	Uppfært
+343	Óháð athugun
+344	Bíður
+345	Takmörk safnskrár
+346	Dulkóðuð safnskrá
+347	Undanskilið
+348	Óaðgengilegt
+349	Tímamörk
+350	Of stórt
+351	Snið ekki stutt
+352	Hætt við
+353	Misst af
+354	Að hluta
+355	Tími rann út
+356	Full
+357	Eftir þörfum
+358	Fljótleg
+359	Endurheimt
+360	Áætluð
+361	Markviss
+362	Bæta við hluta
+363	safnskrár
+364	Eignir
+365	Stöðva þessa skönnun? Niðurstöður hingað til eru geymdar sem skönnun sem hætt var við.
+366	Ekki dekkað
+367	Greiningar
+368	Tæki eftir verndarstöðu
+369	Vél
+370	Á gjalddaga
+371	Síðustu sönnunargögn
+372	Vænt stýring
+373	Tillaga að lagfæringu
+374	Endurprófun
+375	Eign eða nethluti
+376	Opnar eyður
+377	Niðurstöður skannana á 30 dögum
+378	viðvörun að staðfestri hindrun
+379	varin tæki
+380	opinberir endapunktar með vörn hjá veitu
+381	atburður að viðvörun
+382	tæki með nýjar skilgreiningar
+383	tæki með fulla skönnun á 7 dögum
+384	opnar eyður ([0] á eftir áætlun, [1] lokað á 30 dögum)
+385	vaktaðir nethlutar
+386	staðfest sönn jákvæð
+387	skönnunum lokið
+388	Umfang og viðbrögð
+389	Síðasta fulla skönnun
+390	Síðasta fjarmæling
+391	Öll tæki og nethlutar innan umfangs, hvort þau eru varin og hvað á að laga næst.
+392	Sýnileiki nets
+393	Engin tæki skráð enn. Verndaðu tölvu undir Tæki.
+394	Engar opnar eyður.
+395	[0] opin
+396	á eftir áætlun
+397	p95 [0] sek.
+398	Möppur
+399	Möppur til að skanna, aðskildar með kommum
+400	Dulkóðun og eldveggur
+401	Dulkóðun disks [0], eldveggur [1]
+402	Endurheimt eftir atvik
+403	Athuga aftur núna
+404	Ekki endurprófað
+405	Endurprófun mistókst
+406	Staðfest lokað
+407	Tegund skönnunar
+408	Skannanir
+409	Nethluti
+410	Heiti nethluta
+411	Hefja skönnun
+412	Hafið
+413	Staða
+414	Skert
+415	Varið
+416	Óvarið
+417	Tæki eftir stöðu
+418	[0] óþekkt
+419	Enginn sýnileiki
+420	Vaktað
+421	Sýnileiki
+422	Engar greiningar sanna ekki vernd: athugaðu líka umfang og niðurstöður skannana.
+423	Tungumál
+424	Umfang þýðinga
+425	Engin eldri útgáfa
+426	Þema
+427	Dökkt
+428	Mikil birtuskil
+429	Ljóst
+430	Engar nýjar ógnir fundust í [0] skrám.
+431	[0] ógn
+432	[0] ógnir
+433	 fundust í [0] skrám. Farðu yfir þær undir Viðvaranir og Samþykki.
+434	Full skönnun
+435	Ekki tókst að verja þessa tölvu: [0]
+436	Þessi tölva er varin. Rauntímaskönnun er í gangi meðan Agentic Antivirus er opið.
+437	Skönnuninni lauk ekki: [0]
+438	Skannar…
+439	Skannar öll drif. Þetta getur tekið langan tíma.
+440	Skannar Niðurhal, Skjáborð og tímabundnar skrár…
+441	Ekki tókst að lesa [0] skrár.
+442	Skrá
+443	Vefslóð
+444	Samþykkja prófunargögn
+446	Aðgerðir
+447	Bæta við samþættingu
+448	Bæta við undanþágu
+449	Bæta við samþættingu
+450	Bæta við vikulegri fullri skönnun
+451	stjórnandi
+452	Auglýsingar
+453	Samþykki fyrir auglýsingum
+454	Þjónustur sem verða fyrir áhrifum
+455	viðvaranir síðustu 24 klukkustundir
+456	Leyfa
+457	Leyfa og skanna
+458	Stjórnandi þarf að tilgreina ástæðu. Undanþágan er skráð í endurskoðunarslóðina.
+459	Tölvupóstur
+460	Samþykkja endurkomu í rekstur
+461	Samþykki aðgerða
+462	Eign
+463	eignir undir virkri vörn
+464	eignir með viðvaranir á 24 klukkustundum
+465	Endurskoðunarslóð
+466	Sjálfvirk vernd heldur áfram á öllum tækjum. Þetta eru aðgerðirnar sem manneskja þarf að taka ákvörðun um.
+467	Aðgengi
+468	Tiltæk merki
+469	Afrit staðfest
+470	Loka á
+471	Sjálfgefið sendir fulltrúinn öryggisfjarmælingar og tætigildi skráa: heiti ferla og skipanalínur, skráarslóðir, lýsigögn nettenginga og greiningar. Innihaldi skráa er aðeins safnað ef fyrirtækið þitt kveikir á því.
+472	Afkastageta
+473	Flokkur
+474	Breytt
+475	Gjald
+476	Athuga
+477	veldu
+478	Veldu tæki
+480	Loka
+481	Aðskilið með kommum
+482	Tengiliður
+483	Stýring
+484	Umfang eftir verndarlagi
+485	alvarlegt
+486	afhending alvarlegra viðvarana (p95, 30 dagar)
+487	Ákvarðanir sem bíða
+488	Afþakka
+489	Skilgreiningar
+490	Lýstu því sem gerðist
+491	Atriði
+492	Nánar
+493	Greining
+494	Tæki sem á að veita leyfi
+495	fullvarin tæki
+496	einangruð tæki
+497	Tæki sem þarfnast athygli
+498	Stefna umferðar
+499	DNS-svæði
+500	niðurhalssíðunni
+501	Á ókeypis prufutímabilinu og í ógreiddum áskriftum sýnir stjórnborðið auglýsingar frá Google AdSense og snjallforritin auglýsingar frá Google AdMob, eftir að hafa beðið um samþykki þitt. Áskrifendur sjá 95% færri auglýsingar. Auglýsingar birtast aldrei á skjám fyrir samþykki, hindrun, ógnaviðvaranir, yfirferð sóttkvíar, innskráningu, greiðslu eða endurskoðun.
+502	Hver útgáfa býr til nýja undirritaða útgáfu. Tæki halda áfram að framfylgja síðustu staðfestu útgáfunni meðan þau eru ótengd.
+503	Sendu tölvupóst á þjónustuver á
+504	Endapunktur
+505	Equality Software Ltd rekur Agentic Antivirus. Þessi síða lýsir því hverju þjónustan safnar. Vörueigandi þarf að fara yfir hana fyrir birtingu.
+506	Hver aðgerð sem breytir tæki, aðgangi eða umferð fer í gegnum stefnuvélina og AEP-X-stjórnun. Samþykki nær yfir eina aðgerð, nákvæm markmið hennar, þetta fyrirtæki og fastan tíma.
+507	Hver upphleðsla er athuguð fyrir spilliforrit og raunverulega tegund. Skrár án staðfests skoðara eru vistaðar og hægt að sækja þær en þær eru ekki forskoðaðar.
+508	Undanþága
+509	Undanþágur
+510	Slóð möppu
+511	fyrir beiðnir um aðgang eða leiðréttingu.
+512	Eyður
+513	Sæktu fulltrúann fyrir Windows, Mac eða Linux af
+514	Farðu í Tæki, veldu Skrá tæki og keyrðu skipunina sem birtist á tölvunni sem þú vilt verja. Fulltrúinn byrjar að skanna um leið og hann fær undirritaða stefnu sína.
+515	Heilbrigði
+516	Saga
+517	Hýsilheiti
+518	Ég skil að tækin hætta að skanna og loka á ógnir eftir prufutímabilið þar til áskrift hefur verið greidd.
+519	Áhrif
+520	Flytja inn zip eða tar
+521	Atvik
+522	Hafa tungumálalíkanið með (ef fyrirtækið þitt virkjaði það)
+523	IP-tala
+524	Ganga í
+525	Ganga í fyrirtækið þitt
+526	Þekkt spilliforrit eru færð í sóttkví þar sem þau geta ekki keyrt. Ef þú telur að skrá hafi verið stöðvuð fyrir mistök skaltu opna Sóttkví og biðja um yfirferð. Stjórnandi ákveður og skráin kemur aðeins aftur eftir að ný skönnun sýnir að hún sé hrein.
+527	Tungumál án fullrar þýðingar birtast á ensku. Umfangið er mælt, ekki áætlað.
+528	Síðast breytt
+529	Lag
+530	Árangur lögmætra beiðna
+531	Leyfisreglur
+532	Tengill, ef hann er til
+533	Stjórnunarhýslar sem eru áfram aðgengilegir í einangrun
+534	Merkja sem falsjákvætt
+535	Þroski
+536	Vörn
+537	Heiti
+538	Heiti leyndarmálsins í leyndarmálageymslunni þinni, aldrei leyndarmálið sjálft
+539	Engar aðgerðir bíða.
+540	Engin opin atvik.
+541	Ekkert.
+542	Ekkert tilkynnt.
+543	ekki stillt
+544	Tilkynnt eftir
+545	af birtum auglýsingum
+546	Biðminni fyrir atburði án tengingar (MB)
+547	Á Android gerist þú áskrifandi í Agentic Antivirus-forritinu í gegnum Google Play. Á iPhone og iPad eru áskriftir í App Store ekki enn í boði. Greiðsla á vefnum er ekki enn í boði.
+548	Opið atvik
+549	opin atvik
+550	Opin atvik
+551	p95-biðtími
+552	greitt til
+553	Slóðamynstur
+554	Fólk
+555	Á hvert tæki
+556	Á hvern notanda (nær yfir öll tæki hans)
+557	Forskoðun
+558	Aðal
+560	Verja tæki
+561	Samskiptaregla
+562	Veita
+563	Viðvaranir veitu (24 klukkustundir)
+564	Opinberir endapunktar
+565	Birta útgáfu stefnu
+566	Birta undirritaða útgáfu
+567	Birt
+568	Fljótleg skönnun
+569	Upplestur og tal í texta nota innbyggða talaðgerðir vafrans. Við tökum ekki upp né vistum hljóð.
+570	Móttekið
+571	Laus geymslumiðill
+572	Fjarlægja
+573	Beðið um
+574	Beðið um af
+575	Varðveisla
+576	Endurkoma í rekstur
+577	Núna
+578	Áhætta
+579	Hlutverk
+580	Afturkalla
+581	Vista endapunkt
+582	Vista leyfisreglur
+583	Skanna
+584	Tímaáætlun (cron)
+585	Áætlaðar skannanir
+586	Tilvísun í leyndarmál
+587	Senda boð
+588	Senda skýrslu
+589	Senda tengil til endurstillingar
+590	Þjónusta
+591	Þjónustumarkmið
+594	Merki
+595	Stærð
+596	Eitthvað annað
+597	Raða
+598	Skref
+599	Að stöðva ferli, einangra tæki, endurheimta skrár, bæta við undanþágum og breyta umferðarreglum krefst samþykkis manneskju. Samþykki nær yfir eina aðgerð, nákvæm markmið hennar og takmarkaðan tíma. Ef eitthvað breytist þarf að samþykkja aftur.
+600	Gerast áskrifandi á þessu tæki með Google Play
+601	staða áskriftar
+603	Kerfi
+604	Markmið
+605	Gervigreindaraðstoðin
+606	Aðstoðin flokkar tengdar viðvaranir, telur upp það sem sást með tenglum í sönnunargögnin og merkir allt sem hún getur ekki sannað sem tilgátu. Hún getur lagt til aðgerðir en ekki samþykkt þær. Ef líkanið er ekki tiltækt halda skönnun, viðvaranir og handvirk viðbrögð áfram að virka.
+607	Þessi tölva
+608	Aðeins TLS, verður að vera á leyfislista fyrir útleið
+609	Umferðarflóð eru tekin upp af veitunni þinni. Hér gerir þú grein fyrir hverjum opinberum endapunkti, fylgist með viðvörunum veitu og samþykkir nýjar umferðartakmarkanir.
+610	Umferðartakmarkanir
+611	Þýtt
+612	Rusl
+613	dagar eftir af prufu
+614	Kveiktu á vernd til að skanna skrár á þessari tölvu og fylgjast með gagnagíslatöku og þjófnaði á innskráningarupplýsingum.
+615	ódekkað
+616	Afturkalla síðustu breytingu
+617	Notandi
+618	Staðfesta netfang
+619	bíður samþykkis
+620	Við sýnum auglýsingar frá Google AdSense á sumum síðum. Leyfa sérsniðnar auglýsingar?
+621	Webhook:
+622	Hvað tæki senda
+623	Hvað er þetta?
+624	Hvenær
+625	Þegar eitthvað er stöðvað
+626	Þegar prufutímabilinu lýkur án greiðslu
+627	Hver
+628	Þú getur eytt aðganginum þínum í prófílnum þínum. Hafðu samband við
+629	Nafnið þitt
+630	Fyrirtækið þitt fær 30 daga ókeypis prufu. Eftir það kostar það 4,99 £ á mánuði fyrir hvern notanda eða tæki.
+631	Fyrirtækið þitt ákveður hve lengi fjarmælingar og sönnunargögn eru geymd. Ekki er hægt að breyta eða eyða endurskoðunarfærslum.
+632	Réttindi þín
+633	Lesa fyrir
+634	Leyfa notkun hljóðnema fyrir upplestur í texta? Vafrinn vinnur úr hljóðinu og við vistum það ekki.
+635	Hljóðúttak
+636	Gera hlé
+637	Tónhæð
+638	Halda áfram
+639	Hraði
+640	Stöðva
+641	Engin rödd tiltæk fyrir þetta tungumál.
+642	Rödd
+643	Skráin var færð í sóttkví og getur ekki keyrt.
+644	Ógn var stöðvuð á þessu tæki.

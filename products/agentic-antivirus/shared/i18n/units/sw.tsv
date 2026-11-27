@@ -1,0 +1,637 @@
+0	Ruka hadi maudhui makuu
+1	Ongeza kizuizi cha kudumu
+2	Weka kizuizi cha trafiki
+3	Kusanya metadata ya kifaa
+4	Tenga kifaa kutoka kwenye mtandao
+5	Weka faili karantini
+6	Ondoa kifaa kwenye utengaji
+7	Rejesha faili lililo karantini
+8	Ondoa mtumiaji kwenye akaunti kila mahali
+9	Batilisha kizuizi cha trafiki
+10	Batilisha sasisho
+11	Changanua vifaa
+12	Simamisha akaunti ya mtumiaji
+13	Simamisha mchakato
+14	Idhinisha
+15	Kataa
+16	Tuma kwa vifaa
+17	Idhini inaisha [0]
+18	Imependekezwa na msaidizi wa AI
+19	Tangazo
+20	Kitendo
+21	Mawakala
+22	Uliza
+23	Uliza msaidizi wa usalama
+24	Majibu yanatoka kwenye vifaa vyako, matukio yaliyo wazi na mapengo. Msaidizi hawezi kubadilisha chochote.
+25	Kulingana na
+26	Dai [0] lisilo na ushahidi liliondolewa
+27	Madai [0] yasiyo na ushahidi yaliondolewa
+29	Muundo unaojiendesha wenyewe
+30	Kanuni (bila muundo)
+31	Andaa mpango wa kurekebisha
+32	Kila hatua ni pendekezo. Hakuna kinachoendeshwa hadi mtu akiidhinishe.
+33	Swali
+34	Kwa mfano: ni vifaa gani vinahitaji uangalizi?
+35	Ukali unaopendekezwa
+36	Muhtasari
+37	Walengwa
+38	Fupisha tukio hili
+39	Kwa nini
+40	Imegunduliwa
+41	Ripoti jambo la kutiliwa shaka
+42	Kanuni
+43	Ukali
+44	Tahadhari
+46	Ongeza faili
+47	Ongeza folda
+48	Ongeza picha
+49	Kiambatisho [0]
+50	Viambatisho [0]
+51	Viambatisho
+52	Piga picha
+53	Ufikiaji wa kamera haukuruhusiwa. Uruhusu kwenye kivinjari chako, au tumia programu ya kamera ya kifaa chako.
+54	Onyesho la kamera
+55	Kivinjari hiki hakiwezi kufungua kamera hapa.
+56	Nasa
+57	Funga msaidizi
+58	Faili hizi ni nini, na ni salama?
+59	Faili
+60	Uliza kuhusu usalama wako, au ambatisha faili, folda, picha au picha ya kamera. Kila kiambatisho huchanganuliwa kwanza na hakuna kinachohifadhiwa.
+61	Picha [0] ilikuwa
+62	Picha [0] zilikuwa
+63	 zimeelezwa na muundo.
+64	Kwa mfano: je, upakuaji huu ni salama?
+65	Maandishi na picha safi zinaweza kutumwa kwa muundo wa AI ambao shirika lako limewasha. Faili hasidi hazitumwi kamwe.
+66	Faili [0] haikuongezwa
+67	Faili [0] hazikuongezwa
+68	: hadi faili [0], MB [1] kila moja na MB [2] kwa jumla.
+69	Ondoa [0]
+70	Changanua na uulize
+71	Matokeo ya uchanganuzi
+72	Aina
+73	Tumia kamera ya kifaa
+74	Matokeo
+75	Hakuna programu hasidi inayojulikana
+76	Hasidi
+77	Haijachanganuliwa
+78	Mnyororo wa ukaguzi umevunjika kwenye ingizo [0].
+79	Mnyororo wa ukaguzi uko kamili: maingizo [0] yamethibitishwa.
+80	Barua pepe
+81	Umesahau nenosiri?
+82	Ingia kwa Google
+83	Kuingia kwa Google hakukufanya kazi. Jaribu tena, au tumia barua pepe na nenosiri lako.
+84	Ingia
+85	Toka
+86	Nenosiri jipya
+87	au
+88	Shirika
+89	Nenosiri
+90	Nenosiri limebadilishwa. Ingia kwa nenosiri lako jipya.
+91	Angalau herufi 12.
+92	Fungua akaunti
+93	Tuma kiungo tena
+94	Ikiwa akaunti hiyo bado inahitaji kuthibitishwa, kiungo kipya kinakuja. Angalia pia folda yako ya barua taka.
+95	Weka upya nenosiri
+96	Ikiwa akaunti inatumia anwani hiyo, tumetuma kiungo cha kuweka upya. Kinafanya kazi kwa saa moja.
+97	Thibitisha anwani yako ya barua pepe kabla ya kuingia. Fungua kiungo tulichotuma kwa [0].
+98	Barua pepe imethibitishwa. Unaweza kuingia sasa.
+99	Kiungo hiki kimeisha muda au kimeshatumika. Ingia ili kupata kipya.
+100	Angalia barua pepe yako ili kuthibitisha anwani yako.
+101	Kujisajili hupunguza matangazo kwa 95%.
+102	Kipindi chako cha majaribio kimeisha.
+103	Umejisajili hadi [0]
+104	Kila kitu kibaki bila malipo pamoja na matangazo yote
+105	Simamisha kila kitu, pamoja na ulinzi wa vifaa, hadi mtu alipe
+106	Dashibodi inahitaji usajili; vifaa vinabaki vimelindwa
+107	£4.99 kwa mwezi
+108	Jisajili
+109	Majaribio ya bure:
+110	Imebaki siku [0]
+111	Zimebaki siku [0]
+112	Ghairi
+113	Futa
+114	Hitilafu fulani imetokea.
+115	Hamisha
+116	Inapakia…
+117	Haipatikani
+118	Kamwe
+119	Inayofuata
+120	hapana
+121	Hakuna cha kuonyesha.
+122	imezimwa
+123	imewashwa
+124	Iliyotangulia
+125	Onyesha upya
+126	Hifadhi
+127	Tafuta
+128	Uigaji (data ya majaribio)
+129	Hali
+130	Haipatikani
+131	Haijulikani
+132	Imesasishwa [0]
+133	Inafanya kazi…
+134	ndiyo
+135	Tahadhari [0] ndani ya saa 24
+136	Tahadhari [0] ndani ya saa 24
+137	Kifaa [0]
+138	Vifaa [0]
+139	Data kufikia [0]
+140	Tukio [0] lililo wazi
+141	Matukio [0] yaliyo wazi
+142	Idhini [0] inasubiri
+143	Idhini [0] zinasubiri
+144	imethibitishwa
+145	inashukiwa
+146	Sajili kifaa
+147	Kifaa
+148	Hakiripoti
+149	Sera iliyopitwa na wakati
+150	Kihisi kimezimwa
+151	Ufafanuzi uliopitwa na wakati
+152	Matatizo
+153	Ilionekana mara ya mwisho
+154	Mfumo wa uendeshaji
+155	Sera
+156	Endesha kwenye kifaa ndani ya saa 24 (matumizi moja):
+157	Ulinzi
+158	Nakili
+159	Pakua
+160	Hamisha
+161	Folda mpya
+162	Badilisha jina
+163	Rejesha
+164	Hamishia kwenye tupio
+165	Pakia
+166	Usaidizi
+167	Maandishi [0] kwenye ukurasa huu yametafsiriwa na mashine na bado hayajakaguliwa.
+168	Maandishi [0] katika lugha hii yametafsiriwa na mashine na bado hayajakaguliwa.
+169	Lugha hii bado haijatafsiriwa, kwa hivyo Kiingereza kinaonyeshwa.
+170	imeidhinishwa
+171	Mambo yaliyoonekana
+172	Dhana (hazijathibitishwa)
+173	Dhana, uhakika [0]: [1]
+174	Endesha uchunguzi
+175	Ushahidi unaokosekana
+176	Inakosekana: [0]
+177	Soma kwa sauti
+178	Vitendo vinavyopendekezwa
+179	Ratiba ya ushahidi
+180	webhook inayoingia
+181	Ishara kutoka kwa mtoa huduma wako wa utambulisho, DNS, ngome na zana nyingine. Miunganisho mipya huanza ikiwa haipatikani; ni adapta ya mtoa huduma iliyopita jaribio lake la mkataba pekee inayoweza kuwekwa alama kuwa hai. Data ya majaribio huwekwa lebo ya uigaji kila mahali inapoonekana.
+182	Haijaunganishwa (kishikilia nafasi)
+183	Data ya majaribio pekee
+184	Haipatikani
+185	Hai (imethibitishwa)
+186	Siri (inaonyeshwa mara moja):
+187	Idhini
+188	Tahadhari
+189	Ukaguzi
+190	Usajili
+191	Dashibodi
+192	DDoS na upatikanaji
+193	Vifaa
+194	Faili
+195	Matukio
+196	Miunganisho
+197	Sera
+198	Faragha
+199	Karantini
+200	Mwitikio
+201	Usalama
+202	Mipangilio
+203	Weka programu hasidi zinazojulikana karantini kiotomatiki
+204	Fuatilia tabia ya kutiliwa shaka
+205	Zuia hati za kutiliwa shaka
+206	Kusanya maudhui ya faili kwa uchunguzi (imezimwa kwa chaguomsingi)
+207	Ruhusu utengaji wa mtandao
+208	Changanua faili zinapofunguliwa au kuandikwa
+209	Changanua vipakuliwa
+210	Changanua programu zinapoanza
+211	Linda wakala dhidi ya mabadiliko
+212	Onya kuhusu viungo hasidi vinavyojulikana
+213	Sababu
+214	Omba ukaguzi
+215	Rejesha baada ya uchanganuzi mpya
+216	muda wa kati hadi uondoaji uliothibitishwa (n=[0], haijatatuliwa [1])
+217	marekebisho yaliyopita jaribio la marudio
+218	kujirudia baada ya urejeshaji
+219	uondoaji wa virusi uliothibitishwa
+220	kurudi salama kwenye huduma
+221	uchanganuzi wa urejeshaji umekamilika
+222	Matokeo ya karantini pekee ([0]) na vifaa vilivyowekwa upya ([1]) huhesabiwa kando; karantini peke yake haihesabiwi kamwe kuwa uondoaji.
+223	saa [0]
+224	dak [0]
+225	sek [0]
+226	Inasubiri idhini
+227	Ushahidi wa uzalishaji
+228	Rekodi kilichothibitishwa katika uzalishaji, kwenye rasilimali zipi, kwa toleo lipi. Maingizo hayawezi kuhaririwa.
+229	Toleo
+230	Badilisha hali
+231	hakuna ushahidi
+232	imeshindwa
+233	imepita
+234	inasubiri
+235	Angalia maendeleo ya mwongozo
+236	Vifaa vinavyoweza kujibu
+237	Vifaa vyote
+238	Kifaa [0] cha majaribio
+239	Vifaa [0] vya majaribio
+240	Kamili
+241	Kamili wakati
+242	Zoezi
+243	Tazama
+244	Jibu
+245	Ufikiaji
+246	[0] zimeonekana, [1] zinaweza kujibu
+247	Data
+248	Umri wa data
+249	Hai
+250	Data ya majaribio
+251	haijatekelezwa
+252	risiti
+253	inaendelea
+254	haijulikani
+255	Tuma
+256	Ushahidi
+257	Kiliendeshwa
+258	Imepitwa na wakati
+259	Mitiririko ya data
+260	Toleo au muhtasari
+261	Mazingira
+262	Matokeo
+263	Mmiliki
+264	Sharti
+265	Rasilimali au kundi
+266	Onyesha
+267	Zote
+268	Haijakamilika
+269	Imewashwa kwa huduma nzima
+270	Imewashwa kwa shirika hili
+271	Simamisha kila kitendo kipya cha mwitikio kwa shirika hili? Ulinzi na uchanganuzi vinaendelea kufanya kazi.
+272	Ruhusu vitendo vya mwitikio tena
+273	Simamisha vitendo vyote vya mwitikio
+274	Swichi ya dharura
+275	Aina
+276	Dakika za kati wazi ([0] wazi, la zamani zaidi dak [1])
+277	Makataa ya sera
+278	Mazoezi na uigaji (havihesabiwi hapo juu)
+279	Vitendo vilivyorudiwa (lengo 0)
+280	Ucheleweshaji wa kati wa mtiririko (p95 sek [0], n=[1])
+281	Idhini zilizochelewa ([0] zinasubiri, lengo dak [1])
+282	Muda wa kati kutoka ishara hadi uchambuzi (p95 dak [0], n=[1], [2] hazijachambuliwa)
+283	Vitendo vilivyothibitishwa kwa kujitegemea ([0]/[1])
+284	Kipindi: [0]. Risiti peke yake haihesabiwi kamwe kuwa imethibitishwa. Data inayokosekana huonyeshwa kuwa haipatikani.
+285	Vipimo vya mwitikio
+286	Tukio la mwisho
+287	Mawakala hupendekeza; sera thabiti huamua kinachoendeshwa. Kila kitendo kinaonyesha idhini yake, risiti na ukaguzi huru.
+288	Hatua
+289	Inasubiri idhini
+290	Imekataliwa
+291	Imeisha muda
+292	Imeshindwa
+293	Inahitaji upatanisho wa mikono
+294	Imependekezwa
+295	Iko kwenye foleni
+296	Inaendeshwa
+297	Uthibitishaji unasubiri
+298	Imethibitishwa
+299	Hali ya sasa
+300	Hali
+301	Uigaji
+302	Uchanganuzi na ukusanyaji wa data huendeshwa. Vitendo vingine vinabaki mapendekezo.
+303	Vitendo vilivyoidhinishwa huendeshwa kwenye vifaa vilivyochaguliwa.
+304	Vitendo huendeshwa dhidi ya adapta za majaribio pekee. Hakuna kinachobadilika kwenye vifaa vyako.
+305	Bado hakuna vitendo.
+306	Hakuna kinachosubiri idhini.
+307	Bado hakuna ushahidi wa uzalishaji uliorekodiwa.
+308	Bado hakuna vifaa wala miunganisho inayotuma data.
+309	Hakikuendeshwa
+310	Kimeonekana
+311	Kilichotokea
+312	Mwitikio wa DDoS
+313	Chanya ya uongo na urejeshaji
+314	Utambulisho, hadaa na trafiki ya kutiliwa shaka
+315	Programu hasidi na vipakuliwa vya kutiliwa shaka
+316	Mwonekano wa mtandao na hali ya kifaa
+317	Urejeshaji baada ya kuathiriwa
+318	Ransomware au kuathiriwa kunakoshukiwa
+319	Mwongozo
+320	Miongozo
+321	Toleo la sera
+322	Toleo lililosakinishwa
+323	Utengaji wa ngome
+324	Data imepokelewa
+325	Faili imeondolewa
+326	Mchakato umesimamishwa
+327	Hali ya mtoa huduma
+328	Imerekodiwa
+329	Uchanganuzi umekamilika
+330	Imeigwa
+331	Nje ya karantini
+332	Ndani ya karantini
+333	Vitendo na risiti
+334	Rekodi matokeo
+335	Rekodi
+336	Kinaweza kujibu
+337	Chanzo
+338	kifaa
+339	dashibodi
+340	uigaji
+341	Huanza wakati
+342	Imesasishwa
+343	Ukaguzi huru
+344	Inasubiri
+345	Kikomo cha kumbukumbu
+346	Kumbukumbu iliyosimbwa
+347	Imetengwa
+348	Haifikiki
+349	Kikomo cha muda
+350	Kubwa mno
+351	Muundo usiotumika
+352	Imeghairiwa
+353	Imekosekana
+354	Sehemu
+355	Muda umeisha
+356	Kamili
+357	Unapohitajika
+358	Haraka
+359	Urejeshaji
+360	Imeratibiwa
+361	Inayolengwa
+362	Ongeza sehemu
+363	kumbukumbu
+364	Rasilimali
+365	Simamisha uchanganuzi huu? Matokeo ya hadi sasa yanahifadhiwa kama uchanganuzi ulioghairiwa.
+366	Haijashughulikiwa
+367	Ugunduzi
+368	Vifaa kulingana na hali ya ulinzi
+369	Injini
+370	Inadaiwa
+371	Ushahidi wa mwisho
+372	Udhibiti unaotarajiwa
+373	Marekebisho yanayopendekezwa
+374	Jaribu tena
+375	Rasilimali au sehemu
+376	Mapengo yaliyo wazi
+377	Matokeo ya uchanganuzi katika siku 30
+378	tahadhari hadi udhibiti uliothibitishwa
+379	vifaa vilivyolindwa
+380	sehemu za mwisho za umma zenye upunguzaji wa juu
+381	tukio hadi tahadhari
+382	vifaa vyenye ufafanuzi wa sasa
+383	vifaa vyenye uchanganuzi kamili ndani ya siku 7
+384	mapengo yaliyo wazi ([0] yamechelewa, [1] yamefungwa ndani ya siku 30)
+385	sehemu za mtandao zinazofuatiliwa
+386	chanya za kweli zilizothibitishwa
+387	uchanganuzi uliokamilika
+388	Ufikiaji na mwitikio
+389	Uchanganuzi kamili wa mwisho
+390	Telemetria ya mwisho
+391	Kila kifaa na sehemu ya mtandao iliyo ndani ya wigo, ikiwa imelindwa, na nini cha kurekebisha baadaye.
+392	Mwonekano wa mtandao
+393	Bado hakuna vifaa vilivyosajiliwa. Linda kompyuta kutoka Vifaa.
+394	Hakuna mapengo yaliyo wazi.
+395	[0] wazi
+396	imechelewa
+397	p95 sek [0]
+398	Folda
+399	Folda za kuchanganua, zikitenganishwa kwa koma
+400	Usimbaji fiche na ngome
+401	Usimbaji fiche wa diski [0], ngome [1]
+402	Urejeshaji baada ya matukio
+403	Angalia tena sasa
+404	Haijajaribiwa tena
+405	Jaribio la marudio limeshindwa
+406	Imefungwa na kuthibitishwa
+407	Aina ya uchanganuzi
+408	Uchanganuzi
+409	Sehemu
+410	Jina la sehemu
+411	Anza uchanganuzi
+412	Imeanza
+413	Hali
+414	Imedhoofika
+415	Imelindwa
+416	Haijalindwa
+417	Vifaa kulingana na hali
+418	[0] haijulikani
+419	Hakuna mwonekano
+420	Inafuatiliwa
+421	Mwonekano
+422	Kutokuwepo kwa ugunduzi hakuthibitishi ulinzi: angalia pia ufikiaji na matokeo ya uchanganuzi.
+423	Lugha
+424	Ufikiaji wa tafsiri
+425	Hakuna toleo la awali
+426	Mandhari
+427	Giza
+428	Utofautishaji wa juu
+429	Mwanga
+430	Hakuna vitisho vipya vilivyopatikana katika faili [0].
+431	Kitisho [0]
+432	Vitisho [0]
+433	 vimepatikana katika faili [0]. Tazama Tahadhari na Idhini ili kuvikagua.
+434	Uchanganuzi kamili
+435	Haikuweza kulinda kompyuta hii: [0]
+436	Kompyuta hii imelindwa. Uchanganuzi wa wakati halisi huendeshwa wakati Agentic Antivirus iko wazi.
+437	Uchanganuzi haukukamilika: [0]
+438	Inachanganua…
+439	Inachanganua kila hifadhi. Hii inaweza kuchukua muda mrefu.
+440	Inachanganua Vipakuliwa, Eneo-kazi na faili za muda…
+441	Faili [0] hazikuweza kusomwa.
+442	Faili
+443	Kiungo cha tovuti
+444	Kubali data ya majaribio
+446	Vitendo
+447	Ongeza muunganisho
+448	Ongeza kizuizi
+449	Ongeza muunganisho
+450	Ongeza uchanganuzi kamili wa kila wiki
+451	msimamizi
+452	Utangazaji
+453	Idhini ya matangazo
+454	Huduma zilizoathiriwa
+455	tahadhari katika saa 24 zilizopita
+456	Ruhusu
+457	Ruhusu na uchanganue
+458	Msimamizi lazima atoe sababu. Kizuizi kinarekodiwa kwenye kumbukumbu ya ukaguzi.
+459	Barua pepe
+460	Idhinisha kurudi kwenye huduma
+461	Kuidhinisha vitendo
+462	Rasilimali
+463	rasilimali zilizo chini ya upunguzaji unaoendelea
+464	rasilimali zenye tahadhari ndani ya saa 24
+465	Kumbukumbu ya ukaguzi
+466	Ulinzi wa kiotomatiki unaendelea kufanya kazi kwenye kila kifaa. Hivi ndivyo vitendo vinavyohitaji mtu kuamua.
+467	Upatikanaji
+468	Ishara zinazopatikana
+469	Nakala rudufu imethibitishwa
+470	Zuia
+471	Kwa chaguomsingi wakala hutuma telemetria ya usalama na hashi za faili: majina ya michakato na mistari ya amri, njia za faili, metadata ya miunganisho ya mtandao, na ugunduzi. Maudhui ya faili hukusanywa tu ikiwa shirika lako litawasha hilo.
+472	Uwezo
+473	Kategoria
+474	Imebadilishwa
+475	Malipo
+476	Angalia
+477	chagua
+478	Chagua kifaa
+480	Funga
+481	Zikitenganishwa kwa koma
+482	Mawasiliano
+483	Udhibiti
+484	Ufikiaji kwa safu ya ulinzi
+485	muhimu sana
+486	uwasilishaji wa tahadhari muhimu (p95, siku 30)
+487	Maamuzi yanayosubiri
+488	Kataa
+489	Ufafanuzi
+490	Eleza kilichotokea
+491	Maelezo
+492	Maelezo zaidi
+493	Ugunduzi
+494	Kifaa cha kupewa leseni
+495	vifaa vilivyolindwa kikamilifu
+496	vifaa vilivyotengwa
+497	Vifaa vinavyohitaji uangalizi
+498	Mwelekeo
+499	Eneo la DNS
+500	ukurasa wa kupakua
+501	Wakati wa majaribio ya bure, na kwenye mipango isiyolipiwa, dashibodi inaonyesha matangazo ya Google AdSense na programu za simu zinaonyesha matangazo ya Google AdMob, baada ya kuomba idhini yako. Waliojisajili huona matangazo machache kwa 95%. Matangazo hayaonekani kamwe kwenye skrini za idhini, udhibiti, maonyo ya vitisho, ukaguzi wa karantini, kuingia, malipo au ukaguzi.
+502	Kila uchapishaji huunda toleo jipya lililotiwa sahihi. Vifaa vinaendelea kutekeleza toleo la mwisho lililothibitishwa vikiwa nje ya mtandao.
+503	Usaidizi kwa barua pepe kupitia
+504	Sehemu ya mwisho
+505	Equality Software Ltd inaendesha Agentic Antivirus. Ukurasa huu unaeleza kile ambacho huduma inakusanya. Lazima ukaguliwe na mmiliki wa bidhaa kabla ya kuchapishwa.
+506	Kila kitendo kinachobadilisha kifaa, akaunti au trafiki hupitia injini ya sera na usimamizi wa AEP-X. Idhini inashughulikia kitendo kimoja, walengwa wake kamili, shirika hili, na muda maalum.
+507	Kila upakiaji hukaguliwa kwa programu hasidi na aina yake halisi. Faili zisizo na kitazamaji kilichothibitishwa huhifadhiwa na zinaweza kupakuliwa lakini hazionyeshwi awali.
+508	Isipokuwa
+509	Vizuizi
+510	Njia ya folda
+511	kwa maombi ya ufikiaji au marekebisho.
+512	Mapengo
+513	Pata wakala kwa Windows, Mac au Linux kutoka kwenye
+514	Nenda kwenye Vifaa, chagua Sajili kifaa, na uendeshe amri inayoonyeshwa kwenye kompyuta unayotaka kulinda. Wakala huanza kuchanganua mara tu anapopokea sera yake iliyotiwa sahihi.
+515	Afya
+516	Historia
+517	Jina la mwenyeji
+518	Ninaelewa kuwa vifaa vitaacha kuchanganua na kuzuia vitisho baada ya majaribio hadi usajili ulipiwe.
+519	Athari
+520	Ingiza zip au tar
+521	Tukio
+522	Jumuisha muundo wa lugha (ikiwa shirika lako limewasha mmoja)
+523	Anwani ya IP
+524	Jiunge
+525	Jiunge na shirika lako
+526	Programu hasidi zinazojulikana huhamishiwa karantini, ambako haziwezi kuendeshwa. Ikiwa unadhani faili ilizuiwa kimakosa, fungua Karantini na uombe ukaguzi. Msimamizi anaamua, na faili inarudi tu baada ya uchanganuzi mpya kuithibitisha kuwa safi.
+527	Lugha zisizo na tafsiri kamili hutumia Kiingereza. Ufikiaji hupimwa, haukadiriwi.
+528	Ilibadilishwa mara ya mwisho
+529	Safu
+530	Mafanikio ya maombi halali
+531	Kanuni za leseni
+532	Kiungo, ikiwa kipo
+533	Wapangishi wa usimamizi wanaobaki kufikiwa wakati wa utengaji
+534	Weka alama ya chanya ya uongo
+535	Ukomavu
+536	Upunguzaji
+537	Jina
+538	Jina la siri katika hifadhi yako ya siri, kamwe si siri yenyewe
+539	Hakuna vitendo vinavyosubiri.
+540	Hakuna matukio yaliyo wazi.
+541	Hakuna.
+542	Hakuna kilichoripotiwa.
+543	haijawekwa
+544	Imearifiwa baada ya
+545	ya matangazo yaliyoonyeshwa
+546	Hifadhi ya matukio nje ya mtandao (MB)
+547	Kwenye Android, jisajili katika programu ya Agentic Antivirus kupitia Google Play. Kwenye iPhone na iPad, usajili wa App Store bado haupatikani. Kulipa kwenye wavuti bado hakupatikani.
+548	Tukio lililo wazi
+549	matukio yaliyo wazi
+550	Matukio yaliyo wazi
+551	Ucheleweshaji wa p95
+552	imelipiwa hadi
+553	Mchoro wa njia
+554	Watu
+555	Kwa kila kifaa
+556	Kwa kila mtumiaji (inashughulikia vifaa vyake vyote)
+557	Onyesho la awali
+558	Msingi
+560	Linda kifaa
+561	Itifaki
+562	Mtoa huduma
+563	Tahadhari za mtoa huduma (saa 24)
+564	Sehemu za mwisho za umma
+565	Chapisha toleo la sera
+566	Chapisha toleo lililotiwa sahihi
+567	Imechapishwa
+568	Uchanganuzi wa haraka
+569	Kusoma kwa sauti na kuamuru hutumia vipengele vya sauti vilivyojengwa ndani ya kivinjari chako. Hatunasi wala kuhifadhi sauti.
+570	Imepokelewa
+571	Vyombo vya kuhifadhi vinavyoondolewa
+572	Ondoa
+573	Imeombwa
+574	Imeombwa na
+575	Uhifadhi
+576	Rudi kwenye huduma
+577	Sasa hivi
+578	Hatari
+579	Jukumu
+580	Batilisha
+581	Hifadhi sehemu ya mwisho
+582	Hifadhi kanuni za leseni
+583	Changanua
+584	Ratiba (cron)
+585	Uchanganuzi ulioratibiwa
+586	Marejeleo ya siri
+587	Tuma mwaliko
+588	Tuma ripoti
+589	Tuma kiungo cha kuweka upya
+590	Huduma
+591	Malengo ya huduma
+594	Ishara
+595	Ukubwa
+596	Kitu kingine
+597	Panga
+598	Hatua
+599	Kusimamisha michakato, kutenga vifaa, kurejesha faili, kuongeza vizuizi na kubadilisha kanuni za trafiki kunahitaji mtu kuidhinisha. Idhini inashughulikia kitendo kimoja, walengwa wake kamili na muda mfupi. Kitu chochote kikibadilika, idhinisha tena.
+600	Sajili kifaa hiki kwa Google Play
+601	hali ya usajili
+603	Mfumo
+604	Lengo
+605	Msaidizi wa AI
+606	Msaidizi huweka pamoja tahadhari zinazohusiana, huorodhesha kilichoonekana pamoja na viungo vya ushahidi, na huweka alama ya dhana kwa chochote asichoweza kuthibitisha. Anaweza kupendekeza vitendo lakini hawezi kuviidhinisha. Ikiwa muundo haupatikani, uchanganuzi, tahadhari na mwitikio wa mikono vinaendelea kufanya kazi.
+607	Kompyuta hii
+608	TLS pekee, lazima iwe kwenye orodha ya kuruhusiwa ya kutoka
+609	Mafuriko ya trafiki hufyonzwa na mtoa huduma wako wa juu. Hapa unafuatilia kila sehemu ya mwisho ya umma, unatazama tahadhari za mtoa huduma, na unaidhinisha vizuizi vipya vya trafiki.
+610	Vizuizi vya trafiki
+611	Imetafsiriwa
+612	Tupio
+613	siku za majaribio zilizobaki
+614	Washa ulinzi ili kuchanganua faili kwenye kompyuta hii na kufuatilia ransomware na wizi wa vitambulisho.
+615	haijashughulikiwa
+616	Tendua badiliko la mwisho
+617	Mtumiaji
+618	Thibitisha barua pepe
+619	inasubiri idhini
+620	Tunaonyesha matangazo kutoka Google AdSense kwenye baadhi ya kurasa. Ruhusu matangazo yanayokufaa?
+621	Webhook:
+622	Kile vifaa vinatuma
+623	Ni nini?
+624	Lini
+625	Kitu kinapozuiwa
+626	Majaribio yanapoisha bila malipo
+627	Nani
+628	Unaweza kufuta akaunti yako kutoka kwenye wasifu wako. Wasiliana na
+629	Jina lako
+630	Shirika lako linapata majaribio ya bure ya siku 30. Baada ya hapo inagharimu £4.99 kwa mwezi kwa kila mtumiaji au kifaa.
+631	Shirika lako huamua muda ambao telemetria na ushahidi huhifadhiwa. Rekodi za ukaguzi haziwezi kuhaririwa wala kufutwa.
+632	Haki zako
+633	Amuru
+634	Ruhusu matumizi ya maikrofoni kwa kuamuru? Sauti huchakatwa na kivinjari chako na haihifadhiwi nasi.
+635	Utoaji wa sauti
+636	Sitisha
+637	Kiwango cha sauti
+638	Endelea
+639	Kasi
+640	Simamisha
+641	Hakuna sauti inayopatikana kwa lugha hii.
+642	Sauti
+643	Faili ilihamishiwa karantini na haiwezi kuendeshwa.
+644	Kitisho kimezuiwa kwenye kifaa hiki.

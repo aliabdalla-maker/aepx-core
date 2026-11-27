@@ -1,0 +1,637 @@
+0	Ugrás a fő tartalomra
+1	Állandó kivétel hozzáadása
+2	Forgalomkorlátozás alkalmazása
+3	Eszköz-metaadatok gyűjtése
+4	Eszköz leválasztása a hálózatról
+5	Fájl karanténba helyezése
+6	Eszköz feloldása az elkülönítés alól
+7	Karanténba helyezett fájl visszaállítása
+8	Felhasználó kijelentkeztetése mindenhonnan
+9	Forgalomkorlátozás visszavonása
+10	Frissítés visszavonása
+11	Eszközök vizsgálata
+12	Felhasználói fiók felfüggesztése
+13	Folyamat leállítása
+14	Jóváhagyás
+15	Elutasítás
+16	Küldés az eszközökre
+17	A jóváhagyás lejár: [0]
+18	Az AI-asszisztens javaslata
+19	Hirdetés
+20	Művelet
+21	Ügynökök
+22	Kérdezés
+23	Kérdezze a biztonsági asszisztenst
+24	A válaszok az eszközeiből, a nyitott incidensekből és a hiányosságokból származnak. Az asszisztens semmit sem tud módosítani.
+25	Alapja
+26	[0] bizonyíték nélküli állítás eltávolítva
+27	[0] bizonyíték nélküli állítás eltávolítva
+29	Saját üzemeltetésű modell
+30	Szabályok (modell nélkül)
+31	Helyreállítási terv készítése
+32	Minden lépés csak javaslat. Semmi sem fut, amíg valaki jóvá nem hagyja.
+33	Kérdés
+34	Például: mely eszközök igényelnek figyelmet?
+35	Javasolt súlyosság
+36	Összefoglalás
+37	Célpontok
+38	Az incidens összefoglalása
+39	Miért
+40	Észlelve
+41	Gyanús dolog bejelentése
+42	Szabály
+43	Súlyosság
+44	Riasztás
+46	Fájlok hozzáadása
+47	Mappa hozzáadása
+48	Képek hozzáadása
+49	[0] melléklet
+50	[0] melléklet
+51	Mellékletek
+52	Fénykép készítése
+53	A kamera-hozzáférés nincs engedélyezve. Engedélyezze a böngészőben, vagy használja az eszköz kameraalkalmazását.
+54	Kamera előnézete
+55	Ez a böngésző itt nem tudja megnyitni a kamerát.
+56	Rögzítés
+57	Az asszisztens bezárása
+58	Mik ezek a fájlok, és biztonságosak?
+59	Fájl
+60	Kérdezzen a biztonságáról, vagy csatoljon fájlokat, mappát, képeket vagy kamerafotót. Minden mellékletet először megvizsgálunk, és semmit sem tárolunk.
+61	A modell [0] képet
+62	A modell [0] képet
+63	 írt le.
+64	Például: biztonságos ez a letöltés?
+65	A tiszta szöveg és a képek elküldhetők a szervezete által engedélyezett AI-modellnek. A kártékony fájlok soha.
+66	[0] fájl hozzáadása nem sikerült
+67	[0] fájl hozzáadása nem sikerült
+68	: legfeljebb [0] fájl, egyenként [1] MB és összesen [2] MB.
+69	[0] eltávolítása
+70	Vizsgálat és kérdezés
+71	Vizsgálati eredmények
+72	Típus
+73	Az eszköz kamerájának használata
+74	Eredmény
+75	Nincs ismert kártevő
+76	Kártékony
+77	Nincs vizsgálva
+78	A naplólánc megszakadt a(z) [0]. bejegyzésnél.
+79	A naplólánc ép: [0] bejegyzés ellenőrizve.
+80	E-mail
+81	Elfelejtette a jelszavát?
+82	Bejelentkezés Google-fiókkal
+83	A Google-bejelentkezés nem sikerült. Próbálja újra, vagy használja az e-mail-címét és jelszavát.
+84	Bejelentkezés
+85	Kijelentkezés
+86	Új jelszó
+87	vagy
+88	Szervezet
+89	Jelszó
+90	A jelszó megváltozott. Jelentkezzen be az új jelszavával.
+91	Legalább 12 karakter.
+92	Fiók létrehozása
+93	Link újraküldése
+94	Ha a fiók még megerősítésre vár, úton van egy új link. Nézze meg a levélszemét mappát is.
+95	Jelszó visszaállítása
+96	Ha ezt a címet használja egy fiók, elküldtük a visszaállítási linket. Egy óráig érvényes.
+97	Bejelentkezés előtt erősítse meg e-mail-címét. Nyissa meg a(z) [0] címre küldött linket.
+98	Az e-mail-cím ellenőrizve. Most már bejelentkezhet.
+99	Ez a link lejárt, vagy már felhasználták. Jelentkezzen be, hogy újat kapjon.
+100	Nézze meg az e-mailjeit a cím ellenőrzéséhez.
+101	Az előfizetés 95%-kal csökkenti a hirdetéseket.
+102	A próbaidőszak véget ért.
+103	Előfizetve eddig: [0]
+104	Minden ingyenes, teljes hirdetésmegjelenítéssel
+105	Minden leállítása, az eszközvédelmet is beleértve, amíg valaki nem fizet
+106	A konzolhoz előfizetés kell; az eszközök védelme megmarad
+107	Havi 4,99 £
+108	Előfizetés
+109	Ingyenes próbaidőszak:
+110	[0] nap van hátra
+111	[0] nap van hátra
+112	Mégse
+113	Törlés
+114	Hiba történt.
+115	Exportálás
+116	Betöltés…
+117	Nem alkalmazható
+118	Soha
+119	Következő
+120	nem
+121	Nincs megjeleníthető elem.
+122	ki
+123	be
+124	Előző
+125	Frissítés
+126	Mentés
+127	Keresés
+128	Szimuláció (tesztadatok)
+129	Állapot
+130	Nem érhető el
+131	Ismeretlen
+132	Frissítve: [0]
+133	Feldolgozás…
+134	igen
+135	[0] riasztás 24 óra alatt
+136	[0] riasztás 24 óra alatt
+137	[0] eszköz
+138	[0] eszköz
+139	Adatok időpontja: [0]
+140	[0] nyitott incidens
+141	[0] nyitott incidens
+142	[0] jóváhagyás vár
+143	[0] jóváhagyás vár
+144	megerősített
+145	feltételezett
+146	Eszköz regisztrálása
+147	Eszköz
+148	Nem jelentkezik
+149	Elavult házirend
+150	Érzékelő letiltva
+151	Elavult definíciók
+152	Problémák
+153	Utoljára látva
+154	Operációs rendszer
+155	Házirend
+156	Futtassa az eszközön 24 órán belül (egyszer használható):
+157	Védelem
+158	Másolás
+159	Letöltés
+160	Áthelyezés
+161	Új mappa
+162	Átnevezés
+163	Visszaállítás
+164	Áthelyezés a kukába
+165	Feltöltés
+166	Súgó
+167	Ezen az oldalon [0] szöveg gépi fordítású, és még nincs ellenőrizve.
+168	Ezen a nyelven [0] szöveg gépi fordítású, és még nincs ellenőrizve.
+169	Ez a nyelv még nincs lefordítva, ezért angol szöveg jelenik meg.
+170	jóváhagyva
+171	Megfigyelt tények
+172	Hipotézisek (nem megerősített)
+173	Hipotézis, [0] megbízhatóság: [1]
+174	Vizsgálat indítása
+175	Hiányzó bizonyítékok
+176	Hiányzik: [0]
+177	Felolvasás
+178	Javasolt műveletek
+179	Bizonyítékok idővonala
+180	bejövő webhook
+181	Jelzések az identitásszolgáltatótól, a DNS-ből, a tűzfalakból és más eszközökből. Az új integrációk kezdetben nem érhetők el; csak a szerződéses tesztet teljesítő szolgáltatói adapter jelölhető élőnek. A tesztadatok mindenhol szimulációként vannak jelölve.
+182	Nincs csatlakoztatva (helyettesítő)
+183	Csak tesztadatok
+184	Nem érhető el
+185	Élő (ellenőrzött)
+186	Titok (egyszer jelenik meg):
+187	Jóváhagyások
+188	Riasztások
+189	Napló
+190	Előfizetés
+191	Irányítópult
+192	DDoS és rendelkezésre állás
+193	Eszközök
+194	Fájlok
+195	Incidensek
+196	Integrációk
+197	Házirendek
+198	Adatvédelem
+199	Karantén
+200	Reagálás
+201	Biztonság
+202	Beállítások
+203	Ismert kártevők automatikus karanténba helyezése
+204	Gyanús viselkedés figyelése
+205	Gyanús parancsfájlok blokkolása
+206	Fájltartalmak gyűjtése vizsgálathoz (alapértelmezés szerint ki)
+207	Hálózati elkülönítés engedélyezése
+208	Fájlok vizsgálata megnyitáskor vagy íráskor
+209	Letöltések vizsgálata
+210	Programok vizsgálata indításkor
+211	Az ügynök védelme a módosítások ellen
+212	Figyelmeztetés ismert kártékony linkekre
+213	Indok
+214	Felülvizsgálat kérése
+215	Visszaállítás új vizsgálat után
+216	az ellenőrzött felszámolásig eltelt idő mediánja (n=[0], megoldatlan: [1])
+217	sikeres újrateszttel rendelkező javítások
+218	visszatérés a helyreállítás után
+219	ellenőrzött víruseltávolítás
+220	biztonságos visszatérés az üzembe
+221	befejezett helyreállítási vizsgálatok
+222	A csak karanténnal járó eredményeket ([0]) és az újratelepített eszközöket ([1]) külön számoljuk; a karantén önmagában soha nem számít eltávolításnak.
+223	[0] ó
+224	[0] perc
+225	[0] mp
+226	Jóváhagyásra vár
+227	Éles környezetből származó bizonyítékok
+228	Rögzítse, mit ellenőriztek éles környezetben, mely eszközökön és melyik verzióval. A bejegyzések nem szerkeszthetők.
+229	Verzió
+230	Mód módosítása
+231	nincs bizonyíték
+232	sikertelen
+233	sikeres
+234	függőben
+235	Forgatókönyvek előrehaladásának ellenőrzése
+236	Reagálásra képes eszközök
+237	Minden eszköz
+238	[0] kísérleti eszköz
+239	[0] kísérleti eszköz
+240	Kész
+241	Kész, amikor
+242	Gyakorlat
+243	Megfigyelés
+244	Reagálás
+245	Lefedettség
+246	[0] megfigyelt, [1] reagálásra képes
+247	Adatok
+248	Adatok kora
+249	Élő
+250	Tesztadatok
+251	nem futott le
+252	visszaigazolás
+253	folyamatban
+254	ismeretlen
+255	Kiküldés
+256	Bizonyíték
+257	Lefutott
+258	Elavult
+259	Adatforrások
+260	Verzió vagy kivonat
+261	Környezet
+262	Eredmény
+263	Felelős
+264	Követelmény
+265	Eszköz vagy csoport
+266	Megjelenítés
+267	Összes
+268	Nincs kész
+269	Bekapcsolva a teljes szolgáltatásra
+270	Bekapcsolva ennél a szervezetnél
+271	Leállítja az összes új reagálási műveletet ennél a szervezetnél? A védelem és a vizsgálat tovább fut.
+272	Reagálási műveletek újbóli engedélyezése
+273	Összes reagálási művelet leállítása
+274	Vészleállító
+275	Fajta
+276	Nyitva töltött percek mediánja ([0] nyitott, a legrégebbi [1] perc)
+277	Házirend miatti elutasítások
+278	Gyakorlatok és szimulációk (a fentiekben nem számolva)
+279	Ismételt műveletek (cél: 0)
+280	Adatforrás-késés mediánja (p95 [0] mp, n=[1])
+281	Lejárt jóváhagyások ([0] vár, cél: [1] perc)
+282	Jelzéstől osztályozásig eltelt idő mediánja (p95 [0] perc, n=[1], [2] osztályozatlan)
+283	Függetlenül ellenőrzött műveletek ([0]/[1])
+284	Időszak: [0]. A visszaigazolás önmagában soha nem számít ellenőrzöttnek. A hiányzó adatok nem elérhetőként jelennek meg.
+285	Reagálási mutatók
+286	Utolsó esemény
+287	Az ügynökök javasolnak; egy rögzített házirend dönti el, mi fut le. Minden művelethez látható a jóváhagyás, a visszaigazolás és a független ellenőrzés.
+288	Szakasz
+289	Jóváhagyásra vár
+290	Elutasítva
+291	Lejárt
+292	Sikertelen
+293	Kézi egyeztetés szükséges
+294	Javasolt
+295	Sorban áll
+296	Fut
+297	Ellenőrzésre vár
+298	Ellenőrizve
+299	Élő állapot
+300	Mód
+301	Szimuláció
+302	A vizsgálatok és az adatgyűjtés lefutnak. A többi művelet javaslat marad.
+303	A jóváhagyott műveletek a kiválasztott eszközökön futnak.
+304	A műveletek csak tesztadaptereken futnak. Az eszközein semmi sem változik.
+305	Még nincsenek műveletek.
+306	Semmi sem vár jóváhagyásra.
+307	Még nincs rögzített éles bizonyíték.
+308	Még egyetlen eszköz vagy integráció sem küld adatokat.
+309	Nem futott le
+310	Megfigyelve
+311	Mi történt
+312	DDoS-reagálás
+313	Téves riasztások és visszaállítás
+314	Identitás, adathalászat és gyanús forgalom
+315	Kártevők és gyanús letöltések
+316	Hálózati láthatóság és eszközállapot
+317	Helyreállítás kompromittálódás után
+318	Zsarolóvírus vagy feltételezett kompromittálódás
+319	Forgatókönyv
+320	Forgatókönyvek
+321	Házirend verziója
+322	Telepített verzió
+323	Tűzfalas elkülönítés
+324	Adatok megérkeztek
+325	Fájl eltávolítva
+326	Folyamat leállítva
+327	Szolgáltatói állapot
+328	Rögzítve
+329	Vizsgálat kész
+330	Szimulálva
+331	Karanténon kívül
+332	Karanténban
+333	Műveletek és visszaigazolások
+334	Eredmény rögzítése
+335	Rögzítés
+336	Reagálni tud
+337	Forrás
+338	eszköz
+339	konzol
+340	szimuláció
+341	Kezdődik, amikor
+342	Frissítve
+343	Független ellenőrzés
+344	Várakozik
+345	Archívumkorlát
+346	Titkosított archívum
+347	Kizárva
+348	Nem hozzáférhető
+349	Időkorlát
+350	Túl nagy
+351	Nem támogatott formátum
+352	Megszakítva
+353	Kimaradt
+354	Részleges
+355	Időtúllépés
+356	Teljes
+357	Igény szerinti
+358	Gyors
+359	Helyreállítási
+360	Ütemezett
+361	Célzott
+362	Szegmens hozzáadása
+363	archívumok
+364	Eszközök és erőforrások
+365	Leállítja ezt a vizsgálatot? Az eddigi eredmények megszakított vizsgálatként megmaradnak.
+366	Nem lefedett
+367	Észlelések
+368	Eszközök védelmi állapot szerint
+369	Motor
+370	Határidő
+371	Utolsó bizonyíték
+372	Elvárt kontroll
+373	Javasolt javítás
+374	Újrateszt
+375	Erőforrás vagy szegmens
+376	Nyitott hiányosságok
+377	Vizsgálati eredmények 30 napra
+378	riasztástól az ellenőrzött megfékezésig
+379	védett eszközök
+380	nyilvános végpontok felsőbb szintű védelemmel
+381	eseménytől riasztásig
+382	naprakész definíciókkal rendelkező eszközök
+383	7 napon belül teljes vizsgálaton átesett eszközök
+384	nyitott hiányosságok ([0] lejárt, [1] lezárva 30 nap alatt)
+385	figyelt hálózati szegmensek
+386	megerősített valós találatok
+387	befejezett vizsgálatok
+388	Lefedettség és reagálás
+389	Utolsó teljes vizsgálat
+390	Utolsó telemetria
+391	A hatókörbe tartozó minden eszköz és hálózati szegmens: védett-e, és mit kell legközelebb javítani.
+392	Hálózati láthatóság
+393	Még nincs regisztrált eszköz. Védjen meg egy számítógépet az Eszközök oldalon.
+394	Nincsenek nyitott hiányosságok.
+395	[0] nyitott
+396	lejárt
+397	p95 [0] mp
+398	Mappák
+399	Vizsgálandó mappák vesszővel elválasztva
+400	Titkosítás és tűzfal
+401	Lemeztitkosítás: [0], tűzfal: [1]
+402	Helyreállítás incidensek után
+403	Újraellenőrzés most
+404	Nincs újratesztelve
+405	Az újrateszt sikertelen
+406	Ellenőrzötten lezárva
+407	Vizsgálat típusa
+408	Vizsgálatok
+409	Szegmens
+410	Szegmens neve
+411	Vizsgálat indítása
+412	Elindítva
+413	Állapot
+414	Korlátozott
+415	Védett
+416	Nem védett
+417	Eszközök állapot szerint
+418	[0] ismeretlen
+419	Nincs láthatóság
+420	Figyelt
+421	Láthatóság
+422	Az észlelések hiánya nem bizonyítja a védelmet: ellenőrizze a lefedettséget és a vizsgálati eredményeket is.
+423	Nyelv
+424	Fordítási lefedettség
+425	Nincs korábbi verzió
+426	Téma
+427	Sötét
+428	Nagy kontraszt
+429	Világos
+430	Nem található új fenyegetés [0] fájlban.
+431	[0] fenyegetés
+432	[0] fenyegetés
+433	 található [0] fájlban. Tekintse át őket a Riasztások és a Jóváhagyások oldalon.
+434	Teljes vizsgálat
+435	Nem sikerült megvédeni ezt a számítógépet: [0]
+436	Ez a számítógép védett. A valós idejű vizsgálat fut, amíg az Agentic Antivirus nyitva van.
+437	A vizsgálat nem fejeződött be: [0]
+438	Vizsgálat…
+439	Az összes meghajtó vizsgálata. Ez sokáig tarthat.
+440	A Letöltések, az Asztal és az ideiglenes fájlok vizsgálata…
+441	[0] fájl nem olvasható.
+442	Egy fájl
+443	Egy webhelylink
+444	Tesztadatok elfogadása
+446	Műveletek
+447	Integráció hozzáadása
+448	Kivétel hozzáadása
+449	Integráció hozzáadása
+450	Heti teljes vizsgálat hozzáadása
+451	rendszergazda
+452	Hirdetések
+453	Hirdetési hozzájárulás
+454	Érintett szolgáltatások
+455	riasztás az elmúlt 24 órában
+456	Engedélyezés
+457	Engedélyezés és vizsgálat
+458	A rendszergazdának indokot kell megadnia. A kivétel bekerül a naplóba.
+459	Egy e-mail
+460	Üzembe való visszatérés jóváhagyása
+461	Műveletek jóváhagyása
+462	Erőforrás
+463	aktív védekezés alatt álló erőforrások
+464	riasztással érintett erőforrások 24 órán belül
+465	Ellenőrzési napló
+466	Az automatikus védelem minden eszközön tovább fut. Ezekről a műveletekről embernek kell döntenie.
+467	Rendelkezésre állás
+468	Elérhető jelzések
+469	Biztonsági mentés ellenőrizve
+470	Blokkolás
+471	Alapértelmezés szerint az ügynök biztonsági telemetriát és fájlkivonatokat küld: folyamatneveket és parancssorokat, fájlelérési utakat, hálózati kapcsolatok metaadatait és észleléseket. Fájltartalmat csak akkor gyűjt, ha a szervezete ezt bekapcsolja.
+472	Kapacitás
+473	Kategória
+474	Módosítva
+475	Díj
+476	Ellenőrzés
+477	válasszon
+478	Válasszon eszközt
+480	Bezárás
+481	Vesszővel elválasztva
+482	Kapcsolat
+483	Kontroll
+484	Lefedettség védelmi rétegenként
+485	kritikus
+486	kritikus riasztások kézbesítése (p95, 30 nap)
+487	Függő döntések
+488	Elutasítás
+489	Definíciók
+490	Írja le, mi történt
+491	Részlet
+492	Részletek
+493	Észlelés
+494	Licencelendő eszköz
+495	teljesen védett eszközök
+496	elkülönített eszközök
+497	Figyelmet igénylő eszközök
+498	Irány
+499	DNS-zóna
+500	letöltési oldalról
+501	A próbaidőszak alatt és a nem fizetős csomagokban a konzol Google AdSense-hirdetéseket, a mobilalkalmazások pedig Google AdMob-hirdetéseket jelenítenek meg, miután hozzájárulását kérték. Az előfizetők 95%-kal kevesebb hirdetést látnak. Hirdetések soha nem jelennek meg a jóváhagyási, megfékezési, fenyegetésre figyelmeztető, karantén-felülvizsgálati, bejelentkezési, fizetési és naplóképernyőkön.
+502	Minden közzététel új aláírt verziót hoz létre. Az eszközök offline állapotban is az utolsó ellenőrzött verziót alkalmazzák.
+503	Írjon a támogatásnak:
+504	Végpont
+505	Az Agentic Antivirus üzemeltetője az Equality Software Ltd. Ez az oldal leírja, milyen adatokat gyűjt a szolgáltatás. Közzététel előtt a termékfelelősnek felül kell vizsgálnia.
+506	Minden művelet, amely eszközt, fiókot vagy forgalmat módosít, átmegy a házirendmotoron és az AEP-X irányításon. Egy jóváhagyás egy műveletre, annak pontos célpontjaira, erre a szervezetre és meghatározott időre vonatkozik.
+507	Minden feltöltést ellenőrzünk kártevők és a valódi típus szempontjából. Az ellenőrzött megjelenítő nélküli fájlokat tároljuk és letölthetők, de nincs előnézetük.
+508	Kivétel
+509	Kizárások
+510	Mappa elérési útja
+511	hozzáférési vagy helyesbítési kérelmek esetén.
+512	Hiányosságok
+513	Töltse le a Windows, Mac vagy Linux rendszerhez készült ügynököt a(z)
+514	Lépjen az Eszközök oldalra, válassza az Eszköz regisztrálása lehetőséget, és futtassa a megjelenő parancsot a védeni kívánt számítógépen. Az ügynök azonnal megkezdi a vizsgálatot, amint megkapja az aláírt házirendet.
+515	Állapot
+516	Előzmények
+517	Gazdagépnév
+518	Tudomásul veszem, hogy a próbaidőszak után az eszközök leállítják a vizsgálatot és a fenyegetések blokkolását, amíg az előfizetést ki nem fizetik.
+519	Hatás
+520	Importálás zip vagy tar fájlból
+521	Incidens
+522	A nyelvi modell bevonása (ha a szervezete engedélyezte)
+523	IP-cím
+524	Csatlakozás
+525	Csatlakozás a szervezetéhez
+526	Az ismert kártevők karanténba kerülnek, ahol nem tudnak futni. Ha úgy gondolja, hogy egy fájl tévesen lett blokkolva, nyissa meg a Karantént, és kérjen felülvizsgálatot. A rendszergazda dönt, és a fájl csak akkor kerül vissza, ha egy új vizsgálat tisztának találja.
+527	A teljes fordítással nem rendelkező nyelvek angolul jelennek meg. A lefedettséget mérjük, nem becsüljük.
+528	Utolsó módosítás
+529	Réteg
+530	Legitim kérések sikeressége
+531	Licencelési szabályok
+532	Link, ha van
+533	Elkülönítés alatt is elérhető felügyeleti gazdagépek
+534	Megjelölés téves riasztásként
+535	Érettség
+536	Védekezés
+537	Név
+538	A titok neve a titoktárban, soha nem maga a titok
+539	Nincs várakozó művelet.
+540	Nincsenek nyitott incidensek.
+541	Nincs.
+542	Nincs jelentett elem.
+543	nincs beállítva
+544	Értesítés ennyi idő után
+545	a megjelenített hirdetésekből
+546	Offline eseménypuffer (MB)
+547	Androidon az Agentic Antivirus alkalmazásban fizethet elő a Google Playen keresztül. iPhone-on és iPaden az App Store-előfizetések még nem érhetők el. Webes fizetés még nem érhető el.
+548	Incidens megnyitása
+549	nyitott incidens
+550	Nyitott incidensek
+551	p95 késleltetés
+552	kifizetve eddig
+553	Elérésiút-minta
+554	Személyek
+555	Eszközönként
+556	Felhasználónként (az összes eszközére kiterjed)
+557	Előnézet
+558	Elsődleges
+560	Eszköz védelme
+561	Protokoll
+562	Szolgáltató
+563	Szolgáltatói riasztások (24 óra)
+564	Nyilvános végpontok
+565	Házirendverzió közzététele
+566	Aláírt verzió közzététele
+567	Közzétéve
+568	Gyors vizsgálat
+569	A felolvasás és a diktálás a böngésző beépített beszédfunkcióit használja. Hangot nem rögzítünk és nem tárolunk.
+570	Beérkezett
+571	Cserélhető adathordozók
+572	Eltávolítás
+573	Kérve
+574	Kérelmező
+575	Megőrzés
+576	Visszatérés az üzembe
+577	Éppen most
+578	Kockázat
+579	Szerepkör
+580	Visszavonás
+581	Végpont mentése
+582	Licencelési szabályok mentése
+583	Vizsgálat
+584	Ütemezés (cron)
+585	Ütemezett vizsgálatok
+586	Titokhivatkozás
+587	Meghívó küldése
+588	Jelentés küldése
+589	Visszaállítási link küldése
+590	Szolgáltatás
+591	Szolgáltatási célok
+594	Jelzés
+595	Méret
+596	Valami más
+597	Rendezés
+598	Lépés
+599	A folyamatok leállításához, az eszközök elkülönítéséhez, a fájlok visszaállításához, a kivételek hozzáadásához és a forgalmi szabályok módosításához emberi jóváhagyás szükséges. Egy jóváhagyás egy műveletre, annak pontos célpontjaira és korlátozott időre vonatkozik. Ha bármi változik, hagyja jóvá újra.
+600	Előfizetés erre az eszközre a Google Playen
+601	előfizetés állapota
+603	Rendszer
+604	Célpont
+605	Az AI-asszisztens
+606	Az asszisztens csoportosítja a kapcsolódó riasztásokat, felsorolja a megfigyelteket a bizonyítékokra mutató linkekkel, és mindent, amit nem tud bizonyítani, hipotézisként jelöl. Javasolhat műveleteket, de nem hagyhatja jóvá őket. Ha a modell nem érhető el, a vizsgálat, a riasztások és a kézi reagálás tovább működik.
+607	Ez a számítógép
+608	Csak TLS, szerepelnie kell a kimenő forgalom engedélyezési listáján
+609	A forgalmi elárasztásokat a felsőbb szintű szolgáltató nyeli el. Itt nyilvántarthatja az összes nyilvános végpontot, figyelheti a szolgáltatói riasztásokat, és jóváhagyhatja az új forgalomkorlátozásokat.
+610	Forgalomkorlátozások
+611	Lefordítva
+612	Kuka
+613	hátralévő próbanap
+614	Kapcsolja be a védelmet a számítógépen lévő fájlok vizsgálatához, valamint a zsarolóvírusok és a hitelesítőadat-lopás figyeléséhez.
+615	nem lefedett
+616	Utolsó módosítás visszavonása
+617	Felhasználó
+618	E-mail-cím ellenőrzése
+619	jóváhagyásra vár
+620	Egyes oldalakon Google AdSense-hirdetéseket jelenítünk meg. Engedélyezi a személyre szabott hirdetéseket?
+621	Webhook:
+622	Mit küldenek az eszközök
+623	Mi ez?
+624	Mikor
+625	Ha valami blokkolva lett
+626	Ha a próbaidőszak fizetés nélkül ér véget
+627	Ki
+628	Fiókját a profiljában törölheti. Írjon ide:
+629	Az Ön neve
+630	A szervezete 30 napos ingyenes próbaidőszakot kap. Utána havi 4,99 £ felhasználónként vagy eszközönként.
+631	A szervezete határozza meg, meddig őrizzük meg a telemetriát és a bizonyítékokat. A naplóbejegyzések nem szerkeszthetők és nem törölhetők.
+632	Az Ön jogai
+633	Diktálás
+634	Engedélyezi a mikrofon használatát diktáláshoz? A hangot a böngésző dolgozza fel, és mi nem tároljuk.
+635	Hangkimenet
+636	Szünet
+637	Hangmagasság
+638	Folytatás
+639	Sebesség
+640	Leállítás
+641	Ehhez a nyelvhez nem érhető el hang.
+642	Hang
+643	A fájl karanténba került, és nem tud futni.
+644	Egy fenyegetés blokkolva lett ezen az eszközön.

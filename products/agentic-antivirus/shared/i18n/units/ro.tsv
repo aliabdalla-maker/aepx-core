@@ -1,0 +1,637 @@
+0	Salt la conținutul principal
+1	Adaugă o excludere permanentă
+2	Aplică o restricție de trafic
+3	Colectează metadatele dispozitivului
+4	Izolează un dispozitiv de rețea
+5	Pune un fișier în carantină
+6	Scoate un dispozitiv din izolare
+7	Restaurează un fișier din carantină
+8	Deconectează un utilizator de peste tot
+9	Anulează o restricție de trafic
+10	Anulează o actualizare
+11	Scanează dispozitivele
+12	Suspendă un cont de utilizator
+13	Oprește un proces
+14	Aprobă
+15	Respinge
+16	Trimite către dispozitive
+17	Aprobarea expiră [0]
+18	Propus de asistentul AI
+19	Reclamă
+20	Acțiune
+21	Agenți
+22	Întreabă
+23	Întreabă asistentul de securitate
+24	Răspunsurile provin de la dispozitivele tale, incidentele deschise și lacune. Asistentul nu poate modifica nimic.
+25	Pe baza
+26	[0] afirmație fără dovezi a fost eliminată
+27	[0] afirmații fără dovezi au fost eliminate
+29	Model găzduit local
+30	Reguli (fără model)
+31	Elaborează un plan de remediere
+32	Fiecare pas este o propunere. Nimic nu rulează până nu aprobă cineva.
+33	Întrebare
+34	De exemplu: ce dispozitive necesită atenție?
+35	Severitate sugerată
+36	Rezumat
+37	Ținte
+38	Rezumă acest incident
+39	De ce
+40	Detectat
+41	Raportează ceva suspect
+42	Regulă
+43	Severitate
+44	Alertă
+46	Adaugă fișiere
+47	Adaugă un dosar
+48	Adaugă imagini
+49	[0] atașament
+50	[0] atașamente
+51	Atașamente
+52	Fă o fotografie
+53	Accesul la cameră nu a fost permis. Permite-l în browser sau folosește aplicația de cameră a dispozitivului.
+54	Previzualizare cameră
+55	Acest browser nu poate deschide camera aici.
+56	Capturează
+57	Închide asistentul
+58	Ce sunt aceste fișiere și sunt sigure?
+59	Fișier
+60	Întreabă despre securitatea ta sau atașează fișiere, un dosar, imagini ori o fotografie de la cameră. Fiecare atașament este scanat mai întâi și nimic nu este stocat.
+61	[0] imagine a fost descrisă
+62	[0] imagini au fost descrise
+63	 de model.
+64	De exemplu: este sigură această descărcare?
+65	Textul curat și imaginile pot fi trimise modelului AI activat de organizația ta. Fișierele rău intenționate nu sunt trimise niciodată.
+66	[0] fișier nu a fost adăugat
+67	[0] fișiere nu au fost adăugate
+68	: maximum [0] fișiere, câte [1] MB fiecare și [2] MB în total.
+69	Elimină [0]
+70	Scanează și întreabă
+71	Rezultatele scanării
+72	Tip
+73	Folosește camera dispozitivului
+74	Rezultat
+75	Niciun malware cunoscut
+76	Rău intenționat
+77	Nescanat
+78	Lanțul de audit este întrerupt la intrarea [0].
+79	Lanțul de audit este intact: [0] intrări verificate.
+80	E-mail
+81	Ai uitat parola?
+82	Conectează-te cu Google
+83	Conectarea cu Google nu a funcționat. Încearcă din nou sau folosește e-mailul și parola.
+84	Conectare
+85	Deconectare
+86	Parolă nouă
+87	sau
+88	Organizație
+89	Parolă
+90	Parola a fost schimbată. Conectează-te cu noua parolă.
+91	Cel puțin 12 caractere.
+92	Creează cont
+93	Trimite din nou linkul
+94	Dacă acest cont încă trebuie confirmat, un link nou este pe drum. Verifică și dosarul de spam.
+95	Resetează parola
+96	Dacă un cont folosește această adresă, am trimis un link de resetare. Este valabil o oră.
+97	Confirmă adresa de e-mail înainte de a te conecta. Deschide linkul pe care l-am trimis la [0].
+98	E-mail verificat. Te poți conecta acum.
+99	Acest link a expirat sau a fost deja folosit. Conectează-te pentru a primi unul nou.
+100	Verifică e-mailul pentru a confirma adresa.
+101	Abonamentul reduce reclamele cu 95%.
+102	Perioada de probă s-a încheiat.
+103	Abonat până la [0]
+104	Totul gratuit, cu reclame complete
+105	Oprește totul, inclusiv protecția dispozitivelor, până plătește cineva
+106	Consola necesită abonament; dispozitivele rămân protejate
+107	4,99 £ pe lună
+108	Abonează-te
+109	Perioadă de probă gratuită:
+110	[0] zi rămasă
+111	[0] zile rămase
+112	Anulează
+113	Șterge
+114	Ceva nu a funcționat.
+115	Exportă
+116	Se încarcă…
+117	Indisponibil
+118	Niciodată
+119	Înainte
+120	nu
+121	Nimic de afișat.
+122	dezactivat
+123	activat
+124	Înapoi
+125	Reîmprospătează
+126	Salvează
+127	Caută
+128	Simulare (date de test)
+129	Stare
+130	Indisponibil
+131	Necunoscut
+132	Actualizat [0]
+133	Se lucrează…
+134	da
+135	[0] alertă în 24 de ore
+136	[0] alerte în 24 de ore
+137	[0] dispozitiv
+138	[0] dispozitive
+139	Date la [0]
+140	[0] incident deschis
+141	[0] incidente deschise
+142	[0] aprobare în așteptare
+143	[0] aprobări în așteptare
+144	confirmat
+145	suspectat
+146	Înrolează un dispozitiv
+147	Dispozitiv
+148	Nu raportează
+149	Politică învechită
+150	Senzor dezactivat
+151	Definiții învechite
+152	Probleme
+153	Văzut ultima dată
+154	Sistem de operare
+155	Politică
+156	Rulează pe dispozitiv în 24 de ore (o singură utilizare):
+157	Protecție
+158	Copiază
+159	Descarcă
+160	Mută
+161	Dosar nou
+162	Redenumește
+163	Restaurează
+164	Mută în coșul de gunoi
+165	Încarcă
+166	Ajutor
+167	[0] text de pe această pagină este tradus automat și nu a fost încă verificat.
+168	[0] texte în această limbă sunt traduse automat și nu au fost încă verificate.
+169	Această limbă nu este încă tradusă, așa că se afișează engleza.
+170	aprobat
+171	Fapte observate
+172	Ipoteze (neconfirmate)
+173	Ipoteză, încredere [0]: [1]
+174	Rulează investigația
+175	Dovezi lipsă
+176	Lipsește: [0]
+177	Citește cu voce tare
+178	Acțiuni recomandate
+179	Cronologia dovezilor
+180	webhook de intrare
+181	Semnale de la furnizorul de identitate, DNS, firewalluri și alte instrumente. Integrările noi pornesc ca indisponibile; doar un adaptor de furnizor care a trecut testul de contract poate fi marcat ca activ. Datele de test sunt etichetate ca simulare peste tot unde apar.
+182	Neconectat (substituent)
+183	Doar date de test
+184	Indisponibil
+185	Activ (verificat)
+186	Secret (afișat o singură dată):
+187	Aprobări
+188	Alerte
+189	Audit
+190	Abonament
+191	Tablou de bord
+192	DDoS și disponibilitate
+193	Dispozitive
+194	Fișiere
+195	Incidente
+196	Integrări
+197	Politici
+198	Confidențialitate
+199	Carantină
+200	Răspuns
+201	Securitate
+202	Setări
+203	Pune automat în carantină malware-ul cunoscut
+204	Monitorizează comportamentul suspect
+205	Blochează scripturile suspecte
+206	Colectează conținutul fișierelor pentru investigație (dezactivat implicit)
+207	Permite izolarea de rețea
+208	Scanează fișierele la deschidere sau scriere
+209	Scanează descărcările
+210	Scanează programele la pornire
+211	Protejează agentul împotriva modificărilor
+212	Avertizează despre linkuri rău intenționate cunoscute
+213	Motiv
+214	Solicită o revizuire
+215	Restaurează după o scanare nouă
+216	timpul median până la eradicarea verificată (n=[0], nerezolvate [1])
+217	remedieri cu retestare reușită
+218	recurență după recuperare
+219	eliminare verificată a virusului
+220	revenire sigură în funcțiune
+221	scanări de recuperare finalizate
+222	Rezultatele doar cu carantină ([0]) și dispozitivele reinstalate ([1]) sunt numărate separat; carantina singură nu este niciodată considerată eliminare.
+223	[0] h
+224	[0] min
+225	[0] s
+226	În așteptarea aprobării
+227	Dovezi din producție
+228	Înregistrează ce a fost verificat în producție, pe ce active și cu ce versiune. Intrările nu pot fi editate.
+229	Versiune
+230	Schimbă modul
+231	fără dovezi
+232	eșuat
+233	reușit
+234	în așteptare
+235	Verifică progresul playbookurilor
+236	Dispozitive care pot răspunde
+237	Toate dispozitivele
+238	[0] dispozitiv pilot
+239	[0] dispozitive pilot
+240	Finalizat
+241	Finalizat când
+242	Exercițiu
+243	Observare
+244	Răspuns
+245	Acoperire
+246	[0] observate, [1] capabile să răspundă
+247	Date
+248	Vechimea datelor
+249	Live
+250	Date de test
+251	neexecutat
+252	confirmare
+253	în curs
+254	necunoscut
+255	Expediere
+256	Dovezi
+257	A rulat
+258	Învechit
+259	Fluxuri de date
+260	Versiune sau rezumat
+261	Mediu
+262	Rezultat
+263	Responsabil
+264	Cerință
+265	Activ sau grup
+266	Afișează
+267	Toate
+268	Nefinalizat
+269	Activat pentru întregul serviciu
+270	Activat pentru această organizație
+271	Oprești toate acțiunile noi de răspuns pentru această organizație? Protecția și scanarea continuă să funcționeze.
+272	Permite din nou acțiunile de răspuns
+273	Oprește toate acțiunile de răspuns
+274	Comutator de oprire
+275	Fel
+276	Minute mediane deschise ([0] deschise, cel mai vechi [1] min)
+277	Refuzuri de politică
+278	Exerciții și simulări (neincluse mai sus)
+279	Acțiuni repetate (țintă 0)
+280	Întârzierea mediană a fluxului (p95 [0] s, n=[1])
+281	Aprobări restante ([0] în așteptare, țintă [1] min)
+282	Median de la semnal la triere (p95 [0] min, n=[1], [2] netriate)
+283	Acțiuni verificate independent ([0]/[1])
+284	Interval: [0]. O confirmare singură nu contează niciodată ca verificare. Datele lipsă apar ca indisponibile.
+285	Indicatori de răspuns
+286	Ultimul eveniment
+287	Agenții propun; o politică fixă decide ce rulează. Fiecare acțiune își arată aprobarea, confirmarea și verificarea independentă.
+288	Etapă
+289	În așteptarea aprobării
+290	Respins
+291	Expirat
+292	Eșuat
+293	Necesită reconciliere manuală
+294	Propus
+295	În coadă
+296	Rulează
+297	Verificare în așteptare
+298	Verificat
+299	Stare live
+300	Mod
+301	Simulare
+302	Scanările și colectarea datelor rulează. Celelalte acțiuni rămân propuneri.
+303	Acțiunile aprobate rulează pe dispozitivele alese.
+304	Acțiunile rulează doar pe adaptoare de test. Nimic nu se schimbă pe dispozitivele tale.
+305	Nicio acțiune încă.
+306	Nimic nu așteaptă aprobarea.
+307	Încă nu au fost înregistrate dovezi din producție.
+308	Niciun dispozitiv sau integrare nu trimite încă date.
+309	Nu a rulat
+310	Observat
+311	Ce s-a întâmplat
+312	Răspuns la DDoS
+313	Fals pozitive și restaurare
+314	Identitate, phishing și trafic suspect
+315	Malware și descărcări suspecte
+316	Vizibilitatea rețelei și starea dispozitivelor
+317	Recuperare după compromitere
+318	Ransomware sau compromitere suspectată
+319	Playbook
+320	Playbookuri
+321	Versiunea politicii
+322	Versiune instalată
+323	Izolare prin firewall
+324	Date primite
+325	Fișier eliminat
+326	Proces oprit
+327	Starea la furnizor
+328	Înregistrat
+329	Scanare finalizată
+330	Simulat
+331	Scos din carantină
+332	În carantină
+333	Acțiuni și confirmări
+334	Înregistrează rezultatul
+335	Înregistrează
+336	Poate răspunde
+337	Sursă
+338	dispozitiv
+339	consolă
+340	simulare
+341	Începe când
+342	Actualizat
+343	Verificare independentă
+344	În așteptare
+345	Limită de arhivă
+346	Arhivă criptată
+347	Exclus
+348	Inaccesibil
+349	Limită de timp
+350	Prea mare
+351	Format neacceptat
+352	Anulat
+353	Ratat
+354	Parțial
+355	Expirat (timeout)
+356	Completă
+357	La cerere
+358	Rapidă
+359	Recuperare
+360	Programată
+361	Țintită
+362	Adaugă segment
+363	arhive
+364	Active
+365	Oprești această scanare? Rezultatele de până acum sunt păstrate ca scanare anulată.
+366	Neacoperit
+367	Detecții
+368	Dispozitive după starea protecției
+369	Motor
+370	Termen
+371	Ultima dovadă
+372	Control așteptat
+373	Remediere propusă
+374	Retestare
+375	Activ sau segment
+376	Lacune deschise
+377	Rezultatele scanărilor în 30 de zile
+378	de la alertă la izolare verificată
+379	dispozitive protejate
+380	endpointuri publice cu atenuare la furnizorul din amonte
+381	de la eveniment la alertă
+382	dispozitive cu definiții actuale
+383	dispozitive cu scanare completă în 7 zile
+384	lacune deschise ([0] restante, [1] închise în 30 de zile)
+385	segmente de rețea monitorizate
+386	pozitive reale confirmate
+387	scanări finalizate
+388	Acoperire și răspuns
+389	Ultima scanare completă
+390	Ultima telemetrie
+391	Fiecare dispozitiv și segment de rețea din domeniu, dacă este protejat și ce trebuie remediat în continuare.
+392	Vizibilitatea rețelei
+393	Niciun dispozitiv înrolat încă. Protejează un computer din Dispozitive.
+394	Nicio lacună deschisă.
+395	[0] deschise
+396	restant
+397	p95 [0] s
+398	Dosare
+399	Dosare de scanat, separate prin virgule
+400	Criptare și firewall
+401	Criptarea discului [0], firewall [1]
+402	Recuperare după incidente
+403	Verifică din nou acum
+404	Neretestat
+405	Retestare eșuată
+406	Închis verificat
+407	Tipul scanării
+408	Scanări
+409	Segment
+410	Numele segmentului
+411	Pornește scanarea
+412	Pornit
+413	Stare
+414	Degradat
+415	Protejat
+416	Neprotejat
+417	Dispozitive după stare
+418	[0] necunoscute
+419	Fără vizibilitate
+420	Monitorizat
+421	Vizibilitate
+422	Lipsa detecțiilor nu dovedește protecția: verifică și acoperirea și rezultatele scanărilor.
+423	Limbă
+424	Acoperirea traducerii
+425	Nicio versiune anterioară
+426	Temă
+427	Întunecată
+428	Contrast ridicat
+429	Luminoasă
+430	Nu s-au găsit amenințări noi în [0] fișiere.
+431	[0] amenințare găsită
+432	[0] amenințări găsite
+433	 în [0] fișiere. Consultă Alerte și Aprobări pentru a le examina.
+434	Scanare completă
+435	Acest computer nu a putut fi protejat: [0]
+436	Acest computer este protejat. Scanarea în timp real rulează cât timp Agentic Antivirus este deschis.
+437	Scanarea nu s-a încheiat: [0]
+438	Se scanează…
+439	Se scanează toate unitățile. Poate dura mult.
+440	Se scanează Descărcări, Desktop și fișierele temporare…
+441	[0] fișiere nu au putut fi citite.
+442	Un fișier
+443	Un link către un site web
+444	Acceptă date de test
+446	Acțiuni
+447	Adaugă o integrare
+448	Adaugă excludere
+449	Adaugă integrare
+450	Adaugă o scanare completă săptămânală
+451	administrator
+452	Publicitate
+453	Consimțământ pentru publicitate
+454	Servicii afectate
+455	alerte în ultimele 24 de ore
+456	Permite
+457	Permite și scanează
+458	Un administrator trebuie să indice un motiv. Excluderea este înregistrată în jurnalul de audit.
+459	Un e-mail
+460	Aprobă revenirea în funcțiune
+461	Aprobarea acțiunilor
+462	Activ
+463	active cu atenuare activă
+464	active cu alerte în 24 de ore
+465	Jurnal de audit
+466	Protecția automată continuă să ruleze pe fiecare dispozitiv. Acestea sunt acțiunile care necesită decizia unei persoane.
+467	Disponibilitate
+468	Semnale disponibile
+469	Backup verificat
+470	Blochează
+471	Implicit, agentul trimite telemetrie de securitate și hashuri de fișiere: nume de procese și linii de comandă, căi de fișiere, metadatele conexiunilor de rețea și detecții. Conținutul fișierelor este colectat doar dacă organizația ta activează acest lucru.
+472	Capacitate
+473	Categorie
+474	Modificat
+475	Taxă
+476	Verifică
+477	alege
+478	Alege un dispozitiv
+480	Închide
+481	Separate prin virgule
+482	Contact
+483	Control
+484	Acoperire după stratul de protecție
+485	critic
+486	livrarea alertelor critice (p95, 30 de zile)
+487	Decizii în așteptare
+488	Refuză
+489	Definiții
+490	Descrie ce s-a întâmplat
+491	Detaliu
+492	Detalii
+493	Detecție
+494	Dispozitiv de licențiat
+495	dispozitive complet protejate
+496	dispozitive izolate
+497	Dispozitive care necesită atenție
+498	Direcție
+499	Zonă DNS
+500	pagina de descărcări
+501	În perioada de probă gratuită și pe planurile neplătite, consola afișează reclame Google AdSense, iar aplicațiile mobile afișează reclame Google AdMob, după ce îți cer consimțământul. Abonații văd cu 95% mai puține reclame. Reclamele nu apar niciodată pe ecranele de aprobare, izolare, avertizare despre amenințări, revizuire a carantinei, conectare, plată sau audit.
+502	Fiecare publicare creează o nouă versiune semnată. Dispozitivele continuă să aplice ultima versiune verificată cât timp sunt offline.
+503	Scrie echipei de asistență la
+504	Endpoint
+505	Equality Software Ltd operează Agentic Antivirus. Această pagină descrie ce colectează serviciul. Trebuie revizuită de responsabilul de produs înainte de publicare.
+506	Fiecare acțiune care modifică un dispozitiv, un cont sau traficul trece prin motorul de politici și guvernanța AEP-X. O aprobare acoperă o singură acțiune, țintele ei exacte, această organizație și un interval fix.
+507	Fiecare încărcare este verificată pentru malware și pentru tipul real. Fișierele fără un vizualizator verificat sunt stocate și pot fi descărcate, dar nu sunt previzualizate.
+508	Excepție
+509	Excluderi
+510	Calea dosarului
+511	pentru solicitări de acces sau rectificare.
+512	Lacune
+513	Obține agentul pentru Windows, Mac sau Linux de pe
+514	Accesează Dispozitive, alege Înrolează un dispozitiv și rulează comanda afișată pe computerul pe care vrei să-l protejezi. Agentul începe scanarea imediat ce primește politica semnată.
+515	Sănătate
+516	Istoric
+517	Nume gazdă
+518	Înțeleg că, după perioada de probă, dispozitivele nu vor mai scana și bloca amenințările până la plata unui abonament.
+519	Impact
+520	Importă zip sau tar
+521	Incident
+522	Include modelul de limbaj (dacă organizația ta a activat unul)
+523	Adresă IP
+524	Alătură-te
+525	Alătură-te organizației tale
+526	Malware-ul cunoscut este mutat în carantină, unde nu poate rula. Dacă crezi că un fișier a fost blocat din greșeală, deschide Carantina și solicită o revizuire. Un administrator decide, iar fișierul revine doar după ce o scanare nouă îl găsește curat.
+527	Limbile fără traducere completă revin la engleză. Acoperirea este măsurată, nu estimată.
+528	Ultima modificare
+529	Strat
+530	Succesul solicitărilor legitime
+531	Reguli de licențiere
+532	Link, dacă există
+533	Gazde de administrare menținute accesibile în timpul izolării
+534	Marchează ca fals pozitiv
+535	Maturitate
+536	Atenuare
+537	Nume
+538	Numele secretului din depozitul de secrete, niciodată secretul propriu-zis
+539	Nicio acțiune în așteptare.
+540	Niciun incident deschis.
+541	Niciunul.
+542	Nimic raportat.
+543	nesetat
+544	Notificat după
+545	din reclamele afișate
+546	Buffer de evenimente offline (MB)
+547	Pe Android, abonează-te în aplicația Agentic Antivirus prin Google Play. Pe iPhone și iPad, abonamentele App Store nu sunt încă disponibile. Plata pe web nu este încă disponibilă.
+548	Deschide incidentul
+549	incidente deschise
+550	Incidente deschise
+551	Latență p95
+552	plătit până la
+553	Model de cale
+554	Persoane
+555	Per dispozitiv
+556	Per utilizator (acoperă toate dispozitivele sale)
+557	Previzualizare
+558	Principal
+560	Protejează un dispozitiv
+561	Protocol
+562	Furnizor
+563	Alertele furnizorului (24 de ore)
+564	Endpointuri publice
+565	Publică o versiune de politică
+566	Publică versiunea semnată
+567	Publicat
+568	Scanare rapidă
+569	Citirea cu voce tare și dictarea folosesc funcțiile de vorbire integrate ale browserului. Nu înregistrăm și nu stocăm audio.
+570	Primit
+571	Medii amovibile
+572	Elimină
+573	Solicitat
+574	Solicitat de
+575	Păstrare
+576	Revenire în funcțiune
+577	Chiar acum
+578	Risc
+579	Rol
+580	Revino
+581	Salvează endpointul
+582	Salvează regulile de licențiere
+583	Scanează
+584	Program (cron)
+585	Scanări programate
+586	Referință secret
+587	Trimite invitația
+588	Trimite raportul
+589	Trimite linkul de resetare
+590	Serviciu
+591	Obiective de serviciu
+594	Semnal
+595	Dimensiune
+596	Altceva
+597	Sortează
+598	Pas
+599	Oprirea proceselor, izolarea dispozitivelor, restaurarea fișierelor, adăugarea excluderilor și modificarea regulilor de trafic necesită aprobarea unei persoane. O aprobare acoperă o singură acțiune, țintele ei exacte și un timp limitat. Dacă se schimbă ceva, aprobă din nou.
+600	Abonează acest dispozitiv prin Google Play
+601	starea abonamentului
+603	Sistem
+604	Țintă
+605	Asistentul AI
+606	Asistentul grupează alertele asociate, listează ce a fost observat cu linkuri către dovezi și marchează ca ipoteză tot ce nu poate dovedi. Poate sugera acțiuni, dar nu le poate aproba. Dacă modelul nu este disponibil, scanarea, alertele și răspunsurile manuale continuă să funcționeze.
+607	Acest computer
+608	Doar TLS, trebuie să fie pe lista de permisiuni pentru ieșire
+609	Inundațiile de trafic sunt absorbite de furnizorul din amonte. Aici ții evidența fiecărui endpoint public, urmărești alertele furnizorului și aprobi noile restricții de trafic.
+610	Restricții de trafic
+611	Tradus
+612	Coș de gunoi
+613	zile de probă rămase
+614	Activează protecția pentru a scana fișierele de pe acest computer și a monitoriza ransomware-ul și furtul de credențiale.
+615	neacoperit
+616	Anulează ultima modificare
+617	Utilizator
+618	Verifică e-mailul
+619	în așteptarea aprobării
+620	Afișăm reclame Google AdSense pe unele pagini. Permiți reclamele personalizate?
+621	Webhook:
+622	Ce trimit dispozitivele
+623	Ce este?
+624	Când
+625	Când ceva este blocat
+626	Când perioada de probă se încheie fără plată
+627	Cine
+628	Îți poți șterge contul din profil. Contactează
+629	Numele tău
+630	Organizația ta beneficiază de o perioadă de probă gratuită de 30 de zile. După aceea, costă 4,99 £ pe lună pentru fiecare utilizator sau dispozitiv.
+631	Organizația ta stabilește cât timp sunt păstrate telemetria și dovezile. Înregistrările de audit nu pot fi editate sau șterse.
+632	Drepturile tale
+633	Dictează
+634	Permiți folosirea microfonului pentru dictare? Sunetul este procesat de browser și nu este stocat de noi.
+635	Ieșire audio
+636	Pauză
+637	Înălțime
+638	Reia
+639	Viteză
+640	Oprește
+641	Nicio voce disponibilă pentru această limbă.
+642	Voce
+643	Fișierul a fost mutat în carantină și nu poate rula.
+644	O amenințare a fost blocată pe acest dispozitiv.

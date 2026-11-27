@@ -1,0 +1,637 @@
+0	Siirry pääsisältöön
+1	Lisää pysyvä poikkeus
+2	Ota käyttöön liikennerajoitus
+3	Kerää laitteen metatiedot
+4	Eristä laite verkosta
+5	Siirrä tiedosto karanteeniin
+6	Vapauta laite eristyksestä
+7	Palauta karanteenissa oleva tiedosto
+8	Kirjaa käyttäjä ulos kaikkialta
+9	Peru liikennerajoitus
+10	Peru päivitys
+11	Tarkista laitteet
+12	Jäädytä käyttäjätili
+13	Pysäytä prosessi
+14	Hyväksy
+15	Hylkää
+16	Lähetä laitteille
+17	Hyväksyntä vanhenee [0]
+18	Tekoälyavustajan ehdottama
+19	Mainos
+20	Toiminto
+21	Agentit
+22	Kysy
+23	Kysy tietoturva-avustajalta
+24	Vastaukset perustuvat laitteisiisi, avoimiin poikkeamiin ja puutteisiin. Avustaja ei voi muuttaa mitään.
+25	Perustuu
+26	[0] väite ilman näyttöä poistettiin
+27	[0] väitettä ilman näyttöä poistettiin
+29	Itse ylläpidetty malli
+30	Säännöt (ei mallia)
+31	Laadi korjaussuunnitelman luonnos
+32	Jokainen vaihe on ehdotus. Mitään ei suoriteta ennen kuin joku hyväksyy sen.
+33	Kysymys
+34	Esimerkiksi: mitkä laitteet vaativat huomiota?
+35	Ehdotettu vakavuus
+36	Yhteenveto
+37	Kohteet
+38	Tee yhteenveto tästä poikkeamasta
+39	Miksi
+40	Havaittu
+41	Ilmoita epäilyttävästä
+42	Sääntö
+43	Vakavuus
+44	Hälytys
+46	Lisää tiedostoja
+47	Lisää kansio
+48	Lisää kuvia
+49	[0] liite
+50	[0] liitettä
+51	Liitteet
+52	Ota kuva
+53	Kameran käyttöä ei sallittu. Salli se selaimessa tai käytä laitteen kamerasovellusta.
+54	Kameran esikatselu
+55	Tämä selain ei voi avata kameraa tässä.
+56	Kuvaa
+57	Sulje avustaja
+58	Mitä nämä tiedostot ovat, ja ovatko ne turvallisia?
+59	Tiedosto
+60	Kysy tietoturvastasi tai liitä tiedostoja, kansio, kuvia tai kameralla otettu kuva. Jokainen liite tarkistetaan ensin, eikä mitään tallenneta.
+61	[0] kuva
+62	[0] kuvaa
+63	 kuvattiin mallin avulla.
+64	Esimerkiksi: onko tämä lataus turvallinen?
+65	Puhdasta tekstiä ja puhtaita kuvia voidaan lähettää organisaatiosi käyttöön ottamalle tekoälymallille. Haitallisia tiedostoja ei lähetetä koskaan.
+66	[0] tiedosto jäi lisäämättä
+67	[0] tiedostoa jäi lisäämättä
+68	: enintään [0] tiedostoa, kukin enintään [1] Mt ja yhteensä [2] Mt.
+69	Poista [0]
+70	Tarkista ja kysy
+71	Tarkistuksen tulokset
+72	Tyyppi
+73	Käytä laitteen kameraa
+74	Tulos
+75	Ei tunnettuja haittaohjelmia
+76	Haitallinen
+77	Ei tarkistettu
+78	Valvontaketju on katkennut kohdassa [0].
+79	Valvontaketju on eheä: [0] merkintää vahvistettu.
+80	Sähköposti
+81	Unohditko salasanan?
+82	Kirjaudu Googlella
+83	Google-kirjautuminen ei onnistunut. Yritä uudelleen tai käytä sähköpostiosoitetta ja salasanaa.
+84	Kirjaudu sisään
+85	Kirjaudu ulos
+86	Uusi salasana
+87	tai
+88	Organisaatio
+89	Salasana
+90	Salasana vaihdettu. Kirjaudu sisään uudella salasanallasi.
+91	Vähintään 12 merkkiä.
+92	Luo tili
+93	Lähetä linkki uudelleen
+94	Jos tili vaatii vielä vahvistuksen, uusi linkki on tulossa. Tarkista myös roskapostikansio.
+95	Nollaa salasana
+96	Jos jokin tili käyttää tätä osoitetta, lähetimme nollauslinkin. Se toimii tunnin ajan.
+97	Vahvista sähköpostiosoitteesi ennen kirjautumista. Avaa linkki, jonka lähetimme osoitteeseen [0].
+98	Sähköpostiosoite vahvistettu. Voit nyt kirjautua sisään.
+99	Linkki on vanhentunut tai jo käytetty. Kirjaudu sisään saadaksesi uuden.
+100	Vahvista osoitteesi sähköpostiisi lähetetyn viestin avulla.
+101	Tilaus vähentää mainoksia 95 %.
+102	Kokeilujaksosi on päättynyt.
+103	Tilattu [0] asti
+104	Pidä kaikki maksuttomana täysillä mainoksilla
+105	Pysäytä kaikki, myös laitteiden suojaus, kunnes joku maksaa
+106	Konsoli vaatii tilauksen; laitteet pysyvät suojattuina
+107	4,99 £ kuukaudessa
+108	Tilaa
+109	Ilmainen kokeilu: 
+110	[0] päivä jäljellä
+111	[0] päivää jäljellä
+112	Peruuta
+113	Poista
+114	Jokin meni vikaan.
+115	Vie
+116	Ladataan…
+117	Ei sovellu
+118	Ei koskaan
+119	Seuraava
+120	ei
+121	Ei näytettävää.
+122	pois
+123	päällä
+124	Edellinen
+125	Päivitä
+126	Tallenna
+127	Hae
+128	Simulointi (testidata)
+129	Tila
+130	Ei käytettävissä
+131	Tuntematon
+132	Päivitetty [0]
+133	Käsitellään…
+134	kyllä
+135	[0] hälytys 24 tunnissa
+136	[0] hälytystä 24 tunnissa
+137	[0] laite
+138	[0] laitetta
+139	Tiedot ajalta [0]
+140	[0] avoin poikkeama
+141	[0] avointa poikkeamaa
+142	[0] hyväksyntä odottaa
+143	[0] hyväksyntää odottaa
+144	vahvistettu
+145	epäilty
+146	Rekisteröi laite
+147	Laite
+148	Ei raportoi
+149	Vanhentunut käytäntö
+150	Anturi poistettu käytöstä
+151	Vanhentuneet määritykset
+152	Ongelmat
+153	Viimeksi nähty
+154	Käyttöjärjestelmä
+155	Käytäntö
+156	Suorita laitteella 24 tunnin kuluessa (kertakäyttöinen):
+157	Suojaus
+158	Kopioi
+159	Lataa
+160	Siirrä
+161	Uusi kansio
+162	Nimeä uudelleen
+163	Palauta
+164	Siirrä roskakoriin
+165	Lähetä
+166	Ohje
+167	[0] teksti tällä sivulla on konekäännetty eikä sitä ole vielä tarkistettu.
+168	[0] tekstiä tällä kielellä on konekäännetty eikä niitä ole vielä tarkistettu.
+169	Tätä kieltä ei ole vielä käännetty, joten näytetään englanti.
+170	hyväksytty
+171	Havaitut tosiasiat
+172	Hypoteesit (ei vahvistettu)
+173	Hypoteesi, varmuus [0]: [1]
+174	Suorita tutkinta
+175	Puuttuva näyttö
+176	Puuttuu: [0]
+177	Lue ääneen
+178	Suositellut toimet
+179	Näytön aikajana
+180	saapuva webhook
+181	Signaalit identiteetintarjoajalta, DNS:stä, palomuureista ja muista työkaluista. Uudet integraatiot ovat aluksi ei käytettävissä; vain sopimustestin läpäissyt palveluntarjoajan sovitin voidaan merkitä käyttöön otetuksi. Testidata merkitään simuloinniksi kaikkialla, missä se näkyy.
+182	Ei yhdistetty (tynkä)
+183	Vain testidataa
+184	Ei käytettävissä
+185	Käytössä (vahvistettu)
+186	Salaisuus (näytetään kerran):
+187	Hyväksynnät
+188	Hälytykset
+189	Valvonta
+190	Tilaus
+191	Koontinäyttö
+192	DDoS ja saatavuus
+193	Laitteet
+194	Tiedostot
+195	Poikkeamat
+196	Integraatiot
+197	Käytännöt
+198	Tietosuoja
+199	Karanteeni
+200	Reagointi
+201	Tietoturva
+202	Asetukset
+203	Siirrä tunnetut haittaohjelmat karanteeniin automaattisesti
+204	Valvo epäilyttävää toimintaa
+205	Estä epäilyttävät komentosarjat
+206	Kerää tiedostojen sisältöä tutkintaa varten (oletuksena pois)
+207	Salli verkosta eristäminen
+208	Tarkista tiedostot, kun niitä avataan tai kirjoitetaan
+209	Tarkista lataukset
+210	Tarkista ohjelmat, kun ne käynnistyvät
+211	Suojaa agentti muutoksilta
+212	Varoita tunnetuista haitallisista linkeistä
+213	Syy
+214	Pyydä tarkistusta
+215	Palauta uuden tarkistuksen jälkeen
+216	mediaaniaika vahvistettuun poistoon (n=[0], ratkaisematta [1])
+217	korjaukset, joiden uusintatesti onnistui
+218	uusiutuminen palautuksen jälkeen
+219	vahvistettu viruksen poisto
+220	turvallinen paluu käyttöön
+221	palautustarkistukset valmiina
+222	Pelkkään karanteeniin päättyneet tapaukset ([0]) ja uudelleenasennetut laitteet ([1]) lasketaan erikseen; pelkkää karanteenia ei koskaan lasketa poistoksi.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Odottaa hyväksyntää
+227	Tuotannon näyttö
+228	Kirjaa, mitä tuotannossa vahvistettiin, missä resursseissa ja millä versiolla. Merkintöjä ei voi muokata.
+229	Versio
+230	Vaihda tilaa
+231	ei näyttöä
+232	epäonnistui
+233	läpäisty
+234	odottaa
+235	Tarkista toimintaohjeen eteneminen
+236	Laitteet, jotka voivat reagoida
+237	Kaikki laitteet
+238	[0] pilottilaite
+239	[0] pilottilaitetta
+240	Valmis
+241	Valmis, kun
+242	Harjoitus
+243	Tarkkaile
+244	Reagoi
+245	Kattavuus
+246	[0] tarkkailtu, [1] voi reagoida
+247	Tiedot
+248	Tietojen ikä
+249	Reaaliaikainen
+250	Testidata
+251	ei suoritettu
+252	kuittaus
+253	käynnissä
+254	tuntematon
+255	Lähetä
+256	Näyttö
+257	Se suoritettiin
+258	Vanhentunut
+259	Tietosyötteet
+260	Versio tai tiiviste
+261	Ympäristö
+262	Lopputulos
+263	Omistaja
+264	Vaatimus
+265	Resurssi tai ryhmä
+266	Näytä
+267	Kaikki
+268	Ei valmis
+269	Päällä koko palvelussa
+270	Päällä tässä organisaatiossa
+271	Pysäytetäänkö kaikki uudet reagointitoimet tässä organisaatiossa? Suojaus ja tarkistukset jatkuvat.
+272	Salli reagointitoimet uudelleen
+273	Pysäytä kaikki reagointitoimet
+274	Hätäkatkaisin
+275	Laji
+276	Avoinna minuutteja, mediaani ([0] avoinna, vanhin [1] min)
+277	Käytännön hylkäämät
+278	Harjoitukset ja simuloinnit (ei laskettu yllä)
+279	Toistetut toimet (tavoite 0)
+280	Syötteen viiveen mediaani (p95 [0] s, n=[1])
+281	Myöhässä olevat hyväksynnät ([0] odottaa, tavoite [1] min)
+282	Mediaani signaalista luokitteluun (p95 [0] min, n=[1], [2] luokittelematta)
+283	Riippumattomasti vahvistetut toimet ([0]/[1])
+284	Aikaväli: [0]. Pelkkä kuittaus ei koskaan riitä vahvistukseksi. Puuttuvat tiedot näytetään ei käytettävissä -tilassa.
+285	Reagoinnin mittarit
+286	Viimeisin tapahtuma
+287	Agentit ehdottavat; kiinteä käytäntö päättää, mitä suoritetaan. Jokaisesta toimesta näkyy sen hyväksyntä, kuittaus ja riippumaton tarkistus.
+288	Vaihe
+289	Odottaa hyväksyntää
+290	Hylätty
+291	Vanhentunut
+292	Epäonnistui
+293	Vaatii manuaalisen täsmäytyksen
+294	Ehdotettu
+295	Jonossa
+296	Käynnissä
+297	Vahvistus odottaa
+298	Vahvistettu
+299	Nykyinen tila
+300	Tila
+301	Simulointi
+302	Tarkistukset ja tiedonkeruu suoritetaan. Muut toimet jäävät ehdotuksiksi.
+303	Hyväksytyt toimet suoritetaan valituilla laitteilla.
+304	Toimet suoritetaan vain testisovittimia vastaan. Laitteillasi ei muutu mitään.
+305	Ei vielä toimia.
+306	Mikään ei odota hyväksyntää.
+307	Tuotannon näyttöä ei ole vielä kirjattu.
+308	Mitkään laitteet tai integraatiot eivät vielä lähetä tietoja.
+309	Sitä ei suoritettu
+310	Havaittu
+311	Mitä tapahtui
+312	DDoS-reagointi
+313	Väärä positiivinen ja palautus
+314	Identiteetti, tietojenkalastelu ja epäilyttävä liikenne
+315	Haittaohjelmat ja epäilyttävät lataukset
+316	Verkon näkyvyys ja laitteiden tila
+317	Palautuminen tietomurron jälkeen
+318	Kiristyshaittaohjelma tai epäilty tietomurto
+319	Toimintaohje
+320	Toimintaohjeet
+321	Käytännön versio
+322	Asennettu versio
+323	Palomuurieristys
+324	Tiedot vastaanotettu
+325	Tiedosto poistettu
+326	Prosessi pysäytetty
+327	Palveluntarjoajan tila
+328	Kirjattu
+329	Tarkistus valmis
+330	Simuloitu
+331	Poistettu karanteenista
+332	Karanteenissa
+333	Toimet ja kuittaukset
+334	Kirjaa lopputulos
+335	Kirjaa
+336	Voi reagoida
+337	Lähde
+338	laite
+339	konsoli
+340	simulointi
+341	Alkaa, kun
+342	Päivitetty
+343	Riippumaton tarkistus
+344	Odottaa
+345	Arkiston raja
+346	Salattu arkisto
+347	Ohitettu
+348	Ei käytettävissä
+349	Aikaraja
+350	Liian suuri
+351	Muotoa ei tueta
+352	Peruutettu
+353	Väliin jäänyt
+354	Osittainen
+355	Aikakatkaisu
+356	Täysi
+357	Pyydettäessä
+358	Pika
+359	Palautus
+360	Ajoitettu
+361	Kohdennettu
+362	Lisää segmentti
+363	arkistot
+364	Resurssit
+365	Pysäytetäänkö tämä tarkistus? Tähänastiset tulokset säilytetään peruutettuna tarkistuksena.
+366	Ei katettu
+367	Havainnot
+368	Laitteet suojaustilan mukaan
+369	Moottori
+370	Eräpäivä
+371	Viimeisin näyttö
+372	Odotettu kontrolli
+373	Ehdotettu korjaus
+374	Uusintatesti
+375	Resurssi tai segmentti
+376	Avoimet puutteet
+377	Tarkistusten tulokset 30 päivässä
+378	hälytyksestä vahvistettuun eristämiseen
+379	suojattua laitetta
+380	julkiset päätepisteet, joilla on ylävirran torjunta
+381	tapahtumasta hälytykseen
+382	laitteet, joilla on ajantasaiset määritykset
+383	laitteet, joille on tehty täysi tarkistus 7 päivän sisällä
+384	avoimet puutteet ([0] myöhässä, [1] suljettu 30 päivässä)
+385	valvotut verkkosegmentit
+386	vahvistetut todelliset positiiviset
+387	valmiit tarkistukset
+388	Kattavuus ja reagointi
+389	Viimeisin täysi tarkistus
+390	Viimeisin telemetria
+391	Jokainen rajattuun alueeseen kuuluva laite ja verkkosegmentti, onko se suojattu ja mitä korjata seuraavaksi.
+392	Verkon näkyvyys
+393	Laitteita ei ole vielä rekisteröity. Suojaa tietokone Laitteet-näkymässä.
+394	Ei avoimia puutteita.
+395	[0] avoinna
+396	myöhässä
+397	p95 [0] s
+398	Kansiot
+399	Tarkistettavat kansiot pilkuilla erotettuina
+400	Salaus ja palomuuri
+401	Levyn salaus [0], palomuuri [1]
+402	Palautuminen poikkeamista
+403	Tarkista uudelleen nyt
+404	Ei testattu uudelleen
+405	Uusintatesti epäonnistui
+406	Vahvistetusti suljettu
+407	Tarkistuksen tyyppi
+408	Tarkistukset
+409	Segmentti
+410	Segmentin nimi
+411	Aloita tarkistus
+412	Aloitettu
+413	Tila
+414	Heikentynyt
+415	Suojattu
+416	Suojaamaton
+417	Laitteet tilan mukaan
+418	[0] tuntematonta
+419	Ei näkyvyyttä
+420	Valvottu
+421	Näkyvyys
+422	Havaintojen puuttuminen ei todista suojausta: tarkista myös kattavuus ja tarkistusten tulokset.
+423	Kieli
+424	Käännösten kattavuus
+425	Ei aiempaa versiota
+426	Teema
+427	Tumma
+428	Suuri kontrasti
+429	Vaalea
+430	Uusia uhkia ei löytynyt [0] tiedostosta.
+431	[0] uhka
+432	[0] uhkaa
+433	 löytyi [0] tiedostosta. Tarkista ne kohdissa Hälytykset ja Hyväksynnät.
+434	Täysi tarkistus
+435	Tätä tietokonetta ei voitu suojata: [0]
+436	Tämä tietokone on suojattu. Reaaliaikainen tarkistus on käynnissä, kun Agentic Antivirus on auki.
+437	Tarkistus ei valmistunut: [0]
+438	Tarkistetaan…
+439	Tarkistetaan kaikki asemat. Tämä voi kestää kauan.
+440	Tarkistetaan Lataukset, Työpöytä ja väliaikaiset tiedostot…
+441	[0] tiedostoa ei voitu lukea.
+442	Tiedosto
+443	Verkkolinkki
+444	Hyväksy testidata
+446	Toiminnot
+447	Lisää integraatio
+448	Lisää poikkeus
+449	Lisää integraatio
+450	Lisää viikoittainen täysi tarkistus
+451	järjestelmänvalvoja
+452	Mainonta
+453	Mainonnan suostumus
+454	Vaikutuksen kohteena olevat palvelut
+455	hälytystä viimeisen 24 tunnin aikana
+456	Salli
+457	Salli ja tarkista
+458	Järjestelmänvalvojan on annettava syy. Poikkeus kirjataan valvontalokiin.
+459	Sähköpostiviesti
+460	Hyväksy paluu käyttöön
+461	Toimien hyväksyminen
+462	Resurssi
+463	resurssit aktiivisen torjunnan alaisina
+464	resurssit, joilla hälytyksiä 24 tunnissa
+465	Valvontaloki
+466	Automaattinen suojaus jatkuu kaikilla laitteilla. Nämä ovat toimet, joista ihmisen on päätettävä.
+467	Saatavuus
+468	Käytettävissä olevat signaalit
+469	Varmuuskopio vahvistettu
+470	Estä
+471	Oletuksena agentti lähettää tietoturvatelemetriaa ja tiedostojen tiivisteitä: prosessien nimet ja komentorivit, tiedostopolut, verkkoyhteyksien metatiedot ja havainnot. Tiedostojen sisältöä kerätään vain, jos organisaatiosi ottaa sen käyttöön.
+472	Kapasiteetti
+473	Luokka
+474	Muutettu
+475	Veloitus
+476	Tarkista
+477	valitse
+478	Valitse laite
+480	Sulje
+481	Pilkuilla erotettu
+482	Yhteystiedot
+483	Kontrolli
+484	Kattavuus suojauskerroksittain
+485	kriittinen
+486	kriittisten hälytysten toimitus (p95, 30 päivää)
+487	Odottavat päätökset
+488	Kieltäydy
+489	Määritykset
+490	Kuvaile, mitä tapahtui
+491	Tieto
+492	Tiedot
+493	Havainto
+494	Lisensoitava laite
+495	täysin suojattua laitetta
+496	eristettyä laitetta
+497	Huomiota vaativat laitteet
+498	Suunta
+499	DNS-vyöhyke
+500	lataussivulta
+501	Ilmaisen kokeilujakson aikana ja maksamattomissa tilauksissa konsoli näyttää Google AdSense -mainoksia ja mobiilisovellukset Google AdMob -mainoksia suostumuksesi pyytämisen jälkeen. Tilaajat näkevät 95 % vähemmän mainoksia. Mainoksia ei koskaan näytetä hyväksyntä-, eristämis-, uhkavaroitus-, karanteenitarkistus-, kirjautumis-, maksu- tai valvontanäkymissä.
+502	Jokainen julkaisu luo uuden allekirjoitetun version. Laitteet noudattavat viimeisintä vahvistettua versiota ollessaan offline-tilassa.
+503	Lähetä sähköpostia tukeen osoitteeseen
+504	Päätepiste
+505	Agentic Antivirus -palvelua ylläpitää Equality Software Ltd. Tällä sivulla kuvataan, mitä palvelu kerää. Tuotteen omistajan on tarkistettava se ennen julkaisua.
+506	Jokainen laitetta, tiliä tai liikennettä muuttava toimi kulkee käytäntömoottorin ja AEP-X-hallinnan kautta. Hyväksyntä kattaa yhden toimen, sen tarkat kohteet, tämän organisaation ja kiinteän ajan.
+507	Jokainen lähetys tarkistetaan haittaohjelmien ja todellisen tyypin osalta. Tiedostot, joille ei ole vahvistettua katseluohjelmaa, tallennetaan ja niitä voi ladata, mutta niitä ei esikatsella.
+508	Poikkeus
+509	Poikkeukset
+510	Kansion polku
+511	tietojen tarkastus- tai korjauspyyntöjä varten.
+512	Puutteet
+513	Lataa agentti Windowsille, Macille tai Linuxille
+514	Siirry Laitteet-näkymään, valitse Rekisteröi laite ja suorita näytetty komento tietokoneella, jonka haluat suojata. Agentti aloittaa tarkistuksen heti saatuaan allekirjoitetun käytäntönsä.
+515	Kunto
+516	Historia
+517	Isäntänimi
+518	Ymmärrän, että laitteet lopettavat tarkistamisen ja uhkien estämisen kokeilun jälkeen, kunnes tilaus on maksettu.
+519	Vaikutus
+520	Tuo zip tai tar
+521	Poikkeama
+522	Sisällytä kielimalli (jos organisaatiosi on ottanut sellaisen käyttöön)
+523	IP-osoite
+524	Liity
+525	Liity organisaatioosi
+526	Tunnetut haittaohjelmat siirretään karanteeniin, jossa ne eivät voi käynnistyä. Jos uskot tiedoston estetyn virheellisesti, avaa Karanteeni ja pyydä tarkistusta. Järjestelmänvalvoja päättää, ja tiedosto palautetaan vasta, kun uusi tarkistus toteaa sen puhtaaksi.
+527	Kielet, joiden käännös on puutteellinen, näytetään englanniksi. Kattavuus on mitattu, ei arvioitu.
+528	Viimeksi muutettu
+529	Kerros
+530	Oikeutettujen pyyntöjen onnistuminen
+531	Lisensointisäännöt
+532	Linkki, jos sellainen on
+533	Hallintapalvelimet, jotka pysyvät tavoitettavissa eristyksen aikana
+534	Merkitse vääräksi positiiviseksi
+535	Kypsyys
+536	Torjunta
+537	Nimi
+538	Salaisuuden nimi salaisuusvarastossasi, ei koskaan itse salaisuus
+539	Mitkään toimet eivät odota.
+540	Ei avoimia poikkeamia.
+541	Ei mitään.
+542	Ei raportoitu.
+543	ei asetettu
+544	Ilmoitettu jälkeen
+545	näytetyistä mainoksista
+546	Offline-tapahtumapuskuri (Mt)
+547	Androidissa tilaa Agentic Antivirus -sovelluksessa Google Playn kautta. iPhonessa ja iPadissa App Store -tilaukset eivät ole vielä käytettävissä. Maksaminen verkossa ei ole vielä käytettävissä.
+548	Avoin poikkeama
+549	avointa poikkeamaa
+550	Avoimet poikkeamat
+551	p95-viive
+552	maksettu asti
+553	Polkukuvio
+554	Henkilöt
+555	Laitekohtainen
+556	Käyttäjäkohtainen (kattaa kaikki käyttäjän laitteet)
+557	Esikatselu
+558	Ensisijainen
+560	Suojaa laite
+561	Protokolla
+562	Palveluntarjoaja
+563	Palveluntarjoajan hälytykset (24 tuntia)
+564	Julkiset päätepisteet
+565	Julkaise käytännön versio
+566	Julkaise allekirjoitettu versio
+567	Julkaistu
+568	Pikatarkistus
+569	Ääneen lukeminen ja sanelu käyttävät selaimesi sisäänrakennettuja puhetoimintoja. Emme tallenna ääntä.
+570	Vastaanotettu
+571	Siirrettävät tallennusvälineet
+572	Poista
+573	Pyydetty
+574	Pyytäjä
+575	Säilytysaika
+576	Paluu käyttöön
+577	Juuri nyt
+578	Riski
+579	Rooli
+580	Peru
+581	Tallenna päätepiste
+582	Tallenna lisensointisäännöt
+583	Tarkista
+584	Aikataulu (cron)
+585	Ajoitetut tarkistukset
+586	Salaisuuden viite
+587	Lähetä kutsu
+588	Lähetä raportti
+589	Lähetä nollauslinkki
+590	Palvelu
+591	Palvelutavoitteet
+594	Signaali
+595	Koko
+596	Jotain muuta
+597	Lajittele
+598	Vaihe
+599	Prosessien pysäyttäminen, laitteiden eristäminen, tiedostojen palauttaminen, poikkeusten lisääminen ja liikennesääntöjen muuttaminen vaativat ihmisen hyväksynnän. Hyväksyntä kattaa yhden toimen, sen tarkat kohteet ja rajatun ajan. Jos jokin muuttuu, hyväksy uudelleen.
+600	Tilaa tälle laitteelle Google Playn kautta
+601	tilauksen tila
+603	Järjestelmä
+604	Kohde
+605	Tekoälyavustaja
+606	Avustaja ryhmittelee toisiinsa liittyvät hälytykset, luettelee havainnot linkkeineen näyttöön ja merkitsee hypoteesiksi kaiken, mitä se ei voi todistaa. Se voi ehdottaa toimia, mutta ei voi hyväksyä niitä. Jos malli ei ole käytettävissä, tarkistukset, hälytykset ja manuaalinen reagointi toimivat edelleen.
+607	Tämä tietokone
+608	Vain TLS, oltava lähtevän liikenteen sallittujen luettelossa
+609	Ylävirran palveluntarjoajasi vaimentaa liikennetulvat. Täällä kirjaat jokaisen julkisen päätepisteen, seuraat palveluntarjoajan hälytyksiä ja hyväksyt uudet liikennerajoitukset.
+610	Liikennerajoitukset
+611	Käännetty
+612	Roskakori
+613	kokeilupäivää jäljellä
+614	Ota suojaus käyttöön, jotta tämän tietokoneen tiedostot tarkistetaan ja kiristyshaittaohjelmia sekä tunnistetietojen varkauksia valvotaan.
+615	kattamaton
+616	Kumoa viimeisin muutos
+617	Käyttäjä
+618	Vahvista sähköposti
+619	odottaa hyväksyntää
+620	Näytämme Google AdSense -mainoksia joillakin sivuilla. Sallitaanko personoidut mainokset?
+621	Webhook:
+622	Mitä laitteet lähettävät
+623	Mikä se on?
+624	Milloin
+625	Kun jotain estetään
+626	Kun kokeilu päättyy ilman maksua
+627	Kuka
+628	Voit poistaa tilisi profiilistasi. Ota yhteyttä
+629	Nimesi
+630	Organisaatiosi saa 30 päivän ilmaisen kokeilujakson. Sen jälkeen hinta on 4,99 £ kuukaudessa kutakin käyttäjää tai laitetta kohden.
+631	Organisaatiosi määrittää, kuinka kauan telemetriaa ja näyttöä säilytetään. Valvontatietueita ei voi muokata eikä poistaa.
+632	Oikeutesi
+633	Sanele
+634	Sallitaanko mikrofonin käyttö sanelua varten? Selaimesi käsittelee äänen, emmekä tallenna sitä.
+635	Äänen ulostulo
+636	Tauko
+637	Äänenkorkeus
+638	Jatka
+639	Nopeus
+640	Pysäytä
+641	Tälle kielelle ei ole saatavilla ääntä.
+642	Ääni
+643	Tiedosto siirrettiin karanteeniin, eikä sitä voi suorittaa.
+644	Uhka estettiin tällä laitteella.

@@ -39,7 +39,9 @@ VERBATIM_OK = {"Claude", "Agentic Antivirus", "action.approve", "CIDR", "SHA-256
 
 
 def letters_in_script(text: str, scripts: tuple[str, ...]) -> float:
-    text = re.sub(r"\{[^{}]*\}|https?://\S+|\b[A-Z][A-Za-z0-9.-]*\b", "", text)   # placeholders, URLs, names
+    text = re.sub(r"\{\s*\w+\s*,\s*plural\s*,|\b(zero|one|two|few|many|other)\s*\{|=\d+\s*\{", " ", text)  # ICU syntax
+    text = re.sub(r"\{\s*\w+\s*\}|https?://\S+|\S+@\S+|\b[A-Z][A-Za-z0-9.-]*\b|\b(p95|cron|zip|tar|webhook|ms|s|min|h)\b",
+                  "", text)   # placeholders, URLs, addresses, names, units
     letters = [c for c in text if c.isalpha()]
     if not letters:
         return 1.0
@@ -69,12 +71,12 @@ def check_locale(loc: str, base: dict) -> dict:
             errors.append(f"{k}: unbalanced braces")
         if t == en and en not in VERBATIM_OK and len(en) > 3 and loc != "en":
             same += 1
-        if loc in SCRIPT and letters_in_script(t, SCRIPT[loc]) < 0.6:
+        if loc in SCRIPT and en not in VERBATIM_OK and letters_in_script(t, SCRIPT[loc]) < 0.6:
             wrong_script += 1
-        if len(en) >= 12 and not (0.25 <= len(t) / len(en) <= 3.5):
+        if len(en) >= 12 and loc not in ("zh-Hans", "ja", "ko") and not (0.25 <= len(t) / len(en) <= 3.5):
             long += 1
     present = sum(1 for k in base if isinstance(msgs.get(k), str) and msgs[k].strip())
-    if same > max(10, 0.05 * present):
+    if same > max(10, 0.10 * present):     # cognates (Action, Version, Incident…) are legitimately identical
         warnings.append(f"{same} strings identical to English")
     if wrong_script:
         warnings.append(f"{wrong_script} strings mostly outside the expected script ({'/'.join(SCRIPT[loc])})")

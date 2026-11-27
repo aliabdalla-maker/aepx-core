@@ -1,0 +1,637 @@
+0	Hoppa till huvudinnehållet
+1	Lägg till ett permanent undantag
+2	Tillämpa en trafikbegränsning
+3	Samla in enhetsmetadata
+4	Isolera en enhet från nätverket
+5	Sätt en fil i karantän
+6	Häv isoleringen av en enhet
+7	Återställ en fil från karantän
+8	Logga ut en användare överallt
+9	Återkalla en trafikbegränsning
+10	Återställ en uppdatering
+11	Skanna enheter
+12	Stäng av ett användarkonto
+13	Stoppa en process
+14	Godkänn
+15	Neka
+16	Skicka till enheter
+17	Godkännandet upphör [0]
+18	Föreslaget av AI-assistenten
+19	Annons
+20	Åtgärd
+21	Agenter
+22	Fråga
+23	Fråga säkerhetsassistenten
+24	Svaren kommer från dina enheter, öppna incidenter och luckor. Assistenten kan inte ändra något.
+25	Baserat på
+26	[0] påstående utan bevis togs bort
+27	[0] påståenden utan bevis togs bort
+29	Egenhostad modell
+30	Regler (ingen modell)
+31	Skapa ett utkast till åtgärdsplan
+32	Varje steg är ett förslag. Inget körs förrän någon godkänner det.
+33	Fråga
+34	Till exempel: vilka enheter behöver åtgärdas?
+35	Föreslagen allvarlighetsgrad
+36	Sammanfattning
+37	Mål
+38	Sammanfatta den här incidenten
+39	Varför
+40	Upptäckt
+41	Rapportera något misstänkt
+42	Regel
+43	Allvarlighetsgrad
+44	Larm
+46	Lägg till filer
+47	Lägg till en mapp
+48	Lägg till bilder
+49	[0] bilaga
+50	[0] bilagor
+51	Bilagor
+52	Ta ett foto
+53	Kameraåtkomst tilläts inte. Tillåt den i webbläsaren eller använd enhetens kameraapp.
+54	Förhandsvisning av kamera
+55	Den här webbläsaren kan inte öppna kameran här.
+56	Ta bild
+57	Stäng assistenten
+58	Vad är det här för filer, och är de säkra?
+59	Fil
+60	Fråga om din säkerhet eller bifoga filer, en mapp, bilder eller ett kamerafoto. Varje bilaga skannas först och inget sparas.
+61	[0] bild har
+62	[0] bilder har
+63	 beskrivits av modellen.
+64	Till exempel: är den här nedladdningen säker?
+65	Ren text och rena bilder kan skickas till den AI-modell som din organisation har aktiverat. Skadliga filer skickas aldrig.
+66	[0] fil lades inte till
+67	[0] filer lades inte till
+68	: upp till [0] filer, [1] MB per fil och [2] MB totalt.
+69	Ta bort [0]
+70	Skanna och fråga
+71	Skanningsresultat
+72	Typ
+73	Använd enhetens kamera
+74	Resultat
+75	Ingen känd skadlig kod
+76	Skadlig
+77	Inte skannad
+78	Granskningskedjan är bruten vid post [0].
+79	Granskningskedjan är intakt: [0] poster verifierade.
+80	E-post
+81	Glömt lösenordet?
+82	Logga in med Google
+83	Inloggningen med Google fungerade inte. Försök igen eller använd e-post och lösenord.
+84	Logga in
+85	Logga ut
+86	Nytt lösenord
+87	eller
+88	Organisation
+89	Lösenord
+90	Lösenordet har ändrats. Logga in med ditt nya lösenord.
+91	Minst 12 tecken.
+92	Skapa konto
+93	Skicka länken igen
+94	Om kontot fortfarande behöver bekräftas är en ny länk på väg. Kontrollera även skräpposten.
+95	Återställ lösenord
+96	Om ett konto använder den adressen har vi skickat en återställningslänk. Den fungerar i en timme.
+97	Bekräfta din e-postadress innan du loggar in. Öppna länken vi skickade till [0].
+98	E-postadressen är verifierad. Du kan logga in nu.
+99	Länken har gått ut eller har redan använts. Logga in för att få en ny.
+100	Kontrollera din e-post för att verifiera adressen.
+101	Med en prenumeration minskar annonserna med 95 %.
+102	Din provperiod har tagit slut.
+103	Prenumererar till [0]
+104	Behåll allt gratis med alla annonser
+105	Stoppa allt, även enhetsskyddet, tills någon betalar
+106	Konsolen kräver en prenumeration; enheterna förblir skyddade
+107	4,99 £ per månad
+108	Prenumerera
+109	Gratis provperiod: 
+110	[0] dag kvar
+111	[0] dagar kvar
+112	Avbryt
+113	Ta bort
+114	Något gick fel.
+115	Exportera
+116	Läser in…
+117	Ej tillämpligt
+118	Aldrig
+119	Nästa
+120	nej
+121	Inget att visa.
+122	av
+123	på
+124	Föregående
+125	Uppdatera
+126	Spara
+127	Sök
+128	Simulering (testdata)
+129	Status
+130	Ej tillgänglig
+131	Okänd
+132	Uppdaterad [0]
+133	Arbetar…
+134	ja
+135	[0] larm på 24 timmar
+136	[0] larm på 24 timmar
+137	[0] enhet
+138	[0] enheter
+139	Data från [0]
+140	[0] öppen incident
+141	[0] öppna incidenter
+142	[0] godkännande väntar
+143	[0] godkännanden väntar
+144	bekräftad
+145	misstänkt
+146	Registrera en enhet
+147	Enhet
+148	Rapporterar inte
+149	Inaktuell policy
+150	Sensorn är inaktiverad
+151	Inaktuella definitioner
+152	Problem
+153	Senast sedd
+154	Operativsystem
+155	Policy
+156	Kör på enheten inom 24 timmar (engångsanvändning):
+157	Skydd
+158	Kopiera
+159	Ladda ned
+160	Flytta
+161	Ny mapp
+162	Byt namn
+163	Återställ
+164	Flytta till papperskorgen
+165	Ladda upp
+166	Hjälp
+167	[0] text på den här sidan är maskinöversatt och ännu inte granskad.
+168	[0] texter på det här språket är maskinöversatta och ännu inte granskade.
+169	Det här språket är inte översatt än, så engelska visas.
+170	godkänd
+171	Observerade fakta
+172	Hypoteser (inte bekräftade)
+173	Hypotes, [0] säkerhet: [1]
+174	Kör utredning
+175	Saknade bevis
+176	Saknas: [0]
+177	Läs upp
+178	Rekommenderade åtgärder
+179	Tidslinje för bevis
+180	inkommande webhook
+181	Signaler från din identitetsleverantör, DNS, brandväggar och andra verktyg. Nya integrationer börjar som inte tillgängliga; endast en leverantörsadapter som klarat sitt kontraktstest kan markeras som live. Testdata märks som simulering överallt där den visas.
+182	Inte ansluten (stub)
+183	Endast testdata
+184	Inte tillgänglig
+185	Live (verifierad)
+186	Hemlighet (visas en gång):
+187	Godkännanden
+188	Larm
+189	Granskning
+190	Prenumeration
+191	Översikt
+192	DDoS och tillgänglighet
+193	Enheter
+194	Filer
+195	Incidenter
+196	Integrationer
+197	Policyer
+198	Integritet
+199	Karantän
+200	Respons
+201	Säkerhet
+202	Inställningar
+203	Sätt känd skadlig kod i karantän automatiskt
+204	Övervaka misstänkt beteende
+205	Blockera misstänkta skript
+206	Samla in filinnehåll för utredning (av som standard)
+207	Tillåt nätverksisolering
+208	Skanna filer när de öppnas eller skrivs
+209	Skanna nedladdningar
+210	Skanna program när de startar
+211	Skydda agenten mot ändringar
+212	Varna för kända skadliga länkar
+213	Anledning
+214	Begär granskning
+215	Återställ efter ny skanning
+216	mediantid till verifierad utrotning (n=[0], olösta [1])
+217	åtgärder med godkänt omtest
+218	återfall efter återställning
+219	verifierad virusborttagning
+220	säker återgång i drift
+221	slutförda återställningsskanningar
+222	Utfall med enbart karantän ([0]) och ominstallerade enheter ([1]) räknas separat; enbart karantän räknas aldrig som borttagning.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Väntar på godkännande
+227	Bevis från produktion
+228	Registrera vad som verifierades i produktion, på vilka tillgångar och med vilken version. Poster kan inte redigeras.
+229	Version
+230	Byt läge
+231	inga bevis
+232	misslyckades
+233	godkänt
+234	väntar
+235	Kontrollera playbookens förlopp
+236	Enheter som kan agera
+237	Alla enheter
+238	[0] pilotenhet
+239	[0] pilotenheter
+240	Slutförd
+241	Slutförd när
+242	Övning
+243	Observera
+244	Agera
+245	Täckning
+246	[0] observerade, [1] kan agera
+247	Data
+248	Dataålder
+249	Live
+250	Testdata
+251	inte utförd
+252	kvitto
+253	pågår
+254	okänd
+255	Skicka
+256	Bevis
+257	Den kördes
+258	Inaktuell
+259	Dataflöden
+260	Version eller sammanfattning
+261	Miljö
+262	Utfall
+263	Ägare
+264	Krav
+265	Tillgång eller grupp
+266	Visa
+267	Alla
+268	Inte slutförd
+269	På för hela tjänsten
+270	På för den här organisationen
+271	Stoppa alla nya responsåtgärder för den här organisationen? Skydd och skanning fortsätter att köras.
+272	Tillåt responsåtgärder igen
+273	Stoppa alla responsåtgärder
+274	Nödstopp
+275	Slag
+276	Median minuter öppen ([0] öppna, äldsta [1] min)
+277	Policyavslag
+278	Övningar och simuleringar (räknas inte ovan)
+279	Upprepade åtgärder (mål 0)
+280	Median flödesfördröjning (p95 [0] s, n=[1])
+281	Försenade godkännanden ([0] väntar, mål [1] min)
+282	Median från signal till triage (p95 [0] min, n=[1], [2] ej triagerade)
+283	Oberoende verifierade åtgärder ([0]/[1])
+284	Fönster: [0]. Ett kvitto räknas aldrig ensamt som verifiering. Saknade data visas som ej tillgängliga.
+285	Responsmått
+286	Senaste händelse
+287	Agenter föreslår; en fast policy avgör vad som körs. Varje åtgärd visar sitt godkännande, kvitto och oberoende kontroll.
+288	Steg
+289	Inväntar godkännande
+290	Nekad
+291	Utgången
+292	Misslyckades
+293	Kräver manuell avstämning
+294	Föreslagen
+295	I kö
+296	Körs
+297	Verifiering väntar
+298	Verifierad
+299	Aktuellt läge
+300	Läge
+301	Simulering
+302	Skanningar och datainsamling körs. Andra åtgärder förblir förslag.
+303	Godkända åtgärder körs på de valda enheterna.
+304	Åtgärder körs endast mot testadaptrar. Inget ändras på dina enheter.
+305	Inga åtgärder än.
+306	Inget väntar på godkännande.
+307	Inga bevis från produktion har registrerats än.
+308	Inga enheter eller integrationer skickar data än.
+309	Den kördes inte
+310	Observerad
+311	Vad som hände
+312	DDoS-respons
+313	Falskt positiv och återställning
+314	Identitet, nätfiske och misstänkt trafik
+315	Skadlig kod och misstänkta nedladdningar
+316	Nätverksinsyn och enhetsstatus
+317	Återställning efter intrång
+318	Ransomware eller misstänkt intrång
+319	Playbook
+320	Playbooks
+321	Policyversion
+322	Installerad version
+323	Brandväggsisolering
+324	Data mottagen
+325	Filen borttagen
+326	Processen stoppad
+327	Leverantörens status
+328	Registrerad
+329	Skanning slutförd
+330	Simulerad
+331	Utanför karantän
+332	I karantän
+333	Åtgärder och kvitton
+334	Registrera utfall
+335	Registrera
+336	Kan agera
+337	Källa
+338	enhet
+339	konsol
+340	simulering
+341	Startar när
+342	Uppdaterad
+343	Oberoende kontroll
+344	Väntar
+345	Arkivgräns
+346	Krypterat arkiv
+347	Undantagen
+348	Otillgänglig
+349	Tidsgräns
+350	För stor
+351	Format som inte stöds
+352	Avbruten
+353	Missad
+354	Delvis
+355	Tidsgränsen nåddes
+356	Fullständig
+357	På begäran
+358	Snabb
+359	Återställning
+360	Schemalagd
+361	Riktad
+362	Lägg till segment
+363	arkiv
+364	Tillgångar
+365	Stoppa den här skanningen? Resultaten hittills sparas som en avbruten skanning.
+366	Inte täckt
+367	Upptäckter
+368	Enheter efter skyddsstatus
+369	Motor
+370	Förfaller
+371	Senaste bevis
+372	Förväntad kontroll
+373	Föreslagen åtgärd
+374	Omtest
+375	Tillgång eller segment
+376	Öppna luckor
+377	Skanningsutfall på 30 dagar
+378	larm till verifierad inneslutning
+379	skyddade enheter
+380	publika slutpunkter med uppströmsskydd
+381	händelse till larm
+382	enheter med aktuella definitioner
+383	enheter med fullständig skanning inom 7 dagar
+384	öppna luckor ([0] försenade, [1] stängda på 30 dagar)
+385	övervakade nätverkssegment
+386	bekräftade sanna positiva
+387	slutförda skanningar
+388	Täckning och respons
+389	Senaste fullständiga skanning
+390	Senaste telemetri
+391	Varje enhet och nätverkssegment som omfattas, om det är skyddat och vad som ska åtgärdas härnäst.
+392	Nätverksinsyn
+393	Inga enheter har registrerats än. Skydda en dator under Enheter.
+394	Inga öppna luckor.
+395	[0] öppna
+396	försenad
+397	p95 [0] s
+398	Mappar
+399	Mappar att skanna, separerade med kommatecken
+400	Kryptering och brandvägg
+401	Diskkryptering [0], brandvägg [1]
+402	Återställning efter incidenter
+403	Kontrollera igen nu
+404	Inte omtestad
+405	Omtestet misslyckades
+406	Verifierat stängd
+407	Skanningstyp
+408	Skanningar
+409	Segment
+410	Segmentnamn
+411	Starta skanning
+412	Startad
+413	Status
+414	Försämrad
+415	Skyddad
+416	Oskyddad
+417	Enheter efter status
+418	[0] okända
+419	Ingen insyn
+420	Övervakad
+421	Insyn
+422	Inga upptäckter bevisar inte skydd: kontrollera även täckning och skanningsresultat.
+423	Språk
+424	Översättningstäckning
+425	Ingen tidigare version
+426	Tema
+427	Mörkt
+428	Hög kontrast
+429	Ljust
+430	Inga nya hot hittades i [0] filer.
+431	[0] hot
+432	[0] hot
+433	 hittades i [0] filer. Granska dem under Larm och Godkännanden.
+434	Fullständig skanning
+435	Kunde inte skydda den här datorn: [0]
+436	Den här datorn är skyddad. Realtidsskanning körs medan Agentic Antivirus är öppet.
+437	Skanningen slutfördes inte: [0]
+438	Skannar…
+439	Skannar alla enheter. Det kan ta lång tid.
+440	Skannar Hämtade filer, Skrivbord och tillfälliga filer…
+441	[0] filer kunde inte läsas.
+442	En fil
+443	En webblänk
+444	Acceptera testdata
+446	Åtgärder
+447	Lägg till en integration
+448	Lägg till undantag
+449	Lägg till integration
+450	Lägg till veckovis fullständig skanning
+451	administratör
+452	Annonser
+453	Samtycke till annonser
+454	Berörda tjänster
+455	larm de senaste 24 timmarna
+456	Tillåt
+457	Tillåt och skanna
+458	En administratör måste ange en anledning. Undantaget registreras i granskningsloggen.
+459	Ett e-postmeddelande
+460	Godkänn återgång i drift
+461	Godkänna åtgärder
+462	Tillgång
+463	tillgångar under aktivt skydd
+464	tillgångar med larm inom 24 timmar
+465	Granskningslogg
+466	Det automatiska skyddet fortsätter att köras på alla enheter. Det här är de åtgärder som kräver ett beslut av en person.
+467	Tillgänglighet
+468	Tillgängliga signaler
+469	Säkerhetskopia verifierad
+470	Blockera
+471	Som standard skickar agenten säkerhetstelemetri och filhashar: processnamn och kommandorader, filsökvägar, metadata om nätverksanslutningar och upptäckter. Filinnehåll samlas bara in om din organisation aktiverar det.
+472	Kapacitet
+473	Kategori
+474	Ändrad
+475	Avgift
+476	Kontrollera
+477	välj
+478	Välj en enhet
+480	Stäng
+481	Kommaseparerad
+482	Kontakt
+483	Kontroll
+484	Täckning per skyddslager
+485	kritisk
+486	leverans av kritiska larm (p95, 30 dagar)
+487	Beslut som väntar
+488	Avböj
+489	Definitioner
+490	Beskriv vad som hände
+491	Detalj
+492	Detaljer
+493	Upptäckt
+494	Enhet att licensiera
+495	fullt skyddade enheter
+496	isolerade enheter
+497	Enheter som behöver åtgärdas
+498	Riktning
+499	DNS-zon
+500	nedladdningssidan
+501	Under den kostnadsfria provperioden och på obetalda abonnemang visar konsolen annonser från Google AdSense och mobilapparna annonser från Google AdMob, efter att ha bett om ditt samtycke. Prenumeranter ser 95 % färre annonser. Annonser visas aldrig på skärmar för godkännande, inneslutning, hotvarningar, karantängranskning, inloggning, betalning eller granskning.
+502	Varje publicering skapar en ny signerad version. Enheter fortsätter att tillämpa den senast verifierade versionen när de är offline.
+503	Mejla supporten på
+504	Slutpunkt
+505	Equality Software Ltd driver Agentic Antivirus. Den här sidan beskriver vad tjänsten samlar in. Den måste granskas av produktägaren före publicering.
+506	Varje åtgärd som ändrar en enhet, ett konto eller trafik passerar policymotorn och AEP-X-styrningen. Ett godkännande gäller en åtgärd, dess exakta mål, den här organisationen och en fast tid.
+507	Varje uppladdning kontrolleras för skadlig kod och sin faktiska typ. Filer utan verifierad visare sparas och kan laddas ned men förhandsvisas inte.
+508	Undantag
+509	Undantag
+510	Mappsökväg
+511	för begäran om åtkomst eller rättelse.
+512	Luckor
+513	Hämta agenten för Windows, Mac eller Linux från
+514	Gå till Enheter, välj Registrera en enhet och kör kommandot som visas på datorn du vill skydda. Agenten börjar skanna så snart den får sin signerade policy.
+515	Hälsa
+516	Historik
+517	Värdnamn
+518	Jag förstår att enheterna slutar skanna och blockera hot efter provperioden tills en prenumeration har betalats.
+519	Påverkan
+520	Importera zip eller tar
+521	Incident
+522	Inkludera språkmodellen (om din organisation har aktiverat en)
+523	IP-adress
+524	Gå med
+525	Gå med i din organisation
+526	Känd skadlig kod flyttas till karantän, där den inte kan köras. Om du tror att en fil blockerades av misstag öppnar du Karantän och begär en granskning. En administratör beslutar, och filen återställs först när en ny skanning visar att den är ren.
+527	Språk utan fullständig översättning visas på engelska. Täckningen är uppmätt, inte uppskattad.
+528	Senast ändrad
+529	Lager
+530	Lyckade legitima förfrågningar
+531	Licensregler
+532	Länk, om det finns någon
+533	Hanteringsvärdar som förblir nåbara under isolering
+534	Markera som falskt positiv
+535	Mognad
+536	Skydd
+537	Namn
+538	Namnet på hemligheten i ditt hemlighetsvalv, aldrig själva hemligheten
+539	Inga åtgärder väntar.
+540	Inga öppna incidenter.
+541	Inga.
+542	Inga rapporterade.
+543	inte angivet
+544	Meddelad efter
+545	av visade annonser
+546	Händelsebuffert offline (MB)
+547	På Android prenumererar du i Agentic Antivirus-appen via Google Play. På iPhone och iPad är prenumerationer via App Store inte tillgängliga än. Betalning på webben är inte tillgänglig än.
+548	Öppen incident
+549	öppna incidenter
+550	Öppna incidenter
+551	p95-latens
+552	betald till
+553	Sökvägsmönster
+554	Personer
+555	Per enhet
+556	Per användare (omfattar alla deras enheter)
+557	Förhandsvisning
+558	Primär
+560	Skydda en enhet
+561	Protokoll
+562	Leverantör
+563	Leverantörslarm (24 timmar)
+564	Publika slutpunkter
+565	Publicera en policyversion
+566	Publicera signerad version
+567	Publicerad
+568	Snabbskanning
+569	Uppläsning och diktering använder webbläsarens inbyggda talfunktioner. Vi spelar inte in eller sparar ljud.
+570	Mottagen
+571	Flyttbara medier
+572	Ta bort
+573	Begärd
+574	Begärd av
+575	Lagringstid
+576	Återgång i drift
+577	Just nu
+578	Risk
+579	Roll
+580	Återställ
+581	Spara slutpunkt
+582	Spara licensregler
+583	Skanna
+584	Schema (cron)
+585	Schemalagda skanningar
+586	Hemlighetsreferens
+587	Skicka inbjudan
+588	Skicka rapport
+589	Skicka återställningslänk
+590	Tjänst
+591	Tjänstemål
+594	Signal
+595	Storlek
+596	Något annat
+597	Sortera
+598	Steg
+599	Att stoppa processer, isolera enheter, återställa filer, lägga till undantag och ändra trafikregler kräver godkännande av en person. Ett godkännande gäller en åtgärd, dess exakta mål och en begränsad tid. Om något ändras måste du godkänna igen.
+600	Prenumerera på den här enheten via Google Play
+601	prenumerationsstatus
+603	System
+604	Mål
+605	AI-assistenten
+606	Assistenten grupperar relaterade larm, listar vad som observerats med länkar till bevisen och markerar allt den inte kan bevisa som en hypotes. Den kan föreslå åtgärder men inte godkänna dem. Om modellen inte är tillgänglig fortsätter skanning, larm och manuell respons att fungera.
+607	Den här datorn
+608	Endast TLS, måste finnas på listan över tillåtna utgående mål
+609	Trafikfloder absorberas av din uppströmsleverantör. Här redovisar du varje publik slutpunkt, bevakar leverantörslarm och godkänner nya trafikbegränsningar.
+610	Trafikbegränsningar
+611	Översatt
+612	Papperskorg
+613	dagar kvar av provperioden
+614	Aktivera skyddet för att skanna filer på den här datorn och övervaka ransomware och stöld av inloggningsuppgifter.
+615	ej täckta
+616	Ångra senaste ändringen
+617	Användare
+618	Verifiera e-post
+619	väntar på godkännande
+620	Vi visar annonser från Google AdSense på vissa sidor. Tillåta anpassade annonser?
+621	Webhook:
+622	Vad enheter skickar
+623	Vad är det?
+624	När
+625	När något blockeras
+626	När provperioden slutar utan betalning
+627	Vem
+628	Du kan ta bort ditt konto från din profil. Kontakta
+629	Ditt namn
+630	Din organisation får en kostnadsfri provperiod på 30 dagar. Därefter kostar det 4,99 £ per månad för varje användare eller enhet.
+631	Din organisation bestämmer hur länge telemetri och bevis sparas. Granskningsposter kan inte redigeras eller tas bort.
+632	Dina rättigheter
+633	Diktera
+634	Tillåta mikrofonen för diktering? Ljudet bearbetas av webbläsaren och sparas inte av oss.
+635	Ljudutgång
+636	Pausa
+637	Tonhöjd
+638	Återuppta
+639	Hastighet
+640	Stoppa
+641	Ingen röst finns för det här språket.
+642	Röst
+643	Filen flyttades till karantän och kan inte köras.
+644	Ett hot blockerades på den här enheten.

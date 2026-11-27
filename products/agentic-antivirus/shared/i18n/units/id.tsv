@@ -1,0 +1,637 @@
+0	Langsung ke konten utama
+1	Tambahkan pengecualian permanen
+2	Terapkan pembatasan lalu lintas
+3	Kumpulkan metadata perangkat
+4	Isolasi perangkat dari jaringan
+5	Karantina file
+6	Lepaskan perangkat dari isolasi
+7	Pulihkan file yang dikarantina
+8	Keluarkan pengguna dari semua sesi
+9	Batalkan pembatasan lalu lintas
+10	Batalkan pembaruan
+11	Pindai perangkat
+12	Tangguhkan akun pengguna
+13	Hentikan proses
+14	Setujui
+15	Tolak
+16	Kirim ke perangkat
+17	Persetujuan kedaluwarsa [0]
+18	Diusulkan oleh asisten AI
+19	Iklan
+20	Tindakan
+21	Agen
+22	Tanya
+23	Tanya asisten keamanan
+24	Jawaban berasal dari perangkat, insiden terbuka, dan celah Anda. Asisten tidak dapat mengubah apa pun.
+25	Berdasarkan
+26	[0] klaim tanpa bukti telah dihapus
+27	[0] klaim tanpa bukti telah dihapus
+29	Model yang dihosting sendiri
+30	Aturan (tanpa model)
+31	Susun rencana remediasi
+32	Setiap langkah adalah usulan. Tidak ada yang dijalankan sampai seseorang menyetujuinya.
+33	Pertanyaan
+34	Misalnya: perangkat mana yang perlu diperhatikan?
+35	Tingkat keparahan yang disarankan
+36	Ringkasan
+37	Target
+38	Ringkas insiden ini
+39	Alasan
+40	Terdeteksi
+41	Laporkan sesuatu yang mencurigakan
+42	Aturan
+43	Tingkat keparahan
+44	Peringatan
+46	Tambahkan file
+47	Tambahkan folder
+48	Tambahkan gambar
+49	[0] lampiran
+50	[0] lampiran
+51	Lampiran
+52	Ambil foto
+53	Akses kamera tidak diizinkan. Izinkan di browser Anda, atau gunakan aplikasi kamera perangkat Anda.
+54	Pratinjau kamera
+55	Browser ini tidak dapat membuka kamera di sini.
+56	Ambil
+57	Tutup asisten
+58	File apa ini, dan apakah aman?
+59	File
+60	Tanyakan tentang keamanan Anda, atau lampirkan file, folder, gambar, atau foto kamera. Setiap lampiran dipindai terlebih dahulu dan tidak ada yang disimpan.
+61	[0] gambar telah
+62	[0] gambar telah
+63	 dideskripsikan oleh model.
+64	Misalnya: apakah unduhan ini aman?
+65	Teks dan gambar yang bersih dapat dikirim ke model AI yang diaktifkan organisasi Anda. File berbahaya tidak pernah dikirim.
+66	[0] file tidak ditambahkan
+67	[0] file tidak ditambahkan
+68	: maksimal [0] file, masing-masing [1] MB dan total [2] MB.
+69	Hapus [0]
+70	Pindai dan tanya
+71	Hasil pemindaian
+72	Jenis
+73	Gunakan kamera perangkat
+74	Hasil
+75	Tidak ada malware yang dikenal
+76	Berbahaya
+77	Tidak dipindai
+78	Rantai audit rusak pada entri [0].
+79	Rantai audit utuh: [0] entri terverifikasi.
+80	Email
+81	Lupa kata sandi?
+82	Masuk dengan Google
+83	Masuk dengan Google gagal. Coba lagi, atau gunakan email dan kata sandi Anda.
+84	Masuk
+85	Keluar
+86	Kata sandi baru
+87	atau
+88	Organisasi
+89	Kata sandi
+90	Kata sandi diubah. Masuk dengan kata sandi baru Anda.
+91	Minimal 12 karakter.
+92	Buat akun
+93	Kirim ulang tautan
+94	Jika akun tersebut masih perlu dikonfirmasi, tautan baru sedang dikirim. Periksa juga folder spam Anda.
+95	Setel ulang kata sandi
+96	Jika ada akun yang menggunakan alamat tersebut, kami telah mengirim tautan penyetelan ulang. Tautan berlaku selama satu jam.
+97	Konfirmasikan alamat email Anda sebelum masuk. Buka tautan yang kami kirim ke [0].
+98	Email terverifikasi. Anda dapat masuk sekarang.
+99	Tautan ini sudah kedaluwarsa atau sudah digunakan. Masuk untuk mendapatkan tautan baru.
+100	Periksa email Anda untuk memverifikasi alamat Anda.
+101	Berlangganan mengurangi iklan hingga 95%.
+102	Masa uji coba Anda telah berakhir.
+103	Berlangganan hingga [0]
+104	Tetap gratis sepenuhnya dengan iklan penuh
+105	Hentikan semuanya, termasuk perlindungan perangkat, sampai ada yang membayar
+106	Konsol memerlukan langganan; perangkat tetap terlindungi
+107	£4,99 per bulan
+108	Berlangganan
+109	Uji coba gratis: 
+110	[0] hari lagi
+111	[0] hari lagi
+112	Batal
+113	Hapus
+114	Terjadi kesalahan.
+115	Ekspor
+116	Memuat…
+117	T/A
+118	Tidak pernah
+119	Berikutnya
+120	tidak
+121	Tidak ada yang ditampilkan.
+122	nonaktif
+123	aktif
+124	Sebelumnya
+125	Muat ulang
+126	Simpan
+127	Cari
+128	Simulasi (data uji)
+129	Status
+130	Tidak tersedia
+131	Tidak diketahui
+132	Diperbarui [0]
+133	Memproses…
+134	ya
+135	[0] peringatan dalam 24 jam
+136	[0] peringatan dalam 24 jam
+137	[0] perangkat
+138	[0] perangkat
+139	Data per [0]
+140	[0] insiden terbuka
+141	[0] insiden terbuka
+142	[0] persetujuan menunggu
+143	[0] persetujuan menunggu
+144	terkonfirmasi
+145	dicurigai
+146	Daftarkan perangkat
+147	Perangkat
+148	Tidak melapor
+149	Kebijakan usang
+150	Sensor dinonaktifkan
+151	Definisi usang
+152	Masalah
+153	Terakhir terlihat
+154	Sistem operasi
+155	Kebijakan
+156	Jalankan di perangkat dalam 24 jam (sekali pakai):
+157	Perlindungan
+158	Salin
+159	Unduh
+160	Pindahkan
+161	Folder baru
+162	Ganti nama
+163	Pulihkan
+164	Pindahkan ke tempat sampah
+165	Unggah
+166	Bantuan
+167	[0] teks di halaman ini diterjemahkan mesin dan belum ditinjau.
+168	[0] teks dalam bahasa ini diterjemahkan mesin dan belum ditinjau.
+169	Bahasa ini belum diterjemahkan, jadi bahasa Inggris yang ditampilkan.
+170	disetujui
+171	Fakta yang diamati
+172	Hipotesis (belum dikonfirmasi)
+173	Hipotesis, keyakinan [0]: [1]
+174	Jalankan investigasi
+175	Bukti yang kurang
+176	Kurang: [0]
+177	Bacakan
+178	Tindakan yang disarankan
+179	Linimasa bukti
+180	webhook masuk
+181	Sinyal dari penyedia identitas, DNS, firewall, dan alat lain Anda. Integrasi baru dimulai sebagai tidak tersedia; hanya adaptor penyedia yang lulus uji kontraknya yang dapat ditandai aktif. Data uji diberi label simulasi di mana pun data itu muncul.
+182	Tidak terhubung (stub)
+183	Hanya data uji
+184	Tidak tersedia
+185	Aktif (terverifikasi)
+186	Rahasia (ditampilkan sekali):
+187	Persetujuan
+188	Peringatan
+189	Audit
+190	Langganan
+191	Dasbor
+192	DDoS dan ketersediaan
+193	Perangkat
+194	File
+195	Insiden
+196	Integrasi
+197	Kebijakan
+198	Privasi
+199	Karantina
+200	Respons
+201	Keamanan
+202	Setelan
+203	Karantina malware yang dikenal secara otomatis
+204	Pantau perilaku mencurigakan
+205	Blokir skrip mencurigakan
+206	Kumpulkan isi file untuk investigasi (nonaktif secara default)
+207	Izinkan isolasi jaringan
+208	Pindai file saat dibuka atau ditulis
+209	Pindai unduhan
+210	Pindai program saat dimulai
+211	Lindungi agen dari perubahan
+212	Peringatkan tentang tautan berbahaya yang dikenal
+213	Alasan
+214	Minta peninjauan
+215	Pulihkan setelah pemindaian baru
+216	waktu median hingga pemberantasan terverifikasi (n=[0], belum selesai [1])
+217	perbaikan dengan uji ulang yang lulus
+218	kekambuhan setelah pemulihan
+219	penghapusan virus terverifikasi
+220	kembali ke layanan dengan aman
+221	pemindaian pemulihan selesai
+222	Hasil yang hanya karantina ([0]) dan perangkat yang diinstal ulang ([1]) dihitung terpisah; karantina saja tidak pernah dihitung sebagai penghapusan.
+223	[0] jam
+224	[0] mnt
+225	[0] dtk
+226	Menunggu persetujuan
+227	Bukti produksi
+228	Catat apa yang diverifikasi di produksi, pada aset mana, dengan versi mana. Entri tidak dapat diedit.
+229	Versi
+230	Ubah mode
+231	tidak ada bukti
+232	gagal
+233	lulus
+234	tertunda
+235	Periksa kemajuan playbook
+236	Perangkat yang dapat merespons
+237	Semua perangkat
+238	[0] perangkat percontohan
+239	[0] perangkat percontohan
+240	Selesai
+241	Selesai saat
+242	Latihan
+243	Amati
+244	Respons
+245	Cakupan
+246	[0] diamati, [1] dapat merespons
+247	Data
+248	Usia data
+249	Langsung
+250	Data uji
+251	tidak dijalankan
+252	tanda terima
+253	sedang berlangsung
+254	tidak diketahui
+255	Pengiriman
+256	Bukti
+257	Sudah dijalankan
+258	Usang
+259	Umpan data
+260	Versi atau digest
+261	Lingkungan
+262	Hasil
+263	Pemilik
+264	Persyaratan
+265	Aset atau kohort
+266	Tampilkan
+267	Semua
+268	Belum selesai
+269	Aktif untuk seluruh layanan
+270	Aktif untuk organisasi ini
+271	Hentikan setiap tindakan respons baru untuk organisasi ini? Perlindungan dan pemindaian tetap berjalan.
+272	Izinkan tindakan respons lagi
+273	Hentikan semua tindakan respons
+274	Tombol darurat
+275	Jenis
+276	Median menit terbuka ([0] terbuka, terlama [1] mnt)
+277	Penolakan kebijakan
+278	Latihan dan simulasi (tidak dihitung di atas)
+279	Tindakan berulang (target 0)
+280	Median penundaan umpan (p95 [0] dtk, n=[1])
+281	Persetujuan terlambat ([0] menunggu, target [1] mnt)
+282	Median sinyal ke triase (p95 [0] mnt, n=[1], [2] belum ditriase)
+283	Tindakan yang diverifikasi secara independen ([0]/[1])
+284	Rentang: [0]. Tanda terima saja tidak pernah dihitung sebagai terverifikasi. Data yang hilang ditampilkan sebagai tidak tersedia.
+285	Ukuran respons
+286	Peristiwa terakhir
+287	Agen mengusulkan; kebijakan tetap memutuskan apa yang dijalankan. Setiap tindakan menampilkan persetujuan, tanda terima, dan pemeriksaan independennya.
+288	Tahap
+289	Menunggu persetujuan
+290	Ditolak
+291	Kedaluwarsa
+292	Gagal
+293	Perlu rekonsiliasi manual
+294	Diusulkan
+295	Dalam antrean
+296	Berjalan
+297	Verifikasi tertunda
+298	Terverifikasi
+299	Status langsung
+300	Mode
+301	Simulasi
+302	Pemindaian dan pengumpulan data berjalan. Tindakan lain tetap berupa usulan.
+303	Tindakan yang disetujui berjalan di perangkat yang dipilih.
+304	Tindakan hanya berjalan pada adaptor uji. Tidak ada yang berubah di perangkat Anda.
+305	Belum ada tindakan.
+306	Tidak ada yang menunggu persetujuan.
+307	Belum ada bukti produksi yang dicatat.
+308	Belum ada perangkat atau integrasi yang mengirim data.
+309	Tidak dijalankan
+310	Diamati
+311	Apa yang terjadi
+312	Respons DDoS
+313	Positif palsu dan pemulihan
+314	Identitas, phishing, dan lalu lintas mencurigakan
+315	Malware dan unduhan mencurigakan
+316	Visibilitas jaringan dan postur perangkat
+317	Pemulihan pascakompromi
+318	Ransomware atau dugaan kompromi
+319	Playbook
+320	Playbook
+321	Versi kebijakan
+322	Versi terpasang
+323	Isolasi firewall
+324	Data diterima
+325	File dihapus
+326	Proses dihentikan
+327	Status penyedia
+328	Dicatat
+329	Pemindaian selesai
+330	Disimulasikan
+331	Keluar dari karantina
+332	Dalam karantina
+333	Tindakan dan tanda terima
+334	Catat hasil
+335	Catat
+336	Dapat merespons
+337	Sumber
+338	perangkat
+339	konsol
+340	simulasi
+341	Dimulai saat
+342	Diperbarui
+343	Pemeriksaan independen
+344	Menunggu
+345	Batas arsip
+346	Arsip terenkripsi
+347	Dikecualikan
+348	Tidak dapat diakses
+349	Batas waktu
+350	Terlalu besar
+351	Format tidak didukung
+352	Dibatalkan
+353	Terlewat
+354	Sebagian
+355	Waktu habis
+356	Lengkap
+357	Sesuai permintaan
+358	Cepat
+359	Pemulihan
+360	Terjadwal
+361	Tertarget
+362	Tambahkan segmen
+363	arsip
+364	Aset
+365	Hentikan pemindaian ini? Hasil sejauh ini disimpan sebagai pemindaian yang dibatalkan.
+366	Tidak tercakup
+367	Deteksi
+368	Perangkat menurut status perlindungan
+369	Mesin
+370	Jatuh tempo
+371	Bukti terakhir
+372	Kontrol yang diharapkan
+373	Perbaikan yang diusulkan
+374	Uji ulang
+375	Aset atau segmen
+376	Celah terbuka
+377	Hasil pemindaian dalam 30 hari
+378	peringatan hingga penahanan terverifikasi
+379	perangkat terlindungi
+380	endpoint publik dengan mitigasi hulu
+381	peristiwa hingga peringatan
+382	perangkat dengan definisi terkini
+383	perangkat dengan pemindaian lengkap dalam 7 hari
+384	celah terbuka ([0] terlambat, [1] ditutup dalam 30 hari)
+385	segmen jaringan dipantau
+386	positif benar terkonfirmasi
+387	pemindaian selesai
+388	Cakupan dan respons
+389	Pemindaian lengkap terakhir
+390	Telemetri terakhir
+391	Setiap perangkat dan segmen jaringan dalam cakupan, apakah terlindungi, dan apa yang perlu diperbaiki berikutnya.
+392	Visibilitas jaringan
+393	Belum ada perangkat yang terdaftar. Lindungi komputer dari Perangkat.
+394	Tidak ada celah terbuka.
+395	[0] terbuka
+396	terlambat
+397	p95 [0] dtk
+398	Folder
+399	Folder yang akan dipindai, dipisahkan dengan koma
+400	Enkripsi dan firewall
+401	Enkripsi disk [0], firewall [1]
+402	Pemulihan setelah insiden
+403	Periksa lagi sekarang
+404	Belum diuji ulang
+405	Uji ulang gagal
+406	Ditutup terverifikasi
+407	Jenis pemindaian
+408	Pemindaian
+409	Segmen
+410	Nama segmen
+411	Mulai pemindaian
+412	Dimulai
+413	Status
+414	Menurun
+415	Terlindungi
+416	Tidak terlindungi
+417	Perangkat menurut status
+418	[0] tidak diketahui
+419	Tidak ada visibilitas
+420	Dipantau
+421	Visibilitas
+422	Tidak adanya deteksi tidak membuktikan perlindungan: periksa juga cakupan dan hasil pemindaian.
+423	Bahasa
+424	Cakupan terjemahan
+425	Tidak ada versi sebelumnya
+426	Tema
+427	Gelap
+428	Kontras tinggi
+429	Terang
+430	Tidak ada ancaman baru yang ditemukan di [0] file.
+431	[0] ancaman
+432	[0] ancaman
+433	 ditemukan di [0] file. Lihat Peringatan dan Persetujuan untuk meninjaunya.
+434	Pemindaian lengkap
+435	Tidak dapat melindungi komputer ini: [0]
+436	Komputer ini terlindungi. Pemindaian waktu nyata berjalan selama Agentic Antivirus terbuka.
+437	Pemindaian tidak selesai: [0]
+438	Memindai…
+439	Memindai setiap drive. Ini bisa memakan waktu lama.
+440	Memindai Unduhan, Desktop, dan file sementara…
+441	[0] file tidak dapat dibaca.
+442	Sebuah file
+443	Tautan situs web
+444	Terima data uji
+446	Tindakan
+447	Tambahkan integrasi
+448	Tambahkan pengecualian
+449	Tambah integrasi
+450	Tambahkan pemindaian lengkap mingguan
+451	administrator
+452	Periklanan
+453	Persetujuan iklan
+454	Layanan yang terdampak
+455	peringatan dalam 24 jam terakhir
+456	Izinkan
+457	Izinkan dan pindai
+458	Administrator harus memberikan alasan. Pengecualian dicatat dalam jejak audit.
+459	Sebuah email
+460	Setujui kembali ke layanan
+461	Menyetujui tindakan
+462	Aset
+463	aset dalam mitigasi aktif
+464	aset dengan peringatan dalam 24 jam
+465	Jejak audit
+466	Perlindungan otomatis tetap berjalan di setiap perangkat. Berikut tindakan yang memerlukan keputusan seseorang.
+467	Ketersediaan
+468	Sinyal yang tersedia
+469	Cadangan terverifikasi
+470	Blokir
+471	Secara default, agen mengirim telemetri keamanan dan hash file: nama proses dan baris perintah, jalur file, metadata koneksi jaringan, dan deteksi. Isi file hanya dikumpulkan jika organisasi Anda mengaktifkannya.
+472	Kapasitas
+473	Kategori
+474	Diubah
+475	Biaya
+476	Periksa
+477	pilih
+478	Pilih perangkat
+480	Tutup
+481	Dipisahkan dengan koma
+482	Kontak
+483	Kontrol
+484	Cakupan menurut lapisan perlindungan
+485	kritis
+486	pengiriman peringatan kritis (p95, 30 hari)
+487	Keputusan menunggu
+488	Tolak
+489	Definisi
+490	Jelaskan apa yang terjadi
+491	Detail
+492	Detail
+493	Deteksi
+494	Perangkat yang akan dilisensikan
+495	perangkat terlindungi sepenuhnya
+496	perangkat diisolasi
+497	Perangkat yang perlu diperhatikan
+498	Arah
+499	Zona DNS
+500	halaman unduhan
+501	Selama uji coba gratis, dan pada paket yang tidak berbayar, konsol menampilkan iklan Google AdSense dan aplikasi seluler menampilkan iklan Google AdMob, setelah meminta persetujuan Anda. Pelanggan melihat 95% lebih sedikit iklan. Iklan tidak pernah muncul di layar persetujuan, penahanan, peringatan ancaman, peninjauan karantina, masuk, pembayaran, atau audit.
+502	Setiap publikasi membuat versi bertanda tangan yang baru. Perangkat tetap menerapkan versi terverifikasi terakhir saat offline.
+503	Kirim email ke dukungan di
+504	Endpoint
+505	Equality Software Ltd mengoperasikan Agentic Antivirus. Halaman ini menjelaskan apa yang dikumpulkan layanan. Halaman ini harus ditinjau oleh pemilik produk sebelum dipublikasikan.
+506	Setiap tindakan yang mengubah perangkat, akun, atau lalu lintas melewati mesin kebijakan dan tata kelola AEP-X. Persetujuan mencakup satu tindakan, target persisnya, organisasi ini, dan waktu yang tetap.
+507	Setiap unggahan diperiksa untuk malware dan jenis sebenarnya. File tanpa penampil terverifikasi disimpan dan dapat diunduh, tetapi tidak dipratinjau.
+508	Pengecualian
+509	Daftar pengecualian
+510	Jalur folder
+511	untuk permintaan akses atau koreksi.
+512	Celah
+513	Dapatkan agen untuk Windows, Mac, atau Linux dari
+514	Buka Perangkat, pilih Daftarkan perangkat, lalu jalankan perintah yang ditampilkan di komputer yang ingin Anda lindungi. Agen mulai memindai segera setelah menerima kebijakannya yang bertanda tangan.
+515	Kesehatan
+516	Riwayat
+517	Nama host
+518	Saya memahami bahwa perangkat akan berhenti memindai dan memblokir ancaman setelah uji coba hingga langganan dibayar.
+519	Dampak
+520	Impor zip atau tar
+521	Insiden
+522	Sertakan model bahasa (jika organisasi Anda mengaktifkannya)
+523	Alamat IP
+524	Bergabung
+525	Bergabung dengan organisasi Anda
+526	Malware yang dikenal dipindahkan ke karantina, tempat malware tidak dapat berjalan. Jika menurut Anda file diblokir karena kesalahan, buka Karantina dan minta peninjauan. Administrator yang memutuskan, dan file hanya dikembalikan setelah pemindaian baru menyatakannya bersih.
+527	Bahasa tanpa terjemahan lengkap kembali ke bahasa Inggris. Cakupan diukur, bukan diperkirakan.
+528	Terakhir diubah
+529	Lapisan
+530	Keberhasilan permintaan sah
+531	Aturan lisensi
+532	Tautan, jika ada
+533	Host manajemen yang tetap dapat dijangkau selama isolasi
+534	Tandai sebagai positif palsu
+535	Kematangan
+536	Mitigasi
+537	Nama
+538	Nama rahasia di penyimpanan rahasia Anda, bukan rahasianya sendiri
+539	Tidak ada tindakan yang menunggu.
+540	Tidak ada insiden terbuka.
+541	Tidak ada.
+542	Tidak ada yang dilaporkan.
+543	belum diatur
+544	Diberi tahu setelah
+545	dari iklan yang ditampilkan
+546	Buffer peristiwa offline (MB)
+547	Di Android, berlangganan di aplikasi Agentic Antivirus melalui Google Play. Di iPhone dan iPad, langganan App Store belum tersedia. Pembayaran di web belum tersedia.
+548	Insiden terbuka
+549	insiden terbuka
+550	Insiden terbuka
+551	Latensi p95
+552	dibayar hingga
+553	Pola jalur
+554	Orang
+555	Per perangkat
+556	Per pengguna (mencakup semua perangkatnya)
+557	Pratinjau
+558	Utama
+560	Lindungi perangkat
+561	Protokol
+562	Penyedia
+563	Peringatan penyedia (24 jam)
+564	Endpoint publik
+565	Publikasikan versi kebijakan
+566	Publikasikan versi bertanda tangan
+567	Dipublikasikan
+568	Pemindaian cepat
+569	Fitur bacakan dan dikte menggunakan fitur suara bawaan browser Anda. Kami tidak merekam atau menyimpan audio.
+570	Diterima
+571	Media yang dapat dilepas
+572	Hapus
+573	Diminta
+574	Diminta oleh
+575	Retensi
+576	Kembali ke layanan
+577	Saat ini
+578	Risiko
+579	Peran
+580	Batalkan
+581	Simpan endpoint
+582	Simpan aturan lisensi
+583	Pindai
+584	Jadwal (cron)
+585	Pemindaian terjadwal
+586	Referensi rahasia
+587	Kirim undangan
+588	Kirim laporan
+589	Kirim tautan penyetelan ulang
+590	Layanan
+591	Sasaran layanan
+594	Sinyal
+595	Ukuran
+596	Lainnya
+597	Urutkan
+598	Langkah
+599	Menghentikan proses, mengisolasi perangkat, memulihkan file, menambahkan pengecualian, dan mengubah aturan lalu lintas memerlukan persetujuan seseorang. Persetujuan mencakup satu tindakan, target persisnya, dan waktu terbatas. Jika ada yang berubah, setujui lagi.
+600	Berlangganan untuk perangkat ini dengan Google Play
+601	status langganan
+603	Sistem
+604	Target
+605	Asisten AI
+606	Asisten mengelompokkan peringatan terkait, mencantumkan apa yang diamati beserta tautan ke bukti, dan menandai apa pun yang tidak dapat dibuktikannya sebagai hipotesis. Asisten dapat menyarankan tindakan, tetapi tidak dapat menyetujuinya. Jika model tidak tersedia, pemindaian, peringatan, dan respons manual tetap berfungsi.
+607	Komputer ini
+608	Hanya TLS, harus ada di daftar izin keluar
+609	Banjir lalu lintas diserap oleh penyedia hulu Anda. Di sini Anda mendata setiap endpoint publik, memantau peringatan penyedia, dan menyetujui pembatasan lalu lintas baru.
+610	Pembatasan lalu lintas
+611	Diterjemahkan
+612	Tempat sampah
+613	hari uji coba tersisa
+614	Aktifkan perlindungan untuk memindai file di komputer ini dan memantau ransomware serta pencurian kredensial.
+615	tidak tercakup
+616	Urungkan perubahan terakhir
+617	Pengguna
+618	Verifikasi email
+619	menunggu persetujuan
+620	Kami menampilkan iklan dari Google AdSense di beberapa halaman. Izinkan iklan yang dipersonalisasi?
+621	Webhook:
+622	Apa yang dikirim perangkat
+623	Apa ini?
+624	Kapan
+625	Saat sesuatu diblokir
+626	Saat uji coba berakhir tanpa pembayaran
+627	Siapa
+628	Anda dapat menghapus akun dari profil Anda. Hubungi
+629	Nama Anda
+630	Organisasi Anda mendapatkan uji coba gratis 30 hari. Setelah itu, biayanya £4,99 per bulan untuk setiap pengguna atau perangkat.
+631	Organisasi Anda menentukan berapa lama telemetri dan bukti disimpan. Catatan audit tidak dapat diedit atau dihapus.
+632	Hak Anda
+633	Dikte
+634	Izinkan penggunaan mikrofon untuk dikte? Audio diproses oleh browser Anda dan tidak kami simpan.
+635	Output audio
+636	Jeda
+637	Nada
+638	Lanjutkan
+639	Kecepatan
+640	Hentikan
+641	Tidak ada suara yang tersedia untuk bahasa ini.
+642	Suara
+643	File telah dipindahkan ke karantina dan tidak dapat dijalankan.
+644	Ancaman telah diblokir di perangkat ini.

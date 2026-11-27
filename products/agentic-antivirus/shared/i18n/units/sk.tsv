@@ -1,0 +1,637 @@
+0	Prejsť na hlavný obsah
+1	Pridať trvalú výnimku
+2	Použiť obmedzenie prevádzky
+3	Zhromaždiť metadáta zariadenia
+4	Izolovať zariadenie od siete
+5	Presunúť súbor do karantény
+6	Uvoľniť zariadenie z izolácie
+7	Obnoviť súbor z karantény
+8	Odhlásiť používateľa všade
+9	Vrátiť obmedzenie prevádzky
+10	Vrátiť aktualizáciu
+11	Skenovať zariadenia
+12	Pozastaviť používateľský účet
+13	Ukončiť proces
+14	Schváliť
+15	Zamietnuť
+16	Odoslať do zariadení
+17	Schválenie vyprší [0]
+18	Navrhnuté asistentom AI
+19	Reklama
+20	Akcia
+21	Agenti
+22	Opýtať sa
+23	Opýtať sa bezpečnostného asistenta
+24	Odpovede vychádzajú z vašich zariadení, otvorených incidentov a medzier. Asistent nemôže nič zmeniť.
+25	Na základe
+26	Odstránené [0] tvrdenie bez dôkazov
+27	Odstránených [0] tvrdení bez dôkazov
+29	Model hostovaný vo vlastnej réžii
+30	Pravidlá (bez modelu)
+31	Navrhnúť plán nápravy
+32	Každý krok je návrh. Nič sa nespustí, kým to niekto neschváli.
+33	Otázka
+34	Napríklad: ktoré zariadenia vyžadujú pozornosť?
+35	Navrhovaná závažnosť
+36	Zhrnutie
+37	Ciele
+38	Zhrnúť tento incident
+39	Prečo
+40	Zistené
+41	Nahlásiť niečo podozrivé
+42	Pravidlo
+43	Závažnosť
+44	Upozornenie
+46	Pridať súbory
+47	Pridať priečinok
+48	Pridať obrázky
+49	[0] príloha
+50	[0] príloh
+51	Prílohy
+52	Odfotiť
+53	Prístup ku kamere nebol povolený. Povoľte ho v prehliadači alebo použite aplikáciu fotoaparátu v zariadení.
+54	Náhľad kamery
+55	Tento prehliadač tu nemôže otvoriť kameru.
+56	Zachytiť
+57	Zavrieť asistenta
+58	Čo sú tieto súbory a sú bezpečné?
+59	Súbor
+60	Opýtajte sa na svoje zabezpečenie alebo priložte súbory, priečinok, obrázky či fotku z kamery. Každá príloha sa najprv skontroluje a nič sa neukladá.
+61	Model opísal [0] obrázok
+62	Model opísal [0] obrázkov
+63	.
+64	Napríklad: je toto stiahnutie bezpečné?
+65	Čistý text a obrázky sa môžu odoslať modelu AI, ktorý povolila vaša organizácia. Škodlivé súbory nikdy.
+66	[0] súbor nebol pridaný
+67	[0] súborov nebolo pridaných
+68	: najviac [0] súborov, každý do [1] MB a spolu [2] MB.
+69	Odstrániť [0]
+70	Skenovať a opýtať sa
+71	Výsledky skenovania
+72	Typ
+73	Použiť kameru zariadenia
+74	Výsledok
+75	Žiadny známy malvér
+76	Škodlivé
+77	Neskontrolované
+78	Reťazec auditu je prerušený pri zázname [0].
+79	Reťazec auditu je neporušený: overené záznamy: [0].
+80	E-mail
+81	Zabudli ste heslo?
+82	Prihlásiť sa cez Google
+83	Prihlásenie cez Google nefungovalo. Skúste to znova alebo použite e-mail a heslo.
+84	Prihlásiť sa
+85	Odhlásiť sa
+86	Nové heslo
+87	alebo
+88	Organizácia
+89	Heslo
+90	Heslo bolo zmenené. Prihláste sa novým heslom.
+91	Aspoň 12 znakov.
+92	Vytvoriť účet
+93	Odoslať odkaz znova
+94	Ak tento účet stále čaká na potvrdenie, nový odkaz je na ceste. Skontrolujte aj priečinok so spamom.
+95	Obnoviť heslo
+96	Ak túto adresu používa nejaký účet, poslali sme odkaz na obnovenie hesla. Platí jednu hodinu.
+97	Pred prihlásením potvrďte svoju e-mailovú adresu. Otvorte odkaz, ktorý sme poslali na [0].
+98	E-mail bol overený. Teraz sa môžete prihlásiť.
+99	Platnosť tohto odkazu vypršala alebo už bol použitý. Prihláste sa a získajte nový.
+100	Skontrolujte e-mail a overte svoju adresu.
+101	Predplatné zníži počet reklám o 95 %.
+102	Vaša skúšobná verzia sa skončila.
+103	Predplatené do [0]
+104	Všetko zadarmo s plnou reklamou
+105	Zastaviť všetko vrátane ochrany zariadení, kým niekto nezaplatí
+106	Konzola vyžaduje predplatné; zariadenia zostávajú chránené
+107	4,99 £ mesačne
+108	Predplatiť
+109	Skúšobná verzia zadarmo:
+110	Zostáva [0] deň
+111	Zostáva [0] dní
+112	Zrušiť
+113	Odstrániť
+114	Niečo sa pokazilo.
+115	Exportovať
+116	Načítava sa…
+117	Nie je k dispozícii
+118	Nikdy
+119	Ďalej
+120	nie
+121	Nie je čo zobraziť.
+122	vyp.
+123	zap.
+124	Späť
+125	Obnoviť
+126	Uložiť
+127	Hľadať
+128	Simulácia (testovacie údaje)
+129	Stav
+130	Nedostupné
+131	Neznáme
+132	Aktualizované [0]
+133	Spracúva sa…
+134	áno
+135	[0] upozornenie za 24 hodín
+136	[0] upozornení za 24 hodín
+137	[0] zariadenie
+138	[0] zariadení
+139	Údaje k [0]
+140	[0] otvorený incident
+141	[0] otvorených incidentov
+142	[0] schválenie čaká
+143	[0] schválení čaká
+144	potvrdené
+145	podozrenie
+146	Zaregistrovať zariadenie
+147	Zariadenie
+148	Nehlási sa
+149	Zastaraná politika
+150	Senzor vypnutý
+151	Zastarané definície
+152	Problémy
+153	Naposledy videné
+154	Operačný systém
+155	Politika
+156	Spustite v zariadení do 24 hodín (jednorazovo):
+157	Ochrana
+158	Kopírovať
+159	Stiahnuť
+160	Presunúť
+161	Nový priečinok
+162	Premenovať
+163	Obnoviť
+164	Presunúť do koša
+165	Nahrať
+166	Pomocník
+167	[0] text na tejto stránke je strojovo preložený a zatiaľ nebol skontrolovaný.
+168	[0] textov v tomto jazyku je strojovo preložených a zatiaľ neboli skontrolované.
+169	Tento jazyk ešte nie je preložený, preto sa zobrazuje angličtina.
+170	schválené
+171	Zistené fakty
+172	Hypotézy (nepotvrdené)
+173	Hypotéza, istota [0]: [1]
+174	Spustiť vyšetrovanie
+175	Chýbajúce dôkazy
+176	Chýba: [0]
+177	Prečítať nahlas
+178	Odporúčané akcie
+179	Časová os dôkazov
+180	prichádzajúci webhook
+181	Signály od poskytovateľa identít, DNS, firewallov a ďalších nástrojov. Nové integrácie sú spočiatku nedostupné; ako živý možno označiť iba adaptér poskytovateľa, ktorý prešiel zmluvným testom. Testovacie údaje sú všade označené ako simulácia.
+182	Nepripojené (zástupná implementácia)
+183	Iba testovacie údaje
+184	Nie je k dispozícii
+185	Živé (overené)
+186	Tajný kľúč (zobrazí sa raz):
+187	Schválenia
+188	Upozornenia
+189	Audit
+190	Predplatné
+191	Prehľad
+192	DDoS a dostupnosť
+193	Zariadenia
+194	Súbory
+195	Incidenty
+196	Integrácie
+197	Politiky
+198	Ochrana súkromia
+199	Karanténa
+200	Reakcia
+201	Zabezpečenie
+202	Nastavenia
+203	Automaticky presúvať známy malvér do karantény
+204	Sledovať podozrivé správanie
+205	Blokovať podozrivé skripty
+206	Zhromažďovať obsah súborov na vyšetrovanie (predvolene vypnuté)
+207	Povoliť sieťovú izoláciu
+208	Skenovať súbory pri otvorení alebo zápise
+209	Skenovať stiahnuté súbory
+210	Skenovať programy pri spustení
+211	Chrániť agenta pred zmenami
+212	Upozorňovať na známe škodlivé odkazy
+213	Dôvod
+214	Požiadať o kontrolu
+215	Obnoviť po novom skenovaní
+216	medián času do overeného odstránenia (n=[0], nevyriešené [1])
+217	opravy s úspešným opakovaným testom
+218	opakovanie po obnove
+219	overené odstránenie vírusu
+220	bezpečný návrat do prevádzky
+221	dokončené skenovania po obnove
+222	Výsledky iba s karanténou ([0]) a zariadenia s preinštalovaným systémom ([1]) sa počítajú osobitne; samotná karanténa sa nikdy nepočíta ako odstránenie.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Čaká na schválenie
+227	Dôkazy z produkcie
+228	Zaznamenajte, čo bolo overené v produkcii, na ktorých aktívach a s akou verziou. Záznamy nemožno upravovať.
+229	Verzia
+230	Zmeniť režim
+231	žiadne dôkazy
+232	zlyhalo
+233	prešlo
+234	čaká
+235	Skontrolovať priebeh playbookov
+236	Zariadenia schopné reagovať
+237	Všetky zariadenia
+238	[0] pilotné zariadenie
+239	[0] pilotných zariadení
+240	Dokončené
+241	Dokončené, keď
+242	Cvičenie
+243	Sledovať
+244	Reagovať
+245	Pokrytie
+246	Sledované: [0], schopné reagovať: [1]
+247	Údaje
+248	Vek údajov
+249	Naživo
+250	Testovacie údaje
+251	nevykonané
+252	potvrdenie
+253	prebieha
+254	neznáme
+255	Odoslanie
+256	Dôkazy
+257	Spustilo sa
+258	Zastarané
+259	Zdroje údajov
+260	Verzia alebo odtlačok
+261	Prostredie
+262	Výsledok
+263	Vlastník
+264	Požiadavka
+265	Aktívum alebo skupina
+266	Zobraziť
+267	Všetko
+268	Nedokončené
+269	Zapnuté pre celú službu
+270	Zapnuté pre túto organizáciu
+271	Zastaviť všetky nové akcie reakcie v tejto organizácii? Ochrana a skenovanie budú pokračovať.
+272	Znova povoliť akcie reakcie
+273	Zastaviť všetky akcie reakcie
+274	Núdzový vypínač
+275	Druh
+276	Medián minút otvorenia (otvorené: [0], najstaršie [1] min)
+277	Zamietnutia podľa politiky
+278	Cvičenia a simulácie (nezapočítané vyššie)
+279	Opakované akcie (cieľ 0)
+280	Medián oneskorenia zdroja údajov (p95 [0] s, n=[1])
+281	Schválenia po termíne (čaká: [0], cieľ [1] min)
+282	Medián od signálu po triedenie (p95 [0] min, n=[1], netriedené: [2])
+283	Nezávisle overené akcie ([0]/[1])
+284	Obdobie: [0]. Samotné potvrdenie sa nikdy nepočíta ako overenie. Chýbajúce údaje sa zobrazujú ako nedostupné.
+285	Ukazovatele reakcie
+286	Posledná udalosť
+287	Agenti navrhujú; pevná politika rozhoduje, čo sa spustí. Každá akcia ukazuje svoje schválenie, potvrdenie a nezávislú kontrolu.
+288	Fáza
+289	Čaká na schválenie
+290	Zamietnuté
+291	Vypršalo
+292	Zlyhalo
+293	Vyžaduje ručné zosúladenie
+294	Navrhnuté
+295	V poradí
+296	Prebieha
+297	Čaká na overenie
+298	Overené
+299	Živý stav
+300	Režim
+301	Simulácia
+302	Skenovanie a zber údajov sa vykonávajú. Ostatné akcie zostávajú návrhmi.
+303	Schválené akcie sa vykonajú na vybraných zariadeniach.
+304	Akcie sa vykonávajú iba na testovacích adaptéroch. Na vašich zariadeniach sa nič nezmení.
+305	Zatiaľ žiadne akcie.
+306	Nič nečaká na schválenie.
+307	Zatiaľ neboli zaznamenané žiadne dôkazy z produkcie.
+308	Údaje zatiaľ neodosielajú žiadne zariadenia ani integrácie.
+309	Nespustilo sa
+310	Zistené
+311	Čo sa stalo
+312	Reakcia na DDoS
+313	Falošne pozitívne nálezy a obnovenie
+314	Identita, phishing a podozrivá prevádzka
+315	Malvér a podozrivé stiahnutia
+316	Viditeľnosť siete a stav zariadení
+317	Obnova po kompromitácii
+318	Ransomvér alebo podozrenie na kompromitáciu
+319	Playbook
+320	Playbooky
+321	Verzia politiky
+322	Nainštalovaná verzia
+323	Izolácia firewallom
+324	Údaje prijaté
+325	Súbor odstránený
+326	Proces ukončený
+327	Stav u poskytovateľa
+328	Zaznamenané
+329	Skenovanie dokončené
+330	Simulované
+331	Mimo karantény
+332	V karanténe
+333	Akcie a potvrdenia
+334	Zaznamenať výsledok
+335	Zaznamenať
+336	Môže reagovať
+337	Zdroj
+338	zariadenie
+339	konzola
+340	simulácia
+341	Začína, keď
+342	Aktualizované
+343	Nezávislá kontrola
+344	Čaká
+345	Limit archívu
+346	Šifrovaný archív
+347	Vylúčené
+348	Neprístupné
+349	Časový limit
+350	Príliš veľké
+351	Nepodporovaný formát
+352	Zrušené
+353	Zmeškané
+354	Čiastočné
+355	Vypršal časový limit
+356	Úplné
+357	Na požiadanie
+358	Rýchle
+359	Obnova
+360	Plánované
+361	Cielené
+362	Pridať segment
+363	archívy
+364	Aktíva
+365	Zastaviť toto skenovanie? Doterajšie výsledky sa uložia ako zrušené skenovanie.
+366	Nepokryté
+367	Detekcie
+368	Zariadenia podľa stavu ochrany
+369	Modul
+370	Termín
+371	Posledný dôkaz
+372	Očakávaná kontrola
+373	Navrhovaná oprava
+374	Opakovaný test
+375	Aktívum alebo segment
+376	Otvorené medzery
+377	Výsledky skenovania za 30 dní
+378	od upozornenia po overené zadržanie
+379	chránené zariadenia
+380	verejné koncové body s ochranou u nadradeného poskytovateľa
+381	od udalosti po upozornenie
+382	zariadenia s aktuálnymi definíciami
+383	zariadenia s úplným skenovaním za 7 dní
+384	otvorené medzery (po termíne: [0], uzavreté za 30 dní: [1])
+385	monitorované sieťové segmenty
+386	potvrdené skutočné hrozby
+387	dokončené skenovania
+388	Pokrytie a reakcia
+389	Posledné úplné skenovanie
+390	Posledná telemetria
+391	Každé zariadenie a sieťový segment v rozsahu: či je chránené a čo opraviť ďalej.
+392	Viditeľnosť siete
+393	Zatiaľ nie sú zaregistrované žiadne zariadenia. Ochráňte počítač v sekcii Zariadenia.
+394	Žiadne otvorené medzery.
+395	Otvorené: [0]
+396	po termíne
+397	p95 [0] s
+398	Priečinky
+399	Priečinky na skenovanie, oddelené čiarkami
+400	Šifrovanie a firewall
+401	Šifrovanie disku [0], firewall [1]
+402	Obnova po incidentoch
+403	Skontrolovať znova
+404	Neotestované znova
+405	Opakovaný test zlyhal
+406	Overene uzavreté
+407	Typ skenovania
+408	Skenovania
+409	Segment
+410	Názov segmentu
+411	Spustiť skenovanie
+412	Začaté
+413	Stav
+414	Obmedzená
+415	Chránené
+416	Nechránené
+417	Zariadenia podľa stavu
+418	Neznáme: [0]
+419	Bez viditeľnosti
+420	Monitorované
+421	Viditeľnosť
+422	Žiadne detekcie nedokazujú ochranu: skontrolujte aj pokrytie a výsledky skenovania.
+423	Jazyk
+424	Pokrytie prekladom
+425	Žiadna staršia verzia
+426	Motív
+427	Tmavý
+428	Vysoký kontrast
+429	Svetlý
+430	V [0] súboroch sa nenašli žiadne nové hrozby.
+431	Nájdená [0] hrozba
+432	Nájdených [0] hrozieb
+433	 v [0] súboroch. Skontrolujte ich v sekciách Upozornenia a Schválenia.
+434	Úplné skenovanie
+435	Tento počítač sa nepodarilo ochrániť: [0]
+436	Tento počítač je chránený. Skenovanie v reálnom čase beží, kým je Agentic Antivirus otvorený.
+437	Skenovanie sa nedokončilo: [0]
+438	Skenuje sa…
+439	Skenujú sa všetky disky. Môže to trvať dlho.
+440	Skenujú sa priečinky Stiahnuté súbory a Pracovná plocha a dočasné súbory…
+441	[0] súborov nemožno prečítať.
+442	Súbor
+443	Odkaz na web
+444	Prijať testovacie údaje
+446	Akcie
+447	Pridať integráciu
+448	Pridať výnimku
+449	Pridať integráciu
+450	Pridať týždenné úplné skenovanie
+451	správca
+452	Reklama
+453	Súhlas s reklamou
+454	Dotknuté služby
+455	upozornenia za posledných 24 hodín
+456	Povoliť
+457	Povoliť a skenovať
+458	Správca musí uviesť dôvod. Výnimka sa zaznamená do auditného záznamu.
+459	E-mail
+460	Schváliť návrat do prevádzky
+461	Schvaľovanie akcií
+462	Aktívum
+463	aktíva s aktívnym zmierňovaním
+464	aktíva s upozorneniami za 24 hodín
+465	Auditný záznam
+466	Automatická ochrana beží na každom zariadení ďalej. Toto sú akcie, o ktorých musí rozhodnúť človek.
+467	Dostupnosť
+468	Dostupné signály
+469	Záloha overená
+470	Blokovať
+471	Predvolene agent odosiela bezpečnostnú telemetriu a hashe súborov: názvy procesov a príkazové riadky, cesty k súborom, metadáta sieťových pripojení a detekcie. Obsah súborov sa zhromažďuje iba vtedy, keď to vaša organizácia zapne.
+472	Kapacita
+473	Kategória
+474	Zmenené
+475	Poplatok
+476	Skontrolovať
+477	vybrať
+478	Vyberte zariadenie
+480	Zavrieť
+481	Oddelené čiarkami
+482	Kontakt
+483	Kontrola
+484	Pokrytie podľa vrstvy ochrany
+485	kritické
+486	doručenie kritických upozornení (p95, 30 dní)
+487	Čakajúce rozhodnutia
+488	Odmietnuť
+489	Definície
+490	Opíšte, čo sa stalo
+491	Podrobnosť
+492	Podrobnosti
+493	Detekcia
+494	Zariadenie na licencovanie
+495	plne chránené zariadenia
+496	izolované zariadenia
+497	Zariadenia vyžadujúce pozornosť
+498	Smer
+499	Zóna DNS
+500	stránky na stiahnutie
+501	Počas skúšobnej verzie a pri neplatených plánoch zobrazuje konzola reklamy Google AdSense a mobilné aplikácie reklamy Google AdMob, a to po získaní vášho súhlasu. Predplatitelia vidia o 95 % menej reklám. Reklamy sa nikdy nezobrazujú na obrazovkách schvaľovania, zadržania, varovaní pred hrozbami, kontroly karantény, prihlásenia, platby ani auditu.
+502	Každé publikovanie vytvorí novú podpísanú verziu. Zariadenia v režime offline ďalej vynucujú poslednú overenú verziu.
+503	Napíšte podpore na
+504	Koncový bod
+505	Equality Software Ltd prevádzkuje Agentic Antivirus. Táto stránka opisuje, čo služba zhromažďuje. Pred zverejnením ju musí skontrolovať vlastník produktu.
+506	Každá akcia, ktorá mení zariadenie, účet alebo prevádzku, prechádza modulom politík a správou AEP-X. Schválenie sa vzťahuje na jednu akciu, jej presné ciele, túto organizáciu a pevne stanovený čas.
+507	Každý nahraný súbor sa kontroluje na malvér a skutočný typ. Súbory bez overeného zobrazovača sa ukladajú a dajú sa stiahnuť, ale nezobrazuje sa ich náhľad.
+508	Výnimka
+509	Výnimky
+510	Cesta k priečinku
+511	v súvislosti so žiadosťami o prístup alebo opravu.
+512	Medzery
+513	Stiahnite si agenta pre Windows, Mac alebo Linux zo
+514	Prejdite do sekcie Zariadenia, zvoľte Zaregistrovať zariadenie a spustite zobrazený príkaz na počítači, ktorý chcete chrániť. Agent začne skenovať, hneď ako dostane podpísanú politiku.
+515	Stav
+516	História
+517	Názov hostiteľa
+518	Rozumiem, že po skončení skúšobnej verzie zariadenia prestanú skenovať a blokovať hrozby, kým sa nezaplatí predplatné.
+519	Dosah
+520	Importovať zip alebo tar
+521	Incident
+522	Zahrnúť jazykový model (ak ho vaša organizácia povolila)
+523	IP adresa
+524	Pripojiť sa
+525	Pripojte sa k svojej organizácii
+526	Známy malvér sa presúva do karantény, kde ho nemožno spustiť. Ak si myslíte, že súbor bol zablokovaný omylom, otvorte Karanténu a požiadajte o kontrolu. Rozhoduje správca a súbor sa vráti, až keď ho nové skenovanie vyhodnotí ako čistý.
+527	Jazyky bez úplného prekladu sa zobrazujú po anglicky. Pokrytie je merané, nie odhadované.
+528	Naposledy zmenené
+529	Vrstva
+530	Úspešnosť legitímnych požiadaviek
+531	Pravidlá licencovania
+532	Odkaz, ak existuje
+533	Hostitelia správy dostupní počas izolácie
+534	Označiť ako falošne pozitívne
+535	Vyspelosť
+536	Zmierňovanie
+537	Názov
+538	Názov tajného kľúča vo vašom úložisku tajných kľúčov, nikdy samotný kľúč
+539	Nič nečaká.
+540	Žiadne otvorené incidenty.
+541	Žiadne.
+542	Nič nenahlásené.
+543	nenastavené
+544	Oznámené po
+545	zobrazených reklám
+546	Vyrovnávacia pamäť offline udalostí (MB)
+547	V Androide si predplatné aktivujte v aplikácii Agentic Antivirus cez Google Play. Na iPhone a iPade zatiaľ predplatné cez App Store nie je k dispozícii. Platba na webe zatiaľ nie je k dispozícii.
+548	Otvoriť incident
+549	otvorené incidenty
+550	Otvorené incidenty
+551	Latencia p95
+552	zaplatené do
+553	Vzor cesty
+554	Ľudia
+555	Za zariadenie
+556	Za používateľa (pokrýva všetky jeho zariadenia)
+557	Náhľad
+558	Primárne
+560	Ochrániť zariadenie
+561	Protokol
+562	Poskytovateľ
+563	Upozornenia poskytovateľa (24 hodín)
+564	Verejné koncové body
+565	Publikovať verziu politiky
+566	Publikovať podpísanú verziu
+567	Publikované
+568	Rýchle skenovanie
+569	Čítanie nahlas a diktovanie využívajú vstavané hlasové funkcie prehliadača. Zvuk nenahrávame ani neukladáme.
+570	Prijaté
+571	Vymeniteľné médiá
+572	Odstrániť
+573	Vyžiadané
+574	Žiadateľ
+575	Uchovávanie
+576	Návrat do prevádzky
+577	Práve teraz
+578	Riziko
+579	Rola
+580	Vrátiť späť
+581	Uložiť koncový bod
+582	Uložiť pravidlá licencovania
+583	Skenovať
+584	Plán (cron)
+585	Plánované skenovania
+586	Odkaz na tajný kľúč
+587	Odoslať pozvánku
+588	Odoslať hlásenie
+589	Odoslať odkaz na obnovenie
+590	Služba
+591	Ciele služby
+594	Signál
+595	Veľkosť
+596	Niečo iné
+597	Zoradiť
+598	Krok
+599	Ukončovanie procesov, izolácia zariadení, obnova súborov, pridávanie výnimiek a zmeny pravidiel prevádzky vyžadujú schválenie človekom. Schválenie sa vzťahuje na jednu akciu, jej presné ciele a obmedzený čas. Ak sa čokoľvek zmení, schváľte znova.
+600	Predplatiť toto zariadenie cez Google Play
+601	stav predplatného
+603	Systém
+604	Cieľ
+605	Asistent AI
+606	Asistent zoskupuje súvisiace upozornenia, uvádza zistenia s odkazmi na dôkazy a všetko, čo nedokáže preukázať, označí ako hypotézu. Môže navrhovať akcie, ale nemôže ich schvaľovať. Ak je model nedostupný, skenovanie, upozornenia a ručná reakcia fungujú ďalej.
+607	Tento počítač
+608	Iba TLS, musí byť na zozname povolených odchádzajúcich pripojení
+609	Záplavy prevádzky pohlcuje váš nadradený poskytovateľ. Tu evidujete každý verejný koncový bod, sledujete upozornenia poskytovateľa a schvaľujete nové obmedzenia prevádzky.
+610	Obmedzenia prevádzky
+611	Preložené
+612	Kôš
+613	zostávajúce dni skúšobnej verzie
+614	Zapnite ochranu, aby sa skenovali súbory v tomto počítači a sledoval sa ransomvér a krádeže prihlasovacích údajov.
+615	nepokryté
+616	Vrátiť poslednú zmenu
+617	Používateľ
+618	Overiť e-mail
+619	čaká na schválenie
+620	Na niektorých stránkach zobrazujeme reklamy Google AdSense. Povoliť prispôsobené reklamy?
+621	Webhook:
+622	Čo zariadenia odosielajú
+623	Čo to je?
+624	Kedy
+625	Keď sa niečo zablokuje
+626	Keď sa skúšobná verzia skončí bez platby
+627	Kto
+628	Svoj účet môžete odstrániť v profile. Kontaktujte
+629	Vaše meno
+630	Vaša organizácia dostane 30-dňovú skúšobnú verziu zadarmo. Potom stojí 4,99 £ mesačne za každého používateľa alebo zariadenie.
+631	Vaša organizácia určuje, ako dlho sa uchovávajú telemetria a dôkazy. Auditné záznamy nemožno upravovať ani odstraňovať.
+632	Vaše práva
+633	Diktovať
+634	Povoliť použitie mikrofónu na diktovanie? Zvuk spracúva váš prehliadač a my ho neukladáme.
+635	Zvukový výstup
+636	Pozastaviť
+637	Výška hlasu
+638	Pokračovať
+639	Rýchlosť
+640	Zastaviť
+641	Pre tento jazyk nie je k dispozícii žiadny hlas.
+642	Hlas
+643	Súbor bol presunutý do karantény a nemožno ho spustiť.
+644	V tomto zariadení bola zablokovaná hrozba.

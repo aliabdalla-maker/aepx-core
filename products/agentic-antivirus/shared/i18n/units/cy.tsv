@@ -1,0 +1,637 @@
+0	Neidio i'r prif gynnwys
+1	Ychwanegu eithriad parhaol
+2	Gosod cyfyngiad traffig
+3	Casglu metadata'r ddyfais
+4	Ynysu dyfais o'r rhwydwaith
+5	Rhoi ffeil mewn cwarantin
+6	Rhyddhau dyfais o ynysu
+7	Adfer ffeil mewn cwarantin
+8	Allgofnodi defnyddiwr ym mhobman
+9	Dadwneud cyfyngiad traffig
+10	Dadwneud diweddariad
+11	Sganio dyfeisiau
+12	Atal cyfrif defnyddiwr
+13	Stopio proses
+14	Cymeradwyo
+15	Gwrthod
+16	Anfon i ddyfeisiau
+17	Mae'r gymeradwyaeth yn dod i ben [0]
+18	Cynigiwyd gan y cynorthwyydd AI
+19	Hysbyseb
+20	Gweithred
+21	Asiantau
+22	Gofyn
+23	Gofyn i'r cynorthwyydd diogelwch
+24	Daw'r atebion o'ch dyfeisiau, digwyddiadau agored a bylchau. Ni all y cynorthwyydd newid dim byd.
+25	Yn seiliedig ar
+26	Tynnwyd [0] honiad heb dystiolaeth
+27	Tynnwyd [0] honiad heb dystiolaeth
+29	Model hunan-letyol
+30	Rheolau (dim model)
+31	Drafftio cynllun adfer
+32	Cynnig yw pob cam. Does dim yn rhedeg nes bod rhywun yn ei gymeradwyo.
+33	Cwestiwn
+34	Er enghraifft: pa ddyfeisiau sydd angen sylw?
+35	Difrifoldeb a awgrymir
+36	Crynodeb
+37	Targedau
+38	Crynhoi'r digwyddiad hwn
+39	Pam
+40	Canfuwyd
+41	Rhoi gwybod am rywbeth amheus
+42	Rheol
+43	Difrifoldeb
+44	Rhybudd
+46	Ychwanegu ffeiliau
+47	Ychwanegu ffolder
+48	Ychwanegu delweddau
+49	[0] atodiad
+50	[0] atodiad
+51	Atodiadau
+52	Tynnu llun
+53	Ni chaniatawyd mynediad i'r camera. Caniatewch ef yn eich porwr, neu defnyddiwch ap camera eich dyfais.
+54	Rhagolwg camera
+55	Ni all y porwr hwn agor y camera yma.
+56	Cipio
+57	Cau'r cynorthwyydd
+58	Beth yw'r ffeiliau hyn, ac ydyn nhw'n ddiogel?
+59	Ffeil
+60	Gofynnwch am eich diogelwch, neu atodwch ffeiliau, ffolder, delweddau neu lun camera. Caiff pob atodiad ei sganio'n gyntaf ac ni chaiff dim ei storio.
+61	Disgrifiwyd [0] ddelwedd
+62	Disgrifiwyd [0] delwedd
+63	 gan y model.
+64	Er enghraifft: ydy'r lawrlwythiad hwn yn ddiogel?
+65	Gellir anfon testun a delweddau glân i'r model AI a alluogwyd gan eich sefydliad. Ni chaiff ffeiliau maleisus fyth eu hanfon.
+66	Ni ychwanegwyd [0] ffeil
+67	Ni ychwanegwyd [0] ffeil
+68	: hyd at [0] ffeil, [1] MB yr un a [2] MB i gyd.
+69	Tynnu [0]
+70	Sganio a gofyn
+71	Canlyniadau'r sgan
+72	Math
+73	Defnyddio camera'r ddyfais
+74	Canlyniad
+75	Dim maleiswedd hysbys
+76	Maleisus
+77	Heb ei sganio
+78	Mae'r gadwyn archwilio wedi torri yng nghofnod [0].
+79	Mae'r gadwyn archwilio'n gyfan: [0] cofnod wedi'u gwirio.
+80	E-bost
+81	Wedi anghofio'ch cyfrinair?
+82	Mewngofnodi gyda Google
+83	Methodd mewngofnodi gyda Google. Rhowch gynnig arall arni, neu defnyddiwch eich e-bost a'ch cyfrinair.
+84	Mewngofnodi
+85	Allgofnodi
+86	Cyfrinair newydd
+87	neu
+88	Sefydliad
+89	Cyfrinair
+90	Newidiwyd y cyfrinair. Mewngofnodwch gyda'ch cyfrinair newydd.
+91	O leiaf 12 nod.
+92	Creu cyfrif
+93	Anfon y ddolen eto
+94	Os oes angen cadarnhau'r cyfrif hwnnw o hyd, mae dolen newydd ar ei ffordd. Gwiriwch eich ffolder sbam hefyd.
+95	Ailosod cyfrinair
+96	Os yw cyfrif yn defnyddio'r cyfeiriad hwnnw, rydym wedi anfon dolen ailosod. Mae'n gweithio am awr.
+97	Cadarnhewch eich cyfeiriad e-bost cyn mewngofnodi. Agorwch y ddolen a anfonwyd gennym i [0].
+98	E-bost wedi'i wirio. Gallwch fewngofnodi nawr.
+99	Mae'r ddolen hon wedi dod i ben neu wedi'i defnyddio eisoes. Mewngofnodwch i gael un newydd.
+100	Gwiriwch eich e-bost i ddilysu'ch cyfeiriad.
+101	Mae tanysgrifio'n lleihau hysbysebion 95%.
+102	Mae eich cyfnod prawf wedi dod i ben.
+103	Wedi tanysgrifio tan [0]
+104	Cadw popeth am ddim gyda hysbysebion llawn
+105	Stopio popeth, gan gynnwys diogelu dyfeisiau, nes bod rhywun yn talu
+106	Mae angen tanysgrifiad ar y consol; mae'r dyfeisiau'n dal wedi'u diogelu
+107	£4.99 y mis
+108	Tanysgrifio
+109	Treial am ddim: 
+110	[0] diwrnod ar ôl
+111	[0] diwrnod ar ôl
+112	Canslo
+113	Dileu
+114	Aeth rhywbeth o'i le.
+115	Allforio
+116	Wrthi'n llwytho…
+117	Dd/B
+118	Byth
+119	Nesaf
+120	na
+121	Dim i'w ddangos.
+122	i ffwrdd
+123	ymlaen
+124	Blaenorol
+125	Adnewyddu
+126	Cadw
+127	Chwilio
+128	Efelychiad (data prawf)
+129	Statws
+130	Ddim ar gael
+131	Anhysbys
+132	Diweddarwyd [0]
+133	Wrthi'n gweithio…
+134	ie
+135	[0] rhybudd mewn 24 awr
+136	[0] rhybudd mewn 24 awr
+137	[0] ddyfais
+138	[0] dyfais
+139	Data ar [0]
+140	[0] digwyddiad agored
+141	[0] digwyddiad agored
+142	[0] gymeradwyaeth yn aros
+143	[0] cymeradwyaeth yn aros
+144	wedi'i gadarnhau
+145	dan amheuaeth
+146	Cofrestru dyfais
+147	Dyfais
+148	Ddim yn adrodd
+149	Polisi hen
+150	Synhwyrydd wedi'i analluogi
+151	Diffiniadau hen
+152	Problemau
+153	Gwelwyd ddiwethaf
+154	System weithredu
+155	Polisi
+156	Rhedwch ar y ddyfais o fewn 24 awr (un defnydd):
+157	Diogelu
+158	Copïo
+159	Lawrlwytho
+160	Symud
+161	Ffolder newydd
+162	Ailenwi
+163	Adfer
+164	Symud i'r sbwriel
+165	Uwchlwytho
+166	Help
+167	Mae [0] testun ar y dudalen hon wedi'i gyfieithu gan beiriant a heb ei adolygu eto.
+168	Mae [0] testun yn yr iaith hon wedi'u cyfieithu gan beiriant a heb eu hadolygu eto.
+169	Nid yw'r iaith hon wedi'i chyfieithu eto, felly dangosir Saesneg.
+170	wedi'i gymeradwyo
+171	Ffeithiau a welwyd
+172	Damcaniaethau (heb eu cadarnhau)
+173	Damcaniaeth, hyder [0]: [1]
+174	Rhedeg ymchwiliad
+175	Tystiolaeth sydd ar goll
+176	Ar goll: [0]
+177	Darllen yn uchel
+178	Gweithredoedd a argymhellir
+179	Llinell amser y dystiolaeth
+180	webhook i mewn
+181	Signalau gan eich darparwr hunaniaeth, DNS, waliau tân ac offer eraill. Mae integreiddiadau newydd yn dechrau fel rhai nad ydynt ar gael; dim ond addasydd darparwr sydd wedi pasio ei brawf contract y gellir ei farcio'n fyw. Caiff data prawf ei labelu fel efelychiad ym mhob man y mae'n ymddangos.
+182	Heb gysylltu (dros dro)
+183	Data prawf yn unig
+184	Ddim ar gael
+185	Byw (wedi'i wirio)
+186	Cyfrinach (dangosir unwaith):
+187	Cymeradwyaethau
+188	Rhybuddion
+189	Archwilio
+190	Tanysgrifiad
+191	Dangosfwrdd
+192	DDoS ac argaeledd
+193	Dyfeisiau
+194	Ffeiliau
+195	Digwyddiadau
+196	Integreiddiadau
+197	Polisïau
+198	Preifatrwydd
+199	Cwarantin
+200	Ymateb
+201	Diogelwch
+202	Gosodiadau
+203	Rhoi maleiswedd hysbys mewn cwarantin yn awtomatig
+204	Gwylio am ymddygiad amheus
+205	Rhwystro sgriptiau amheus
+206	Casglu cynnwys ffeiliau ar gyfer ymchwilio (i ffwrdd yn ddiofyn)
+207	Caniatáu ynysu rhwydwaith
+208	Sganio ffeiliau pan gânt eu hagor neu eu hysgrifennu
+209	Sganio lawrlwythiadau
+210	Sganio rhaglenni pan fyddant yn cychwyn
+211	Diogelu'r asiant rhag newidiadau
+212	Rhybuddio am ddolenni maleisus hysbys
+213	Rheswm
+214	Gofyn am adolygiad
+215	Adfer ar ôl sgan newydd
+216	amser canolrifol hyd at ddileu wedi'i wirio (n=[0], heb eu datrys [1])
+217	atgyweiriadau sydd wedi pasio ailbrawf
+218	ailddigwydd ar ôl adfer
+219	tynnu firws wedi'i wirio
+220	dychwelyd yn ddiogel i wasanaeth
+221	sganiau adfer wedi'u cwblhau
+222	Caiff canlyniadau cwarantin yn unig ([0]) a dyfeisiau wedi'u hailosod ([1]) eu cyfrif ar wahân; nid yw cwarantin ar ei ben ei hun byth yn cyfrif fel tynnu.
+223	[0] awr
+224	[0] mun
+225	[0] eil
+226	Yn aros am gymeradwyaeth
+227	Tystiolaeth gynhyrchu
+228	Cofnodwch beth a wiriwyd wrth gynhyrchu, ar ba asedau, gyda pha fersiwn. Ni ellir golygu cofnodion.
+229	Fersiwn
+230	Newid modd
+231	dim tystiolaeth
+232	wedi methu
+233	wedi pasio
+234	yn yr arfaeth
+235	Gwirio cynnydd y llyfr chwarae
+236	Dyfeisiau sy'n gallu ymateb
+237	Pob dyfais
+238	[0] ddyfais beilot
+239	[0] dyfais beilot
+240	Wedi'i gwblhau
+241	Wedi'i gwblhau pan
+242	Ymarfer
+243	Arsylwi
+244	Ymateb
+245	Cwmpas
+246	[0] wedi'u harsylwi, [1] yn gallu ymateb
+247	Data
+248	Oed y data
+249	Byw
+250	Data prawf
+251	heb ei weithredu
+252	derbynneb
+253	ar y gweill
+254	anhysbys
+255	Anfon
+256	Tystiolaeth
+257	Fe redodd
+258	Hen
+259	Ffrydiau data
+260	Fersiwn neu grynhoad
+261	Amgylchedd
+262	Canlyniad
+263	Perchennog
+264	Gofyniad
+265	Ased neu garfan
+266	Dangos
+267	Y cyfan
+268	Heb ei gwblhau
+269	Ymlaen ar gyfer y gwasanaeth cyfan
+270	Ymlaen ar gyfer y sefydliad hwn
+271	Stopio pob gweithred ymateb newydd ar gyfer y sefydliad hwn? Mae diogelu a sganio'n parhau i redeg.
+272	Caniatáu gweithredoedd ymateb eto
+273	Stopio pob gweithred ymateb
+274	Switsh lladd
+275	Math
+276	Canolrif munudau ar agor ([0] ar agor, hynaf [1] mun)
+277	Gwrthodiadau polisi
+278	Ymarferion ac efelychiadau (heb eu cyfrif uchod)
+279	Gweithredoedd wedi'u hailadrodd (targed 0)
+280	Canolrif oedi ffrydiau (p95 [0] eil, n=[1])
+281	Cymeradwyaethau hwyr ([0] yn aros, targed [1] mun)
+282	Canolrif o signal i frysbennu (p95 [0] mun, n=[1], [2] heb eu brysbennu)
+283	Gweithredoedd wedi'u gwirio'n annibynnol ([0]/[1])
+284	Cyfnod: [0]. Nid yw derbynneb ar ei phen ei hun byth yn cyfrif fel gwiriad. Dangosir data sydd ar goll fel ddim ar gael.
+285	Mesurau ymateb
+286	Digwyddiad diwethaf
+287	Mae asiantau'n cynnig; mae polisi sefydlog yn penderfynu beth sy'n rhedeg. Mae pob gweithred yn dangos ei chymeradwyaeth, ei derbynneb a'i gwiriad annibynnol.
+288	Cam
+289	Yn aros am gymeradwyaeth
+290	Gwrthodwyd
+291	Wedi dod i ben
+292	Wedi methu
+293	Angen cysoni â llaw
+294	Cynigiwyd
+295	Mewn ciw
+296	Yn rhedeg
+297	Gwirio yn yr arfaeth
+298	Wedi'i wirio
+299	Cyflwr byw
+300	Modd
+301	Efelychiad
+302	Mae sganiau a chasglu data'n rhedeg. Mae gweithredoedd eraill yn aros yn gynigion.
+303	Mae gweithredoedd wedi'u cymeradwyo'n rhedeg ar y dyfeisiau a ddewiswyd.
+304	Dim ond yn erbyn addaswyr prawf y mae gweithredoedd yn rhedeg. Does dim yn newid ar eich dyfeisiau.
+305	Dim gweithredoedd eto.
+306	Does dim yn aros am gymeradwyaeth.
+307	Dim tystiolaeth gynhyrchu wedi'i chofnodi eto.
+308	Does dim dyfeisiau nac integreiddiadau'n anfon data eto.
+309	Ni redodd
+310	Wedi'i arsylwi
+311	Beth ddigwyddodd
+312	Ymateb DDoS
+313	Positif ffug ac adfer
+314	Hunaniaeth, gwe-rwydo a thraffig amheus
+315	Maleiswedd a lawrlwythiadau amheus
+316	Gwelededd rhwydwaith a chyflwr dyfeisiau
+317	Adfer ar ôl cyfaddawdu
+318	Meddalwedd wystlo neu gyfaddawdu tybiedig
+319	Llyfr chwarae
+320	Llyfrau chwarae
+321	Fersiwn polisi
+322	Fersiwn wedi'i gosod
+323	Ynysu wal dân
+324	Data wedi'i dderbyn
+325	Ffeil wedi'i thynnu
+326	Proses wedi'i stopio
+327	Cyflwr y darparwr
+328	Wedi'i gofnodi
+329	Sgan wedi'i gwblhau
+330	Wedi'i efelychu
+331	Allan o gwarantin
+332	Mewn cwarantin
+333	Gweithredoedd a derbynebau
+334	Cofnodi canlyniad
+335	Cofnodi
+336	Yn gallu ymateb
+337	Ffynhonnell
+338	dyfais
+339	consol
+340	efelychiad
+341	Yn dechrau pan
+342	Diweddarwyd
+343	Gwiriad annibynnol
+344	Yn aros
+345	Terfyn archif
+346	Archif wedi'i hamgryptio
+347	Wedi'i eithrio
+348	Anhygyrch
+349	Terfyn amser
+350	Rhy fawr
+351	Fformat heb ei gefnogi
+352	Wedi'i ganslo
+353	Wedi'i fethu
+354	Rhannol
+355	Wedi cyrraedd y terfyn amser
+356	Llawn
+357	Ar alw
+358	Cyflym
+359	Adfer
+360	Wedi'i drefnu
+361	Wedi'i dargedu
+362	Ychwanegu segment
+363	archifau
+364	Asedau
+365	Stopio'r sgan hwn? Caiff y canlyniadau hyd yma eu cadw fel sgan wedi'i ganslo.
+366	Heb ei gwmpasu
+367	Canfyddiadau
+368	Dyfeisiau yn ôl cyflwr diogelu
+369	Peiriant
+370	Erbyn
+371	Tystiolaeth ddiwethaf
+372	Rheolaeth ddisgwyliedig
+373	Atgyweiriad arfaethedig
+374	Ailbrofi
+375	Ased neu segment
+376	Bylchau agored
+377	Canlyniadau sganiau mewn 30 diwrnod
+378	rhybudd i ffrwyno wedi'i wirio
+379	dyfeisiau wedi'u diogelu
+380	pwyntiau terfyn cyhoeddus gyda lliniaru gan y darparwr
+381	digwyddiad i rybudd
+382	dyfeisiau gyda diffiniadau cyfredol
+383	dyfeisiau gyda sgan llawn mewn 7 diwrnod
+384	bylchau agored ([0] yn hwyr, [1] wedi'u cau mewn 30 diwrnod)
+385	segmentau rhwydwaith dan fonitro
+386	positifau gwir wedi'u cadarnhau
+387	sganiau wedi'u cwblhau
+388	Cwmpas ac ymateb
+389	Sgan llawn diwethaf
+390	Telemetreg ddiwethaf
+391	Pob dyfais a segment rhwydwaith o fewn cwmpas, a ydynt wedi'u diogelu, a beth i'w drwsio nesaf.
+392	Gwelededd rhwydwaith
+393	Dim dyfeisiau wedi'u cofrestru eto. Diogelwch gyfrifiadur o Dyfeisiau.
+394	Dim bylchau agored.
+395	[0] ar agor
+396	yn hwyr
+397	p95 [0] eil
+398	Ffolderi
+399	Ffolderi i'w sganio, wedi'u gwahanu gan atalnodau
+400	Amgryptio a wal dân
+401	Amgryptio disg [0], wal dân [1]
+402	Adfer ar ôl digwyddiadau
+403	Gwirio eto nawr
+404	Heb ei ailbrofi
+405	Ailbrawf wedi methu
+406	Wedi'i gau a'i wirio
+407	Math o sgan
+408	Sganiau
+409	Segment
+410	Enw'r segment
+411	Dechrau sgan
+412	Wedi dechrau
+413	Cyflwr
+414	Diraddiedig
+415	Wedi'i ddiogelu
+416	Heb ei ddiogelu
+417	Dyfeisiau yn ôl cyflwr
+418	[0] anhysbys
+419	Dim gwelededd
+420	Dan fonitro
+421	Gwelededd
+422	Nid yw absenoldeb canfyddiadau'n profi diogelwch: gwiriwch y cwmpas a chanlyniadau'r sganiau hefyd.
+423	Iaith
+424	Cwmpas cyfieithu
+425	Dim fersiwn gynharach
+426	Thema
+427	Tywyll
+428	Cyferbyniad uchel
+429	Golau
+430	Ni chanfuwyd bygythiadau newydd mewn [0] ffeil.
+431	[0] bygythiad
+432	[0] bygythiad
+433	 wedi'u canfod mewn [0] ffeil. Gweler Rhybuddion a Cymeradwyaethau i'w hadolygu.
+434	Sgan llawn
+435	Methu diogelu'r cyfrifiadur hwn: [0]
+436	Mae'r cyfrifiadur hwn wedi'i ddiogelu. Mae sganio amser real yn rhedeg tra bod Agentic Antivirus ar agor.
+437	Ni orffennodd y sgan: [0]
+438	Wrthi'n sganio…
+439	Wrthi'n sganio pob gyriant. Gall hyn gymryd amser hir.
+440	Wrthi'n sganio Lawrlwythiadau, y Bwrdd Gwaith a ffeiliau dros dro…
+441	Methu darllen [0] ffeil.
+442	Ffeil
+443	Dolen gwefan
+444	Derbyn data prawf
+446	Gweithredoedd
+447	Ychwanegu integreiddiad
+448	Ychwanegu eithriad
+449	Ychwanegu integreiddiad
+450	Ychwanegu sgan llawn wythnosol
+451	gweinyddwr
+452	Hysbysebu
+453	Caniatâd hysbysebu
+454	Gwasanaethau yr effeithir arnynt
+455	rhybuddion yn y 24 awr ddiwethaf
+456	Caniatáu
+457	Caniatáu a sganio
+458	Rhaid i weinyddwr roi rheswm. Caiff yr eithriad ei gofnodi yn y trywydd archwilio.
+459	E-bost
+460	Cymeradwyo dychwelyd i wasanaeth
+461	Cymeradwyo gweithredoedd
+462	Ased
+463	asedau dan liniaru gweithredol
+464	asedau gyda rhybuddion mewn 24 awr
+465	Trywydd archwilio
+466	Mae diogelu awtomatig yn parhau i redeg ar bob dyfais. Dyma'r gweithredoedd sydd angen i berson benderfynu arnynt.
+467	Argaeledd
+468	Signalau sydd ar gael
+469	Copi wrth gefn wedi'i wirio
+470	Rhwystro
+471	Yn ddiofyn mae'r asiant yn anfon telemetreg diogelwch a stwnshau ffeiliau: enwau prosesau a llinellau gorchymyn, llwybrau ffeiliau, metadata cysylltiadau rhwydwaith, a chanfyddiadau. Dim ond os bydd eich sefydliad yn troi hynny ymlaen y caiff cynnwys ffeiliau ei gasglu.
+472	Capasiti
+473	Categori
+474	Newidiwyd
+475	Tâl
+476	Gwirio
+477	dewis
+478	Dewiswch ddyfais
+480	Cau
+481	Wedi'u gwahanu gan atalnodau
+482	Cyswllt
+483	Rheolaeth
+484	Cwmpas yn ôl haen diogelu
+485	critigol
+486	cyflwyno rhybuddion critigol (p95, 30 diwrnod)
+487	Penderfyniadau'n aros
+488	Gwrthod
+489	Diffiniadau
+490	Disgrifiwch beth ddigwyddodd
+491	Manylyn
+492	Manylion
+493	Canfod
+494	Dyfais i'w thrwyddedu
+495	dyfeisiau wedi'u diogelu'n llawn
+496	dyfeisiau wedi'u hynysu
+497	Dyfeisiau sydd angen sylw
+498	Cyfeiriad
+499	Parth DNS
+500	dudalen lawrlwytho
+501	Yn ystod y treial am ddim, ac ar gynlluniau heb eu talu, mae'r consol yn dangos hysbysebion Google AdSense ac mae'r apiau symudol yn dangos hysbysebion Google AdMob, ar ôl gofyn am eich caniatâd. Mae tanysgrifwyr yn gweld 95% yn llai o hysbysebion. Nid yw hysbysebion byth yn ymddangos ar sgriniau cymeradwyo, ffrwyno, rhybuddion bygythiad, adolygu cwarantin, mewngofnodi, talu nac archwilio.
+502	Mae pob cyhoeddiad yn creu fersiwn newydd wedi'i llofnodi. Mae dyfeisiau'n parhau i orfodi'r fersiwn wedi'i gwirio ddiwethaf tra byddant all-lein.
+503	Anfonwch e-bost at gymorth yn
+504	Pwynt terfyn
+505	Equality Software Ltd sy'n gweithredu Agentic Antivirus. Mae'r dudalen hon yn disgrifio beth mae'r gwasanaeth yn ei gasglu. Rhaid i berchennog y cynnyrch ei hadolygu cyn ei chyhoeddi.
+506	Mae pob gweithred sy'n newid dyfais, cyfrif neu draffig yn mynd drwy'r peiriant polisi a llywodraethu AEP-X. Mae cymeradwyaeth yn cwmpasu un weithred, ei thargedau union, y sefydliad hwn, ac amser penodol.
+507	Caiff pob uwchlwythiad ei wirio am faleiswedd a'i wir fath. Caiff ffeiliau heb wyliwr wedi'i wirio eu storio a gellir eu lawrlwytho, ond ni chânt eu rhagweld.
+508	Eithriad
+509	Eithriadau
+510	Llwybr y ffolder
+511	ar gyfer ceisiadau mynediad neu gywiro.
+512	Bylchau
+513	Mynnwch yr asiant ar gyfer Windows, Mac neu Linux o'r
+514	Ewch i Dyfeisiau, dewiswch Cofrestru dyfais, a rhedwch y gorchymyn a ddangosir ar y cyfrifiadur rydych am ei ddiogelu. Mae'r asiant yn dechrau sganio cyn gynted ag y caiff ei bolisi wedi'i lofnodi.
+515	Iechyd
+516	Hanes
+517	Enw gwesteiwr
+518	Rwy'n deall y bydd dyfeisiau'n stopio sganio a rhwystro bygythiadau ar ôl y treial nes bydd tanysgrifiad wedi'i dalu.
+519	Effaith
+520	Mewnforio zip neu tar
+521	Digwyddiad
+522	Cynnwys y model iaith (os yw eich sefydliad wedi galluogi un)
+523	Cyfeiriad IP
+524	Ymuno
+525	Ymunwch â'ch sefydliad
+526	Caiff maleiswedd hysbys ei symud i gwarantin, lle na all redeg. Os ydych chi'n credu bod ffeil wedi'i rhwystro trwy gamgymeriad, agorwch Cwarantin a gofynnwch am adolygiad. Gweinyddwr sy'n penderfynu, a dim ond ar ôl i sgan newydd ei chael yn lân y daw'r ffeil yn ôl.
+527	Mae ieithoedd heb gyfieithiad cyflawn yn dangos Saesneg. Caiff y cwmpas ei fesur, nid ei amcangyfrif.
+528	Newidiwyd ddiwethaf
+529	Haen
+530	Llwyddiant ceisiadau dilys
+531	Rheolau trwyddedu
+532	Dolen, os oes un
+533	Gwesteiwyr rheoli sy'n aros yn hygyrch yn ystod ynysu
+534	Marcio'n bositif ffug
+535	Aeddfedrwydd
+536	Lliniaru
+537	Enw
+538	Enw'r gyfrinach yn eich storfa gyfrinachau, byth y gyfrinach ei hun
+539	Does dim gweithredoedd yn aros.
+540	Dim digwyddiadau agored.
+541	Dim.
+542	Dim wedi'u hadrodd.
+543	heb ei osod
+544	Hysbyswyd ar ôl
+545	o'r hysbysebion a ddangosir
+546	Byffer digwyddiadau all-lein (MB)
+547	Ar Android, tanysgrifiwch yn ap Agentic Antivirus drwy Google Play. Ar iPhone ac iPad, nid yw tanysgrifiadau App Store ar gael eto. Nid yw talu ar y we ar gael eto.
+548	Digwyddiad agored
+549	digwyddiadau agored
+550	Digwyddiadau agored
+551	Hwyrni p95
+552	wedi talu tan
+553	Patrwm llwybr
+554	Pobl
+555	Fesul dyfais
+556	Fesul defnyddiwr (yn cwmpasu eu holl ddyfeisiau)
+557	Rhagolwg
+558	Prif
+560	Diogelu dyfais
+561	Protocol
+562	Darparwr
+563	Rhybuddion darparwr (24 awr)
+564	Pwyntiau terfyn cyhoeddus
+565	Cyhoeddi fersiwn polisi
+566	Cyhoeddi fersiwn wedi'i llofnodi
+567	Cyhoeddwyd
+568	Sgan cyflym
+569	Mae darllen yn uchel ac arddweud yn defnyddio nodweddion lleferydd adeiledig eich porwr. Nid ydym yn recordio nac yn storio sain.
+570	Derbyniwyd
+571	Cyfryngau symudadwy
+572	Tynnu
+573	Gofynnwyd
+574	Gofynnwyd gan
+575	Cadw
+576	Dychwelyd i wasanaeth
+577	Ar hyn o bryd
+578	Risg
+579	Rôl
+580	Dadwneud
+581	Cadw'r pwynt terfyn
+582	Cadw'r rheolau trwyddedu
+583	Sganio
+584	Amserlen (cron)
+585	Sganiau wedi'u trefnu
+586	Cyfeirnod y gyfrinach
+587	Anfon gwahoddiad
+588	Anfon adroddiad
+589	Anfon dolen ailosod
+590	Gwasanaeth
+591	Amcanion gwasanaeth
+594	Signal
+595	Maint
+596	Rhywbeth arall
+597	Trefnu
+598	Cam
+599	Mae angen i berson gymeradwyo stopio prosesau, ynysu dyfeisiau, adfer ffeiliau, ychwanegu eithriadau a newid rheolau traffig. Mae cymeradwyaeth yn cwmpasu un weithred, ei thargedau union ac amser cyfyngedig. Os bydd unrhyw beth yn newid, cymeradwywch eto.
+600	Tanysgrifio'r ddyfais hon gyda Google Play
+601	cyflwr y tanysgrifiad
+603	System
+604	Targed
+605	Y cynorthwyydd AI
+606	Mae'r cynorthwyydd yn grwpio rhybuddion cysylltiedig, yn rhestru'r hyn a welwyd gyda dolenni i'r dystiolaeth, ac yn marcio unrhyw beth na all ei brofi fel damcaniaeth. Gall awgrymu gweithredoedd ond ni all eu cymeradwyo. Os nad yw'r model ar gael, mae sganio, rhybuddion ac ymatebion â llaw yn parhau i weithio.
+607	Y cyfrifiadur hwn
+608	TLS yn unig, rhaid iddo fod ar y rhestr caniatáu allanol
+609	Caiff llifogydd traffig eu hamsugno gan eich darparwr i fyny'r afon. Yma rydych yn cyfrif am bob pwynt terfyn cyhoeddus, yn gwylio rhybuddion y darparwr, ac yn cymeradwyo cyfyngiadau traffig newydd.
+610	Cyfyngiadau traffig
+611	Wedi'i gyfieithu
+612	Sbwriel
+613	diwrnod treial ar ôl
+614	Trowch ddiogelu ymlaen i sganio ffeiliau ar y cyfrifiadur hwn a gwylio am feddalwedd wystlo a dwyn manylion mewngofnodi.
+615	heb ei gwmpasu
+616	Dadwneud y newid diwethaf
+617	Defnyddiwr
+618	Dilysu e-bost
+619	yn aros am gymeradwyaeth
+620	Rydym yn dangos hysbysebion Google AdSense ar rai tudalennau. Caniatáu hysbysebion personol?
+621	Webhook:
+622	Beth mae dyfeisiau'n ei anfon
+623	Beth yw e?
+624	Pryd
+625	Pan fydd rhywbeth yn cael ei rwystro
+626	Pan ddaw'r treial i ben heb daliad
+627	Pwy
+628	Gallwch ddileu eich cyfrif o'ch proffil. Cysylltwch â
+629	Eich enw
+630	Mae eich sefydliad yn cael treial 30 diwrnod am ddim. Ar ôl hynny mae'n costio £4.99 y mis am bob defnyddiwr neu ddyfais.
+631	Eich sefydliad sy'n penderfynu am ba hyd y cedwir telemetreg a thystiolaeth. Ni ellir golygu na dileu cofnodion archwilio.
+632	Eich hawliau
+633	Arddweud
+634	Caniatáu defnyddio'r meicroffon i arddweud? Caiff y sain ei phrosesu gan eich porwr ac nid ydym ni'n ei storio.
+635	Allbwn sain
+636	Saib
+637	Traw
+638	Ailddechrau
+639	Cyflymder
+640	Stopio
+641	Dim llais ar gael ar gyfer yr iaith hon.
+642	Llais
+643	Symudwyd y ffeil i gwarantin ac ni all redeg.
+644	Rhwystrwyd bygythiad ar y ddyfais hon.

@@ -1,0 +1,637 @@
+0	Prijeđi na glavni sadržaj
+1	Dodaj trajno izuzeće
+2	Primijeni ograničenje prometa
+3	Prikupi metapodatke uređaja
+4	Izoliraj uređaj od mreže
+5	Premjesti datoteku u karantenu
+6	Oslobodi uređaj iz izolacije
+7	Vrati datoteku iz karantene
+8	Odjavi korisnika posvuda
+9	Poništi ograničenje prometa
+10	Poništi ažuriranje
+11	Skeniraj uređaje
+12	Suspendiraj korisnički račun
+13	Zaustavi proces
+14	Odobri
+15	Odbij
+16	Pošalji na uređaje
+17	Odobrenje istječe [0]
+18	Predložio AI asistent
+19	Oglas
+20	Radnja
+21	Agenti
+22	Pitaj
+23	Pitaj sigurnosnog asistenta
+24	Odgovori dolaze s vaših uređaja, otvorenih incidenata i nedostataka. Asistent ne može ništa promijeniti.
+25	Na temelju
+26	Uklonjena je [0] tvrdnja bez dokaza
+27	Uklonjeno je [0] tvrdnji bez dokaza
+29	Model na vlastitom poslužitelju
+30	Pravila (bez modela)
+31	Izradi plan otklanjanja
+32	Svaki korak je prijedlog. Ništa se ne pokreće dok netko to ne odobri.
+33	Pitanje
+34	Na primjer: kojim uređajima treba pozornost?
+35	Predložena ozbiljnost
+36	Sažetak
+37	Ciljevi
+38	Sažmi ovaj incident
+39	Zašto
+40	Otkriveno
+41	Prijavi nešto sumnjivo
+42	Pravilo
+43	Ozbiljnost
+44	Upozorenje
+46	Dodaj datoteke
+47	Dodaj mapu
+48	Dodaj slike
+49	[0] privitak
+50	[0] privitaka
+51	Privici
+52	Snimi fotografiju
+53	Pristup kameri nije dopušten. Dopustite ga u pregledniku ili upotrijebite aplikaciju kamere na uređaju.
+54	Pregled kamere
+55	Ovaj preglednik ovdje ne može otvoriti kameru.
+56	Snimi
+57	Zatvori asistenta
+58	Što su ove datoteke i jesu li sigurne?
+59	Datoteka
+60	Pitajte o svojoj sigurnosti ili priložite datoteke, mapu, slike ili fotografiju s kamere. Svaki se privitak najprije skenira i ništa se ne pohranjuje.
+61	Model je opisao [0] sliku
+62	Model je opisao [0] slika
+63	.
+64	Na primjer: je li ovo preuzimanje sigurno?
+65	Čisti tekst i slike mogu se poslati AI modelu koji je omogućila vaša organizacija. Zlonamjerne datoteke nikada.
+66	[0] datoteka nije dodana
+67	[0] datoteka nije dodano
+68	: najviše [0] datoteka, svaka do [1] MB i ukupno [2] MB.
+69	Ukloni [0]
+70	Skeniraj i pitaj
+71	Rezultati skeniranja
+72	Vrsta
+73	Upotrijebi kameru uređaja
+74	Rezultat
+75	Nema poznatog zlonamjernog softvera
+76	Zlonamjerno
+77	Nije skenirano
+78	Lanac revizije prekinut je kod unosa [0].
+79	Lanac revizije je netaknut: provjereni unosi: [0].
+80	E-pošta
+81	Zaboravili ste lozinku?
+82	Prijava putem Googlea
+83	Prijava putem Googlea nije uspjela. Pokušajte ponovno ili upotrijebite e-poštu i lozinku.
+84	Prijava
+85	Odjava
+86	Nova lozinka
+87	ili
+88	Organizacija
+89	Lozinka
+90	Lozinka je promijenjena. Prijavite se novom lozinkom.
+91	Najmanje 12 znakova.
+92	Izradi račun
+93	Ponovno pošalji poveznicu
+94	Ako taj račun još treba potvrdu, nova poveznica je na putu. Provjerite i mapu neželjene pošte.
+95	Ponovno postavi lozinku
+96	Ako neki račun koristi tu adresu, poslali smo poveznicu za ponovno postavljanje. Vrijedi jedan sat.
+97	Prije prijave potvrdite svoju adresu e-pošte. Otvorite poveznicu koju smo poslali na [0].
+98	E-pošta je potvrđena. Sada se možete prijaviti.
+99	Ova je poveznica istekla ili je već iskorištena. Prijavite se da biste dobili novu.
+100	Provjerite e-poštu kako biste potvrdili adresu.
+101	Pretplata smanjuje broj oglasa za 95 %.
+102	Vaše probno razdoblje je završilo.
+103	Pretplaćeno do [0]
+104	Sve besplatno uz puno oglašavanje
+105	Zaustavi sve, uključujući zaštitu uređaja, dok netko ne plati
+106	Konzola zahtijeva pretplatu; uređaji ostaju zaštićeni
+107	4,99 £ mjesečno
+108	Pretplati se
+109	Besplatno probno razdoblje:
+110	Preostao je [0] dan
+111	Preostalo je [0] dana
+112	Odustani
+113	Izbriši
+114	Nešto nije u redu.
+115	Izvezi
+116	Učitavanje…
+117	Nije primjenjivo
+118	Nikad
+119	Sljedeće
+120	ne
+121	Nema ništa za prikaz.
+122	isključeno
+123	uključeno
+124	Prethodno
+125	Osvježi
+126	Spremi
+127	Pretraži
+128	Simulacija (testni podaci)
+129	Status
+130	Nedostupno
+131	Nepoznato
+132	Ažurirano [0]
+133	Obrada…
+134	da
+135	[0] upozorenje u 24 sata
+136	[0] upozorenja u 24 sata
+137	[0] uređaj
+138	[0] uređaja
+139	Podaci od [0]
+140	[0] otvoren incident
+141	[0] otvorenih incidenata
+142	[0] odobrenje na čekanju
+143	[0] odobrenja na čekanju
+144	potvrđeno
+145	sumnja
+146	Registriraj uređaj
+147	Uređaj
+148	Ne javlja se
+149	Zastarjelo pravilo
+150	Senzor onemogućen
+151	Zastarjele definicije
+152	Problemi
+153	Zadnje viđeno
+154	Operacijski sustav
+155	Pravilo
+156	Pokrenite na uređaju u roku od 24 sata (jednokratno):
+157	Zaštita
+158	Kopiraj
+159	Preuzmi
+160	Premjesti
+161	Nova mapa
+162	Preimenuj
+163	Vrati
+164	Premjesti u smeće
+165	Prenesi
+166	Pomoć
+167	[0] tekst na ovoj stranici strojno je preveden i još nije pregledan.
+168	[0] tekstova na ovom jeziku strojno je prevedeno i još nisu pregledani.
+169	Ovaj jezik još nije preveden pa se prikazuje engleski.
+170	odobreno
+171	Utvrđene činjenice
+172	Hipoteze (nepotvrđene)
+173	Hipoteza, pouzdanost [0]: [1]
+174	Pokreni istragu
+175	Nedostajući dokazi
+176	Nedostaje: [0]
+177	Pročitaj naglas
+178	Preporučene radnje
+179	Vremenska crta dokaza
+180	dolazni webhook
+181	Signali vašeg davatelja identiteta, DNS-a, vatrozida i drugih alata. Nove integracije u početku nisu dostupne; kao aktivan može se označiti samo adapter davatelja koji je prošao ugovorni test. Testni podaci posvuda su označeni kao simulacija.
+182	Nije povezano (privremeno rješenje)
+183	Samo testni podaci
+184	Nije dostupno
+185	Aktivno (provjereno)
+186	Tajna (prikazuje se jednom):
+187	Odobrenja
+188	Upozorenja
+189	Revizija
+190	Pretplata
+191	Nadzorna ploča
+192	DDoS i dostupnost
+193	Uređaji
+194	Datoteke
+195	Incidenti
+196	Integracije
+197	Pravila
+198	Privatnost
+199	Karantena
+200	Odgovor
+201	Sigurnost
+202	Postavke
+203	Automatski premjesti poznati zlonamjerni softver u karantenu
+204	Prati sumnjivo ponašanje
+205	Blokiraj sumnjive skripte
+206	Prikupljaj sadržaj datoteka za istragu (zadano isključeno)
+207	Dopusti mrežnu izolaciju
+208	Skeniraj datoteke pri otvaranju ili pisanju
+209	Skeniraj preuzimanja
+210	Skeniraj programe pri pokretanju
+211	Zaštiti agenta od promjena
+212	Upozori na poznate zlonamjerne poveznice
+213	Razlog
+214	Zatraži pregled
+215	Vrati nakon novog skeniranja
+216	medijan vremena do provjerenog uklanjanja (n=[0], neriješeno [1])
+217	popravci s uspješnim ponovnim testom
+218	ponavljanje nakon oporavka
+219	provjereno uklanjanje virusa
+220	siguran povratak u rad
+221	dovršena skeniranja oporavka
+222	Ishodi samo s karantenom ([0]) i uređaji s ponovno instaliranim sustavom ([1]) broje se zasebno; sama karantena nikad se ne računa kao uklanjanje.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Čeka odobrenje
+227	Dokazi iz produkcije
+228	Zabilježite što je provjereno u produkciji, na kojoj imovini i s kojom verzijom. Unosi se ne mogu uređivati.
+229	Verzija
+230	Promijeni način
+231	nema dokaza
+232	neuspješno
+233	uspješno
+234	na čekanju
+235	Provjeri napredak priručnika
+236	Uređaji koji mogu odgovoriti
+237	Svi uređaji
+238	[0] pilot-uređaj
+239	[0] pilot-uređaja
+240	Dovršeno
+241	Dovršeno kada
+242	Vježba
+243	Promatraj
+244	Odgovori
+245	Pokrivenost
+246	Promatrano: [0], može odgovoriti: [1]
+247	Podaci
+248	Starost podataka
+249	Uživo
+250	Testni podaci
+251	nije izvršeno
+252	potvrda
+253	u tijeku
+254	nepoznato
+255	Slanje
+256	Dokazi
+257	Izvršeno
+258	Zastarjelo
+259	Izvori podataka
+260	Verzija ili sažetak
+261	Okruženje
+262	Ishod
+263	Vlasnik
+264	Zahtjev
+265	Imovina ili skupina
+266	Prikaži
+267	Sve
+268	Nije dovršeno
+269	Uključeno za cijelu uslugu
+270	Uključeno za ovu organizaciju
+271	Zaustaviti sve nove radnje odgovora za ovu organizaciju? Zaštita i skeniranje nastavljaju raditi.
+272	Ponovno dopusti radnje odgovora
+273	Zaustavi sve radnje odgovora
+274	Sigurnosni prekidač
+275	Vrsta
+276	Medijan minuta otvorenosti (otvoreno: [0], najstarije [1] min)
+277	Odbijanja prema pravilima
+278	Vježbe i simulacije (nisu uračunate gore)
+279	Ponovljene radnje (cilj 0)
+280	Medijan kašnjenja izvora podataka (p95 [0] s, n=[1])
+281	Zakašnjela odobrenja (na čekanju: [0], cilj [1] min)
+282	Medijan od signala do trijaže (p95 [0] min, n=[1], bez trijaže: [2])
+283	Neovisno provjerene radnje ([0]/[1])
+284	Razdoblje: [0]. Sama potvrda nikad se ne računa kao provjera. Nedostajući podaci prikazuju se kao nedostupni.
+285	Pokazatelji odgovora
+286	Zadnji događaj
+287	Agenti predlažu; fiksno pravilo odlučuje što se pokreće. Svaka radnja prikazuje svoje odobrenje, potvrdu i neovisnu provjeru.
+288	Faza
+289	Čeka odobrenje
+290	Odbijeno
+291	Isteklo
+292	Neuspješno
+293	Potrebno ručno usklađivanje
+294	Predloženo
+295	U redu čekanja
+296	U tijeku
+297	Čeka provjeru
+298	Provjereno
+299	Stanje uživo
+300	Način
+301	Simulacija
+302	Skeniranja i prikupljanje podataka se izvršavaju. Ostale radnje ostaju prijedlozi.
+303	Odobrene radnje izvršavaju se na odabranim uređajima.
+304	Radnje se izvršavaju samo na testnim adapterima. Na vašim uređajima ništa se ne mijenja.
+305	Još nema radnji.
+306	Ništa ne čeka odobrenje.
+307	Još nema zabilježenih dokaza iz produkcije.
+308	Nijedan uređaj ni integracija još ne šalju podatke.
+309	Nije izvršeno
+310	Uočeno
+311	Što se dogodilo
+312	Odgovor na DDoS
+313	Lažno pozitivni rezultati i vraćanje
+314	Identitet, krađa identiteta i sumnjiv promet
+315	Zlonamjerni softver i sumnjiva preuzimanja
+316	Vidljivost mreže i stanje uređaja
+317	Oporavak nakon kompromitacije
+318	Ucjenjivački softver ili sumnja na kompromitaciju
+319	Priručnik
+320	Priručnici
+321	Verzija pravila
+322	Instalirana verzija
+323	Izolacija vatrozidom
+324	Podaci primljeni
+325	Datoteka uklonjena
+326	Proces zaustavljen
+327	Stanje kod davatelja
+328	Zabilježeno
+329	Skeniranje dovršeno
+330	Simulirano
+331	Izvan karantene
+332	U karanteni
+333	Radnje i potvrde
+334	Zabilježi ishod
+335	Zabilježi
+336	Može odgovoriti
+337	Izvor
+338	uređaj
+339	konzola
+340	simulacija
+341	Počinje kada
+342	Ažurirano
+343	Neovisna provjera
+344	Na čekanju
+345	Ograničenje arhive
+346	Šifrirana arhiva
+347	Izuzeto
+348	Nedostupno
+349	Vremensko ograničenje
+350	Preveliko
+351	Nepodržani format
+352	Otkazano
+353	Propušteno
+354	Djelomično
+355	Isteklo vrijeme
+356	Potpuno
+357	Na zahtjev
+358	Brzo
+359	Oporavak
+360	Zakazano
+361	Ciljano
+362	Dodaj segment
+363	arhive
+364	Imovina
+365	Zaustaviti ovo skeniranje? Dosadašnji rezultati čuvaju se kao otkazano skeniranje.
+366	Nije pokriveno
+367	Otkrivanja
+368	Uređaji prema stanju zaštite
+369	Modul
+370	Rok
+371	Zadnji dokaz
+372	Očekivana kontrola
+373	Predloženi popravak
+374	Ponovni test
+375	Imovina ili segment
+376	Otvoreni nedostaci
+377	Ishodi skeniranja u 30 dana
+378	od upozorenja do provjerenog obuzdavanja
+379	zaštićeni uređaji
+380	javne krajnje točke sa zaštitom kod nadređenog davatelja
+381	od događaja do upozorenja
+382	uređaji s ažurnim definicijama
+383	uređaji s potpunim skeniranjem u 7 dana
+384	otvoreni nedostaci (zakašnjelih: [0], zatvorenih u 30 dana: [1])
+385	nadzirani mrežni segmenti
+386	potvrđeni stvarni pozitivni rezultati
+387	dovršena skeniranja
+388	Pokrivenost i odgovor
+389	Zadnje potpuno skeniranje
+390	Zadnja telemetrija
+391	Svaki uređaj i mrežni segment u opsegu: je li zaštićen i što sljedeće popraviti.
+392	Vidljivost mreže
+393	Još nema registriranih uređaja. Zaštitite računalo u odjeljku Uređaji.
+394	Nema otvorenih nedostataka.
+395	Otvoreno: [0]
+396	zakašnjelo
+397	p95 [0] s
+398	Mape
+399	Mape za skeniranje, odvojene zarezima
+400	Šifriranje i vatrozid
+401	Šifriranje diska [0], vatrozid [1]
+402	Oporavak nakon incidenata
+403	Ponovno provjeri sada
+404	Nije ponovno testirano
+405	Ponovni test nije uspio
+406	Provjereno zatvoreno
+407	Vrsta skeniranja
+408	Skeniranja
+409	Segment
+410	Naziv segmenta
+411	Pokreni skeniranje
+412	Pokrenuto
+413	Stanje
+414	Ograničeno
+415	Zaštićeno
+416	Nezaštićeno
+417	Uređaji prema stanju
+418	Nepoznato: [0]
+419	Nema vidljivosti
+420	Nadzirano
+421	Vidljivost
+422	Izostanak otkrivanja ne dokazuje zaštitu: provjerite i pokrivenost i rezultate skeniranja.
+423	Jezik
+424	Pokrivenost prijevodom
+425	Nema ranije verzije
+426	Tema
+427	Tamna
+428	Visoki kontrast
+429	Svijetla
+430	U [0] datoteka nisu pronađene nove prijetnje.
+431	Pronađena je [0] prijetnja
+432	Pronađeno je [0] prijetnji
+433	 u [0] datoteka. Pregledajte ih u odjeljcima Upozorenja i Odobrenja.
+434	Potpuno skeniranje
+435	Nije moguće zaštititi ovo računalo: [0]
+436	Ovo računalo je zaštićeno. Skeniranje u stvarnom vremenu radi dok je Agentic Antivirus otvoren.
+437	Skeniranje nije dovršeno: [0]
+438	Skeniranje…
+439	Skeniranje svih pogona. To može dugo trajati.
+440	Skeniranje mapa Preuzimanja i Radna površina te privremenih datoteka…
+441	Nije moguće pročitati [0] datoteka.
+442	Datoteka
+443	Poveznica na web-mjesto
+444	Prihvati testne podatke
+446	Radnje
+447	Dodaj integraciju
+448	Dodaj izuzeće
+449	Dodaj integraciju
+450	Dodaj tjedno potpuno skeniranje
+451	administrator
+452	Oglašavanje
+453	Privola za oglašavanje
+454	Zahvaćene usluge
+455	upozorenja u zadnja 24 sata
+456	Dopusti
+457	Dopusti i skeniraj
+458	Administrator mora navesti razlog. Izuzeće se bilježi u revizijski trag.
+459	E-pošta
+460	Odobri povratak u rad
+461	Odobravanje radnji
+462	Imovina
+463	imovina pod aktivnim ublažavanjem
+464	imovina s upozorenjima u 24 sata
+465	Revizijski trag
+466	Automatska zaštita nastavlja raditi na svakom uređaju. Ovo su radnje o kojima mora odlučiti osoba.
+467	Dostupnost
+468	Dostupni signali
+469	Sigurnosna kopija provjerena
+470	Blokiraj
+471	Prema zadanim postavkama agent šalje sigurnosnu telemetriju i sažetke datoteka: nazive procesa i naredbene retke, putanje datoteka, metapodatke mrežnih veza i otkrivanja. Sadržaj datoteka prikuplja se samo ako to uključi vaša organizacija.
+472	Kapacitet
+473	Kategorija
+474	Promijenjeno
+475	Naknada
+476	Provjeri
+477	odaberi
+478	Odaberite uređaj
+480	Zatvori
+481	Odvojeno zarezima
+482	Kontakt
+483	Kontrola
+484	Pokrivenost prema sloju zaštite
+485	kritično
+486	isporuka kritičnih upozorenja (p95, 30 dana)
+487	Odluke na čekanju
+488	Odbij
+489	Definicije
+490	Opišite što se dogodilo
+491	Pojedinost
+492	Pojedinosti
+493	Otkrivanje
+494	Uređaj za licenciranje
+495	potpuno zaštićeni uređaji
+496	izolirani uređaji
+497	Uređaji kojima treba pozornost
+498	Smjer
+499	DNS zona
+500	stranice za preuzimanje
+501	Tijekom besplatnog probnog razdoblja i na neplaćenim planovima konzola prikazuje oglase Google AdSense, a mobilne aplikacije oglase Google AdMob, nakon što zatraže vašu privolu. Pretplatnici vide 95 % manje oglasa. Oglasi se nikad ne prikazuju na zaslonima odobravanja, obuzdavanja, upozorenja o prijetnjama, pregleda karantene, prijave, plaćanja ni revizije.
+502	Svako objavljivanje stvara novu potpisanu verziju. Uređaji izvan mreže i dalje primjenjuju zadnju provjerenu verziju.
+503	Pišite podršci na
+504	Krajnja točka
+505	Equality Software Ltd upravlja uslugom Agentic Antivirus. Ova stranica opisuje što usluga prikuplja. Prije objave mora je pregledati vlasnik proizvoda.
+506	Svaka radnja koja mijenja uređaj, račun ili promet prolazi kroz modul pravila i upravljanje AEP-X. Odobrenje obuhvaća jednu radnju, njezine točne ciljeve, ovu organizaciju i određeno vrijeme.
+507	Svaki prijenos provjerava se na zlonamjerni softver i stvarnu vrstu. Datoteke bez provjerenog preglednika pohranjuju se i mogu se preuzeti, ali nemaju pretpregled.
+508	Iznimka
+509	Izuzeća
+510	Putanja mape
+511	za zahtjeve za pristup ili ispravak.
+512	Nedostaci
+513	Preuzmite agenta za Windows, Mac ili Linux sa
+514	Idite na Uređaji, odaberite Registriraj uređaj i pokrenite prikazanu naredbu na računalu koje želite zaštititi. Agent počinje skenirati čim primi potpisano pravilo.
+515	Ispravnost
+516	Povijest
+517	Naziv hosta
+518	Razumijem da će uređaji nakon probnog razdoblja prestati skenirati i blokirati prijetnje dok se pretplata ne plati.
+519	Utjecaj
+520	Uvezi zip ili tar
+521	Incident
+522	Uključi jezični model (ako ga je vaša organizacija omogućila)
+523	IP adresa
+524	Pridruži se
+525	Pridružite se svojoj organizaciji
+526	Poznati zlonamjerni softver premješta se u karantenu, gdje se ne može pokrenuti. Ako mislite da je datoteka blokirana greškom, otvorite Karantenu i zatražite pregled. Odluku donosi administrator, a datoteka se vraća tek kada je novo skeniranje ocijeni čistom.
+527	Jezici bez potpunog prijevoda prikazuju se na engleskom. Pokrivenost se mjeri, a ne procjenjuje.
+528	Zadnja promjena
+529	Sloj
+530	Uspješnost legitimnih zahtjeva
+531	Pravila licenciranja
+532	Poveznica, ako postoji
+533	Upravljački hostovi dostupni tijekom izolacije
+534	Označi kao lažno pozitivno
+535	Zrelost
+536	Ublažavanje
+537	Naziv
+538	Naziv tajne u vašoj pohrani tajni, nikad sama tajna
+539	Nijedna radnja ne čeka.
+540	Nema otvorenih incidenata.
+541	Ništa.
+542	Ništa nije prijavljeno.
+543	nije postavljeno
+544	Obaviješteno nakon
+545	prikazanih oglasa
+546	Međuspremnik događaja izvan mreže (MB)
+547	Na Androidu se pretplatite u aplikaciji Agentic Antivirus putem Google Playa. Na iPhoneu i iPadu pretplate putem App Storea još nisu dostupne. Plaćanje na webu još nije dostupno.
+548	Otvori incident
+549	otvoreni incidenti
+550	Otvoreni incidenti
+551	Latencija p95
+552	plaćeno do
+553	Uzorak putanje
+554	Osobe
+555	Po uređaju
+556	Po korisniku (obuhvaća sve njegove uređaje)
+557	Pretpregled
+558	Primarno
+560	Zaštiti uređaj
+561	Protokol
+562	Davatelj
+563	Upozorenja davatelja (24 sata)
+564	Javne krajnje točke
+565	Objavi verziju pravila
+566	Objavi potpisanu verziju
+567	Objavljeno
+568	Brzo skeniranje
+569	Čitanje naglas i diktiranje koriste ugrađene govorne značajke preglednika. Ne snimamo i ne pohranjujemo zvuk.
+570	Primljeno
+571	Prijenosni mediji
+572	Ukloni
+573	Zatraženo
+574	Zatražio
+575	Zadržavanje
+576	Povratak u rad
+577	Upravo sada
+578	Rizik
+579	Uloga
+580	Poništi
+581	Spremi krajnju točku
+582	Spremi pravila licenciranja
+583	Skeniraj
+584	Raspored (cron)
+585	Zakazana skeniranja
+586	Referenca tajne
+587	Pošalji pozivnicu
+588	Pošalji prijavu
+589	Pošalji poveznicu za ponovno postavljanje
+590	Usluga
+591	Ciljevi usluge
+594	Signal
+595	Veličina
+596	Nešto drugo
+597	Poredaj
+598	Korak
+599	Zaustavljanje procesa, izolacija uređaja, vraćanje datoteka, dodavanje izuzeća i mijenjanje pravila prometa zahtijevaju odobrenje osobe. Odobrenje obuhvaća jednu radnju, njezine točne ciljeve i ograničeno vrijeme. Ako se išta promijeni, ponovno odobrite.
+600	Pretplati ovaj uređaj putem Google Playa
+601	stanje pretplate
+603	Sustav
+604	Cilj
+605	AI asistent
+606	Asistent grupira povezana upozorenja, navodi utvrđeno s poveznicama na dokaze i sve što ne može dokazati označava kao hipotezu. Može predlagati radnje, ali ih ne može odobriti. Ako model nije dostupan, skeniranje, upozorenja i ručni odgovori nastavljaju raditi.
+607	Ovo računalo
+608	Samo TLS, mora biti na popisu dopuštenih odlaznih veza
+609	Poplave prometa apsorbira vaš nadređeni davatelj. Ovdje vodite evidenciju o svakoj javnoj krajnjoj točki, pratite upozorenja davatelja i odobravate nova ograničenja prometa.
+610	Ograničenja prometa
+611	Prevedeno
+612	Smeće
+613	preostali dani probnog razdoblja
+614	Uključite zaštitu kako biste skenirali datoteke na ovom računalu i pratili ucjenjivački softver i krađu vjerodajnica.
+615	nije pokriveno
+616	Poništi zadnju promjenu
+617	Korisnik
+618	Potvrdi e-poštu
+619	čeka odobrenje
+620	Na nekim stranicama prikazujemo oglase Google AdSense. Dopustiti personalizirane oglase?
+621	Webhook:
+622	Što uređaji šalju
+623	Što je to?
+624	Kada
+625	Kada je nešto blokirano
+626	Kada probno razdoblje završi bez plaćanja
+627	Tko
+628	Račun možete izbrisati u svom profilu. Obratite se na
+629	Vaše ime
+630	Vaša organizacija dobiva 30-dnevno besplatno probno razdoblje. Nakon toga cijena je 4,99 £ mjesečno po korisniku ili uređaju.
+631	Vaša organizacija određuje koliko se dugo čuvaju telemetrija i dokazi. Revizijski zapisi ne mogu se uređivati ni brisati.
+632	Vaša prava
+633	Diktiraj
+634	Dopustiti upotrebu mikrofona za diktiranje? Zvuk obrađuje vaš preglednik i mi ga ne pohranjujemo.
+635	Audioizlaz
+636	Pauziraj
+637	Visina glasa
+638	Nastavi
+639	Brzina
+640	Zaustavi
+641	Za ovaj jezik nema dostupnog glasa.
+642	Glas
+643	Datoteka je premještena u karantenu i ne može se pokrenuti.
+644	Na ovom je uređaju blokirana prijetnja.

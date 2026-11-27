@@ -1,0 +1,637 @@
+0	Salti al la ĉefa enhavo
+1	Aldoni daŭran escepton
+2	Apliki trafikan limigon
+3	Kolekti metadatenojn de la aparato
+4	Izoli aparaton de la reto
+5	Kvarantenigi dosieron
+6	Liberigi aparaton el izolado
+7	Restarigi kvarantenigitan dosieron
+8	Elsalutigi uzanton ĉie
+9	Malfari trafikan limigon
+10	Malfari ĝisdatigon
+11	Skani aparatojn
+12	Suspendi uzantokonton
+13	Haltigi procezon
+14	Aprobi
+15	Rifuzi
+16	Sendi al aparatoj
+17	La aprobo eksvalidiĝas [0]
+18	Proponita de la AI-asistanto
+19	Reklamo
+20	Ago
+21	Agentoj
+22	Demandi
+23	Demandi la sekurecan asistanton
+24	La respondoj venas de viaj aparatoj, malfermitaj incidentoj kaj mankoj. La asistanto povas ŝanĝi nenion.
+25	Bazita sur
+26	[0] aserto sen pruvo estis forigita
+27	[0] asertoj sen pruvo estis forigitaj
+29	Memgastigata modelo
+30	Reguloj (sen modelo)
+31	Redakti riparplanon
+32	Ĉiu paŝo estas propono. Nenio funkcias ĝis iu aprobas ĝin.
+33	Demando
+34	Ekzemple: kiuj aparatoj bezonas atenton?
+35	Sugestita graveco
+36	Resumo
+37	Celoj
+38	Resumi ĉi tiun incidenton
+39	Kial
+40	Detektita
+41	Raporti ion suspektindan
+42	Regulo
+43	Graveco
+44	Alarmo
+46	Aldoni dosierojn
+47	Aldoni dosierujon
+48	Aldoni bildojn
+49	[0] aldonaĵo
+50	[0] aldonaĵoj
+51	Aldonaĵoj
+52	Fari foton
+53	Aliro al la kamerao ne estis permesita. Permesu ĝin en via retumilo, aŭ uzu la kameraan aplikaĵon de via aparato.
+54	Antaŭrigardo de la kamerao
+55	Ĉi tiu retumilo ne povas malfermi la kameraon ĉi tie.
+56	Kapti
+57	Fermi la asistanton
+58	Kio estas ĉi tiuj dosieroj, kaj ĉu ili estas sekuraj?
+59	Dosiero
+60	Demandu pri via sekureco, aŭ aldonu dosierojn, dosierujon, bildojn aŭ kameraan foton. Ĉiu aldonaĵo unue estas skanita kaj nenio estas konservita.
+61	[0] bildo estis priskribita
+62	[0] bildoj estis priskribitaj
+63	 de la modelo.
+64	Ekzemple: ĉu ĉi tiu elŝuto estas sekura?
+65	Puraj tekstoj kaj bildoj povas esti senditaj al la AI-modelo, kiun via organizo ebligis. Malicaj dosieroj neniam.
+66	[0] dosiero ne estis aldonita
+67	[0] dosieroj ne estis aldonitaj
+68	: ĝis [0] dosieroj, po [1] MB kaj entute [2] MB.
+69	Forigi [0]
+70	Skani kaj demandi
+71	Skanrezultoj
+72	Tipo
+73	Uzi la kameraon de la aparato
+74	Rezulto
+75	Neniu konata fiprogramaro
+76	Malica
+77	Ne skanita
+78	La kontrolĉeno estas rompita ĉe ero [0].
+79	La kontrolĉeno estas sendifekta: [0] eroj kontrolitaj.
+80	Retpoŝto
+81	Ĉu vi forgesis la pasvorton?
+82	Ensaluti per Google
+83	Ensaluto per Google ne funkciis. Provu denove, aŭ uzu vian retpoŝtadreson kaj pasvorton.
+84	Ensaluti
+85	Elsaluti
+86	Nova pasvorto
+87	aŭ
+88	Organizo
+89	Pasvorto
+90	La pasvorto estis ŝanĝita. Ensalutu per via nova pasvorto.
+91	Almenaŭ 12 signoj.
+92	Krei konton
+93	Resendi la ligilon
+94	Se tiu konto ankoraŭ bezonas konfirmon, nova ligilo estas survoje. Kontrolu ankaŭ vian spamujon.
+95	Restarigi pasvorton
+96	Se konto uzas tiun adreson, ni sendis restarigan ligilon. Ĝi validas dum unu horo.
+97	Konfirmu vian retpoŝtadreson antaŭ ol ensaluti. Malfermu la ligilon, kiun ni sendis al [0].
+98	La retpoŝtadreso estas kontrolita. Vi nun povas ensaluti.
+99	Ĉi tiu ligilo eksvalidiĝis aŭ jam estis uzita. Ensalutu por ricevi novan.
+100	Kontrolu vian retpoŝton por konfirmi vian adreson.
+101	Abono malpliigas reklamojn je 95%.
+102	Via provperiodo finiĝis.
+103	Abonita ĝis [0]
+104	Teni ĉion senpaga kun plenaj reklamoj
+105	Haltigi ĉion, inkluzive de la protekto de aparatoj, ĝis iu pagos
+106	La konzolo bezonas abonon; la aparatoj restas protektitaj
+107	4,99 £ monate
+108	Aboni
+109	Senpaga provo: 
+110	Restas [0] tago
+111	Restas [0] tagoj
+112	Nuligi
+113	Forigi
+114	Io misfunkciis.
+115	Eksporti
+116	Ŝargado…
+117	N/A
+118	Neniam
+119	Sekva
+120	ne
+121	Nenio por montri.
+122	malŝaltita
+123	ŝaltita
+124	Antaŭa
+125	Refreŝigi
+126	Konservi
+127	Serĉi
+128	Simulado (testaj datenoj)
+129	Stato
+130	Nedisponebla
+131	Nekonata
+132	Ĝisdatigita [0]
+133	Laborante…
+134	jes
+135	[0] alarmo en 24 horoj
+136	[0] alarmoj en 24 horoj
+137	[0] aparato
+138	[0] aparatoj
+139	Datenoj ĝis [0]
+140	[0] malfermita incidento
+141	[0] malfermitaj incidentoj
+142	[0] aprobo atendas
+143	[0] aproboj atendas
+144	konfirmita
+145	suspektata
+146	Registri aparaton
+147	Aparato
+148	Ne raportas
+149	Malaktuala politiko
+150	Sensilo malŝaltita
+151	Malaktualaj difinoj
+152	Problemoj
+153	Laste vidita
+154	Operaciumo
+155	Politiko
+156	Rulu en la aparato ene de 24 horoj (unufoja uzo):
+157	Protekto
+158	Kopii
+159	Elŝuti
+160	Movi
+161	Nova dosierujo
+162	Renomi
+163	Restarigi
+164	Movi al rubujo
+165	Alŝuti
+166	Helpo
+167	[0] teksto en ĉi tiu paĝo estas maŝine tradukita kaj ankoraŭ ne reviziita.
+168	[0] tekstoj en ĉi tiu lingvo estas maŝine tradukitaj kaj ankoraŭ ne reviziitaj.
+169	Ĉi tiu lingvo ankoraŭ ne estas tradukita, do la angla estas montrata.
+170	aprobita
+171	Observitaj faktoj
+172	Hipotezoj (ne konfirmitaj)
+173	Hipotezo, [0] fido: [1]
+174	Ruli esploron
+175	Mankantaj pruvoj
+176	Mankas: [0]
+177	Laŭtlegi
+178	Rekomenditaj agoj
+179	Tempolinio de pruvoj
+180	envenanta rethoko
+181	Signaloj de via identeca provizanto, DNS, fajroŝirmiloj kaj aliaj iloj. Novaj integriĝoj komenciĝas kiel nedisponeblaj; nur provizanta adaptilo, kiu sukcesis en sia kontrakta testo, povas esti markita kiel aktiva. Testaj datenoj estas etikeditaj kiel simulado ĉie, kie ili aperas.
+182	Ne konektita (ŝtopilo)
+183	Nur testaj datenoj
+184	Nedisponebla
+185	Aktiva (kontrolita)
+186	Sekreto (montrata unufoje):
+187	Aproboj
+188	Alarmoj
+189	Kontrolado
+190	Abono
+191	Panelo
+192	DDoS kaj disponebleco
+193	Aparatoj
+194	Dosieroj
+195	Incidentoj
+196	Integriĝoj
+197	Politikoj
+198	Privateco
+199	Kvaranteno
+200	Respondo
+201	Sekureco
+202	Agordoj
+203	Aŭtomate kvarantenigi konatan fiprogramaron
+204	Gardi kontraŭ suspektinda konduto
+205	Bloki suspektindajn skriptojn
+206	Kolekti dosierenhavon por esplorado (defaŭlte malŝaltita)
+207	Permesi retan izoladon
+208	Skani dosierojn kiam ili estas malfermataj aŭ skribataj
+209	Skani elŝutojn
+210	Skani programojn kiam ili startas
+211	Protekti la agenton kontraŭ ŝanĝoj
+212	Averti pri konataj malicaj ligiloj
+213	Kialo
+214	Peti revizion
+215	Restarigi post freŝa skanado
+216	meza tempo ĝis kontrolita forigo (n=[0], nesolvitaj [1])
+217	riparoj kun sukcesa retesto
+218	ripetiĝo post restarigo
+219	kontrolita forigo de virusoj
+220	sekura reveno al servo
+221	restarigaj skanadoj finitaj
+222	Rezultoj nur kun kvaranteno ([0]) kaj reinstalitaj aparatoj ([1]) estas nombrataj aparte; kvaranteno sola neniam nombriĝas kiel forigo.
+223	[0] h
+224	[0] min
+225	[0] s
+226	Atendas aprobon
+227	Produktadaj pruvoj
+228	Registru, kio estis kontrolita en produktado, sur kiuj valoraĵoj, kun kiu versio. Eroj ne povas esti redaktitaj.
+229	Versio
+230	Ŝanĝi reĝimon
+231	neniu pruvo
+232	malsukcesis
+233	sukcesis
+234	atendata
+235	Kontroli progreson de la agadplano
+236	Aparatoj, kiuj povas respondi
+237	Ĉiuj aparatoj
+238	[0] pilota aparato
+239	[0] pilotaj aparatoj
+240	Finita
+241	Finita kiam
+242	Ekzercado
+243	Observi
+244	Respondi
+245	Kovrado
+246	[0] observataj, [1] kapablaj respondi
+247	Datenoj
+248	Aĝo de datenoj
+249	Aktiva
+250	Testaj datenoj
+251	ne plenumita
+252	kvitanco
+253	okazanta
+254	nekonata
+255	Ekspedo
+256	Pruvoj
+257	Ĝi funkciis
+258	Malfreŝa
+259	Datenfluoj
+260	Versio aŭ haketaĵo
+261	Medio
+262	Rezulto
+263	Respondeculo
+264	Postulo
+265	Valoraĵo aŭ kohorto
+266	Montri
+267	Ĉiuj
+268	Ne finita
+269	Ŝaltita por la tuta servo
+270	Ŝaltita por ĉi tiu organizo
+271	Ĉu haltigi ĉiun novan respondan agon por ĉi tiu organizo? Protekto kaj skanado daŭre funkcias.
+272	Denove permesi respondajn agojn
+273	Haltigi ĉiujn respondajn agojn
+274	Krizŝaltilo
+275	Speco
+276	Mediana nombro de minutoj malfermitaj ([0] malfermitaj, plej malnova [1] min)
+277	Rifuzoj de la politiko
+278	Ekzercoj kaj simuladoj (ne nombritaj supre)
+279	Ripetitaj agoj (celo 0)
+280	Mediana prokrasto de fluoj (p95 [0] s, n=[1])
+281	Malfruaj aproboj ([0] atendas, celo [1] min)
+282	Mediano de signalo ĝis prioritatigo (p95 [0] min, n=[1], [2] neprioritatigitaj)
+283	Sendepende kontrolitaj agoj ([0]/[1])
+284	Periodo: [0]. Kvitanco sola neniam nombriĝas kiel kontrolita. Mankantaj datenoj aperas kiel nedisponeblaj.
+285	Respondaj mezuroj
+286	Lasta evento
+287	Agentoj proponas; fiksa politiko decidas, kio funkcias. Ĉiu ago montras sian aprobon, kvitancon kaj sendependan kontrolon.
+288	Etapo
+289	Atendas aprobon
+290	Rifuzita
+291	Eksvalidiĝinta
+292	Malsukcesis
+293	Bezonas manan akordigon
+294	Proponita
+295	En vico
+296	Rulanta
+297	Kontrolo atendata
+298	Kontrolita
+299	Aktuala stato
+300	Reĝimo
+301	Simulado
+302	Skanadoj kaj datenkolektado funkcias. Aliaj agoj restas proponoj.
+303	Aprobitaj agoj funkcias sur la elektitaj aparatoj.
+304	Agoj funkcias nur kontraŭ testaj adaptiloj. Nenio ŝanĝiĝas en viaj aparatoj.
+305	Ankoraŭ neniuj agoj.
+306	Nenio atendas aprobon.
+307	Ankoraŭ neniuj produktadaj pruvoj registritaj.
+308	Ankoraŭ neniuj aparatoj aŭ integriĝoj sendas datenojn.
+309	Ĝi ne funkciis
+310	Observita
+311	Kio okazis
+312	Respondo al DDoS
+313	Falsa pozitivo kaj restarigo
+314	Identeco, retŝtelado kaj suspektinda trafiko
+315	Fiprogramaro kaj suspektindaj elŝutoj
+316	Reta videbleco kaj stato de aparatoj
+317	Restarigo post kompromitiĝo
+318	Elaĉetvirusoj aŭ suspektata kompromitiĝo
+319	Agadplano
+320	Agadplanoj
+321	Versio de politiko
+322	Instalita versio
+323	Izolado per fajroŝirmilo
+324	Datenoj ricevitaj
+325	Dosiero forigita
+326	Procezo haltigita
+327	Stato de provizanto
+328	Registrita
+329	Skanado finita
+330	Simulita
+331	El kvaranteno
+332	En kvaranteno
+333	Agoj kaj kvitancoj
+334	Registri rezulton
+335	Registri
+336	Povas respondi
+337	Fonto
+338	aparato
+339	konzolo
+340	simulado
+341	Komenciĝas kiam
+342	Ĝisdatigita
+343	Sendependa kontrolo
+344	Atendanta
+345	Arkiva limo
+346	Ĉifrita arkivo
+347	Ekskludita
+348	Nealirebla
+349	Tempolimo
+350	Tro granda
+351	Nesubtenata formato
+352	Nuligita
+353	Maltrafita
+354	Parta
+355	Tempolimo atingita
+356	Plena
+357	Laŭpeta
+358	Rapida
+359	Restarigo
+360	Planita
+361	Celita
+362	Aldoni segmenton
+363	arkivoj
+364	Valoraĵoj
+365	Ĉu haltigi ĉi tiun skanadon? La ĝisnunaj rezultoj estos konservitaj kiel nuligita skanado.
+366	Ne kovrita
+367	Detektoj
+368	Aparatoj laŭ protekta stato
+369	Motoro
+370	Limdato
+371	Lasta pruvo
+372	Atendata kontrolo
+373	Proponita riparo
+374	Retesti
+375	Valoraĵo aŭ segmento
+376	Malfermitaj mankoj
+377	Skanrezultoj en 30 tagoj
+378	alarmo ĝis kontrolita reteno
+379	aparatoj protektitaj
+380	publikaj finpunktoj kun mildigo ĉe la provizanto
+381	evento ĝis alarmo
+382	aparatoj kun aktualaj difinoj
+383	aparatoj kun plena skanado en 7 tagoj
+384	malfermitaj mankoj ([0] malfruaj, [1] fermitaj en 30 tagoj)
+385	retaj segmentoj monitorataj
+386	konfirmitaj veraj pozitivoj
+387	skanadoj finitaj
+388	Kovrado kaj respondo
+389	Lasta plena skanado
+390	Lasta telemetrio
+391	Ĉiu aparato kaj reta segmento en la amplekso, ĉu ĝi estas protektita, kaj kion ripari poste.
+392	Reta videbleco
+393	Ankoraŭ neniuj aparatoj registritaj. Protektu komputilon el Aparatoj.
+394	Neniuj malfermitaj mankoj.
+395	[0] malfermitaj
+396	malfrua
+397	p95 [0] s
+398	Dosierujoj
+399	Skanotaj dosierujoj, apartigitaj per komoj
+400	Ĉifrado kaj fajroŝirmilo
+401	Diska ĉifrado [0], fajroŝirmilo [1]
+402	Restarigo post incidentoj
+403	Kontroli denove nun
+404	Ne retestita
+405	Retesto malsukcesis
+406	Kontrolite fermita
+407	Tipo de skanado
+408	Skanadoj
+409	Segmento
+410	Nomo de segmento
+411	Komenci skanadon
+412	Komencita
+413	Stato
+414	Degradita
+415	Protektita
+416	Neprotektita
+417	Aparatoj laŭ stato
+418	[0] nekonataj
+419	Neniu videbleco
+420	Monitorata
+421	Videbleco
+422	Neniuj detektoj ne pruvas protekton: kontrolu ankaŭ la kovradon kaj la skanrezultojn.
+423	Lingvo
+424	Tradukkovrado
+425	Neniu pli frua versio
+426	Etoso
+427	Malhela
+428	Alta kontrasto
+429	Hela
+430	Neniuj novaj minacoj trovitaj en [0] dosieroj.
+431	[0] minaco trovita
+432	[0] minacoj trovitaj
+433	 en [0] dosieroj. Vidu Alarmojn kaj Aprobojn por revizii ilin.
+434	Plena skanado
+435	Ne eblis protekti ĉi tiun komputilon: [0]
+436	Ĉi tiu komputilo estas protektita. Realtempa skanado funkcias dum Agentic Antivirus estas malfermita.
+437	La skanado ne finiĝis: [0]
+438	Skanante…
+439	Skanante ĉiujn diskojn. Tio povas daŭri longe.
+440	Skanante Elŝutojn, Labortablon kaj provizorajn dosierojn…
+441	[0] dosieroj ne legeblis.
+442	Dosiero
+443	Retejligilo
+444	Akcepti testajn datenojn
+446	Agoj
+447	Aldoni integriĝon
+448	Aldoni escepton
+449	Aldoni integriĝon
+450	Aldoni semajnan plenan skanadon
+451	administranto
+452	Reklamado
+453	Konsento pri reklamado
+454	Trafitaj servoj
+455	alarmoj en la lastaj 24 horoj
+456	Permesi
+457	Permesi kaj skani
+458	Administranto devas doni kialon. La escepto estas registrita en la kontrolprotokolo.
+459	Retmesaĝo
+460	Aprobi revenon al servo
+461	Aprobado de agoj
+462	Valoraĵo
+463	valoraĵoj sub aktiva mildigo
+464	valoraĵoj kun alarmoj en 24 horoj
+465	Kontrolprotokolo
+466	Aŭtomata protekto daŭre funkcias en ĉiu aparato. Jen la agoj, pri kiuj homo devas decidi.
+467	Disponebleco
+468	Disponeblaj signaloj
+469	Sekurkopio kontrolita
+470	Bloki
+471	Defaŭlte la agento sendas sekurecan telemetrion kaj haketaĵojn de dosieroj: nomojn de procezoj kaj komandliniojn, dosierindikojn, metadatenojn de retaj konektoj kaj detektojn. Dosierenhavo estas kolektata nur se via organizo ŝaltas tion.
+472	Kapacito
+473	Kategorio
+474	Ŝanĝita
+475	Pago
+476	Kontroli
+477	elekti
+478	Elektu aparaton
+480	Fermi
+481	Apartigitaj per komoj
+482	Kontakto
+483	Kontrolilo
+484	Kovrado laŭ protekta tavolo
+485	kritika
+486	livero de kritikaj alarmoj (p95, 30 tagoj)
+487	Decidoj atendantaj
+488	Malakcepti
+489	Difinoj
+490	Priskribu, kio okazis
+491	Detalo
+492	Detaloj
+493	Detekto
+494	Aparato por licenci
+495	aparatoj plene protektitaj
+496	aparatoj izolitaj
+497	Aparatoj, kiuj bezonas atenton
+498	Direkto
+499	DNS-zono
+500	elŝuta paĝo
+501	Dum la senpaga provo kaj ĉe nepagitaj planoj, la konzolo montras reklamojn de Google AdSense kaj la poŝaplikaĵoj montras reklamojn de Google AdMob, post peto pri via konsento. Abonantoj vidas 95% malpli da reklamoj. Reklamoj neniam aperas en ekranoj de aprobo, reteno, minacaverto, kvarantena revizio, ensaluto, pago aŭ kontrolado.
+502	Ĉiu publikigo kreas novan subskribitan version. Aparatoj daŭre aplikas la lastan kontrolitan version dum ili estas eksterrete.
+503	Retpoŝtu al subteno ĉe
+504	Finpunkto
+505	Equality Software Ltd administras Agentic Antivirus. Ĉi tiu paĝo priskribas, kion la servo kolektas. La produktestro devas revizii ĝin antaŭ publikigo.
+506	Ĉiu ago, kiu ŝanĝas aparaton, konton aŭ trafikon, trapasas la politikan motoron kaj la AEP-X-regadon. Aprobo kovras unu agon, ĝiajn precizajn celojn, ĉi tiun organizon kaj fiksan tempon.
+507	Ĉiu alŝutaĵo estas kontrolata pri fiprogramaro kaj sia vera tipo. Dosieroj sen kontrolita montrilo estas konservataj kaj elŝuteblaj, sed ne antaŭrigardataj.
+508	Escepto
+509	Esceptoj
+510	Dosieruja vojo
+511	por petoj pri aliro aŭ korekto.
+512	Mankoj
+513	Akiru la agenton por Windows, Mac aŭ Linux el la
+514	Iru al Aparatoj, elektu Registri aparaton, kaj rulu la montritan komandon en la komputilo, kiun vi volas protekti. La agento komencas skani tuj kiam ĝi ricevas sian subskribitan politikon.
+515	Sano
+516	Historio
+517	Gastiga nomo
+518	Mi komprenas, ke la aparatoj ĉesos skani kaj bloki minacojn post la provo, ĝis abono estos pagita.
+519	Efiko
+520	Importi zip aŭ tar
+521	Incidento
+522	Inkluzivi la lingvomodelon (se via organizo ebligis iun)
+523	IP-adreso
+524	Aliĝi
+525	Aliĝu al via organizo
+526	Konata fiprogramaro estas movata al kvaranteno, kie ĝi ne povas funkcii. Se vi opinias, ke dosiero estis blokita erare, malfermu Kvarantenon kaj petu revizion. Administranto decidas, kaj la dosiero revenas nur post kiam freŝa skanado trovas ĝin pura.
+527	Lingvoj sen kompleta traduko montras la anglan. La kovrado estas mezurata, ne taksata.
+528	Laste ŝanĝita
+529	Tavolo
+530	Sukceso de legitimaj petoj
+531	Licencaj reguloj
+532	Ligilo, se ekzistas
+533	Administraj gastigantoj atingeblaj dum izolado
+534	Marki kiel falsan pozitivon
+535	Matureco
+536	Mildigo
+537	Nomo
+538	Nomo de la sekreto en via sekretejo, neniam la sekreto mem
+539	Neniuj agoj atendas.
+540	Neniuj malfermitaj incidentoj.
+541	Neniu.
+542	Nenio raportita.
+543	ne agordita
+544	Sciigita post
+545	el montritaj reklamoj
+546	Bufro por eksterretaj eventoj (MB)
+547	En Android, abonu en la aplikaĵo Agentic Antivirus per Google Play. En iPhone kaj iPad, abonoj en App Store ankoraŭ ne disponeblas. Pagi en la reto ankoraŭ ne eblas.
+548	Malfermita incidento
+549	malfermitaj incidentoj
+550	Malfermitaj incidentoj
+551	p95-latenteco
+552	pagita ĝis
+553	Voja ŝablono
+554	Homoj
+555	Po aparato
+556	Po uzanto (kovras ĉiujn liajn aparatojn)
+557	Antaŭrigardo
+558	Ĉefa
+560	Protekti aparaton
+561	Protokolo
+562	Provizanto
+563	Alarmoj de provizanto (24 horoj)
+564	Publikaj finpunktoj
+565	Publikigi version de politiko
+566	Publikigi subskribitan version
+567	Publikigita
+568	Rapida skanado
+569	Laŭtlegado kaj diktado uzas la enkonstruitajn parolfunkciojn de via retumilo. Ni ne registras nek konservas sonon.
+570	Ricevita
+571	Demeteblaj datumportiloj
+572	Forigi
+573	Petita
+574	Petita de
+575	Konservado
+576	Reveno al servo
+577	Ĝuste nun
+578	Risko
+579	Rolo
+580	Malfari
+581	Konservi finpunkton
+582	Konservi licencajn regulojn
+583	Skani
+584	Plano (cron)
+585	Planitaj skanadoj
+586	Referenco al sekreto
+587	Sendi inviton
+588	Sendi raporton
+589	Sendi restarigan ligilon
+590	Servo
+591	Servaj celoj
+594	Signalo
+595	Grando
+596	Io alia
+597	Ordigi
+598	Paŝo
+599	Haltigi procezojn, izoli aparatojn, restarigi dosierojn, aldoni esceptojn kaj ŝanĝi trafikajn regulojn bezonas aprobon de homo. Aprobo kovras unu agon, ĝiajn precizajn celojn kaj limigitan tempon. Se io ajn ŝanĝiĝas, aprobu denove.
+600	Aboni ĉi tiun aparaton per Google Play
+601	stato de abono
+603	Sistemo
+604	Celo
+605	La AI-asistanto
+606	La asistanto grupigas rilatajn alarmojn, listigas kion oni observis kun ligiloj al la pruvoj, kaj markas kiel hipotezon ĉion, kion ĝi ne povas pruvi. Ĝi povas sugesti agojn sed ne povas aprobi ilin. Se la modelo ne disponeblas, skanado, alarmoj kaj manaj respondoj daŭre funkcias.
+607	Ĉi tiu komputilo
+608	Nur TLS, devas esti en la permesolisto por eliro
+609	Trafikajn inundojn sorbas via kontraŭflua provizanto. Ĉi tie vi kontrolas ĉiun publikan finpunkton, observas alarmojn de la provizanto kaj aprobas novajn trafikajn limigojn.
+610	Trafikaj limigoj
+611	Tradukita
+612	Rubujo
+613	provtagoj restas
+614	Ŝaltu protekton por skani dosierojn en ĉi tiu komputilo kaj gardi kontraŭ elaĉetvirusoj kaj ŝtelado de akreditaĵoj.
+615	nekovrita
+616	Malfari lastan ŝanĝon
+617	Uzanto
+618	Kontroli retpoŝton
+619	atendas aprobon
+620	Ni montras reklamojn de Google AdSense en kelkaj paĝoj. Ĉu permesi personecigitajn reklamojn?
+621	Rethoko:
+622	Kion aparatoj sendas
+623	Kio ĝi estas?
+624	Kiam
+625	Kiam io estas blokita
+626	Kiam la provo finiĝas sen pago
+627	Kiu
+628	Vi povas forigi vian konton el via profilo. Kontaktu
+629	Via nomo
+630	Via organizo ricevas 30-tagan senpagan provon. Poste ĝi kostas 4,99 £ monate por ĉiu uzanto aŭ aparato.
+631	Via organizo difinas, kiom longe telemetrio kaj pruvoj estas konservataj. Kontrolaj registroj ne povas esti redaktitaj aŭ forigitaj.
+632	Viaj rajtoj
+633	Dikti
+634	Ĉu permesi uzon de la mikrofono por diktado? La sono estas traktata de via retumilo kaj ne konservata de ni.
+635	Sona eligo
+636	Paŭzi
+637	Tonalto
+638	Daŭrigi
+639	Rapido
+640	Haltigi
+641	Neniu voĉo disponeblas por ĉi tiu lingvo.
+642	Voĉo
+643	La dosiero estis movita al kvaranteno kaj ne povas funkcii.
+644	Minaco estis blokita en ĉi tiu aparato.

@@ -1,0 +1,637 @@
+0	Laktaw ngadto sa panguna nga sulod
+1	Pagdugang og permanenteng eksklusyon
+2	Ipatuman ang pagpugong sa trapiko
+3	Kolektaha ang metadata sa aparato
+4	Ilain ang aparato gikan sa network
+5	I-quarantine ang file
+6	Buhii ang aparato gikan sa pagkalain
+7	Ibalik ang file nga naka-quarantine
+8	I-sign out ang user bisan asa
+9	Ibalik ang pagpugong sa trapiko
+10	Ibalik ang update
+11	I-scan ang mga aparato
+12	Suspendeha ang account sa user
+13	Hunonga ang proseso
+14	Aprubahi
+15	Ibalibad
+16	Ipadala sa mga aparato
+17	Mo-expire ang pag-apruba [0]
+18	Gisugyot sa AI nga katabang
+19	Paanunsiyo
+20	Aksyon
+21	Mga ahente
+22	Pangutana
+23	Pangutan-a ang katabang sa seguridad
+24	Ang mga tubag gikan sa imong mga aparato, bukas nga mga insidente ug mga kakulangan. Walay mausab ang katabang.
+25	Base sa
+26	Gitangtang ang [0] pahayag nga walay ebidensya
+27	Gitangtang ang [0] ka pahayag nga walay ebidensya
+29	Modelo nga kaugalingong host
+30	Mga lagda (walay modelo)
+31	Paghimo og draft nga plano sa pag-ayo
+32	Ang matag lakang usa ka sugyot. Walay modagan hangtod adunay moaprubar.
+33	Pangutana
+34	Pananglitan: unsang mga aparato ang nanginahanglan og pagtagad?
+35	Gisugyot nga kagrabe
+36	Katingbanan
+37	Mga target
+38	Tingbana kini nga insidente
+39	Ngano
+40	Nakita
+41	Ireport ang kadudahan
+42	Lagda
+43	Kagrabe
+44	Alerto
+46	Pagdugang og mga file
+47	Pagdugang og folder
+48	Pagdugang og mga hulagway
+49	[0] ka attachment
+50	[0] ka attachment
+51	Mga gilakip
+52	Pagkuha og litrato
+53	Wala gitugotan ang pag-access sa kamera. Tugoti kini sa imong browser, o gamita ang camera app sa imong aparato.
+54	Preview sa kamera
+55	Dili maablihan niini nga browser ang kamera dinhi.
+56	Kuhaa
+57	Sirad-i ang katabang
+58	Unsa kini nga mga file, ug luwas ba sila?
+59	Payl
+60	Pangutana bahin sa imong seguridad, o ilakip ang mga file, folder, hulagway o litrato sa kamera. Ang matag gilakip i-scan una ug walay gitipigan.
+61	[0] ka hulagway ang
+62	[0] ka hulagway ang
+63	 gihulagway sa modelo.
+64	Pananglitan: luwas ba kini nga download?
+65	Ang limpyo nga teksto ug mga hulagway mahimong ipadala sa AI nga modelo nga gi-enable sa imong organisasyon. Ang makadaot nga mga file dili gayud ipadala.
+66	Wala madugang ang [0] ka file
+67	Wala madugang ang [0] ka file
+68	: hangtod [0] ka file, [1] MB matag usa ug [2] MB sa kinatibuk-an.
+69	Tangtanga ang [0]
+70	I-scan ug pangutana
+71	Mga resulta sa scan
+72	Klase
+73	Gamita ang kamera sa aparato
+74	Resulta
+75	Walay nahibal-ang malware
+76	Makadaot
+77	Wala ma-scan
+78	Naguba ang kadena sa audit sa entry [0].
+79	Kompleto ang kadena sa audit: [0] ka entry ang na-verify.
+80	Email address
+81	Nakalimtan ang password?
+82	Mag-sign in gamit ang Google
+83	Wala molihok ang pag-sign in sa Google. Sulayi pag-usab, o gamita ang imong email ug password.
+84	Mag-sign in
+85	Mag-sign out
+86	Bag-ong password
+87	o
+88	Organisasyon
+89	Pasword
+90	Nausab ang password. Mag-sign in gamit ang imong bag-ong password.
+91	Labing menos 12 ka karakter.
+92	Paghimo og account
+93	Ipadala pag-usab ang link
+94	Kon kana nga account nanginahanglan pa og kumpirmasyon, adunay bag-ong link nga moabot. Susiha usab ang imong spam folder.
+95	I-reset ang password
+96	Kon adunay account nga naggamit niana nga address, nagpadala kami og link sa pag-reset. Molihok kini sulod sa usa ka oras.
+97	Kumpirmaha ang imong email address sa dili pa ka mag-sign in. Ablihi ang link nga among gipadala sa [0].
+98	Na-verify ang email. Makasign in na ka karon.
+99	Kini nga link na-expire na o nagamit na. Mag-sign in aron makakuha og bag-o.
+100	Susiha ang imong email aron ma-verify ang imong address.
+101	Ang pag-subscribe makunhod sa mga ad og 95%.
+102	Nahuman na ang imong trial.
+103	Naka-subscribe hangtod [0]
+104	Ipabilin nga libre ang tanan uban ang tibuok nga mga ad
+105	Hunonga ang tanan, lakip ang proteksyon sa aparato, hangtod adunay mobayad
+106	Ang console nanginahanglan og subscription; ang mga aparato magpabilin nga protektado
+107	£4.99 matag bulan
+108	Mag-subscribe
+109	Libreng trial:
+110	[0] ka adlaw na lang
+111	[0] ka adlaw na lang
+112	Kanselaha
+113	Papasa
+114	Adunay sayop nga nahitabo.
+115	I-export
+116	Nag-load…
+117	Wala
+118	Dili gayud
+119	Sunod
+120	dili
+121	Walay ipakita.
+122	patay
+123	buhi
+124	Kaniadto
+125	I-refresh
+126	I-save
+127	Pangita
+128	Simulasyon (datos sa pagsulay)
+129	Kahimtang
+130	Dili magamit
+131	Wala mahibal-an
+132	Na-update [0]
+133	Nagtrabaho…
+134	oo
+135	[0] ka alerto sulod sa 24 ka oras
+136	[0] ka alerto sulod sa 24 ka oras
+137	[0] ka aparato
+138	[0] ka aparato
+139	Datos hangtod [0]
+140	[0] ka bukas nga insidente
+141	[0] ka bukas nga insidente
+142	[0] ka pag-apruba ang naghulat
+143	[0] ka pag-apruba ang naghulat
+144	kumpirmado
+145	gidudahan
+146	Ipalista ang aparato
+147	Aparato
+148	Wala nagreport
+149	Daan nga palisiya
+150	Gipalong ang sensor
+151	Daan nga mga depinisyon
+152	Mga isyu
+153	Katapusang nakita
+154	Sistema sa operasyon
+155	Palisiya
+156	Padagana sa aparato sulod sa 24 ka oras (usa ka gamit):
+157	Proteksyon
+158	Kopyaha
+159	I-download
+160	Ibalhin
+161	Bag-ong folder
+162	Ilisan ang ngalan
+163	Ibalik
+164	Ibalhin sa basurahan
+165	I-upload
+166	Tabang
+167	[0] ka teksto niini nga panid gihubad sa makina ug wala pa marepaso.
+168	[0] ka teksto niini nga pinulongan gihubad sa makina ug wala pa marepaso.
+169	Kini nga pinulongan wala pa mahubad, mao nga Iningles ang gipakita.
+170	giaprobahan
+171	Mga naobserbahan nga kamatuoran
+172	Mga pangagpas (wala makumpirma)
+173	Pangagpas, [0] kasiguroan: [1]
+174	Padagana ang imbestigasyon
+175	Kulang nga ebidensya
+176	Kulang: [0]
+177	Basaha og kusog
+178	Girekomendar nga mga aksyon
+179	Timeline sa ebidensya
+180	umaabot nga webhook
+181	Mga signal gikan sa imong identity provider, DNS, mga firewall ug uban pang himan. Ang bag-ong mga integrasyon magsugod nga dili magamit; ang adapter lamang sa provider nga nakapasar sa iyang contract test ang mahimong markahan nga live. Ang datos sa pagsulay gimarkahan nga simulasyon bisan asa kini makita.
+182	Wala makonektar (stub)
+183	Datos sa pagsulay lamang
+184	Dili magamit
+185	Live (na-verify)
+186	Sekreto (makausa ra ipakita):
+187	Mga pag-apruba
+188	Mga alerto
+189	Pag-audit
+190	Suskripsyon
+191	Panguna nga panid
+192	DDoS ug pagkaanaa
+193	Mga aparato
+194	Mga file
+195	Mga insidente
+196	Mga integrasyon
+197	Mga palisiya
+198	Pribasiya
+199	Kwarantina
+200	Tubag
+201	Seguridad
+202	Mga setting
+203	Awtomatikong i-quarantine ang nahibal-ang malware
+204	Bantayi ang kadudahang kinaiya
+205	Babagi ang kadudahang mga script
+206	Kolektaha ang sulod sa file para sa imbestigasyon (patay isip default)
+207	Tugoti ang pagkalain sa network
+208	I-scan ang mga file kon ablihan o sulatan
+209	I-scan ang mga download
+210	I-scan ang mga programa kon magsugod
+211	Panalipdi ang ahente gikan sa mga kausaban
+212	Pasidan-i bahin sa nahibal-ang makadaot nga mga link
+213	Rason
+214	Pangayo og repaso
+215	Ibalik human sa bag-ong scan
+216	median nga oras hangtod sa na-verify nga pagtangtang (n=[0], wala masulbad [1])
+217	mga pag-ayo nga nakapasar sa pagsulay pag-usab
+218	pagbalik human sa pagkaayo
+219	na-verify nga pagtangtang sa virus
+220	luwas nga pagbalik sa serbisyo
+221	nahuman ang mga scan sa pagkaayo
+222	Ang mga resulta nga quarantine lamang ([0]) ug mga aparato nga gi-reimage ([1]) giihap nga bulag; ang quarantine lamang dili gayud iihap nga pagtangtang.
+223	[0] ka oras
+224	[0] minuto
+225	[0] segundo
+226	Naghulat og pag-apruba
+227	Ebidensya sa produksyon
+228	Irekord kon unsa ang na-verify sa produksyon, sa unsang mga asset, ug sa unsang bersyon. Dili ma-edit ang mga entry.
+229	Bersyon
+230	Usba ang mode
+231	walay ebidensya
+232	napakyas
+233	nakapasar
+234	naghulat
+235	Susiha ang pag-uswag sa playbook
+236	Mga aparato nga makatubag
+237	Tanan nga aparato
+238	[0] ka pilot nga aparato
+239	[0] ka pilot nga aparato
+240	Kompleto
+241	Kompleto kon
+242	Ensayo
+243	Obserbahi
+244	Tubag
+245	Sakup
+246	[0] naobserbahan, [1] makatubag
+247	Datos
+248	Edad sa datos
+249	Buhi
+250	Datos sa pagsulay
+251	wala mahimo
+252	resibo
+253	nagpadayon
+254	wala mahibal-an
+255	Ipadala
+256	Ebidensya
+257	Midagan kini
+258	Daan na
+259	Mga agos sa datos
+260	Bersyon o digest
+261	Palibot
+262	Sangputanan
+263	Tag-iya
+264	Kinahanglanon
+265	Asset o grupo
+266	Ipakita
+267	Tanan
+268	Dili kompleto
+269	Buhi para sa tibuok serbisyo
+270	Buhi para niini nga organisasyon
+271	Hunongon ang matag bag-ong aksyon sa pagtubag para niini nga organisasyon? Magpadayon ang proteksyon ug pag-scan.
+272	Tugoti pag-usab ang mga aksyon sa pagtubag
+273	Hunonga ang tanang aksyon sa pagtubag
+274	Emerhensiyang switch
+275	Matang
+276	Median nga minuto nga bukas ([0] bukas, labing daan [1] min)
+277	Mga pagbalibad sa palisiya
+278	Mga ensayo ug simulasyon (wala maihap sa ibabaw)
+279	Gibalik-balik nga mga aksyon (target 0)
+280	Median nga paglangan sa agos (p95 [0] seg, n=[1])
+281	Mga pag-apruba nga nalangan ([0] naghulat, target [1] min)
+282	Median gikan sa signal hangtod triage (p95 [0] min, n=[1], [2] wala ma-triage)
+283	Mga aksyon nga independenteng na-verify ([0]/[1])
+284	Panahon: [0]. Ang resibo lamang dili gayud iihap nga na-verify. Ang kulang nga datos ipakita nga dili magamit.
+285	Mga sukod sa pagtubag
+286	Katapusang panghitabo
+287	Ang mga ahente mosugyot; usa ka pirmi nga palisiya ang modesisyon kon unsa ang modagan. Ang matag aksyon nagpakita sa iyang pag-apruba, resibo ug independenteng pagsusi.
+288	Ang-ang
+289	Naghulat og pag-apruba
+290	Gibalibaran
+291	Na-expire
+292	Napakyas
+293	Nanginahanglan og manwal nga pagpahiuyon
+294	Gisugyot
+295	Naa sa pila
+296	Nagdagan
+297	Naghulat ang pag-verify
+298	Na-verify
+299	Kasamtangang kahimtang
+300	Paagi
+301	Simulasyon
+302	Modagan ang mga scan ug pagkolekta sa datos. Ang ubang aksyon magpabilin nga sugyot.
+303	Ang giaprobahang mga aksyon modagan sa napiling mga aparato.
+304	Ang mga aksyon modagan lamang batok sa mga test adapter. Walay mausab sa imong mga aparato.
+305	Wala pay mga aksyon.
+306	Walay naghulat og pag-apruba.
+307	Wala pay narekord nga ebidensya sa produksyon.
+308	Wala pay mga aparato o integrasyon nga nagpadala og datos.
+309	Wala kini midagan
+310	Naobserbahan
+311	Unsa ang nahitabo
+312	Tubag sa DDoS
+313	Sayop nga positibo ug pagbalik
+314	Identidad, phishing ug kadudahang trapiko
+315	Malware ug kadudahang mga download
+316	Panan-aw sa network ug kahimtang sa aparato
+317	Pagkaayo human sa kompromiso
+318	Ransomware o gidudahang kompromiso
+319	Playbook sa pagtubag
+320	Mga playbook sa pagtubag
+321	Bersyon sa palisiya
+322	Na-install nga bersyon
+323	Pagkalain sa firewall
+324	Nadawat ang datos
+325	Gitangtang ang file
+326	Gihunong ang proseso
+327	Kahimtang sa provider
+328	Narekord
+329	Nahuman ang scan
+330	Gi-simulate
+331	Gawas sa quarantine
+332	Sulod sa quarantine
+333	Mga aksyon ug resibo
+334	Irekord ang sangputanan
+335	Irekord
+336	Makatubag
+337	Gigikanan
+338	aparato
+339	konsol
+340	simulasyon
+341	Magsugod kon
+342	Na-update
+343	Independenteng pagsusi
+344	Naghulat
+345	Limitasyon sa archive
+346	Naka-encrypt nga archive
+347	Wala iapil
+348	Dili ma-access
+349	Limitasyon sa oras
+350	Dako kaayo
+351	Dili suportadong format
+352	Gikansela
+353	Nalaktawan
+354	Partial
+355	Nahutdan og oras
+356	Tibuok
+357	Kon gikinahanglan
+358	Dali
+359	Pagkaayo
+360	Naka-iskedyul
+361	Gitumong
+362	Pagdugang og bahin
+363	mga archive
+364	Mga asset
+365	Hunongon kini nga scan? Ang mga resulta hangtod karon tipigan isip gikanselang scan.
+366	Dili sakup
+367	Mga nakit-an
+368	Mga aparato sumala sa kahimtang sa proteksyon
+369	Makina
+370	Takdang petsa
+371	Katapusang ebidensya
+372	Gipaabot nga kontrol
+373	Gisugyot nga pag-ayo
+374	Sulayi pag-usab
+375	Asset o bahin
+376	Bukas nga mga kakulangan
+377	Mga resulta sa scan sulod sa 30 ka adlaw
+378	alerto hangtod na-verify nga pagpugong
+379	mga aparato nga protektado
+380	publiko nga mga endpoint nga adunay upstream mitigation
+381	panghitabo hangtod alerto
+382	mga aparato nga adunay bag-ong mga depinisyon
+383	mga aparato nga adunay full scan sulod sa 7 ka adlaw
+384	bukas nga mga kakulangan ([0] nalangan, [1] gisirad-an sulod sa 30 ka adlaw)
+385	gibantayan nga mga bahin sa network
+386	kumpirmadong tinuod nga positibo
+387	nahuman nga mga scan
+388	Sakup ug pagtubag
+389	Katapusang full scan
+390	Katapusang telemetry
+391	Ang matag aparato ug bahin sa network nga sakup, kon protektado ba kini, ug unsa ang sunod nga ayohon.
+392	Panan-aw sa network
+393	Wala pay nalista nga aparato. Panalipdi ang kompyuter gikan sa Mga aparato.
+394	Walay bukas nga kakulangan.
+395	[0] bukas
+396	nalangan
+397	p95 [0] seg
+398	Mga folder
+399	Mga folder nga i-scan, gibulag sa koma
+400	Encryption ug firewall
+401	Encryption sa disk [0], firewall [1]
+402	Pagkaayo human sa mga insidente
+403	Susiha pag-usab karon
+404	Wala masulayi pag-usab
+405	Napakyas ang pagsulay pag-usab
+406	Na-verify nga sirado
+407	Klase sa scan
+408	Mga scan
+409	Bahin
+410	Ngalan sa bahin
+411	Sugdi ang scan
+412	Gisugdan
+413	Kahimtang
+414	Mihuyang
+415	Protektado
+416	Dili protektado
+417	Mga aparato sumala sa kahimtang
+418	[0] wala mahibal-an
+419	Walay panan-aw
+420	Gibantayan
+421	Panan-aw
+422	Ang walay nakit-an dili pamatuod sa proteksyon: susiha usab ang sakup ug mga resulta sa scan.
+423	Pinulongan
+424	Sakup sa hubad
+425	Walay naunang bersyon
+426	Tema
+427	Ngitngit
+428	Taas nga kalainan
+429	Hayag
+430	Walay bag-ong hulga nga nakit-an sa [0] ka file.
+431	[0] ka hulga
+432	[0] ka hulga
+433	 ang nakit-an sa [0] ka file. Tan-awa ang Mga alerto ug Mga pag-apruba aron repasohon kini.
+434	Tibuok nga scan
+435	Dili mapanalipdan kini nga kompyuter: [0]
+436	Protektado kini nga kompyuter. Ang real-time nga pag-scan modagan samtang bukas ang Agentic Antivirus.
+437	Wala nahuman ang scan: [0]
+438	Nag-scan…
+439	Nag-scan sa matag drive. Mahimong dugay kini.
+440	Nag-scan sa Downloads, Desktop ug temporaryong mga file…
+441	[0] ka file ang dili mabasa.
+442	Usa ka file
+443	Link sa website
+444	Dawata ang datos sa pagsulay
+446	Mga aksyon
+447	Pagdugang og integrasyon
+448	Pagdugang og eksklusyon
+449	Idugang ang integrasyon
+450	Pagdugang og semanal nga full scan
+451	administrador
+452	Pag-anunsiyo
+453	Pagtugot sa paanunsiyo
+454	Apektadong mga serbisyo
+455	mga alerto sa miaging 24 ka oras
+456	Tugoti
+457	Tugoti ug i-scan
+458	Ang administrador kinahanglan mohatag og rason. Ang eksklusyon girekord sa audit trail.
+459	Usa ka email
+460	Aprubahi ang pagbalik sa serbisyo
+461	Pag-apruba sa mga aksyon
+462	Kabtangan
+463	mga asset ubos sa aktibong mitigation
+464	mga asset nga adunay alerto sulod sa 24 ka oras
+465	Rekord sa audit
+466	Ang awtomatikong proteksyon nagpadayon sa matag aparato. Kini ang mga aksyon nga nanginahanglan og tawo nga modesisyon.
+467	Pagkaanaa
+468	Magamit nga mga signal
+469	Na-verify ang backup
+470	Babagi
+471	Isip default, ang ahente nagpadala og security telemetry ug mga file hash: mga ngalan sa proseso ug command line, mga file path, metadata sa koneksyon sa network, ug mga nakit-an. Ang sulod sa file kolektahon lamang kon i-on kini sa imong organisasyon.
+472	Kapasidad
+473	Kategoriya
+474	Giusab
+475	Bayad
+476	Susiha
+477	pilia
+478	Pilia ang aparato
+480	Sirad-i
+481	Gibulag sa koma
+482	Kontak
+483	Kontrol
+484	Sakup sumala sa layer sa proteksyon
+485	kritikal
+486	paghatod sa kritikal nga alerto (p95, 30 ka adlaw)
+487	Mga desisyon nga naghulat
+488	Ibalibad
+489	Mga depinisyon
+490	Ihulagway ang nahitabo
+491	Detalye
+492	Mga detalye
+493	Pagkakita
+494	Aparato nga lisensyahan
+495	mga aparato nga hingpit nga protektado
+496	mga aparato nga gilain
+497	Mga aparato nga nanginahanglan og pagtagad
+498	Direksyon
+499	Sona sa DNS
+500	panid sa download
+501	Panahon sa libreng trial, ug sa mga plano nga wala bayri, ang console nagpakita og mga ad sa Google AdSense ug ang mga mobile app nagpakita og mga ad sa Google AdMob, human mangayo sa imong pagtugot. Ang mga subscriber makakita og 95% nga mas gamay nga ad. Ang mga ad dili gayud makita sa mga screen sa pag-apruba, pagpugong, pasidaan sa hulga, repaso sa quarantine, pag-sign in, pagbayad o audit.
+502	Ang matag pagpatik maghimo og bag-ong bersyon nga gipirmahan. Ang mga aparato magpadayon sa pagpatuman sa katapusang na-verify nga bersyon samtang offline.
+503	Email sa suporta sa
+504	Endpoint sa serbisyo
+505	Ang Equality Software Ltd ang nagpadagan sa Agentic Antivirus. Kini nga panid naghulagway kon unsa ang gikolekta sa serbisyo. Kinahanglan kini repasohon sa tag-iya sa produkto sa dili pa ipatik.
+506	Ang matag aksyon nga nag-usab sa aparato, account o trapiko moagi sa makina sa palisiya ug sa pagdumala sa AEP-X. Ang usa ka pag-apruba naglangkob sa usa ka aksyon, sa eksaktong mga target niini, niini nga organisasyon, ug sa pirmi nga oras.
+507	Ang matag upload gisusi para sa malware ug sa tinuod nga klase niini. Ang mga file nga walay na-verify nga viewer gitipigan ug ma-download apan dili ma-preview.
+508	Eksepsiyon
+509	Mga eksklusyon
+510	Path sa folder
+511	para sa mga hangyo sa pag-access o pagtul-id.
+512	Mga kakulangan
+513	Kuhaa ang ahente para sa Windows, Mac o Linux gikan sa
+514	Adto sa Mga aparato, pilia ang Ipalista ang aparato, ug padagana ang gipakitang command sa kompyuter nga gusto nimong panalipdan. Ang ahente magsugod sa pag-scan dayon kon madawat na niini ang gipirmahan nga palisiya.
+515	Kahimsog
+516	Kasaysayan
+517	Ngalan sa host
+518	Nasabtan nako nga ang mga aparato mohunong sa pag-scan ug pagbabag sa mga hulga human sa trial hangtod mabayran ang subscription.
+519	Epekto
+520	I-import ang zip o tar
+521	Insidente
+522	Ilakip ang modelo sa pinulongan (kon adunay gi-enable ang imong organisasyon)
+523	Address sa IP
+524	Apil
+525	Apil sa imong organisasyon
+526	Ang nahibal-ang malware ibalhin sa quarantine, diin dili kini makadagan. Kon sa imong hunahuna nababagan ang usa ka file sa sayop, ablihi ang Kwarantina ug pangayo og repaso. Usa ka administrador ang modesisyon, ug ang file mobalik lamang human makit-an sa bag-ong scan nga limpyo kini.
+527	Ang mga pinulongan nga walay kompletong hubad mobalik sa Iningles. Ang sakup gisukod, dili gibanabana.
+528	Katapusang giusab
+529	Lut-od
+530	Kalampusan sa lehitimong hangyo
+531	Mga lagda sa lisensya
+532	Link, kon aduna
+533	Mga management host nga maabot samtang gilain
+534	Markahi nga sayop nga positibo
+535	Pagkahamtong
+536	Mitigasyon
+537	Ngalan
+538	Ngalan sa sekreto sa imong tipiganan sa sekreto, dili gayud ang sekreto mismo
+539	Walay naghulat nga aksyon.
+540	Walay bukas nga insidente.
+541	Wala.
+542	Walay gireport.
+543	wala gi-set
+544	Gipahibalo human sa
+545	sa mga ad nga gipakita
+546	Buffer sa offline nga panghitabo (MB)
+547	Sa Android, mag-subscribe sa Agentic Antivirus app pinaagi sa Google Play. Sa iPhone ug iPad, ang mga subscription sa App Store dili pa magamit. Ang pagbayad sa web dili pa magamit.
+548	Bukas nga insidente
+549	bukas nga mga insidente
+550	Bukas nga mga insidente
+551	Latency sa p95
+552	bayad hangtod
+553	Pattern sa path
+554	Mga tawo
+555	Matag aparato
+556	Matag user (naglangkob sa tanan nilang aparato)
+557	Tan-awa daan
+558	Panguna
+560	Panalipdi ang aparato
+561	Protokol
+562	Tighatag
+563	Mga alerto sa provider (24 ka oras)
+564	Publiko nga mga endpoint
+565	Ipatik ang bersyon sa palisiya
+566	Ipatik ang gipirmahan nga bersyon
+567	Gipatik
+568	Dali nga scan
+569	Ang pagbasa og kusog ug pagdikta naggamit sa built-in nga speech features sa imong browser. Wala kami nagrekord o nagtipig og audio.
+570	Nadawat
+571	Matangtang nga media
+572	Tangtanga
+573	Gihangyo
+574	Gihangyo ni
+575	Pagtipig
+576	Ibalik sa serbisyo
+577	Karon dayon
+578	Peligro
+579	Papel
+580	Ibalik
+581	I-save ang endpoint
+582	I-save ang mga lagda sa lisensya
+583	I-scan
+584	Iskedyul (cron)
+585	Naka-iskedyul nga mga scan
+586	Reperensiya sa sekreto
+587	Ipadala ang imbitasyon
+588	Ipadala ang report
+589	Ipadala ang link sa pag-reset
+590	Serbisyo
+591	Mga tumong sa serbisyo
+594	Timailhan
+595	Gidak-on
+596	Uban pa
+597	Hikay
+598	Lakang
+599	Ang paghunong sa mga proseso, pagkalain sa mga aparato, pagbalik sa mga file, pagdugang og mga eksklusyon ug pag-usab sa mga lagda sa trapiko nanginahanglan og tawo nga moaprubar. Ang usa ka pag-apruba naglangkob sa usa ka aksyon, sa eksaktong mga target niini ug sa limitadong oras. Kon adunay mausab, aprubahi pag-usab.
+600	I-subscribe kini nga aparato gamit ang Google Play
+601	kahimtang sa subscription
+603	Sistema
+604	Target nga butang
+605	Ang AI nga katabang
+606	Ang katabang naggrupo sa may kalabutan nga mga alerto, naglista kon unsa ang naobserbahan uban ang mga link sa ebidensya, ug nagmarka isip pangagpas sa bisan unsa nga dili niini mapamatud-an. Makasugyot kini og mga aksyon apan dili kini makaaprubar. Kon dili magamit ang modelo, ang pag-scan, mga alerto ug manwal nga pagtubag magpadayon.
+607	Kini nga kompyuter
+608	TLS lamang, kinahanglan naa sa egress allowlist
+609	Ang mga baha sa trapiko gisuyop sa imong upstream provider. Dinhi imong ihap ang matag publiko nga endpoint, bantayan ang mga alerto sa provider, ug aprubahan ang bag-ong mga pagpugong sa trapiko.
+610	Mga pagpugong sa trapiko
+611	Nahubad
+612	Basurahan
+613	nahabilin nga adlaw sa trial
+614	I-on ang proteksyon aron i-scan ang mga file niini nga kompyuter ug bantayan ang ransomware ug pagpangawat sa credential.
+615	dili sakup
+616	Ibalik ang katapusang kausaban
+617	Tiggamit
+618	I-verify ang email
+619	naghulat og pag-apruba
+620	Nagpakita kami og mga ad gikan sa Google AdSense sa pipila ka panid. Tugotan ang personalized nga mga ad?
+621	Umaabot nga webhook:
+622	Unsa ang gipadala sa mga aparato
+623	Unsa kini?
+624	Kanus-a
+625	Kon adunay nababagan
+626	Kon matapos ang trial nga walay bayad
+627	Kinsa
+628	Mahimo nimong papason ang imong account gikan sa imong profile. Kontaka ang
+629	Imong ngalan
+630	Ang imong organisasyon makakuha og 30 ka adlaw nga libreng trial. Human niana, nagkantidad kini og £4.99 matag bulan para sa matag user o aparato.
+631	Ang imong organisasyon ang motakda kon unsa kadugay tipigan ang telemetry ug ebidensya. Ang mga rekord sa audit dili ma-edit o mapapas.
+632	Imong mga katungod
+633	Pagdikta
+634	Tugotan ang paggamit sa mikropono para sa pagdikta? Ang audio giproseso sa imong browser ug dili namo tipigan.
+635	Gawas nga tingog
+636	I-pause
+637	Tono
+638	Ipadayon
+639	Kakusog
+640	Hunonga
+641	Walay tingog nga magamit para niini nga pinulongan.
+642	Tingog
+643	Ang file gibalhin sa quarantine ug dili makadagan.
+644	Usa ka hulga ang nababagan niini nga aparato.
