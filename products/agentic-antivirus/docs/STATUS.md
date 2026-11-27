@@ -33,6 +33,12 @@ New since 0.1.1, all covered by tests:
   business KPIs (KPI-01); OCI Object Storage for off-VM encrypted backups (BE-05); OpenTelemetry traces with a
   collector overlay (BE-06); FastAPI lifespan handlers (audit L-3).
 
+Second round (same day): real-time pre-open/pre-exec blocking — Linux fanotify (tested for real as root),
+Windows AavFilter minifilter and macOS Endpoint Security client (sources + CI builds; loading needs signing and
+Apple's entitlement); live provider adapters with encrypted write-only credentials and a live credential-check gate
+(Google Workspace, Entra ID, Cloudflare, OPNsense, S3 backup, URLhaus, Safe Browsing); URL reputation endpoint;
+gRPC ingest and SQL/IMAP pull transports. Tests: control plane 187, agent 16.
+
 Still needs the VM, a provider, an account or a person: VM runs of staging/preflight/restore/rollback, GitHub
 environment reviewer, signing certificates, store accounts, kernel-level blocking, live provider adapters,
 1,000-endpoint load and DDoS exercises, translations + per-locale QA, gRPC/IMAP/SFTP/AMQP/MQTT/SQL transports.

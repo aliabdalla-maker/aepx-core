@@ -1,6 +1,6 @@
 # Deploy runbook — R1 close-out and R2 build (v0.1.2)
 
-Owner and release approver: **Ali**. Branch: `feat/aav-r1-closeout-r2` (7 commits on top of `master` `97c4746`).
+Owner and release approver: **Ali**. Branch: `feat/aav-r1-closeout-r2` (11 commits on top of `master` `97c4746`).
 Every step names the requirement IDs it closes. Commands assume a checkout of `aliabdalla-maker/aepx-core`.
 
 ## 0. Land the branch (≈10 min)
@@ -117,12 +117,44 @@ Commit the evidence files (`preflight-*.log`, `restore-*.json`, `rollback-*.json
 CI-11, CI-15, RA-01, RA-09, RA-10, RA-12, RA-13, DEL-05, DLV-09, NFR-01, AV-01, FN-06, REL-01 (and BE-05 once the
 bucket has a stored backup). Then fill the release row in `docs/APPROVALS.md`.
 
+## 10. Real-time blocking (B-01, B-04)
+
+- **Linux:** nothing to do — the agent service runs as root and starts fanotify blocking itself; the device's sensor
+  health shows `realtime_blocking: fanotify`.
+- **Windows:** download `aav-kernel-windows` from the CI run. On a test machine: `bcdedit /set testsigning on`, reboot,
+  test-sign `AavFilter.sys`, `pnputil /add-driver AavFilter.inf /install`, `fltmc load AavFilter`, restart the agent
+  service (sensor health then shows `minifilter`). For customers: request an altitude from Microsoft and submit the
+  driver for attestation signing in Partner Center (EV certificate).
+- **macOS:** request the Endpoint Security entitlement from Apple. Meanwhile, on a test Mac with SIP disabled, run
+  the `aav-kernel-macos` binary as root with the LaunchDaemon in `agent/kernel/macos` (sensor health shows
+  `endpoint_security`).
+
+## 11. Live providers (B-06) — per tenant, in the console or API
+
+For each provider: `POST /v1/integrations` (kind, `protocol: rest`, `config` with `provider` and its ids — never
+the credential) → `PUT /v1/integrations/{id}/secret` (stored encrypted, never shown again) →
+`POST /v1/integrations/{id}/verify-credentials` (live read-only call) → `POST /v1/integrations/{id}/maturity`
+`verified_live` with `sandbox_contract_passed` and `policy_reviewed`. Add each API host to `AAV_EGRESS_ALLOWLIST`
+(`admin.googleapis.com,oauth2.googleapis.com,login.microsoftonline.com,graph.microsoft.com,api.cloudflare.com,
+urlhaus-api.abuse.ch,safebrowsing.googleapis.com` plus your firewall and bucket hosts). Provider table and required
+permissions: `control-plane/app/providers/__init__.py`.
+
+## 12. Extra transports (INT-02)
+
+- gRPC ingest: set `AAV_GRPC_PORT=50051` and route `grpc.<your host>` through the TLS proxy to
+  `control-plane:50051` (h2c). Clients call `aav.ingest.v1.Ingest/Submit` with a `google.protobuf.Struct` and the
+  metadata `x-aav-integration-id`, `x-aav-webhook-secret`.
+- SQL and IMAP pull run every `AAV_POLL_SECONDS` (default 300) for integrations with `protocol: sql` or `imap`
+  (details in `control-plane/app/transports.py`).
+
 ## Still with you (not code)
 
 | Item | What is needed | Closes |
 |---|---|---|
 | Code signing | Azure Artifact Signing account (Windows) + Apple Developer ID; add the secrets named in the desktop job | B-02, DST-08, CI-10, RA-07, DLV-11 |
 | Stores | Play Console app + service account; App Store Connect app | B-03, B-05, PRJ-21, DST-02/03/09, OBJ-08, DLV-12, PLT-03, UI-02/08/10 |
-| Kernel blocking | EV certificate + Microsoft attestation signing; Apple Endpoint Security entitlement | B-01, B-04 |
-| Live providers | Provider accounts (IdP, DNS, CDN/WAF, backup, URL feeds) | B-06, then DDoS/load B-08/B-09, NFR-02, DDOS-02/04, DDL-03 |
-| Translations | Run `agentic-antivirus-i18n.yml` with a translation provider key; per-locale QA | L10N-01/10/11 |
+| Kernel blocking | Microsoft altitude + attestation signing (EV cert); Apple Endpoint Security entitlement | B-01, B-04 |
+| Live providers | Accounts and keys for the providers you choose (step 11) | B-06, then DDoS/load B-08/B-09, NFR-02, DDOS-02/04, DDL-03 |
+| Translations | Run `agentic-antivirus-i18n.yml` (local M2M100/MADLAD models, or ANTHROPIC_API_KEY); native per-locale QA | L10N-01/10/11 |
+| Remaining transports | SFTP, AMQP, MQTT; CRM/ERP/messaging/IoT connectors once a product is chosen | INT-02, INT-03 |
+| Later stages | Managed, Agentic, Expanded release stages and optional platforms are roadmap scope after R2 | REL-02…05, PLT-04 |
