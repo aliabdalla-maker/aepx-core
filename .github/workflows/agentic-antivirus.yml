@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
-      - run: pip install -r $P/control-plane/requirements.txt -r $P/agent/requirements.txt pytest ruff==0.16.0
+      - run: pip install -r $P/control-plane/requirements.txt -r $P/control-plane/requirements-test.txt -r $P/agent/requirements.txt ruff==0.16.0
       - name: AEP-X governance in its own environment (its FastAPI pin differs from the control plane's)
         run: python -m venv /tmp/gov && /tmp/gov/bin/pip install -q -r services/governance/requirements.txt
       - run: ruff check --config ruff.toml $P/control-plane $P/agent $P/detection

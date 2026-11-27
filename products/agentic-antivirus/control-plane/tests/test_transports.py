@@ -79,6 +79,9 @@ def test_sql_pull_with_cursor(new_account, source_db):
     query = ("SELECT lpad(id::text, 8, '0') AS external_id, kind AS category, sev AS severity, at AS observed_at, "
              "src AS device_ip FROM fw_events WHERE lpad(id::text, 8, '0') > %(cursor)s ORDER BY id")
     integ = _integration(admin, "firewall", "sql", endpoint=endpoint, config={"query": query})
+    if source_db.get("password"):                  # CI's database uses password auth: store it as the encrypted secret
+        assert admin.put(f"/v1/integrations/{integ['id']}/secret",
+                         json={"value": source_db["password"]}).status_code == 204
     from app.routers import integrations
     import uuid
     r = transports.poll_integration(uuid.UUID(integ["id"]), uuid.UUID(admin.tenant_id), check_egress=False)
