@@ -46,19 +46,26 @@ class _FakeS3(BaseHTTPRequestHandler):
                                    secret_key=self.secret, region="uk-london-1", now=now)
         return want["authorization"] == auth
 
+    def _reply(self, code, headers=None):
+        self.send_response(code)
+        for k, v in (headers or {}).items():
+            self.send_header(k, v)
+        self.end_headers()
+
     def _do(self):
         body = self.rfile.read(int(self.headers.get("content-length") or 0))
         if not self._authorised(body):
-            self.send_response(403); self.end_headers(); return
+            return self._reply(403)
         if self.command == "PUT":
             self.objects[self.path] = body
-            self.send_response(200); self.send_header("ETag", '"e"'); self.end_headers(); return
+            return self._reply(200, {"ETag": '"e"'})
         if self.path not in self.objects:
-            self.send_response(404); self.end_headers(); return
+            return self._reply(404)
         if self.command == "DELETE":
-            del self.objects[self.path]; self.send_response(204); self.end_headers(); return
+            del self.objects[self.path]
+            return self._reply(204)
         data = self.objects[self.path]
-        self.send_response(200); self.send_header("Content-Length", str(len(data))); self.end_headers()
+        self._reply(200, {"Content-Length": str(len(data))})
         if self.command == "GET":
             self.wfile.write(data)
 

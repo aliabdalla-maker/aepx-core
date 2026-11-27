@@ -11,12 +11,12 @@ import stat
 import subprocess
 import sys
 import tempfile
-import time
 from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "detection"))
+_HERE = Path(__file__).resolve().parent
+sys.path[:0] = [str(_HERE.parent), str(_HERE.parents[1] / "detection")]
 from aav_detection import Engine  # noqa: E402
 
 from aav_agent import realtime  # noqa: E402
@@ -61,7 +61,8 @@ def test_verdict_service_scans_descriptors_caches_and_fails_open(tmp_path):
 @pytest.mark.skipif(not hasattr(socket, "AF_UNIX") or sys.platform == "win32", reason="Unix sockets")
 def test_macos_verdict_socket_protocol(tmp_path):
     blocks = []
-    sock_path = str(tmp_path / "v.sock")
+    sock_dir = tempfile.mkdtemp(prefix="aav", dir="/tmp")    # macOS caps AF_UNIX paths at 104 bytes
+    sock_path = os.path.join(sock_dir, "v.sock")
     srv = realtime.VerdictSocketServer(service(blocks), sock_path).start()
     try:
         assert stat.S_IMODE(os.stat(sock_path).st_mode) == 0o600

@@ -2,7 +2,6 @@
 webhook (validation, dedup, attribution, incidents, audit)."""
 from __future__ import annotations
 
-import json
 from email.message import EmailMessage
 
 import grpc
