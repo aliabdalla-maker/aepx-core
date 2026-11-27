@@ -1,7 +1,8 @@
 # Agentic Antivirus CI/CD (CI-01..15, DLV-07/08/10/11). Builds and tests on every push/PR touching the
 # product. Signing happens only when the repository secrets exist; otherwise artifacts are unsigned and
-# the job summary says so. Production deployment is manual, from a verified commit, behind the protected
-# "agentic-antivirus-production" environment (configure required reviewers in repository settings).
+# the job summary says so. Deployment is manual, from a verified commit: first to the "staging" environment,
+# then to the protected "production" environment, whose required reviewer is the release approver (D-02, CI-11,
+# RA-10). Configure the reviewer in Settings > Environments > production.
 name: agentic-antivirus
 on:
   push:
@@ -346,6 +347,23 @@ jobs:
           echo "$KEY" > k && chmod 600 k
           mkdir -p ~/.ssh && ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
           ssh -i k -o StrictHostKeyChecking=accept-new "$SSH_USER@$HOST" "cd /opt/aepx-core && git fetch && git checkout ${{ inputs.deploy_sha }} && products/agentic-antivirus/deploy/deploy.sh ${{ inputs.deploy_sha }}"
+      - name: Post-deploy smoke test (RA-03, RA-11, FN-06)
+        run: |
+          V=$(python3 -c "import json;print(json.load(open('$P/clients/desktop/package.json'))['version'])")
+          python3 $P/tools/smoke_release.py --version "$V" --build "${{ inputs.deploy_sha }}" --evidence smoke.json
+      - name: Record the approval (RA-10)
+        if: always()
+        run: |
+          {
+            echo "### Production deployment record"
+            echo "- Commit: \`${{ inputs.deploy_sha }}\`"
+            echo "- Environment: \`production\` (required reviewer approval recorded by GitHub on this run)"
+            echo "- Triggered by: ${{ github.triggering_actor }} · run ${{ github.run_id }}"
+            echo "- Result: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: { name: "aav-deploy-evidence-${{ inputs.deploy_sha }}", path: smoke.json, if-no-files-found: ignore }
 
   auto-deploy:
     # Continuous deployment: every green master commit ships itself, hands-free.

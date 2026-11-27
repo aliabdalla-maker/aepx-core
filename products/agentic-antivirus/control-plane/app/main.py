@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import threading
 import uuid
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -10,14 +11,6 @@ from fastapi.responses import JSONResponse
 from app import db, governance, licensing, mailer
 from app.routers import (actions, agent, ai, auth, billing, endpoints, files, harness, incidents, integrations,
                          investigation, platform, security, threats)
-
-app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.0", openapi_url="/v1/openapi.json",
-              docs_url="/v1/docs")
-
-for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
-          integrations.router, threats.router, billing.router, files.router, platform.router, security.router,
-          ai.router, harness.router):
-    app.include_router(r)
 
 _retention_stop = threading.Event()
 
@@ -32,17 +25,25 @@ def _retention_loop() -> None:
             pass
 
 
-@app.on_event("startup")
-def _start_mailer() -> None:
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Start the mail outbox worker and retention loop; stop them on shutdown (replaces on_event, L-3)."""
     mailer.start()
     threading.Thread(target=_retention_loop, name="aav-retention", daemon=True).start()
+    try:
+        yield
+    finally:
+        mailer.stop()
+        _retention_stop.set()
 
 
-@app.on_event("shutdown")
-def _stop_mailer() -> None:
-    mailer.stop()
-    _retention_stop.set()
+app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.2", openapi_url="/v1/openapi.json",
+              docs_url="/v1/docs", lifespan=lifespan)
 
+for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
+          integrations.router, threats.router, billing.router, files.router, platform.router, security.router,
+          ai.router, harness.router):
+    app.include_router(r)
 
 # Paths that stay reachable when the console is paywalled (post-trial policy) so users can
 # sign in, read help/privacy, see their licence, and pay.
@@ -75,7 +76,9 @@ async def trace_and_licence(request: Request, call_next):
 @app.get("/health")
 def health():
     """Liveness."""
-    return {"status": "ok", "service": "agentic-antivirus-control-plane"}
+    from app.config import settings
+    return {"status": "ok", "service": "agentic-antivirus-control-plane", "version": app.version,
+            "build": settings.build_sha, "environment": settings.environment}
 
 
 @app.get("/ready")
