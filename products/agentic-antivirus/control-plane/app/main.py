@@ -9,8 +9,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app import db, governance, licensing, mailer
-from app.routers import (actions, agent, ai, auth, billing, endpoints, files, harness, incidents, integrations,
-                         investigation, platform, security, threats)
+from app.routers import (actions, agent, ai, auth, billing, endpoints, files, graphql_api, harness, incidents,
+                         integrations, investigation, mcp, platform, security, threats)
 
 _retention_stop = threading.Event()
 
@@ -42,7 +42,7 @@ app = FastAPI(title="Agentic Antivirus Control Plane", version="0.1.2", openapi_
 
 for r in (auth.router, agent.router, endpoints.router, incidents.router, actions.router, investigation.router,
           integrations.router, threats.router, billing.router, files.router, platform.router, security.router,
-          ai.router, harness.router):
+          ai.router, harness.router, graphql_api.router, mcp.router):
     app.include_router(r)
 
 # Paths that stay reachable when the console is paywalled (post-trial policy) so users can
